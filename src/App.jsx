@@ -169,10 +169,24 @@ const SectionHeading = ({ title, sub }) => {
    MAIN APP
    ══════════════════════════════════════════════ */
 export default function HappyBuzzComingSoon() {
-  const [count, setCount] = useState(143);
+  const [count, setCount] = useState(() => {
+    try { const saved = localStorage.getItem("hb_wl_count"); return saved ? parseInt(saved, 10) : 143; }
+    catch (e) { return 143; }
+  });
   const [selectedTier, setSelectedTier] = useState(1);
   const [page, setPage] = useState("home");
-  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(() => {
+    try { return localStorage.getItem("hb_wl_done") === "1"; }
+    catch (e) { return false; }
+  });
+
+  /* Persist count & submitted state */
+  useEffect(() => {
+    try { localStorage.setItem("hb_wl_count", String(count)); } catch (e) {}
+  }, [count]);
+  useEffect(() => {
+    if (waitlistSubmitted) { try { localStorage.setItem("hb_wl_done", "1"); } catch (e) {} }
+  }, [waitlistSubmitted]);
 
   /* Navigate to subpage and scroll to top */
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
