@@ -191,69 +191,49 @@ export default function HappyBuzzComingSoon() {
   /* Navigate to subpage and scroll to top */
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
 
-  /* Waitlist email input — triple submission for max reliability */
+  /* Submit to Mailchimp via the persistent hidden iframe */
+  const submitToMailchimp = (emailValue) => {
+    if (!emailValue || !emailValue.includes("@") || waitlistSubmitted) return;
+
+    /* Build and submit a real form to the persistent iframe */
+    const existing = document.getElementById("mc-submit-form");
+    if (existing) existing.remove();
+
+    const form = document.createElement("form");
+    form.id = "mc-submit-form";
+    form.method = "POST";
+    form.action = MC.action;
+    form.target = "mc-iframe";
+    form.style.display = "none";
+
+    const fields = { u: MC.u, id: MC.id, EMAIL: emailValue, [`b_${MC.u}_${MC.id}`]: "" };
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      setWaitlistSubmitted(true);
+      setCount((c) => c + 1);
+    }, 1500);
+  };
+
+  /* Simple email input that calls parent submit function */
   const EmailInput = ({ variant = "default" }) => {
     const [localEmail, setLocalEmail] = useState("");
-    const [localSubmitting, setLocalSubmitting] = useState(false);
+    const [sending, setSending] = useState(false);
 
-    const submit = () => {
-      if (!localEmail || !localEmail.includes("@") || localSubmitting || waitlistSubmitted) return;
-      setLocalSubmitting(true);
-
-      const email = encodeURIComponent(localEmail);
-      const baseUrl = MC.action.replace("/post?", "/post-json?");
-
-      /* Method 1: JSONP (official Mailchimp AJAX method) */
-      try {
-        const cbName = `mc_${Date.now()}`;
-        window[cbName] = () => { delete window[cbName]; };
-        const s = document.createElement("script");
-        s.src = `${baseUrl}&EMAIL=${email}&c=${cbName}`;
-        document.head.appendChild(s);
-        setTimeout(() => { try { s.remove(); } catch(e){} }, 5000);
-      } catch (e) {}
-
-      /* Method 2: Hidden iframe + real form POST */
-      try {
-        const iframeName = `mc_if_${Date.now()}`;
-        const iframe = document.createElement("iframe");
-        iframe.name = iframeName;
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = MC.action;
-        form.target = iframeName;
-
-        const addField = (name, value) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = name;
-          input.value = value;
-          form.appendChild(input);
-        };
-        addField("u", MC.u);
-        addField("id", MC.id);
-        addField("EMAIL", localEmail);
-        addField(`b_${MC.u}_${MC.id}`, ""); /* honeypot */
-
-        document.body.appendChild(form);
-        form.submit();
-        setTimeout(() => { try { form.remove(); iframe.remove(); } catch(e){} }, 5000);
-      } catch (e) {}
-
-      /* Method 3: Image beacon (GET fallback) */
-      try {
-        const img = new Image();
-        img.src = `${baseUrl}&EMAIL=${email}&c=__`;
-      } catch (e) {}
-
-      setTimeout(() => {
-        setWaitlistSubmitted(true);
-        setLocalSubmitting(false);
-        setCount((c) => c + 1);
-      }, 1500);
+    const handleClick = () => {
+      if (!localEmail || !localEmail.includes("@") || sending || waitlistSubmitted) return;
+      setSending(true);
+      submitToMailchimp(localEmail);
+      setTimeout(() => setSending(false), 2000);
     };
 
     if (waitlistSubmitted) {
@@ -272,7 +252,7 @@ export default function HappyBuzzComingSoon() {
             value={localEmail}
             onChange={(e) => setLocalEmail(e.target.value)}
             placeholder="deine@email.ch"
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } }}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleClick(); } }}
             style={{
               flex: 1, minWidth: 200, padding: "14px 18px", borderRadius: T.rSm, border: `1.5px solid ${T.border}`,
               fontSize: 15, outline: "none", fontFamily: T.font, boxSizing: "border-box", background: T.surface,
@@ -283,17 +263,17 @@ export default function HappyBuzzComingSoon() {
           />
           <button
             type="button"
-            onClick={submit}
-            disabled={localSubmitting}
+            onClick={handleClick}
+            disabled={sending}
             style={{
-              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: localSubmitting ? T.border : T.honey, color: T.dark,
-              fontSize: 15, fontWeight: 800, cursor: localSubmitting ? "wait" : "pointer", fontFamily: T.font, whiteSpace: "nowrap",
+              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: sending ? T.border : T.honey, color: T.dark,
+              fontSize: 15, fontWeight: 800, cursor: sending ? "wait" : "pointer", fontFamily: T.font, whiteSpace: "nowrap",
               transition: "background 0.2s, transform 0.15s", letterSpacing: "-0.01em",
             }}
-            onMouseEnter={(e) => { if (!localSubmitting) { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; } }}
-            onMouseLeave={(e) => { e.target.style.background = localSubmitting ? T.border : T.honey; e.target.style.transform = "translateY(0)"; }}
+            onMouseEnter={(e) => { if (!sending) { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; } }}
+            onMouseLeave={(e) => { e.target.style.background = sending ? T.border : T.honey; e.target.style.transform = "translateY(0)"; }}
           >
-            {localSubmitting ? "Wird gesendet…" : "Auf die Warteliste →"}
+            {sending ? "Wird gesendet…" : "Auf die Warteliste →"}
           </button>
         </div>
       </div>
@@ -317,6 +297,9 @@ export default function HappyBuzzComingSoon() {
   return (
     <div style={{ background: T.bg, minHeight: "100vh", fontFamily: T.font, color: T.text, overflowX: "hidden" }}>
       <FontLoader />
+
+      {/* Persistent hidden iframe for Mailchimp — lives outside all components, never re-renders */}
+      <iframe name="mc-iframe" id="mc-iframe" style={{ display: "none" }} tabIndex="-1" aria-hidden="true" />
 
       {/* ═══ GLOBAL STYLES ═══ */}
       <style>{`
