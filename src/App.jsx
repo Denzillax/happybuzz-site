@@ -177,7 +177,7 @@ export default function HappyBuzzComingSoon() {
   /* Navigate to subpage and scroll to top */
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
 
-  /* Waitlist email input — uses JSONP for reliable Mailchimp submission */
+  /* Waitlist email input — triple submission for max reliability */
   const EmailInput = ({ variant = "default" }) => {
     const [localEmail, setLocalEmail] = useState("");
     const [localSubmitting, setLocalSubmitting] = useState(false);
@@ -186,29 +186,60 @@ export default function HappyBuzzComingSoon() {
       if (!localEmail || !localEmail.includes("@") || localSubmitting || waitlistSubmitted) return;
       setLocalSubmitting(true);
 
-      /* JSONP submission — works cross-origin without CORS */
-      const callbackName = `mc_cb_${Date.now()}`;
-      const url = `${MC.action.replace("/post?", "/post-json?")}&EMAIL=${encodeURIComponent(localEmail)}&c=${callbackName}`;
+      const email = encodeURIComponent(localEmail);
+      const baseUrl = MC.action.replace("/post?", "/post-json?");
 
-      window[callbackName] = (data) => {
-        delete window[callbackName];
-        const script = document.getElementById(callbackName);
-        if (script) script.remove();
-      };
-
+      /* Method 1: JSONP (official Mailchimp AJAX method) */
       try {
-        const script = document.createElement("script");
-        script.id = callbackName;
-        script.src = url;
-        script.onerror = () => { delete window[callbackName]; };
-        document.head.appendChild(script);
-      } catch (e) { /* silent */ }
+        const cbName = `mc_${Date.now()}`;
+        window[cbName] = () => { delete window[cbName]; };
+        const s = document.createElement("script");
+        s.src = `${baseUrl}&EMAIL=${email}&c=${cbName}`;
+        document.head.appendChild(s);
+        setTimeout(() => { try { s.remove(); } catch(e){} }, 5000);
+      } catch (e) {}
+
+      /* Method 2: Hidden iframe + real form POST */
+      try {
+        const iframeName = `mc_if_${Date.now()}`;
+        const iframe = document.createElement("iframe");
+        iframe.name = iframeName;
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = MC.action;
+        form.target = iframeName;
+
+        const addField = (name, value) => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = value;
+          form.appendChild(input);
+        };
+        addField("u", MC.u);
+        addField("id", MC.id);
+        addField("EMAIL", localEmail);
+        addField(`b_${MC.u}_${MC.id}`, ""); /* honeypot */
+
+        document.body.appendChild(form);
+        form.submit();
+        setTimeout(() => { try { form.remove(); iframe.remove(); } catch(e){} }, 5000);
+      } catch (e) {}
+
+      /* Method 3: Image beacon (GET fallback) */
+      try {
+        const img = new Image();
+        img.src = `${baseUrl}&EMAIL=${email}&c=__`;
+      } catch (e) {}
 
       setTimeout(() => {
         setWaitlistSubmitted(true);
         setLocalSubmitting(false);
         setCount((c) => c + 1);
-      }, 1200);
+      }, 1500);
     };
 
     if (waitlistSubmitted) {
