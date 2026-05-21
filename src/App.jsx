@@ -169,56 +169,49 @@ const SectionHeading = ({ title, sub }) => {
    MAIN APP
    ══════════════════════════════════════════════ */
 export default function HappyBuzzComingSoon() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [count, setCount] = useState(143);
   const [selectedTier, setSelectedTier] = useState(1);
   const [page, setPage] = useState("home");
-  const formRef = useRef(null);
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
 
   /* Navigate to subpage and scroll to top */
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
 
-  /* Mailchimp submit */
-  const handleSubmit = () => {
-    if (!email || !email.includes("@") || submitting) return;
-    setSubmitting(true);
-
-    const form = formRef.current;
-    if (form) {
-      const data = new FormData(form);
-      fetch(MC.action.replace("/post?", "/post-json?") + "&c=?", { mode: "no-cors", method: "POST", body: data })
-        .catch(() => {});
-    }
-
-    setTimeout(() => {
-      setSubmitted(true);
-      setSubmitting(false);
-      setCount((c) => c + 1);
-    }, 800);
-  };
-
-  /* Waitlist email input */
+  /* Waitlist email input — uses JSONP for reliable Mailchimp submission */
   const EmailInput = ({ variant = "default" }) => {
     const [localEmail, setLocalEmail] = useState("");
-    const [localSubmitted, setLocalSubmitted] = useState(false);
-    const localFormRef = useRef(null);
+    const [localSubmitting, setLocalSubmitting] = useState(false);
 
     const submit = () => {
-      if (!localEmail || !localEmail.includes("@")) return;
-      const form = localFormRef.current;
-      if (form) {
-        const data = new FormData(form);
-        fetch(MC.action.replace("/post?", "/post-json?") + "&c=?", { mode: "no-cors", method: "POST", body: data }).catch(() => {});
-      }
+      if (!localEmail || !localEmail.includes("@") || localSubmitting || waitlistSubmitted) return;
+      setLocalSubmitting(true);
+
+      /* JSONP submission — works cross-origin without CORS */
+      const callbackName = `mc_cb_${Date.now()}`;
+      const url = `${MC.action.replace("/post?", "/post-json?")}&EMAIL=${encodeURIComponent(localEmail)}&c=${callbackName}`;
+
+      window[callbackName] = (data) => {
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+      };
+
+      try {
+        const script = document.createElement("script");
+        script.id = callbackName;
+        script.src = url;
+        script.onerror = () => { delete window[callbackName]; };
+        document.head.appendChild(script);
+      } catch (e) { /* silent */ }
+
       setTimeout(() => {
-        setLocalSubmitted(true);
+        setWaitlistSubmitted(true);
+        setLocalSubmitting(false);
         setCount((c) => c + 1);
-      }, 600);
+      }, 1200);
     };
 
-    if (localSubmitted || submitted) {
+    if (waitlistSubmitted) {
       return (
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: T.greenSoft, borderRadius: T.rSm, padding: "14px 24px", color: T.green, fontWeight: 700, fontSize: 15, fontFamily: T.font }}>
           {Icons.check} Du bist dabei! Wir melden uns mit den nächsten happybuzz.-Updates.
@@ -227,12 +220,9 @@ export default function HappyBuzzComingSoon() {
     }
 
     return (
-      <form ref={localFormRef} action={MC.action} method="POST" target="_blank" onSubmit={(e) => { e.preventDefault(); submit(); }} style={{ margin: 0 }}>
-        <input type="hidden" name="u" value={MC.u} />
-        <input type="hidden" name="id" value={MC.id} />
+      <div style={{ margin: 0 }}>
         <div style={{ display: "flex", gap: 8, maxWidth: 440, margin: variant === "center" ? "0 auto" : undefined, flexWrap: "wrap" }}>
           <input
-            name="EMAIL"
             type="email"
             value={localEmail}
             onChange={(e) => setLocalEmail(e.target.value)}
@@ -247,22 +237,21 @@ export default function HappyBuzzComingSoon() {
             onBlur={(e) => (e.target.style.borderColor = T.border)}
           />
           <button
-            type="submit"
+            type="button"
+            onClick={submit}
+            disabled={localSubmitting}
             style={{
-              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: T.honey, color: T.dark,
-              fontSize: 15, fontWeight: 800, cursor: "pointer", fontFamily: T.font, whiteSpace: "nowrap",
+              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: localSubmitting ? T.border : T.honey, color: T.dark,
+              fontSize: 15, fontWeight: 800, cursor: localSubmitting ? "wait" : "pointer", fontFamily: T.font, whiteSpace: "nowrap",
               transition: "background 0.2s, transform 0.15s", letterSpacing: "-0.01em",
             }}
-            onMouseEnter={(e) => { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; }}
-            onMouseLeave={(e) => { e.target.style.background = T.honey; e.target.style.transform = "translateY(0)"; }}
+            onMouseEnter={(e) => { if (!localSubmitting) { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; } }}
+            onMouseLeave={(e) => { e.target.style.background = localSubmitting ? T.border : T.honey; e.target.style.transform = "translateY(0)"; }}
           >
-            Auf die Warteliste →
+            {localSubmitting ? "Wird gesendet…" : "Auf die Warteliste →"}
           </button>
         </div>
-        <div style={{ display: "none" }} aria-hidden="true">
-          <input type="text" name={`b_${MC.u}_${MC.id}`} tabIndex="-1" defaultValue="" />
-        </div>
-      </form>
+      </div>
     );
   };
 
