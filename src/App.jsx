@@ -169,10 +169,6 @@ const SectionHeading = ({ title, sub }) => {
    MAIN APP
    ══════════════════════════════════════════════ */
 export default function HappyBuzzComingSoon() {
-  const [count, setCount] = useState(() => {
-    try { const saved = localStorage.getItem("hb_wl_count"); return saved ? parseInt(saved, 10) : 143; }
-    catch (e) { return 143; }
-  });
   const [selectedTier, setSelectedTier] = useState(1);
   const [page, setPage] = useState("home");
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(() => {
@@ -180,10 +176,7 @@ export default function HappyBuzzComingSoon() {
     catch (e) { return false; }
   });
 
-  /* Persist count & submitted state */
-  useEffect(() => {
-    try { localStorage.setItem("hb_wl_count", String(count)); } catch (e) {}
-  }, [count]);
+  /* Persist submitted state */
   useEffect(() => {
     if (waitlistSubmitted) { try { localStorage.setItem("hb_wl_done", "1"); } catch (e) {} }
   }, [waitlistSubmitted]);
@@ -191,50 +184,9 @@ export default function HappyBuzzComingSoon() {
   /* Navigate to subpage and scroll to top */
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: "instant" }); };
 
-  /* Submit to Mailchimp via the persistent hidden iframe */
-  const submitToMailchimp = (emailValue) => {
-    if (!emailValue || !emailValue.includes("@") || waitlistSubmitted) return;
-
-    /* Build and submit a real form to the persistent iframe */
-    const existing = document.getElementById("mc-submit-form");
-    if (existing) existing.remove();
-
-    const form = document.createElement("form");
-    form.id = "mc-submit-form";
-    form.method = "POST";
-    form.action = MC.action;
-    form.target = "mc-iframe";
-    form.style.display = "none";
-
-    const fields = { u: MC.u, id: MC.id, EMAIL: emailValue, [`b_${MC.u}_${MC.id}`]: "" };
-    Object.entries(fields).forEach(([name, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(() => {
-      setWaitlistSubmitted(true);
-      setCount((c) => c + 1);
-    }, 1500);
-  };
-
-  /* Simple email input that calls parent submit function */
+  /* Email input with native form POST to Mailchimp via hidden iframe */
   const EmailInput = ({ variant = "default" }) => {
     const [localEmail, setLocalEmail] = useState("");
-    const [sending, setSending] = useState(false);
-
-    const handleClick = () => {
-      if (!localEmail || !localEmail.includes("@") || sending || waitlistSubmitted) return;
-      setSending(true);
-      submitToMailchimp(localEmail);
-      setTimeout(() => setSending(false), 2000);
-    };
 
     if (waitlistSubmitted) {
       return (
@@ -245,14 +197,23 @@ export default function HappyBuzzComingSoon() {
     }
 
     return (
-      <div style={{ margin: 0 }}>
+      <form
+        action={MC.action}
+        method="POST"
+        target="mc-iframe"
+        onSubmit={() => { setTimeout(() => setWaitlistSubmitted(true), 800); }}
+        style={{ margin: 0 }}
+      >
+        <input type="hidden" name="u" value={MC.u} />
+        <input type="hidden" name="id" value={MC.id} />
         <div style={{ display: "flex", gap: 8, maxWidth: 440, margin: variant === "center" ? "0 auto" : undefined, flexWrap: "wrap" }}>
           <input
+            name="EMAIL"
             type="email"
+            required
             value={localEmail}
             onChange={(e) => setLocalEmail(e.target.value)}
             placeholder="deine@email.ch"
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleClick(); } }}
             style={{
               flex: 1, minWidth: 200, padding: "14px 18px", borderRadius: T.rSm, border: `1.5px solid ${T.border}`,
               fontSize: 15, outline: "none", fontFamily: T.font, boxSizing: "border-box", background: T.surface,
@@ -262,21 +223,22 @@ export default function HappyBuzzComingSoon() {
             onBlur={(e) => (e.target.style.borderColor = T.border)}
           />
           <button
-            type="button"
-            onClick={handleClick}
-            disabled={sending}
+            type="submit"
             style={{
-              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: sending ? T.border : T.honey, color: T.dark,
-              fontSize: 15, fontWeight: 800, cursor: sending ? "wait" : "pointer", fontFamily: T.font, whiteSpace: "nowrap",
+              padding: "14px 28px", borderRadius: T.rSm, border: "none", background: T.honey, color: T.dark,
+              fontSize: 15, fontWeight: 800, cursor: "pointer", fontFamily: T.font, whiteSpace: "nowrap",
               transition: "background 0.2s, transform 0.15s", letterSpacing: "-0.01em",
             }}
-            onMouseEnter={(e) => { if (!sending) { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; } }}
-            onMouseLeave={(e) => { e.target.style.background = sending ? T.border : T.honey; e.target.style.transform = "translateY(0)"; }}
+            onMouseEnter={(e) => { e.target.style.background = T.honeyHover; e.target.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.target.style.background = T.honey; e.target.style.transform = "translateY(0)"; }}
           >
-            {sending ? "Wird gesendet…" : "Auf die Warteliste →"}
+            Auf die Warteliste →
           </button>
         </div>
-      </div>
+        <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
+          <input type="text" name={`b_${MC.u}_${MC.id}`} tabIndex="-1" defaultValue="" />
+        </div>
+      </form>
     );
   };
 
@@ -439,19 +401,6 @@ export default function HappyBuzzComingSoon() {
                   <div style={{ flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: T.rSm, background: T.warm, color: T.textLt, fontWeight: 600, fontSize: 11 }}>Eigene %</div>
                 </div>
                 <p style={{ fontSize: 11, color: T.textLt, marginTop: 8, textAlign: "center" }}>Eigener Beitrag ab 3 % möglich</p>
-              </div>
-
-              {/* Card: Warteliste counter */}
-              <div style={{ background: T.surface, borderRadius: T.r, padding: 20, border: `1px solid ${T.borderLt}`, boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: T.textLt, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>Auf der Warteliste</p>
-                    <p style={{ fontSize: 28, fontWeight: 800, color: T.dark, letterSpacing: "-0.03em" }}>{count}+</p>
-                  </div>
-                  <div style={{ width: 48, height: 48, borderRadius: 12, background: T.honeySoft, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke={T.honey} strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
-                  </div>
-                </div>
               </div>
 
               {/* Card: Impact */}
@@ -705,12 +654,6 @@ export default function HappyBuzzComingSoon() {
 
             <p style={{ fontSize: 12, color: T.textLt, marginTop: 16 }}>Kein Spam. Abmeldung jederzeit möglich.</p>
             <p style={{ fontSize: 11, color: T.textLt, marginTop: 4 }}>Wir nutzen deine E-Mail nur für Updates zum Start von happybuzz.</p>
-
-            {/* Counter */}
-            <div style={{ marginTop: 24, display: "inline-flex", alignItems: "center", gap: 8, background: T.warm, borderRadius: 99, padding: "8px 16px" }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: T.green, display: "inline-block", animation: "pulse 2s ease infinite" }} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: T.textMd }}>{count}+ Personen auf der Warteliste</span>
-            </div>
           </div>
         </Section>
 
