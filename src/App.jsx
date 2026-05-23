@@ -172,9 +172,13 @@ export default function HappyBuzzComingSoon() {
   const [selectedTier, setSelectedTier] = useState(1);
   const [page, setPage] = useState("home");
   const [heroSlide, setHeroSlide] = useState(0);
-  const heroImages = ["/Happybuzz_Ad_Camera.png", "/Happybuzz_Ad_Gameboy.png", "/Happybuzz_Ad_Vinyl.png"];
+  const heroSlides = [
+    { accent: "Kaufen & Verkaufen.", sub: "Dein Marktplatz für einzigartige Dinge — Festpreis oder Auktion, du entscheidest.", img: "/Happybuzz_Ad_Camera.png" },
+    { accent: "Mieten & Vermieten.", sub: "Teilen statt besitzen — vermiete, was du hast, und miete, was du brauchst.", img: "/Happybuzz_Ad_Gameboy.png" },
+    { accent: "gemeinsamen Impact.", sub: "Ein Teil jedes Beitrags fliesst direkt in Schweizer Bienenschutzprojekte.", img: "/Happybuzz_Ad_Vinyl.png" },
+  ];
   useEffect(() => {
-    const timer = setInterval(() => setHeroSlide((s) => (s + 1) % 3), 4500);
+    const timer = setInterval(() => setHeroSlide((s) => (s + 1) % 3), 5000);
     return () => clearInterval(timer);
   }, []);
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(() => {
@@ -278,6 +282,7 @@ export default function HappyBuzzComingSoon() {
         input::placeholder { color: ${T.textLt}; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes slideTextIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; text-align: center !important; }
@@ -335,19 +340,21 @@ export default function HappyBuzzComingSoon() {
                 <span style={{ fontSize: 13, fontWeight: 600, color: T.textMd, letterSpacing: "0.01em" }}>Warteliste geöffnet — bald in der Schweiz</span>
               </div>
 
-              {/* Headline */}
+              {/* Headline — fixed + rotating accent */}
               <h1 style={{
                 fontFamily: T.font, fontSize: "clamp(36px, 5.5vw, 56px)", fontWeight: 800,
                 lineHeight: 1.08, letterSpacing: "-0.035em", color: T.dark, marginBottom: 20,
               }}>
-                Kaufen, verkaufen
+                Dein Marktplatz für
                 <br />
-                <span style={{ color: T.honey }}>und Gutes</span> bewirken.
+                <span key={heroSlide} style={{ color: T.honey, display: "inline-block", animation: "slideTextIn 0.6s ease" }}>
+                  {heroSlides[heroSlide].accent}
+                </span>
               </h1>
 
-              {/* Subheadline */}
-              <p style={{ fontSize: 18, lineHeight: 1.6, color: T.textMd, maxWidth: 480, marginBottom: 32 }}>
-                happybuzz. ist der neue Schweizer Marktplatz — mit Festpreis und Auktion. Du wählst deinen Plattformbeitrag selbst, und ein Teil davon geht an ein gutes Projekt.
+              {/* Rotating subtitle */}
+              <p key={"sub" + heroSlide} style={{ fontSize: 18, lineHeight: 1.6, color: T.textMd, maxWidth: 480, marginBottom: 32, minHeight: 58, animation: "slideTextIn 0.6s ease 0.1s both" }}>
+                {heroSlides[heroSlide].sub}
               </p>
 
               {/* CTA Buttons */}
@@ -377,40 +384,37 @@ export default function HappyBuzzComingSoon() {
                 </button>
               </div>
 
-              {/* Trust line */}
-              <p style={{ fontSize: 13, color: T.textLt, marginTop: 4 }}>Kein Spam. Nur Launch-Updates und früher Zugang.</p>
+              {/* Dots — under text on left */}
+              <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+                {heroSlides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setHeroSlide(i)}
+                    style={{
+                      width: heroSlide === i ? 28 : 8, height: 8, borderRadius: 99,
+                      background: heroSlide === i ? T.honey : T.border, border: "none",
+                      cursor: "pointer", transition: "all 0.3s ease", padding: 0,
+                    }}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* RIGHT — Preview Cards */}
-            {/* RIGHT — Image Carousel */}
+            {/* RIGHT — Image */}
             <div className="hero-cards" style={{ animation: "fadeUp 0.7s ease 0.2s both", position: "relative", width: "100%" }}>
               <div style={{
                 borderRadius: T.rLg, overflow: "hidden", position: "relative",
                 boxShadow: "0 8px 40px rgba(0,0,0,0.10)", aspectRatio: "4/3", width: "100%",
               }}>
-                {heroImages.map((src, i) => (
+                {heroSlides.map((slide, i) => (
                   <img
-                    key={src}
-                    src={src}
-                    alt={["Kamera", "Gameboy", "Vinyl"][i]}
+                    key={slide.img}
+                    src={slide.img}
+                    alt={slide.accent}
                     style={{
                       position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
                       objectFit: "cover", opacity: heroSlide === i ? 1 : 0,
                       transition: "opacity 0.8s ease",
-                    }}
-                  />
-                ))}
-              </div>
-              {/* Dots */}
-              <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 16 }}>
-                {heroImages.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setHeroSlide(i)}
-                    style={{
-                      width: heroSlide === i ? 24 : 8, height: 8, borderRadius: 99,
-                      background: heroSlide === i ? T.honey : T.border, border: "none",
-                      cursor: "pointer", transition: "all 0.3s ease", padding: 0,
                     }}
                   />
                 ))}
