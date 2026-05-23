@@ -281,7 +281,7 @@ export default function HappyBuzzComingSoon() {
         @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; text-align: center !important; }
-          .hero-cards { max-width: 100%; margin: 0 auto; }
+          .hero-cards { max-width: 100%; width: 100% !important; margin: 0 auto; }
           .compare-grid { grid-template-columns: 1fr !important; }
           .usp-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .steps-grid { grid-template-columns: 1fr !important; }
@@ -383,10 +383,10 @@ export default function HappyBuzzComingSoon() {
 
             {/* RIGHT — Preview Cards */}
             {/* RIGHT — Image Carousel */}
-            <div className="hero-cards" style={{ animation: "fadeUp 0.7s ease 0.2s both", position: "relative" }}>
+            <div className="hero-cards" style={{ animation: "fadeUp 0.7s ease 0.2s both", position: "relative", width: "100%" }}>
               <div style={{
                 borderRadius: T.rLg, overflow: "hidden", position: "relative",
-                boxShadow: "0 8px 40px rgba(0,0,0,0.10)", aspectRatio: "4/3",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.10)", aspectRatio: "4/3", width: "100%",
               }}>
                 {heroImages.map((src, i) => (
                   <img
