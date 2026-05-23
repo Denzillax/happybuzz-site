@@ -175,7 +175,7 @@ export default function HappyBuzzComingSoon() {
   const heroSlides = [
     { accent: "Kaufen & Verkaufen.", sub: "Dein Marktplatz für einzigartige Dinge — Festpreis oder Auktion, du entscheidest.", img: "/Happybuzz_Ad_Camera.png" },
     { accent: "Mieten & Vermieten.", sub: "Teilen statt besitzen — vermiete, was du hast, und miete, was du brauchst.", img: "/Happybuzz_Ad_Gameboy.png" },
-    { accent: "gemeinsamen Impact.", sub: "Ein Teil jedes Beitrags fliesst direkt in Schweizer Bienenschutzprojekte.", img: "/Happybuzz_Ad_Vinyl.png" },
+    { accent: "echten Impact.", sub: "Ein Teil jedes Beitrags fliesst direkt in Schweizer Bienenschutzprojekte.", img: "/Happybuzz_Ad_Vinyl.png" },
   ];
   useEffect(() => {
     const timer = setInterval(() => setHeroSlide((s) => (s + 1) % 3), 5000);
