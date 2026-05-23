@@ -286,19 +286,19 @@ export default function HappyBuzzComingSoon() {
           .usp-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .steps-grid { grid-template-columns: 1fr !important; }
           .fee-layout { grid-template-columns: 1fr !important; }
-          .nav-logo { height: 40px !important; }
+          .nav-logo { height: 32px !important; }
         }
         @media (max-width: 480px) {
           .hero-ctas { flex-direction: column !important; align-items: stretch !important; }
           .usp-grid { grid-template-columns: 1fr !important; }
-          .nav-logo { height: 36px !important; }
+          .nav-logo { height: 28px !important; }
         }
       `}</style>
 
       {/* ═══ NAV ═══ */}
       <nav style={{ padding: "16px 24px", display: "flex", justifyContent: "center", alignItems: "center", position: "sticky", top: 0, background: `${T.bg}ee`, backdropFilter: "blur(12px)", zIndex: 100, borderBottom: `1px solid ${T.borderLt}` }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 1080, width: "100%", gap: 16 }}>
-          <img src={LOGO_URI} alt="happybuzz" className="nav-logo" style={{ height: 48, width: "auto", cursor: "pointer" }} onClick={() => goTo("home")} />
+          <img src={LOGO_URI} alt="happybuzz" className="nav-logo" style={{ height: 36, width: "auto", cursor: "pointer" }} onClick={() => goTo("home")} />
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: T.textMd, letterSpacing: "0.04em", textTransform: "uppercase" }}>Pre-Launch Schweiz</span>
             <button
@@ -322,7 +322,7 @@ export default function HappyBuzzComingSoon() {
            HERO
            ═══════════════════════════ */}
         <section style={{ padding: "72px 24px 64px", background: `linear-gradient(180deg, ${T.bg} 0%, ${T.honeySoft} 100%)` }}>
-          <div className="hero-grid" style={{ maxWidth: 1140, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 520px", gap: 48, alignItems: "center" }}>
+          <div className="hero-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 580px", gap: 48, alignItems: "center" }}>
 
             {/* LEFT — Content */}
             <div style={{ animation: "fadeUp 0.7s ease" }}>
@@ -789,7 +789,7 @@ export default function HappyBuzzComingSoon() {
       {/* ═══ FOOTER ═══ */}
       <footer style={{ borderTop: `1px solid ${T.border}`, padding: "28px 24px 24px", background: T.bg }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, maxWidth: 1080, margin: "0 auto" }}>
-          <img src={LOGO_URI} alt="happybuzz" style={{ height: 32, width: "auto" }} />
+          <img src={LOGO_URI} alt="happybuzz" style={{ height: 24, width: "auto" }} />
           <div style={{ display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap" }}>
             <a onClick={() => goTo("datenschutz")} style={{ fontSize: 12, color: T.textLt, textDecoration: "none", fontFamily: T.font, transition: "color 0.2s", cursor: "pointer" }} onMouseEnter={(e) => e.target.style.color = T.textMd} onMouseLeave={(e) => e.target.style.color = T.textLt}>Datenschutz</a>
             <a onClick={() => goTo("impressum")} style={{ fontSize: 12, color: T.textLt, textDecoration: "none", fontFamily: T.font, transition: "color 0.2s", cursor: "pointer" }} onMouseEnter={(e) => e.target.style.color = T.textMd} onMouseLeave={(e) => e.target.style.color = T.textLt}>Impressum</a>
