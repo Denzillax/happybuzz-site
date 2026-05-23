@@ -78,7 +78,7 @@ export default function App() {
   const [email,setEmail]=useState("");
   const [submitted,setSubmitted]=useState(false);
   const [error,setError]=useState("");
-  
+  const [page,setPage]=useState("home");
 
   const handleSubmit=()=>{
     if(!email.includes("@")||!email.includes(".")){setError("Bitte gib eine gültige E-Mail-Adresse ein.");return;}
@@ -111,11 +111,20 @@ export default function App() {
       `}</style>
 
       {/* ── NAV ── */}
-      <nav style={{padding:"28px 32px",display:"flex",justifyContent:"center"}}>
-        <img src={LOGO_URI} alt="HappyBuzz" style={{height:80,width:"auto"}} />
+      <nav style={{padding:"0 32px",display:"flex",justifyContent:"space-between",alignItems:"center",height:64,maxWidth:1060,margin:"0 auto"}}>
+        <img src={LOGO_URI} alt="HappyBuzz" onClick={()=>setPage("home")} style={{height:36,width:"auto",cursor:"pointer",flexShrink:0}} />
+        <div style={{display:"flex",alignItems:"center",gap:20,fontSize:13,color:T.textMd}}>
+          {[{l:"So funktioniert's",p:"home"},{l:"Impressum",p:"impressum"},{l:"Datenschutz",p:"datenschutz"}].map(link=>(
+            <span key={link.p} onClick={()=>setPage(link.p)} style={{cursor:"pointer",fontWeight:page===link.p?700:500,color:page===link.p?T.text:T.textMd,transition:"color .15s"}}
+              onMouseEnter={e=>e.target.style.color=T.text} onMouseLeave={e=>{if(page!==link.p)e.target.style.color=T.textMd;}}>{link.l}</span>
+          ))}
+        </div>
       </nav>
 
       <main style={{maxWidth:1060,margin:"0 auto",padding:"0 24px"}}>
+        {page==="impressum"?<ImpressumPage setPage={setPage}/>
+         :page==="datenschutz"?<DatenschutzPage setPage={setPage}/>
+         :<>
 
         {/* ── HERO ── */}
         <section className="hero-split" style={{padding:"40px 0 48px",display:"grid",gridTemplateColumns:"1fr 400px",gap:48,alignItems:"center"}}>
@@ -238,16 +247,68 @@ export default function App() {
             </div>
           )}
         </section>
-
+        </>}
       </main>
 
       {/* ── FOOTER ── */}
       <footer style={{borderTop:`1px solid ${T.border}`,padding:"24px 32px",maxWidth:1060,margin:"0 auto"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12}}>
-          <img src={LOGO_URI} alt="HappyBuzz" style={{height:36,width:"auto"}} />
+          <img src={LOGO_URI} alt="HappyBuzz" onClick={()=>setPage("home")} style={{height:28,width:"auto",cursor:"pointer"}} />
+          <div style={{display:"flex",gap:16,fontSize:11,color:T.textLt}}>
+            {[{l:"Impressum",p:"impressum"},{l:"Datenschutz",p:"datenschutz"}].map(link=>(
+              <span key={link.p} onClick={()=>{setPage(link.p);window.scrollTo({top:0,behavior:"smooth"});}} style={{cursor:"pointer"}}
+                onMouseEnter={e=>e.target.style.color=T.text} onMouseLeave={e=>e.target.style.color=T.textLt}>{link.l}</span>
+            ))}
+          </div>
           <p style={{fontSize:11,color:T.textLt,margin:0}}>© 2026 HappyBuzz — Made with care in Switzerland</p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function ImpressumPage({setPage}) {
+  return (
+    <div style={{maxWidth:700,margin:"0 auto",padding:"40px 24px 60px",animation:"up .4s ease"}}>
+      <button onClick={()=>setPage("home")} style={{background:"none",border:"none",color:"#9A9490",fontSize:13,fontWeight:600,cursor:"pointer",padding:0,marginBottom:24,fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>← Zurück</button>
+      <h1 style={{fontSize:28,fontWeight:900,margin:"0 0 24px"}}>Impressum</h1>
+      <div style={{background:"#FFFFFF",borderRadius:14,padding:"28px 32px",border:"1px solid #E8E2D8",lineHeight:1.8,fontSize:14,color:"#5C5753"}}>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>HappyBuzz</p>
+        <p style={{margin:"0 0 16px"}}>Denis Mihaljevic<br/>Gemeindehausstrasse 11B<br/>CH-6010 Kriens</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>Kontakt</p>
+        <p style={{margin:"0 0 16px"}}>E-Mail: info@happybuzz.ch</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>Verantwortlich für den Inhalt</p>
+        <p style={{margin:"0 0 16px"}}>Denis Mihaljevic</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>Haftungsausschluss</p>
+        <p style={{margin:"0 0 16px"}}>Die Inhalte dieser Website werden mit grösster Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>Urheberrecht</p>
+        <p style={{margin:0}}>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem schweizerischen Urheberrecht. Die Vervielfältigung, Bearbeitung und Verbreitung ausserhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Erstellers.</p>
+      </div>
+    </div>
+  );
+}
+
+function DatenschutzPage({setPage}) {
+  return (
+    <div style={{maxWidth:700,margin:"0 auto",padding:"40px 24px 60px",animation:"up .4s ease"}}>
+      <button onClick={()=>setPage("home")} style={{background:"none",border:"none",color:"#9A9490",fontSize:13,fontWeight:600,cursor:"pointer",padding:0,marginBottom:24,fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>← Zurück</button>
+      <h1 style={{fontSize:28,fontWeight:900,margin:"0 0 24px"}}>Datenschutzerklärung</h1>
+      <div style={{background:"#FFFFFF",borderRadius:14,padding:"28px 32px",border:"1px solid #E8E2D8",lineHeight:1.8,fontSize:14,color:"#5C5753"}}>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>1. Allgemeines</p>
+        <p style={{margin:"0 0 16px"}}>Der Schutz deiner persönlichen Daten ist uns wichtig. Diese Datenschutzerklärung informiert dich über die Erhebung und Verwendung personenbezogener Daten auf happybuzz.ch.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>2. Verantwortliche Stelle</p>
+        <p style={{margin:"0 0 16px"}}>Denis Mihaljevic, Gemeindehausstrasse 11B, CH-6010 Kriens<br/>E-Mail: info@happybuzz.ch</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>3. Erhobene Daten</p>
+        <p style={{margin:"0 0 16px"}}>Beim Besuch dieser Website werden automatisch technische Daten erfasst (IP-Adresse, Browsertyp, Zugriffszeit). Bei der Anmeldung zur Warteliste wird deine E-Mail-Adresse gespeichert.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>4. Newsletter / Warteliste</p>
+        <p style={{margin:"0 0 16px"}}>Wenn du dich auf die Warteliste einträgst, wird deine E-Mail-Adresse bei unserem Dienstleister Mailchimp (The Rocket Science Group LLC, USA) gespeichert. Mailchimp ist unter dem EU-US Data Privacy Framework zertifiziert. Du kannst dich jederzeit abmelden.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>5. Hosting</p>
+        <p style={{margin:"0 0 16px"}}>Diese Website wird bei Vercel Inc. (USA) gehostet. Beim Besuch der Website werden technische Daten an Vercel übermittelt.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>6. Deine Rechte</p>
+        <p style={{margin:"0 0 16px"}}>Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung deiner Daten. Kontaktiere uns unter info@happybuzz.ch.</p>
+        <p style={{fontWeight:700,color:"#191615",margin:"0 0 4px"}}>7. Änderungen</p>
+        <p style={{margin:0}}>Wir behalten uns vor, diese Datenschutzerklärung anzupassen. Die aktuelle Version ist auf dieser Seite abrufbar.</p>
+      </div>
     </div>
   );
 }
