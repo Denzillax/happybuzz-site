@@ -297,7 +297,7 @@ export default function HappyBuzzComingSoon() {
 
       {/* ═══ NAV ═══ */}
       <nav style={{ padding: "16px 24px", display: "flex", justifyContent: "center", alignItems: "center", position: "sticky", top: 0, background: `${T.bg}ee`, backdropFilter: "blur(12px)", zIndex: 100, borderBottom: `1px solid ${T.borderLt}` }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 1080, width: "100%", gap: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 1200, width: "100%", gap: 16 }}>
           <img src={LOGO_URI} alt="happybuzz" className="nav-logo" style={{ height: 36, width: "auto", cursor: "pointer" }} onClick={() => goTo("home")} />
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: T.textMd, letterSpacing: "0.04em", textTransform: "uppercase" }}>Pre-Launch Schweiz</span>
