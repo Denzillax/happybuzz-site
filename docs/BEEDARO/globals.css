@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+:root {
+  --color-honey: #F4C03F;
+  --color-honey-light: #F8D76E;
+  --color-honey-dark: #D4A020;
+  --color-text: #191615;
+  --color-bg: #F9F4EC;
+  --color-bg-alt: #F0E8DA;
+  --color-green: #5B8C5A;
+  --color-blue: #94B9C9;
+  --radius: 12px;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 { @apply text-4xl md:text-5xl; }
+  h2 { @apply text-3xl md:text-4xl; }
+  h3 { @apply text-2xl md:text-3xl; }
+}
+
+@layer components {
+  /* Primary CTA Button */
+  .btn-honey {
+    @apply inline-flex items-center justify-center gap-2
+           bg-honey text-text font-semibold
+           px-6 py-3 rounded-buzz
+           shadow-buzz hover:shadow-buzz-hover
+           transition-all duration-200
+           hover:bg-honey-light active:scale-[0.98];
+  }
+
+  /* Secondary Button */
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2
+           border-2 border-text/20 text-text font-medium
+           px-6 py-3 rounded-buzz
+           transition-all duration-200
+           hover:border-honey hover:bg-honey/5;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-white rounded-buzz shadow-buzz
+           overflow-hidden transition-shadow duration-200
+           hover:shadow-buzz-lg;
+  }
+
+  /* Input */
+  .input {
+    @apply w-full px-4 py-3 rounded-buzz
+           border border-text/10 bg-white
+           text-text placeholder:text-text/40
+           focus:outline-none focus:ring-2 focus:ring-honey/50 focus:border-honey
+           transition-all duration-200;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1
+           px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-honey { @apply badge bg-honey/15 text-honey-dark; }
+  .badge-green { @apply badge bg-green/15 text-green; }
+  .badge-blue  { @apply badge bg-blue/15 text-blue; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-text); border-radius: 3px; opacity: 0.2; }
+
+/* Selection */
+::selection {
+  background: var(--color-honey);
+  color: var(--color-text);
+}
+
+

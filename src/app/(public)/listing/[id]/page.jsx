@@ -1,0 +1,867 @@
+"use client";
+import { supabase } from "@/lib/supabase/supabase";
+import { useState, useEffect, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import {
+  Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag,
+} from "lucide-react";
+import BeeIcon from "@/components/shared/BeeIcon";
+import { BeeLevelBadge } from "@/components/shared/BeeLevel";
+import { CategoryIcon } from "@/components/shared/CategoryIcon";
+import { colors, fonts, radius } from "@/lib/theme";
+import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS } from "@/lib/constants";
+import {
+  getListingPublic, toggleFavorite, isListingFavorited,
+  incrementViewCount, createPurchase, getUserAvgRating, getSimilarListings,
+  getOrCreateConversation, placeBid, getBids, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
+  getListingQuestions, askPublicQuestion, replyToQuestion, sendMessage,
+  checkProfileComplete,
+} from "@/lib/listings";
+import { ListingCard } from "@/components/shared/ListingCard";
+import MessagePanel from "@/components/listing-detail/MessagePanel";
+import AuctionPanel from "@/components/listing-detail/AuctionPanel";
+import BookingPanel from "@/components/listing-detail/BookingPanel";
+
+// ── LocationMap: Geocoding via Nominatim ──────────────────
+function LocationMap({ city, canton }) {
+  const [coords, setCoords] = useState(null);
+  useEffect(() => {
+    async function geocode() {
+      try {
+        const q = `${city}${canton ? `, ${canton}` : ""}, Switzerland`;
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`);
+        const data = await res.json();
+        if (data?.[0]) setCoords({ lat: data[0].lat, lon: data[0].lon });
+      } catch {}
+    }
+    if (city) geocode();
+  }, [city, canton]);
+
+  if (!coords) return <div style={{ height: 300, background: colors.warm, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 13 }}>Karte wird geladen...</div>;
+
+  const bbox = `${(parseFloat(coords.lon) - 0.05).toFixed(4)},${(parseFloat(coords.lat) - 0.03).toFixed(4)},${(parseFloat(coords.lon) + 0.05).toFixed(4)},${(parseFloat(coords.lat) + 0.03).toFixed(4)}`;
+  return (
+    <iframe
+      title="Standort"
+      width="100%" height="440" frameBorder="0" style={{ border: 0, display: "block" }}
+      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${coords.lat},${coords.lon}`}
+      loading="lazy"
+    />
+  );
+}
+
+export default function ListingDetail() {
+  const params = useParams();
+  const router = useRouter();
+  const [l, setListing] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isFav, setIsFav] = useState(false);
+  const viewCounted = useRef(false);
+  const [sellerRating, setSellerRating] = useState({ avg: 0, count: 0 });
+  const [activeImg, setActiveImg] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
+
+  // Lightbox Keyboard (ESC, Arrows)
+  useEffect(() => {
+    if (!lightbox) return;
+    const handler = (e) => {
+      if (e.key === "Escape") setLightbox(false);
+      if (e.key === "ArrowLeft") setActiveImg(i => i > 0 ? i - 1 : (l?.images?.length || 1) - 1);
+      if (e.key === "ArrowRight") setActiveImg(i => i < (l?.images?.length || 1) - 1 ? i + 1 : 0);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightbox, l]);
+  const [buyState, setBuyState] = useState("idle"); // idle|confirm|buying|success|error
+  const [buyError, setBuyError] = useState("");
+  const [similar, setSimilar] = useState([]);
+  const [bids, setBids] = useState([]);
+  const [myBid, setMyBid] = useState(null);
+  const [auctionResult, setAuctionResult] = useState(null); // null | {status, winner, price}
+  const [countdown, setCountdown] = useState("");
+  const [bidAmount, setBidAmount] = useState("");
+  const [bidding, setBidding] = useState(false);
+  const [bidError, setBidError] = useState("");
+  const [bidModal, setBidModal] = useState(null); // null | "bid" | "buynow"
+  const [bidShipping, setBidShipping] = useState("shipping");
+  const [questions, setQuestions] = useState([]);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [replyText, setReplyText] = useState({});
+  const [profileWarning, setProfileWarning] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportText, setReportText] = useState("");
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await getListingPublic(params.id);
+        setListing(data);
+        if (data.user_id) getUserAvgRating(data.user_id).then(setSellerRating).catch(() => {});
+        if (data.category_id) getSimilarListings(params.id, data.category_id).then(setSimilar).catch(() => {});
+        if (data.listing_type === "auction") {
+          getBids(params.id).then(setBids).catch(() => {});
+          // Check if auction has ended
+          if (data.auction_end && new Date() >= new Date(data.auction_end) && data.status === "active") {
+            finalizeAuction(params.id).then(result => {
+              if (result) {
+                setAuctionResult(result);
+                if (result.status === "sold") setListing(prev => ({ ...prev, status: "sold", price: result.price }));
+                if (result.status === "expired") setListing(prev => ({ ...prev, status: "expired" }));
+              }
+            }).catch(() => {});
+          }
+        }
+        getListingQuestions(params.id).then(setQuestions).catch(() => {});
+        // View Count: für alle (auch anonyme), ausser Besitzer
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const u = session?.user || null;
+          if (u) {
+            setUser(u);
+            setIsFav(await isListingFavorited(u.id, params.id));
+            if (data.listing_type === "auction") getMyBid(params.id, u.id).then(setMyBid).catch(() => {});
+          }
+          if (!u || u.id !== data.user_id) {
+            if (!viewCounted.current) { viewCounted.current = true; incrementViewCount(params.id).catch(() => {}); }
+          }
+        } catch {}
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
+    }
+    load();
+  }, [params.id]);
+
+  // Auth state listener — keeps user updated after session refresh
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => subscription?.unsubscribe();
+  }, []);
+
+  // Live countdown timer for auctions
+  useEffect(() => {
+    if (!l || l.listing_type !== "auction" || !l.auction_end || l.status !== "active") return;
+    const tick = () => {
+      const now = new Date();
+      const end = new Date(l.auction_end);
+      const diff = end.getTime() - now.getTime();
+      if (diff <= 0) {
+        setCountdown("Auktion beendet");
+        // Auto-finalize
+        finalizeAuction(l.id).then(result => {
+          if (result) {
+            setAuctionResult(result);
+            if (result.status === "sold") setListing(prev => ({ ...prev, status: "sold", price: result.price }));
+            if (result.status === "expired") setListing(prev => ({ ...prev, status: "expired" }));
+          }
+        }).catch(() => {});
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hrs = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      if (diff > 86400000) setCountdown(end.toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }));
+      else if (hrs > 0) setCountdown(`${hrs}h ${mins}m ${secs}s`);
+      else setCountdown(`${mins}m ${secs}s`);
+    };
+    tick();
+    const iv = setInterval(tick, 1000);
+    return () => clearInterval(iv);
+  }, [l?.auction_end, l?.status]);
+
+  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (!l) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
+
+  const imgs = l.images || [];
+  const isOwner = user && user.id === l.user_id;
+  const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
+  const displayPrice = l.listing_type === "auction"
+    ? (bids[0]?.amount || l.price || l.start_price || 0)
+    : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
+  const beeImpact = displayPrice * (l.fee_percentage || 5) / 100 * BEE_IMPACT_RATE;
+  const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
+
+  const handleFav = async () => { if (!user) { router.push("/login"); return; } setIsFav(await toggleFavorite(user.id, l.id)); };
+
+  const handleSendMsg = async (text, isPublic) => {
+    if (!user || !text.trim()) return;
+    try {
+      const isSeller = user.id === l.user_id;
+      const sendPublic = isSeller ? true : isPublic;
+      const filtered = questions.filter(q => sendPublic ? q.is_public : !q.is_public);
+
+      if (filtered.length > 0) {
+        const lastConv = filtered[filtered.length - 1];
+        await replyToQuestion(lastConv.id, user.id, text.trim());
+      } else {
+        const { data: newConv, error: convErr } = await supabase
+          .from("conversations")
+          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: sendPublic })
+          .select()
+          .single();
+        if (convErr) { console.error("Conv error:", convErr); return; }
+
+        const { error: msgErr } = await supabase
+          .from("messages")
+          .insert({ conversation_id: newConv.id, sender_id: user.id, content: text.trim() });
+        if (msgErr) { console.error("Msg error:", msgErr); return; }
+
+        await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", newConv.id);
+      }
+
+      getListingQuestions(params.id).then(setQuestions);
+    } catch (err) { console.error("Send error:", err); }
+  };
+  const handleBuy = async () => {
+    if (!user) { router.push("/login"); return; }
+    if (buyState === "idle") {
+      // Profil-Check vor Kauf
+      const check = await checkProfileComplete(user.id, "buy");
+      if (!check.complete) { setProfileWarning(check.missing); return; }
+      setProfileWarning(null);
+      setBuyState("confirm"); return;
+    }
+    if (buyState === "confirm") {
+      setBuyState("buying");
+      try {
+        const purchaseId = await createPurchase(user.id, l.id);
+        setBuyState("success");
+        setListing((prev) => ({ ...prev, status: "sold" }));
+        if (purchaseId) router.push(`/order/${purchaseId}`);
+      } catch (err) { setBuyError(err.message); setBuyState("error"); }
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 80px" }}>
+
+        {/* ── BREADCRUMBS ─────────────────────────────── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16, fontSize: 13, color: colors.muted, flexWrap: "wrap" }}>
+          <Link href="/" style={{ color: colors.muted, textDecoration: "none" }}>BEEDARO</Link>
+          {l.categoryPath?.map((cat, i) => (
+            <span key={cat.id} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ color: colors.mutedLt }}>/</span>
+              <Link href={`/search?category=${cat.slug}`} style={{ color: i === l.categoryPath.length - 1 ? colors.dark : colors.muted, fontWeight: i === l.categoryPath.length - 1 ? 600 : 400, textDecoration: "none" }}>{cat.name}</Link>
+            </span>
+          ))}
+        </div>
+
+        {/* ── 2-COLUMN LAYOUT ─────────────────────────── */}
+        <div className="detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 380px", className: "detail-grid", gap: 32, alignItems: "start" }}>
+
+          {/* ════ LEFT COLUMN ════ */}
+          <div>
+            {/* ── IMAGE GALLERY ──────────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ position: "relative", aspectRatio: "4/3", background: colors.warm, cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
+                onClick={() => imgs.length > 0 && setLightbox(true)}
+                onMouseMove={(e) => {
+                  if (imgs.length === 0) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = ((e.clientX - rect.left) / rect.width) * 100;
+                  const y = ((e.clientY - rect.top) / rect.height) * 100;
+                  const img = e.currentTarget.querySelector(".zoom-img");
+                  if (img) { img.style.transformOrigin = `${x}% ${y}%`; img.style.transform = "scale(2)"; }
+                }}
+                onMouseLeave={(e) => {
+                  const img = e.currentTarget.querySelector(".zoom-img");
+                  if (img) { img.style.transform = "scale(1)"; }
+                }}>
+                {imgs.length > 0
+                  ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: colors.warm, pointerEvents: "none", transition: "transform 0.15s ease-out" }} />
+                  : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Camera size={60} color={colors.mutedLt} /></div>
+                }
+                {/* Favorite Heart */}
+                <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleFav(); }} style={{
+                  position: "absolute", top: 14, right: 14, width: 40, height: 40, borderRadius: "50%",
+                  background: "rgba(255,255,255,.85)", border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,.1)", transition: "all .15s",
+                }}>
+                  <Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
+                </button>
+                {imgs.length > 1 && <>
+                  <button onClick={(e) => { e.stopPropagation(); setActiveImg((i) => i > 0 ? i - 1 : imgs.length - 1); }} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.8)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><ChevronLeft size={20} /></button>
+                  <button onClick={(e) => { e.stopPropagation(); setActiveImg((i) => i < imgs.length - 1 ? i + 1 : 0); }} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.8)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><ChevronRight size={20} /></button>
+                </>}
+              </div>
+              {imgs.length > 1 && (
+                <div style={{ display: "flex", gap: 8, padding: "12px 16px", overflowX: "auto" }}>
+                  {imgs.map((img, i) => (
+                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 6, overflow: "hidden", border: i === activeImg ? `2px solid ${colors.yellow}` : `2px solid transparent`, cursor: "pointer", flexShrink: 0 }}>
+                      <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* ── ATTRIBUTE BAR ──────────────────────── */}
+            <div style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+              {l.condition && (
+                <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
+                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Zustand</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{condLabel}</p>
+                </div>
+              )}
+              {l.categoryName && (
+                <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
+                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Kategorie</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.categoryName}</p>
+                </div>
+              )}
+              {l.city && (
+                <div style={{ flex: 1, padding: "14px 18px" }}>
+                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Standort</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700 }}>{l.city}</p>
+                </div>
+              )}
+            </div>
+
+            {/* ── BESCHREIBUNG ───────────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+              <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
+              <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
+            </div>
+
+            {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+              <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
+              <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "12px 20px", fontSize: 13 }}>
+                <span style={{ color: colors.muted }}>Lieferung</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Truck size={14} color={colors.muted} /> {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}</span>
+                {l.pickup_only && <>
+                  <span style={{ color: colors.muted }}>Abholung</span>
+                  <span style={{ display: "flex", alignItems: "center", gap: 6 }}><MapPin size={14} color={colors.muted} /> {l.city || "Vor Ort"}</span>
+                </>}
+                <span style={{ color: colors.muted }}>Bezahlung</span>
+                <span style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {l.pay_twint && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>TWINT</span>}
+                  {l.pay_bank && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>Banküberweisung</span>}
+                  {l.pay_cash && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>Barzahlung</span>}
+                </span>
+              </div>
+            </div>
+
+            {/* ── VERKÄUFER ──────────────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+              <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={colors.yellow} />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                    <Link href={`/user/${l.user_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{l.sellerName}</Link>
+                    <BeeLevelBadge impactTotal={l.sellerBeeImpact} size="md" />
+                  </div>
+                  {sellerRating.count > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                      <div style={{ display: "flex", gap: 2 }}>{[1, 2, 3, 4, 5].map((s) => <Star key={s} size={14} color={s <= Math.round(sellerRating.avg) ? colors.yellow : colors.borderLt} fill={s <= Math.round(sellerRating.avg) ? colors.yellow : "none"} />)}</div>
+                      <span style={{ fontSize: 13, color: colors.muted }}>{sellerRating.avg.toFixed(1)} ({sellerRating.count} Bewertungen)</span>
+                    </div>
+                  )}
+                  <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>Dabei seit {l.sellerSince ? new Date(l.sellerSince).toLocaleDateString("de-CH", { month: "long", year: "numeric" }) : "–"}</p>
+                </div>
+                <Link href={`/user/${l.user_id}`} style={{ padding: "8px 16px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 12, fontWeight: 700, color: colors.dark, textDecoration: "none", whiteSpace: "nowrap" }}>ALLE ARTIKEL</Link>
+              </div>
+            </div>
+
+            {/* ── STANDORT (KARTE) ──────────────────── */}
+            {l.city && (
+              <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+                <div style={{ padding: "16px 28px 12px" }}>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
+                  <p style={{ margin: "4px 0 0", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
+                    <MapPin size={13} /> {l.city}, Schweiz
+                  </p>
+                </div>
+                <LocationMap city={l.city} canton={l.canton} />
+              </div>
+            )}
+
+            <MessagePanel questions={questions} user={user} listing={l} isOwner={isOwner} onSendMsg={handleSendMsg} />
+          </div>
+
+          {/* ════ RIGHT COLUMN (STICKY SIDEBAR) ════ */}
+          <div style={{ position: "sticky", top: 84 }}>
+
+            {/* ── TITLE + PRICE CARD ─────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 14 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.3 }}>{l.title}</h1>
+              <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
+                <Clock size={13} /> {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}
+                {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span>{l.view_count} Aufrufe</>}
+              </p>
+
+              {/* Price */}
+              <div style={{ marginBottom: 16 }}>
+                <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontWeight: 600 }}>
+                  {l.listing_type === "auction" ? "Aktuelles Gebot" : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
+                </p>
+                <p style={{ margin: "2px 0 0", fontSize: 32, fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
+                  {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : `CHF ${fmtPrice(displayPrice)}`}
+                </p>
+              </div>
+
+              {/* Buy / Status */}
+              {l.listing_type === "sell" && l.status === "active" && (
+                <div>
+                  <button onClick={() => {
+                    if (isOwner) return;
+                    if (!user) { router.push("/login"); return; }
+                    setBidShipping(l.shipping_available ? "shipping" : "pickup");
+                    setBidModal("buynow");
+                  }} disabled={isOwner}
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                      padding: "15px", borderRadius: radius.sm, border: "none", width: "100%",
+                      background: isOwner ? colors.warm : colors.yellow,
+                      color: isOwner ? colors.mutedLt : colors.dark,
+                      fontSize: 15, fontWeight: 800, fontFamily: fonts.body, letterSpacing: ".03em",
+                      cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1,
+                    }}>
+                    <ShoppingBag size={18} /> KAUFEN · CHF {fmtPrice(l.price)}
+                  </button>
+                  {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginTop: 6, marginBottom: 0 }}>Das ist dein eigenes Inserat</p>}
+                </div>
+              )}
+              {l.status === "sold" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                  {l.listing_type === "auction" ? "Auktion beendet. Verkauft" : "Verkauft"}
+                  {auctionResult?.winner === user?.id && <div style={{ fontSize: 12, marginTop: 4 }}>Du hast die Auktion gewonnen! CHF {fmtPrice(auctionResult.price)}</div>}
+                </div>
+              )}
+              {l.status === "rented" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#E3F2FD", color: "#1565C0", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                  Aktuell vermietet
+                </div>
+              )}
+              {l.status === "archived" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.cream, color: colors.muted, fontSize: 14, fontWeight: 700, textAlign: "center", border: `1px solid ${colors.border}` }}>
+                  Nicht mehr verfügbar
+                </div>
+              )}
+              {l.status === "paused" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFF3E0", color: "#E65100", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                  Vorübergehend pausiert
+                </div>
+              )}
+              {l.status === "expired" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.cream, color: colors.muted, fontSize: 14, fontWeight: 700, textAlign: "center", border: `1px solid ${colors.border}` }}>
+                  Auktion abgelaufen. Keine Gebote eingegangen
+                </div>
+              )}
+
+              <AuctionPanel listing={l} user={user} isOwner={isOwner}
+                    onBidModal={(bids, myBid) => {
+                      const minBid = (bids[0]?.amount || l.start_price || 0) + 1;
+                      setBidAmount(myBid ? String(myBid.max_amount) : String(Math.ceil(minBid)));
+                      setBidModal("bid");
+                    }}
+                    onBuyNowModal={() => setBidModal("buynow")}
+                  />
+
+                  
+
+              {/* ── KAUFEN / SOFORTKAUF MODAL (für Festpreis + Auktion) ── */}
+              {bidModal && (
+                    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setBidModal(null)}>
+                      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, width: "100%", maxWidth: 440, maxHeight: "85vh", overflow: "auto", fontFamily: fonts.body }}>
+                        {/* Modal Header */}
+                        <div style={{ padding: "18px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                          <div>
+                            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>{l.title}</h3>
+                            <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>
+                              {l.listing_type === "auction"
+                                ? `ab CHF ${fmtPrice(l.start_price || 1)}.– · Endet ${l.auction_end ? new Date(l.auction_end).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) + " Uhr" : "—"}`
+                                : `Festpreis CHF ${fmtPrice(l.price)}`
+                              }
+                            </p>
+                          </div>
+                          <button onClick={() => setBidModal(null)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}><X size={20} /></button>
+                        </div>
+
+                        <div style={{ padding: "16px 20px" }}>
+                          {bidModal === "bid" ? (
+                            <>
+                              {/* Current Bid */}
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 12 }}>
+                                <span style={{ color: colors.muted }}>Aktuelles Gebot</span>
+                                <span style={{ fontWeight: 700 }}>CHF {fmtPrice(bids[0]?.amount || l.start_price || l.price)}</span>
+                              </div>
+
+                              {/* Your Max Bid */}
+                              <div style={{ marginBottom: 16 }}>
+                                <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 6 }}>Dein Gebot</label>
+                                <p style={{ fontSize: 11, color: colors.muted, margin: "0 0 8px" }}>
+                                  {myBid
+                                    ? `Aktuelles Preislimit: CHF ${myBid.max_amount?.toFixed(2)}. Du kannst es erhöhen oder senken (min. CHF ${(myBid.amount + 1).toFixed(2)}).`
+                                    : "Gib dein Preislimit ein. Das System bietet automatisch das Minimum für dich."
+                                  }
+                                </p>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
+                                  <input type="number" value={bidAmount} onChange={e => {
+                                    let val = e.target.value;
+                                    if (l.buy_now_price > 0 && parseFloat(val) >= l.buy_now_price) {
+                                      val = String(l.buy_now_price - 1);
+                                    }
+                                    setBidAmount(val);
+                                  }}
+                                    min={myBid ? myBid.amount + 1 : (bids[0]?.amount || l.start_price || 0) + 1}
+                                    max={l.buy_now_price > 0 ? l.buy_now_price - 1 : undefined}
+                                    style={{ flex: 1, padding: "12px 14px", borderRadius: 8, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
+                                    onFocus={e => e.target.style.borderColor = colors.yellow}
+                                    onBlur={e => e.target.style.borderColor = colors.border} />
+                                </div>
+                                {l.buy_now_price > 0 && <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Max: CHF {fmtPrice(l.buy_now_price - 1)} (ab Sofortkauf-Preis wird direkt gekauft)</p>}
+                                {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
+                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
+                                    Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
+                                    <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: colors.yellow, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {/* Sofortkauf / Festpreis */}
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 16 }}>
+                                <span style={{ color: colors.muted }}>{l.listing_type === "auction" ? "Sofortkauf-Preis" : "Preis"}</span>
+                                <span style={{ fontWeight: 700 }}>CHF {fmtPrice(l.listing_type === "auction" ? l.buy_now_price : l.price)}</span>
+                              </div>
+                            </>
+                          )}
+
+                          {/* Delivery Options */}
+                          <div style={{ marginBottom: 16 }}>
+                            <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 8 }}>Lieferung</label>
+                            {l.shipping_available && (
+                              <div onClick={() => setBidShipping("shipping")} style={{
+                                display: "flex", justifyContent: "space-between", alignItems: "center",
+                                padding: "10px 14px", borderRadius: 8, marginBottom: 6, cursor: "pointer",
+                                border: `1.5px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`,
+                                background: bidShipping === "shipping" ? colors.yellowSoft : "transparent",
+                              }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {bidShipping === "shipping" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                                  </div>
+                                  <span style={{ fontSize: 13 }}>{l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"} {l.ship_speed === "priority" ? "A-Post" : "B-Post"}</span>
+                                </div>
+                                <span style={{ fontSize: 13, fontWeight: 700 }}>CHF {fmtPrice(l.free_shipping ? 0 : l.shipping_cost || 9)}</span>
+                              </div>
+                            )}
+                            {l.pickup_only && (
+                              <div onClick={() => setBidShipping("pickup")} style={{
+                                display: "flex", justifyContent: "space-between", alignItems: "center",
+                                padding: "10px 14px", borderRadius: 8, cursor: "pointer",
+                                border: `1.5px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`,
+                                background: bidShipping === "pickup" ? colors.yellowSoft : "transparent",
+                              }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {bidShipping === "pickup" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                                  </div>
+                                  <span style={{ fontSize: 13 }}>Abholung in {l.postal_code} {l.city}</span>
+                                </div>
+                                <span style={{ fontSize: 13, fontWeight: 700 }}>CHF 0.00</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Cost Breakdown */}
+                          {(() => {
+                            const itemPrice = bidModal === "buynow" ? (l.listing_type === "auction" ? l.buy_now_price : l.price) : parseFloat(bidAmount) || 0;
+                            const shipCost = bidShipping === "pickup" ? 0 : (l.free_shipping ? 0 : parseFloat(l.shipping_cost) || 9);
+                            const total = itemPrice + shipCost;
+                            return (
+                              <div style={{ padding: "14px 0", borderTop: `1px solid ${colors.border}`, marginBottom: 16 }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 6 }}>
+                                  <span>{bidModal === "buynow" ? (l.listing_type === "auction" ? "Sofortkauf" : "Artikelpreis") : "Max. Gebotsbetrag"}</span>
+                                  <span>CHF {fmtPrice(itemPrice)}</span>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 8 }}>
+                                  <span>{bidShipping === "pickup" ? "Abholung" : l.shipping_method === "brief" ? "Brief" : "Paket"}</span>
+                                  <span>{shipCost === 0 ? "Gratis" : `CHF ${fmtPrice(shipCost)}`}</span>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: `1.5px solid ${colors.dark}` }}>
+                                  <span>{bidModal === "bid" ? "Max. Total" : "Total"}</span>
+                                  <span>CHF {fmtPrice(total)}</span>
+                                </div>
+                                {bidModal === "bid" && (
+                                  <p style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>Du zahlst nur so viel wie nötig. Dein Maximum wird nur erreicht, wenn jemand mitbietet.</p>
+                                )}
+                              </div>
+                            );
+                          })()}
+
+                          {/* AGB Text */}
+                          <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.5, marginBottom: 16 }}>
+                            {bidModal === "bid"
+                              ? <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a>. Das System bietet automatisch für dich bis zu deinem Maximum. Du verpflichtest dich, den Gesamtbetrag zu zahlen, wenn du die Auktion gewinnst.</>
+                              : <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a> und verpflichtest dich, den Gesamtbetrag zu zahlen.</>
+                            }
+                          </p>
+
+                          {bidError && <p style={{ fontSize: 12, color: "#c00", marginBottom: 10 }}>{bidError}</p>}
+
+                          {/* Buttons */}
+                          <div style={{ display: "flex", gap: 10 }}>
+                            <button onClick={() => setBidModal(null)} style={{ flex: 1, padding: "14px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                            <button onClick={async () => {
+                              setBidding(true); setBidError("");
+                              try {
+                                if (bidModal === "buynow") {
+                                  // For auctions: update listing price to buy_now_price first
+                                  if (l.listing_type === "auction" && l.buy_now_price > 0) {
+                                    await supabase.from("listings").update({ price: l.buy_now_price }).eq("id", l.id);
+                                  }
+                                  const purchaseId = await createPurchase(user.id, l.id);
+                                  // Ensure purchase price matches buy_now_price (not auction bid)
+                                  if (l.listing_type === "auction" && l.buy_now_price > 0 && purchaseId) {
+                                    await supabase.from("purchases").update({ price: l.buy_now_price }).eq("id", purchaseId);
+                                  }
+                                  setBuyState("success");
+                                  setBidModal(null);
+                                  router.push(`/order/${purchaseId || l.id}`);
+                                } else {
+                                  const amount = parseFloat(bidAmount);
+                                  const minBid = myBid ? myBid.amount + 1 : (bids[0]?.amount || l.start_price || 0) + 1;
+                                  if (amount < minBid) { setBidError(`Minimum: CHF ${fmtPrice(minBid)}`); setBidding(false); return; }
+                                  if (l.buy_now_price > 0 && amount >= l.buy_now_price) { setBidError(`Max: CHF ${fmtPrice(l.buy_now_price - 1)}. Nutze Sofortkauf.`); setBidding(false); return; }
+                                  
+                                  if (myBid && amount < myBid.max_amount) {
+                                    // Preislimit SENKEN
+                                    await adjustPreislimit(l.id, user.id, amount);
+                                    const newMyBid = await getMyBid(l.id, user.id);
+                                    setMyBid(newMyBid);
+                                    window.__auctionRefresh?.();
+                                    setBidError(""); setBidModal(null);
+                                  } else {
+                                    // Neues Gebot oder Preislimit ERHÖHEN
+                                    const result = await placeBid(l.id, user.id, amount);
+                                    const newBids = await getBids(l.id);
+                                    setBids(newBids);
+                                    const newMyBid = await getMyBid(l.id, user.id);
+                                    setMyBid(newMyBid);
+                                    setListing(prev => ({ ...prev, price: result.displayPrice || newBids[0]?.amount || prev.price }));
+                                    window.__auctionRefresh?.();
+                                    if (result.isTopBidder) {
+                                      setBidError(""); setBidModal(null);
+                                    } else {
+                                      setBidError(result.message || "Du wurdest automatisch überboten.");
+                                    }
+                                  }
+                                  setBidAmount("");
+                                }
+                              } catch (err) { setBidError(err.message); }
+                              finally { setBidding(false); }
+                            }} disabled={bidding || (bidModal === "bid" && !bidAmount)}
+                              style={{ flex: 1, padding: "14px", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
+                              {bidding ? "Wird verarbeitet..." : bidModal === "bid" ? "Gebot bestätigen" : "Kaufen"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+              <BookingPanel listing={l} user={user} isOwner={isOwner} />
+
+                  
+
+              {/* ── FREE ──────────────────────────────── */}
+              {l.listing_type === "free" && l.status === "active" && (
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>Gratis — Kontaktiere den Verkäufer</div>
+              )}
+
+              {/* Success */}
+              {buyState === "success" && (
+                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Kauf erfolgreich!</p>
+                  <Link href="/purchases" style={{ fontSize: 13, color: colors.blue }}>Zu meinen Käufen</Link>
+                </div>
+              )}
+              {buyState === "error" && (
+                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#fff0f0", textAlign: "center" }}>
+                  <p style={{ margin: 0, fontSize: 13, color: "#c00" }}>{buyError}</p>
+                  <button onClick={() => setBuyState("idle")} style={{ marginTop: 6, fontSize: 12, color: colors.blue, background: "none", border: "none", cursor: "pointer" }}>Nochmal versuchen</button>
+                </div>
+              )}
+
+              {/* Favorit */}
+              <button onClick={handleFav} style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
+                background: isFav ? colors.yellowSoft : colors.surface, color: isFav ? colors.dark : colors.muted,
+                fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 10,
+                letterSpacing: ".03em",
+              }}>
+                <Heart size={16} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
+                {isFav ? "IN FAVORITEN" : "ZU FAVORITEN HINZUFÜGEN"}
+              </button>
+            </div>
+
+            {/* ── PROFIL-WARNUNG ──────────────────────── */}
+            {profileWarning && (
+              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
+                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100" }}>Profil unvollständig:</p>
+                {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100" }}>• {m}</p>)}
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 6, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+              </div>
+            )}
+
+            {/* ── BEE-IMPACT BOX ─────────────────────── */}
+            {l.status === "active" && beeImpact > 0 && (
+              <div style={{ background: colors.greenSoft, borderRadius: radius.lg, border: `1px solid ${colors.green}22`, padding: "18px 22px", marginBottom: 14 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <BeeIcon size={20} color={colors.green} />
+                  <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
+                </div>
+                <p style={{ margin: 0, fontSize: 13, color: colors.dark, lineHeight: 1.5 }}>
+                  Bei einem Kauf gehen <b style={{ color: colors.green }}>CHF {beeImpact.toFixed(2)}</b> an Schweizer Bienen- und Naturprojekte.
+                </p>
+              </div>
+            )}
+
+            {/* ── LIEFERUNG SIDEBAR ──────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
+              <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Lieferung</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>
+                {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}
+              </p>
+              {l.pickup_only && <p style={{ margin: "4px 0 0", color: colors.muted }}>Abholung in {l.city || "–"}</p>}
+            </div>
+
+            {/* ── SELLER MINI-CARD ───────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 22px", marginBottom: 14 }}>
+              <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
+              <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
+                </div>
+                <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.sellerName}</span>
+                {sellerRating.count > 0 && (
+                  <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 4, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
+                    {sellerRating.avg.toFixed(1)}
+                  </span>
+                )}
+              </Link>
+            </div>
+
+            {/* ── SHARE ──────────────────────────────── */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, padding: "8px 0" }}>
+              <button onClick={() => { navigator.clipboard.writeText(window.location.href); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.blue, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
+                <Share2 size={14} /> TEILEN
+              </button>
+              {user && !isOwner && (
+                <button onClick={() => setShowReportModal(true)} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.muted, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
+                  <Flag size={14} /> MELDEN
+                </button>
+              )}
+            </div>
+
+            {/* Report Modal */}
+            {showReportModal && (              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
+                onClick={() => setShowReportModal(false)}>
+                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "24px 28px", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
+                  <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 800 }}>Inserat melden</h3>
+                  <p style={{ margin: "0 0 12px", fontSize: 12, color: colors.muted }}>Warum möchtest du dieses Inserat melden?</p>
+                  <select value={reportReason} onChange={e => setReportReason(e.target.value)}
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 6, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, marginBottom: 10, outline: "none" }}>
+                    <option value="">Grund wählen...</option>
+                    <option value="counterfeit">Gefälschtes Inserat</option>
+                    <option value="inappropriate">Unangemessener Inhalt</option>
+                    <option value="fraud">Betrug / Scam</option>
+                    <option value="spam">Spam / Duplikat</option>
+                    <option value="other">Sonstiges</option>
+                  </select>
+                  <textarea value={reportText} onChange={e => setReportText(e.target.value)} placeholder="Details (optional)..."
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 6, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, minHeight: 80, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
+                  <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                    <button onClick={() => setShowReportModal(false)}
+                      style={{ flex: 1, padding: "10px", borderRadius: 6, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                    <button onClick={async () => {
+                      if (!reportReason) return;
+                      await supabase.from("reports").insert({ reporter_id: user.id, listing_id: l.id, reason: reportReason, description: reportText || null, report_type: "listing" });
+                      setShowReportModal(false); setReportReason(""); setReportText("");
+                      alert("Danke für deine Meldung. Wir prüfen das Inserat.");
+                    }} disabled={!reportReason}
+                      style={{ flex: 1, padding: "10px", borderRadius: 6, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── ÄHNLICHE ARTIKEL ─────────────────────────── */}
+        {similar.length > 0 && (
+          <div style={{ marginTop: 40 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, marginBottom: 20, letterSpacing: ".02em" }}>Ähnliche Artikel</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+              {similar.map((item) => (
+                <ListingCard key={item.id} listing={item} userId={user?.id} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Responsive ────────────────────────────────── */}
+      <style>{`
+        @media (max-width: 900px) {
+          .detail-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
+      {/* ── LIGHTBOX ────────────────────────────────── */}
+      {lightbox && imgs.length > 0 && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.92)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={() => setLightbox(false)}>
+          {/* Close */}
+          <button onClick={() => setLightbox(false)} style={{ position: "absolute", top: 20, right: 20, width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10001 }}>
+            <X size={24} color="#fff" />
+          </button>
+          {/* Counter */}
+          <div style={{ position: "absolute", top: 24, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: 600, fontFamily: "'Manrope', sans-serif" }}>
+            {activeImg + 1} / {imgs.length}
+          </div>
+          {/* Main Image */}
+          <img src={imgs[activeImg]?.url} alt={l.title} onClick={e => e.stopPropagation()}
+            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 4, cursor: "default" }} />
+          {/* Arrows */}
+          {imgs.length > 1 && <>
+            <button onClick={(e) => { e.stopPropagation(); setActiveImg(i => i > 0 ? i - 1 : imgs.length - 1); }}
+              style={{ position: "absolute", left: 20, top: "50%", transform: "translateY(-50%)", width: 48, height: 48, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <ChevronLeft size={28} color="#fff" />
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); setActiveImg(i => i < imgs.length - 1 ? i + 1 : 0); }}
+              style={{ position: "absolute", right: 20, top: "50%", transform: "translateY(-50%)", width: 48, height: 48, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <ChevronRight size={28} color="#fff" />
+            </button>
+          </>}
+          {/* Thumbnails */}
+          {imgs.length > 1 && (
+            <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8, padding: "8px 12px", background: "rgba(0,0,0,0.5)", borderRadius: 8 }} onClick={e => e.stopPropagation()}>
+              {imgs.map((img, i) => (
+                <div key={i} onClick={() => setActiveImg(i)} style={{ width: 52, height: 52, borderRadius: 4, overflow: "hidden", border: i === activeImg ? "2px solid #F4C03F" : "2px solid transparent", cursor: "pointer", opacity: i === activeImg ? 1 : 0.5, transition: "opacity .15s" }}>
+                  <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

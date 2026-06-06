@@ -1,0 +1,155 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import { CategoryIcon } from "@/components/shared/CategoryIcon";
+import { colors, fonts, radius } from "@/lib/theme";
+import { getAllCategories } from "@/lib/listings";
+
+function buildTree(cats) {
+  const map = {};
+  const roots = [];
+  cats.forEach((c) => { map[c.id] = { ...c, children: [] }; });
+  cats.forEach((c) => {
+    if (c.parent_id && map[c.parent_id]) {
+      map[c.parent_id].children.push(map[c.id]);
+    } else if (!c.parent_id) {
+      roots.push(map[c.id]);
+    }
+  });
+  return roots;
+}
+
+export function MegaMenu({ open, onClose }) {
+  const [categories, setCategories] = useState([]);
+  const [activeMain, setActiveMain] = useState(null);
+  const [activeSub, setActiveSub] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    getAllCategories().then((data) => setCategories(buildTree(data)));
+  }, []);
+
+  useEffect(() => {
+    if (!open) { setActiveMain(null); setActiveSub(null); }
+  }, [open]);
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) onClose();
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open, onClose]);
+
+  if (!open || !categories.length) return null;
+
+  const mainCat = activeMain ? categories.find((c) => c.id === activeMain) : null;
+  const subCat = activeSub && mainCat ? mainCat.children.find((c) => c.id === activeSub) : null;
+
+  const colStyle = {
+    width: 240, flexShrink: 0, maxHeight: "70vh", overflowY: "auto", borderRight: `1px solid ${colors.borderLt}`,
+    padding: "8px 0",
+  };
+
+  const itemStyle = (active) => ({
+    display: "flex", alignItems: "center", justifyContent: "space-between",
+    padding: "10px 16px", fontSize: 13, fontFamily: fonts.body,
+    color: active ? colors.dark : colors.muted, fontWeight: active ? 700 : 500,
+    background: active ? colors.yellowSoft : "transparent",
+    cursor: "pointer", transition: "all .1s", textDecoration: "none",
+    borderLeft: active ? `3px solid ${colors.yellow}` : "3px solid transparent",
+  });
+
+  return (
+    <div ref={ref} style={{
+      position: "absolute", top: "100%", left: 0, zIndex: 1000,
+      background: colors.surface, borderRadius: `0 0 ${radius.lg}px ${radius.lg}px`,
+      border: `1px solid ${colors.border}`, borderTop: `2px solid ${colors.yellow}`,
+      boxShadow: "0 12px 40px rgba(0,0,0,.12)",
+      display: "flex", minHeight: 300,
+    }}>
+      {/* Column 1: Main Categories */}
+      <div style={colStyle}>
+        <div style={{ padding: "8px 16px 12px", fontSize: 11, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".06em" }}>
+          Alle Kategorien
+        </div>
+        {categories.map((cat) => (
+          <div
+            key={cat.id}
+            onMouseEnter={() => { setActiveMain(cat.id); setActiveSub(null); }}
+          >
+            {cat.children.length > 0 ? (
+              <div style={itemStyle(activeMain === cat.id)}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CategoryIcon name={cat.icon} size={16} />
+                  {cat.name}
+                </span>
+                <ChevronRight size={14} />
+              </div>
+            ) : (
+              <Link href={`/search?category=${cat.slug}`} style={itemStyle(activeMain === cat.id)} onClick={onClose}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CategoryIcon name={cat.icon} size={16} />
+                  {cat.name}
+                </span>
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Column 2: Subcategories */}
+      {mainCat && mainCat.children.length > 0 && (
+        <div style={colStyle}>
+          <Link href={`/search?category=${mainCat.slug}`} onClick={onClose}
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            Alle in {mainCat.name}
+          </Link>
+          {mainCat.children.map((sub) => (
+            <div
+              key={sub.id}
+              onMouseEnter={() => setActiveSub(sub.id)}
+            >
+              {sub.children.length > 0 ? (
+                <div style={itemStyle(activeSub === sub.id)}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <CategoryIcon name={sub.icon} size={14} />
+                    {sub.name}
+                  </span>
+                  <ChevronRight size={14} />
+                </div>
+              ) : (
+                <Link href={`/search?category=${sub.slug}`} style={itemStyle(activeSub === sub.id)} onClick={onClose}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <CategoryIcon name={sub.icon} size={14} />
+                    {sub.name}
+                  </span>
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Column 3: Sub-Subcategories */}
+      {subCat && subCat.children.length > 0 && (
+        <div style={{ ...colStyle, borderRight: "none" }}>
+          <Link href={`/search?category=${subCat.slug}`} onClick={onClose}
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            Alle in {subCat.name}
+          </Link>
+          {subCat.children.map((subsub) => (
+            <Link key={subsub.id} href={`/search?category=${subsub.slug}`} style={itemStyle(false)} onClick={onClose}>
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <CategoryIcon name={subsub.icon} size={14} />
+                {subsub.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+
+    </div>
+  );
+}

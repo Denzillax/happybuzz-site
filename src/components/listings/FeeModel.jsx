@@ -1,0 +1,135 @@
+"use client";
+
+import { colors, fonts, radius } from "@/lib/theme";
+import { FEE_TIERS, BEE_IMPACT_RATE } from "@/lib/constants";
+import BeeIcon from "@/components/shared/BeeIcon";
+
+export default function FeeModel({ price, selected, onSelect, defaultTier }) {
+  const numPrice = parseFloat(price) || 0;
+  const numSelected = typeof selected === "number" ? selected : parseInt(selected) || 5;
+  const activeTier = FEE_TIERS.find((t) => t.pct === numSelected) || FEE_TIERS[1];
+
+  return (
+    <div>
+      {/* Tier Cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+        {FEE_TIERS.map((t) => {
+          const isActive = numSelected === t.pct;
+          const isDefault = defaultTier && (defaultTier === t.tier || defaultTier === t.dbTier || defaultTier === t.pct || defaultTier === String(t.pct));
+          const beePct = (t.pct * BEE_IMPACT_RATE).toFixed(1);
+          const platPct = (t.pct * (1 - BEE_IMPACT_RATE)).toFixed(1);
+
+          return (
+            <div
+              key={t.pct}
+              onClick={() => onSelect(t.pct, t.tier)}
+              style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "14px 16px", borderRadius: radius.sm,
+                cursor: "pointer",
+                background: isActive ? colors.yellowSoft : colors.surface,
+                border: `1.5px solid ${isActive ? colors.yellow : colors.border}`,
+                transition: "all .15s",
+              }}
+            >
+              {/* Radio */}
+              <div style={{
+                width: 20, height: 20, borderRadius: "50%",
+                border: `2px solid ${isActive ? colors.yellow : colors.border}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                {isActive && (
+                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: colors.yellow }} />
+                )}
+              </div>
+
+              {/* Info */}
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 15, fontWeight: 700, fontFamily: fonts.body, color: colors.dark }}>
+                    {t.label}
+                  </span>
+                  <span style={{
+                    fontSize: 18, fontFamily: fonts.head,
+                    color: isActive ? colors.yellow : colors.muted, letterSpacing: ".02em",
+                  }}>
+                    {t.pct}%
+                  </span>
+                  {isDefault && (
+                    <span style={{
+                      fontSize: 9, fontWeight: 800, fontFamily: fonts.body,
+                      background: colors.green, color: "#fff",
+                      padding: "2px 6px", borderRadius: 4,
+                      textTransform: "uppercase", letterSpacing: ".04em",
+                    }}>
+                      Dein Standard
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontSize: 12, color: colors.muted, fontFamily: fonts.body, marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
+                  {platPct}% Plattform · {beePct}% Bee-Impact <BeeIcon size={13} color={colors.yellow} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Summary */}
+      {numPrice > 0 && (() => {
+        const totalFee = numPrice * activeTier.pct / 100;
+        const beeFee = totalFee * BEE_IMPACT_RATE;
+        const platFee = totalFee * (1 - BEE_IMPACT_RATE);
+        const payout = numPrice - totalFee;
+
+        return (
+          <div style={{
+            background: colors.surface, border: `1.5px solid ${colors.border}`,
+            borderRadius: radius.sm, padding: "14px 16px",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted }}>Verkaufspreis</span>
+              <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.dark }}>
+                CHF {numPrice.toFixed(2)}
+              </span>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+              <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted }}>
+                Plattform ({(activeTier.pct * (1 - BEE_IMPACT_RATE)).toFixed(1)}%)
+              </span>
+              <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.red }}>
+                − CHF {platFee.toFixed(2)}
+              </span>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 4 }}>
+                Bee-Impact ({(activeTier.pct * BEE_IMPACT_RATE).toFixed(1)}%) <BeeIcon size={13} color={colors.yellow} />
+              </span>
+              <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.green }}>
+                − CHF {beeFee.toFixed(2)}
+              </span>
+            </div>
+
+            <div style={{
+              borderTop: `1px solid ${colors.border}`, paddingTop: 8, marginTop: 4,
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 700, color: colors.dark }}>
+                Du erhältst
+              </span>
+              <span style={{
+                fontSize: 18, fontFamily: fonts.head,
+                color: colors.green, letterSpacing: ".02em",
+              }}>
+                CHF {payout.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}

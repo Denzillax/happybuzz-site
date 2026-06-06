@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #F9F4EC;
+  color: #191615;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═══════════════════════════════════════════
+   GRID DEFAULTS — Desktop
+   ═══════════════════════════════════════════ */
+.cat-grid { grid-template-columns: repeat(5, 1fr); }
+.steps-grid { grid-template-columns: repeat(3, 1fr); }
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE — Homepage Sections
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Hero: image first, compact */
+  .hero-section {
+    min-height: auto !important;
+  }
+  .hero-content {
+    flex-direction: column-reverse !important;
+    padding: 24px 20px 20px !important;
+    min-height: auto !important;
+    gap: 16px !important;
+  }
+  .hero-content > div {
+    flex-basis: auto !important;
+    flex-shrink: 1 !important;
+    flex-grow: 0 !important;
+  }
+  .hero-content > div img {
+    max-height: 280px !important;
+  }
+
+  /* Categories: 3 columns on tablet, 2 on phone */
+  .cat-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* HowItWorks: 1 column stacked */
+  .steps-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* WhyBeedaro: 1 column stacked */
+  .why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Search: filter panel fullscreen overlay */
+  .search-filter-panel {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    z-index: 60 !important;
+    overflow-y: auto !important;
+    padding: 0 !important;
+  }
+  .search-filter-panel > div {
+    border: none !important;
+    border-radius: 0 !important;
+    min-height: 100vh;
+    padding: 24px 20px !important;
+  }
+
+  /* Detail page: single column */
+  .detail-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .detail-layout > div:last-child {
+    position: static !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Categories: 2 columns on small phones */
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   LOGIN PAGE
+   ═══════════════════════════════════════════ */
+@keyframes floatHex { 0%{transform:translateY(0) rotate(0)} 100%{transform:translateY(-18px) rotate(12deg)} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+.card-enter { animation: fadeIn .4s ease-out; }
+.logo-p { animation: pulse 3s ease-in-out infinite; }
+.tab { position:relative; background:none; border:none; padding:11px 0; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
+.tab.active { color:#191615; }
+.tab.active::after { content:''; position:absolute; bottom:0; left:15%; width:70%; height:2.5px; background:#F4C03F; border-radius:2px; }
+.link { color:#D4A017; font-weight:600; cursor:pointer; text-decoration:none; font-size:13px; }
+.link:hover { color:#191615; text-decoration:underline; }
+
+/* Print Styles */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+  @page { margin: 15mm 20mm; }
+}
+
+/* ── Footer Responsive ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ftr-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .ftr-bottom {
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ftr-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+}
