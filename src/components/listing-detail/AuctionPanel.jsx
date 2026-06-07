@@ -3,7 +3,20 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Gavel, Clock, ShoppingBag, ChevronDown, ChevronUp } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getBids, getMyBid, getBidHistory, removePreislimit } from "@/lib/listings";
+import { supabase } from "@/lib/supabase/supabase";
+import { getBids, getMyBid, removePreislimit } from "@/lib/listings";
+
+// Direkt hier definiert, nicht aus listings.js
+async function getBidHistory(listingId) {
+  const { data, error } = await supabase
+    .from("bid_history")
+    .select("*, bidder:profiles!bid_history_bidder_id_fkey(id, display_name)")
+    .eq("listing_id", listingId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) { console.error("getBidHistory inline:", error.message); return []; }
+  return data || [];
+}
 
 export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuyNowModal }) {
   const router = useRouter();

@@ -15,7 +15,7 @@ import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS } from "@/lib/constants";
 import {
   getListingPublic, toggleFavorite, isListingFavorited,
   incrementViewCount, createPurchase, getUserAvgRating, getSimilarListings,
-  getOrCreateConversation, placeBid, getBids, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
+  getOrCreateConversation, placeBid, getBids, getBidHistory, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
   getListingQuestions, askPublicQuestion, replyToQuestion, sendMessage,
   checkProfileComplete,
 } from "@/lib/listings";
@@ -76,6 +76,8 @@ export default function ListingDetail() {
   const [buyError, setBuyError] = useState("");
   const [similar, setSimilar] = useState([]);
   const [bids, setBids] = useState([]);
+  const [bidHistory, setBidHistory] = useState([]);
+  const [showAllBids, setShowAllBids] = useState(false);
   const [myBid, setMyBid] = useState(null);
   const [auctionResult, setAuctionResult] = useState(null); // null | {status, winner, price}
   const [countdown, setCountdown] = useState("");
@@ -109,6 +111,7 @@ export default function ListingDetail() {
         if (data.category_id) getSimilarListings(params.id, data.category_id).then(setSimilar).catch(() => {});
         if (data.listing_type === "auction") {
           getBids(params.id).then(setBids).catch(() => {});
+          getBidHistory(params.id).then(setBidHistory).catch(() => {});
           // Check if auction has ended
           if (data.auction_end && new Date() >= new Date(data.auction_end) && data.status === "active") {
             finalizeAuction(params.id).then(result => {
@@ -580,7 +583,7 @@ export default function ListingDetail() {
               {l.listing_type === "auction" && l.status === "active" && (
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 12 }}>
-                    <span><Gavel size={14} /> {bids.length} Gebote</span>
+                    <span><Gavel size={14} /> {bidHistory.length || bids.length} Gebote</span>
                     {countdown && (
                       <span style={{
                         fontWeight: 700, fontFamily: fonts.body,
@@ -656,16 +659,58 @@ export default function ListingDetail() {
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
 
                   {/* Bid History */}
-                  {bids.length > 0 && (
-                    <div style={{ fontSize: 12, color: colors.muted }}>
-                      {bids.slice(0, 5).map((b, i) => (
-                        <div key={b.id} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: i < 4 ? `1px solid ${colors.borderLt}` : "none" }}>
-                          <span>{b.bidder?.display_name || "Bieter"}</span>
-                          <span style={{ fontWeight: 600 }}>CHF {fmtPrice(b.amount)}</span>
+                  {(bidHistory.length > 0 || bids.length > 0) && (() => {
+                    const allBids = bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }));
+                    const totalBids = allBids.length;
+                    const visibleBids = totalBids <= 3 ? allBids : (showAllBids ? allBids : allBids.slice(0, 3));
+                    const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
+                    return (
+                    <div style={{ fontSize: 13, marginTop: 8 }}>
+                      <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
+                      {visibleBids.map((b, i) => {
+                        const isTopBidder = (b.bidder_id || b.bidder?.id) === topBidderId && b.amount >= (bids[0]?.amount || 0);
+                        return (
+                        <div key={b.id || i} style={{
+                          display: "flex", justifyContent: "space-between", alignItems: "center",
+                          padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
+                          background: isTopBidder ? `${colors.teal}06` : "transparent",
+                        }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.graphite, fontSize: 12 }}>
+                              {b.bidder?.display_name || "Bieter"}
+                            </span>
+                            {b.bid_type === "auto" && (
+                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cloud || colors.cream, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
+                            )}
+                            {isTopBidder && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <span style={{ fontWeight: 700, color: colors.dark, fontSize: 12 }}>CHF {fmtPrice(b.amount)}</span>
+                            <span style={{ display: "block", fontSize: 10, color: colors.muted }}>
+                              {new Date(b.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}, {new Date(b.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          </div>
                         </div>
-                      ))}
+                        );
+                      })}
+                      {totalBids > 3 && (
+                        <button onClick={() => setShowAllBids(!showAllBids)} style={{
+                          display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+                          width: "100%", padding: "10px 0", marginTop: 4,
+                          background: "none", border: "none", cursor: "pointer",
+                          fontSize: 12, fontWeight: 700, color: colors.yellow,
+                          fontFamily: fonts.body,
+                        }}>
+                          {showAllBids ? (
+                            <><ChevronDown size={14} style={{ transform: "rotate(180deg)" }} /> Weniger anzeigen</>
+                          ) : (
+                            <><ChevronDown size={14} /> Alle {totalBids} Gebote anzeigen</>
+                          )}
+                        </button>
+                      )}
                     </div>
-                  )}
+                    );
+                  })()}
                   {bidError && <p style={{ fontSize: 12, color: "#c00", margin: "8px 0 0" }}>{bidError}</p>}
                 </div>
               )}
