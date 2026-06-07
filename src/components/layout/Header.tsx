@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
 import { Search, X, Plus, User, LogOut, ChevronDown, ChevronRight, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, SearchIcon, LayoutGrid, MessageCircle, CalendarDays, ShieldCheck } from 'lucide-react'
-import NotificationBell from '@/components/shared/NotificationBell'
 import { MegaMenu } from '@/components/shared/MegaMenu'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 
 const navLinks = [
@@ -137,7 +137,6 @@ export function Header() {
   const favSubItems = [
     { href: '/favorites', icon: Package, label: 'Artikel' },
     { href: '/favorites?tab=sellers', icon: UserCheck, label: 'Verkäufer' },
-    { href: '/favorites?tab=searches', icon: Search, label: 'Suchen' },
   ]
 
   // Shared styles
@@ -242,7 +241,11 @@ export function Header() {
               </div>
 
             {/* Notifications */}
-              {user && <NotificationBell />}
+              {user ? <NotificationBell /> : (
+                <button className="hdr-icon-btn" style={iconBtn} onClick={() => router.push('/login')}>
+                  <Bell size={20} />
+                </button>
+              )}
 
             {/* Inserieren */}
             <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: '#F4C03F', color: '#1a1a1a', fontWeight: 700, fontSize: 14, borderRadius: 8, textDecoration: 'none', transition: 'all 0.15s', fontFamily: 'inherit', marginLeft: 2 }}>

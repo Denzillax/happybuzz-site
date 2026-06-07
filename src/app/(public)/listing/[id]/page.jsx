@@ -20,9 +20,6 @@ import {
   checkProfileComplete,
 } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
-import MessagePanel from "@/components/listing-detail/MessagePanel";
-import AuctionPanel from "@/components/listing-detail/AuctionPanel";
-import BookingPanel from "@/components/listing-detail/BookingPanel";
 
 // ── LocationMap: Geocoding via Nominatim ──────────────────
 function LocationMap({ city, canton }) {
@@ -87,9 +84,17 @@ export default function ListingDetail() {
   const [bidError, setBidError] = useState("");
   const [bidModal, setBidModal] = useState(null); // null | "bid" | "buynow"
   const [bidShipping, setBidShipping] = useState("shipping");
+  const [bookStart, setBookStart] = useState("");
+  const [bookEnd, setBookEnd] = useState("");
+  const [bookingSuccess, setBookingSuccess] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState("");
   const [replyText, setReplyText] = useState({});
+  const [msgPublic, setMsgPublic] = useState(true);
+  const [msgText, setMsgText] = useState("");
+  const [sendingMsg, setSendingMsg] = useState(false);
+  const [msgOpen, setMsgOpen] = useState(false);
+  const [msgSent, setMsgSent] = useState(false);
   const [profileWarning, setProfileWarning] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportReason, setReportReason] = useState("");
@@ -181,42 +186,50 @@ export default function ListingDetail() {
   const imgs = l.images || [];
   const isOwner = user && user.id === l.user_id;
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
-  const displayPrice = l.listing_type === "auction"
-    ? (bids[0]?.amount || l.price || l.start_price || 0)
-    : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
+  const displayPrice = (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
   const beeImpact = displayPrice * (l.fee_percentage || 5) / 100 * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
   const handleFav = async () => { if (!user) { router.push("/login"); return; } setIsFav(await toggleFavorite(user.id, l.id)); };
 
-  const handleSendMsg = async (text, isPublic) => {
-    if (!user || !text.trim()) return;
+  const handleSendMsg = async () => {
+    if (!user || !msgText.trim() || sendingMsg) return;
+    setSendingMsg(true);
     try {
       const isSeller = user.id === l.user_id;
-      const sendPublic = isSeller ? true : isPublic;
+      const sendPublic = isSeller ? true : msgPublic;
       const filtered = questions.filter(q => sendPublic ? q.is_public : !q.is_public);
 
       if (filtered.length > 0) {
+        // Bestehende Conversation → Antwort hinzufügen
         const lastConv = filtered[filtered.length - 1];
-        await replyToQuestion(lastConv.id, user.id, text.trim());
+        await replyToQuestion(lastConv.id, user.id, msgText.trim());
       } else {
+        // Neue Conversation erstellen
+        const buyerId = isSeller ? user.id : user.id;
+        const sellerId = isSeller ? user.id : l.user_id;
+
         const { data: newConv, error: convErr } = await supabase
           .from("conversations")
-          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: sendPublic })
+          .insert({ listing_id: l.id, buyer_id: buyerId, seller_id: l.user_id, is_public: sendPublic })
           .select()
           .single();
         if (convErr) { console.error("Conv error:", convErr); return; }
 
         const { error: msgErr } = await supabase
           .from("messages")
-          .insert({ conversation_id: newConv.id, sender_id: user.id, content: text.trim() });
+          .insert({ conversation_id: newConv.id, sender_id: user.id, content: msgText.trim() });
         if (msgErr) { console.error("Msg error:", msgErr); return; }
 
         await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", newConv.id);
       }
 
+      setMsgText("");
+      setMsgSent(true);
+      setTimeout(() => setMsgSent(false), 3000);
       getListingQuestions(params.id).then(setQuestions);
     } catch (err) { console.error("Send error:", err); }
+    finally { setSendingMsg(false); }
   };
   const handleBuy = async () => {
     if (!user) { router.push("/login"); return; }
@@ -387,7 +400,110 @@ export default function ListingDetail() {
               </div>
             )}
 
-            <MessagePanel questions={questions} user={user} listing={l} isOwner={isOwner} onSendMsg={handleSendMsg} />
+            {/* ── NACHRICHTEN (aufklappbar) ─────────────────────────── */}
+            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+              {/* Header mit Toggle */}
+              <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <MessageCircle size={16} color={colors.muted} />
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Nachrichten</p>
+                  {questions.length > 0 && (
+                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 10 }}>
+                      {questions.reduce((sum, q) => sum + (q.messages?.length || 0), 0)}
+                    </span>
+                  )}
+                </div>
+                <ChevronDown size={18} color={colors.muted} style={{ transform: msgOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+              </div>
+
+              {msgOpen && (
+              <>
+              <div style={{ padding: "0 20px 10px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", justifyContent: "flex-end" }}>
+                {isOwner ? (
+                  <span style={{ fontSize: 11, fontWeight: 600, color: colors.muted, padding: "5px 12px", background: colors.cream, borderRadius: 6 }}>Öffentlich</span>
+                ) : (
+                  <div style={{ display: "flex", background: colors.cream, borderRadius: 6, overflow: "hidden", border: `1px solid ${colors.borderLt}` }}>
+                    <button onClick={() => setMsgPublic(true)} style={{ padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, border: "none", background: msgPublic ? colors.yellow : "transparent", color: colors.dark, transition: "all .15s" }}>
+                      Öffentlich ({questions.filter(q => q.is_public).length})
+                    </button>
+                    <button onClick={() => setMsgPublic(false)} style={{ padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, border: "none", background: !msgPublic ? colors.yellow : "transparent", color: colors.dark, transition: "all .15s" }}>
+                      Privat ({questions.filter(q => !q.is_public).length})
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Chat-Bereich — feste Höhe, WhatsApp-Style */}
+              <div style={{ height: 320, overflowY: "auto", padding: "16px 20px", background: colors.cream }}>
+                {(() => {
+                  const viewPublic = isOwner ? true : msgPublic;
+                  const filtered = questions.filter(q => viewPublic ? q.is_public : !q.is_public);
+                  const allMsgs = filtered.flatMap(q => q.messages.map(m => ({ ...m, convId: q.id })));
+                  allMsgs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+                  return allMsgs.length > 0 ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {allMsgs.map((msg) => {
+                        const isMe = msg.sender_id === user?.id;
+                        const isSeller = msg.sender_id === l.user_id;
+                        return (
+                          <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" }}>
+                            <div style={{
+                              maxWidth: "75%", padding: "8px 12px", borderRadius: 14,
+                              background: isMe ? colors.yellow : colors.surface,
+                              border: isMe ? "none" : `1px solid ${colors.borderLt}`,
+                              borderBottomRightRadius: isMe ? 4 : 14,
+                              borderBottomLeftRadius: isMe ? 14 : 4,
+                            }}>
+                              {!isMe && (
+                                <p style={{ margin: "0 0 2px", fontSize: 11, fontWeight: 700, color: isSeller ? colors.blue : colors.dark }}>
+                                  {msg.sender?.display_name || "Benutzer"}
+                                  {isSeller && <span style={{ fontSize: 9, padding: "1px 4px", borderRadius: 3, background: colors.blue, color: "#fff", fontWeight: 600, marginLeft: 4 }}>Verkäufer</span>}
+                                </p>
+                              )}
+                              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45, color: colors.dark }}>{msg.content}</p>
+                              <p style={{ margin: "3px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.35)" : colors.mutedLt, textAlign: "right" }}>
+                                {new Date(msg.created_at).toLocaleString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <p style={{ fontSize: 13, color: colors.mutedLt }}>
+                        {(isOwner || msgPublic) ? "Noch keine öffentlichen Nachrichten." : "Noch keine privaten Nachrichten."}
+                      </p>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Input-Bar — für Käufer UND Verkäufer */}
+              {user && l.status === "active" && (
+                <div style={{ padding: "10px 16px", borderTop: `1px solid ${colors.borderLt}`, background: colors.surface, display: "flex", gap: 8, alignItems: "center" }}>
+                  <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
+                    placeholder={isOwner ? "Öffentliche Nachricht als Verkäufer..." : (msgPublic ? "Öffentliche Nachricht..." : "Private Nachricht...")}
+                    style={{ flex: 1, padding: "10px 14px", borderRadius: 20, border: `1.5px solid ${colors.borderLt}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: colors.cream }} />
+                  <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
+                    style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .15s" }}>
+                    <MessageCircle size={16} color={msgText.trim() ? colors.dark : colors.mutedLt} />
+                  </button>
+                </div>
+              )}
+
+              {!user && l.status === "active" && (
+                <div style={{ padding: "12px 20px", borderTop: `1px solid ${colors.borderLt}`, background: colors.surface }}>
+                  <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>
+                    <Link href="/login" style={{ color: colors.blue }}>Anmelden</Link> um eine Nachricht zu schreiben.
+                  </p>
+                </div>
+              )}
+              </>
+              )}
+            </div>
           </div>
 
           {/* ════ RIGHT COLUMN (STICKY SIDEBAR) ════ */}
@@ -460,16 +576,99 @@ export default function ListingDetail() {
                 </div>
               )}
 
-              <AuctionPanel listing={l} user={user} isOwner={isOwner}
-                    onBidModal={(bids, myBid) => {
+              {/* ── AUCTION UI ────────────────────────── */}
+              {l.listing_type === "auction" && l.status === "active" && (
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 12 }}>
+                    <span><Gavel size={14} /> {bids.length} Gebote</span>
+                    {countdown && (
+                      <span style={{
+                        fontWeight: 700, fontFamily: fonts.body,
+                        color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.muted,
+                        fontSize: countdown.includes("s") && !countdown.includes("h") ? 14 : 13,
+                      }}>
+                        <Clock size={14} /> {countdown}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Timer-Verlängerung Hinweis */}
+                  <p style={{ fontSize: 11, color: colors.muted, marginBottom: 12, lineHeight: 1.4 }}>
+                    Gebot in den letzten 3 Minuten? Auktion verlängert sich automatisch um 3 Minuten.
+                  </p>
+
+                  {/* Dein Preislimit */}
+                  {myBid && !isOwner && (
+                    <div style={{
+                      padding: "10px 14px", borderRadius: 8, marginBottom: 12,
+                      background: bids[0]?.bidder_id === user?.id ? "#E8F5E9" : "#FFF3E0",
+                      border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
+                      fontSize: 13,
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontWeight: 700, color: bids[0]?.bidder_id === user?.id ? "#2E7D32" : "#E65100" }}>
+                          {bids[0]?.bidder_id === user?.id ? "Du führst!" : "Du wurdest überboten"}
+                        </span>
+                        <span style={{ fontSize: 12, color: colors.muted }}>
+                          {myBid.max_amount > myBid.amount
+                            ? `Preislimit: CHF ${myBid.max_amount?.toFixed(2)}`
+                            : `Gebot: CHF ${myBid.amount?.toFixed(2)}`
+                          }
+                        </span>
+                      </div>
+                      {myBid.max_amount > myBid.amount && (
+                        <button onClick={async () => {
+                          try {
+                            await removePreislimit(l.id, user.id);
+                            const newMyBid = await getMyBid(l.id, user.id);
+                            setMyBid(newMyBid);
+                          } catch (err) { alert(err.message); }
+                        }} style={{
+                          background: "none", border: "none", cursor: "pointer",
+                          fontSize: 11, color: colors.muted, textDecoration: "underline",
+                          fontFamily: fonts.body, padding: "4px 0 0", display: "block",
+                        }}>
+                          Preislimit entfernen (Gebot bleibt bei CHF {myBid.amount?.toFixed(2)})
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Sofortkauf Button */}
+                  {l.buy_now_price > 0 && !isOwner && (
+                    <button onClick={() => { if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
+                      style={{ width: "100%", padding: "14px", borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      <ShoppingBag size={18} /> SOFORT KAUFEN · CHF {fmtPrice(l.buy_now_price)}
+                    </button>
+                  )}
+
+                  {/* Bieten Button */}
+                  {!isOwner && (
+                    <button onClick={() => {
+                      if (!user) { router.push("/login"); return; }
                       const minBid = (bids[0]?.amount || l.start_price || 0) + 1;
                       setBidAmount(myBid ? String(myBid.max_amount) : String(Math.ceil(minBid)));
                       setBidModal("bid");
-                    }}
-                    onBuyNowModal={() => setBidModal("buynow")}
-                  />
+                    }} style={{ width: "100%", padding: "14px", borderRadius: radius.sm, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      <Gavel size={18} /> GEBOT ABGEBEN
+                    </button>
+                  )}
+                  {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
 
-                  
+                  {/* Bid History */}
+                  {bids.length > 0 && (
+                    <div style={{ fontSize: 12, color: colors.muted }}>
+                      {bids.slice(0, 5).map((b, i) => (
+                        <div key={b.id} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: i < 4 ? `1px solid ${colors.borderLt}` : "none" }}>
+                          <span>{b.bidder?.display_name || "Bieter"}</span>
+                          <span style={{ fontWeight: 600 }}>CHF {fmtPrice(b.amount)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {bidError && <p style={{ fontSize: 12, color: "#c00", margin: "8px 0 0" }}>{bidError}</p>}
+                </div>
+              )}
 
               {/* ── KAUFEN / SOFORTKAUF MODAL (für Festpreis + Auktion) ── */}
               {bidModal && (
@@ -644,7 +843,6 @@ export default function ListingDetail() {
                                     await adjustPreislimit(l.id, user.id, amount);
                                     const newMyBid = await getMyBid(l.id, user.id);
                                     setMyBid(newMyBid);
-                                    window.__auctionRefresh?.();
                                     setBidError(""); setBidModal(null);
                                   } else {
                                     // Neues Gebot oder Preislimit ERHÖHEN
@@ -654,7 +852,6 @@ export default function ListingDetail() {
                                     const newMyBid = await getMyBid(l.id, user.id);
                                     setMyBid(newMyBid);
                                     setListing(prev => ({ ...prev, price: result.displayPrice || newBids[0]?.amount || prev.price }));
-                                    window.__auctionRefresh?.();
                                     if (result.isTopBidder) {
                                       setBidError(""); setBidModal(null);
                                     } else {
@@ -675,9 +872,90 @@ export default function ListingDetail() {
                     </div>
                   )}
 
-              <BookingPanel listing={l} user={user} isOwner={isOwner} />
-
-                  
+              {/* ── RENTAL UI ─────────────────────────── */}
+              {(l.listing_type === "rent" || l.listing_type === "service") && l.status === "active" && (
+                <div>
+                  <div style={{ marginBottom: 12, fontSize: 13, color: colors.muted }}>
+                    <CalendarDays size={14} /> {l.rent_period === "hour" ? "pro Stunde" : l.rent_period === "day" ? "pro Tag" : l.rent_period === "week" ? "pro Woche" : "pro Monat"}
+                    {l.listing_type === "rent" && l.deposit_amount > 0 && <span> · Kaution CHF {fmtPrice(l.deposit_amount)}</span>}
+                  </div>
+                  {!isOwner && (
+                    <div>
+                      <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 11, fontWeight: 600, color: colors.muted, display: "block", marginBottom: 4 }}>Von</label>
+                          <input type="date" value={bookStart} onChange={(e) => setBookStart(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                            style={{ width: "100%", padding: "10px 12px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body }} />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 11, fontWeight: 600, color: colors.muted, display: "block", marginBottom: 4 }}>Bis</label>
+                          <input type="date" value={bookEnd} onChange={(e) => setBookEnd(e.target.value)}
+                            min={bookStart || new Date().toISOString().split("T")[0]}
+                            style={{ width: "100%", padding: "10px 12px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body }} />
+                        </div>
+                      </div>
+                      {/* Price breakdown */}
+                      {bookStart && bookEnd && new Date(bookEnd) > new Date(bookStart) && (() => {
+                        const days = Math.ceil((new Date(bookEnd) - new Date(bookStart)) / (1000 * 60 * 60 * 24));
+                        const rentPrice = parseFloat(l.rent_price || l.price);
+                        const total = days * rentPrice;
+                        const fee = total * (l.fee_percentage || 5) / 100;
+                        const impact = fee * BEE_IMPACT_RATE;
+                        return (
+                          <div style={{ marginBottom: 12, padding: "12px 14px", background: colors.cream, borderRadius: radius.sm, fontSize: 13 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                              <span>{days} Tage × CHF {fmtPrice(rentPrice)}</span>
+                              <span style={{ fontWeight: 700 }}>CHF {fmtPrice(total)}</span>
+                            </div>
+                            {parseFloat(l.deposit_amount) > 0 && (
+                              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, color: colors.muted }}>
+                                <span>Kaution (wird zurückerstattet)</span>
+                                <span>CHF {fmtPrice(l.deposit_amount)}</span>
+                              </div>
+                            )}
+                            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 6, borderTop: `1px solid ${colors.borderLt}`, fontWeight: 700 }}>
+                              <span>Total</span>
+                              <span>CHF {fmtPrice(total + parseFloat(l.deposit_amount || 0))}</span>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 12, color: colors.green }}>
+                              <span>Bee-Impact</span>
+                              <span style={{ fontWeight: 600 }}>CHF {impact.toFixed(2)}</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
+                      <button onClick={async () => {
+                        if (!user) { router.push("/login"); return; }
+                        if (!bookStart || !bookEnd) return;
+                        // Profil-Check vor Miete
+                        const check = await checkProfileComplete(user.id, "rent");
+                        if (!check.complete) { setProfileWarning(check.missing); return; }
+                        setProfileWarning(null);
+                        try {
+                          const days = Math.ceil((new Date(bookEnd) - new Date(bookStart)) / (1000 * 60 * 60 * 24));
+                          if (l.min_rent_days && days < l.min_rent_days) { return; }
+                          const total = days * parseFloat(l.rent_price || l.price);
+                          await createBooking(l.id, user.id, l.user_id, bookStart, bookEnd, total, l.deposit_amount || 0);
+                          setBookingSuccess(true);
+                          setBookStart(""); setBookEnd("");
+                        } catch (err) { console.error(err); }
+                      }}
+                        disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.sm, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
+                        <CalendarDays size={18} /> ANFRAGE SENDEN
+                      </button>
+                      {bookingSuccess && (
+                        <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
+                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet!</p>
+                          <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>Der Vermieter wird benachrichtigt und kann bestätigen.</p>
+                          <Link href="/bookings" style={{ fontSize: 12, color: colors.blue }}>Zu meinen Buchungen</Link>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* ── FREE ──────────────────────────────── */}
               {l.listing_type === "free" && l.status === "active" && (

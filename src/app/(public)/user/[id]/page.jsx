@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2,
+  MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2, Heart,
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating } from "@/lib/listings";
+import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
 
 export default function PublicProfilePage() {
@@ -18,9 +18,10 @@ export default function PublicProfilePage() {
   const [listings, setListings] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [avgRating, setAvgRating] = useState({ avg: 0, count: 0 });
+  const [isSellerFav, setIsSellerFav] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [tab, setTab] = useState("listings");
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -39,6 +40,9 @@ export default function PublicProfilePage() {
         try {
           const { data } = await supabase.auth.getUser();
           setCurrentUser(data?.user || null);
+          if (data?.user && data.user.id !== params.id) {
+            setIsSellerFav(await isSellerFavorited(data.user.id, params.id));
+          }
         } catch {}
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
@@ -140,6 +144,25 @@ export default function PublicProfilePage() {
                 <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Impact CHF</p>
               </div>
             </div>
+
+            {/* Favorite Seller Button */}
+            {currentUser && currentUser.id !== params.id && (
+              <button onClick={async () => {
+                const result = await toggleFavoriteSeller(currentUser.id, params.id);
+                setIsSellerFav(result);
+              }} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "10px 20px", borderRadius: radius.sm,
+                border: `1.5px solid ${isSellerFav ? colors.yellow : colors.border}`,
+                background: isSellerFav ? `${colors.yellow}15` : "transparent",
+                cursor: "pointer", fontFamily: fonts.body,
+                fontSize: 13, fontWeight: 700, color: colors.dark,
+                flexShrink: 0,
+              }}>
+                <Heart size={16} fill={isSellerFav ? colors.yellow : "none"} color={isSellerFav ? colors.yellow : colors.muted} />
+                {isSellerFav ? "Gemerkt" : "Verkäufer merken"}
+              </button>
+            )}
           </div>
 
           {/* Rating Summary Bar */}
