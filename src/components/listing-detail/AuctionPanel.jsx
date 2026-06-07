@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Gavel, Clock, ShoppingBag } from "lucide-react";
+import { Gavel, Clock, ShoppingBag, ChevronDown, ChevronUp } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getBids, getMyBid, getBidHistory, removePreislimit } from "@/lib/listings";
 
@@ -12,7 +12,8 @@ export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuy
   const [bidHistory, setBidHistory] = useState([]);
   const [myBid, setMyBid] = useState(null);
   const [countdown, setCountdown] = useState("");
-  const [urgency, setUrgency] = useState(false); // true = unter 1 Stunde
+  const [urgency, setUrgency] = useState(false);
+  const [showAllBids, setShowAllBids] = useState(false); // true = unter 1 Stunde
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
 
   // Load bids + bid history
@@ -144,11 +145,15 @@ export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuy
       {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
 
       {/* ── Gebotsverlauf (Ricardo-Stil) ───────────────────── */}
-      {(bidHistory.length > 0 || bids.length > 0) && (
+      {(bidHistory.length > 0 || bids.length > 0) && (() => {
+        const allBids = bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }));
+        const totalBids = allBids.length;
+        const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
+        return (
         <div style={{ fontSize: 13, marginTop: 8 }}>
           <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
-          {(bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }))).slice(0, 20).map((b, i) => (
-            <div key={b.id} style={{
+          {visibleBids.map((b, i) => (
+            <div key={b.id || i} style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
               padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
               background: i === 0 ? `${colors.teal}06` : "transparent",
@@ -170,8 +175,24 @@ export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuy
               </div>
             </div>
           ))}
+          {totalBids > 3 && (
+            <button onClick={() => setShowAllBids(!showAllBids)} style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+              width: "100%", padding: "10px 0", marginTop: 4,
+              background: "none", border: "none", cursor: "pointer",
+              fontSize: 12, fontWeight: 700, color: colors.yellow,
+              fontFamily: fonts.body,
+            }}>
+              {showAllBids ? (
+                <><ChevronUp size={14} /> Weniger anzeigen</>
+              ) : (
+                <><ChevronDown size={14} /> Alle {totalBids} Gebote anzeigen</>
+              )}
+            </button>
+          )}
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

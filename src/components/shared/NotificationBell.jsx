@@ -1,168 +1,269 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Bell, X, Check, CheckCheck, ShoppingBag, Star, MessageSquare, Leaf, Gavel, Key } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, Check, CheckCheck, X, Gavel, ShoppingBag, MessageCircle, Star, CalendarDays, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
-import { getNotifications, getUnreadCount, markAsRead, markAllAsRead } from "@/lib/notifications";
-import { colors, fonts, radius } from "@/lib/theme";
-import Link from "next/link";
+import { colors, fonts } from "@/lib/theme";
+import {
+  getNotifications,
+  getUnreadCount,
+  markAsRead,
+  markAllAsRead,
+  deleteNotification,
+  subscribeToNotifications,
+} from "@/lib/api/notifications";
 
-const TYPE_ICONS = {
-  purchase: ShoppingBag,
-  rating: Star,
-  message: MessageSquare,
-  system: Bell,
+const ICONS = {
   bid: Gavel,
-  rental: Key,
-  impact: Leaf,
+  purchase: ShoppingBag,
+  message: MessageCircle,
+  rating: Star,
+  booking: CalendarDays,
+  system: Bell,
+  rental: CalendarDays,
+};
+
+const TIME_AGO = (date) => {
+  const diff = Date.now() - new Date(date).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Jetzt";
+  if (mins < 60) return `${mins}m`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d`;
+  return new Date(date).toLocaleDateString("de-CH", { day: "numeric", month: "short" });
 };
 
 export default function NotificationBell() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unread, setUnread] = useState(0);
   const [userId, setUserId] = useState(null);
   const ref = useRef(null);
 
+  // Load user + notifications
   useEffect(() => {
-    async function load() {
+    async function init() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
+      if (!session) return;
       setUserId(session.user.id);
-      setUnread(await getUnreadCount(session.user.id));
+
+      const count = await getUnreadCount();
+      setUnread(count);
     }
-    load();
-
-    // Echtzeit-Subscription
-    const channel = supabase.channel("notifications")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications" }, (payload) => {
-        setNotifications(prev => [payload.new, ...prev]);
-        setUnread(prev => prev + 1);
-      })
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
+    init();
   }, []);
 
+  // Realtime subscription
   useEffect(() => {
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    if (!userId) return;
+    const unsub = subscribeToNotifications(userId, (newNotif) => {
+      setNotifications(prev => [newNotif, ...prev]);
+      setUnread(prev => prev + 1);
+    });
+    return unsub;
+  }, [userId]);
+
+  // Load full list when dropdown opens
+  useEffect(() => {
+    if (open && userId) {
+      getNotifications(20).then(setNotifications);
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open, userId]);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleOpen = async () => {
-    if (!open && userId) {
-      const items = await getNotifications(userId);
-      setNotifications(items);
+  const handleClick = async (notif) => {
+    if (!notif.is_read) {
+      await markAsRead(notif.id);
+      setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
+      setUnread(prev => Math.max(0, prev - 1));
     }
-    setOpen(!open);
+    if (notif.link) {
+      router.push(notif.link);
+      setOpen(false);
+    }
   };
 
   const handleMarkAll = async () => {
-    if (userId) {
-      await markAllAsRead(userId);
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      setUnread(0);
-    }
+    await markAllAsRead();
+    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+    setUnread(0);
   };
 
-  const handleClick = async (n) => {
-    if (!n.read) {
-      await markAsRead(n.id);
-      setNotifications(prev => prev.map(x => x.id === n.id ? { ...x, read: true } : x));
-      setUnread(prev => Math.max(0, prev - 1));
-    }
-    setOpen(false);
+  const handleDelete = async (e, notifId) => {
+    e.stopPropagation();
+    await deleteNotification(notifId);
+    const wasUnread = notifications.find(n => n.id === notifId && !n.is_read);
+    setNotifications(prev => prev.filter(n => n.id !== notifId));
+    if (wasUnread) setUnread(prev => Math.max(0, prev - 1));
   };
 
-  const formatTime = (ts) => {
-    const d = new Date(ts);
-    const now = new Date();
-    const diff = (now - d) / 1000;
-    if (diff < 60) return "Gerade eben";
-    if (diff < 3600) return `${Math.floor(diff / 60)} Min.`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)} Std.`;
-    return d.toLocaleDateString("de-CH", { day: "numeric", month: "short" });
+  const handleDeleteAll = async () => {
+    for (const n of notifications) {
+      await deleteNotification(n.id);
+    }
+    setNotifications([]);
+    setUnread(0);
   };
 
   return (
     <div ref={ref} style={{ position: "relative" }}>
-      <button onClick={handleOpen} style={{
-        background: "none", border: "none", cursor: "pointer", padding: 6, position: "relative",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        <Bell size={20} color={colors.muted} />
+      {/* Bell Button */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          background: "none", border: "none", cursor: "pointer",
+          position: "relative", padding: 6, display: "flex",
+          alignItems: "center", justifyContent: "center",
+        }}
+      >
+        <Bell size={22} color={colors.dark} />
         {unread > 0 && (
           <span style={{
             position: "absolute", top: 2, right: 2,
-            width: 16, height: 16, borderRadius: "50%",
-            background: colors.red, color: "#fff",
-            fontSize: 9, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center",
-            lineHeight: 1,
-          }}>{unread > 9 ? "9+" : unread}</span>
+            minWidth: 16, height: 16, borderRadius: 8,
+            background: "#c62828", color: "#fff",
+            fontSize: 10, fontWeight: 800,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "0 4px", fontFamily: fonts.body,
+            border: "2px solid #fff",
+          }}>
+            {unread > 99 ? "99+" : unread}
+          </span>
         )}
       </button>
 
+      {/* Dropdown */}
       {open && (
         <div style={{
-          position: "absolute", top: "100%", right: -10, marginTop: 8,
-          width: 360, maxHeight: 480, background: colors.surface,
-          borderRadius: radius.lg, boxShadow: "0 12px 48px rgba(0,0,0,.14)",
-          border: `1px solid ${colors.line}`, overflow: "hidden", zIndex: 200,
+          position: "absolute", top: "calc(100% + 8px)", right: 0,
+          width: 380, maxHeight: 480, background: "#fff",
+          borderRadius: 12, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
+          border: `1px solid ${colors.border}`,
+          overflow: "hidden", zIndex: 1000,
+          animation: "fadeIn .15s ease",
         }}>
           {/* Header */}
           <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            padding: "14px 18px", borderBottom: `1px solid ${colors.line}`,
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "14px 16px", borderBottom: `1px solid ${colors.border}`,
           }}>
-            <span style={{ fontSize: 15, fontWeight: 700, fontFamily: fonts.head }}>Benachrichtigungen</span>
-            {unread > 0 && (
-              <button onClick={handleMarkAll} style={{
-                background: "none", border: "none", cursor: "pointer",
-                fontSize: 11, color: colors.teal, fontWeight: 600, fontFamily: fonts.body,
-                display: "flex", alignItems: "center", gap: 4,
-              }}><CheckCheck size={14} /> Alle gelesen</button>
-            )}
+            <h3 style={{
+              margin: 0, fontSize: 16, fontWeight: 800,
+              fontFamily: fonts.body, color: colors.dark,
+            }}>Benachrichtigungen</h3>
+            <div style={{ display: "flex", gap: 12 }}>
+              {unread > 0 && (
+                <button onClick={handleMarkAll} style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  fontSize: 12, fontWeight: 600, color: colors.yellow,
+                  fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  <CheckCheck size={14} /> Alle gelesen
+                </button>
+              )}
+              {notifications.length > 0 && (
+                <button onClick={handleDeleteAll} style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  fontSize: 12, fontWeight: 600, color: colors.muted,
+                  fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  <Trash2 size={14} /> Alle löschen
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Liste */}
-          <div style={{ maxHeight: 400, overflowY: "auto" }}>
+          {/* List */}
+          <div style={{ overflowY: "auto", maxHeight: 400 }}>
             {notifications.length === 0 ? (
-              <div style={{ padding: "40px 20px", textAlign: "center" }}>
-                <Bell size={32} color={colors.line} style={{ marginBottom: 8 }} />
-                <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Keine Benachrichtigungen</p>
+              <div style={{
+                padding: 40, textAlign: "center",
+                color: colors.muted, fontSize: 13,
+              }}>
+                Keine Benachrichtigungen
               </div>
             ) : (
-              notifications.map(n => {
-                const Icon = TYPE_ICONS[n.type] || Bell;
-                const content = (
-                  <div key={n.id} onClick={() => handleClick(n)} style={{
-                    display: "flex", gap: 12, padding: "12px 18px", cursor: "pointer",
-                    background: n.read ? "transparent" : `${colors.teal}06`,
-                    borderBottom: `1px solid ${colors.line}`,
-                    transition: "background .1s",
+              notifications.map(n => (
+                <div
+                  key={n.id}
+                  onClick={() => handleClick(n)}
+                  style={{
+                    display: "flex", gap: 12, padding: "12px 16px",
+                    cursor: n.link ? "pointer" : "default",
+                    background: n.is_read ? "transparent" : `${colors.yellow}08`,
+                    borderBottom: `1px solid ${colors.border}`,
+                    transition: "background .15s",
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = colors.cloud}
-                  onMouseLeave={e => e.currentTarget.style.background = n.read ? "transparent" : `${colors.teal}06`}
-                  >
-                    <div style={{
-                      width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-                      background: n.read ? colors.cloud : `${colors.teal}12`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <Icon size={16} color={n.read ? colors.muted : colors.teal} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, fontSize: 13, fontWeight: n.read ? 400 : 600, color: colors.charcoal, lineHeight: 1.3 }}>{n.title}</p>
-                      {n.body && <p style={{ margin: "2px 0 0", fontSize: 12, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{n.body}</p>}
-                      <p style={{ margin: "4px 0 0", fontSize: 10, color: colors.muted }}>{formatTime(n.created_at)}</p>
-                    </div>
-                    {!n.read && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.teal, flexShrink: 0, marginTop: 4 }} />}
+                  onMouseEnter={e => { if (!n.is_read) e.currentTarget.style.background = `${colors.yellow}15`; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = n.is_read ? "transparent" : `${colors.yellow}08`; }}
+                >
+                  {/* Icon */}
+                  <div style={{
+                    width: 36, height: 36, borderRadius: "50%",
+                    background: n.is_read ? colors.cream : `${colors.yellow}20`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    {(() => { const Icon = ICONS[n.type] || Bell; return <Icon size={16} color={n.is_read ? colors.muted : colors.dark} />; })()}
                   </div>
-                );
-                return n.link ? <Link key={n.id} href={n.link} style={{ textDecoration: "none", color: "inherit" }}>{content}</Link> : content;
-              })
+
+                  {/* Content */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: 13, fontWeight: n.is_read ? 500 : 700,
+                      color: colors.dark, fontFamily: fonts.body,
+                    }}>
+                      {n.title}
+                    </div>
+                    {n.message && (
+                      <div style={{
+                        fontSize: 12, color: colors.muted,
+                        marginTop: 2, lineHeight: 1.4,
+                        overflow: "hidden", textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {n.message}
+                      </div>
+                    )}
+                    <div style={{
+                      fontSize: 11, color: colors.muted, marginTop: 3,
+                    }}>
+                      {TIME_AGO(n.created_at)}
+                    </div>
+                  </div>
+
+                  {/* Unread dot + Delete */}
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                    {!n.is_read && (
+                      <div style={{
+                        width: 8, height: 8, borderRadius: "50%",
+                        background: colors.yellow,
+                      }} />
+                    )}
+                    <button onClick={(e) => handleDelete(e, n.id)} style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      padding: 2, color: colors.muted, opacity: 0.4,
+                      transition: "opacity .15s",
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                    onMouseLeave={e => e.currentTarget.style.opacity = 0.4}
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
