@@ -218,6 +218,7 @@ export default function SearchPage() {
                   <option value="sell">Festpreis</option>
                   <option value="auction">Auktion</option>
                   <option value="rent">Vermietung</option>
+                  <option value="service">Service</option>
                   <option value="free">Gratis</option>
                 </select>
                 <button onClick={doSearch}

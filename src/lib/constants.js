@@ -9,6 +9,7 @@ export const LISTING_TYPES = [
   { value: "sell",    label: "Festpreis",    icon: null },
   { value: "auction", label: "Auktion",      icon: null },
   { value: "rent",    label: "Mieten",       icon: null },
+  { value: "service", label: "Service",      icon: null },
   { value: "free",    label: "Gratis",       icon: null },
 ];
 export const LISTING_TYPE_LABELS = Object.fromEntries(LISTING_TYPES.map(t => [t.value, t.label]));
