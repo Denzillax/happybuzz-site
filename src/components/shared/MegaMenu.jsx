@@ -24,6 +24,7 @@ export function MegaMenu({ open, onClose }) {
   const [categories, setCategories] = useState([]);
   const [activeMain, setActiveMain] = useState(null);
   const [activeSub, setActiveSub] = useState(null);
+  const [activeSubSub, setActiveSubSub] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export function MegaMenu({ open, onClose }) {
   }, []);
 
   useEffect(() => {
-    if (!open) { setActiveMain(null); setActiveSub(null); }
+    if (!open) { setActiveMain(null); setActiveSub(null); setActiveSubSub(null); }
   }, [open]);
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export function MegaMenu({ open, onClose }) {
 
   const mainCat = activeMain ? categories.find((c) => c.id === activeMain) : null;
   const subCat = activeSub && mainCat ? mainCat.children.find((c) => c.id === activeSub) : null;
+  const subSubCat = activeSubSub && subCat ? subCat.children.find((c) => c.id === activeSubSub) : null;
 
   const colStyle = {
     width: 240, flexShrink: 0, maxHeight: "70vh", overflowY: "auto", borderRight: `1px solid ${colors.borderLt}`,
@@ -109,7 +111,7 @@ export function MegaMenu({ open, onClose }) {
           {mainCat.children.map((sub) => (
             <div
               key={sub.id}
-              onMouseEnter={() => setActiveSub(sub.id)}
+              onMouseEnter={() => { setActiveSub(sub.id); setActiveSubSub(null); }}
             >
               {sub.children.length > 0 ? (
                 <div style={itemStyle(activeSub === sub.id)}>
@@ -134,16 +136,45 @@ export function MegaMenu({ open, onClose }) {
 
       {/* Column 3: Sub-Subcategories */}
       {subCat && subCat.children.length > 0 && (
-        <div style={{ ...colStyle, borderRight: "none" }}>
+        <div style={{ ...colStyle, borderRight: subSubCat ? `1px solid ${colors.borderLt}` : "none" }}>
           <Link href={`/search?category=${subCat.slug}`} onClick={onClose}
             style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
             Alle in {subCat.name}
           </Link>
           {subCat.children.map((subsub) => (
-            <Link key={subsub.id} href={`/search?category=${subsub.slug}`} style={itemStyle(false)} onClick={onClose}>
+            subsub.children.length > 0 ? (
+              <div key={subsub.id} onMouseEnter={() => setActiveSubSub(subsub.id)}
+                style={itemStyle(activeSubSub === subsub.id)}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CategoryIcon name={subsub.icon} size={14} />
+                  {subsub.name}
+                </span>
+                <ChevronRight size={14} style={{ opacity: 0.4 }} />
+              </div>
+            ) : (
+              <Link key={subsub.id} href={`/search?category=${subsub.slug}`} style={itemStyle(false)} onClick={onClose}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <CategoryIcon name={subsub.icon} size={14} />
+                  {subsub.name}
+                </span>
+              </Link>
+            )
+          ))}
+        </div>
+      )}
+
+      {/* Column 4: Level 4 categories */}
+      {subSubCat && subSubCat.children.length > 0 && (
+        <div style={{ ...colStyle, borderRight: "none" }}>
+          <Link href={`/search?category=${subSubCat.slug}`} onClick={onClose}
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            Alle in {subSubCat.name}
+          </Link>
+          {subSubCat.children.map((item) => (
+            <Link key={item.id} href={`/search?category=${item.slug}`} style={itemStyle(false)} onClick={onClose}>
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <CategoryIcon name={subsub.icon} size={14} />
-                {subsub.name}
+                <CategoryIcon name={item.icon} size={14} />
+                {item.name}
               </span>
             </Link>
           ))}
