@@ -3,25 +3,33 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { getUserListings, deleteListing } from "@/lib/listings";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
+  paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
   rented:   { label: "Vermietet", color: colors.blue, icon: CheckCircle },
   inactive: { label: "Inaktiv", color: colors.muted, icon: XCircle },
   archived: { label: "Archiviert", color: colors.muted, icon: ArchiveRestore },
 };
 
+const PAGE_SIZE = 25;
+
 export default function ListingsPage() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [deleteId, setDeleteId] = useState(null);
   const [bidCounts, setBidCounts] = useState({});
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [selected, setSelected] = useState(new Set());
+  const [batchAction, setBatchAction] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -30,36 +38,18 @@ export default function ListingsPage() {
         if (!user) { window.location.href = "/login"; return; }
         const items = await getUserListings(user.id);
         setListings(items);
-        // Bid counts für Auktionen laden
         const auctionIds = items.filter(l => l.listing_type === "auction").map(l => l.id);
         if (auctionIds.length > 0) {
-          // Anzahl Gebote aus bid_history
-          const { data: historyBids } = await supabase
-            .from("bid_history")
-            .select("listing_id")
-            .in("listing_id", auctionIds);
+          const { data: historyBids } = await supabase.from("bid_history").select("listing_id").in("listing_id", auctionIds);
           const countMap = {};
           auctionIds.forEach(id => { countMap[id] = { count: 0, topBid: 0 }; });
           (historyBids || []).forEach(b => { countMap[b.listing_id].count++; });
-          // Fallback auf bids Tabelle wenn bid_history leer
           if (historyBids?.length === 0) {
-            const { data: bidsAlt } = await supabase
-              .from("bids")
-              .select("listing_id")
-              .in("listing_id", auctionIds);
+            const { data: bidsAlt } = await supabase.from("bids").select("listing_id").in("listing_id", auctionIds);
             (bidsAlt || []).forEach(b => { countMap[b.listing_id].count++; });
           }
-          // Höchstes Gebot pro Auktion
-          const { data: topBids } = await supabase
-            .from("bids")
-            .select("listing_id, amount")
-            .in("listing_id", auctionIds)
-            .order("amount", { ascending: false });
-          (topBids || []).forEach(b => {
-            if (countMap[b.listing_id] && !countMap[b.listing_id].topBid) {
-              countMap[b.listing_id].topBid = b.amount;
-            }
-          });
+          const { data: topBids } = await supabase.from("bids").select("listing_id, amount").in("listing_id", auctionIds).order("amount", { ascending: false });
+          (topBids || []).forEach(b => { if (countMap[b.listing_id] && !countMap[b.listing_id].topBid) countMap[b.listing_id].topBid = b.amount; });
           setBidCounts(countMap);
         }
       } catch (err) { console.error(err); }
@@ -70,21 +60,86 @@ export default function ListingsPage() {
 
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" });
-  const filtered = listings.filter((l) => filter === "all" || l.status === filter);
-  const counts = { all: listings.length, active: listings.filter(l => l.status === "active").length, sold: listings.filter(l => l.status === "sold").length };
+
+  // Filter
+  let filtered = listings.filter((l) => filter === "all" || l.status === filter);
+  if (typeFilter !== "all") filtered = filtered.filter(l => l.listing_type === typeFilter);
+
+  // Sort
+  filtered = [...filtered].sort((a, b) => {
+    if (sortBy === "newest") return new Date(b.created_at) - new Date(a.created_at);
+    if (sortBy === "oldest") return new Date(a.created_at) - new Date(b.created_at);
+    if (sortBy === "views") return (b.view_count || 0) - (a.view_count || 0);
+    if (sortBy === "bids") return ((bidCounts[b.id]?.count || 0) - (bidCounts[a.id]?.count || 0));
+    if (sortBy === "price_high") return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
+    if (sortBy === "price_low") return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
+    return 0;
+  });
+
+  const totalFiltered = filtered.length;
+  const paginated = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < totalFiltered;
+
+  const counts = {
+    all: listings.length,
+    active: listings.filter(l => l.status === "active").length,
+    sold: listings.filter(l => l.status === "sold").length,
+    paused: listings.filter(l => l.status === "paused").length,
+    draft: listings.filter(l => l.status === "draft").length,
+  };
 
   const FILTERS = [
     { key: "all", label: `Alle (${counts.all})` },
     { key: "active", label: `Aktiv (${counts.active})` },
     { key: "sold", label: `Verkauft (${counts.sold})` },
-    { key: "draft", label: "Entwürfe" },
+    ...(counts.paused > 0 ? [{ key: "paused", label: `Pausiert (${counts.paused})` }] : []),
+    ...(counts.draft > 0 ? [{ key: "draft", label: `Entwürfe (${counts.draft})` }] : []),
   ];
 
+  // Batch actions
+  const toggleSelect = (id) => {
+    setSelected(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+  };
+  const toggleAll = () => {
+    if (selected.size === paginated.length) setSelected(new Set());
+    else setSelected(new Set(paginated.map(l => l.id)));
+  };
+
+  const handleBatchAction = async (action) => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    setBatchAction(action);
+    try {
+      if (action === "pause") {
+        await supabase.from("listings").update({ status: "paused" }).in("id", ids);
+        setListings(prev => prev.map(l => ids.includes(l.id) ? { ...l, status: "paused" } : l));
+      } else if (action === "activate") {
+        await supabase.from("listings").update({ status: "active" }).in("id", ids);
+        setListings(prev => prev.map(l => ids.includes(l.id) ? { ...l, status: "active" } : l));
+      } else if (action === "delete") {
+        for (const id of ids) {
+          if (!bidCounts[id]?.count) await deleteListing(id);
+        }
+        setListings(prev => prev.filter(l => !ids.includes(l.id) || bidCounts[l.id]?.count > 0));
+      }
+      setSelected(new Set());
+    } catch (err) { console.error(err); }
+    finally { setBatchAction(null); }
+  };
+
+  // Quick toggle pause/activate
+  const togglePause = async (l) => {
+    const newStatus = l.status === "paused" ? "active" : "paused";
+    await supabase.from("listings").update({ status: newStatus }).eq("id", l.id);
+    setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: newStatus } : x));
+  };
+
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };
+  const selectStyle = { padding: "7px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px 80px" }}>
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
@@ -97,16 +152,62 @@ export default function ListingsPage() {
           </Link>
         </div>
 
-        {/* Filters */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
+        {/* Status Filters */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
-            <button key={f.key} onClick={() => setFilter(f.key)} style={{
+            <button key={f.key} onClick={() => { setFilter(f.key); setVisibleCount(PAGE_SIZE); }} style={{
               padding: "7px 14px", borderRadius: radius.sm, fontSize: 12, fontWeight: filter === f.key ? 700 : 500,
               cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${filter === f.key ? colors.yellow : colors.border}`,
               background: filter === f.key ? colors.yellowSoft : colors.surface, color: filter === f.key ? colors.dark : colors.muted,
             }}>{f.label}</button>
           ))}
         </div>
+
+        {/* Type + Sort row */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 20, alignItems: "center", flexWrap: "wrap" }}>
+          <select value={typeFilter} onChange={e => { setTypeFilter(e.target.value); setVisibleCount(PAGE_SIZE); }} style={selectStyle}>
+            <option value="all">Alle Typen</option>
+            <option value="sell">Festpreis</option>
+            <option value="auction">Auktion</option>
+            <option value="rent">Vermietung</option>
+            <option value="service">Service</option>
+            <option value="free">Gratis</option>
+          </select>
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={selectStyle}>
+            <option value="newest">Neueste zuerst</option>
+            <option value="oldest">Älteste zuerst</option>
+            <option value="views">Meiste Aufrufe</option>
+            <option value="bids">Meiste Gebote</option>
+            <option value="price_high">Preis hoch → tief</option>
+            <option value="price_low">Preis tief → hoch</option>
+          </select>
+          <span style={{ fontSize: 12, color: colors.muted, marginLeft: "auto" }}>{totalFiltered} Ergebnisse</span>
+        </div>
+
+        {/* Batch Actions Bar */}
+        {selected.size > 0 && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", marginBottom: 12,
+            background: colors.yellowSoft, borderRadius: 8, border: `1.5px solid ${colors.yellow}`,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
+            <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
+              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              <Pause size={12} /> Pausieren
+            </button>
+            <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
+              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              <Play size={12} /> Aktivieren
+            </button>
+            <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
+              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              <Trash2 size={12} /> Löschen
+            </button>
+            <button onClick={() => setSelected(new Set())} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
+              Auswahl aufheben
+            </button>
+          </div>
+        )}
 
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
@@ -127,6 +228,10 @@ export default function ListingsPage() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
+                  <th style={{ ...colHead, width: 36, textAlign: "center" }}>
+                    <input type="checkbox" checked={selected.size === paginated.length && paginated.length > 0} onChange={toggleAll}
+                      style={{ cursor: "pointer", accentColor: colors.yellow }} />
+                  </th>
                   <th style={colHead}>Artikel</th>
                   <th style={colHead}>Erstellt</th>
                   <th style={{ ...colHead, textAlign: "right" }}>Preis</th>
@@ -134,25 +239,34 @@ export default function ListingsPage() {
                   <th style={{ ...colHead, textAlign: "center" }}>Favoriten</th>
                   <th style={{ ...colHead, textAlign: "center" }}>Gebote</th>
                   <th style={colHead}>Status</th>
-                  <th style={{ ...colHead, width: 80 }}></th>
+                  <th style={{ ...colHead, width: 180 }}>Aktionen</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(l => {
+                {paginated.map(l => {
                   const st = STATUS_CONFIG[l.status] || STATUS_CONFIG.active;
                   const StIcon = st.icon;
+                  const isSelected = selected.has(l.id);
+                  const hasBids = bidCounts[l.id]?.count > 0;
                   return (
-                    <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}`, transition: "background .1s" }}
-                      onMouseEnter={e => e.currentTarget.style.background = colors.cream}
-                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                    <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}`, transition: "background .1s", background: isSelected ? `${colors.yellow}10` : "transparent" }}
+                      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = colors.cream; }}
+                      onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = "transparent"; }}>
+                      {/* Checkbox */}
+                      <td style={{ padding: "14px 10px", textAlign: "center", verticalAlign: "middle" }}>
+                        <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(l.id)}
+                          style={{ cursor: "pointer", accentColor: colors.yellow }} />
+                      </td>
                       {/* Artikel */}
-                      <td style={{ padding: "14px 10px", display: "flex", gap: 12, alignItems: "center" }}>
-                        <div style={{ width: 64, height: 64, borderRadius: radius.sm, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
-                        </div>
-                        <div>
-                          <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2 }}>{l.title}</Link>
-                          <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
+                      <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
+                        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                          <div style={{ width: 56, height: 56, borderRadius: 6, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
+                          </div>
+                          <div>
+                            <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2 }}>{l.title}</Link>
+                            <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
+                          </div>
                         </div>
                       </td>
                       {/* Erstellt */}
@@ -185,15 +299,11 @@ export default function ListingsPage() {
                                 <Gavel size={14} /> {bc.count}
                               </div>
                               {bc.topBid > 0 && (
-                                <div style={{ fontSize: 10, color: colors.green, fontWeight: 600 }}>
-                                  CHF {fmtPrice(bc.topBid)}
-                                </div>
+                                <div style={{ fontSize: 10, color: colors.green, fontWeight: 600 }}>CHF {fmtPrice(bc.topBid)}</div>
                               )}
                             </div>
                           );
-                        })() : (
-                          <span style={{ color: colors.borderLt, fontSize: 12 }}>—</span>
-                        )}
+                        })() : <span style={{ color: colors.borderLt, fontSize: 12 }}>—</span>}
                       </td>
                       {/* Status */}
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
@@ -202,21 +312,26 @@ export default function ListingsPage() {
                         </div>
                       </td>
                       {/* Actions */}
-                      <td style={{ padding: "14px 10px", verticalAlign: "middle", textAlign: "center" }}>
-                        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-                          <Link href={`/listings/${l.id}`} style={{ color: colors.blue, fontSize: 13, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
-                            <Pencil size={13} /> Bearbeiten
+                      <td style={{ padding: "14px 6px", verticalAlign: "middle" }}>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                          <Link href={`/listings/${l.id}`} style={{ color: colors.blue, fontSize: 11, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body }}>
+                            <Pencil size={11} /> Bearbeiten
                           </Link>
+                          {(l.status === "active" || l.status === "paused") && (
+                            <button onClick={() => togglePause(l)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body, color: l.status === "paused" ? "#2E7D32" : "#E65100" }}>
+                              {l.status === "paused" ? <><Play size={11} /> Aktivieren</> : <><Pause size={11} /> Pausieren</>}
+                            </button>
+                          )}
                           {deleteId === l.id ? (
-                            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                              <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ background: "#c62828", border: "none", cursor: "pointer", color: "#fff", fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 4, fontFamily: fonts.body }}>Ja, löschen</button>
-                              <button onClick={() => setDeleteId(null)} style={{ background: colors.cloud, border: "none", cursor: "pointer", color: colors.muted, fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 4, fontFamily: fonts.body }}>Abbrechen</button>
+                            <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                              <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ background: "#c62828", border: "none", cursor: "pointer", color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 4, fontFamily: fonts.body }}>Ja</button>
+                              <button onClick={() => setDeleteId(null)} style={{ background: colors.cream, border: "none", cursor: "pointer", color: colors.muted, fontSize: 10, fontWeight: 600, padding: "3px 8px", borderRadius: 4, fontFamily: fonts.body }}>Nein</button>
                             </div>
-                          ) : (bidCounts[l.id]?.count > 0 || (l.listing_type === "auction" && l.status === "active")) && bidCounts[l.id]?.count > 0 ? (
-                            <span style={{ fontSize: 11, color: colors.muted, fontStyle: "italic" }}>Gebote vorhanden</span>
+                          ) : hasBids ? (
+                            <span style={{ fontSize: 10, color: colors.muted, fontStyle: "italic" }}>Gebote</span>
                           ) : (
-                            <button onClick={() => setDeleteId(l.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "#c62828", fontSize: 13, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4, fontFamily: fonts.body }}>
-                              <Trash2 size={13} /> Löschen
+                            <button onClick={() => setDeleteId(l.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "#c62828", fontSize: 11, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body }}>
+                              <Trash2 size={11} />
                             </button>
                           )}
                         </div>
@@ -226,6 +341,19 @@ export default function ListingsPage() {
                 })}
               </tbody>
             </table>
+
+            {/* Load More */}
+            {hasMore && (
+              <div style={{ textAlign: "center", padding: "16px 0", borderTop: `1px solid ${colors.borderLt}` }}>
+                <button onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)} style={{
+                  padding: "10px 28px", borderRadius: 8, fontSize: 13, fontWeight: 700,
+                  border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark,
+                  cursor: "pointer", fontFamily: fonts.body, display: "inline-flex", alignItems: "center", gap: 6,
+                }}>
+                  <ChevronDown size={14} /> Weitere {Math.min(PAGE_SIZE, totalFiltered - visibleCount)} von {totalFiltered} laden
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
