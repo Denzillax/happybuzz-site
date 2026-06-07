@@ -5,9 +5,8 @@ import { supabase } from '@/lib/supabase/supabase'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
-import { Search, X, Plus, User, LogOut, ChevronDown, ChevronRight, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, SearchIcon, LayoutGrid, MessageCircle, CalendarDays, ShieldCheck } from 'lucide-react'
+import { Search, X, Plus, User, LogOut, ChevronDown, ChevronRight, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, SearchIcon, LayoutGrid, MessageCircle, CalendarDays, ShieldCheck, Gavel } from 'lucide-react'
 import { MegaMenu } from '@/components/shared/MegaMenu'
-import NotificationBell from '@/components/shared/NotificationBell'
 
 
 const navLinks = [
@@ -127,9 +126,10 @@ export function Header() {
     { divider: true },
     { href: '/listings', icon: Tag, label: 'Meine Inserate' },
     { href: '/purchases', icon: Receipt, label: 'Meine Käufe' },
+    { href: '/bids', icon: Gavel, label: 'Meine Gebote' },
     { href: '/sales', icon: ShoppingBag, label: 'Meine Verkäufe' },
-    { href: '/chat', icon: MessageCircle, label: 'Nachrichten' },
     { href: '/bookings', icon: CalendarDays, label: 'Buchungen' },
+    { href: '/chat', icon: MessageCircle, label: 'Nachrichten' },
     { href: '/fees', icon: Receipt, label: 'Gebühren & Beiträge' },
     ...(user?.id === '48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0' ? [{ divider: true }, { href: '/admin', icon: ShieldCheck, label: 'Admin Dashboard' }] : []),
   ]
@@ -137,6 +137,7 @@ export function Header() {
   const favSubItems = [
     { href: '/favorites', icon: Package, label: 'Artikel' },
     { href: '/favorites?tab=sellers', icon: UserCheck, label: 'Verkäufer' },
+    { href: '/favorites?tab=searches', icon: Search, label: 'Suchen' },
   ]
 
   // Shared styles
@@ -241,11 +242,10 @@ export function Header() {
               </div>
 
             {/* Notifications */}
-              {user ? <NotificationBell /> : (
-                <button className="hdr-icon-btn" style={iconBtn} onClick={() => router.push('/login')}>
-                  <Bell size={20} />
-                </button>
-              )}
+              <button className="hdr-icon-btn" style={iconBtn} onClick={() => { if (!user) { router.push('/login'); return; } router.push('/notifications'); }}>
+                <Bell size={20} />
+                {user && <span style={{ position: 'absolute', top: 8, right: 8, width: 8, height: 8, borderRadius: '50%', background: '#D44', border: '2px solid #fff' }} />}
+              </button>
 
             {/* Inserieren */}
             <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: '#F4C03F', color: '#1a1a1a', fontWeight: 700, fontSize: 14, borderRadius: 8, textDecoration: 'none', transition: 'all 0.15s', fontFamily: 'inherit', marginLeft: 2 }}>
