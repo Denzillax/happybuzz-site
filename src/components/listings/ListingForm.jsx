@@ -12,6 +12,7 @@ import {
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
 } from "@/lib/constants";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
+import BeeIcon from "@/components/shared/BeeIcon";
 import { checkProfileComplete } from "@/lib/listings";
 
 // ─── Photo Slot Labels (Ricardo-style) ──────────────────────
@@ -1556,40 +1557,115 @@ export default function ListingForm({
       </div>
       )}
 
-      {/* ── BEE-RATE (emotional) ─────────────────────────────── */}
+      {/* ── BEE-RATE (Ricardo-Style elegant) ─────────────────── */}
       {!isFree && effectiveType !== "free" && (
         <div style={sectionBase}>
-          <label style={labelBase}>Bee-Impact</label>
-          <p style={{ margin: "0 0 6px", fontSize: 14, fontWeight: 600, color: colors.dark, fontFamily: fonts.body }}>
-            Jeder Verkauf auf BEEDARO schützt Bienen und Natur in der Schweiz. Wähle deinen Impact. Je grösser, desto mehr bewirkst du.
+          <label style={{ ...labelBase, fontFamily: fonts.head, fontSize: 20, letterSpacing: ".04em" }}>DEIN BEE-IMPACT</label>
+          <p style={{ margin: "0 0 6px", fontSize: 14, color: colors.dark, fontFamily: fonts.body, lineHeight: 1.5 }}>
+            Jeder Verkauf schützt Bienen und Natur in der Schweiz. Je grösser, desto mehr bewirkst du.
           </p>
-          <p style={{ ...hintStyle, marginTop: 0, marginBottom: 14, fontSize: 11 }}>
-            Die Gebühr wird nur bei erfolgreichem Verkauf fällig und vom Erlös abgezogen. 20% fliessen in echte Schweizer Bienen- und Naturschutzprojekte. Höherer Impact = bessere Platzierung.
+          <p style={{ ...hintStyle, marginTop: 0, marginBottom: 16, fontSize: 11 }}>
+            Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20% fliessen in echte Schweizer Naturschutzprojekte. Höherer Impact = bessere Platzierung.
           </p>
           {[
-            { tier: "fair", pct: 3 },
-            { tier: "supporter", pct: 5 },
-            { tier: "impact", pct: 7 },
-            { tier: "hero", pct: 10 },
-          ].map(({ tier, pct }) => {
+            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde" },
+            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland" },
+            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true },
+            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen" },
+          ].map(({ tier, pct, impact, project, recommended }) => {
             const active = form.fee_tier === tier;
-            const isDefault = tier === "impact";
             return (
               <div key={tier} onClick={() => selectFee(pct, tier)} style={{
-                padding: "16px 18px", marginBottom: 8, borderRadius: radius.lg, cursor: "pointer",
-                border: active ? `2px solid ${colors.yellow}` : `1.5px solid ${colors.borderLt}`,
-                background: active ? "#FFF9E6" : colors.surface,
-                transition: "all .15s",
+                position: "relative", padding: "18px 50px 18px 22px", marginBottom: 8, borderRadius: 14, cursor: "pointer",
+                border: `2px solid ${active ? colors.green : "transparent"}`,
+                background: active ? `linear-gradient(135deg, ${colors.surface}, ${colors.green}08)` : colors.surface,
+                boxShadow: active ? `0 2px 16px ${colors.green}18` : "0 1px 3px rgba(0,0,0,.04)",
+                transition: "all .2s ease", overflow: "hidden",
               }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 15, fontWeight: 800, color: colors.dark, fontFamily: fonts.body }}>{beeTexts[tier]}</span>
-                  {isDefault && <span style={{ fontSize: 9, fontWeight: 700, background: colors.teal, color: "#fff", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase", letterSpacing: ".05em" }}>Empfohlen</span>}
+                {/* Left accent bar */}
+                <div style={{
+                  position: "absolute", left: 0, top: 0, bottom: 0, width: 4, borderRadius: "14px 0 0 14px",
+                  background: active ? `linear-gradient(180deg, ${colors.green}, ${colors.yellow})` : colors.borderLt,
+                  transition: "all .2s",
+                }} />
+                {/* Radio indicator — vertically centered */}
+                <div style={{
+                  position: "absolute", right: 18, top: "50%", transform: "translateY(-50%)",
+                  width: 20, height: 20, borderRadius: "50%",
+                  border: `2px solid ${active ? colors.green : colors.borderLt}`,
+                  display: "flex", alignItems: "center", justifyContent: "center", transition: "all .2s",
+                }}>
+                  {active && <div style={{ width: 10, height: 10, borderRadius: "50%", background: colors.green }} />}
                 </div>
-                <p style={{ margin: "4px 0 0", fontSize: 11, color: colors.muted, fontFamily: fonts.body }}>{BEE_FEE_SUBTITLES[tier]}</p>
-                <p style={{ margin: "4px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>{pct}% Gebühr · {(pct * 0.8).toFixed(1)}% Plattform · {(pct * 0.2).toFixed(1)}% Bee-Impact</p>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
+                  <div style={{ flex: 1, paddingLeft: 8 }}>
+                    {/* Title row with impact dots */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                      <div style={{ display: "flex", gap: 3 }}>
+                        {[1, 2, 3, 4].map((i) => (
+                          <div key={i} style={{
+                            width: 8, height: 8, borderRadius: "50%",
+                            background: i <= impact ? (active ? colors.green : colors.yellow) : `${colors.muted}25`,
+                            transition: "all .2s",
+                          }} />
+                        ))}
+                      </div>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: colors.dark, fontFamily: fonts.body }}>{beeTexts[tier]}</span>
+                      {recommended && (
+                        <span style={{
+                          fontSize: 9, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase",
+                          padding: "3px 8px", borderRadius: 4, background: colors.green, color: "#fff", flexShrink: 0,
+                        }}>Empfohlen</span>
+                      )}
+                    </div>
+                    {/* Subtitle */}
+                    <p style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
+                      {BEE_FEE_SUBTITLES[tier]}
+                    </p>
+                    {/* Project tag (only when selected) */}
+                    {active && (
+                      <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 6,
+                        background: `${colors.green}12`, marginLeft: 44, fontSize: 11, fontWeight: 600, color: colors.green,
+                      }}>
+                        <BeeIcon size={12} color={colors.green} />
+                        {project}
+                      </div>
+                    )}
+                  </div>
+                  {/* Right: percentage only */}
+                  <div style={{ textAlign: "right", flexShrink: 0, paddingRight: 12 }}>
+                    <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: active ? colors.green : colors.muted, fontFamily: fonts.body }}>{pct}%</p>
+                  </div>
+                </div>
               </div>
             );
           })}
+          {/* Cost breakdown */}
+          {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
+            const price = parseFloat(form.price);
+            const fee = price * form.fee_percentage / 100;
+            const platform = fee * 0.8;
+            const beeImpact = fee * 0.2;
+            return (
+              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 12, border: `1px solid ${colors.borderLt}` }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
+                  <span>Plattformgebühr ({(form.fee_percentage * 0.8).toFixed(1)}%)</span>
+                  <span>CHF {platform.toFixed(2)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 8, borderTop: `1px solid ${colors.borderLt}`, fontFamily: fonts.body }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: colors.green, display: "flex", alignItems: "center", gap: 6 }}>
+                    <BeeIcon size={14} color={colors.green} />
+                    Bee-Impact ({(form.fee_percentage * 0.2).toFixed(1)}%)
+                  </span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: colors.green }}>CHF {beeImpact.toFixed(2)}</span>
+                </div>
+                <p style={{ margin: "6px 0 0", fontSize: 11, color: colors.muted, fontFamily: fonts.body }}>
+                  Fliesst direkt in echte Schweizer Naturschutzprojekte. Du erhältst Bee-Level Credits.
+                </p>
+              </div>
+            );
+          })()}
         </div>
       )}
 
