@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/lib/supabase/supabase";
 import {
-  Camera, X, Star, ChevronDown, Sparkles, Eye, Search,
+  Camera, X, Star, ChevronDown, ChevronRight, Sparkles, Eye, Search,
   Package, Gavel, Home, Truck, MapPin, Gift, Wrench,
 } from "lucide-react";
 import { colors, fonts, radius, shadows } from "@/lib/theme";
@@ -13,7 +13,6 @@ import {
 } from "@/lib/constants";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
 import { checkProfileComplete } from "@/lib/listings";
-import ShippingSection from "./form/ShippingSection";
 
 // ─── Photo Slot Labels (Ricardo-style) ──────────────────────
 const PHOTO_SLOTS = [
@@ -271,6 +270,7 @@ export default function ListingForm({
   const parentCats = categories.filter((c) => !c.parent_id);
   const [selectedMainCat, setSelectedMainCat] = useState("");
   const [catSearch, setCatSearch] = useState("");
+  const [catModalOpen, setCatModalOpen] = useState(false);
   const [addrQ, setAddrQ] = useState("");
   const [addrHits, setAddrHits] = useState([]);
   const [profileAddr, setProfileAddr] = useState({ street: "", postal_code: "", city: "" });
@@ -286,27 +286,24 @@ export default function ListingForm({
     loadAddr();
   }, []);
   const [selectedSubCat, setSelectedSubCat] = useState("");
+  const [selectedSubSubCat, setSelectedSubSubCat] = useState("");
   const subCatsForm = categories.filter((c) => c.parent_id === selectedMainCat);
   const subSubCatsForm = categories.filter((c) => c.parent_id === selectedSubCat);
+  const subSubSubCatsForm = categories.filter((c) => c.parent_id === selectedSubSubCat);
 
-  // Sync selectedMainCat from initial category_id
+  // Sync selectedMainCat from initial category_id (supports 4 levels)
   useEffect(() => {
     if (form.category_id && categories.length > 0) {
-      const cat = categories.find(c => c.id === form.category_id);
-      if (cat) {
-        if (!cat.parent_id) {
-          setSelectedMainCat(cat.id);
-        } else {
-          const parent = categories.find(c => c.id === cat.parent_id);
-          if (parent && !parent.parent_id) {
-            setSelectedMainCat(parent.id);
-            setSelectedSubCat(cat.id);
-          } else if (parent) {
-            const grandparent = categories.find(c => c.id === parent.parent_id);
-            if (grandparent) { setSelectedMainCat(grandparent.id); setSelectedSubCat(parent.id); }
-          }
-        }
+      // Walk up the parent chain to find all ancestors
+      const chain = [];
+      let current = categories.find(c => c.id === form.category_id);
+      while (current) {
+        chain.unshift(current);
+        current = current.parent_id ? categories.find(c => c.id === current.parent_id) : null;
       }
+      if (chain.length >= 1) setSelectedMainCat(chain[0].id);
+      if (chain.length >= 2) setSelectedSubCat(chain[1].id);
+      if (chain.length >= 3) setSelectedSubSubCat(chain[2].id);
     }
   }, [form.category_id, categories]);
 
@@ -793,77 +790,220 @@ export default function ListingForm({
         {/* Kategorie (hierarchisch + Autocomplete) */}
         <div style={{ marginTop: 18 }}>
           <label style={labelBase}>Kategorie</label>
-          {/* Autocomplete Search */}
-          <div style={{ position: "relative", marginBottom: 8 }}>
-            <input
-              type="text"
-              value={catSearch}
-              onChange={(e) => setCatSearch(e.target.value)}
-              placeholder="Kategorie suchen..."
-              style={{ ...inputBase, paddingLeft: 32 }}
-            />
-            <Search size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#aaa", pointerEvents: "none" }} />
-            {catSearch.length >= 2 && (
-              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 6, maxHeight: 180, overflowY: "auto", zIndex: 50, boxShadow: "0 4px 12px rgba(0,0,0,.1)" }}>
-                {categories.filter(c => c.name.toLowerCase().includes(catSearch.toLowerCase())).slice(0, 8).map(c => {
-                  const parent = categories.find(p => p.id === c.parent_id);
-                  return (
-                    <div key={c.id} onClick={() => {
-                      set("category_id", c.id);
-                      if (c.parent_id) {
-                        const grandparent = categories.find(p => p.id === parent?.parent_id);
-                        if (grandparent) { setSelectedMainCat(grandparent.id); setSelectedSubCat(c.parent_id); }
-                        else if (parent) { setSelectedMainCat(c.parent_id); setSelectedSubCat(c.id); }
-                      } else { setSelectedMainCat(c.id); setSelectedSubCat(""); }
-                      setCatSearch("");
-                    }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: `1px solid ${colors.borderLt}` }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#f5f5f5"}
-                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                      <span style={{ fontWeight: 600 }}>{c.name}</span>
-                      {parent && <span style={{ fontSize: 11, color: "#888", marginLeft: 6 }}>in {parent.name}</span>}
-                    </div>
-                  );
-                })}
-                {categories.filter(c => c.name.toLowerCase().includes(catSearch.toLowerCase())).length === 0 && (
-                  <div style={{ padding: "10px 12px", fontSize: 12, color: "#888", textAlign: "center" }}>Keine Kategorie gefunden</div>
+          {/* ── RICARDO-STYLE MODAL PICKER ──────────────────── */}
+          {(() => {
+            // Build category path for display
+            const catChain = [];
+            let cur = categories.find(c => c.id === form.category_id);
+            while (cur) { catChain.unshift(cur); cur = cur.parent_id ? categories.find(c => c.id === cur.parent_id) : null; }
+            const catLabel = catChain.map(c => c.name).join(" → ");
+            return (
+              <>
+                {/* Trigger Button */}
+                <div onClick={() => setCatModalOpen(true)} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "12px 14px", borderRadius: 8, cursor: "pointer",
+                  border: `1.5px solid ${form.category_id ? colors.yellow : colors.border}`,
+                  background: form.category_id ? `${colors.yellow}08` : "#fff",
+                  transition: "all .15s",
+                }}>
+                  <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
+                    {catLabel || "Kategorie wählen..."}
+                  </span>
+                  <ChevronRight size={16} color={colors.muted} />
+                </div>
+                {form.category_id && (
+                  <button onClick={() => { set("category_id", ""); setSelectedMainCat(""); setSelectedSubCat(""); setSelectedSubSubCat(""); }}
+                    style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: colors.muted, padding: "4px 0", fontFamily: fonts.body }}>
+                    Kategorie entfernen
+                  </button>
                 )}
-              </div>
-            )}
-          </div>
-          {/* Hierarchische Dropdowns */}
-          <SelectWrap
-            value={selectedMainCat}
-            onChange={(e) => { setSelectedMainCat(e.target.value); setSelectedSubCat(""); set("category_id", e.target.value); }}
-          >
-            <option value="">Hauptkategorie wählen</option>
-            {parentCats.map((cat) => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
-            ))}
-          </SelectWrap>
-          {subCatsForm.length > 0 && (
-            <SelectWrap
-              style={{ marginTop: 8 }}
-              value={selectedSubCat}
-              onChange={(e) => { setSelectedSubCat(e.target.value); set("category_id", e.target.value || selectedMainCat); }}
-            >
-              <option value="">Unterkategorie wählen</option>
-              {subCatsForm.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </SelectWrap>
-          )}
-          {subSubCatsForm.length > 0 && (
-            <SelectWrap
-              style={{ marginTop: 8 }}
-              value={form.category_id === selectedSubCat ? "" : form.category_id}
-              onChange={(e) => { set("category_id", e.target.value || selectedSubCat); }}
-            >
-              <option value="">Spezifischer</option>
-              {subSubCatsForm.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </SelectWrap>
-          )}
+
+                {/* Modal */}
+                {catModalOpen && (
+                  <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+                    onClick={() => setCatModalOpen(false)}>
+                    <div onClick={e => e.stopPropagation()} style={{
+                      background: "#fff", borderRadius: 16, width: "100%", maxWidth: 800,
+                      maxHeight: "80vh", display: "flex", flexDirection: "column",
+                      fontFamily: fonts.body, boxShadow: "0 20px 60px rgba(0,0,0,.2)",
+                    }}>
+                      {/* Modal Header */}
+                      <div style={{ padding: "16px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>Kategorie wählen</h3>
+                        <button onClick={() => setCatModalOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+                          <X size={20} />
+                        </button>
+                      </div>
+
+                      {/* Search */}
+                      <div style={{ padding: "12px 20px", borderBottom: `1px solid ${colors.borderLt}` }}>
+                        <div style={{ position: "relative" }}>
+                          <input type="text" value={catSearch} onChange={e => setCatSearch(e.target.value)}
+                            placeholder="Kategorie suchen..." autoFocus
+                            style={{ width: "100%", padding: "10px 14px 10px 36px", borderRadius: 8, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }}
+                            onFocus={e => e.target.style.borderColor = colors.yellow}
+                            onBlur={e => e.target.style.borderColor = colors.border} />
+                          <Search size={16} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: colors.muted, pointerEvents: "none" }} />
+                        </div>
+                        {/* Search Results */}
+                        {catSearch.length >= 2 && (
+                          <div style={{ marginTop: 8, maxHeight: 200, overflowY: "auto" }}>
+                            {categories.filter(c => c.name.toLowerCase().includes(catSearch.toLowerCase())).slice(0, 10).map(c => {
+                              const path = [];
+                              let p = c;
+                              while (p) { path.unshift(p.name); p = p.parent_id ? categories.find(x => x.id === p.parent_id) : null; }
+                              return (
+                                <div key={c.id} onClick={() => {
+                                  set("category_id", c.id);
+                                  // Sync all dropdowns
+                                  const chain = [];
+                                  let walk = c;
+                                  while (walk) { chain.unshift(walk); walk = walk.parent_id ? categories.find(x => x.id === walk.parent_id) : null; }
+                                  if (chain[0]) setSelectedMainCat(chain[0].id);
+                                  if (chain[1]) setSelectedSubCat(chain[1].id);
+                                  if (chain[2]) setSelectedSubSubCat(chain[2].id);
+                                  setCatSearch("");
+                                  setCatModalOpen(false);
+                                }} style={{
+                                  padding: "10px 12px", cursor: "pointer", borderRadius: 6, marginBottom: 2,
+                                  display: "flex", flexDirection: "column",
+                                }}
+                                  onMouseEnter={e => e.currentTarget.style.background = colors.cream}
+                                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                  <span style={{ fontWeight: 600, fontSize: 14 }}>{c.name}</span>
+                                  <span style={{ fontSize: 11, color: colors.muted }}>{path.join(" → ")}</span>
+                                </div>
+                              );
+                            })}
+                            {categories.filter(c => c.name.toLowerCase().includes(catSearch.toLowerCase())).length === 0 && (
+                              <p style={{ fontSize: 13, color: colors.muted, textAlign: "center", padding: 12 }}>Keine Ergebnisse</p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Breadcrumb Path */}
+                      {(selectedMainCat || selectedSubCat) && !catSearch && (
+                        <div style={{ padding: "8px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", fontSize: 12 }}>
+                          <span onClick={() => { setSelectedMainCat(""); setSelectedSubCat(""); setSelectedSubSubCat(""); }}
+                            style={{ color: colors.blue, cursor: "pointer", fontWeight: 600 }}>Alle</span>
+                          {(() => {
+                            const bc = [];
+                            if (selectedMainCat) { const m = categories.find(c => c.id === selectedMainCat); if (m) bc.push({ id: m.id, name: m.name, level: 1 }); }
+                            if (selectedSubCat) { const s = categories.find(c => c.id === selectedSubCat); if (s) bc.push({ id: s.id, name: s.name, level: 2 }); }
+                            if (selectedSubSubCat) { const ss = categories.find(c => c.id === selectedSubSubCat); if (ss) bc.push({ id: ss.id, name: ss.name, level: 3 }); }
+                            return bc.map((b, i) => (
+                              <span key={b.id} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                <span style={{ color: colors.muted }}>/</span>
+                                <span onClick={() => {
+                                  if (b.level === 1) { setSelectedSubCat(""); setSelectedSubSubCat(""); }
+                                  if (b.level === 2) { setSelectedSubSubCat(""); }
+                                }}
+                                  style={{ color: i === bc.length - 1 ? colors.dark : colors.blue, fontWeight: i === bc.length - 1 ? 700 : 600, cursor: "pointer" }}>
+                                  {b.name}
+                                </span>
+                              </span>
+                            ));
+                          })()}
+                        </div>
+                      )}
+
+                      {/* Category Grid */}
+                      {!catSearch && (
+                        <div style={{ flex: 1, overflowY: "auto", padding: "12px 20px" }}>
+                          {(() => {
+                            // Determine which categories to show
+                            let items = [];
+                            let currentParentId = null;
+                            if (selectedSubSubCat) {
+                              items = categories.filter(c => c.parent_id === selectedSubSubCat);
+                              currentParentId = selectedSubSubCat;
+                            } else if (selectedSubCat) {
+                              items = categories.filter(c => c.parent_id === selectedSubCat);
+                              currentParentId = selectedSubCat;
+                            } else if (selectedMainCat) {
+                              items = categories.filter(c => c.parent_id === selectedMainCat);
+                              currentParentId = selectedMainCat;
+                            } else {
+                              items = parentCats;
+                            }
+
+                            if (items.length === 0 && currentParentId) {
+                              // Leaf category — auto-select and close
+                              return (
+                                <p style={{ fontSize: 13, color: colors.muted, textAlign: "center", padding: 20 }}>
+                                  Keine weiteren Unterkategorien. Kategorie ist ausgewählt.
+                                </p>
+                              );
+                            }
+
+                            return (
+                              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 6 }}>
+                                {/* "Alle in X" option if we're in a subcategory */}
+                                {currentParentId && (
+                                  <div onClick={() => {
+                                    set("category_id", currentParentId);
+                                    setCatModalOpen(false);
+                                  }} style={{
+                                    padding: "12px 14px", borderRadius: 8, cursor: "pointer",
+                                    border: `1.5px solid ${colors.yellow}`,
+                                    background: colors.yellowSoft,
+                                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                                  }}
+                                    onMouseEnter={e => e.currentTarget.style.background = colors.yellow + "30"}
+                                    onMouseLeave={e => e.currentTarget.style.background = colors.yellowSoft}>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>
+                                      Alle in dieser Kategorie
+                                    </span>
+                                  </div>
+                                )}
+                                {items.map(cat => {
+                                  const hasChildren = categories.some(c => c.parent_id === cat.id);
+                                  return (
+                                    <div key={cat.id} onClick={() => {
+                                      if (hasChildren) {
+                                        // Navigate deeper
+                                        if (!selectedMainCat) { setSelectedMainCat(cat.id); }
+                                        else if (!selectedSubCat) { setSelectedSubCat(cat.id); }
+                                        else if (!selectedSubSubCat) { setSelectedSubSubCat(cat.id); }
+                                        else { set("category_id", cat.id); setCatModalOpen(false); }
+                                      } else {
+                                        // Leaf — select and close
+                                        set("category_id", cat.id);
+                                        // Sync states
+                                        const chain = [];
+                                        let walk = cat;
+                                        while (walk) { chain.unshift(walk); walk = walk.parent_id ? categories.find(x => x.id === walk.parent_id) : null; }
+                                        if (chain[0]) setSelectedMainCat(chain[0].id);
+                                        if (chain[1]) setSelectedSubCat(chain[1].id);
+                                        if (chain[2]) setSelectedSubSubCat(chain[2].id);
+                                        setCatModalOpen(false);
+                                      }
+                                    }} style={{
+                                      padding: "12px 14px", borderRadius: 8, cursor: "pointer",
+                                      border: `1.5px solid ${colors.borderLt}`,
+                                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                                      transition: "all .1s",
+                                    }}
+                                      onMouseEnter={e => { e.currentTarget.style.borderColor = colors.yellow; e.currentTarget.style.background = `${colors.yellow}08`; }}
+                                      onMouseLeave={e => { e.currentTarget.style.borderColor = colors.borderLt; e.currentTarget.style.background = "transparent"; }}>
+                                      <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{cat.name}</span>
+                                      {hasChildren && <ChevronRight size={14} color={colors.muted} />}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </div>
 
@@ -1090,9 +1230,333 @@ export default function ListingForm({
           </div>
         )}
       </div>
-      <ShippingSection form={form} set={set} Err={Err} />
+      {form.listing_type === "service" ? (
+        <div style={sectionBase}>
+          <label style={labelBase}>Zahlung</label>
+          <p style={{ ...hintStyle, marginTop: 0 }}>Wie möchtest du bezahlt werden?</p>
 
-            {/* ── BEE-RATE (emotional) ─────────────────────────────── */}
+          {/* TWINT Toggle */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+            <div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>TWINT</span>
+              <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per TWINT</div>
+            </div>
+            <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
+              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+              background: form.pay_twint ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          </div>
+
+          {/* Barzahlung Toggle */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+            <div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>Barzahlung</span>
+              <div style={{ fontSize: 11, color: colors.muted }}>Zahlung vor Ort in bar</div>
+            </div>
+            <button onClick={() => set("pay_cash", !form.pay_cash)} style={{
+              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+              background: form.pay_cash ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          </div>
+
+          {/* Banküberweisung Toggle */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0" }}>
+            <div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>Überweisung / Rechnung</span>
+              <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per Banküberweisung</div>
+            </div>
+            <button onClick={() => set("pay_bank", !form.pay_bank)} style={{
+              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+              background: form.pay_bank ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          </div>
+          <Err field="payment" />
+        </div>
+      ) : (
+      <div style={sectionBase}>
+        <label style={labelBase}>Lieferung</label>
+        <p style={{ ...hintStyle, marginTop: 0 }}>Die Kosten werden vom Käufer getragen</p>
+
+        {/* ─ Versand Toggle ─ */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+          <button onClick={() => {
+            const next = !form.shipping_available;
+            set("shipping_available", next);
+            if (next) { set("pay_bank", true); if (!form.shipping_method) set("shipping_method", "paket"); }
+            if (!next) { set("pay_bank", false); if (!form.pickup_only) set("pickup_only", true); }
+          }} style={{
+            width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", flexShrink: 0,
+            background: form.shipping_available ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Versand</span>
+        </div>
+
+        {form.shipping_available && (
+          <div style={{ padding: "14px 0" }}>
+            {/* Summary Card */}
+            <div style={{ border: `1px solid ${colors.border}`, borderRadius: radius.md, overflow: "hidden" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <Package size={20} color={colors.muted} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>
+                      {{ paket: "Paket", brief: "Brief", sperrgut: "Sperrgut", kurier: "Kurier", spediteur: "Spediteur", einschreiben: "Einschreiben", lieferung_verkaeufer: "Lieferung durch Verkäufer" }[form.shipping_method] || "Paket"}
+                    </div>
+                    <div style={{ fontSize: 12, color: colors.muted }}>
+                      {{ paket: `Max. 100 x 60 x 60 cm, ${form.ship_weight || "2kg"}`, brief: "Max. 25 x 35.3 cm", sperrgut: "Max. Länge: 250 cm", kurier: "Lieferung am selben Tag", spediteur: "Schwere/grosse Artikel", einschreiben: "Eingeschriebener Brief", lieferung_verkaeufer: "Persönliche Lieferung" }[form.shipping_method] || ""}
+                    </div>
+                  </div>
+                </div>
+                <button onClick={() => set("_shipModal", true)} style={{
+                  padding: "6px 14px", borderRadius: 6, border: `1.5px solid ${colors.yellow}`, background: "transparent",
+                  color: colors.dark, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body,
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>Bearbeiten</button>
+              </div>
+              <div style={{ padding: "10px 16px", fontSize: 13, color: colors.muted }}>
+                <div style={{ display: "flex", gap: 20 }}>
+                  <div><span style={{ fontWeight: 600 }}>Lieferzeit</span><br />{form.ship_speed === "priority" ? "Priority, 1 Werktag" : "Economy, 2-3 Werktage"}</div>
+                  <div><span style={{ fontWeight: 600 }}>Versandkosten</span><br />{form.free_shipping ? "Gratis" : `CHF ${form.shipping_cost || "9.00"}`}</div>
+                  <div><span style={{ fontWeight: 600 }}>Zahlung</span><br />Vorauszahlung</div>
+                </div>
+              </div>
+            </div>
+
+            {/* TWINT Toggle */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+              <div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>TWINT akzeptieren</span>
+                <div style={{ fontSize: 11, color: colors.muted }}>Käufer kann auch mit TWINT bezahlen</div>
+              </div>
+              <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
+                width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
+                background: form.pay_twint ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+              }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+            </div>
+
+            {/* ── Versand Modal ── */}
+            {form._shipModal && (
+              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => set("_shipModal", false)}>
+                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, width: 480, maxHeight: "80vh", overflow: "auto", padding: 24 }}>
+
+                  {!form._shipStep ? (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                        <h3 style={{ margin: 0, fontSize: 18, fontFamily: fonts.body }}>Versand</h3>
+                        <button onClick={() => set("_shipModal", false)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={20} /></button>
+                      </div>
+                      {[
+                        { value: "paket", label: "Paket", desc: "Max. 100 x 60 x 60", icon: Package, hasDetail: true },
+                        { value: "brief", label: "Brief", desc: "max. 25 x 35.3 cm", icon: Package, hasDetail: true },
+                        { value: "sperrgut", label: "Sperrgut", desc: "Max. Länge: 250 cm", icon: Package, hasDetail: true },
+                        { value: "andere", label: "Andere Versandarten", desc: "", icon: Package, hasDetail: true },
+                      ].map(opt => (
+                        <div key={opt.value} onClick={() => {
+                          if (opt.value === "andere") { set("_shipStep", "andere"); }
+                          else { set("shipping_method", opt.value); set("_shipStep", opt.value); }
+                        }} style={{
+                          display: "flex", alignItems: "center", justifyContent: "space-between",
+                          padding: "16px", borderRadius: 8, border: `1.5px solid ${form.shipping_method === opt.value ? colors.yellow : colors.border}`,
+                          marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? colors.yellowSoft : "#fff",
+                        }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 4, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
+                            <div>
+                              <div style={{ fontWeight: 700, fontSize: 14 }}>{opt.label}</div>
+                              {opt.desc && <div style={{ fontSize: 12, color: colors.muted }}>{opt.desc}</div>}
+                            </div>
+                          </div>
+                          <span style={{ color: colors.muted }}>›</span>
+                        </div>
+                      ))}
+                      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
+                        <button onClick={() => set("_shipModal", false)} style={{ padding: "8px 20px", borderRadius: 6, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                      </div>
+                    </>
+                  ) : form._shipStep === "andere" ? (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                        <h3 style={{ margin: 0, fontSize: 18, fontFamily: fonts.body }}>Andere Versandarten</h3>
+                        <button onClick={() => set("_shipModal", false)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={20} /></button>
+                      </div>
+                      <label style={{ ...labelBase, fontSize: 13 }}>Versandarten</label>
+                      <select value={form.shipping_method} onChange={e => set("shipping_method", e.target.value)} style={{ ...inputBase, marginBottom: 14 }}>
+                        <option value="">Wählen...</option>
+                        <option value="kurier">Kurier</option>
+                        <option value="spediteur">Spediteur</option>
+                        <option value="einschreiben">Einschreiben</option>
+                        <option value="lieferung_verkaeufer">Lieferung durch Verkäufer</option>
+                      </select>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                        <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
+                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", background: form.free_shipping ? colors.yellow : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                      </div>
+                      {!form.free_shipping && (
+                        <div style={{ marginBottom: 14 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600 }}>Versandkosten</div>
+                          <div style={{ fontSize: 12, color: colors.muted, marginBottom: 4 }}>Getragen vom Käufer</div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><span style={{ fontSize: 13, color: colors.muted }}>CHF</span><input style={{ ...inputBase, width: 100 }} type="number" min="0" step="0.50" value={form.shipping_cost} onChange={e => set("shipping_cost", e.target.value)} /></div>
+                        </div>
+                      )}
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 6, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 6, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                        <h3 style={{ margin: 0, fontSize: 18, fontFamily: fonts.body }}>{{ paket: "Paket", brief: "Brief", sperrgut: "Sperrgut" }[form._shipStep]}</h3>
+                        <button onClick={() => set("_shipModal", false)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={20} /></button>
+                      </div>
+                      <div style={{ padding: "10px 14px", background: colors.cream, borderRadius: 8, marginBottom: 16, fontSize: 13, color: colors.muted, textAlign: "center" }}>
+                        {{ paket: "Max. Grösse: 100 x 60 x 60 cm", brief: "Max. Grösse: 25 x 35.3 cm", sperrgut: "Max. Länge: 250 cm" }[form._shipStep]}
+                      </div>
+                      {form._shipStep === "paket" && (
+                        <>
+                          <label style={{ ...labelBase, fontSize: 13 }}>Gewicht</label>
+                          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                            {["bis 2kg", "bis 10kg", "bis 30kg"].map(w => {
+                              const price = POST_TARIFE.paket?.[form.ship_speed || "economy"]?.[w] || 0;
+                              return (
+                                <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                </Chip>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
+                      {form._shipStep === "brief" && (
+                        <>
+                          <label style={{ ...labelBase, fontSize: 13 }}>Format</label>
+                          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                            {["Standard", "Gross", "Maxi"].map(w => {
+                              const price = POST_TARIFE.brief?.[form.ship_speed || "economy"]?.[w] || 0;
+                              return (
+                                <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                </Chip>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
+                      {form._shipStep === "sperrgut" && (
+                        <>
+                          <label style={{ ...labelBase, fontSize: 13 }}>Gewicht</label>
+                          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                            {["bis 30kg", "bis 60kg"].map(w => {
+                              const price = POST_TARIFE.sperrgut?.[form.ship_speed || "economy"]?.[w] || 0;
+                              return (
+                                <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                </Chip>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
+                      <label style={{ ...labelBase, fontSize: 13 }}>Lieferzeit</label>
+                      <div style={{ display: "flex", gap: 6, marginBottom: 4 }}>
+                        <Chip active={form.ship_speed !== "priority"} onClick={() => {
+                          set("ship_speed", "economy");
+                          const t = POST_TARIFE[form._shipStep]?.["economy"]?.[form.ship_weight] || 0;
+                          if (t) set("shipping_cost", t.toFixed(2));
+                        }}>Economy</Chip>
+                        <Chip active={form.ship_speed === "priority"} onClick={() => {
+                          set("ship_speed", "priority");
+                          const t = POST_TARIFE[form._shipStep]?.["priority"]?.[form.ship_weight] || 0;
+                          if (t) set("shipping_cost", t.toFixed(2));
+                        }}>Priority</Chip>
+                      </div>
+                      <p style={{ ...hintStyle, marginBottom: 16 }}>{form.ship_speed === "priority" ? "1 Werktag" : "2 - 3 Werktage"}</p>
+
+                      {(() => {
+                        const tariffBase = POST_TARIFE[form._shipStep]?.[form.ship_speed || "economy"]?.[form.ship_weight] || 0;
+                        const tariffMax = tariffBase + MAX_MARKUP;
+                        return (
+                        <>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                        <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
+                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", background: form.free_shipping ? colors.yellow : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                      </div>
+                      {!form.free_shipping && (
+                        <div style={{ marginBottom: 14 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                            <div><div style={{ fontSize: 13, fontWeight: 600 }}>Versandkosten</div><div style={{ fontSize: 12, color: colors.muted, marginBottom: 4 }}>Getragen vom Käufer</div></div>
+                            {tariffBase > 0 && <div style={{ fontSize: 11, color: colors.muted }}>Post-Tarif: CHF {tariffBase.toFixed(2)} · Max: CHF {tariffMax.toFixed(2)}</div>}
+                          </div>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <span style={{ fontSize: 13, color: colors.muted }}>CHF</span>
+                            <input style={{ ...inputBase, width: 100 }} type="number" min={tariffBase || 0} max={tariffBase > 0 ? tariffMax : 999} step="0.50" value={form.shipping_cost} onChange={e => {
+                              let val = parseFloat(e.target.value) || 0;
+                              if (tariffBase > 0 && val > tariffMax) val = tariffMax;
+                              if (tariffBase > 0 && val < tariffBase) val = tariffBase;
+                              set("shipping_cost", val.toFixed(2));
+                            }} />
+                          </div>
+                          {tariffBase > 0 && Number(form.shipping_cost) > tariffBase && <p style={{ ...hintStyle, marginTop: 4, fontSize: 11 }}>+CHF {(Number(form.shipping_cost) - tariffBase).toFixed(2)} Aufschlag (max. CHF {MAX_MARKUP.toFixed(2)})</p>}
+                        </div>
+                      )}
+                        </>
+                        );
+                      })()}
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 6, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 6, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ─ Abholung Toggle ─ */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0" }}>
+          <button onClick={() => {
+            const next = !form.pickup_only;
+            set("pickup_only", next);
+            if (!next && !form.shipping_available) set("shipping_available", true);
+          }} style={{
+            width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", flexShrink: 0,
+            background: form.pickup_only ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Abholung</span>
+        </div>
+
+        {form.pickup_only && (
+          <div style={{ border: `1px solid ${colors.border}`, borderRadius: radius.md, overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
+              <MapPin size={20} color={colors.muted} />
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Abholung</div>
+                <div style={{ fontSize: 12, color: colors.muted }}>Die in deinem Benutzerkonto gespeicherte Adresse gilt als Abholadresse</div>
+              </div>
+            </div>
+            <div style={{ padding: "10px 16px", fontSize: 13, color: colors.muted }}>
+              <div style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: "6px 12px" }}>
+                <span style={{ fontWeight: 600 }}>Abholadresse</span>
+                <span>{profileAddr.street || "Keine Adresse hinterlegt"}{profileAddr.street && <><br />{profileAddr.postal_code} {profileAddr.city}</>}</span>
+                <span style={{ fontWeight: 600 }}>Versandkosten</span>
+                <span>Gratis</span>
+                <span style={{ fontWeight: 600 }}>Zahlung</span>
+                <span>Barzahlung bei Übergabe</span>
+              </div>
+              {!profileAddr.street && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.yellow, fontWeight: 700 }}>Einstellungen</a>.</p>}
+            </div>
+          </div>
+        )}
+
+        {!form.shipping_available && !form.pickup_only && (
+          <p style={{ ...hintStyle, color: "#c62828", marginTop: 8 }}>Mindestens eine Übergabeart muss aktiv sein.</p>
+        )}
+      </div>
+      )}
+
+      {/* ── BEE-RATE (emotional) ─────────────────────────────── */}
       {!isFree && effectiveType !== "free" && (
         <div style={sectionBase}>
           <label style={labelBase}>Bee-Impact</label>
