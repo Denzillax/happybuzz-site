@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
 import { Search, X, Plus, User, LogOut, ChevronDown, ChevronRight, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, SearchIcon, LayoutGrid, MessageCircle, CalendarDays, ShieldCheck, Gavel } from 'lucide-react'
+import NotificationBell from '@/components/shared/NotificationBell'
 import { MegaMenu } from '@/components/shared/MegaMenu'
 
 
@@ -242,10 +243,7 @@ export function Header() {
               </div>
 
             {/* Notifications */}
-              <button className="hdr-icon-btn" style={iconBtn} onClick={() => { if (!user) { router.push('/login'); return; } router.push('/notifications'); }}>
-                <Bell size={20} />
-                {user && <span style={{ position: 'absolute', top: 8, right: 8, width: 8, height: 8, borderRadius: '50%', background: '#D44', border: '2px solid #fff' }} />}
-              </button>
+              {user ? <NotificationBell /> : <button className="hdr-icon-btn" style={iconBtn} onClick={() => router.push('/login')}><Bell size={20} /></button>}
 
             {/* Inserieren */}
             <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 20px', background: '#F4C03F', color: '#1a1a1a', fontWeight: 700, fontSize: 14, borderRadius: 8, textDecoration: 'none', transition: 'all 0.15s', fontFamily: 'inherit', marginLeft: 2 }}>

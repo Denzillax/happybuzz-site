@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { getUserListings, deleteListing } from "@/lib/listings";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2 } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
@@ -21,13 +21,47 @@ export default function ListingsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [deleteId, setDeleteId] = useState(null);
+  const [bidCounts, setBidCounts] = useState({});
 
   useEffect(() => {
     async function load() {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) { window.location.href = "/login"; return; }
-        setListings(await getUserListings(user.id));
+        const items = await getUserListings(user.id);
+        setListings(items);
+        // Bid counts für Auktionen laden
+        const auctionIds = items.filter(l => l.listing_type === "auction").map(l => l.id);
+        if (auctionIds.length > 0) {
+          // Anzahl Gebote aus bid_history
+          const { data: historyBids } = await supabase
+            .from("bid_history")
+            .select("listing_id")
+            .in("listing_id", auctionIds);
+          const countMap = {};
+          auctionIds.forEach(id => { countMap[id] = { count: 0, topBid: 0 }; });
+          (historyBids || []).forEach(b => { countMap[b.listing_id].count++; });
+          // Fallback auf bids Tabelle wenn bid_history leer
+          if (historyBids?.length === 0) {
+            const { data: bidsAlt } = await supabase
+              .from("bids")
+              .select("listing_id")
+              .in("listing_id", auctionIds);
+            (bidsAlt || []).forEach(b => { countMap[b.listing_id].count++; });
+          }
+          // Höchstes Gebot pro Auktion
+          const { data: topBids } = await supabase
+            .from("bids")
+            .select("listing_id, amount")
+            .in("listing_id", auctionIds)
+            .order("amount", { ascending: false });
+          (topBids || []).forEach(b => {
+            if (countMap[b.listing_id] && !countMap[b.listing_id].topBid) {
+              countMap[b.listing_id].topBid = b.amount;
+            }
+          });
+          setBidCounts(countMap);
+        }
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }
@@ -98,6 +132,7 @@ export default function ListingsPage() {
                   <th style={{ ...colHead, textAlign: "right" }}>Preis</th>
                   <th style={{ ...colHead, textAlign: "center" }}>Aufrufe</th>
                   <th style={{ ...colHead, textAlign: "center" }}>Favoriten</th>
+                  <th style={{ ...colHead, textAlign: "center" }}>Gebote</th>
                   <th style={colHead}>Status</th>
                   <th style={{ ...colHead, width: 80 }}></th>
                 </tr>
@@ -140,6 +175,26 @@ export default function ListingsPage() {
                           <Heart size={14} fill={l.favorite_count > 0 ? colors.yellow : "none"} /> {l.favorite_count || 0}
                         </div>
                       </td>
+                      {/* Gebote */}
+                      <td style={{ padding: "14px 10px", textAlign: "center", verticalAlign: "middle" }}>
+                        {l.listing_type === "auction" ? (() => {
+                          const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
+                          return (
+                            <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 4, color: bc.count > 0 ? colors.green : colors.muted, fontSize: 13, fontWeight: bc.count > 0 ? 700 : 400 }}>
+                                <Gavel size={14} /> {bc.count}
+                              </div>
+                              {bc.topBid > 0 && (
+                                <div style={{ fontSize: 10, color: colors.green, fontWeight: 600 }}>
+                                  CHF {fmtPrice(bc.topBid)}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })() : (
+                          <span style={{ color: colors.borderLt, fontSize: 12 }}>—</span>
+                        )}
+                      </td>
                       {/* Status */}
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
                         <div style={{ display: "inline-flex", alignItems: "center", gap: 5, color: st.color, fontSize: 12, fontWeight: 600 }}>
@@ -157,6 +212,8 @@ export default function ListingsPage() {
                               <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ background: "#c62828", border: "none", cursor: "pointer", color: "#fff", fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 4, fontFamily: fonts.body }}>Ja, löschen</button>
                               <button onClick={() => setDeleteId(null)} style={{ background: colors.cloud, border: "none", cursor: "pointer", color: colors.muted, fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 4, fontFamily: fonts.body }}>Abbrechen</button>
                             </div>
+                          ) : (bidCounts[l.id]?.count > 0 || (l.listing_type === "auction" && l.status === "active")) && bidCounts[l.id]?.count > 0 ? (
+                            <span style={{ fontSize: 11, color: colors.muted, fontStyle: "italic" }}>Gebote vorhanden</span>
                           ) : (
                             <button onClick={() => setDeleteId(l.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "#c62828", fontSize: 13, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4, fontFamily: fonts.body }}>
                               <Trash2 size={13} /> Löschen

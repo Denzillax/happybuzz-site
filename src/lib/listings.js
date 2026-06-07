@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase/supabase";
-import { createNotification } from "@/lib/api/notifications";
 
 // ─── Slug ────────────────────────────────────────────────────
 function slugify(text) {
@@ -518,12 +517,6 @@ export async function createPurchase(buyerId, listingId) {
     p_buyer_id: buyerId,
   });
   if (error) throw new Error(error.message);
-
-  try {
-    const { data: listing } = await supabase.from("listings").select("title, user_id").eq("id", listingId).maybeSingle();
-    if (listing?.user_id) await createNotification(listing.user_id, "purchase", "Artikel verkauft", `"${listing.title}" wurde gekauft`, `/order/${data}`, "sell_sold");
-  } catch (e) {}
-
   return data; // purchase ID
 }
 
@@ -844,15 +837,6 @@ export async function sendMessage(conversationId, senderId, content) {
     .single();
   if (error) throw error;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
-
-  try {
-    const { data: conv } = await supabase.from("conversations").select("buyer_id, seller_id, listing:listings(title, id)").eq("id", conversationId).maybeSingle();
-    if (conv) {
-      const recipientId = conv.buyer_id === senderId ? conv.seller_id : conv.buyer_id;
-      if (recipientId) await createNotification(recipientId, "message", "Neue Nachricht", `Zu "${conv.listing?.title || 'Inserat'}"`, `/listing/${conv.listing?.id || ''}`, "msg_new");
-    }
-  } catch (e) {}
-
   return data;
 }
 
@@ -883,13 +867,12 @@ function getBidIncrement(price) {
 
 export async function placeBid(listingId, bidderId, maxAmount) {
   // ── PROXY BIDDING (Ricardo-Style) ──
-  const logBid = async (bid_bidder, bid_amount, bid_type) => {
-    try { await supabase.from("bid_history").insert({ listing_id: listingId, bidder_id: bid_bidder, amount: bid_amount, bid_type }); } catch(e) {}
-  };
+  // maxAmount = Preislimit des Bieters (geheim)
+  // System bietet automatisch das Minimum
 
   // 1. Listing holen
   const { data: listing } = await supabase.from("listings")
-    .select("start_price, buy_now_price, price, auction_end, title, user_id")
+    .select("start_price, buy_now_price, price, auction_end")
     .eq("id", listingId).single();
   if (!listing) throw new Error("Inserat nicht gefunden");
 
@@ -932,13 +915,8 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         const inc = getBidIncrement(currentTop.max_amount);
         const newPrice = Math.min(maxAmount, currentTop.max_amount + inc);
         await supabase.from("bids").update({ amount: newPrice }).eq("id", existingBid.id);
-        await logBid(bidderId, newPrice, "manual");
         await supabase.from("listings").update({ price: newPrice }).eq("id", listingId);
         await extendAuctionIfNeeded(listingId, listing.auction_end);
-        try {
-          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
-          if (currentTop.bidder_id !== bidderId) await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `"${listing.title}": CHF ${newPrice.toFixed(2)}`, `/listing/${listingId}`, "buy_outbid");
-        } catch(e) {}
         return { displayPrice: newPrice, isTopBidder: true, message: "Du führst jetzt!" };
       } else {
         // Immer noch überboten — Auto-Bid des Top-Bieters
@@ -946,13 +924,8 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         const autoPrice = Math.min(currentTop.max_amount, maxAmount + inc);
         await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
         await supabase.from("bids").update({ amount: maxAmount }).eq("id", existingBid.id);
-        await logBid(bidderId, maxAmount, "manual");
-        await logBid(currentTop.bidder_id, autoPrice, "auto");
         await supabase.from("listings").update({ price: autoPrice }).eq("id", listingId);
         await extendAuctionIfNeeded(listingId, listing.auction_end);
-        try {
-          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${autoPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
-        } catch(e) {}
         return { displayPrice: autoPrice, isTopBidder: false, message: "Du wurdest automatisch überboten." };
       }
     }
@@ -968,21 +941,17 @@ export async function placeBid(listingId, bidderId, maxAmount) {
     // Erster Bieter
     newDisplayPrice = startPrice;
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
-    await logBid(bidderId, newDisplayPrice, "manual");
   } else if (maxAmount > currentTop.max_amount) {
     // Neuer Bieter überbietet
     const inc = getBidIncrement(currentTop.max_amount);
     newDisplayPrice = Math.min(maxAmount, currentTop.max_amount + inc);
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
-    await logBid(bidderId, newDisplayPrice, "manual");
   } else {
     // Bestehender Bieter bleibt vorne
     const inc = getBidIncrement(maxAmount);
     const autoPrice = Math.min(currentTop.max_amount, maxAmount + inc);
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: maxAmount, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
     await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
-    await logBid(bidderId, maxAmount, "manual");
-    await logBid(currentTop.bidder_id, autoPrice, "auto");
     newDisplayPrice = autoPrice;
     isTop = false;
   }
@@ -996,16 +965,6 @@ export async function placeBid(listingId, bidderId, maxAmount) {
   // 6. bid_count aktualisieren
   const { count } = await supabase.from("bids").select("*", { count: "exact", head: true }).eq("listing_id", listingId);
   await supabase.from("listings").update({ bid_count: count || 0 }).eq("id", listingId);
-
-  // Notifications
-  try {
-    if (listing.user_id && listing.user_id !== bidderId) {
-      await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newDisplayPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
-    }
-    if (currentTop && currentTop.bidder_id !== bidderId && !isTop) {
-      await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `"${listing.title}": CHF ${newDisplayPrice.toFixed(2)}`, `/listing/${listingId}`, "buy_outbid");
-    }
-  } catch (e) {}
 
   return {
     displayPrice: newDisplayPrice,
@@ -1162,20 +1121,6 @@ export async function getBids(listingId) {
     .order("amount", { ascending: false })
     .limit(20);
   if (error) return [];
-  return data || [];
-}
-
-export async function getBidHistory(listingId) {
-  const { data, error } = await supabase
-    .from("bid_history")
-    .select("*, bidder:profiles!bid_history_bidder_id_fkey(id, display_name)")
-    .eq("listing_id", listingId)
-    .order("created_at", { ascending: false })
-    .limit(50);
-  if (error) {
-    console.error("getBidHistory:", error);
-    return [];
-  }
   return data || [];
 }
 
@@ -1499,42 +1444,16 @@ export async function submitServiceInvoice(purchaseId, sellerId, hours, hourlyRa
 }
 
 // ═════════════════════════════════════════════════════════════
-// FAVORITE SELLERS
+// BID HISTORY — Detaillierter Gebotsverlauf (Ricardo-Stil)
 // ═════════════════════════════════════════════════════════════
 
-export async function toggleFavoriteSeller(userId, sellerId) {
-  const { data: existing } = await supabase
-    .from("favorite_sellers")
-    .select("user_id")
-    .eq("user_id", userId)
-    .eq("seller_id", sellerId)
-    .maybeSingle();
-
-  if (existing) {
-    await supabase.from("favorite_sellers").delete().eq("user_id", userId).eq("seller_id", sellerId);
-    return false;
-  } else {
-    await supabase.from("favorite_sellers").insert({ user_id: userId, seller_id: sellerId });
-    return true;
-  }
-}
-
-export async function isSellerFavorited(userId, sellerId) {
-  const { data } = await supabase
-    .from("favorite_sellers")
-    .select("user_id")
-    .eq("user_id", userId)
-    .eq("seller_id", sellerId)
-    .maybeSingle();
-  return !!data;
-}
-
-export async function getFavoriteSellers(userId) {
+export async function getBidHistory(listingId) {
   const { data, error } = await supabase
-    .from("favorite_sellers")
-    .select("seller_id, created_at, seller:profiles!favorite_sellers_seller_id_fkey(id, display_name, avatar_url, bee_impact_total, city)")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
-  if (error) return [];
+    .from("bid_history")
+    .select("id, listing_id, bidder_id, amount, bid_type, created_at, bidder:profiles(id, display_name)")
+    .eq("listing_id", listingId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) { console.error("getBidHistory error:", error); return []; }
   return data || [];
 }

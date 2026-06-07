@@ -189,7 +189,7 @@ export default function ListingDetail() {
   const imgs = l.images || [];
   const isOwner = user && user.id === l.user_id;
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
-  const displayPrice = (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
+  const displayPrice = (l.listing_type === "auction" && bids.length > 0) ? bids[0].amount : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
   const beeImpact = displayPrice * (l.fee_percentage || 5) / 100 * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
@@ -658,11 +658,11 @@ export default function ListingDetail() {
                   )}
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
 
-                  {/* Bid History */}
+                  {/* Bid History — Collapsible */}
                   {(bidHistory.length > 0 || bids.length > 0) && (() => {
                     const allBids = bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }));
                     const totalBids = allBids.length;
-                    const visibleBids = totalBids <= 3 ? allBids : (showAllBids ? allBids : allBids.slice(0, 3));
+                    const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
                     const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
                     return (
                     <div style={{ fontSize: 13, marginTop: 8 }}>
@@ -673,14 +673,13 @@ export default function ListingDetail() {
                         <div key={b.id || i} style={{
                           display: "flex", justifyContent: "space-between", alignItems: "center",
                           padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
-                          background: isTopBidder ? `${colors.teal}06` : "transparent",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.graphite, fontSize: 12 }}>
+                            <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.muted, fontSize: 12 }}>
                               {b.bidder?.display_name || "Bieter"}
                             </span>
                             {b.bid_type === "auto" && (
-                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cloud || colors.cream, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
+                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
                             )}
                             {isTopBidder && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
                           </div>
@@ -698,14 +697,10 @@ export default function ListingDetail() {
                           display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
                           width: "100%", padding: "10px 0", marginTop: 4,
                           background: "none", border: "none", cursor: "pointer",
-                          fontSize: 12, fontWeight: 700, color: colors.yellow,
-                          fontFamily: fonts.body,
+                          fontSize: 12, fontWeight: 700, color: colors.yellow, fontFamily: fonts.body,
                         }}>
-                          {showAllBids ? (
-                            <><ChevronDown size={14} style={{ transform: "rotate(180deg)" }} /> Weniger anzeigen</>
-                          ) : (
-                            <><ChevronDown size={14} /> Alle {totalBids} Gebote anzeigen</>
-                          )}
+                          <ChevronDown size={14} style={{ transform: showAllBids ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+                          {showAllBids ? "Weniger anzeigen" : `Alle ${totalBids} Gebote anzeigen`}
                         </button>
                       )}
                     </div>
