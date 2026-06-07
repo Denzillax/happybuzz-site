@@ -385,6 +385,11 @@ export function Header() {
             <div style={{ padding: '4px 12px' }}>
               {[
                 { href: '/listings', icon: Tag, label: 'Meine Inserate' },
+                { href: '/purchases', icon: Receipt, label: 'Meine Käufe' },
+                { href: '/bids', icon: Gavel, label: 'Meine Gebote' },
+                { href: '/sales', icon: ShoppingBag, label: 'Meine Verkäufe' },
+                { href: '/bookings', icon: CalendarDays, label: 'Buchungen' },
+                { href: '/chat', icon: MessageCircle, label: 'Nachrichten' },
                 { href: '/favorites', icon: Heart, label: 'Favoriten' },
                 { href: '/settings', icon: Settings, label: 'Einstellungen' },
               ].map(link => (

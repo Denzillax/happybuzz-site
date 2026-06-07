@@ -239,7 +239,7 @@ export default function ListingsPage() {
                   <th style={{ ...colHead, textAlign: "center" }}>Favoriten</th>
                   <th style={{ ...colHead, textAlign: "center" }}>Gebote</th>
                   <th style={colHead}>Status</th>
-                  <th style={{ ...colHead, width: 180 }}>Aktionen</th>
+                  <th style={{ ...colHead, width: 120, textAlign: "center" }}>Aktionen</th>
                 </tr>
               </thead>
               <tbody>
@@ -263,8 +263,8 @@ export default function ListingsPage() {
                           <div style={{ width: 56, height: 56, borderRadius: 6, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
                           </div>
-                          <div>
-                            <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2 }}>{l.title}</Link>
+                          <div style={{ minWidth: 0 }}>
+                            <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 220 }}>{l.title}</Link>
                             <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
                           </div>
                         </div>
@@ -311,27 +311,58 @@ export default function ListingsPage() {
                           <StIcon size={14} /> {st.label}
                         </div>
                       </td>
-                      {/* Actions */}
+                      {/* Actions — Icon-Only mit Hover-Tooltip */}
                       <td style={{ padding: "14px 6px", verticalAlign: "middle" }}>
-                        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                          <Link href={`/listings/${l.id}`} style={{ color: colors.blue, fontSize: 11, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body }}>
-                            <Pencil size={11} /> Bearbeiten
+                        <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center" }}>
+                          {/* Bearbeiten */}
+                          <Link href={`/listings/${l.id}`} title="Bearbeiten" style={{
+                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            color: colors.blue, background: `${colors.blue}10`, border: "none", textDecoration: "none", transition: "all .15s",
+                          }}
+                            onMouseEnter={e => e.currentTarget.style.background = `${colors.blue}20`}
+                            onMouseLeave={e => e.currentTarget.style.background = `${colors.blue}10`}>
+                            <Pencil size={14} />
                           </Link>
+                          {/* Pausieren / Aktivieren */}
                           {(l.status === "active" || l.status === "paused") && (
-                            <button onClick={() => togglePause(l)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body, color: l.status === "paused" ? "#2E7D32" : "#E65100" }}>
-                              {l.status === "paused" ? <><Play size={11} /> Aktivieren</> : <><Pause size={11} /> Pausieren</>}
+                            <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
+                              width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                              border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
+                              color: l.status === "paused" ? "#2E7D32" : "#E65100",
+                              background: l.status === "paused" ? "#E8F5E910" : "#FFF3E0",
+                            }}
+                              onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
+                              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                              {l.status === "paused" ? <Play size={14} /> : <Pause size={14} />}
                             </button>
                           )}
+                          {/* Löschen */}
                           {deleteId === l.id ? (
                             <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                              <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ background: "#c62828", border: "none", cursor: "pointer", color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 4, fontFamily: fonts.body }}>Ja</button>
-                              <button onClick={() => setDeleteId(null)} style={{ background: colors.cream, border: "none", cursor: "pointer", color: colors.muted, fontSize: 10, fontWeight: 600, padding: "3px 8px", borderRadius: 4, fontFamily: fonts.body }}>Nein</button>
+                              <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} title="Bestätigen" style={{
+                                width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                background: "#c62828", border: "none", cursor: "pointer", color: "#fff",
+                              }}><CheckCircle size={12} /></button>
+                              <button onClick={() => setDeleteId(null)} title="Abbrechen" style={{
+                                width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                background: colors.cream, border: "none", cursor: "pointer", color: colors.muted,
+                              }}><XCircle size={12} /></button>
                             </div>
-                          ) : hasBids ? (
-                            <span style={{ fontSize: 10, color: colors.muted, fontStyle: "italic" }}>Gebote</span>
                           ) : (
-                            <button onClick={() => setDeleteId(l.id)} style={{ background: "none", border: "none", cursor: "pointer", color: "#c62828", fontSize: 11, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 3, fontFamily: fonts.body }}>
-                              <Trash2 size={11} />
+                            <button onClick={() => { if (!hasBids) setDeleteId(l.id); }}
+                              title={hasBids ? "Kann nicht gelöscht werden (aktive Gebote)" : "Löschen"}
+                              disabled={hasBids}
+                              style={{
+                                width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                border: "none", fontFamily: fonts.body, transition: "all .15s",
+                                color: hasBids ? colors.borderLt : "#c62828",
+                                background: hasBids ? "transparent" : "#FFEBEE",
+                                cursor: hasBids ? "not-allowed" : "pointer",
+                                opacity: hasBids ? 0.5 : 1,
+                              }}
+                              onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FFCDD2"; }}
+                              onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FFEBEE"; }}>
+                              <Trash2 size={14} />
                             </button>
                           )}
                         </div>
