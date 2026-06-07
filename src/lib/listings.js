@@ -523,7 +523,7 @@ export async function createPurchase(buyerId, listingId) {
   try {
     const { data: listing } = await supabase.from("listings").select("title, user_id").eq("id", listingId).maybeSingle();
     if (listing?.user_id) {
-      await createNotification(listing.user_id, "purchase", "Artikel verkauft", `"${listing.title}" wurde gekauft`, `/order/${data}`);
+      await createNotification(listing.user_id, "purchase", "Artikel verkauft", `"${listing.title}" wurde gekauft`, `/order/${data}`, "sell_sold");
     }
   } catch (e) { console.error("Purchase notification:", e); }
 
@@ -854,7 +854,7 @@ export async function sendMessage(conversationId, senderId, content) {
     if (conv) {
       const recipientId = conv.buyer_id === senderId ? conv.seller_id : conv.buyer_id;
       if (recipientId) {
-        await createNotification(recipientId, "message", "Neue Nachricht", `Zu "${conv.listing?.title || 'Inserat'}"`, `/listing/${conv.listing?.id || ''}`);
+        await createNotification(recipientId, "message", "Neue Nachricht", `Zu "${conv.listing?.title || 'Inserat'}"`, `/listing/${conv.listing?.id || ''}`, "msg_new");
       }
     }
   } catch (e) { console.error("Message notification:", e); }
@@ -944,8 +944,8 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         await supabase.from("listings").update({ price: newPrice }).eq("id", listingId);
         await extendAuctionIfNeeded(listingId, listing.auction_end);
         try {
-          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`);
-          if (currentTop.bidder_id !== bidderId) await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `"${listing.title}": CHF ${newPrice.toFixed(2)}`, `/listing/${listingId}`);
+          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
+          if (currentTop.bidder_id !== bidderId) await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `"${listing.title}": CHF ${newPrice.toFixed(2)}`, `/listing/${listingId}`, "buy_outbid");
         } catch(e) {}
         return { displayPrice: newPrice, isTopBidder: true, message: "Du führst jetzt!" };
       } else {
@@ -959,7 +959,7 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         await supabase.from("listings").update({ price: autoPrice }).eq("id", listingId);
         await extendAuctionIfNeeded(listingId, listing.auction_end);
         try {
-          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${autoPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`);
+          if (listing.user_id && listing.user_id !== bidderId) await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${autoPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
         } catch(e) {}
         return { displayPrice: autoPrice, isTopBidder: false, message: "Du wurdest automatisch überboten." };
       }
@@ -1008,10 +1008,10 @@ export async function placeBid(listingId, bidderId, maxAmount) {
   // 7. Notifications
   try {
     if (listing.user_id && listing.user_id !== bidderId) {
-      await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newDisplayPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`);
+      await createNotification(listing.user_id, "bid", "Neues Gebot", `CHF ${newDisplayPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "sell_new_bid");
     }
     if (currentTop && currentTop.bidder_id !== bidderId && !isTop) {
-      await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `Neues Gebot: CHF ${newDisplayPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`);
+      await createNotification(currentTop.bidder_id, "bid", "Du wurdest überboten", `Neues Gebot: CHF ${newDisplayPrice.toFixed(2)} auf "${listing.title}"`, `/listing/${listingId}`, "buy_outbid");
     }
   } catch (e) { console.error("Bid notification:", e); }
 
@@ -1242,13 +1242,13 @@ export async function updatePurchaseStatus(purchaseId, newStatus) {
 }
 
 // Helper: Get purchase + notify counterpart
-async function notifyOrderCounterpart(purchaseId, actorId, type, title, message) {
+async function notifyOrderCounterpart(purchaseId, actorId, type, title, message, settingsKey) {
   try {
     const { data: p } = await supabase.from("purchases").select("buyer_id, seller_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
     if (!p) return;
     const recipientId = p.buyer_id === actorId ? p.seller_id : p.buyer_id;
     const msg = message || `"${p.listing?.title}"`;
-    if (recipientId) await createNotification(recipientId, type, title, msg, `/order/${purchaseId}`);
+    if (recipientId) await createNotification(recipientId, type, title, msg, `/order/${purchaseId}`, settingsKey);
   } catch (e) { console.error("Order notification:", e); }
 }
 
@@ -1256,35 +1256,35 @@ async function notifyOrderCounterpart(purchaseId, actorId, type, title, message)
 export async function markAsPaid(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "payment_pending");
   await addPurchaseEvent(purchaseId, "payment_marked", "Käufer hat die Zahlung als erledigt markiert.", null, userId);
-  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Zahlung markiert", null);
+  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Zahlung markiert", null, "buy_payment");
 }
 
 // Verkäufer: "Zahlung erhalten"
 export async function confirmPayment(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "paid");
   await addPurchaseEvent(purchaseId, "payment_confirmed", "Verkäufer hat den Zahlungseingang bestätigt.", null, userId);
-  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Zahlung bestätigt", null);
+  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Zahlung bestätigt", null, "buy_payment");
 }
 
 // Verkäufer: "Als versendet markieren"
 export async function markAsShipped(purchaseId, userId, trackingNumber) {
   await updatePurchaseStatus(purchaseId, "shipped");
   await addPurchaseEvent(purchaseId, "shipped", "Artikel wurde versendet.", trackingNumber, userId);
-  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Artikel versendet", null);
+  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Artikel versendet", null, "buy_payment");
 }
 
 // Verkäufer: "Als übergeben markieren" (Abholung)
 export async function markAsPickedUp(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "picked_up");
   await addPurchaseEvent(purchaseId, "picked_up", "Artikel wurde übergeben.", null, userId);
-  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Artikel übergeben", null);
+  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Artikel übergeben", null, "buy_payment");
 }
 
 // Käufer: "Empfang bestätigen"
 export async function confirmDelivery(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "delivered");
   await addPurchaseEvent(purchaseId, "delivered", "Käufer hat den Empfang bestätigt.", null, userId);
-  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Empfang bestätigt", null);
+  await notifyOrderCounterpart(purchaseId, userId, "purchase", "Empfang bestätigt", null, "sell_sold");
 }
 
 // Beide: "Bewertung abgeben" → completed
@@ -1360,7 +1360,7 @@ export async function createBooking(listingId, renterId, ownerId, startDate, end
   try {
     const { data: listing } = await supabase.from("listings").select("title, listing_type").eq("id", listingId).maybeSingle();
     const label = listing?.listing_type === "service" ? "Service-Anfrage" : "Buchungsanfrage";
-    await createNotification(ownerId, "rental", label, `Neue Anfrage für "${listing?.title}" am ${new Date(startDate).toLocaleDateString("de-CH", { day: "numeric", month: "long" })}`, "/bookings");
+    await createNotification(ownerId, "rental", label, `Neue Anfrage für "${listing?.title}" am ${new Date(startDate).toLocaleDateString("de-CH", { day: "numeric", month: "long" })}`, "/bookings", "sell_question");
   } catch (e) { console.error("Booking notification:", e); }
 
   return data;
@@ -1513,7 +1513,7 @@ export async function submitServiceInvoice(purchaseId, sellerId, hours, hourlyRa
 
   try {
     const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
-    if (p) await createNotification(p.buyer_id, "purchase", "Rechnung erhalten", `${p.listing?.title}: ${notes}`, `/order/${purchaseId}`);
+    if (p) await createNotification(p.buyer_id, "purchase", "Rechnung erhalten", `${p.listing?.title}: ${notes}`, `/order/${purchaseId}`, "buy_payment");
   } catch (e) { console.error("Invoice notification:", e); }
 
   return { total, notes };

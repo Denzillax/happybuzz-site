@@ -49,8 +49,17 @@ export async function deleteNotification(notificationId) {
 
 // ── Notification erstellen ──
 
-export async function createNotification(userId, type, title, message, link) {
+export async function createNotification(userId, type, title, message, link, settingsKey) {
   if (!userId) return;
+
+  // Check user preferences (if settingsKey provided)
+  if (settingsKey) {
+    try {
+      const prefs = await getNotificationPreferences(userId);
+      if (prefs[settingsKey]?.push === false) return; // User hat diesen Typ deaktiviert
+    } catch (e) { /* preferences not set = allow all */ }
+  }
+
   const { error } = await supabase.from("notifications").insert({
     user_id: userId,
     type,

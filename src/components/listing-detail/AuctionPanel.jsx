@@ -149,23 +149,27 @@ export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuy
         const allBids = bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }));
         const totalBids = allBids.length;
         const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
+        // Der tatsächliche Höchstbietende kommt aus bids (sortiert nach amount DESC)
+        const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
         return (
         <div style={{ fontSize: 13, marginTop: 8 }}>
           <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
-          {visibleBids.map((b, i) => (
+          {visibleBids.map((b, i) => {
+            const isTopBidder = (b.bidder_id || b.bidder?.id) === topBidderId && b.amount >= (bids[0]?.amount || 0);
+            return (
             <div key={b.id || i} style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",
               padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
-              background: i === 0 ? `${colors.teal}06` : "transparent",
+              background: isTopBidder ? `${colors.teal}06` : "transparent",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontWeight: i === 0 ? 700 : 500, color: i === 0 ? colors.dark : colors.graphite }}>
+                <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.graphite }}>
                   {b.bidder?.display_name || "Bieter"}
                 </span>
                 {b.bid_type === "auto" && (
                   <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cloud, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
                 )}
-                {i === 0 && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
+                {isTopBidder && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
               </div>
               <div style={{ textAlign: "right" }}>
                 <span style={{ fontWeight: 700, color: colors.dark }}>CHF {fmtPrice(b.amount)}</span>
@@ -174,7 +178,8 @@ export default function AuctionPanel({ listing, user, isOwner, onBidModal, onBuy
                 </span>
               </div>
             </div>
-          ))}
+            );
+          })}
           {totalBids > 3 && (
             <button onClick={() => setShowAllBids(!showAllBids)} style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
