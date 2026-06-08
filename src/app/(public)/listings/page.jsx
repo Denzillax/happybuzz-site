@@ -65,8 +65,11 @@ export default function ListingsPage() {
   let filtered = listings.filter((l) => filter === "all" || l.status === filter);
   if (typeFilter !== "all") filtered = filtered.filter(l => l.listing_type === typeFilter);
 
-  // Sort
+  // Sort — status priority first (active/paused on top, sold/archived bottom)
+  const statusPriority = { active: 0, paused: 1, draft: 2, rented: 3, sold: 4, expired: 5, archived: 6, inactive: 7 };
   filtered = [...filtered].sort((a, b) => {
+    const sp = (statusPriority[a.status] ?? 9) - (statusPriority[b.status] ?? 9);
+    if (sp !== 0) return sp;
     if (sortBy === "newest") return new Date(b.created_at) - new Date(a.created_at);
     if (sortBy === "oldest") return new Date(a.created_at) - new Date(b.created_at);
     if (sortBy === "views") return (b.view_count || 0) - (a.view_count || 0);
@@ -314,7 +317,7 @@ export default function ListingsPage() {
                       {/* Actions — Icon-Only mit Hover-Tooltip */}
                       <td style={{ padding: "14px 6px", verticalAlign: "middle" }}>
                         <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center" }}>
-                          {/* Bearbeiten */}
+                          {/* Bearbeiten — immer sichtbar */}
                           <Link href={`/listings/${l.id}`} title="Bearbeiten" style={{
                             width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.blue, background: `${colors.blue}10`, border: "none", textDecoration: "none", transition: "all .15s",
@@ -323,7 +326,7 @@ export default function ListingsPage() {
                             onMouseLeave={e => e.currentTarget.style.background = `${colors.blue}10`}>
                             <Pencil size={14} />
                           </Link>
-                          {/* Pausieren / Aktivieren */}
+                          {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {(l.status === "active" || l.status === "paused") && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
                               width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -336,34 +339,36 @@ export default function ListingsPage() {
                               {l.status === "paused" ? <Play size={14} /> : <Pause size={14} />}
                             </button>
                           )}
-                          {/* Löschen */}
-                          {deleteId === l.id ? (
-                            <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                              <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} title="Bestätigen" style={{
-                                width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                background: "#c62828", border: "none", cursor: "pointer", color: "#fff",
-                              }}><CheckCircle size={12} /></button>
-                              <button onClick={() => setDeleteId(null)} title="Abbrechen" style={{
-                                width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                background: colors.cream, border: "none", cursor: "pointer", color: colors.muted,
-                              }}><XCircle size={12} /></button>
-                            </div>
-                          ) : (
-                            <button onClick={() => { if (!hasBids) setDeleteId(l.id); }}
-                              title={hasBids ? "Kann nicht gelöscht werden (aktive Gebote)" : "Löschen"}
-                              disabled={hasBids}
-                              style={{
-                                width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                border: "none", fontFamily: fonts.body, transition: "all .15s",
-                                color: hasBids ? colors.borderLt : "#c62828",
-                                background: hasBids ? "transparent" : "#FFEBEE",
-                                cursor: hasBids ? "not-allowed" : "pointer",
-                                opacity: hasBids ? 0.5 : 1,
-                              }}
-                              onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FFCDD2"; }}
-                              onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FFEBEE"; }}>
-                              <Trash2 size={14} />
-                            </button>
+                          {/* Löschen — nicht bei sold/rented, ausgegraut bei Geboten */}
+                          {l.status !== "sold" && l.status !== "rented" && (
+                            deleteId === l.id ? (
+                              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                                <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} title="Bestätigen" style={{
+                                  width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  background: "#c62828", border: "none", cursor: "pointer", color: "#fff",
+                                }}><CheckCircle size={12} /></button>
+                                <button onClick={() => setDeleteId(null)} title="Abbrechen" style={{
+                                  width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  background: colors.cream, border: "none", cursor: "pointer", color: colors.muted,
+                                }}><XCircle size={12} /></button>
+                              </div>
+                            ) : (
+                              <button onClick={() => { if (!hasBids) setDeleteId(l.id); }}
+                                title={hasBids ? "Kann nicht gelöscht werden (aktive Gebote)" : "Löschen"}
+                                disabled={hasBids}
+                                style={{
+                                  width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  border: "none", fontFamily: fonts.body, transition: "all .15s",
+                                  color: hasBids ? colors.borderLt : "#c62828",
+                                  background: hasBids ? "transparent" : "#FFEBEE",
+                                  cursor: hasBids ? "not-allowed" : "pointer",
+                                  opacity: hasBids ? 0.5 : 1,
+                                }}
+                                onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FFCDD2"; }}
+                                onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FFEBEE"; }}>
+                                <Trash2 size={14} />
+                              </button>
+                            )
                           )}
                         </div>
                       </td>
