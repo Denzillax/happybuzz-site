@@ -9,6 +9,7 @@ import {
   getUnreadCount,
   markAsRead,
   markAllAsRead,
+  deleteNotification,
   subscribeToNotifications,
 } from "@/lib/api/notifications";
 

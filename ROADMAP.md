@@ -1399,3 +1399,47 @@ src/lib/api/invoices.js (NEU)
 - [ ] OpenRouter KI Beschreibungsgenerator
 - [ ] Domain beedaro.ch registrieren
 - [ ] Transaktions-Emails via Resend
+
+===================================================================
+## Session 9. Juni 2026 (Status-Check): Code-Audit + Doku-Sync
+===================================================================
+
+### Ziel
+Code mit Roadmap abgeglichen. Es zeigte sich: der Code ist weiter als die Doku.
+Mehrere Features existieren bereits, waren aber nicht als fertig vermerkt.
+
+### Bereits implementiert (war nicht dokumentiert)
+- **Notification-System komplett**: `src/lib/api/notifications.js` (getNotifications,
+  getUnreadCount, markAsRead, markAllAsRead, deleteNotification, createNotification,
+  getNotificationPreferences, saveNotificationPreferences, subscribeToNotifications
+  via Supabase Realtime). `src/components/shared/NotificationBell.jsx` im Header
+  verdrahtet (Dropdown, Unread-Badge, Realtime-Push, pro-Typ-Preferences).
+  Notification-Settings in `profiles.notification_settings` (jsonb).
+- **Settings-Tabs DOCH aufgeteilt** (Roadmap sagte "abgebrochen"):
+  `src/components/settings/` → ProfileTab, AddressTab, PaymentTab, VerifyTab,
+  NotificationsTab, PublicProfileModal, shared.js.
+- **Neue Seiten**: `src/app/(public)/bids/page.jsx` (Meine Gebote),
+  `src/app/(public)/profile/[id]/page.jsx`.
+- **Gamification-Modul angelegt**: `src/lib/gamification.js` (BEE_LEVELS, XP_REWARDS,
+  calculateLevel, levelProgress, awardXP, unlockAchievement, ACHIEVEMENTS,
+  getUserAchievements, getXPHistory, getActiveChallenges, getUserChallengeProgress).
+
+### Bug gefunden + gefixt
+- **NotificationBell.jsx**: `deleteNotification` wurde verwendet (handleDelete,
+  handleDeleteAll), aber NIE importiert → `ReferenceError` beim Löschen.
+  FIX: Import aus `@/lib/api/notifications` ergänzt. ✅
+
+### Offene Befunde (noch zu erledigen)
+- [ ] **Gamification ist totes Modul**: `awardXP`/`unlockAchievement` werden NIRGENDS
+  aufgerufen. Es wird nie XP vergeben. Phase 16 muss die Hook-Points einbauen
+  (z.B. in purchases.js `completeTransaction` → awardXP sale/purchase_completed,
+  createListing → listing_created, etc.) UND die DB-Tabellen anlegen
+  (xp_log, user_achievements, challenges, user_challenges + profiles.xp_total,
+  profiles.bee_level).
+- [ ] **Spalten-Inkonsistenz**: `getUserAchievements` sortiert nach `unlocked_at`,
+  `unlockAchievement` schreibt diese Spalte nicht (Roadmap-Schema nennt `earned_at`).
+  Vor Aktivierung von Phase 16 vereinheitlichen.
+- [ ] **BEE_LEVELS-Schwellen abgeglichen**: Code = 0/100/500/2000/10000,
+  frühere Roadmap = 0/100/300/750/1500. Vor Launch final festlegen.
+- [ ] **Kein Git**: Weiterhin keine Versionskontrolle. `git init` + erster Commit
+  dringend empfohlen (Dateiverlust-Risiko).
