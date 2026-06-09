@@ -3,7 +3,7 @@
 > **FORMATIERUNG: Keine Bindestriche als Trennlinien verwenden. Immer === verwenden.**
 > **TEXTE: Keine Gedankenstriche in UI Texten auf der Website. Stattdessen Punkte, Kommas oder Doppelpunkte verwenden.**
 
-> Letzte Aktualisierung: 2. Juni 2026 (Phase 14: Order-System Overhaul)
+> Letzte Aktualisierung: 9. Juni 2026 (Session: Homepage Redesign, Features, Fixes)
 > Tech: Next.js 14 (App Router) + Supabase + Vercel + GitHub (`happybuzz-site`)
 > Supabase Project ID: `ekfsehsmwzougrgqukgf`
 > Denis User ID: `48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0`
@@ -26,7 +26,7 @@
 - Überall `getSession()` statt `getUser()` (getUser() returned null wegen localStorage)
 
 ### Fonts & Colors
-- Staatliches (Headlines, Google Fonts) + Manrope (Body, Google Fonts)
+- General Sans (Headlines, Fontshare) + Manrope (Body, Google Fonts)
 - Geladen als `<link>` in `layout.tsx`, NICHT `@import` in globals.css
 - Colors: `#F4C03F` / `#191615` / `#F9F4EC` / `#5B8C5A` / `#94B9C9`
 
@@ -916,7 +916,7 @@ Gebühr total:     CHF 5.00
   - **Existiert bereits**: Admin-Dashboard, öffentliches Profil, Chat, Bookings, Beta-Feedback, alle Legal-Seiten, Help, How It Works, Impact, Fees, Contact, BeeLevel Component
   - **Fehlt noch**: Custom 404/Error-Seite, Transaktions-Emails, nackte Nummer-Suche (Hex-Erkennung)
 - [ ] **PRE-BETA**: Rechtsform klären + Treuhänder-Erstberatung (Einzelfirma vs. GmbH, MWST, Bee-Impact steuerlich)
-- [ ] Benachrichtigungssystem (notifications Tabelle + Glocke im Header + Auktions-Erinnerungen)
+- [x] ~~Benachrichtigungssystem (notifications + createNotification Import Fix + alle Transaktions-Events)~~ ✅ 9. Juni 2026
 - [x] ~~Meine Käufe / Meine Verkäufe Seiten (Liste → Order-Detail)~~ ✅ Phase 14
 - [ ] Content-Filtering (Block personal info in Messages)
 - [ ] Responsive / Mobile Testing komplett
@@ -961,7 +961,7 @@ Gebühr total:     CHF 5.00
 - [ ] PWA (installierbar auf Homescreen)
 - [ ] OpenRouter KI-Beschreibungsgenerator
 - [ ] Gebühren-Ranking: höhere Bee-Rate = höherer Search-Platz ("Relevanz")
-- [ ] Kategorie-spezifische filterbare Attribute
+- [x] ~~Kategorie-spezifische filterbare Attribute (category_attributes + listing_attributes + Filter Pills)~~ ✅ 9. Juni 2026
 - [ ] BEEDARO Wallet (internes Token-System)
 - [ ] Escrow (Geld gehalten bis Käufer bestätigt)
 - [ ] Mietlogik: Wiederholte Vermietung + Kalender-Ansicht
@@ -1273,3 +1273,129 @@ ROADMAP.md
 - [ ] Benachrichtigungssystem (Glocke + DB + Echtzeit)
 - [ ] Responsive / Mobile Testing
 - [ ] Partnerschaften anfragen (FreeTheBees, BienenSchweiz, etc.)
+
+===================================================================
+## Session 8./9. Juni 2026: Homepage Redesign, Features, Fixes
+===================================================================
+
+### Homepage Redesign
+- **Header**: Neues Layout (Alle Kategorien Button, breitere Suche, Heart/Bell/Chat Icons, Avatar rechts, kein +Inserieren)
+- **BottomNav** (NEU): Mobile Bottom-Nav (Home/Suche/+/Favoriten/Profil)
+- **FloatingButton** (NEU): Gelber FAB unten rechts (nur Desktop)
+- **Hero**: Altes Carousel beibehalten (Denis wollte kein zentriertes Layout)
+- **Categories**: Horizontale Kreis-Icons mit Labels
+- **NewListings** (NEU): "Neu eingestellt" 4-Spalten Grid mit ListingCard
+- **PopularListings** (NEU): "Beliebt gerade" Section
+- **CommunityImpact**: marginTop -50 für Hero-Overlap
+- **globals.css**: FAB/BottomNav Sichtbarkeit, Input Focus States, Responsive Grids
+
+### Feature 1: Kategorie-spezifische Attribut-Filter
+- **DB**: `category_attributes` + `listing_attributes` Tabellen mit RLS
+- **37 Attribute** für 13 Hauptkategorien geseeded (korrigiert am 9. Juni)
+- **Games auf SUBKATEGORIEN**: Konsolen (Lieferumfang/Speicher), Videospiele (Plattform/Genre/Sprache), Gaming-Zubehör (Kompatibel mit/Typ), PC-Gaming (Typ/Marke), Retro-Gaming (System/Typ)
+- **KATEGORIE-ID FIX**: IDs waren komplett verschoben (c005=Audio statt Foto, c006=Fahrzeuge statt Kleidung, etc.). Alles gelöscht und mit korrekten IDs neu geseeded
+- **API**: `src/lib/api/attributes.js` (getCategoryAttributes walks up tree, getFilterableAttributes, saveListingAttributes, filterListingsByAttributes)
+- **Suchseite**: Ricardo-Style horizontale Filter-Pills (nicht Sidebar), dynamische Attribute als zweite Pill-Reihe
+- **ListingForm**: Eigenschaften-Block zwischen Kategorie und Inserattyp
+
+### Feature 2: Service-Rechnungen mit Positionen
+- **DB**: `invoice_items` Tabelle (label, description, quantity, unit_price, total, item_type, sort_order) mit RLS
+- **API**: `src/lib/api/invoices.js` mit Templates (Anfahrtspauschale CHF 30, Arbeitsstunde CHF 65, Material, Entsorgung, Freitext), CRUD, submitServiceInvoiceWithItems
+- **ServiceInvoiceEditor** (NEU): Positions-Editor mit Template-Dropdown, Menge x Preis, Bemerkung, Subtotal/Gebühr/BeeImpact/Auszahlung
+- **ServiceInvoiceView**: Käufer-Ansicht mit einzelnen Positionen + QR-Code (Swiss QR aus Seller IBAN)
+- **QR-PDF-Rechnung**: `order/[id]/invoice/page.jsx` zeigt einzelne invoice_items statt nur eine Zeile
+
+### Notification-System Fix
+- **ROOT CAUSE**: `createNotification` war in `listings.js` NIE importiert. Alle Notification-Calls haben still gefailed
+- **Fix**: `import { createNotification } from "@/lib/notifications"` hinzugefügt
+- **Neue Notifications** für alle kritischen Events: markAsPaid→Seller, confirmPayment→Buyer, markAsShipped→Buyer, markAsPickedUp→Buyer, confirmDelivery→Seller, updateBookingStatus(confirmed/rejected)→Renter, markAsReturned→Owner, reportDamage→Renter
+- **Transaktions-Notifications fix immer an** (nicht abschaltbar). Nur Kanal (Email/Push) konfigurierbar
+
+### Payment-Flow Fix
+- **"Ich habe bezahlt" Endlos-Loop**: `markAsPaid` setzte `payment_pending`, aber Service war schon `payment_pending` nach Rechnungsstellung
+- **Fix**: `markAsPaid` setzt jetzt `payment_marked` (neuer, eindeutiger Status)
+- **STATUS_MAP**: `payment_marked` hinzugefügt
+- **Buyer-Ansicht**: Nach Zahlung zeigt "Zahlung markiert, Anbieter prüft" statt denselben Button nochmal
+- **Timeline-Dedup**: Fenster von 5s auf 2 Minuten erweitert
+
+### Service-Buchung Fix
+- Rent (Von/Bis Datum-Range) und Service (Wunschdatum + Uhrzeit) sind jetzt GETRENNTE UI-Blöcke
+- Service: "Wunschdatum" + "Uhrzeit" + "SERVICE ANFRAGEN" Button
+- Rent: "Von" + "Bis" + Preisberechnung + "MIETE ANFRAGEN" Button
+
+### Suchseite Redesign
+- Ricardo-Style Filter-Pills statt Sidebar
+- FilterPill Dropdown-Komponente (teal active, rounded Dropdowns, ChevronDown Animation)
+- Preis-Dropdown mit Von/Bis Eingabefeldern
+- Dynamische Kategorie-Attribute als zweite Pill-Reihe
+- Sortierung rechts als Dropdown
+- CSS `>` Selektoren aus inline `<style>` in `globals.css` verschoben (Hydration-Error Fix)
+- Inline `gridTemplateColumns` entfernt, CSS-Klasse übernimmt
+
+### Mobile Grid Fix
+- `listing-grid` CSS-Klasse: Desktop 4 Spalten, Tablet 3, Mobile 2 gleich grosse
+- `search-results-grid`: Desktop auto-fill, Mobile 2 gleich grosse Spalten
+- NewListings + PopularListings verwenden gleiche Klasse (identisches Scaling)
+- BottomNav/FAB Sichtbarkeit in globals.css
+
+### Settings + Inserieren Theme-Anpassungen
+- Settings: Buttons primary yellow→teal, Toggles yellow→teal
+- ListingForm: Chips/Checks yellow→teal, Toggles teal, Section radius 18px
+
+### CLAUDE.md erstellt
+- Kompletter Projektkontext für Claude Code
+- Inkl. Supabase MCP Setup, DB Schema, Architektur-Regeln, Kategorie-IDs, Roadmap
+
+### Verifizierte Kategorie-IDs (9. Juni 2026)
+```
+c0010000 = Elektronik & Computer
+c0020000 = Handy & Telefon
+c0030000 = Games & Spielkonsolen
+c0040000 = Foto & Optik
+c0050000 = Audio, TV & Video
+c0060000 = Fahrzeuge
+c0070000 = Fahrzeugzubehör
+c0080000 = Sport
+c0090000 = Kleidung & Accessoires
+c0100000 = Uhren & Schmuck
+c0110000 = Haushalt & Wohnen
+c0120000 = Handwerk & Garten
+c0130000 = Kind & Baby
+c0140000 = Bücher & Comics
+```
+
+### Geänderte Dateien (Session)
+```
+CLAUDE.md (NEU)
+ROADMAP.md (aktualisiert)
+src/app/globals.css (komplett neu mit allen Responsive-Regeln)
+src/app/(public)/(home)/page.tsx (NewListings + PopularListings)
+src/app/(public)/search/page.jsx (Filter Pills Redesign)
+src/app/(public)/order/[id]/page.jsx (Payment-Flow + Notifications + QR + Dedup)
+src/app/(public)/order/[id]/invoice/page.jsx (invoice_items in PDF)
+src/app/(public)/listing/[id]/page.jsx (Service-Buchung Datum+Uhrzeit)
+src/app/(public)/settings/page.jsx (Theme teal)
+src/components/layout/Header.tsx (Redesign)
+src/components/layout/BottomNav.tsx (NEU)
+src/components/layout/FloatingButton.tsx (NEU)
+src/components/home/NewListings.tsx (NEU)
+src/components/home/PopularListings.tsx (NEU)
+src/components/home/Categories.tsx (Kreis-Icons)
+src/components/home/CommunityImpact.jsx (Overlap)
+src/components/order/ServiceInvoiceEditor.jsx (NEU)
+src/components/listings/ListingForm.jsx (Theme + Attribute)
+src/lib/listings.js (createNotification Import + markAsPaid Fix)
+src/lib/api/attributes.js (NEU)
+src/lib/api/invoices.js (NEU)
+```
+
+### Pending (nächste Session)
+- [ ] Usertyp Privat/Unternehmen (account_type, Firmenname, UID-Nummer, Badge, Filter)
+- [ ] Gamification (Bee-Level, XP, Community Counter)
+- [ ] Gebühren-Ranking (höhere Bee-Rate = bessere Platzierung)
+- [ ] BEEDARO Wallet (internes Token-System)
+- [ ] Escrow (Geld halten bis Empfangsbestätigung)
+- [ ] PWA + ggf. Capacitor
+- [ ] OpenRouter KI Beschreibungsgenerator
+- [ ] Domain beedaro.ch registrieren
+- [ ] Transaktions-Emails via Resend
