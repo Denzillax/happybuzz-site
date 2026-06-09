@@ -192,7 +192,7 @@ export default function BetaFeedback() {
   if (!open) {
     return (
       <button onClick={() => setOpen(true)} title="Beta Feedback" style={{
-        position: "fixed", bottom: 20, right: 20, zIndex: 9990,
+        position: "fixed", bottom: 96, right: 20, zIndex: 9990,
         width: 48, height: 48, borderRadius: "50%",
         background: colors.yellow, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -229,7 +229,7 @@ export default function BetaFeedback() {
 
   return (
     <div style={{
-      position: "fixed", bottom: 20, right: 20, zIndex: 9990,
+      position: "fixed", bottom: 96, right: 20, zIndex: 9990,
       width: 380, maxHeight: "75vh", borderRadius: 16, overflow: "hidden",
       background: "#fff", border: `1px solid ${colors.border}`,
       boxShadow: "0 8px 32px rgba(0,0,0,.18)", fontFamily: fonts.body,

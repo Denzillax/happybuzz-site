@@ -113,7 +113,7 @@ function Toggle({ checked, onChange, label, description }) {
     >
       <div style={{
         width: 44, height: 24, borderRadius: 12, flexShrink: 0, marginTop: 2,
-        background: checked ? C.yellow : C.border, transition: "background .25s",
+        background: checked ? C.teal : C.border, transition: "background .25s",
         position: "relative",
       }}>
         <div style={{
@@ -140,7 +140,7 @@ function Btn({ children, variant = "primary", onClick, style: s, small, disabled
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: C.yellow, color: C.dark },
+    primary:   { background: C.teal, color: "#fff" },
     secondary: { background: "transparent", color: C.dark, border: `1.5px solid ${C.border}` },
     danger:    { background: C.redSoft, color: C.red },
     ghost:     { background: "transparent", color: C.muted },
@@ -158,8 +158,8 @@ function Section({ title, description, children, badge }) {
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 8 }}>
         <h3 style={{
-          fontFamily: "'General Sans', sans-serif", fontSize: 18, fontWeight: 400,
-          letterSpacing: ".5px", color: C.dark, margin: 0,
+          fontFamily: "'General Sans', sans-serif", fontSize: 16, fontWeight: 700,
+          letterSpacing: "0", color: C.dark, margin: 0,
         }}>{title}</h3>
         {badge}
       </div>

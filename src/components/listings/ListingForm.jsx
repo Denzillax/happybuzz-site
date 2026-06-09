@@ -14,6 +14,7 @@ import {
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { checkProfileComplete } from "@/lib/listings";
+import { getCategoryAttributes, saveListingAttributes, getListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
 
 // ─── Photo Slot Labels (Ricardo-style) ──────────────────────
 const PHOTO_SLOTS = [
@@ -165,6 +166,8 @@ export default function ListingForm({
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
+  const [categoryAttrs, setCategoryAttrs] = useState([]);
+  const [attrValues, setAttrValues] = useState({});
   const [beeTexts] = useState(() => getRandomBeeTexts());
   const fileRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
@@ -307,6 +310,29 @@ export default function ListingForm({
       if (chain.length >= 3) setSelectedSubSubCat(chain[2].id);
     }
   }, [form.category_id, categories]);
+
+  // Load category-specific attributes when category changes
+  useEffect(() => {
+    if (form.category_id) {
+      getCategoryAttributes(form.category_id).then(attrs => {
+        setCategoryAttrs(attrs);
+        // Only reset values if not editing (to preserve existing values)
+        if (!isEdit) setAttrValues({});
+      });
+    } else {
+      setCategoryAttrs([]);
+      setAttrValues({});
+    }
+  }, [form.category_id]);
+
+  // Load existing attribute values for edit mode
+  useEffect(() => {
+    if (isEdit && initialData?.id) {
+      getListingAttributes(initialData.id).then(vals => {
+        if (vals && Object.keys(vals).length > 0) setAttrValues(vals);
+      });
+    }
+  }, [isEdit, initialData?.id]);
 
   // Effective listing type for save
   const effectiveType = isFree ? "free" : form.listing_type;
@@ -460,6 +486,7 @@ export default function ListingForm({
         publish,
         existingImages,
         newFiles,
+        attributeValues: attrValues,
       });
     } catch (err) {
       console.error("Save error:", err);
@@ -1007,6 +1034,54 @@ export default function ListingForm({
           })()}
         </div>
       </div>
+
+      {/* ── KATEGORIE-ATTRIBUTE (dynamisch) ───────────────────── */}
+      {categoryAttrs.length > 0 && (
+        <div style={sectionBase}>
+          <label style={labelBase}>Eigenschaften</label>
+          <p style={{ ...hintStyle, marginBottom: 14 }}>
+            Zusätzliche Angaben helfen Käufern, dein Inserat schneller zu finden.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {categoryAttrs.map(attr => (
+              <div key={attr.id}>
+                <label style={{ ...labelBase, fontSize: 12, marginBottom: 4 }}>
+                  {attr.name}{attr.unit ? ` (${attr.unit})` : ""}
+                  {attr.is_required && <span style={{ color: colors.red, marginLeft: 2 }}>*</span>}
+                </label>
+                {attr.attribute_type === "select" && attr.options ? (
+                  <select
+                    value={attrValues[attr.attribute_key] || ""}
+                    onChange={e => setAttrValues(prev => ({ ...prev, [attr.attribute_key]: e.target.value }))}
+                    style={{ ...inputBase, cursor: "pointer", appearance: "none" }}
+                  >
+                    <option value="">Bitte wählen</option>
+                    {(Array.isArray(attr.options) ? attr.options : []).map(opt => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                ) : attr.attribute_type === "number" ? (
+                  <input
+                    type="number"
+                    value={attrValues[attr.attribute_key] || ""}
+                    onChange={e => setAttrValues(prev => ({ ...prev, [attr.attribute_key]: e.target.value }))}
+                    placeholder={attr.name}
+                    style={inputBase}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={attrValues[attr.attribute_key] || ""}
+                    onChange={e => setAttrValues(prev => ({ ...prev, [attr.attribute_key]: e.target.value }))}
+                    placeholder={attr.name}
+                    style={inputBase}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── INSERAT-TYP TABS ────────────────────────────────── */}
       <div style={sectionBase}>

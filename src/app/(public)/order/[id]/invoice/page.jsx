@@ -8,6 +8,7 @@ import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate } from "@/lib/fees";
 import { fmtCHF, fmtDateLong, fullName } from "@/lib/formatters";
+import { getInvoiceItems } from "@/lib/api/invoices";
 function buildSwissQR({ iban, name, street, plzCity, amount, currency, dName, dStreet, dPlzCity, message }) {
   return ["SPC","0200","1",iban,"K",name,street||"",plzCity||"","","","CH","","","","","","","",amount,currency,"K",dName||"",dStreet||"",dPlzCity||"","","","CH","NON","",message||"","EPD"].join("\r\n");
 }
@@ -19,6 +20,7 @@ export default function InvoicePage() {
   const isDeposit = searchParams.get("type") === "deposit";
   const [order, setOrder] = useState(null);
   const [booking, setBooking] = useState(null);
+  const [invoiceItems, setInvoiceItems] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function load() {
@@ -32,6 +34,7 @@ export default function InvoicePage() {
           if (bk) setBooking(bk);
         }
         setOrder({ ...p, buyer, seller });
+        if (p.listing?.listing_type === "service") { const items = await getInvoiceItems(p.id); setInvoiceItems(items); }
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }
@@ -130,13 +133,26 @@ export default function InvoicePage() {
               </>
             ) : (
               <>
-                <tr style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={{ ...cp, fontSize: 12 }}>
-                    {order.listing?.title || "Artikel"}
-                    <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
-                  </td>
-                  <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(price)}</td>
-                </tr>
+                {invoiceItems.length > 0 ? (
+                  invoiceItems.map((item) => (
+                    <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
+                      <td style={{ ...cp, fontSize: 12 }}>
+                        {item.label}
+                        {item.description && <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{item.description}</span>}
+                        <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{parseFloat(item.quantity)} x CHF {parseFloat(item.unit_price).toFixed(2)}</span>
+                      </td>
+                      <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(parseFloat(item.total))}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={{ ...cp, fontSize: 12 }}>
+                      {order.listing?.title || "Artikel"}
+                      <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
+                    </td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(price)}</td>
+                  </tr>
+                )}
                 {shipping > 0 && (
                   <tr style={{ borderBottom: "1px solid #eee" }}>
                     <td style={{ ...cp, fontSize: 12, color: "#666" }}>Versand</td>

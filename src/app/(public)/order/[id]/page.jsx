@@ -17,11 +17,16 @@ import {
 import { colors, fonts, radius } from "@/lib/theme";
 import { fmtCHF, fullName } from "@/lib/formatters";
 import { makeBeeRef, makeArtRef } from "@/lib/fees";
+import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
+import { getInvoiceItems } from "@/lib/api/invoices";
+import OrderTimeline from "@/components/order/OrderTimeline";
+import RatingSection from "@/components/order/RatingSection";
 
 const STATUS_MAP = {
   confirmed:       { label: "Warten auf Zahlung",  color: "#F4A100", icon: CreditCard },
   pending_payment: { label: "Warten auf Zahlung",  color: "#F4A100", icon: CreditCard },
-  payment_pending: { label: "Zahlung markiert",     color: "#F4A100", icon: Clock },
+  payment_pending: { label: "Warten auf Zahlung",  color: "#F4A100", icon: CreditCard },
+  payment_marked:  { label: "Zahlung markiert",    color: "#F4A100", icon: Clock },
   paid:            { label: "Bezahlt",              color: "#5B8C5A", icon: CheckCircle },
   shipped:         { label: "Versendet",            color: "#94B9C9", icon: Truck },
   picked_up:       { label: "Übergeben",            color: "#94B9C9", icon: MapPin },
@@ -65,6 +70,58 @@ function SidebarSection({ icon: Icon, title, children }) {
   );
 }
 
+function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acting }) {
+  const [items, setItems] = useState([]);
+  useEffect(() => { getInvoiceItems(purchaseId).then(setItems); }, [purchaseId]);
+
+  const total = parseFloat(totalPrice || 0);
+  const sellerIban = (sellerProfile?.iban || "").replace(/\s/g, "");
+  const qrUrl = sellerIban ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&ecc=M&data=${encodeURIComponent(["SPC","0200","1",sellerIban,"K",fullName(sellerProfile),sellerProfile?.street||"",`${sellerProfile?.postal_code||""} ${sellerProfile?.city||""}`.trim(),"","","CH","","","","","","","",total.toFixed(2),"CHF","K","","","","","","CH","NON","",`Service ${(purchaseId||"").substring(0,8).toUpperCase()}`,"EPD"].join("\r\n"))}` : null;
+
+  return (
+    <div>
+      <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 12px" }}>Service-Rechnung</h3>
+      {items.length > 0 ? (
+        <div style={{ background: "#F9F4EC", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
+          {items.map((item, i) => (
+            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid #e8e4df" : "none" }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{item.label}</div>
+                {item.description && <div style={{ fontSize: 11, color: colors.muted }}>{item.description}</div>}
+                <div style={{ fontSize: 11, color: colors.muted }}>{parseFloat(item.quantity)} x CHF {parseFloat(item.unit_price).toFixed(2)}</div>
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, whiteSpace: "nowrap" }}>CHF {parseFloat(item.total).toFixed(2)}</div>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 10, marginTop: 4, borderTop: "2px solid #e8e4df" }}>
+            <span>Total</span><span>CHF {total.toFixed(2)}</span>
+          </div>
+        </div>
+      ) : (
+        <div style={{ padding: "12px 14px", background: "#F9F4EC", borderRadius: 6, fontSize: 13, marginBottom: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16 }}>
+            <span>Total</span><span>CHF {total.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
+      {qrUrl && (
+        <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 10, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
+          <img src={qrUrl} alt="QR" style={{ width: 100, height: 100, borderRadius: 4, flexShrink: 0 }} />
+          <div style={{ fontSize: 12, color: colors.muted }}>
+            <div style={{ fontWeight: 700, color: colors.dark, marginBottom: 4 }}>QR-Zahlung</div>
+            <div>IBAN: {sellerProfile?.iban || ""}</div>
+            <div>Betrag: CHF {total.toFixed(2)}</div>
+            <div style={{ marginTop: 6, fontSize: 11 }}>Mit Banking-App scannen</div>
+          </div>
+        </div>
+      )}
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 8, border: "none", background: "#0E9493", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+        {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
+      </button>
+    </div>
+  );
+}
+
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -79,6 +136,7 @@ export default function OrderDetailPage() {
   const [damageAmount, setDamageAmount] = useState("");
   const [damageDesc, setDamageDesc] = useState("");
   const [showDamageForm, setShowDamageForm] = useState(false);
+  const [showFullTimeline, setShowFullTimeline] = useState(false);
   const [booking, setBooking] = useState(null);
   const [damageFiles, setDamageFiles] = useState([]);
 
@@ -98,7 +156,7 @@ export default function OrderDetailPage() {
           // Deduplizieren (gleicher event_type + ähnliche Zeit)
           const seen = new Set();
           const unique = ev.filter(e => {
-            const key = `${e.event_type}-${Math.floor(new Date(e.created_at).getTime() / 5000)}`;
+            const key = `${e.event_type}-${Math.floor(new Date(e.created_at).getTime() / 120000)}`;
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
@@ -240,38 +298,32 @@ export default function OrderDetailPage() {
             {!isFinished && (
               <div style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20, marginBottom: 16 }}>
 
-                {/* SERVICE: Anbieter loggt Stunden */}
+                {/* SERVICE: Anbieter erstellt Rechnung mit Positionen */}
                 {isService && isSeller && p.status === "confirmed" && (
-                  <div>
-                    <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 4px", display: "flex", alignItems: "center", gap: 6 }}><Wrench size={16} /> Service abrechnen</h3>
-                    <p style={{ fontSize: 13, color: colors.muted, marginBottom: 12 }}>Trage den Aufwand ein und erstelle die Rechnung.</p>
-                    <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: colors.muted, display: "block", marginBottom: 4 }}>{listing?.rent_period === "hour" ? "Stunden" : listing?.rent_period === "day" ? "Tage" : "Einheiten"}</label>
-                        <input type="number" min="0.5" step="0.5" placeholder="z.B. 2.5" value={serviceHours} onChange={(e) => setServiceHours(e.target.value)} style={{ width: "100%", padding: "10px 12px", borderRadius: 6, border: "1.5px solid #e0dcd7", fontSize: 14 }} />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: colors.muted, display: "block", marginBottom: 4 }}>Tarif</label>
-                        <div style={{ padding: "10px 12px", borderRadius: 6, border: "1.5px solid #e0dcd7", fontSize: 14, background: "#F9F4EC" }}>CHF {parseFloat(listing?.rent_price || 0).toFixed(2)} / {listing?.rent_period === "hour" ? "Std" : listing?.rent_period === "day" ? "Tag" : "Mt"}</div>
-                      </div>
-                    </div>
-                    {serviceHours > 0 && (<div style={{ padding: "12px 14px", background: "#F9F4EC", borderRadius: 6, fontSize: 13, marginBottom: 12 }}><div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 15 }}><span>{serviceHours} x CHF {parseFloat(listing?.rent_price || 0).toFixed(2)}</span><span>CHF {(parseFloat(serviceHours) * parseFloat(listing?.rent_price || 0)).toFixed(2)}</span></div></div>)}
-                    <button onClick={async () => { if (!serviceHours || parseFloat(serviceHours) <= 0) return; setActing(true); try { await submitServiceInvoice(p.id, user.id, serviceHours, listing?.rent_price || 0, listing?.rent_period || "hour"); window.location.reload(); } catch (err) { console.error(err); } setActing(false); }} disabled={acting || !serviceHours || parseFloat(serviceHours) <= 0} style={{ width: "100%", padding: 14, borderRadius: 6, border: "none", background: serviceHours > 0 ? "#0E9493" : "#e0dcd7", color: "#fff", fontSize: 14, fontWeight: 800, cursor: serviceHours > 0 ? "pointer" : "default" }}>{acting ? "Wird erstellt..." : "Rechnung erstellen"}</button>
-                  </div>
+                  <ServiceInvoiceEditor
+                    purchaseId={p.id}
+                    sellerId={user.id}
+                    feePercent={listing?.fee_percentage || 5}
+                    onSubmitted={() => window.location.reload()}
+                  />
                 )}
                 {/* SERVICE: Kunde wartet */}
                 {isService && isBuyer && p.status === "confirmed" && (
                   <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#9A9490", margin: 0 }}>Der Anbieter fuehrt den Service durch und sendet dir anschliessend die Rechnung.</p></div>
                 )}
-                {/* SERVICE: Rechnung erhalten */}
+                {/* SERVICE: Rechnung erhalten — mit Positionen */}
                 {isService && isBuyer && p.status === "payment_pending" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Rechnung erhalten</h3><div style={{ padding: "12px 14px", background: "#F9F4EC", borderRadius: 6, fontSize: 13, marginBottom: 12 }}><p style={{ margin: "0 0 6px", fontWeight: 600 }}>{p.notes}</p><div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 8, borderTop: "1px solid #e8e4df" }}><span>Total</span><span>CHF {parseFloat(p.price || 0).toFixed(2)}</span></div></div><button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 6, border: "none", background: "#0E9493", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button></div>
+                  <ServiceInvoiceView purchaseId={p.id} totalPrice={p.price} sellerProfile={p.seller} onPay={() => doAction(markAsPaid, p.id, user.id)} acting={acting} />
+                )}
+                {/* SERVICE: Buyer hat bezahlt, wartet */}
+                {isService && isBuyer && p.status === "payment_marked" && (
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#9A9490", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
                 )}
                 {/* SERVICE: Anbieter wartet auf Zahlung */}
                 {isService && isSeller && p.status === "payment_pending" && (
                   <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#9A9490", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
                 )}
-                {/* SERVICE: Zahlung bestaetigen */}
+                {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
                   <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 6, border: "none", background: "#0E9493", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
@@ -283,13 +335,13 @@ export default function OrderDetailPage() {
                     <button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button>
                   </div>
                 )}
-                {!isService && isBuyer && p.status === "payment_pending" && (
+                {!isService && isBuyer && (p.status === "payment_pending" || p.status === "payment_marked") && (
                   <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#F4A100" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer prüft deine Zahlung.</p></div>
                 )}
-                {!isService && isSeller && (p.status === "confirmed" || p.status === "pending_payment" || p.status === "payment_pending") && (
+                {!isService && isSeller && (p.status === "confirmed" || p.status === "pending_payment" || p.status === "payment_pending" || p.status === "payment_marked") && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung</h3>
-                    {p.status === "payment_pending" ? (
+                    {(p.status === "payment_pending" || p.status === "payment_marked") ? (
                       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Käufer hat die Zahlung als erledigt markiert. Du kannst den Eingang bestätigen.</p>
                     ) : (
                       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Sobald die Zahlung bei dir eingegangen ist, bestätige den Eingang — auch wenn der Käufer noch nicht markiert hat.</p>

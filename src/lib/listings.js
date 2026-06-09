@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase/supabase";
+import { createNotification } from "@/lib/notifications";
 
 // ─── Slug ────────────────────────────────────────────────────
 function slugify(text) {
@@ -1183,32 +1184,52 @@ export async function updatePurchaseStatus(purchaseId, newStatus) {
 
 // Käufer: "Ich habe bezahlt"
 export async function markAsPaid(purchaseId, userId) {
-  await updatePurchaseStatus(purchaseId, "payment_pending");
+  await updatePurchaseStatus(purchaseId, "payment_marked");
   await addPurchaseEvent(purchaseId, "payment_marked", "Käufer hat die Zahlung als erledigt markiert.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("seller_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.seller_id, "purchase", "Zahlung markiert", `Zahlung für "${p.listing?.title}" wurde als erledigt markiert. Bitte prüfen.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Verkäufer: "Zahlung erhalten"
 export async function confirmPayment(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "paid");
   await addPurchaseEvent(purchaseId, "payment_confirmed", "Verkäufer hat den Zahlungseingang bestätigt.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.buyer_id, "purchase", "Zahlung bestätigt", `Deine Zahlung für "${p.listing?.title}" wurde bestätigt.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Verkäufer: "Als versendet markieren"
 export async function markAsShipped(purchaseId, userId, trackingNumber) {
   await updatePurchaseStatus(purchaseId, "shipped");
   await addPurchaseEvent(purchaseId, "shipped", "Artikel wurde versendet.", trackingNumber, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.buyer_id, "purchase", "Versendet", `"${p.listing?.title}" wurde versendet.${trackingNumber ? " Tracking: " + trackingNumber : ""}`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Verkäufer: "Als übergeben markieren" (Abholung)
 export async function markAsPickedUp(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "picked_up");
   await addPurchaseEvent(purchaseId, "picked_up", "Artikel wurde übergeben.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.buyer_id, "purchase", "Übergeben", `"${p.listing?.title}" wurde übergeben. Bitte Empfang bestätigen.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Käufer: "Empfang bestätigen"
 export async function confirmDelivery(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "delivered");
   await addPurchaseEvent(purchaseId, "delivered", "Käufer hat den Empfang bestätigt.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("seller_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.seller_id, "purchase", "Empfang bestätigt", `Käufer hat den Empfang von "${p.listing?.title}" bestätigt.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Beide: "Bewertung abgeben" → completed
@@ -1225,6 +1246,10 @@ export async function completeTransaction(purchaseId, userId) {
 export async function markAsReturned(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "return_pending");
   await addPurchaseEvent(purchaseId, "return_marked", "Rückgabe markiert.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("seller_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.seller_id, "rental", "Rückgabe markiert", `Mieter hat "${p.listing?.title}" als zurückgegeben markiert. Bitte prüfen.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Vermieter: "Rückgabe OK — Kaution zurückerstatten" (volle Kaution)
@@ -1243,6 +1268,10 @@ export async function reportDamage(purchaseId, userId, damageAmount, description
   await updatePurchaseStatus(purchaseId, "damage_reported");
   await supabase.from("purchases").update({ damage_amount: damageAmount, damage_photos: photoUrls }).eq("id", purchaseId);
   await addPurchaseEvent(purchaseId, "damage_reported", `Schaden gemeldet: CHF ${parseFloat(damageAmount).toFixed(2)}. ${description}`, null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.buyer_id, "rental", "Schaden gemeldet", `Vermieter hat bei "${p.listing?.title}" einen Schaden von CHF ${parseFloat(damageAmount).toFixed(2)} gemeldet.`, `/order/${purchaseId}`);
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Upload damage photos to Supabase Storage
@@ -1383,6 +1412,19 @@ export async function updateBookingStatus(bookingId, status) {
     .update({ status })
     .eq("id", bookingId);
   if (error) throw error;
+
+  // Notify renter about status change
+  try {
+    const { data: bk } = await supabase.from("rental_bookings").select("renter_id, listing:listings(title, listing_type)").eq("id", bookingId).maybeSingle();
+    if (bk) {
+      const label = bk.listing?.listing_type === "service" ? "Service" : "Buchung";
+      if (status === "confirmed") {
+        await createNotification(bk.renter_id, "rental", `${label} bestätigt`, `Deine Anfrage für "${bk.listing?.title}" wurde bestätigt.`, "/bookings");
+      } else if (status === "rejected" || status === "cancelled") {
+        await createNotification(bk.renter_id, "rental", `${label} abgelehnt`, `Deine Anfrage für "${bk.listing?.title}" wurde leider abgelehnt.`, "/bookings");
+      }
+    }
+  } catch (e) { console.error("Booking notification:", e); }
 
   // When owner confirms → create a purchase so the payment/order flow kicks in
   if (status === "confirmed") {

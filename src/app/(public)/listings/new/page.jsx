@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useRouter } from "next/navigation";
 import { createListing, uploadListingImages, updateListingStatus, getCategories, checkProfileComplete } from "@/lib/listings";
+import { saveListingAttributes } from "@/lib/api/attributes";
 import { useState, useEffect } from "react";
 import ListingForm from "@/components/listings/ListingForm";
 
@@ -36,6 +37,10 @@ export default function NewListingPage() {
     const listing = await createListing(user.id, formData);
     if (formData.newFiles?.length > 0) {
       await uploadListingImages(listing.id, formData.newFiles);
+    }
+    // Save category-specific attributes
+    if (formData.attributeValues && Object.keys(formData.attributeValues).length > 0) {
+      await saveListingAttributes(listing.id, formData.attributeValues);
     }
     if (formData.publish) {
       await updateListingStatus(listing.id, "active");
