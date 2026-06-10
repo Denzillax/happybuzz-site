@@ -1,19 +1,19 @@
 "use client";
 
 import { colors, fonts, radius } from "@/lib/theme";
-import { getBeeLevel, getBeeLevelProgress, getNextBeeLevel } from "@/lib/constants";
+import { calculateLevel, levelProgress, xpToNext, BEE_LEVELS } from "@/lib/gamification";
 import BeeIcon from "./BeeIcon";
 
 /**
- * BeeLevelBadge — Zeigt das Bee-Level als kleines Badge neben dem Username.
+ * BeeLevelBadge — XP-basiertes Bee-Level als kleines Badge neben dem Username.
  *
  * Props:
- *  - impactTotal: number — CHF Bee-Impact des Users
- *  - size: "sm" | "md" | "lg" — Badge-Grösse
+ *  - xp: number — XP-Total des Users
+ *  - size: "sm" | "md" | "lg"
  *  - showLabel: boolean — Level-Name anzeigen (default: true)
  */
-export function BeeLevelBadge({ impactTotal = 0, size = "sm", showLabel = true }) {
-  const level = getBeeLevel(impactTotal);
+export function BeeLevelBadge({ xp = 0, size = "sm", showLabel = true }) {
+  const level = calculateLevel(xp);
 
   const sizes = {
     sm: { icon: 12, font: 10, pad: "2px 7px", gap: 3 },
@@ -32,29 +32,31 @@ export function BeeLevelBadge({ impactTotal = 0, size = "sm", showLabel = true }
       lineHeight: 1, whiteSpace: "nowrap",
     }}>
       <BeeIcon size={s.icon} color={level.color} />
-      {showLabel && level.label}
+      {showLabel && level.name}
     </span>
   );
 }
 
 /**
- * BeeLevelCard — Grössere Anzeige mit Fortschrittsbalken für Profil/Settings.
+ * BeeLevelCard — XP-Level mit Fortschrittsbalken für Profil/Settings.
  *
  * Props:
- *  - impactTotal: number — CHF Bee-Impact
+ *  - xp: number — XP-Total
  */
-export function BeeLevelCard({ impactTotal = 0 }) {
-  const level = getBeeLevel(impactTotal);
-  const progress = getBeeLevelProgress(impactTotal);
-  const next = getNextBeeLevel(impactTotal);
-  const total = parseFloat(impactTotal) || 0;
+export function BeeLevelCard({ xp = 0 }) {
+  const total = parseInt(xp) || 0;
+  const level = calculateLevel(total);
+  const idx = BEE_LEVELS.indexOf(level);
+  const next = BEE_LEVELS[idx + 1] || null;
+  const progress = Math.round(levelProgress(total) * 100);
+  const toNext = xpToNext(total);
 
   return (
     <div style={{
       background: colors.surface, borderRadius: radius.lg,
       border: `1px solid ${colors.border}`, padding: "22px 24px",
     }}>
-      {/* Level + Impact */}
+      {/* Level + XP */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
@@ -66,14 +68,14 @@ export function BeeLevelCard({ impactTotal = 0 }) {
           </div>
           <div>
             <p style={{ margin: 0, fontSize: 16, fontWeight: 800, color: colors.dark, fontFamily: fonts.body }}>
-              {level.label}
+              {level.name}
             </p>
             <p style={{ margin: "2px 0 0", fontSize: 12, color: colors.muted }}>
-              CHF {total.toFixed(2)} Bee-Impact
+              {total.toLocaleString("de-CH")} XP
             </p>
           </div>
         </div>
-        <BeeLevelBadge impactTotal={impactTotal} size="md" showLabel={false} />
+        <BeeLevelBadge xp={total} size="md" showLabel={false} />
       </div>
 
       {/* Progress Bar */}
@@ -84,7 +86,7 @@ export function BeeLevelCard({ impactTotal = 0 }) {
         <div style={{
           height: "100%", borderRadius: 4,
           background: level.color,
-          width: `${progress}%`,
+          width: `${next ? progress : 100}%`,
           transition: "width .5s ease-out",
         }} />
       </div>
@@ -92,35 +94,13 @@ export function BeeLevelCard({ impactTotal = 0 }) {
       {/* Next Level Info */}
       {next ? (
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: colors.muted }}>
-          <span>{progress}% zum nächsten Level</span>
-          <span style={{ fontWeight: 600 }}>
-            {next.label} ab CHF {next.min}
-          </span>
+          <span>Noch {toNext.toLocaleString("de-CH")} XP bis {next.name}</span>
+          <span style={{ fontWeight: 600, color: next.color }}>{next.perk}</span>
         </div>
       ) : (
         <p style={{ margin: 0, fontSize: 12, color: level.color, fontWeight: 600 }}>
           Maximales Level erreicht
         </p>
-      )}
-
-      {/* Benefits */}
-      {level.benefits && level.benefits.length > 0 && (
-        <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${colors.borderLt}` }}>
-          <p style={{ margin: "0 0 8px", fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".04em" }}>Deine Vorteile</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            {level.benefits.map((b, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: colors.dark }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: level.color, flexShrink: 0 }} />
-                {b}
-              </div>
-            ))}
-          </div>
-          {next && next.benefits && (
-            <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 6, background: `${next.color}10`, fontSize: 11, color: colors.muted }}>
-              <span style={{ fontWeight: 600, color: next.color }}>Nächstes Level:</span> {next.benefits[next.benefits.length - 1]}
-            </div>
-          )}
-        </div>
       )}
     </div>
   );

@@ -108,7 +108,7 @@ export default function PublicProfilePage() {
                   {profile.account_type === "business" && profile.company_name ? profile.company_name : (profile.display_name || profile.username)}
                 </h1>
                 <AccountBadge accountType={profile.account_type} size="lg" />
-                <BeeLevelBadge impactTotal={profile.bee_impact_total} size="md" />
+                <BeeLevelBadge xp={profile.xp_total} size="md" />
               </div>
 
               {profile.account_type === "business" && profile.company_uid && (

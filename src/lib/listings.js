@@ -227,7 +227,7 @@ export async function getListing(listingId) {
 // ─── Get Single (public + seller) ────────────────────────────
 export async function getListingPublic(listingId) {
   const { data, error } = await supabase.from("listings")
-    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)")
+    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, avg_rating, rating_count)")
     .eq("id", listingId).not("status", "eq", "deleted").single();
   if (error) throw error;
 
@@ -247,6 +247,7 @@ export async function getListingPublic(listingId) {
     sellerAvatar: data.seller?.avatar_url || null,
     sellerSince: data.seller?.created_at || null,
     sellerBeeImpact: data.seller?.bee_impact_total || 0,
+    sellerXp: data.seller?.xp_total || 0,
   };
 
   // Kategorie-Breadcrumb-Pfad aufbauen (Bottom-up)
@@ -633,7 +634,7 @@ export async function getMyBeeProfile(userId) {
 export async function getPublicProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, bee_level")
+    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total")
     .eq("id", userId)
     .single();
   if (error) throw error;

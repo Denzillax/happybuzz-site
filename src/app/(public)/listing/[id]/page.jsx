@@ -380,7 +380,7 @@ export default function ListingDetail() {
                       {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
                     </Link>
                     <AccountBadge accountType={l.seller?.account_type} />
-                    <BeeLevelBadge impactTotal={l.sellerBeeImpact} size="md" />
+                    <BeeLevelBadge xp={l.sellerXp} size="md" />
                   </div>
                   {sellerRating.count > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>

@@ -548,7 +548,7 @@ export default function SettingsPage() {
       <>
         {/* Bee-Level */}
         <div style={{ marginBottom: 20 }}>
-          <BeeLevelCard impactTotal={profile?.bee_impact_total || 0} />
+          <BeeLevelCard xp={profile?.xp_total || 0} />
         </div>
 
         <Section title="ÖFFENTLICHES PROFIL" description="So sehen andere dich auf BEEDARO.">
