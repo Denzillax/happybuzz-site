@@ -4,9 +4,12 @@ import { Star } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 
+const RATING_TAGS = ["Schneller Versand", "Wie beschrieben", "Freundliche Kommunikation", "Faire Preise", "Gut verpackt"];
+
 export default function RatingSection({ purchase, user, listing, isService, isBuyer, counterpartName }) {
   const [rating, setRating] = useState(0);
   const [ratingComment, setRatingComment] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
   const [ratingDone, setRatingDone] = useState(false);
   const [myRating, setMyRating] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -35,7 +38,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
       const { error } = await supabase.from("ratings").insert({
         purchase_id: p.id, role: isBuyer ? "buyer" : "seller",
         rater_id: raterId, rated_id: ratedId,
-        rating, comment: ratingComment || null,
+        rating, comment: ratingComment || null, tags: selectedTags,
       });
       if (error) { console.error("Rating error:", JSON.stringify(error)); return; }
       setRatingDone(true);
@@ -74,6 +77,19 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
             ))}
           </div>
           {rating > 0 && <p style={{ textAlign: "center", fontSize: 13, color: colors.dark, fontWeight: 600, margin: "0 0 14px", fontFamily: fonts.body }}>{["", "Schlecht", "Geht so", "Okay", "Gut", "Ausgezeichnet"][rating]}</p>}
+          {/* Tags */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14, justifyContent: "center" }}>
+            {RATING_TAGS.map(t => {
+              const on = selectedTags.includes(t);
+              return (
+                <button key={t} type="button" onClick={() => setSelectedTags(prev => on ? prev.filter(x => x !== t) : [...prev, t])}
+                  style={{ padding: "6px 12px", borderRadius: 16, cursor: "pointer", fontFamily: fonts.body, fontSize: 12, fontWeight: on ? 700 : 500,
+                    border: `1.5px solid ${on ? colors.teal : colors.border}`, background: on ? "#E6F5F5" : "#fff", color: on ? colors.tealDark : colors.dark }}>
+                  {t}
+                </button>
+              );
+            })}
+          </div>
           <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: "none", background: rating ? colors.yellow : "#ddd", color: colors.dark, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body }}>Bewertung abgeben</button>

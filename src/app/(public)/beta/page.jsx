@@ -124,6 +124,7 @@ const TESTS = [
       { id: "bf_pay_mark", label: "Zahlung als getätigt markieren" },
       { id: "bf_confirm_receipt", label: "Empfang bestätigen funktioniert" },
       { id: "bf_rating", label: "Bewertung nach Empfang abgeben" },
+      { id: "bf_rating_tags", label: "Bewertungs-Tags wählbar; auf Profil aggregiert (z.B. '3× Schneller Versand')" },
       { id: "bf_return", label: "Rückgabe / Schaden melden" },
       { id: "bf_service_invoice", label: "Service-Rechnung mit Positionen (falls Service)" },
     ],

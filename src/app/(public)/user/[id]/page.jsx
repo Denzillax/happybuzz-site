@@ -277,6 +277,22 @@ export default function PublicProfilePage() {
         {/* ── TAB: BEWERTUNGEN ────────────────────────── */}
         {tab === "ratings" && (
           <div>
+            {/* Tag-Aggregation */}
+            {(() => {
+              const counts = {};
+              ratings.forEach(r => (r.tags || []).forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+              const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+              if (!sorted.length) return null;
+              return (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+                  {sorted.map(([t, c]) => (
+                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 20, background: "#E6F5F5", border: `1px solid ${colors.teal}33`, fontSize: 13, color: colors.tealDark, fontFamily: fonts.body }}>
+                      <b style={{ fontWeight: 800 }}>{c}×</b> {t}
+                    </span>
+                  ))}
+                </div>
+              );
+            })()}
             {ratings.length === 0 ? (
               <div style={{ textAlign: "center", padding: 60, color: colors.muted }}>
                 <Star size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
