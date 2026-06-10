@@ -150,19 +150,43 @@ export async function getXPHistory(userId, limit = 20) {
 // Verdient wird Nektar serverseitig per Trigger (Verkaufs-Meilensteine,
 // Bee-Rate-Bonus, 5-Sterne, Level-Up). Speicher: profiles.nektar + nektar_log.
 
-// Nektar-Einlöse-Katalog (Anzeige; Einlösen-Engine folgt separat)
+// Nektar-Einlöse-Katalog. needsListing = Inserat-Picker nötig; durationHours = Boost-Dauer.
 export const NEKTAR_CATALOG = [
-  { key: "spotlight",      name: "Spotlight",            cost: 50,   group: "Sichtbarkeit", desc: "Dein Inserat 24h zuoberst in der Kategorie." },
-  { key: "golden_stamp",   name: "Goldener Stempel",     cost: 100,  group: "Sichtbarkeit", desc: "Featured-Badge auf deinem Inserat für 3 Tage." },
-  { key: "showcase",       name: "Schaufenster",         cost: 200,  group: "Sichtbarkeit", desc: "Dein Profil 1 Woche auf der Homepage." },
-  { key: "mega_boost",     name: "Mega-Boost",           cost: 300,  group: "Sichtbarkeit", desc: "Alle Inserate 48h zuoberst + Featured-Badge." },
-  { key: "bluehpatenschaft", name: "Blühpatenschaft",    cost: 250,  group: "Impact",       desc: "5m² Wildblumenwiese in deinem Namen." },
-  { key: "wildbienen",     name: "Wildbienen-Patenschaft", cost: 500, group: "Impact",      desc: "Ein Wildbienenhotel mit deinem Namen." },
-  { key: "naturschutz_held", name: "Naturschutz-Held",   cost: 1000, group: "Impact",       desc: "Urkunde + Name auf der Wall of Impact." },
-  { key: "custom_badge",   name: "Custom Badge",         cost: 150,  group: "Exklusiv",     desc: "Eigenes Badge-Icon für 30 Tage." },
-  { key: "shop_color",     name: "Shop-Farbe",           cost: 200,  group: "Exklusiv",     desc: "Akzentfarbe für deinen Shop." },
-  { key: "early_access",   name: "Early Access",         cost: 100,  group: "Exklusiv",     desc: "Neue Features 2 Wochen früher." },
+  { key: "spotlight",      name: "Spotlight",            cost: 50,   group: "Sichtbarkeit", desc: "Dein Inserat 24h zuoberst in der Kategorie.",         needsListing: true,  durationHours: 24 },
+  { key: "golden_stamp",   name: "Goldener Stempel",     cost: 100,  group: "Sichtbarkeit", desc: "Featured-Badge auf deinem Inserat für 3 Tage.",       needsListing: true,  durationHours: 72 },
+  { key: "showcase",       name: "Schaufenster",         cost: 200,  group: "Sichtbarkeit", desc: "Dein Profil 1 Woche auf der Homepage.",               needsListing: false, durationHours: 168, confirm: "Dein Profil wird 1 Woche auf der Homepage gezeigt." },
+  { key: "mega_boost",     name: "Mega-Boost",           cost: 300,  group: "Sichtbarkeit", desc: "Alle Inserate 48h zuoberst + Featured-Badge.",        needsListing: false, durationHours: 48 },
+  { key: "bluehpatenschaft", name: "Blühpatenschaft",    cost: 250,  group: "Impact",       desc: "5m² Wildblumenwiese in deinem Namen.",                needsListing: false, durationHours: 0, confirm: "Dein Name erscheint auf dem Projekt (Bee-Impact-Seite)." },
+  { key: "wildbienen",     name: "Wildbienen-Patenschaft", cost: 500, group: "Impact",      desc: "Ein Wildbienenhotel mit deinem Namen.",               needsListing: false, durationHours: 0, confirm: "Dein Name erscheint auf dem Wildbienenhotel." },
+  { key: "naturschutz_held", name: "Naturschutz-Held",   cost: 1000, group: "Impact",       desc: "Urkunde + Name auf der Wall of Impact.",              needsListing: false, durationHours: 0, confirm: "Dein Name erscheint auf der Wall of Impact." },
+  { key: "custom_badge",   name: "Custom Badge",         cost: 150,  group: "Exklusiv",     desc: "Eigenes Badge-Icon für 30 Tage.",                     needsListing: false, durationHours: 720 },
+  { key: "shop_color",     name: "Shop-Farbe",           cost: 200,  group: "Exklusiv",     desc: "Akzentfarbe für deinen Shop.",                        needsListing: false, durationHours: 0 },
+  { key: "early_access",   name: "Early Access",         cost: 100,  group: "Exklusiv",     desc: "Neue Features 2 Wochen früher.",                      needsListing: false, durationHours: 0 },
 ];
+
+// Nektar einlösen (atomar serverseitig). Gibt {ok, new_balance, error} zurück.
+export async function redeemNektar(reward, cost, listingId = null, durationHours = 0) {
+  const { data, error } = await supabase.rpc("redeem_nektar", {
+    p_reward: reward, p_cost: cost, p_listing_id: listingId, p_duration_hours: durationHours,
+  });
+  if (error) { console.error("redeem_nektar:", error); return { ok: false, error: "rpc" }; }
+  return data || { ok: false, error: "unknown" };
+}
+
+// Aktive Boosts für eine Liste von Inseraten (Badge-Anzeige auf Cards).
+export async function getActiveBoosts(listingIds) {
+  if (!listingIds?.length) return {};
+  const nowIso = new Date().toISOString();
+  const { data } = await supabase.from("nektar_redemptions")
+    .select("listing_id, reward_type, expires_at")
+    .in("listing_id", listingIds).eq("status", "active");
+  const map = {};
+  (data || []).forEach((r) => {
+    if (r.expires_at && r.expires_at < nowIso) return;
+    (map[r.listing_id] = map[r.listing_id] || []).push(r.reward_type);
+  });
+  return map;
+}
 
 const NEKTAR_REASON_LABEL = {
   level_up: "Neues Level erreicht",

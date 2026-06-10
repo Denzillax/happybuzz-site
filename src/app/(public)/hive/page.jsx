@@ -10,7 +10,7 @@ import {
   BEE_LEVELS, ACHIEVEMENTS, calculateLevel, levelProgress, xpToNext,
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
   getCommunityStats, getXPHistory, touchStreak,
-  NEKTAR_CATALOG,
+  NEKTAR_CATALOG, redeemNektar,
 } from "@/lib/gamification";
 
 const REASON_LABEL = {
@@ -52,6 +52,40 @@ export default function HivePage() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [community, setCommunity] = useState({ totalImpact: 0, hiveMembers: 0, weekXp: 0 });
   const [history, setHistory] = useState([]);
+  const [redeemReward, setRedeemReward] = useState(null); // catalog item being redeemed
+  const [pickerListings, setPickerListings] = useState(null); // null=not loaded, []=none
+  const [pickedListing, setPickedListing] = useState(null);
+  const [redeeming, setRedeeming] = useState(false);
+  const [redeemError, setRedeemError] = useState("");
+
+  async function startRedeem(reward) {
+    if ((profile?.nektar || 0) < reward.cost) return;
+    setRedeemError(""); setPickedListing(null); setRedeemReward(reward);
+    if (reward.needsListing) {
+      setPickerListings(null);
+      const { data } = await supabase.from("listings")
+        .select("id, title").eq("user_id", me).eq("status", "active").order("created_at", { ascending: false });
+      setPickerListings(data || []);
+    } else {
+      setPickerListings(undefined);
+    }
+  }
+
+  async function confirmRedeem() {
+    if (!redeemReward || redeeming) return;
+    if (redeemReward.needsListing && !pickedListing) { setRedeemError("Bitte ein Inserat wählen."); return; }
+    setRedeeming(true); setRedeemError("");
+    try {
+      const res = await redeemNektar(redeemReward.key, redeemReward.cost, redeemReward.needsListing ? pickedListing : null, redeemReward.durationHours || 0);
+      if (res?.ok) {
+        setProfile((p) => ({ ...p, nektar: res.new_balance }));
+        setRedeemReward(null);
+      } else {
+        setRedeemError(res?.error === "insufficient" ? "Nicht genug Nektar." : "Einlösen fehlgeschlagen.");
+      }
+    } catch { setRedeemError("Einlösen fehlgeschlagen."); }
+    finally { setRedeeming(false); }
+  }
 
   useEffect(() => {
     async function load() {
@@ -171,12 +205,16 @@ export default function HivePage() {
                     </span>
                   </div>
                   <span style={{ fontSize: 11.5, color: colors.muted, lineHeight: 1.4, flex: 1 }}>{r.desc}</span>
-                  <span style={{ alignSelf: "flex-start", marginTop: 2, fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.mutedLt }}>{r.group}</span>
+                  <span style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.mutedLt }}>{r.group}</span>
+                  {affordable ? (
+                    <button onClick={() => startRedeem(r)} style={{ marginTop: 6, padding: "8px 0", borderRadius: 8, border: "none", background: colors.yellow, color: colors.dark, fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer" }}>Einlösen</button>
+                  ) : (
+                    <button disabled style={{ marginTop: 6, padding: "8px 0", borderRadius: 8, border: `1px solid ${colors.borderLt}`, background: colors.cream, color: colors.mutedLt, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "default" }}>Noch {(r.cost - nektar).toLocaleString("de-CH")} Nektar nötig</button>
+                  )}
                 </div>
               );
             })}
           </div>
-          <p style={{ margin: "12px 0 0", fontSize: 12, color: colors.muted }}>Einlösen kommt bald. Du siehst hier, wofür sich dein Nektar lohnt.</p>
         </Card>
 
         {/* ── STREAK + COMMUNITY (zwei Spalten) ── */}
@@ -310,6 +348,40 @@ export default function HivePage() {
           </Card>
         )}
       </div>
+
+      {/* ── EINLÖSE-MODAL ── */}
+      {redeemReward && (
+        <div onClick={() => !redeeming && setRedeemReward(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
+            <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>{redeemReward.name} einlösen</h3>
+            <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
+              <b style={{ color: "#C8860A" }}>{redeemReward.cost} Nektar</b> ausgeben?{redeemReward.confirm ? ` ${redeemReward.confirm}` : ""}
+            </p>
+            {redeemReward.needsListing && (
+              pickerListings === null ? (
+                <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Lade deine Inserate…</p>
+              ) : pickerListings.length === 0 ? (
+                <p style={{ fontSize: 13, color: colors.red, marginBottom: 14 }}>Du hast keine aktiven Inserate für diesen Boost.</p>
+              ) : (
+                <select value={pickedListing || ""} onChange={(e) => setPickedListing(e.target.value)}
+                  style={{ width: "100%", padding: "11px 12px", borderRadius: 8, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, marginBottom: 14, background: "#fff", outline: "none" }}>
+                  <option value="">Auf welches Inserat?</option>
+                  {pickerListings.map((l) => <option key={l.id} value={l.id}>{l.title}</option>)}
+                </select>
+              )
+            )}
+            {redeemError && <p style={{ fontSize: 12, color: colors.red, margin: "0 0 12px" }}>{redeemError}</p>}
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={confirmRedeem} disabled={redeeming || (redeemReward.needsListing && (!pickerListings?.length || !pickedListing))}
+                style={{ flex: 1, padding: 13, borderRadius: 8, border: "none", background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", opacity: (redeeming || (redeemReward.needsListing && (!pickerListings?.length || !pickedListing))) ? 0.5 : 1 }}>
+                {redeeming ? "Einlösen…" : "Einlösen"}
+              </button>
+              <button onClick={() => setRedeemReward(null)} disabled={redeeming} style={{ padding: "13px 18px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`@media (max-width: 640px) { .hive-two-col { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   );
