@@ -40,15 +40,15 @@ export default function NektarBadge() {
   const toNext = xpToNext(data.xp);
 
   return (
-    <div ref={ref} className="nektar-badge-desktop" style={{ position: "relative" }}>
+    <div ref={ref} className="nektar-badge" style={{ position: "relative" }}>
       <button onClick={() => setOpen((o) => !o)} style={{
         display: "flex", alignItems: "center", gap: 8, padding: "7px 12px", borderRadius: 20,
         border: "1px solid #E2E2E2", background: "#fff", cursor: "pointer", fontFamily: "'Manrope', sans-serif",
       }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 800, color: level.color, whiteSpace: "nowrap" }}>
-          <BeeIcon size={13} color={level.color} /> {level.name}
+          <BeeIcon size={13} color={level.color} /> <span className="nektar-level-name">{level.name}</span>
         </span>
-        <span style={{ width: 1, height: 14, background: "#E2E2E2" }} />
+        <span className="nektar-level-name" style={{ width: 1, height: 14, background: "#E2E2E2" }} />
         <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#C8860A" }}>
           <Droplets size={12} color="#C8860A" /> {data.nektar}
         </span>

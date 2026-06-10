@@ -147,6 +147,7 @@ const TESTS = [
       { id: "ml_reactivate", label: "Pausiertes Inserat reaktivieren" },
       { id: "ml_sold", label: "Als verkauft markieren" },
       { id: "ml_delete", label: "Löschen (Soft Delete, verkauft ist gesperrt)" },
+      { id: "ml_mobile_cards", label: "Mobile: Karten-Liste statt Tabelle (Aktionen als Buttons, Boost-Menü)" },
     ],
   },
   {

@@ -262,6 +262,7 @@ export default function ListingsPage() {
         {/* Table */}
         {!loading && filtered.length > 0 && (
           <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+            <div className="ml-table">
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -470,6 +471,88 @@ export default function ListingsPage() {
                 })}
               </tbody>
             </table>
+            </div>
+
+            {/* ── MOBILE: Karten-Liste ── */}
+            <div className="ml-cards">
+              {paginated.map(l => {
+                const st = STATUS_CONFIG[l.status] || STATUS_CONFIG.active;
+                const StIcon = st.icon;
+                const hasBids = bidCounts[l.id]?.count > 0;
+                const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
+                const boost = myBoosts[l.id]?.[0];
+                const actBtn = { display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 11px", borderRadius: 8, border: `1px solid ${colors.borderLt}`, background: "#fff", fontSize: 12.5, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark };
+                return (
+                  <div key={l.id} style={{ padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
+                    <div style={{ display: "flex", gap: 12 }}>
+                      <div style={{ width: 60, height: 60, borderRadius: 8, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <Link href={`/listing/${l.id}`} style={{ fontSize: 14.5, fontWeight: 700, color: colors.dark, textDecoration: "none", display: "block", marginBottom: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.title}</Link>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <TypeBadge type={l.listing_type} />
+                          <span style={{ fontSize: 14, fontWeight: 800, color: colors.dark }}>{l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(l.rent_price || l.price)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : `CHF ${fmtPrice(l.price)}`}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Meta */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10, flexWrap: "wrap", fontSize: 12.5 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: st.color, fontWeight: 700 }}><StIcon size={14} /> {st.label}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: colors.muted }}><Eye size={14} /> {l.view_count || 0}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? colors.yellow : colors.muted }}><Heart size={14} fill={l.favorite_count > 0 ? colors.yellow : "none"} /> {l.favorite_count || 0}</span>
+                      {l.listing_type === "auction" && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: bc.count > 0 ? colors.green : colors.muted, fontWeight: bc.count > 0 ? 700 : 400 }}><Gavel size={14} /> {bc.count}{bc.topBid > 0 ? ` · CHF ${fmtPrice(bc.topBid)}` : ""}</span>}
+                      {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#C8860A", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
+                    </div>
+
+                    {/* Aktionen */}
+                    <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+                      <Link href={`/listings/${l.id}`} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> Bearbeiten</Link>
+                      <Link href={`/listings/new?duplicate=${l.id}`} style={{ ...actBtn, color: colors.teal, borderColor: `${colors.teal}40` }}><Copy size={14} /> Ähnliches</Link>
+                      <button onClick={() => openStats(l)} style={actBtn}><BarChart3 size={14} /> Statistik</button>
+                      {l.status === "active" && (
+                        <div style={{ position: "relative" }}>
+                          <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#C8860A", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
+                          {boostMenuFor === l.id && (
+                            <>
+                              <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
+                              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 10, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
+                                <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
+                                {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
+                                  const aff = myNektar >= r.cost;
+                                  return (
+                                    <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "9px 8px", borderRadius: 6, border: "none", background: "transparent", cursor: aff ? "pointer" : "default", fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt }}>
+                                      <span style={{ fontWeight: 700 }}>{r.name}</span>
+                                      <span style={{ fontWeight: 800, color: aff ? "#C8860A" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )}
+                      {(l.status === "active" || l.status === "paused") && (
+                        <button onClick={() => togglePause(l)} style={{ ...actBtn, color: l.status === "paused" ? "#2E7D32" : "#E65100", borderColor: l.status === "paused" ? "#2E7D3240" : "#E6510040" }}>
+                          {l.status === "paused" ? <><Play size={14} /> Aktivieren</> : <><Pause size={14} /> Pausieren</>}
+                        </button>
+                      )}
+                      {l.status !== "sold" && l.status !== "rented" && (
+                        deleteId === l.id ? (
+                          <>
+                            <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ ...actBtn, background: "#c62828", color: "#fff", borderColor: "#c62828" }}><CheckCircle size={14} /> Wirklich löschen</button>
+                            <button onClick={() => setDeleteId(null)} style={actBtn}>Abbrechen</button>
+                          </>
+                        ) : (
+                          <button onClick={() => { if (!hasBids) setDeleteId(l.id); }} disabled={hasBids} style={{ ...actBtn, color: hasBids ? colors.mutedLt : "#c62828", borderColor: hasBids ? colors.borderLt : "#c6282840", opacity: hasBids ? 0.5 : 1, cursor: hasBids ? "not-allowed" : "pointer" }}><Trash2 size={14} /> Löschen</button>
+                        )
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
             {/* Load More */}
             {hasMore && (

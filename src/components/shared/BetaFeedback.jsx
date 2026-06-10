@@ -74,6 +74,8 @@ const PAGE_TESTS = {
     { id: "ml_pause", label: "Pausieren funktioniert" },
     { id: "ml_delete", label: "Löschen (Soft Delete)" },
     { id: "ml_sold", label: "Verkauft markieren" },
+    { id: "ml_boost", label: "Boosten (Nektar) öffnet Menü" },
+    { id: "ml_mobile_cards", label: "Mobile: Karten-Liste statt Tabelle" },
   ],
   "/order/": [
     { id: "bf_order", label: "Bestellseite lädt" },

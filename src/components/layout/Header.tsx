@@ -311,6 +311,7 @@ export function Header() {
 
           {/* ── Mobile Right: Avatar + Hamburger ── */}
           <div className="hdr-mobile-only" style={{ marginLeft: 'auto', alignItems: 'center', gap: 8 }}>
+            {user && <NektarBadge />}
             {user && (
               <button onClick={() => setMobileOpen(!mobileOpen)}
                 style={{ width: 34, height: 34, borderRadius: '50%', background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: DARK, border: 'none', cursor: 'pointer', boxShadow: mobileOpen ? `0 0 0 2px #fff, 0 0 0 4px ${YELLOW}` : 'none' }}>
