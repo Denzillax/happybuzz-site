@@ -130,7 +130,7 @@ const PAGE_TESTS = {
     { id: "usr_listings", label: "Inserate des Nutzers sichtbar" },
   ],
   "/hive": [
-    { id: "hv_level", label: "Level + XP-Balken korrekt" },
+    { id: "hv_level", label: "Level + Pollen-Balken korrekt" },
     { id: "hv_streak", label: "Streak angezeigt" },
     { id: "hv_challenges", label: "Challenges mit Fortschritt" },
     { id: "hv_achievements", label: "Achievements gesperrt/offen" },

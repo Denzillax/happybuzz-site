@@ -118,7 +118,7 @@ export default function HivePage() {
             </div>
             <div style={{ textAlign: "right" }}>
               <p style={{ margin: 0, fontSize: 26, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{xp.toLocaleString("de-CH")}</p>
-              <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>XP gesamt</p>
+              <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Pollen gesamt</p>
             </div>
           </div>
           {/* Progress */}
@@ -128,7 +128,7 @@ export default function HivePage() {
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontSize: 12 }}>
             {next ? (
               <>
-                <span style={{ color: colors.dark, fontWeight: 700 }}>Noch {toNext.toLocaleString("de-CH")} XP bis {next.name}</span>
+                <span style={{ color: colors.dark, fontWeight: 700 }}>Noch {toNext.toLocaleString("de-CH")} Pollen bis {next.name}</span>
                 <span style={{ color: colors.muted }}>Dann: {next.perk}</span>
               </>
             ) : (
@@ -159,7 +159,7 @@ export default function HivePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <Stat label="Bienen-Impact gesamt" value={`CHF ${community.totalImpact.toLocaleString("de-CH", { minimumFractionDigits: 2 })}`} />
               <Stat label="Aktive Hive-Mitglieder" value={community.hiveMembers.toLocaleString("de-CH")} />
-              <Stat label="XP diese Woche" value={community.weekXp.toLocaleString("de-CH")} />
+              <Stat label="Pollen diese Woche" value={community.weekXp.toLocaleString("de-CH")} />
             </div>
           </Card>
         </div>
@@ -181,7 +181,7 @@ export default function HivePage() {
                         {c.title}
                       </span>
                       <span style={{ fontSize: 12, fontWeight: 800, color: c.done ? "#5B8C5A" : colors.teal, display: "inline-flex", alignItems: "center", gap: 3 }}>
-                        <Zap size={12} /> {c.xp_reward} XP
+                        <Zap size={12} /> {c.xp_reward} Pollen
                       </span>
                     </div>
                     <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}</p>
@@ -214,7 +214,7 @@ export default function HivePage() {
                   <div style={{ minWidth: 0 }}>
                     <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: unlocked ? colors.dark : colors.muted }}>{a.name}</p>
                     <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted, lineHeight: 1.35 }}>{a.desc}</p>
-                    <p style={{ margin: "3px 0 0", fontSize: 11, fontWeight: 700, color: unlocked ? "#5B8C5A" : colors.mutedLt }}>+{a.xp} XP</p>
+                    <p style={{ margin: "3px 0 0", fontSize: 11, fontWeight: 700, color: unlocked ? "#5B8C5A" : colors.mutedLt }}>+{a.xp} Pollen</p>
                   </div>
                 </div>
               );
@@ -226,7 +226,7 @@ export default function HivePage() {
         <Card style={{ marginBottom: 16 }}>
           <SectionTitle icon={Crown} right={<span style={{ fontSize: 11, color: colors.muted }}>Diese Woche</span>}>Leaderboard</SectionTitle>
           {leaderboard.length === 0 ? (
-            <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Noch keine XP diese Woche. Sei der Erste.</p>
+            <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Noch keine Pollen diese Woche. Sei der Erste.</p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column" }}>
               {leaderboard.map(row => {
@@ -242,7 +242,7 @@ export default function HivePage() {
                       {!row.avatar_url && (row.display_name || "?")[0].toUpperCase()}
                     </div>
                     <span style={{ flex: 1, fontSize: 14, fontWeight: isMe ? 800 : 600, color: colors.dark }}>{row.display_name || "Benutzer"}{isMe && " (du)"}</span>
-                    <span style={{ fontSize: 13, fontWeight: 800, color: colors.teal }}>{row.weekXp.toLocaleString("de-CH")} XP</span>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: colors.teal }}>{row.weekXp.toLocaleString("de-CH")} Pollen</span>
                   </div>
                 );
               })}

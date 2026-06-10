@@ -1,17 +1,19 @@
 // ═══════════════════════════════════════════════════════════════
 // BEEDARO Gamification System
-// Bee-Levels: Starter → Busy Bee → Hive Builder → Queen Bee → Bee Legend
+// Währung: POLLEN (Erfahrung, automatisch gesammelt → bestimmt Bee-Level)
+// Bee-Levels: Entdecker → Sammler → Hive Builder → Queen Bee → Legende
+// (intern weiterhin xp_total/xp_log — UI-Begriff ist "Pollen")
 // ═══════════════════════════════════════════════════════════════
 
 import { supabase } from "@/lib/supabase/supabase";
 
-// Bee-Level Definitionen
+// Bee-Level Definitionen (minXp = Pollen-Schwelle)
 export const BEE_LEVELS = [
-  { key: "starter",      name: "Bee Starter",  minXp: 0,     color: "#9E9E9E", perk: "Willkommen im Hive" },
-  { key: "busy",         name: "Busy Bee",     minXp: 100,   color: "#F4C03E", perk: "Trust-Badge sichtbar" },
-  { key: "hive_builder", name: "Hive Builder", minXp: 500,   color: "#E8A820", perk: "Ranking-Boost in der Suche" },
-  { key: "queen",        name: "Queen Bee",    minXp: 2000,  color: "#0E9493", perk: "Featured-Slot pro Woche" },
-  { key: "legend",       name: "Bee Legend",   minXp: 10000, color: "#04151F", perk: "25% Bienen-Anteil statt 20%" },
+  { key: "starter",      name: "Entdecker",    minXp: 0,    color: "#9E9E9E", perk: "Willkommen im Schwarm" },
+  { key: "busy",         name: "Sammler",      minXp: 100,  color: "#CD7F32", perk: "Sammler-Badge + bessere Platzierung" },
+  { key: "hive_builder", name: "Hive Builder", minXp: 500,  color: "#9FB1BC", perk: "Verified-Badge + Ranking-Boost" },
+  { key: "queen",        name: "Queen Bee",    minXp: 2000, color: "#E8A820", perk: "Shop-Name + Top-Platzierung" },
+  { key: "legend",       name: "Legende",      minXp: 5000, color: "#04151F", perk: "Animiertes Badge + Homepage-Feature" },
 ];
 
 export function getLevelByKey(key) {

@@ -52,7 +52,7 @@ function showXpToast(row, uid) {
         </div>
       ), { duration: 6000 });
     } else {
-      toast(`+${row.amount} XP`, { description: reasonLabel(row.reason), icon: <Zap size={16} color="#0E9493" />, duration: 2600 });
+      toast(`+${row.amount} Pollen`, { description: reasonLabel(row.reason), icon: <Zap size={16} color="#0E9493" />, duration: 2600 });
     }
   })();
 }

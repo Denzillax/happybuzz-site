@@ -1683,10 +1683,10 @@ export default function ListingForm({
             Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20% fliessen in echte Schweizer Naturschutzprojekte. Höherer Impact = bessere Platzierung.
           </p>
           {[
-            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× XP · Standard-Platzierung" },
-            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× XP · bessere Platzierung" },
-            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true, perks: "1,8× XP · Top-Platzierung" },
-            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen", perks: "2,5× XP · Top-Platzierung · grösster Bienen-Beitrag" },
+            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× Pollen · Standard-Platzierung" },
+            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× Pollen · bessere Platzierung" },
+            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true, perks: "1,8× Pollen · Top-Platzierung" },
+            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen", perks: "2,5× Pollen · Top-Platzierung · grösster Bienen-Beitrag" },
           ].map(({ tier, pct, impact, project, recommended, perks }) => {
             const active = form.fee_tier === tier;
             return (

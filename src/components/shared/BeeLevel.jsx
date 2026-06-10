@@ -71,7 +71,7 @@ export function BeeLevelCard({ xp = 0 }) {
               {level.name}
             </p>
             <p style={{ margin: "2px 0 0", fontSize: 12, color: colors.muted }}>
-              {total.toLocaleString("de-CH")} XP
+              {total.toLocaleString("de-CH")} Pollen
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function BeeLevelCard({ xp = 0 }) {
       {/* Next Level Info */}
       {next ? (
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: colors.muted }}>
-          <span>Noch {toNext.toLocaleString("de-CH")} XP bis {next.name}</span>
+          <span>Noch {toNext.toLocaleString("de-CH")} Pollen bis {next.name}</span>
           <span style={{ fontWeight: 600, color: next.color }}>{next.perk}</span>
         </div>
       ) : (
