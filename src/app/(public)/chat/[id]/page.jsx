@@ -83,11 +83,14 @@ export default function ChatConversation() {
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
+  // Gesendete Nachricht sofort anzeigen (Realtime dedupliziert per id).
+  const appendMsg = (m) => { if (m) setMessages((prev) => prev.some((x) => x.id === m.id) ? prev : [...prev, m]); };
+
   const sendText = async (text) => {
     const t = (text ?? newMsg).trim();
     if (!t || sending) return;
     setSending(true);
-    try { await sendMessage(params.id, user.id, t); if (text === undefined) setNewMsg(""); }
+    try { const m = await sendMessage(params.id, user.id, t); appendMsg(m); if (text === undefined) setNewMsg(""); }
     catch (err) { console.error(err); }
     finally { setSending(false); }
   };
@@ -100,7 +103,8 @@ export default function ChatConversation() {
     setUploading(true);
     try {
       const url = await uploadChatImage(params.id, file);
-      await sendMessage(params.id, user.id, "", { imageUrl: url });
+      const m = await sendMessage(params.id, user.id, "", { imageUrl: url });
+      appendMsg(m);
     } catch (err) { console.error(err); }
     finally { setUploading(false); }
   };
@@ -111,13 +115,13 @@ export default function ChatConversation() {
     setSending(true);
     try {
       await createPurchaseAtPrice(conv.buyer_id, conv.listing.id, amount);
-      await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} angenommen. Bestellung wurde erstellt.`, { messageType: "system" });
-    } catch (e) { console.error(e); await sendMessage(params.id, user.id, "Vorschlag konnte nicht angenommen werden (Inserat evtl. nicht mehr verfügbar).", { messageType: "system" }).catch(() => {}); }
+      appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} angenommen. Bestellung wurde erstellt.`, { messageType: "system" }));
+    } catch (e) { console.error(e); await sendMessage(params.id, user.id, "Vorschlag konnte nicht angenommen werden (Inserat evtl. nicht mehr verfügbar).", { messageType: "system" }).then(appendMsg).catch(() => {}); }
     finally { setSending(false); }
   };
   const rejectOffer = async (amount) => {
     if (sending) return; setSending(true);
-    try { await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} abgelehnt.`, { messageType: "system" }); }
+    try { appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} abgelehnt.`, { messageType: "system" })); }
     catch (e) { console.error(e); } finally { setSending(false); }
   };
   const counterOffer = async () => {
@@ -125,7 +129,7 @@ export default function ChatConversation() {
     const v = parseFloat(raw);
     if (!v || v <= 0 || sending) return;
     setSending(true);
-    try { await sendMessage(params.id, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v }); }
+    try { appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v })); }
     catch (e) { console.error(e); } finally { setSending(false); }
   };
 
