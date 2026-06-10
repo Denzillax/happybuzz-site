@@ -13,6 +13,7 @@ const PAGE_TESTS = {
     { id: "pg_cats", label: "Kategorien-Grid anklickbar" },
     { id: "pg_howit", label: "So funktionierts Sektion" },
     { id: "pg_impact_counter", label: "Bee-Impact Counter sichtbar" },
+    { id: "pg_showcase", label: "Schaufenster: eingelöste Verkäufer mit Inseraten" },
   ],
   "/search": [
     { id: "sr_text", label: "Textsuche findet Inserate" },

@@ -188,6 +188,49 @@ export async function getActiveBoosts(listingIds) {
   return map;
 }
 
+// Verkäufer mit aktivem "Schaufenster" (showcase) für die Homepage.
+// Lädt Profil + bis zu 3 aktive Inserate je Verkäufer. Älteste Einlösung zuerst.
+export async function getShowcaseSellers(maxSellers = 6) {
+  const nowIso = new Date().toISOString();
+  const { data: reds } = await supabase.from("nektar_redemptions")
+    .select("user_id, created_at, expires_at")
+    .eq("reward_type", "showcase").eq("status", "active")
+    .order("created_at", { ascending: true });
+  const active = (reds || []).filter((r) => !r.expires_at || r.expires_at > nowIso);
+  if (!active.length) return [];
+
+  // Pro Verkäufer nur die früheste aktive Einlösung behalten.
+  const seen = new Set();
+  const userIds = [];
+  for (const r of active) {
+    if (seen.has(r.user_id)) continue;
+    seen.add(r.user_id);
+    userIds.push(r.user_id);
+    if (userIds.length >= maxSellers) break;
+  }
+
+  const { data: profiles } = await supabase.from("profiles")
+    .select("id, display_name, avatar_url, account_type, company_name, avg_rating, rating_count")
+    .in("id", userIds);
+  const profMap = {};
+  (profiles || []).forEach((p) => { profMap[p.id] = p; });
+
+  const { data: listings } = await supabase.from("listings")
+    .select("id, title, price, rent_price, rent_period, listing_type, user_id, listing_images(url, sort_order)")
+    .in("user_id", userIds).eq("status", "active")
+    .order("created_at", { ascending: false });
+  const byUser = {};
+  (listings || []).forEach((l) => {
+    if ((byUser[l.user_id]?.length || 0) >= 3) return;
+    const imgs = (l.listing_images || []).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+    (byUser[l.user_id] = byUser[l.user_id] || []).push({ id: l.id, title: l.title, price: l.price, rent_price: l.rent_price, rent_period: l.rent_period, listing_type: l.listing_type, cover: imgs[0]?.url || null });
+  });
+
+  return userIds
+    .map((id) => profMap[id] ? { ...profMap[id], listings: byUser[id] || [] } : null)
+    .filter(Boolean);
+}
+
 const NEKTAR_REASON_LABEL = {
   level_up: "Neues Level erreicht",
   five_star_nektar: "5-Sterne-Bewertung",

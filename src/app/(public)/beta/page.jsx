@@ -254,6 +254,7 @@ const TESTS = [
     id: "pages", title: "Seiten & Inhalte", icon: Monitor,
     items: [
       { id: "pg_home", label: "Homepage lädt korrekt" },
+      { id: "pg_showcase", label: "Schaufenster: Verkäufer mit aktivem Showcase + Inserate-Grid sichtbar (Nektar-Einlösung)" },
       { id: "pg_help", label: "Hilfe: FAQ-Suche & aufklappbare Antworten" },
       { id: "pg_how", label: "So funktionierts-Seite" },
       { id: "pg_impact", label: "Bee-Impact-Seite mit Live-Counter" },
