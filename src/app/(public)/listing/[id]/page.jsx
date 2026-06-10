@@ -668,26 +668,28 @@ export default function ListingDetail() {
                     const totalBids = allBids.length;
                     const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
                     const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
-                    // Bieter anonymisieren: erste 2 Buchstaben + **** (z.B. "Ze****"), eigene = "Du".
-                    const bidderLabel = (b) => {
-                      const bid = b.bidder_id || b.bidder?.id;
-                      if (bid && user?.id && bid === user.id) return "Du";
+                    // Bieter maskieren (erste 2 Buchstaben + ****). Ausnahme: oberster/höchster
+                    // Bieter wird voll angezeigt. Eigene Gebote werden farblich hervorgehoben.
+                    const bidderLabel = (b, isTop) => {
                       const name = (b.bidder?.display_name || "").trim();
+                      if (isTop) return name || "Bieter";
                       return name ? `${name.slice(0, 2)}****` : "Bieter";
                     };
                     return (
                     <div style={{ fontSize: 13, marginTop: 8 }}>
                       <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
                       {visibleBids.map((b, i) => {
-                        const isTopBidder = (b.bidder_id || b.bidder?.id) === topBidderId && b.amount >= (bids[0]?.amount || 0);
+                        const bidderUid = b.bidder_id || b.bidder?.id;
+                        const isTopBidder = bidderUid === topBidderId && b.amount >= (bids[0]?.amount || 0);
+                        const isMine = bidderUid && user?.id && bidderUid === user.id;
                         return (
                         <div key={b.id || i} style={{
                           display: "flex", justifyContent: "space-between", alignItems: "center",
                           padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.muted, fontSize: 12 }}>
-                              {bidderLabel(b)}
+                            <span style={{ fontWeight: (isMine || isTopBidder) ? 700 : 500, color: isMine ? colors.teal : (isTopBidder ? colors.dark : colors.muted), fontSize: 12 }}>
+                              {bidderLabel(b, isTopBidder)}{isMine && " (du)"}
                             </span>
                             {b.bid_type === "auto" && (
                               <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
