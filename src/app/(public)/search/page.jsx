@@ -8,6 +8,7 @@ import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/a
 import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
 import { ListingCard } from "@/components/shared/ListingCard";
+import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/recentSearches";
 
 const SORT_OPTS = [
   { value: "relevanz", label: "Relevanz" },
@@ -110,8 +111,10 @@ export default function SearchPage() {
   const [categoryAttrs, setCategoryAttrs] = useState([]);
   const [attrFilters, setAttrFilters] = useState({});
   const [showPrice, setShowPrice] = useState(false);
+  const [recents, setRecents] = useState([]);
   const priceRef = useRef(null);
 
+  useEffect(() => { setRecents(getRecentSearches()); }, []);
   useEffect(() => { supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null)); }, []);
   useEffect(() => { getCategories().then(setCategories).catch(console.error); }, []);
   useEffect(() => {
@@ -166,6 +169,7 @@ export default function SearchPage() {
       });
       setResults(res.listings);
       setTotal(res.total);
+      if (query.trim()) { recordSearch(query); setRecents(getRecentSearches()); }
     } catch (e) { console.error(e); }
     setLoading(false);
   }
@@ -183,6 +187,33 @@ export default function SearchPage() {
     <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#F9F4EC" }}>
 
       <div style={{ maxWidth: 1320, margin: "0 auto", padding: "24px 24px 48px" }}>
+
+        {/* ── Letzte Suchen (Chips) ── */}
+        {recents.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: colors.muted }}>Letzte Suchen:</span>
+            {recents.map((term) => (
+              <button
+                key={term}
+                onClick={() => { setQuery(term); setPage(1); }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 5,
+                  padding: "6px 12px", borderRadius: 20, cursor: "pointer",
+                  border: `1.5px solid ${colors.border}`, background: "#fff",
+                  fontSize: 13, fontFamily: fonts.body, color: colors.dark, whiteSpace: "nowrap",
+                }}
+              >
+                <Search size={12} color={colors.muted} /> {term}
+              </button>
+            ))}
+            <button
+              onClick={() => { clearRecentSearches(); setRecents([]); }}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body, textDecoration: "underline" }}
+            >
+              löschen
+            </button>
+          </div>
+        )}
 
         {/* ── Breadcrumbs ── */}
         {mainCatId && (() => {

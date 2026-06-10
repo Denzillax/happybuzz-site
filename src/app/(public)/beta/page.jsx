@@ -45,6 +45,7 @@ const TESTS = [
       { id: "sr_cards", label: "Ergebnis-Cards: Bild, Preis, Verkäufer korrekt" },
       { id: "sr_no_results", label: "Keine Ergebnisse → sinnvolle Meldung" },
       { id: "sr_url_params", label: "Filter bleiben nach Reload in der URL erhalten" },
+      { id: "sr_recent", label: "Letzte Suchen als Chips: klickbar, neueste zuerst, löschbar" },
     ],
   },
   {
