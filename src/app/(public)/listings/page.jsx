@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { getUserListings, deleteListing, getListingAnalytics } from "@/lib/listings";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
@@ -32,6 +32,7 @@ export default function ListingsPage() {
   const [batchAction, setBatchAction] = useState(null);
   const [statsFor, setStatsFor] = useState(null); // listing object
   const [statsData, setStatsData] = useState(null);
+  const [myBoosts, setMyBoosts] = useState({}); // listing_id -> [{reward_type, expires_at}]
 
   const openStats = async (listing) => {
     setStatsFor(listing); setStatsData(null);
@@ -46,6 +47,11 @@ export default function ListingsPage() {
         if (!user) { window.location.href = "/login"; return; }
         const items = await getUserListings(user.id);
         setListings(items);
+        supabase.from("nektar_redemptions").select("listing_id, reward_type, expires_at").eq("user_id", user.id).eq("status", "active").then(({ data }) => {
+          const bmap = {};
+          (data || []).forEach(r => { if (r.listing_id) (bmap[r.listing_id] = bmap[r.listing_id] || []).push(r); });
+          setMyBoosts(bmap);
+        });
         const auctionIds = items.filter(l => l.listing_type === "auction").map(l => l.id);
         if (auctionIds.length > 0) {
           const { data: historyBids } = await supabase.from("bid_history").select("listing_id").in("listing_id", auctionIds);
@@ -321,6 +327,13 @@ export default function ListingsPage() {
                         <div style={{ display: "inline-flex", alignItems: "center", gap: 5, color: st.color, fontSize: 12, fontWeight: 600 }}>
                           <StIcon size={14} /> {st.label}
                         </div>
+                        {myBoosts[l.id]?.length > 0 && (() => {
+                          const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" };
+                          const b = myBoosts[l.id][0];
+                          const rem = b.expires_at ? Math.max(0, new Date(b.expires_at).getTime() - Date.now()) : null;
+                          const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`;
+                          return <div style={{ marginTop: 4, fontSize: 10, fontWeight: 800, color: "#C8860A", display: "flex", alignItems: "center", gap: 3 }}><Rocket size={10} /> {labels[b.reward_type] || b.reward_type}{remStr ? ` · ${remStr}` : ""}</div>;
+                        })()}
                       </td>
                       {/* Actions — Icon-Only mit Hover-Tooltip */}
                       <td style={{ padding: "14px 6px", verticalAlign: "middle" }}>

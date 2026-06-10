@@ -9,6 +9,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/recentSearches";
+import { getActiveBoosts } from "@/lib/gamification";
 
 const SORT_OPTS = [
   { value: "relevanz", label: "Relevanz" },
@@ -91,6 +92,7 @@ function FilterPill({ label, value, options, onChange, active }) {
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const [results, setResults] = useState([]);
+  const [boosts, setBoosts] = useState({});
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -169,6 +171,7 @@ export default function SearchPage() {
       });
       setResults(res.listings);
       setTotal(res.total);
+      getActiveBoosts((res.listings || []).map(l => l.id)).then(setBoosts).catch(() => {});
       if (query.trim()) { recordSearch(query); setRecents(getRecentSearches()); }
     } catch (e) { console.error(e); }
     setLoading(false);
@@ -383,7 +386,7 @@ export default function SearchPage() {
         ) : results.length > 0 ? (
           <>
             <div className="search-results-grid" style={{ display: "grid", gap: 16 }}>
-              {results.map(l => <ListingCard key={l.id} listing={l} userId={user?.id} />)}
+              {results.map(l => <ListingCard key={l.id} listing={l} userId={user?.id} boost={boosts[l.id]} />)}
             </div>
             {totalPages > 1 && (
               <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 32 }}>

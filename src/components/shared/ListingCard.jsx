@@ -46,7 +46,7 @@ function AuctionCountdown({ endDate }) {
   );
 }
 
-export function ListingCard({ listing, userId }) {
+export function ListingCard({ listing, userId, boost }) {
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const cover = getCoverUrl(listing);
@@ -62,6 +62,9 @@ export function ListingCard({ listing, userId }) {
   const viewCount = listing.view_count || 0;
   const favCount = listing.favorite_count || 0;
   const isPopular = (isAuction && bidCount > 5) || favCount > 3 || viewCount > 100;
+  const boosts = boost || listing.boost || [];
+  const hasSpotlight = boosts.includes("spotlight") || boosts.includes("mega_boost");
+  const hasFeatured = boosts.includes("golden_stamp") || boosts.includes("mega_boost");
   const endingSoon = isAuction && listing.auction_end && (new Date(listing.auction_end).getTime() - Date.now()) < 24 * 60 * 60 * 1000 && (new Date(listing.auction_end).getTime() - Date.now()) > 0;
 
   return (
@@ -71,10 +74,10 @@ export function ListingCard({ listing, userId }) {
         onMouseLeave={() => setHover(false)}
         style={{
           background: colors.surface, borderRadius: radius.md,
-          border: `1px solid ${colors.border}`,
+          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${colors.border}`,
           overflow: "hidden", transition: "box-shadow .2s, transform .2s",
           transform: hover ? "translateY(-2px)" : "none",
-          boxShadow: hover ? shadows.card : "none",
+          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.card : "none"),
           display: "flex", flexDirection: "column", height: "100%",
         }}
       >
@@ -87,6 +90,16 @@ export function ListingCard({ listing, userId }) {
 
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {hasFeatured && (
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+                <Star size={9} fill="#fff" /> Featured
+              </span>
+            )}
+            {hasSpotlight && (
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+                <Star size={9} /> Gesponsert
+              </span>
+            )}
             {isNew && (
               <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
             )}

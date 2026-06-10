@@ -47,6 +47,7 @@ const TESTS = [
       { id: "sr_url_params", label: "Filter bleiben nach Reload in der URL erhalten" },
       { id: "sr_recent", label: "Letzte Suchen als Chips: klickbar, neueste zuerst, löschbar" },
       { id: "sr_seasonal", label: "Startseite: saisonale Empfehlungen (Chips passend zur Jahreszeit) führen zur Suche" },
+      { id: "sr_boost", label: "Boost-Badges auf Karten: 'Gesponsert' (gelber Rahmen) + 'Featured' (gold)" },
     ],
   },
   {
@@ -136,6 +137,7 @@ const TESTS = [
     items: [
       { id: "ml_list", label: "Inserate-Liste wird angezeigt" },
       { id: "ml_stats", label: "Statistik je Inserat: Aufrufe/Favoriten/Chats, 7-Tage-Chart, Quellen" },
+      { id: "ml_boost", label: "Aktiver Boost je Inserat (z.B. 'Featured · noch 2d') sichtbar" },
       { id: "ml_filter", label: "Filter/Tabs: Alle, Aktiv, Pausiert, Verkauft" },
       { id: "ml_counters", label: "Views + Favoriten-Zähler korrekt" },
       { id: "ml_edit", label: "Bearbeiten → /listings/[id] lädt die Daten" },
