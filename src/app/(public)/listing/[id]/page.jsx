@@ -668,16 +668,12 @@ export default function ListingDetail() {
                     const totalBids = allBids.length;
                     const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
                     const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
-                    // Anonyme, pro Auktion stabile Bieter-Pseudonyme (Bieter 1 = frühestes Gebot).
-                    const bidderNum = {};
-                    [...allBids].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).forEach(b => {
-                      const bid = b.bidder_id || b.bidder?.id;
-                      if (bid && !(bid in bidderNum)) bidderNum[bid] = Object.keys(bidderNum).length + 1;
-                    });
+                    // Bieter anonymisieren: erste 2 Buchstaben + **** (z.B. "Ze****"), eigene = "Du".
                     const bidderLabel = (b) => {
                       const bid = b.bidder_id || b.bidder?.id;
                       if (bid && user?.id && bid === user.id) return "Du";
-                      return bid ? `Bieter ${bidderNum[bid]}` : "Bieter";
+                      const name = (b.bidder?.display_name || "").trim();
+                      return name ? `${name.slice(0, 2)}****` : "Bieter";
                     };
                     return (
                     <div style={{ fontSize: 13, marginTop: 8 }}>
