@@ -212,6 +212,7 @@ const TESTS = [
       { id: "hive_nektar_balance", label: "Nektar-Balance wird im Hero angezeigt" },
       { id: "hive_nektar_catalog", label: "Belohnungs-Katalog (Spotlight, Patenschaften, ...) sichtbar" },
       { id: "hive_nektar_redeem", label: "Belohnung einlösen: Bestätigung, Inserat-Picker (Spotlight/Stempel), Nektar abgezogen" },
+      { id: "hive_header_badge", label: "Header (Desktop): Level + Nektar-Badge mit Dropdown; Mobile: Nektar im Profil/Settings" },
       { id: "hive_nektar_toast", label: "Nektar-Toast erscheint nach Meilenstein (z.B. 5-Sterne, Level-Up)" },
     ],
   },

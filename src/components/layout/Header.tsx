@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
 import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
 import NotificationBell from '@/components/shared/NotificationBell'
+import NektarBadge from '@/components/shared/NektarBadge'
 import { MegaMenu } from '@/components/shared/MegaMenu'
 
 
@@ -247,6 +248,9 @@ export function Header() {
                 )}
               </button>
             </div>
+
+            {/* ── Nektar/Level-Badge (Desktop) ── */}
+            {user && <div style={{ marginLeft: 10 }}><NektarBadge /></div>}
 
             {/* ── Avatar — separated to far right ── */}
             <div ref={dropdownRef} style={{ position: 'relative', marginLeft: 12, flexShrink: 0 }}>

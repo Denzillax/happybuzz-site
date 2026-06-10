@@ -3,6 +3,7 @@
 import { colors, fonts, radius } from "@/lib/theme";
 import { calculateLevel, levelProgress, xpToNext, BEE_LEVELS } from "@/lib/gamification";
 import BeeIcon from "./BeeIcon";
+import { Droplets } from "lucide-react";
 
 /**
  * BeeLevelBadge — XP-basiertes Bee-Level als kleines Badge neben dem Username.
@@ -43,7 +44,7 @@ export function BeeLevelBadge({ xp = 0, size = "sm", showLabel = true }) {
  * Props:
  *  - xp: number — XP-Total
  */
-export function BeeLevelCard({ xp = 0 }) {
+export function BeeLevelCard({ xp = 0, nektar = null }) {
   const total = parseInt(xp) || 0;
   const level = calculateLevel(total);
   const idx = BEE_LEVELS.indexOf(level);
@@ -101,6 +102,15 @@ export function BeeLevelCard({ xp = 0 }) {
         <p style={{ margin: 0, fontSize: 12, color: level.color, fontWeight: 600 }}>
           Maximales Level erreicht
         </p>
+      )}
+
+      {nektar != null && (
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 10, background: "#E8A82014", border: "1px solid #E8A82033", textDecoration: "none" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#C8860A" }}>
+            <Droplets size={15} color="#C8860A" /> {Number(nektar).toLocaleString("de-CH")} Nektar
+          </span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: colors.teal }}>Einlösen →</span>
+        </a>
       )}
     </div>
   );
