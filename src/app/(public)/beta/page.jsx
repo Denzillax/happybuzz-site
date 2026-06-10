@@ -104,6 +104,7 @@ const TESTS = [
       { id: "lv_recent", label: "Zuletzt angesehen: besuchte Inserate erscheinen auf der Startseite" },
       { id: "lv_qr", label: "QR-Code: Modal zeigt scanbaren Code zum Inserat + Drucken" },
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
+      { id: "lv_offer", label: "Preis vorschlagen (verhandelbar): Vorschlag → Chat; Annehmen/Ablehnen/Gegenvorschlag, max 3 Runden" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },
       { id: "lv_bidder_anon", label: "Gebotsverlauf maskiert Bieter (z.B. 'Ze****', eigene = 'Du'), kein voller Name" },

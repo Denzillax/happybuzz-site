@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getMessages, sendMessage, markMessagesRead, uploadChatImage } from "@/lib/listings";
+import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice } from "@/lib/listings";
 
 const QUICK_REPLIES = [
   "Ist noch verfügbar",
@@ -105,9 +105,37 @@ export default function ChatConversation() {
     finally { setUploading(false); }
   };
 
+  // ── Preisvorschlag-Aktionen ──
+  const acceptOffer = async (amount) => {
+    if (sending || !conv?.listing?.id) return;
+    setSending(true);
+    try {
+      await createPurchaseAtPrice(conv.buyer_id, conv.listing.id, amount);
+      await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} angenommen. Bestellung wurde erstellt.`, { messageType: "system" });
+    } catch (e) { console.error(e); await sendMessage(params.id, user.id, "Vorschlag konnte nicht angenommen werden (Inserat evtl. nicht mehr verfügbar).", { messageType: "system" }).catch(() => {}); }
+    finally { setSending(false); }
+  };
+  const rejectOffer = async (amount) => {
+    if (sending) return; setSending(true);
+    try { await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} abgelehnt.`, { messageType: "system" }); }
+    catch (e) { console.error(e); } finally { setSending(false); }
+  };
+  const counterOffer = async () => {
+    const raw = (window.prompt("Dein Gegenvorschlag (CHF):") || "").replace(",", ".");
+    const v = parseFloat(raw);
+    if (!v || v <= 0 || sending) return;
+    setSending(true);
+    try { await sendMessage(params.id, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v }); }
+    catch (e) { console.error(e); } finally { setSending(false); }
+  };
+
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
   const otherUser = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
+  const offerMsgs = messages.filter((m) => m.message_type === "offer");
+  const lastOffer = offerMsgs[offerMsgs.length - 1] || null;
+  const offerResolved = lastOffer && messages.some((m) => m.message_type === "system" && new Date(m.created_at) > new Date(lastOffer.created_at));
+  const canCounter = offerMsgs.length < 3;
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", flexDirection: "column", color: colors.dark }}>
@@ -150,13 +178,49 @@ export default function ChatConversation() {
           const prev = messages[i - 1];
           const showDay = !prev || new Date(prev.created_at).toDateString() !== new Date(msg.created_at).toDateString();
           const isImage = msg.message_type === "image" || (!!msg.image_url && !msg.content);
+          const isOffer = msg.message_type === "offer";
+          const isSystem = msg.message_type === "system";
+          const dayChip = showDay && (
+            <div style={{ textAlign: "center", margin: "12px 0" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 12 }}>{dayLabel(msg.created_at)}</span>
+            </div>
+          );
+          if (isSystem) {
+            return (
+              <div key={msg.id || i}>
+                {dayChip}
+                <div style={{ textAlign: "center", margin: "8px 0" }}>
+                  <span style={{ fontSize: 12, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "6px 14px", borderRadius: 12 }}>{msg.content}</span>
+                </div>
+              </div>
+            );
+          }
+          if (isOffer) {
+            const amount = Number(msg.offer_amount || 0);
+            const showActions = lastOffer && msg.id === lastOffer.id && !offerResolved && !isMe;
+            return (
+              <div key={msg.id || i}>
+                {dayChip}
+                <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
+                  <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: 16, background: "#FFF9E6", border: `1.5px solid ${colors.yellow}`, borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }}>
+                    <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".04em", textTransform: "uppercase", color: colors.yellowDark }}>Preisvorschlag</p>
+                    <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>CHF {amount.toLocaleString("de-CH")}</p>
+                    {showActions && (
+                      <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+                        <button onClick={() => acceptOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Annehmen</button>
+                        {canCounter && <button onClick={counterOffer} disabled={sending} style={{ padding: "7px 14px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Gegenvorschlag</button>}
+                        <button onClick={() => rejectOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.red, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Ablehnen</button>
+                      </div>
+                    )}
+                    <p style={{ margin: "8px 0 0", fontSize: 10, color: colors.mutedLt, textAlign: "right" }}>{new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
           return (
             <div key={msg.id || i}>
-              {showDay && (
-                <div style={{ textAlign: "center", margin: "12px 0" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 12 }}>{dayLabel(msg.created_at)}</span>
-                </div>
-              )}
+              {dayChip}
               <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
                 <div style={{
                   maxWidth: "72%", padding: isImage ? 4 : "10px 14px", borderRadius: 16,

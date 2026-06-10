@@ -536,6 +536,15 @@ export async function createPurchase(buyerId, listingId) {
 }
 
 // Meine Käufe laden (als Käufer)
+// Kauf mit vereinbartem Preis (akzeptierter Preisvorschlag).
+export async function createPurchaseAtPrice(buyerId, listingId, price) {
+  const { data, error } = await supabase.rpc("create_purchase", {
+    p_listing_id: listingId, p_buyer_id: buyerId, p_price: price,
+  });
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 export async function getMyPurchases(userId) {
   const { data, error } = await supabase
     .from("purchases")
@@ -904,6 +913,8 @@ export async function getMessages(conversationId) {
 export async function sendMessage(conversationId, senderId, content, opts = {}) {
   const row = { conversation_id: conversationId, sender_id: senderId, content };
   if (opts.imageUrl) { row.image_url = opts.imageUrl; row.message_type = "image"; }
+  if (opts.messageType) row.message_type = opts.messageType;
+  if (opts.offerAmount != null) row.offer_amount = opts.offerAmount;
   const { data, error } = await supabase
     .from("messages")
     .insert(row)

@@ -22,6 +22,7 @@ import {
 } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
+import { createNotification } from "@/lib/notifications";
 
 // ── LocationMap: Geocoding via Nominatim ──────────────────
 function LocationMap({ city, canton }) {
@@ -104,6 +105,9 @@ export default function ListingDetail() {
   const [showShare, setShowShare] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
   const [showQr, setShowQr] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [offerAmount, setOfferAmount] = useState("");
+  const [offerSending, setOfferSending] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
 
@@ -259,6 +263,31 @@ export default function ListingDetail() {
       if (convId) router.push(`/chat/${convId}`);
     } catch (err) { console.error(err); }
     finally { setSendingMsg(false); }
+  };
+
+  // Preisvorschlag senden (privater Chat + Offer-Nachricht + Notification).
+  const sendPriceOffer = async () => {
+    if (!user) { router.push("/login"); return; }
+    const v = parseFloat(String(offerAmount).replace(",", "."));
+    if (!v || v <= 0 || offerSending) return;
+    setOfferSending(true);
+    try {
+      const { data: existing } = await supabase.from("conversations")
+        .select("id").eq("listing_id", l.id).eq("buyer_id", user.id).eq("seller_id", l.user_id).eq("is_public", false).maybeSingle();
+      let convId = existing?.id;
+      if (!convId) {
+        const { data: nc, error } = await supabase.from("conversations")
+          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: false }).select("id").single();
+        if (error) { console.error(error); return; }
+        convId = nc?.id;
+      }
+      if (!convId) return;
+      await sendMessage(convId, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v });
+      try { await createNotification(l.user_id, "offer", "Neuer Preisvorschlag", `CHF ${v.toLocaleString("de-CH")} für "${l.title}"`, `/chat/${convId}`); } catch {}
+      setShowOfferModal(false);
+      router.push(`/chat/${convId}`);
+    } catch (err) { console.error(err); }
+    finally { setOfferSending(false); }
   };
 
   const handleBuy = async () => {
@@ -572,7 +601,33 @@ export default function ListingDetail() {
                     }}>
                     <ShoppingBag size={18} /> KAUFEN · CHF {fmtPrice(l.price)}
                   </button>
+                  {!isOwner && l.is_negotiable && (
+                    <button onClick={() => { if (!user) { router.push("/login"); return; } setOfferAmount(""); setShowOfferModal(true); }}
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
+                      <Tag size={16} /> Preis vorschlagen
+                    </button>
+                  )}
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginTop: 6, marginBottom: 0 }}>Das ist dein eigenes Inserat</p>}
+
+                  {showOfferModal && (
+                    <div onClick={() => setShowOfferModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                      <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: radius.lg, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
+                        <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>Preis vorschlagen</h3>
+                        <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>Aktueller Preis: CHF {fmtPrice(l.price)}. Der Verkäufer kann annehmen, ablehnen oder kontern.</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                          <span style={{ fontSize: 14, color: colors.muted, fontWeight: 700 }}>CHF</span>
+                          <input type="number" min="1" step="1" autoFocus value={offerAmount} onChange={(e) => setOfferAmount(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && sendPriceOffer()}
+                            placeholder="Dein Vorschlag"
+                            style={{ flex: 1, padding: "12px 14px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 16, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
+                        </div>
+                        <div style={{ display: "flex", gap: 10 }}>
+                          <button onClick={sendPriceOffer} disabled={offerSending || !offerAmount} style={{ flex: 1, padding: 13, borderRadius: radius.sm, border: "none", background: offerAmount ? colors.teal : "#ccc", color: "#fff", fontSize: 14, fontWeight: 800, cursor: offerAmount ? "pointer" : "default", fontFamily: fonts.body }}>{offerSending ? "Senden…" : "Vorschlag senden"}</button>
+                          <button onClick={() => setShowOfferModal(false)} style={{ padding: "13px 18px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               {l.status === "sold" && (
