@@ -46,6 +46,7 @@ const TESTS = [
       { id: "sr_no_results", label: "Keine Ergebnisse → sinnvolle Meldung" },
       { id: "sr_url_params", label: "Filter bleiben nach Reload in der URL erhalten" },
       { id: "sr_recent", label: "Letzte Suchen als Chips: klickbar, neueste zuerst, löschbar" },
+      { id: "sr_seasonal", label: "Startseite: saisonale Empfehlungen (Chips passend zur Jahreszeit) führen zur Suche" },
     ],
   },
   {
