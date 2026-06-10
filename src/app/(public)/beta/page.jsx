@@ -106,6 +106,7 @@ const TESTS = [
       { id: "lv_live", label: "Live-Zähler: 'X schauen gerade' bei >2 aktiven Betrachtern (Realtime)" },
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_offer", label: "Preis vorschlagen (verhandelbar): Vorschlag → Chat; Annehmen/Ablehnen/Gegenvorschlag, max 3 Runden" },
+      { id: "lv_cart", label: "In den Warenkorb (Festpreis); Bundle-Hinweis bei Mengenrabatt" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },
       { id: "lv_bidder_anon", label: "Gebotsverlauf maskiert Bieter (z.B. 'Ze****', eigene = 'Du'), kein voller Name" },
@@ -148,6 +149,7 @@ const TESTS = [
   {
     id: "bids_bookings", title: "Gebote & Buchungen", icon: Monitor,
     items: [
+      { id: "bb_cart", label: "Warenkorb: nach Verkäufer gruppiert, Mengenrabatt + gebündelter Versand, Checkout" },
       { id: "bb_bids_list", label: "Meine Gebote: Liste mit Status (Führend/Überboten)" },
       { id: "bb_bids_link", label: "Gebot → Inserat öffnen" },
       { id: "bb_book_tabs", label: "Buchungen: Eingehende Anfragen vs. Meine Buchungen" },
@@ -231,6 +233,7 @@ const TESTS = [
       { id: "set_account_type", label: "Kontotyp Privat/Unternehmen + Firmenname/UID speichern" },
       { id: "set_bio", label: "Über mich (Bio) ändern + speichern" },
       { id: "set_bee_rate", label: "Bee-Rate Default wählen + speichern" },
+      { id: "set_bundle", label: "Mengenrabatt konfigurieren (ab N Artikel, X%) + speichern" },
       { id: "set_verify_email", label: "E-Mail-Verifizierung Status korrekt" },
       { id: "set_verify_phone", label: "Telefon verifizieren" },
       { id: "set_verify_address", label: "Adresse verifizieren" },

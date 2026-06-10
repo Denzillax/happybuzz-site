@@ -23,6 +23,8 @@ import {
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { createNotification } from "@/lib/notifications";
+import { addToCart, removeFromCart, isInCart } from "@/lib/cart";
+import { ShoppingCart } from "lucide-react";
 
 // ── LocationMap: Geocoding via Nominatim ──────────────────
 function LocationMap({ city, canton }) {
@@ -109,6 +111,7 @@ export default function ListingDetail() {
   const [offerAmount, setOfferAmount] = useState("");
   const [offerSending, setOfferSending] = useState(false);
   const [viewerCount, setViewerCount] = useState(1);
+  const [inCart, setInCart] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
 
@@ -118,6 +121,7 @@ export default function ListingDetail() {
         const data = await getListingPublic(params.id);
         setListing(data);
         recordView(data);
+        setInCart(isInCart(data.id));
         if (data.user_id) getUserAvgRating(data.user_id).then(setSellerRating).catch(() => {});
         if (data.category_id) getSimilarListings(params.id, data.category_id).then(setSimilar).catch(() => {});
         if (data.listing_type === "auction") {
@@ -630,6 +634,20 @@ export default function ListingDetail() {
                       style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
                       <Tag size={16} /> Preis vorschlagen
                     </button>
+                  )}
+                  {!isOwner && (
+                    <button onClick={() => {
+                      if (inCart) { removeFromCart(l.id); setInCart(false); }
+                      else { addToCart({ id: l.id, title: l.title, price: l.price, cover_image: l.cover_image || l.listing_images?.[0]?.url || null, seller_id: l.user_id, sellerName: l.seller?.display_name || "Verkäufer", shipping_cost: l.shipping_cost || 0, slug: l.slug }); setInCart(true); }
+                    }}
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${inCart ? colors.teal : colors.border}`, background: inCart ? "#E6F5F5" : colors.surface, color: inCart ? colors.tealDark : colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
+                      <ShoppingCart size={16} /> {inCart ? "Im Warenkorb" : "In den Warenkorb"}
+                    </button>
+                  )}
+                  {!isOwner && l.seller?.bundle_min_items > 0 && l.seller?.bundle_discount_pct > 0 && (
+                    <p style={{ margin: "8px 0 0", fontSize: 12, color: colors.green, fontWeight: 600, textAlign: "center" }}>
+                      Kaufe {l.seller.bundle_min_items}+ Artikel von diesem Verkäufer und spare {l.seller.bundle_discount_pct}%.
+                    </p>
                   )}
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginTop: 6, marginBottom: 0 }}>Das ist dein eigenes Inserat</p>}
 
