@@ -76,6 +76,9 @@ const TESTS = [
       { id: "lc_publish_check", label: "Veröffentlichen: Profil-Check (IBAN/Adresse) greift" },
       { id: "lc_publish", label: "Veröffentlichen erstellt das Inserat" },
       { id: "lc_draft", label: "Als Entwurf speichern" },
+      { id: "lc_type_first", label: "Inserattyp steht zuoberst, Preis-Felder passen sich an" },
+      { id: "lc_expiry", label: "Laufzeit-Hinweis: 60 Tage (Auktion = Auktionsdauer)" },
+      { id: "lc_sticky_bar", label: "Aktions-Bar bleibt beim Scrollen unten sichtbar" },
     ],
   },
   {

@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import {
   Camera, X, Star, ChevronDown, ChevronRight, Sparkles, Eye, Search,
   Package, Gavel, Home, Truck, MapPin, Gift, Wrench,
+  Type, Tag, Clock, SlidersHorizontal, Rocket,
 } from "lucide-react";
 import { colors, fonts, radius, shadows } from "@/lib/theme";
 import {
@@ -82,10 +83,11 @@ const labelBase = {
 
 const sectionBase = {
   background: colors.surface,
-  borderRadius: radius.lg,
-  padding: "24px 20px",
-  border: `1px solid ${colors.border}`,
-  marginBottom: 16,
+  borderRadius: radius.xl,
+  padding: "26px 24px",
+  border: `1px solid ${colors.borderLt}`,
+  boxShadow: shadows.card,
+  marginBottom: 18,
 };
 
 const hintStyle = {
@@ -94,6 +96,25 @@ const hintStyle = {
   fontFamily: fonts.body,
   marginTop: 4,
 };
+
+// ─── Section header: Icon-Chip + Titel (+ Hint, rechter Slot) ──
+const SectionHead = ({ icon: Icon, title, hint, right }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+    {Icon && (
+      <div style={{
+        width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+        background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <Icon size={17} color={colors.teal} />
+      </div>
+    )}
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ fontSize: 15.5, fontWeight: 800, color: colors.dark, fontFamily: fonts.body, letterSpacing: ".005em" }}>{title}</div>
+      {hint && <div style={{ fontSize: 12, color: colors.muted, fontFamily: fonts.body, marginTop: 2 }}>{hint}</div>}
+    </div>
+    {right}
+  </div>
+);
 
 // ═════════════════════════════════════════════════════════════
 // COMPONENT
@@ -616,30 +637,103 @@ export default function ListingForm({
   // RENDER
   // ═══════════════════════════════════════════════════════════
   return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 16px 80px" }}>
+    <div className="listing-form" style={{ maxWidth: 680, margin: "0 auto", padding: "36px 16px 32px" }}>
 
       {/* ── HEADER ──────────────────────────────────────────── */}
-      <div style={{ marginBottom: 28 }}>
+      <div style={{ marginBottom: 24 }}>
         <h1 style={{
-          fontFamily: fonts.head, fontSize: 28, color: colors.dark,
-          margin: 0, letterSpacing: ".03em",
+          fontFamily: fonts.head, fontSize: 30, color: colors.dark,
+          margin: 0, letterSpacing: ".02em", lineHeight: 1.1,
         }}>
-          {isEdit ? "INSERAT BEARBEITEN" : "NEUES INSERAT"}
+          {isEdit ? "Inserat bearbeiten" : "Neues Inserat"}
         </h1>
-        <p style={{ ...hintStyle, marginTop: 6, fontSize: 14 }}>
-          {isEdit ? "Passe dein Inserat an." : "Nicht neu. Nur interessanter."}
-        </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+          <span style={{ width: 28, height: 3, borderRadius: 2, background: colors.teal }} />
+          <p style={{ margin: 0, fontSize: 14, color: colors.muted, fontFamily: fonts.body }}>
+            {isEdit ? "Passe dein Inserat an." : "Nicht neu. Nur interessanter."}
+          </p>
+        </div>
+      </div>
+
+      {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}
+      <div style={sectionBase} className="lf-section">
+        <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
+        <div style={{
+          display: "flex", gap: 0,
+          background: colors.cream, borderRadius: radius.md, padding: 4,
+        }}>
+          {TYPE_TABS.map((t) => {
+            const active = form.listing_type === t.value && !isFree;
+            const Icon = t.icon;
+            return (
+              <button
+                key={t.value}
+                onClick={() => { set("listing_type", t.value); setIsFree(false); }}
+                style={{
+                  flex: 1, padding: "12px 8px",
+                  borderRadius: radius.sm, border: "none",
+                  background: active ? colors.surface : "transparent",
+                  boxShadow: active ? shadows.sm : "none",
+                  cursor: "pointer", transition: "all .15s",
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", gap: 5,
+                }}
+              >
+                <Icon size={18} color={active ? colors.teal : colors.muted} />
+                <span style={{
+                  fontSize: 12.5, fontWeight: active ? 800 : 500,
+                  fontFamily: fonts.body, color: active ? colors.dark : colors.muted,
+                }}>
+                  {t.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Gratis toggle (only for sell) */}
+        {form.listing_type === "sell" && (
+          <div
+            onClick={toggleFree}
+            style={{
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "12px 14px", borderRadius: radius.md,
+              border: `1.5px solid ${isFree ? colors.green : colors.border}`,
+              background: isFree ? colors.greenSoft : "transparent",
+              cursor: "pointer", marginTop: 12,
+              transition: "all .15s",
+            }}
+          >
+            <Gift size={16} color={isFree ? colors.green : colors.muted} />
+            <span style={{
+              fontSize: 14, fontFamily: fonts.body,
+              fontWeight: isFree ? 700 : 500,
+              color: isFree ? colors.green : colors.dark,
+            }}>
+              Gratis verschenken
+            </span>
+            {isFree && (
+              <span style={{
+                marginLeft: "auto", fontSize: 11, fontWeight: 700,
+                fontFamily: fonts.body, color: colors.green,
+                background: "rgba(91,140,90,.12)", padding: "2px 8px",
+                borderRadius: 4, textTransform: "uppercase",
+              }}>
+                Aktiv
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── FOTOS (Ricardo-style Slots) ─────────────────────── */}
-      <div style={sectionBase}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <label style={labelBase}>
-            <Camera size={14} style={{ marginRight: 6, verticalAlign: "text-bottom" }} />
-            Fotos
-          </label>
-          <span style={{ ...hintStyle, margin: 0 }}>{images.length}/10</span>
-        </div>
+      <div style={sectionBase} className="lf-section">
+        <SectionHead
+          icon={Camera}
+          title="Fotos"
+          hint="Erstes Bild ist das Cover. Bis zu 10 Bilder."
+          right={<span style={{ fontSize: 13, fontWeight: 700, color: colors.muted, fontFamily: fonts.body }}>{images.length}/10</span>}
+        />
 
         {/* Slot Grid */}
         <div style={{
@@ -783,7 +877,8 @@ export default function ListingForm({
       </div>
 
       {/* ── TITEL + BESCHREIBUNG ────────────────────────────── */}
-      <div style={sectionBase}>
+      <div style={sectionBase} className="lf-section">
+        <SectionHead icon={Type} title="Details" hint="Titel, Zustand, Beschreibung und Kategorie." />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 6 }}>
           <label style={{ ...labelBase, marginBottom: 0 }}>Titel *</label>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1052,11 +1147,8 @@ export default function ListingForm({
 
       {/* ── KATEGORIE-ATTRIBUTE (dynamisch) ───────────────────── */}
       {categoryAttrs.length > 0 && (
-        <div style={sectionBase}>
-          <label style={labelBase}>Eigenschaften</label>
-          <p style={{ ...hintStyle, marginBottom: 14 }}>
-            Zusätzliche Angaben helfen Käufern, dein Inserat schneller zu finden.
-          </p>
+        <div style={sectionBase} className="lf-section">
+          <SectionHead icon={SlidersHorizontal} title="Eigenschaften" hint="Zusätzliche Angaben helfen Käufern, dein Inserat schneller zu finden." />
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {categoryAttrs.map(attr => (
               <div key={attr.id}>
@@ -1098,78 +1190,13 @@ export default function ListingForm({
         </div>
       )}
 
-      {/* ── INSERAT-TYP TABS ────────────────────────────────── */}
-      <div style={sectionBase}>
-        <label style={labelBase}>Inserattyp</label>
-
-        {/* Tab bar */}
-        <div style={{
-          display: "flex", gap: 0,
-          background: colors.cream, borderRadius: radius.sm,
-          padding: 3, marginBottom: 16,
-        }}>
-          {TYPE_TABS.map((t) => {
-            const active = form.listing_type === t.value && !isFree;
-            const Icon = t.icon;
-            return (
-              <button
-                key={t.value}
-                onClick={() => { set("listing_type", t.value); setIsFree(false); }}
-                style={{
-                  flex: 1, padding: "10px 8px",
-                  borderRadius: radius.sm - 2, border: "none",
-                  background: active ? colors.surface : "transparent",
-                  boxShadow: active ? shadows.sm : "none",
-                  cursor: "pointer", transition: "all .15s",
-                  display: "flex", flexDirection: "column",
-                  alignItems: "center", gap: 3,
-                }}
-              >
-                <Icon size={16} color={active ? colors.dark : colors.muted} />
-                <span style={{
-                  fontSize: 12, fontWeight: active ? 700 : 500,
-                  fontFamily: fonts.body, color: active ? colors.dark : colors.muted,
-                }}>
-                  {t.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Gratis toggle (only for sell) */}
-        {form.listing_type === "sell" && (
-          <div
-            onClick={toggleFree}
-            style={{
-              display: "flex", alignItems: "center", gap: 10,
-              padding: "10px 14px", borderRadius: radius.sm,
-              border: `1.5px solid ${isFree ? colors.green : colors.border}`,
-              background: isFree ? colors.greenSoft : "transparent",
-              cursor: "pointer", marginBottom: 16,
-              transition: "all .15s",
-            }}
-          >
-            <Gift size={16} color={isFree ? colors.green : colors.muted} />
-            <span style={{
-              fontSize: 14, fontFamily: fonts.body,
-              fontWeight: isFree ? 700 : 500,
-              color: isFree ? colors.green : colors.dark,
-            }}>
-              Gratis verschenken
-            </span>
-            {isFree && (
-              <span style={{
-                marginLeft: "auto", fontSize: 11, fontWeight: 700,
-                fontFamily: fonts.body, color: colors.green,
-                background: "rgba(91,140,90,.12)", padding: "2px 8px",
-                borderRadius: 4, textTransform: "uppercase",
-              }}>
-                Aktiv
-              </span>
-            )}
-          </div>
-        )}
+      {/* ── PREIS & KONDITIONEN ─────────────────────────────── */}
+      <div style={sectionBase} className="lf-section">
+        <SectionHead
+          icon={Tag}
+          title="Preis & Konditionen"
+          hint={TYPE_TABS.find((t) => t.value === form.listing_type)?.label || "Festpreis"}
+        />
 
         {/* ── FESTPREIS FELDER ──────────────────────── */}
         {form.listing_type === "sell" && !isFree && (
@@ -1322,9 +1349,8 @@ export default function ListingForm({
         )}
       </div>
       {form.listing_type === "service" ? (
-        <div style={sectionBase}>
-          <label style={labelBase}>Zahlung</label>
-          <p style={{ ...hintStyle, marginTop: 0 }}>Wie möchtest du bezahlt werden?</p>
+        <div style={sectionBase} className="lf-section">
+          <SectionHead icon={Tag} title="Zahlung" hint="Wie möchtest du bezahlt werden?" />
 
           {/* TWINT Toggle */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
@@ -1364,9 +1390,8 @@ export default function ListingForm({
           <Err field="payment" />
         </div>
       ) : (
-      <div style={sectionBase}>
-        <label style={labelBase}>Lieferung</label>
-        <p style={{ ...hintStyle, marginTop: 0 }}>Die Kosten werden vom Käufer getragen</p>
+      <div style={sectionBase} className="lf-section">
+        <SectionHead icon={Truck} title="Lieferung" hint="Versand- und Abholoptionen. Kosten trägt der Käufer." />
 
         {/* ─ Versand Toggle ─ */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
@@ -1649,7 +1674,7 @@ export default function ListingForm({
 
       {/* ── BEE-RATE (Ricardo-Style elegant) ─────────────────── */}
       {!isFree && effectiveType !== "free" && (
-        <div style={sectionBase}>
+        <div style={sectionBase} className="lf-section">
           <label style={{ ...labelBase, fontFamily: fonts.head, fontSize: 20, letterSpacing: ".04em" }}>DEIN BEE-IMPACT</label>
           <p style={{ margin: "0 0 6px", fontSize: 14, color: colors.dark, fontFamily: fonts.body, lineHeight: 1.5 }}>
             Jeder Verkauf schützt Bienen und Natur in der Schweiz. Je grösser, desto mehr bewirkst du.
@@ -1835,63 +1860,89 @@ export default function ListingForm({
         </div>
       )}
 
-      {/* ── BUTTONS ─────────────────────────────────────────── */}
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
-        <button
-          onClick={() => setShowPreview(!showPreview)}
-          style={{
-            padding: "14px 18px", borderRadius: radius.sm,
-            border: `1.5px solid ${colors.border}`, background: colors.surface,
-            color: colors.muted, fontSize: 14, fontFamily: fonts.body,
-            cursor: "pointer", transition: "all .15s",
-          }}
-        >
-          {showPreview ? <><X size={15} style={{ marginRight: 4, verticalAlign: "text-bottom" }} /> Vorschau</> : <><Eye size={15} style={{ marginRight: 4, verticalAlign: "text-bottom" }} /> Vorschau</>}
-        </button>
+      {/* ── LAUFZEIT-HINWEIS ────────────────────────────────── */}
+      {!isFree && effectiveType !== "free" && (
+        <div className="lf-section" style={{
+          display: "flex", alignItems: "center", gap: 12,
+          padding: "14px 18px", marginBottom: 18, borderRadius: radius.lg,
+          background: colors.cream, border: `1px solid ${colors.borderLt}`,
+        }}>
+          <Clock size={18} color={colors.teal} style={{ flexShrink: 0 }} />
+          <div style={{ fontSize: 13, color: colors.muted, fontFamily: fonts.body, lineHeight: 1.45 }}>
+            {effectiveType === "auction" ? (
+              <>Diese Auktion läuft <b style={{ color: colors.dark }}>{form.auction_duration} Tage</b> und endet danach automatisch.</>
+            ) : (
+              <>Dein Inserat läuft <b style={{ color: colors.dark }}>60 Tage</b>. Danach verlängerst du es in <b style={{ color: colors.dark }}>Meine Inserate</b> mit einem Klick.</>
+            )}
+          </div>
+        </div>
+      )}
 
-        <button
-          onClick={() => handleSubmit(false)}
-          disabled={saving}
-          style={{
-            flex: 1, minWidth: 130, padding: "14px 18px",
-            borderRadius: radius.sm,
-            border: `1.5px solid ${colors.border}`, background: colors.surface,
-            color: colors.dark, fontSize: 14, fontWeight: 700,
-            fontFamily: fonts.body, cursor: saving ? "not-allowed" : "pointer",
-            opacity: saving ? 0.6 : 1, transition: "all .15s",
-          }}
-        >
-          {saving ? "Speichern…" : "Als Entwurf"}
-        </button>
-
-        <button
-          onClick={() => handleSubmit(true)}
-          disabled={saving}
-          style={{
-            flex: 1, minWidth: 130, padding: "14px 18px",
-            borderRadius: radius.sm, border: "none",
-            background: colors.teal, color: "#fff",
-            fontSize: 14, fontWeight: 700, fontFamily: fonts.body,
-            cursor: saving ? "not-allowed" : "pointer",
-            opacity: saving ? 0.6 : 1, transition: "all .15s",
-          }}
-        >
-          {saving ? "Veröffentlichen…" : "Veröffentlichen"}
-        </button>
-
-        {onCancel && (
+      {/* ── STICKY ACTION-BAR ───────────────────────────────── */}
+      <div className="lf-actionbar" style={{
+        position: "sticky", bottom: 0, zIndex: 30,
+        margin: "8px -16px 0", padding: "14px 16px",
+        background: "rgba(249,244,236,.92)", borderTop: `1px solid ${colors.border}`,
+      }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
-            onClick={onCancel}
+            onClick={() => setShowPreview(!showPreview)}
+            title="Vorschau"
             style={{
-              padding: "14px 18px", borderRadius: radius.sm,
-              border: "none", background: "transparent",
+              padding: "13px 16px", borderRadius: radius.md,
+              border: `1.5px solid ${colors.border}`, background: colors.surface,
               color: colors.muted, fontSize: 14, fontFamily: fonts.body,
-              cursor: "pointer",
+              cursor: "pointer", transition: "all .15s", display: "flex", alignItems: "center", gap: 6,
             }}
           >
-            Abbrechen
+            {showPreview ? <X size={16} /> : <Eye size={16} />} Vorschau
           </button>
-        )}
+
+          <button
+            onClick={() => handleSubmit(false)}
+            disabled={saving}
+            style={{
+              padding: "13px 18px", borderRadius: radius.md,
+              border: `1.5px solid ${colors.border}`, background: colors.surface,
+              color: colors.dark, fontSize: 14, fontWeight: 700,
+              fontFamily: fonts.body, cursor: saving ? "not-allowed" : "pointer",
+              opacity: saving ? 0.6 : 1, transition: "all .15s",
+            }}
+          >
+            {saving ? "Speichern…" : "Entwurf"}
+          </button>
+
+          <button
+            onClick={() => handleSubmit(true)}
+            disabled={saving}
+            style={{
+              flex: 1, minWidth: 150, padding: "13px 18px",
+              borderRadius: radius.md, border: "none",
+              background: colors.teal, color: "#fff",
+              fontSize: 14.5, fontWeight: 800, fontFamily: fonts.body,
+              cursor: saving ? "not-allowed" : "pointer",
+              opacity: saving ? 0.6 : 1, transition: "all .15s",
+              boxShadow: saving ? "none" : `0 4px 14px ${colors.teal}33`,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
+            }}
+          >
+            <Rocket size={16} /> {saving ? "Veröffentlichen…" : "Veröffentlichen"}
+          </button>
+
+          {onCancel && (
+            <button
+              onClick={onCancel}
+              style={{
+                padding: "13px 14px", borderRadius: radius.md,
+                border: "none", background: "transparent",
+                color: colors.muted, fontSize: 14, fontFamily: fonts.body,
+                cursor: "pointer",
+              }}
+            >
+              Abbrechen
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

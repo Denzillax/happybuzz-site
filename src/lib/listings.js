@@ -198,6 +198,18 @@ export async function updateListingStatus(listingId, status) {
   if (error) throw error;
 }
 
+// ─── Laufzeit verlängern ─────────────────────────────────────
+// Setzt expires_at auf 60 Tage ab jetzt und reaktiviert abgelaufene Inserate.
+export async function renewListing(listingId) {
+  const expires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString();
+  const { error } = await supabase
+    .from("listings")
+    .update({ expires_at: expires, status: "active" })
+    .eq("id", listingId);
+  if (error) throw error;
+  return expires;
+}
+
 // ─── Soft Delete ─────────────────────────────────────────────
 // Setzt status auf 'deleted' statt echtem Löschen — Daten bleiben erhalten
 export async function deleteListing(listingId) {
