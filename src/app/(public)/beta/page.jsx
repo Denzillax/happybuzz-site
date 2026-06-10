@@ -167,6 +167,7 @@ const TESTS = [
       { id: "ch_public", label: "Öffentliche Q&A: Frage & Antwort des Verkäufers" },
       { id: "ch_private", label: "Private Nachrichten senden/empfangen" },
       { id: "ch_thread", label: "Einzel-Chat /chat/[id]: Verlauf korrekt" },
+      { id: "ch_quick", label: "Schnell-Antworten: vordefinierte Chips senden, eigene anlegen/löschen" },
     ],
   },
   {

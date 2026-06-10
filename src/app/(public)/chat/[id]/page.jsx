@@ -3,9 +3,18 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Send, ArrowLeft, User, Package, Loader2 } from "lucide-react";
+import { Send, ArrowLeft, User, Package, Loader2, Plus, X } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getMessages, sendMessage, markMessagesRead } from "@/lib/listings";
+
+const QUICK_REPLIES = [
+  "Ist noch verfügbar",
+  "Preis ist verhandelbar",
+  "Kann morgen abgeholt werden",
+  "Reserviert für dich bis morgen",
+  "Leider schon verkauft",
+];
+const QR_KEY = "beedaro_quick_replies";
 
 export default function ChatConversation() {
   const params = useParams();
@@ -15,7 +24,16 @@ export default function ChatConversation() {
   const [conv, setConv] = useState(null);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [customReplies, setCustomReplies] = useState([]);
   const bottomRef = useRef(null);
+
+  useEffect(() => {
+    try { const a = JSON.parse(localStorage.getItem(QR_KEY) || "[]"); if (Array.isArray(a)) setCustomReplies(a); } catch {}
+  }, []);
+
+  const saveCustom = (arr) => { setCustomReplies(arr); try { localStorage.setItem(QR_KEY, JSON.stringify(arr)); } catch {} };
+  const addCustom = () => { const t = (window.prompt("Eigene Schnell-Antwort:") || "").trim(); if (t) saveCustom([...customReplies, t].slice(0, 10)); };
+  const removeCustom = (t) => saveCustom(customReplies.filter((x) => x !== t));
 
   useEffect(() => {
     async function load() {
@@ -63,15 +81,17 @@ export default function ChatConversation() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!newMsg.trim() || sending) return;
+  const sendText = async (text) => {
+    const t = (text ?? newMsg).trim();
+    if (!t || sending) return;
     setSending(true);
     try {
-      await sendMessage(params.id, user.id, newMsg.trim());
-      setNewMsg("");
+      await sendMessage(params.id, user.id, t);
+      if (text === undefined) setNewMsg("");
     } catch (err) { console.error(err); }
     finally { setSending(false); }
   };
+  const handleSend = () => sendText();
 
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
@@ -126,6 +146,25 @@ export default function ChatConversation() {
 
       {/* Input */}
       <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "12px 20px", position: "sticky", bottom: 0 }}>
+        {/* Schnell-Antworten */}
+        <div style={{ maxWidth: 800, margin: "0 auto 10px", display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
+          {QUICK_REPLIES.map((q) => (
+            <button key={q} onClick={() => sendText(q)} disabled={sending}
+              style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: `1.5px solid ${colors.border}`, background: colors.cream, color: colors.dark, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
+              {q}
+            </button>
+          ))}
+          {customReplies.map((q) => (
+            <span key={q} style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 4, padding: "6px 8px 6px 12px", borderRadius: 16, border: `1.5px solid ${colors.teal}`, background: "#E6F5F5", color: colors.tealDark, fontSize: 12, fontFamily: fonts.body, whiteSpace: "nowrap" }}>
+              <button onClick={() => sendText(q)} disabled={sending} style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", fontSize: 12, fontFamily: fonts.body, padding: 0 }}>{q}</button>
+              <X size={12} style={{ cursor: "pointer", opacity: 0.6 }} onClick={() => removeCustom(q)} />
+            </span>
+          ))}
+          <button onClick={addCustom} title="Eigene Schnell-Antwort"
+            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, padding: "6px 10px", borderRadius: 16, border: `1.5px dashed ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
+            <Plus size={12} /> Eigene
+          </button>
+        </div>
         <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 10, alignItems: "center" }}>
           <input
             type="text" value={newMsg}
