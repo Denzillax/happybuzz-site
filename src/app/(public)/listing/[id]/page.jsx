@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer,
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
@@ -103,6 +103,7 @@ export default function ListingDetail() {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
 
@@ -1180,12 +1181,39 @@ export default function ListingDetail() {
                   </>
                 );
               })()}
+              <button onClick={() => setShowQr(true)} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.blue, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
+                <QrCode size={14} /> QR-CODE
+              </button>
               {user && !isOwner && (
                 <button onClick={() => setShowReportModal(true)} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.muted, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
                   <Flag size={14} /> MELDEN
                 </button>
               )}
             </div>
+
+            {/* QR-Code Modal */}
+            {showQr && (() => {
+              const url = typeof window !== "undefined" ? window.location.href : "";
+              const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(url)}`;
+              return (
+                <div onClick={() => setShowQr(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                  <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 14, padding: "24px 28px", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
+                    <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 800, color: colors.dark }}>QR-Code</h3>
+                    <p style={{ margin: "0 0 16px", fontSize: 12, color: colors.muted }}>Scannen führt direkt zu diesem Inserat.</p>
+                    <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 8 }} />
+                    <p style={{ margin: "12px 0 0", fontSize: 13, fontWeight: 700, color: colors.dark, wordBreak: "break-word" }}>{l?.title}</p>
+                    <div style={{ display: "flex", gap: 8, marginTop: 16 }} className="no-print">
+                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                        <Printer size={15} /> Drucken
+                      </button>
+                      <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                        Schliessen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Report Modal */}
             {showReportModal && (              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
