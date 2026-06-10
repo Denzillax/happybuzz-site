@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
-import { Zap, Trophy } from "lucide-react";
+import { Zap, Trophy, Droplets } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import BeeIcon from "@/components/shared/BeeIcon";
-import { calculateLevel, ACHIEVEMENTS } from "@/lib/gamification";
+import { calculateLevel, ACHIEVEMENTS, nektarReasonLabel } from "@/lib/gamification";
 
 const REASON_LABEL = {
   listing_created: "Inserat erstellt",
@@ -57,6 +57,15 @@ function showXpToast(row, uid) {
   })();
 }
 
+function showNektarToast(row) {
+  const positive = (row.amount || 0) >= 0;
+  toast(`${positive ? "+" : "−"}${Math.abs(row.amount)} Nektar`, {
+    description: positive ? nektarReasonLabel(row.reason) : "Belohnung eingelöst",
+    icon: <Droplets size={16} color="#C8860A" />,
+    duration: 2800,
+  });
+}
+
 // Sofort-Feedback für serverseitig (per DB-Trigger) vergebene XP/Achievements.
 // Pollt die eigenen neuen xp_log-Zeilen (zuverlässig, unabhängig von Realtime).
 export default function GamificationProvider() {
@@ -92,6 +101,47 @@ export default function GamificationProvider() {
         if (data && data.length) {
           lastSeen = data[data.length - 1].created_at;
           data.forEach((row) => showXpToast(row, uid));
+        }
+      } catch {}
+    }
+
+    const iv = setInterval(poll, 6000);
+    const onFocus = () => poll();
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      stopped = true;
+      clearInterval(iv);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, [uid]);
+
+  // Zweiter Poller: Nektar (nektar_log)
+  useEffect(() => {
+    if (!uid) return;
+    let lastSeen = null;
+    let stopped = false;
+
+    (async () => {
+      const { data } = await supabase.from("nektar_log").select("created_at").eq("user_id", uid)
+        .order("created_at", { ascending: false }).limit(1);
+      if (!stopped) lastSeen = data?.[0]?.created_at || new Date(0).toISOString();
+    })();
+
+    async function poll() {
+      if (stopped || document.hidden || lastSeen === null) return;
+      try {
+        const { data } = await supabase
+          .from("nektar_log")
+          .select("id, amount, reason, created_at")
+          .eq("user_id", uid)
+          .gt("created_at", lastSeen)
+          .order("created_at", { ascending: true })
+          .limit(10);
+        if (data && data.length) {
+          lastSeen = data[data.length - 1].created_at;
+          data.forEach((row) => showNektarToast(row));
         }
       } catch {}
     }

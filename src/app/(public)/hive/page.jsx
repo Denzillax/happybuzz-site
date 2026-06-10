@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2 } from "lucide-react";
+import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -10,6 +10,7 @@ import {
   BEE_LEVELS, ACHIEVEMENTS, calculateLevel, levelProgress, xpToNext,
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
   getCommunityStats, getXPHistory, touchStreak,
+  NEKTAR_CATALOG,
 } from "@/lib/gamification";
 
 const REASON_LABEL = {
@@ -62,7 +63,7 @@ export default function HivePage() {
       await touchStreak(user.id);
 
       const [{ data: p }, ach, chs, lb, comm, hist] = await Promise.all([
-        supabase.from("profiles").select("display_name, xp_total, bee_level, current_streak, longest_streak, bee_impact_total").eq("id", user.id).maybeSingle(),
+        supabase.from("profiles").select("display_name, xp_total, nektar, bee_level, current_streak, longest_streak, bee_impact_total").eq("id", user.id).maybeSingle(),
         getUserAchievements(user.id),
         getChallengesWithProgress(user.id),
         getWeeklyLeaderboard(10),
@@ -93,6 +94,7 @@ export default function HivePage() {
   const next = BEE_LEVELS[lvlIdx + 1] || null;
   const progress = Math.round(levelProgress(xp) * 100);
   const toNext = xpToNext(xp);
+  const nektar = profile?.nektar || 0;
   const unlockedKeys = new Set(achievements.map(a => a.achievement_key));
   const streak = profile?.current_streak || 0;
 
@@ -135,6 +137,46 @@ export default function HivePage() {
               <span style={{ color: level.color, fontWeight: 700 }}>Maximales Level erreicht. Legende.</span>
             )}
           </div>
+
+          {/* Nektar-Balance */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 10, marginTop: 16, padding: "12px 14px",
+            borderRadius: 12, background: "#E8A82014", border: `1px solid #E8A82033`,
+          }}>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#E8A82022", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Droplets size={18} color="#C8860A" />
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: 0, fontSize: 16, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>{nektar.toLocaleString("de-CH")} Nektar</p>
+              <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Einlösbare Belohnung. Verdient bei Meilensteinen.</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* ── NEKTAR-BELOHNUNGEN (Katalog) ── */}
+        <Card style={{ marginBottom: 16 }}>
+          <SectionTitle icon={Gift} right={<span style={{ fontSize: 12, fontWeight: 800, color: "#C8860A" }}>{nektar.toLocaleString("de-CH")} Nektar</span>}>Belohnungen einlösen</SectionTitle>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
+            {NEKTAR_CATALOG.map(r => {
+              const affordable = nektar >= r.cost;
+              return (
+                <div key={r.key} style={{
+                  padding: "12px 14px", borderRadius: 12, border: `1px solid ${affordable ? "#E8A82055" : colors.borderLt}`,
+                  background: affordable ? "#E8A82010" : colors.surface, display: "flex", flexDirection: "column", gap: 4,
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: colors.dark }}>{r.name}</span>
+                    <span style={{ fontSize: 12, fontWeight: 800, color: "#C8860A", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      <Droplets size={12} color="#C8860A" /> {r.cost}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 11.5, color: colors.muted, lineHeight: 1.4, flex: 1 }}>{r.desc}</span>
+                  <span style={{ alignSelf: "flex-start", marginTop: 2, fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.mutedLt }}>{r.group}</span>
+                </div>
+              );
+            })}
+          </div>
+          <p style={{ margin: "12px 0 0", fontSize: 12, color: colors.muted }}>Einlösen kommt bald. Du siehst hier, wofür sich dein Nektar lohnt.</p>
         </Card>
 
         {/* ── STREAK + COMMUNITY (zwei Spalten) ── */}

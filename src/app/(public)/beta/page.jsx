@@ -194,6 +194,9 @@ const TESTS = [
       { id: "hive_leaderboard", label: "Wochen-Leaderboard zeigt eigene Position" },
       { id: "hive_community", label: "Community-Hive: Impact, Mitglieder, Wochen-Pollen" },
       { id: "hive_xp_award", label: "Pollen steigt nach Aktion (Inserat erstellen / Verkauf abschliessen)" },
+      { id: "hive_nektar_balance", label: "Nektar-Balance wird im Hero angezeigt" },
+      { id: "hive_nektar_catalog", label: "Belohnungs-Katalog (Spotlight, Patenschaften, ...) sichtbar" },
+      { id: "hive_nektar_toast", label: "Nektar-Toast erscheint nach Meilenstein (z.B. 5-Sterne, Level-Up)" },
     ],
   },
   {
