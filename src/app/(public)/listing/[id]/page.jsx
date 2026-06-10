@@ -15,7 +15,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS } from "@/lib/constants";
 import {
   getListingPublic, toggleFavorite, isListingFavorited,
-  incrementViewCount, createPurchase, getUserAvgRating, getSimilarListings,
+  incrementViewCount, logListingView, createPurchase, getUserAvgRating, getSimilarListings,
   getOrCreateConversation, placeBid, getBids, getBidHistory, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
   getListingQuestions, askPublicQuestion, replyToQuestion, sendMessage,
   checkProfileComplete,
@@ -144,7 +144,12 @@ export default function ListingDetail() {
             if (data.listing_type === "auction") getMyBid(params.id, u.id).then(setMyBid).catch(() => {});
           }
           if (!u || u.id !== data.user_id) {
-            if (!viewCounted.current) { viewCounted.current = true; incrementViewCount(params.id).catch(() => {}); }
+            if (!viewCounted.current) {
+              viewCounted.current = true;
+              incrementViewCount(params.id).catch(() => {});
+              const src = (() => { try { const r = document.referrer; if (!r) return "direct"; const ru = new URL(r); if (ru.host !== location.host) return "extern"; if (ru.pathname.startsWith("/search")) return "search"; return "intern"; } catch { return "direct"; } })();
+              logListingView(params.id, src).catch(() => {});
+            }
           }
         } catch {}
       } catch (err) { console.error(err); }

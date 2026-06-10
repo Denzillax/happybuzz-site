@@ -733,6 +733,16 @@ export async function toggleFavoriteSeller(userId, sellerId) {
   return true;
 }
 
+// ─── Inserat-Aufruf protokollieren + Auswertung (Owner) ──────
+export async function logListingView(listingId, source = "direct") {
+  try { await supabase.from("listing_views").insert({ listing_id: listingId, source }); } catch {}
+}
+export async function getListingAnalytics(listingId) {
+  const { data, error } = await supabase.rpc("get_listing_analytics", { p_listing_id: listingId });
+  if (error) { console.error("get_listing_analytics:", error); return null; }
+  return data;
+}
+
 // ─── Aggregierte Verkäufer-Statistiken (RPC) ─────────────────
 export async function getSellerStats(userId) {
   if (!userId) return null;

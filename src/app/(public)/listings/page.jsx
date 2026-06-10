@@ -1,9 +1,9 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
-import { getUserListings, deleteListing } from "@/lib/listings";
+import { getUserListings, deleteListing, getListingAnalytics } from "@/lib/listings";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
@@ -30,6 +30,14 @@ export default function ListingsPage() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selected, setSelected] = useState(new Set());
   const [batchAction, setBatchAction] = useState(null);
+  const [statsFor, setStatsFor] = useState(null); // listing object
+  const [statsData, setStatsData] = useState(null);
+
+  const openStats = async (listing) => {
+    setStatsFor(listing); setStatsData(null);
+    const d = await getListingAnalytics(listing.id);
+    setStatsData(d || {});
+  };
 
   useEffect(() => {
     async function load() {
@@ -335,6 +343,15 @@ export default function ListingsPage() {
                             onMouseLeave={e => e.currentTarget.style.background = `${colors.teal}10`}>
                             <Copy size={14} />
                           </Link>
+                          {/* Statistik */}
+                          <button onClick={() => openStats(l)} title="Statistik" style={{
+                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            color: colors.muted, background: colors.cream, border: "none", cursor: "pointer", transition: "all .15s",
+                          }}
+                            onMouseEnter={e => e.currentTarget.style.background = colors.warm}
+                            onMouseLeave={e => e.currentTarget.style.background = colors.cream}>
+                            <BarChart3 size={14} />
+                          </button>
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {(l.status === "active" || l.status === "paused") && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
@@ -402,6 +419,80 @@ export default function ListingsPage() {
           </div>
         )}
       </div>
+
+      {/* ── STATISTIK-MODAL ── */}
+      {statsFor && (
+        <div onClick={() => setStatsFor(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", maxWidth: 460, width: "100%", fontFamily: fonts.body, maxHeight: "85vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
+              <div>
+                <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>Statistik</p>
+                <h3 style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 800, color: colors.dark }}>{statsFor.title}</h3>
+              </div>
+              <button onClick={() => setStatsFor(null)} style={{ background: "none", border: "none", cursor: "pointer", color: colors.muted, padding: 2 }}><X size={20} /></button>
+            </div>
+
+            {!statsData ? (
+              <p style={{ fontSize: 13, color: colors.muted, textAlign: "center", padding: 30 }}>Lade…</p>
+            ) : (
+              <>
+                <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
+                  {[
+                    { v: statsData.total_views ?? 0, l: "Aufrufe", icon: Eye },
+                    { v: statsData.favorites ?? 0, l: "Favoriten", icon: Heart },
+                    { v: statsData.chat_requests ?? 0, l: "Chat-Anfragen", icon: MessageCircle },
+                  ].map(t => (
+                    <div key={t.l} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, background: colors.cream, border: `1px solid ${colors.borderLt}`, textAlign: "center" }}>
+                      <t.icon size={15} color={colors.teal} style={{ marginBottom: 4 }} />
+                      <p style={{ margin: 0, fontSize: 20, fontWeight: 800, fontFamily: fonts.head, color: colors.dark }}>{t.v}</p>
+                      <p style={{ margin: "1px 0 0", fontSize: 10, color: colors.muted }}>{t.l}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 7-Tage Aufrufe */}
+                <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, color: colors.dark }}>Aufrufe (7 Tage)</p>
+                {(() => {
+                  const daily = statsData.daily || [];
+                  const max = Math.max(1, ...daily.map(d => d.count));
+                  return (
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 90, marginBottom: 6 }}>
+                      {daily.map((d, i) => (
+                        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                          <div style={{ fontSize: 9, color: colors.muted }}>{d.count}</div>
+                          <div style={{ width: "100%", height: `${Math.round((d.count / max) * 64)}px`, minHeight: 3, background: d.count > 0 ? colors.teal : colors.borderLt, borderRadius: 4 }} />
+                          <div style={{ fontSize: 9, color: colors.mutedLt }}>{d.day}</div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+                {daily0Note(statsData)}
+
+                {/* Quellen */}
+                {statsData.sources && Object.keys(statsData.sources).length > 0 && (
+                  <div style={{ marginTop: 14 }}>
+                    <p style={{ margin: "0 0 6px", fontSize: 12, fontWeight: 700, color: colors.dark }}>Woher kommen Aufrufe</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                      {Object.entries(statsData.sources).map(([s, c]) => (
+                        <span key={s} style={{ fontSize: 12, padding: "5px 10px", borderRadius: 16, background: colors.cream, border: `1px solid ${colors.borderLt}`, color: colors.dark }}>
+                          {({ search: "Suche", intern: "Intern", extern: "Extern", direct: "Direkt" })[s] || s}: <b>{c}</b>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function daily0Note(statsData) {
+  const total = (statsData.daily || []).reduce((s, d) => s + (d.count || 0), 0);
+  if (total > 0) return null;
+  return <p style={{ fontSize: 11, color: "#9A9490", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
 }
