@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2,
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
@@ -101,6 +101,8 @@ export default function ListingDetail() {
   const [msgSent, setMsgSent] = useState(false);
   const [profileWarning, setProfileWarning] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
 
@@ -1146,10 +1148,38 @@ export default function ListingDetail() {
             </div>
 
             {/* ── SHARE ──────────────────────────────── */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 20, padding: "8px 0" }}>
-              <button onClick={() => { navigator.clipboard.writeText(window.location.href); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.blue, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, padding: "8px 0", position: "relative" }}>
+              <button
+                onClick={async () => {
+                  const url = typeof window !== "undefined" ? window.location.href : "";
+                  if (navigator.share) {
+                    try { await navigator.share({ title: l?.title || "BEEDARO", url }); return; } catch {}
+                  }
+                  setShowShare(s => !s);
+                }}
+                style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.blue, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}
+              >
                 <Share2 size={14} /> TEILEN
               </button>
+              {showShare && (() => {
+                const url = typeof window !== "undefined" ? window.location.href : "";
+                const txt = `${l?.title || "Schau dir das an"} – ${url}`;
+                const item = (icon, label, onClick) => (
+                  <button onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 14px", background: "none", border: "none", cursor: "pointer", fontSize: 13, fontFamily: fonts.body, color: colors.dark, textAlign: "left" }}>
+                    {icon} {label}
+                  </button>
+                );
+                return (
+                  <>
+                    <div onClick={() => setShowShare(false)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
+                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
+                      {item(<MessageCircle size={16} color="#25D366" />, "WhatsApp", () => { window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank"); setShowShare(false); })}
+                      {item(<Mail size={16} color={colors.muted} />, "E-Mail", () => { window.location.href = `mailto:?subject=${encodeURIComponent(l?.title || "BEEDARO")}&body=${encodeURIComponent(txt)}`; setShowShare(false); })}
+                      {item(<Link2 size={16} color={colors.muted} />, shareCopied ? "Link kopiert!" : "Link kopieren", () => { navigator.clipboard.writeText(url); setShareCopied(true); setTimeout(() => setShareCopied(false), 1500); })}
+                    </div>
+                  </>
+                );
+              })()}
               {user && !isOwner && (
                 <button onClick={() => setShowReportModal(true)} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", cursor: "pointer", color: colors.muted, fontSize: 12, fontWeight: 700, letterSpacing: ".03em" }}>
                   <Flag size={14} /> MELDEN

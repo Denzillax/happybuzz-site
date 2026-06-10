@@ -91,7 +91,7 @@ const TESTS = [
       { id: "lv_hover_zoom", label: "Hover-Zoom auf Hauptbild" },
       { id: "lv_thumbnails", label: "Thumbnails anklickbar" },
       { id: "lv_favorite", label: "Herz-Button → Favorit speichern/entfernen" },
-      { id: "lv_share", label: "Teilen-Button → Link kopiert" },
+      { id: "lv_share", label: "Teilen: WhatsApp / E-Mail / Link kopieren (bzw. native Share auf Mobile)" },
       { id: "lv_report", label: "Melden → Report-Modal & Absenden" },
       { id: "lv_chat_public", label: "Öffentliche Frage stellen (Q&A unter Inserat)" },
       { id: "lv_chat_private", label: "Private Nachricht an Verkäufer" },
