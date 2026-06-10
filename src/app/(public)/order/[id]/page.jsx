@@ -139,6 +139,7 @@ export default function OrderDetailPage() {
   const [showFullTimeline, setShowFullTimeline] = useState(false);
   const [booking, setBooking] = useState(null);
   const [damageFiles, setDamageFiles] = useState([]);
+  const [salePopup, setSalePopup] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -177,6 +178,28 @@ export default function OrderDetailPage() {
     }
     load();
   }, [params.id]);
+
+  // Verkaufs-Popup für den Verkäufer, einmalig pro Bestellung.
+  useEffect(() => {
+    if (!purchase || !user) return;
+    const finished = purchase.status === "completed" || purchase.status === "delivered";
+    if (!finished || purchase.seller_id !== user.id) return;
+    const key = `beedaro_sale_popup_${purchase.id}`;
+    try { if (localStorage.getItem(key)) return; } catch {}
+    (async () => {
+      try {
+        const [{ data: xp }, { data: nk }, { data: prof }] = await Promise.all([
+          supabase.from("xp_log").select("amount").eq("user_id", user.id).eq("reference_id", purchase.id),
+          supabase.from("nektar_log").select("amount").eq("user_id", user.id).eq("reference_id", purchase.id),
+          supabase.from("profiles").select("nektar").eq("id", user.id).maybeSingle(),
+        ]);
+        const pollen = (xp || []).reduce((s, r) => s + (r.amount || 0), 0);
+        const nektar = (nk || []).reduce((s, r) => s + (r.amount || 0), 0);
+        setSalePopup({ pollen, nektar, balance: prof?.nektar || 0 });
+        try { localStorage.setItem(key, "1"); } catch {}
+      } catch {}
+    })();
+  }, [purchase, user]);
 
   const reload = async () => {
     if (!purchase) return;
@@ -256,6 +279,28 @@ export default function OrderDetailPage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+
+      {/* Verkaufs-Popup (Verkäufer, einmalig) */}
+      {salePopup && (
+        <div onClick={() => setSalePopup(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 18, padding: "28px 26px", maxWidth: 360, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#E6F5F5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+              <Star size={28} color={colors.teal} fill={colors.teal} />
+            </div>
+            <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "0 0 14px", flexWrap: "wrap" }}>
+              {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#5B8C5A", background: "#5B8C5A14", padding: "6px 12px", borderRadius: 16 }}>+{salePopup.pollen} Pollen</span>}
+              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#C8860A", background: "#E8A82014", padding: "6px 12px", borderRadius: 16 }}>+{salePopup.nektar} Nektar</span>}
+            </div>
+            <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#C8860A" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
+            <div style={{ display: "flex", gap: 10 }}>
+              <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 10, background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
+              <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 20px 80px" }}>
 
         <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: colors.muted, fontFamily: fonts.body, marginBottom: 20, padding: 0 }}>

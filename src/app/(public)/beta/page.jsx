@@ -128,6 +128,7 @@ const TESTS = [
       { id: "bf_confirm_receipt", label: "Empfang bestätigen funktioniert" },
       { id: "bf_rating", label: "Bewertung nach Empfang abgeben" },
       { id: "bf_rating_tags", label: "Bewertungs-Tags wählbar; auf Profil aggregiert (z.B. '3× Schneller Versand')" },
+      { id: "bf_sale_popup", label: "Verkauf abgeschlossen → Popup mit Pollen/Nektar + 'Belohnungen einlösen' (einmalig)" },
       { id: "bf_return", label: "Rückgabe / Schaden melden" },
       { id: "bf_service_invoice", label: "Service-Rechnung mit Positionen (falls Service)" },
     ],
