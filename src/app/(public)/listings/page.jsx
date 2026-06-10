@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { getUserListings, deleteListing } from "@/lib/listings";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
@@ -325,6 +325,15 @@ export default function ListingsPage() {
                             onMouseEnter={e => e.currentTarget.style.background = `${colors.blue}20`}
                             onMouseLeave={e => e.currentTarget.style.background = `${colors.blue}10`}>
                             <Pencil size={14} />
+                          </Link>
+                          {/* Ähnliches Inserat erstellen (Duplikat als Vorlage) */}
+                          <Link href={`/listings/new?duplicate=${l.id}`} title="Ähnliches Inserat erstellen" style={{
+                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            color: colors.teal, background: `${colors.teal}10`, border: "none", textDecoration: "none", transition: "all .15s",
+                          }}
+                            onMouseEnter={e => e.currentTarget.style.background = `${colors.teal}20`}
+                            onMouseLeave={e => e.currentTarget.style.background = `${colors.teal}10`}>
+                            <Copy size={14} />
                           </Link>
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {(l.status === "active" || l.status === "paused") && (

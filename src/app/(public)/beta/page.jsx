@@ -80,6 +80,7 @@ const TESTS = [
       { id: "lc_type_first", label: "Inserattyp steht zuoberst, Preis-Felder passen sich an" },
       { id: "lc_expiry", label: "Laufzeit-Hinweis: 60 Tage (Auktion = Auktionsdauer)" },
       { id: "lc_sticky_bar", label: "Aktions-Bar bleibt beim Scrollen unten sichtbar" },
+      { id: "lc_duplicate", label: "Ähnliches erstellen / Letztes als Vorlage: Felder übernommen (ausser Titel + Fotos)" },
     ],
   },
   {
