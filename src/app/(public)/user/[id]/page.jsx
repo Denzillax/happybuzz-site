@@ -10,7 +10,7 @@ import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { AccountBadge } from "@/components/shared/AccountBadge";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited, getUserNote, saveUserNote } from "@/lib/listings";
+import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited, getUserNote, saveUserNote, getSellerStats } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
 
 export default function PublicProfilePage() {
@@ -26,6 +26,7 @@ export default function PublicProfilePage() {
   const [note, setNote] = useState("");
   const [noteSaving, setNoteSaving] = useState(false);
   const [noteSaved, setNoteSaved] = useState(false);
+  const [sellerStats, setSellerStats] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -40,6 +41,7 @@ export default function PublicProfilePage() {
         setListings(items);
         setRatings(rats);
         setAvgRating(avg);
+        getSellerStats(params.id).then(setSellerStats).catch(() => {});
 
         try {
           const { data } = await supabase.auth.getUser();
@@ -174,6 +176,26 @@ export default function PublicProfilePage() {
               </button>
             )}
           </div>
+
+          {/* Verkäufer-Statistiken (server-berechnet) */}
+          {sellerStats && (sellerStats.completed_sales > 0 || sellerStats.sales_rate != null || sellerStats.avg_response_minutes != null) && (() => {
+            const fmtResp = (m) => m == null ? "–" : m < 60 ? `${m} Min` : m < 1440 ? `${Math.round(m / 60)} Std` : `${Math.round(m / 1440)} Tg`;
+            const tiles = [
+              { v: sellerStats.completed_sales, l: "Verkäufe" },
+              { v: sellerStats.sales_rate != null ? `${sellerStats.sales_rate}%` : "–", l: "Verkaufsrate" },
+              { v: sellerStats.avg_response_minutes != null ? fmtResp(sellerStats.avg_response_minutes) : "–", l: "Ø Antwortzeit" },
+            ];
+            return (
+              <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
+                {tiles.map((t) => (
+                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: radius.md, background: colors.cream, border: `1px solid ${colors.borderLt}`, textAlign: "center" }}>
+                    <p style={{ margin: 0, fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: colors.dark }}>{t.v}</p>
+                    <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{t.l}</p>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
 
           {/* Private Notiz (nur für eingeloggte Nutzer, nicht beim eigenen Profil) */}
           {currentUser && currentUser.id !== params.id && (

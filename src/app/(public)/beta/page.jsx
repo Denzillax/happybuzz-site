@@ -215,6 +215,7 @@ const TESTS = [
       { id: "pf_business", label: "Unternehmen-Badge + Firmenname (falls gewerblich)" },
       { id: "pf_fav_seller", label: "Verkäufer als Favorit speichern" },
       { id: "pf_note", label: "Private Notiz zum Verkäufer speichern (nur für dich, bleibt nach Reload)" },
+      { id: "pf_stats", label: "Verkäufer-Statistiken: Verkäufe, Verkaufsrate, Ø Antwortzeit" },
     ],
   },
   {

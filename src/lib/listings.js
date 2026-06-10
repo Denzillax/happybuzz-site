@@ -724,6 +724,14 @@ export async function toggleFavoriteSeller(userId, sellerId) {
   return true;
 }
 
+// ─── Aggregierte Verkäufer-Statistiken (RPC) ─────────────────
+export async function getSellerStats(userId) {
+  if (!userId) return null;
+  const { data, error } = await supabase.rpc("get_seller_stats", { p_uid: userId });
+  if (error) { console.error("get_seller_stats:", error); return null; }
+  return data;
+}
+
 // ─── Private Verkäufer-Notizen ───────────────────────────────
 export async function getUserNote(noterId, notedId) {
   if (!noterId || !notedId) return "";
