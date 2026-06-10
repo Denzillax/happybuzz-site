@@ -14,12 +14,12 @@ export default function HomePage() {
     <>
       <Hero />
       <CommunityImpact />
+      <FeaturedSellers />
       <Categories />
       <SeasonalRecommendations />
       <RecentlyViewed />
       <NewListings />
       <PopularListings />
-      <FeaturedSellers />
       <HowItWorks />
       <WhyBeedaro />
     </>
