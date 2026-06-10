@@ -64,15 +64,22 @@ export default function InvoicePage() {
   // For regular invoice: payer = buyer, payee = seller
   const payee = isDeposit ? order.buyer : order.seller;
   const payer = isDeposit ? order.seller : order.buyer;
+  const payeeIsBusiness = payee?.account_type === "business" && !!payee?.company_name;
+  const payeeName = payeeIsBusiness ? payee.company_name : fullName(payee);
   const payeeIban = (payee?.iban || "").replace(/\s/g, "");
   const payeeStreet = payee?.street || "";
   const payeePlz = `${payee?.postal_code || ""} ${payee?.city || ""}`.trim();
   const payerStreet = payer?.street || "";
   const payerPlz = `${payer?.postal_code || ""} ${payer?.city || ""}`.trim();
   const qrMessage = isDeposit ? `Kaution ${ref}` : `Rechnung ${ref}`;
-  const qrPayload = buildSwissQR({ iban: payeeIban, name: fullName(payee), street: payeeStreet, plzCity: payeePlz, amount: total.toFixed(2), currency: "CHF", dName: fullName(payer), dStreet: payerStreet, dPlzCity: payerPlz, message: qrMessage });
+  const qrPayload = buildSwissQR({ iban: payeeIban, name: payeeName, street: payeeStreet, plzCity: payeePlz, amount: total.toFixed(2), currency: "CHF", dName: fullName(payer), dStreet: payerStreet, dPlzCity: payerPlz, message: qrMessage });
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=${encodeURIComponent(qrPayload)}`;
-  const addr = (p) => [fullName(p), p?.street, `${p?.postal_code || ""} ${p?.city || ""}`.trim()].filter(Boolean);
+  const addr = (p) => {
+    const isBiz = p?.account_type === "business" && p?.company_name;
+    const lines = [isBiz ? p.company_name : fullName(p), p?.street, `${p?.postal_code || ""} ${p?.city || ""}`.trim()].filter(Boolean);
+    if (isBiz && p?.company_uid) lines.push(`UID: ${p.company_uid}`);
+    return lines;
+  };
   const lbl = { margin: "0 0 4px", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase", letterSpacing: ".1em", fontFamily: f };
   const cp = { padding: "9px 0", fontFamily: f };
 
@@ -187,8 +194,9 @@ export default function InvoicePage() {
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
-              { l: isDeposit ? "Begünstigter" : "Konto / Zahlbar an", v: [fullName(payee), payeeStreet, payeePlz].filter(Boolean).join("\n") },
+              { l: isDeposit ? "Begünstigter" : "Konto / Zahlbar an", v: [payeeName, payeeStreet, payeePlz].filter(Boolean).join("\n") },
               { l: "IBAN", v: payee?.iban || "—" },
+              ...(payeeIsBusiness && payee?.company_uid ? [{ l: "UID", v: payee.company_uid }] : []),
               { l: isDeposit ? "Rückerstattungsbetrag" : "Betrag", v: `CHF ${fmt(total)}` },
               { l: "Zahlungszweck", v: isDeposit ? `Kaution ${ref}` : ref },
             ].map((r, i) => (

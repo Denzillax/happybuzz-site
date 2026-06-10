@@ -339,6 +339,9 @@ export default function SettingsPage() {
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
     display_name: "",
+    account_type: "private",
+    company_name: "",
+    company_uid: "",
     bio: "",
     phone: "",
     first_name: "",
@@ -414,6 +417,9 @@ export default function SettingsPage() {
       setForm(prev => ({
         ...prev,
         display_name: data.display_name ?? "",
+        account_type: data.account_type ?? "private",
+        company_name: data.company_name ?? "",
+        company_uid: data.company_uid ?? "",
         bio: data.bio ?? "",
         phone: data.phone ?? "",
         first_name: data.first_name ?? "",
@@ -606,6 +612,55 @@ export default function SettingsPage() {
             onChange={v => updateForm("display_name", v)}
             maxLength={30}
           />
+
+          {/* Kontotyp: Privat / Unternehmen */}
+          <div style={{ marginBottom: 18 }}>
+            <label style={{
+              display: "block", fontSize: 12, fontWeight: 700, color: C.muted,
+              marginBottom: 6, textTransform: "uppercase", letterSpacing: ".5px",
+            }}>Kontotyp</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[{ v: "private", l: "Privat" }, { v: "business", l: "Unternehmen" }].map(o => {
+                const active = form.account_type === o.v;
+                return (
+                  <button
+                    key={o.v}
+                    type="button"
+                    onClick={() => updateForm("account_type", o.v)}
+                    style={{
+                      flex: 1, padding: "10px 12px", borderRadius: 8, cursor: "pointer",
+                      border: `1.5px solid ${active ? C.teal : C.border}`,
+                      background: active ? C.greenSoft : "#fff",
+                      color: active ? C.tealDark : C.muted,
+                      fontWeight: 700, fontSize: 14, fontFamily: "'Manrope', sans-serif",
+                    }}
+                  >
+                    {o.l}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {form.account_type === "business" && (
+            <>
+              <Input
+                label="Firmenname"
+                value={form.company_name}
+                onChange={v => updateForm("company_name", v)}
+                maxLength={80}
+                placeholder="Muster GmbH"
+              />
+              <Input
+                label="UID (optional)"
+                value={form.company_uid}
+                onChange={v => updateForm("company_uid", v)}
+                maxLength={20}
+                placeholder="CHE-123.456.789"
+              />
+            </>
+          )}
+
           <div style={{ marginBottom: 18 }}>
             <label style={{
               display: "block", fontSize: 12, fontWeight: 700, color: C.muted,
@@ -635,10 +690,19 @@ export default function SettingsPage() {
 
         <Btn
           loading={saving}
-          onClick={() => saveProfile({
-            display_name: form.display_name,
-            bio: form.bio,
-          })}
+          onClick={() => {
+            if (form.account_type === "business" && !form.company_name.trim()) {
+              showToast("Firmenname ist für Unternehmen erforderlich");
+              return;
+            }
+            saveProfile({
+              display_name: form.display_name,
+              bio: form.bio,
+              account_type: form.account_type,
+              company_name: form.account_type === "business" ? (form.company_name.trim() || null) : null,
+              company_uid: form.account_type === "business" ? (form.company_uid.trim() || null) : null,
+            });
+          }}
           style={{ width: "100%" }}
         >
           Änderungen speichern

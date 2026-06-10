@@ -6,6 +6,7 @@ import { colors, fonts, radius, shadows } from "@/lib/theme";
 import { getCoverUrl } from "@/lib/formatters";
 import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
+import { AccountBadge } from "./AccountBadge";
 import { useFavorite } from "@/hooks/useFavorite";
 
 function AuctionCountdown({ endDate }) {
@@ -207,7 +208,12 @@ export function ListingCard({ listing, userId }) {
           {/* Seller */}
           {listing.seller && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 5 }}>
-              <span style={{ fontSize: 11, color: colors.muted }}>{listing.seller.display_name}</span>
+              <span style={{ fontSize: 11, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {listing.seller.account_type === "business" && listing.seller.company_name
+                  ? listing.seller.company_name
+                  : listing.seller.display_name}
+              </span>
+              <AccountBadge accountType={listing.seller.account_type} />
               {listing.seller.avg_rating > 0 && (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: "auto", fontSize: 11, color: colors.muted }}>
                   <Star size={10} fill={colors.yellow} color={colors.yellow} />

@@ -80,12 +80,12 @@ function PasswordStrength({ password }) {
 
 function SocialBtn({ icon, label, onClick }) {
   const [h, setH] = useState(false);
-  return <button onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:12, border:`1.5px solid ${C.border}`, background:h?"#F5F0E8":C.surface, cursor:"pointer", fontSize:14, fontWeight:600, color:C.dark, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all .2s" }}>{icon}{label}</button>;
+  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:12, border:`1.5px solid ${C.border}`, background:h?"#F5F0E8":C.surface, cursor:"pointer", fontSize:14, fontWeight:600, color:C.dark, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all .2s" }}>{icon}{label}</button>;
 }
 
-function Btn({ children, onClick, loading, secondary }) {
+function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
-    <button onClick={onClick} disabled={loading} style={{
+    <button type={type} onClick={onClick} disabled={loading} style={{
       width:"100%", padding:"13px", border:secondary?`1.5px solid ${C.border}`:"none", borderRadius:12,
       background:secondary?"transparent":C.yellow, color:C.dark, fontSize:15, fontWeight:700,
       fontFamily:"'Plus Jakarta Sans',sans-serif", cursor:loading?"default":"pointer",
@@ -233,8 +233,8 @@ export default function AuthPage() {
   const views = {
     login: () => <>
       <div style={{ display:"flex", borderBottom:`1px solid ${C.border}`, marginBottom:22 }}>
-        <button onClick={()=>switchView("login")} className="tab active">Anmelden</button>
-        <button onClick={()=>switchView("register")} className="tab">Registrieren</button>
+        <button type="button" onClick={()=>switchView("login")} className="tab active">Anmelden</button>
+        <button type="button" onClick={()=>switchView("register")} className="tab">Registrieren</button>
       </div>
       <div style={{ display:"flex", gap:10 }}>
         <SocialBtn icon={<GoogleIcon/>} label="Google" onClick={()=>handleOAuth("google")}/>
@@ -247,7 +247,7 @@ export default function AuthPage() {
       <div style={{ display:"flex", justifyContent:"flex-end", marginTop:-8, marginBottom:18 }}>
         <a onClick={()=>switchView("forgot")} className="link">Passwort vergessen?</a>
       </div>
-      <Btn onClick={handleLogin} loading={loading}>Anmelden</Btn>
+      <Btn onClick={handleLogin} loading={loading} type="submit">Anmelden</Btn>
       <p style={{ textAlign:"center", fontSize:13, color:C.muted, marginTop:18, fontWeight:500 }}>Noch kein Konto? <a onClick={()=>switchView("register")} className="link">Jetzt registrieren</a></p>
     </>,
 

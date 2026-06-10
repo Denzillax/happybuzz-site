@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase/supabase'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
-import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify } from 'lucide-react'
+import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
 import NotificationBell from '@/components/shared/NotificationBell'
 import { MegaMenu } from '@/components/shared/MegaMenu'
 
@@ -118,6 +118,7 @@ export function Header() {
     { href: '/search', icon: ShoppingBag, label: 'Stöbern' },
     { href: '/how-it-works', icon: Star, label: 'So funktionierts' },
     { divider: true },
+    { href: '/hive', icon: Trophy, label: 'Mein Hive' },
     { href: '/listings', icon: Tag, label: 'Meine Inserate' },
     { href: '/purchases', icon: Receipt, label: 'Meine Käufe' },
     { href: '/bids', icon: Gavel, label: 'Meine Gebote' },
@@ -362,6 +363,7 @@ export function Header() {
           {user && (
             <div style={{ padding: '4px 12px' }}>
               {[
+                { href: '/hive', icon: Trophy, label: 'Mein Hive' },
                 { href: '/listings', icon: Tag, label: 'Meine Inserate' },
                 { href: '/purchases', icon: Receipt, label: 'Meine Käufe' },
                 { href: '/bids', icon: Gavel, label: 'Meine Gebote' },

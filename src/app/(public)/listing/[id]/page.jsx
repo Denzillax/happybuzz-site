@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
+import { AccountBadge } from "@/components/shared/AccountBadge";
 import { CategoryIcon } from "@/components/shared/CategoryIcon";
 import { colors, fonts, radius } from "@/lib/theme";
 import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS } from "@/lib/constants";
@@ -374,8 +375,11 @@ export default function ListingDetail() {
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={colors.yellow} />}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <Link href={`/user/${l.user_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{l.sellerName}</Link>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
+                    <Link href={`/user/${l.user_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>
+                      {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
+                    </Link>
+                    <AccountBadge accountType={l.seller?.account_type} />
                     <BeeLevelBadge impactTotal={l.sellerBeeImpact} size="md" />
                   </div>
                   {sellerRating.count > 0 && (
@@ -1118,7 +1122,10 @@ export default function ListingDetail() {
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.sellerName}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>
+                  {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
+                </span>
+                <AccountBadge accountType={l.seller?.account_type} />
                 {sellerRating.count > 0 && (
                   <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 4, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
                     {sellerRating.avg.toFixed(1)}

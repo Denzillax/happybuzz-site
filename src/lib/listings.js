@@ -135,6 +135,7 @@ export async function createListing(userId, formData) {
 
   const { data, error } = await supabase.from("listings").insert(row).select().single();
   if (error) throw error;
+  // XP/Achievements werden serverseitig per DB-Trigger vergeben (bei Publish → active).
   return data;
 }
 
@@ -226,7 +227,7 @@ export async function getListing(listingId) {
 // ─── Get Single (public + seller) ────────────────────────────
 export async function getListingPublic(listingId) {
   const { data, error } = await supabase.from("listings")
-    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, bee_impact_total, bee_level, avg_rating, rating_count)")
+    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)")
     .eq("id", listingId).not("status", "eq", "deleted").single();
   if (error) throw error;
 
@@ -287,7 +288,7 @@ export async function searchListings({
 } = {}) {
   // ── ART-/BEE-/Hex Prefix-Suche (UUID-Range statt text cast) ──
   const upperQ = (query || "").trim().toUpperCase();
-  const selectRef = "*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, bee_impact_total, bee_level, avg_rating, rating_count)";
+  const selectRef = "*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)";
   const mapListings = (data) => (data || []).map(listing => {
     const sorted = (listing.listing_images || []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
     return { ...listing, cover_image: sorted[0]?.url || null, categoryName: listing.category?.name || null, sellerName: listing.seller?.display_name || "Benutzer" };
@@ -338,7 +339,7 @@ export async function searchListings({
   }
 
   let q = supabase.from("listings")
-    .select("*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, bee_impact_total, bee_level, avg_rating, rating_count)", { count: "exact" })
+    .select("*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)", { count: "exact" })
     .eq("status", "active");
 
   if (query) q = q.or(`title.ilike.%${query}%,description.ilike.%${query}%`);
@@ -466,7 +467,7 @@ export async function toggleFavorite(userId, listingId) {
 
 export async function getUserFavorites(userId) {
   const { data, error } = await supabase.from("favorites")
-    .select("listing_id, listing:listings(*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, bee_impact_total, bee_level, avg_rating, rating_count))")
+    .select("listing_id, listing:listings(*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count))")
     .eq("user_id", userId);
   if (error) throw error;
   return (data || []).map(fav => {
@@ -632,7 +633,7 @@ export async function getMyBeeProfile(userId) {
 export async function getPublicProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, bee_impact_total, bee_level")
+    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, bee_level")
     .eq("id", userId)
     .single();
   if (error) throw error;
@@ -684,6 +685,30 @@ export async function getUserAvgRating(userId) {
   if (error || !data?.length) return { avg: 0, count: 0 };
   const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length;
   return { avg: Math.round(avg * 10) / 10, count: data.length };
+}
+
+// ─── Favorite Sellers ────────────────────────────────────────
+export async function isSellerFavorited(userId, sellerId) {
+  if (!userId || !sellerId) return false;
+  const { data } = await supabase
+    .from("favorite_sellers")
+    .select("seller_id")
+    .eq("user_id", userId)
+    .eq("seller_id", sellerId)
+    .maybeSingle();
+  return !!data;
+}
+
+// Toggle: gibt true zurück wenn jetzt favorisiert, false wenn entfernt
+export async function toggleFavoriteSeller(userId, sellerId) {
+  if (!userId || !sellerId) return false;
+  const favorited = await isSellerFavorited(userId, sellerId);
+  if (favorited) {
+    await supabase.from("favorite_sellers").delete().eq("user_id", userId).eq("seller_id", sellerId);
+    return false;
+  }
+  await supabase.from("favorite_sellers").insert({ user_id: userId, seller_id: sellerId });
+  return true;
 }
 
 // ═════════════════════════════════════════════════════════════
@@ -748,7 +773,7 @@ export async function getSimilarListings(listingId, categoryId, limit = 6) {
   // Erst gleiche Kategorie versuchen
   let { data, error } = await supabase
     .from("listings")
-    .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, bee_impact_total, bee_level, avg_rating, rating_count)")
+    .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)")
     .eq("status", "active")
     .eq("category_id", categoryId)
     .neq("id", listingId)
@@ -765,7 +790,7 @@ export async function getSimilarListings(listingId, categoryId, limit = 6) {
       sibIds.push(cat.parent_id);
       const { data: parentData } = await supabase
         .from("listings")
-        .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, bee_impact_total, bee_level, avg_rating, rating_count)")
+        .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)")
         .eq("status", "active")
         .in("category_id", sibIds)
         .neq("id", listingId)
@@ -1236,6 +1261,8 @@ export async function confirmDelivery(purchaseId, userId) {
 export async function completeTransaction(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "completed");
   await addPurchaseEvent(purchaseId, "completed", "Transaktion abgeschlossen.", null, userId);
+  // XP/Achievements (Verkäufer fee-skaliert + Käufer) werden serverseitig per
+  // DB-Trigger auf den Status-Wechsel nach 'completed' vergeben.
 }
 
 // ═════════════════════════════════════════════════════════════

@@ -12,7 +12,8 @@ import { makeBeeRef } from "@/lib/fees";
 const STATUS_CONFIG = {
   confirmed:       { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
   pending_payment: { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
-  payment_pending: { label: "Zahlung markiert",   color: "#F4A100", icon: Clock },
+  payment_pending: { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
+  payment_marked:  { label: "Zahlung markiert",   color: "#F4A100", icon: Clock },
   paid:            { label: "Bezahlt",             color: "#5B8C5A", icon: CheckCircle },
   shipped:         { label: "Versendet",           color: "#94B9C9", icon: Truck },
   picked_up:       { label: "Übergeben",           color: "#94B9C9", icon: Truck },
@@ -24,7 +25,7 @@ const STATUS_CONFIG = {
 
 const FILTERS = [
   { key: "all", label: "Alle" },
-  { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending"].includes(s) },
+  { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending","payment_marked"].includes(s) },
   { key: "paid", label: "Bezahlt", match: s => s === "paid" },
   { key: "shipping", label: "Unterwegs", match: s => ["shipped","picked_up"].includes(s) },
   { key: "done", label: "Abgeschlossen", match: s => ["delivered","completed"].includes(s) },
@@ -55,7 +56,7 @@ export default function PurchasesPage() {
     return f?.match ? f.match(p.status) : true;
   });
 
-  const openCount = purchases.filter(p => ["confirmed","pending_payment","payment_pending","paid","shipped","picked_up"].includes(p.status)).length;
+  const openCount = purchases.filter(p => ["confirmed","pending_payment","payment_pending","payment_marked","paid","shipped","picked_up"].includes(p.status)).length;
   const totalBee = purchases.reduce((sum, p) => sum + (parseFloat(p.bee_impact) || 0), 0);
 
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };

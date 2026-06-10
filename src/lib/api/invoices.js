@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/supabase";
-import { addPurchaseEvent, createNotification } from "@/lib/listings";
+import { addPurchaseEvent } from "@/lib/listings";
+import { createNotification } from "@/lib/notifications";
 import { calcFeeFromPrice } from "@/lib/fees";
 
 // ── Predefined Templates ─────────────────────────────────────

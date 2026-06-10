@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
+import GamificationProvider from '@/components/shared/GamificationProvider'
 
 export const metadata = {
   title: {
@@ -24,7 +25,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" />
       </head>
-      <body>{children}<BetaFeedback /></body>
+      <body>{children}<BetaFeedback /><GamificationProvider /></body>
     </html>
   )
 }

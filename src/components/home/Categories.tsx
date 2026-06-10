@@ -37,13 +37,11 @@ export function Categories() {
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
-        .cat-circles { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
-        .cat-circles::-webkit-scrollbar { display: none; }
         .cat-circle-item:hover .cat-circle-icon { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
         @media (max-width: 767px) {
           .cat-header { padding: 0 4px !important; }
           .cat-header h2 { font-size: 20px !important; }
-          .cat-circles { gap: 16px !important; }
+          .cat-circles { gap: 16px 12px !important; }
         }
       `}</style>
 
@@ -63,8 +61,8 @@ export function Categories() {
 
       {/* Horizontal scrollable circles */}
       <div className="cat-circles" style={{
-        display: 'flex', gap: 20,
-        paddingBottom: 8,
+        display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+        gap: 24,
       }}>
         {categories.map((cat, i) => (
           <Link
@@ -76,7 +74,7 @@ export function Categories() {
               alignItems: 'center', gap: 8,
               textDecoration: 'none', color: 'inherit',
               flexShrink: 0,
-              width: 88,
+              width: 100,
             }}
           >
             <div className="cat-circle-icon" style={{
@@ -87,7 +85,7 @@ export function Categories() {
             }}>
               <CategoryIcon name={cat.icon || 'Package'} size={26} />
             </div>
-            <span style={{
+            <span lang="de" style={{
               fontSize: 11, fontWeight: 600, fontFamily: BODY,
               color: '#555', textAlign: 'center',
               lineHeight: 1.25,
@@ -96,7 +94,8 @@ export function Categories() {
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              wordBreak: 'break-word',
+              hyphens: 'auto',
+              overflowWrap: 'break-word',
             }}>
               {cat.name}
             </span>

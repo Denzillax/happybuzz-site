@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Star, MapPin, Calendar, Package, ShoppingBag } from "lucide-react";
+import { AccountBadge } from "@/components/shared/AccountBadge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { fmtCHF, fullName } from "@/lib/formatters";
 
@@ -42,7 +43,15 @@ export default function ProfilePage() {
             {profile.avatar_url ? <img src={profile.avatar_url} style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} /> : (profile.display_name?.[0] || "?").toUpperCase()}
           </div>
           <div>
-            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800 }}>{profile.display_name || "Benutzer"}</h1>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800 }}>
+                {profile.account_type === "business" && profile.company_name ? profile.company_name : (profile.display_name || "Benutzer")}
+              </h1>
+              <AccountBadge accountType={profile.account_type} size="lg" />
+            </div>
+            {profile.account_type === "business" && profile.company_uid && (
+              <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>UID: {profile.company_uid}</p>
+            )}
             {profile.city && <p style={{ margin: "4px 0 0", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 4 }}><MapPin size={13} /> {profile.postal_code} {profile.city}</p>}
             <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 13 }}>
               {avgRating && <span style={{ display: "flex", alignItems: "center", gap: 4 }}><Star size={14} fill={colors.yellow} color={colors.yellow} /> {avgRating} ({ratings.length} Bewertungen)</span>}

@@ -39,6 +39,7 @@ const PAGE_TESTS = {
     { id: "lc_abholung", label: "Abholung: Adresse wird angezeigt" },
     { id: "lc_bee_rate", label: "Bee-Rate: Dein Standard vorausgewählt" },
     { id: "lc_publish", label: "Veröffentlichen funktioniert" },
+    { id: "lc_service_block", label: "Service-Inserat blockiert, solange früherer Auftrag nicht in Rechnung gestellt" },
   ],
   "/listing/": [
     { id: "lv_images", label: "Bilder laden korrekt" },
@@ -57,6 +58,7 @@ const PAGE_TESTS = {
   "/settings": [
     { id: "set_sidebar", label: "Sidebar-Navigation" },
     { id: "set_name", label: "Anzeigename ändern" },
+    { id: "set_account_type", label: "Kontotyp Privat/Unternehmen + Firma" },
     { id: "set_bee_rate", label: "Bee-Rate Default wählen" },
     { id: "set_verify", label: "Verifizierungen: Status + Aktionen" },
     { id: "set_iban", label: "IBAN speichern" },
@@ -77,6 +79,7 @@ const PAGE_TESTS = {
     { id: "bf_order", label: "Bestellseite lädt" },
     { id: "bf_invoice", label: "QR-Rechnung korrekt" },
     { id: "bf_name", label: "Echter Name auf Rechnung" },
+    { id: "bf_business", label: "Firmenname + UID auf Rechnung (gewerblich)" },
     { id: "bf_address", label: "Adresse korrekt" },
     { id: "bf_confirm", label: "Empfang bestätigen" },
     { id: "bf_rating", label: "Bewertung abgeben" },
@@ -85,6 +88,53 @@ const PAGE_TESTS = {
     { id: "fav_list", label: "Favoriten werden angezeigt" },
     { id: "fav_remove", label: "Favorit entfernen" },
     { id: "fav_click", label: "Klick öffnet Inserat" },
+  ],
+  "/bids": [
+    { id: "bd_list", label: "Gebote-Liste lädt" },
+    { id: "bd_status", label: "Status korrekt (Führend/Überboten/Beendet)" },
+    { id: "bd_link", label: "Klick öffnet Inserat" },
+  ],
+  "/bookings": [
+    { id: "bk_tabs", label: "Anfragen vs. Meine Buchungen" },
+    { id: "bk_action", label: "Bestätigen / Ablehnen funktioniert" },
+    { id: "bk_status", label: "Buchungs-Status korrekt" },
+    { id: "bk_returned", label: "Als zurückgegeben markieren" },
+  ],
+  "/purchases": [
+    { id: "pu_list", label: "Käufe-Liste lädt" },
+    { id: "pu_filter", label: "Status-Filter funktioniert" },
+    { id: "pu_order", label: "Link zur Bestellseite" },
+  ],
+  "/sales": [
+    { id: "sa_list", label: "Verkäufe-Liste lädt" },
+    { id: "sa_filter", label: "Status-Filter funktioniert" },
+    { id: "sa_order", label: "Link zur Bestellseite" },
+  ],
+  "/chat": [
+    { id: "cht_list", label: "Unterhaltungen nach Inserat gruppiert" },
+    { id: "cht_unread", label: "Ungelesen-Markierung" },
+    { id: "cht_send", label: "Nachricht senden/empfangen" },
+    { id: "cht_toggle", label: "Öffentlich ↔ Privat umschalten" },
+  ],
+  "/fees": [
+    { id: "fe_overview", label: "Gebühren-Stufen erklärt" },
+    { id: "fe_invoices", label: "Gebühren-Rechnungen aufgelistet" },
+    { id: "fe_detail", label: "Rechnungs-Detail öffnet" },
+  ],
+  "/profile/": [
+    { id: "prf_load", label: "Verkäufer-Profil lädt (Inserate, Bewertung)" },
+    { id: "prf_fav", label: "Verkäufer als Favorit speichern" },
+  ],
+  "/user/": [
+    { id: "usr_load", label: "Nutzer-Profil lädt korrekt" },
+    { id: "usr_listings", label: "Inserate des Nutzers sichtbar" },
+  ],
+  "/hive": [
+    { id: "hv_level", label: "Level + XP-Balken korrekt" },
+    { id: "hv_streak", label: "Streak angezeigt" },
+    { id: "hv_challenges", label: "Challenges mit Fortschritt" },
+    { id: "hv_achievements", label: "Achievements gesperrt/offen" },
+    { id: "hv_leaderboard", label: "Leaderboard zeigt eigene Position" },
   ],
   "_default": [
     { id: "pg_loads", label: "Seite lädt korrekt" },
@@ -125,6 +175,7 @@ export default function BetaFeedback() {
   const [isMobile, setIsMobile] = useState(false);
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState(null);
+  const [submittedLabels, setSubmittedLabels] = useState(() => new Set());
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
@@ -138,6 +189,27 @@ export default function BetaFeedback() {
     }
     loadUser();
   }, []);
+
+  // Checklisten-Punkte, die dieser User für die aktuelle Seite bereits
+  // abgeschickt hat → bleiben über Refresh gesperrt, kein Doppel-Absenden.
+  const loadSubmitted = async (uid, path) => {
+    if (!uid) { setSubmittedLabels(new Set()); return; }
+    const { data } = await supabase
+      .from("beta_feedback")
+      .select("title")
+      .eq("user_id", uid)
+      .eq("page_url", path);
+    const set = new Set();
+    (data || []).forEach(r => {
+      const m = /^\[(OK|PARTIAL|BROKEN)\]\s+(.*)$/.exec(r.title || "");
+      if (m) set.add(m[2]);
+    });
+    setSubmittedLabels(set);
+  };
+
+  useEffect(() => {
+    if (userId) loadSubmitted(userId, pagePath);
+  }, [userId, pagePath, open]);
 
   // Get relevant tests for current page
   const getPageTests = () => {
@@ -155,10 +227,12 @@ export default function BetaFeedback() {
   const totalCount = pageTests.length + (isMobile ? MOBILE_TESTS.length : 0);
 
   const toggleCheck = (id) => setChecks(p => ({ ...p, [id]: ((p[id] || 0) + 1) % 4 }));
+  const isLocked = (item) => submittedLabels.has(item.label);
 
   const submitChecks = async () => {
     const allTests = [...pageTests, ...(isMobile ? MOBILE_TESTS : [])];
     for (const item of allTests) {
+      if (isLocked(item)) continue;
       const s = checks[item.id] || 0;
       if (s > 0) {
         await supabase.from("beta_feedback").insert({
@@ -171,6 +245,7 @@ export default function BetaFeedback() {
         });
       }
     }
+    await loadSubmitted(userId, pagePath);
     setSent(true);
     setTimeout(() => { setSent(false); setChecks({}); setNotes({}); }, 2500);
   };
@@ -192,21 +267,33 @@ export default function BetaFeedback() {
   if (!open) {
     return (
       <button onClick={() => setOpen(true)} title="Beta Feedback" style={{
-        position: "fixed", bottom: 96, right: 20, zIndex: 9990,
+        position: "fixed", bottom: 96, right: 32, zIndex: 9990,
         width: 48, height: 48, borderRadius: "50%",
-        background: colors.yellow, border: "none", cursor: "pointer",
+        background: colors.teal, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 4px 16px rgba(0,0,0,.2)", transition: "transform .2s",
+        boxShadow: "0 4px 16px rgba(14,148,147,.4)", transition: "transform .2s",
       }}
         onMouseEnter={e => e.currentTarget.style.transform = "scale(1.1)"}
         onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
       >
-        <MessageSquarePlus size={22} color={colors.dark} />
+        <MessageSquarePlus size={22} color="#fff" />
       </button>
     );
   }
 
   const renderCheckItem = (item) => {
+    if (isLocked(item)) {
+      return (
+        <div key={item.id} style={{
+          padding: "8px 0", display: "flex", alignItems: "center", gap: 8,
+          borderBottom: `1px solid ${colors.borderLt || "#f0f0f0"}`, opacity: 0.55,
+        }}>
+          <CheckCircle size={16} color={colors.muted} style={{ flexShrink: 0 }} />
+          <span style={{ flex: 1, fontSize: 12, color: colors.muted, textDecoration: "line-through" }}>{item.label}</span>
+          <span style={{ fontSize: 9, color: colors.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".03em", whiteSpace: "nowrap" }}>bereits abgeschickt</span>
+        </div>
+      );
+    }
     const s = checks[item.id] || 0;
     const Icon = STATUS_ICONS[s];
     return (

@@ -155,7 +155,7 @@ c0140000 = Bücher & Comics
 ```
 
 ## Offene Features (Roadmap)
-1. Usertyp Privat/Unternehmen (account_type, Firmenname, UID, Badge)
+1. ~~Usertyp Privat/Unternehmen~~ ✅ ERLEDIGT — `profiles.account_type` ('private'/'business'), `company_name`, `company_uid`; Settings-Umschalter; `AccountBadge` auf ListingCard/Listing-Detail/Profil; Firmenname + UID auf Rechnung
 2. Gamification (Bee-Level, Community Counter)
 3. Gebühren-Ranking (höhere Bee-Rate = bessere Platzierung)
 4. BEEDARO Wallet (internes Token-System)

@@ -459,6 +459,21 @@ export default function ListingForm({
           setErrors({ submit: `Bitte ergänze dein Profil: ${check.missing.join(", ")}` });
           return;
         }
+        // Missbrauchsschutz: kein neues Service-Inserat, solange für einen früheren
+        // Service-Auftrag noch keine Rechnung erstellt wurde (Status 'confirmed').
+        if (form.listing_type === "service") {
+          const { data: uninvoiced } = await supabase
+            .from("purchases")
+            .select("id, listing:listings!inner(listing_type)")
+            .eq("seller_id", session.user.id)
+            .eq("status", "confirmed")
+            .eq("listing.listing_type", "service")
+            .limit(1);
+          if (uninvoiced && uninvoiced.length > 0) {
+            setErrors({ submit: "Du hast einen offenen Service-Auftrag, für den du noch keine Rechnung erstellt hast. Bitte stelle zuerst die Rechnung, bevor du ein neues Service-Inserat veröffentlichst." });
+            return;
+          }
+        }
       }
     } else {
       if (!form.title.trim()) {
@@ -1643,11 +1658,11 @@ export default function ListingForm({
             Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20% fliessen in echte Schweizer Naturschutzprojekte. Höherer Impact = bessere Platzierung.
           </p>
           {[
-            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde" },
-            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland" },
-            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true },
-            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen" },
-          ].map(({ tier, pct, impact, project, recommended }) => {
+            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× XP · Standard-Platzierung" },
+            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× XP · bessere Platzierung" },
+            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true, perks: "1,8× XP · Top-Platzierung" },
+            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen", perks: "2,5× XP · Top-Platzierung · grösster Bienen-Beitrag" },
+          ].map(({ tier, pct, impact, project, recommended, perks }) => {
             const active = form.fee_tier === tier;
             return (
               <div key={tier} onClick={() => selectFee(pct, tier)} style={{
@@ -1694,8 +1709,12 @@ export default function ListingForm({
                       )}
                     </div>
                     {/* Subtitle */}
-                    <p style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
+                    <p style={{ margin: "0 0 4px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
                       {BEE_FEE_SUBTITLES[tier]}
+                    </p>
+                    {/* Perks — was du dafür bekommst */}
+                    <p style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 11.5, fontWeight: 700, color: colors.teal, fontFamily: fonts.body, lineHeight: 1.4 }}>
+                      {perks}
                     </p>
                     {/* Project tag (only when selected) */}
                     {active && (

@@ -33,7 +33,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
       const raterId = user.id;
       const ratedId = isBuyer ? p.seller_id : p.buyer_id;
       const { error } = await supabase.from("ratings").insert({
-        purchase_id: p.id, listing_id: p.listing_id,
+        purchase_id: p.id, role: isBuyer ? "buyer" : "seller",
         rater_id: raterId, rated_id: ratedId,
         rating, comment: ratingComment || null,
       });
@@ -41,6 +41,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
       setRatingDone(true);
       setMyRating({ rating, comment: ratingComment });
       setShowModal(false);
+      // XP/Achievements (Bewertender + Bewerteter) werden serverseitig per DB-Trigger vergeben.
     } catch (err) { console.error("Rating exception:", err); }
   };
 

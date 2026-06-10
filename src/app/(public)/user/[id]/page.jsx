@@ -8,6 +8,7 @@ import {
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";
+import { AccountBadge } from "@/components/shared/AccountBadge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
@@ -104,10 +105,15 @@ export default function PublicProfilePage() {
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
                 <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, fontFamily: fonts.head }}>
-                  {profile.display_name || profile.username}
+                  {profile.account_type === "business" && profile.company_name ? profile.company_name : (profile.display_name || profile.username)}
                 </h1>
+                <AccountBadge accountType={profile.account_type} size="lg" />
                 <BeeLevelBadge impactTotal={profile.bee_impact_total} size="md" />
               </div>
+
+              {profile.account_type === "business" && profile.company_uid && (
+                <p style={{ margin: "0 0 8px", fontSize: 12, color: colors.muted }}>UID: {profile.company_uid}</p>
+              )}
 
               {profile.bio && (
                 <p style={{ margin: "0 0 10px", fontSize: 14, color: colors.muted, lineHeight: 1.5 }}>{profile.bio}</p>

@@ -12,7 +12,8 @@ import { makeBeeRef } from "@/lib/fees";
 const STATUS_CONFIG = {
   confirmed:       { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
   pending_payment: { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
-  payment_pending: { label: "Zahlung markiert",   color: "#F4A100", icon: Clock },
+  payment_pending: { label: "Warten auf Zahlung", color: "#F4A100", icon: CreditCard },
+  payment_marked:  { label: "Zahlung markiert",   color: "#F4A100", icon: Clock },
   paid:            { label: "Bezahlt",             color: "#5B8C5A", icon: CheckCircle },
   shipped:         { label: "Versendet",           color: "#94B9C9", icon: Truck },
   picked_up:       { label: "Übergeben",           color: "#94B9C9", icon: Truck },
@@ -24,7 +25,7 @@ const STATUS_CONFIG = {
 
 const FILTERS = [
   { key: "all", label: "Alle" },
-  { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending","paid"].includes(s) },
+  { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending","payment_marked","paid"].includes(s) },
   { key: "shipping", label: "Versendet", match: s => ["shipped","picked_up"].includes(s) },
   { key: "done", label: "Abgeschlossen", match: s => ["delivered","completed"].includes(s) },
 ];
@@ -54,7 +55,7 @@ export default function SalesPage() {
     return f?.match ? f.match(s.status) : true;
   });
 
-  const openCount = sales.filter(s => ["confirmed","pending_payment","payment_pending","paid"].includes(s.status)).length;
+  const openCount = sales.filter(s => ["confirmed","pending_payment","payment_pending","payment_marked","paid"].includes(s.status)).length;
   const totalRevenue = sales.reduce((sum, s) => sum + parseFloat(s.price) - parseFloat(s.fee_amount || 0), 0);
   const totalBee = sales.reduce((sum, s) => sum + (parseFloat(s.bee_impact) || 0), 0);
 
