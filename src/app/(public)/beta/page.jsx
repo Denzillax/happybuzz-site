@@ -214,6 +214,7 @@ const TESTS = [
       { id: "set_verify_phone", label: "Telefon verifizieren" },
       { id: "set_verify_address", label: "Adresse verifizieren" },
       { id: "set_verify_id", label: "ID hochladen funktioniert" },
+      { id: "set_verify_xp", label: "Vollständige Verifizierung → XP + 'Vollständig'-Achievement" },
       { id: "set_iban", label: "IBAN eingeben + speichern" },
       { id: "set_address_auto", label: "Strassen-Autocomplete (geo.admin.ch)" },
       { id: "set_address_save", label: "Hauptadresse speichern" },
