@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Leaf } from "lucide-react";
+import Link from "next/link";
+import { Leaf, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
 
@@ -16,6 +17,7 @@ export function CommunityImpact() {
   const [stats, setStats] = useState({ impact: 0, articles: 0 });
   const [userImpact, setUserImpact] = useState(0);
   const [firstName, setFirstName] = useState("");
+  const [imgOk, setImgOk] = useState(true);
 
   useEffect(() => {
     getCommunityImpactStats().then(setStats).catch(() => {});
@@ -46,34 +48,60 @@ export function CommunityImpact() {
     <section style={{
       width: "100%",
       background: "linear-gradient(180deg, rgba(91,140,90,0.10) 0%, rgba(91,140,90,0.03) 100%)",
-      padding: "36px 20px",
+      padding: "44px 20px",
     }}>
-      <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-          <Leaf size={15} color={GREEN} />
-          <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: GREEN }}>Bee-Impact</span>
-        </div>
-        <h2 style={{ margin: "0 0 20px", fontSize: 26, fontWeight: 800, fontFamily: HEAD, color: DARK, letterSpacing: ".01em" }}>
-          Gemeinsam bewirken
-        </h2>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-          {cards.map((c) => (
-            <div key={c.label} style={{
-              background: "#fff", border: "1px solid #E2E2E2", borderRadius: 16,
-              padding: "16px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-            }}>
-              <span style={{ fontFamily: HEAD, fontWeight: 800, color: DARK, lineHeight: 1.1, fontSize: "clamp(18px, 5.2vw, 28px)" }}>{c.value}</span>
-              <span style={{ fontSize: "clamp(10px, 2.6vw, 12px)", color: MUTED, fontWeight: 600 }}>{c.label}</span>
-            </div>
-          ))}
+      <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
+        {/* ── Foto ── */}
+        <div className="impact-photo" style={{
+          position: "relative", borderRadius: 20, overflow: "hidden",
+          boxShadow: "0 14px 40px rgba(91,140,90,0.22)", background: "#E8EFE6",
+          aspectRatio: "3 / 2", display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          {imgOk ? (
+            <img src="/images/bee-impact.jpg" alt="Biene auf einer Blume mit Vintage-Polaroid-Kamera"
+              onError={() => setImgOk(false)}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <Leaf size={56} color={GREEN} strokeWidth={1.5} style={{ opacity: 0.5 }} />
+          )}
         </div>
 
-        {userImpact > 0 && (
-          <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
-            Dein Beitrag: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
-          </p>
-        )}
+        {/* ── Inhalt ── */}
+        <div className="impact-content">
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+            <Leaf size={15} color={GREEN} />
+            <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: GREEN }}>Bee-Impact</span>
+          </div>
+          <h2 style={{ margin: "0 0 18px", fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 800, fontFamily: HEAD, color: DARK, letterSpacing: ".01em", lineHeight: 1.1 }}>
+            Gemeinsam bewirken
+          </h2>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {cards.map((c) => (
+              <div key={c.label} style={{
+                background: "#fff", border: "1px solid #E2E2E2", borderRadius: 16,
+                padding: "16px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+              }}>
+                <span style={{ fontFamily: HEAD, fontWeight: 800, color: DARK, lineHeight: 1.1, fontSize: "clamp(18px, 4.4vw, 28px)" }}>{c.value}</span>
+                <span style={{ fontSize: "clamp(10px, 2.4vw, 12px)", color: MUTED, fontWeight: 600, textAlign: "center" }}>{c.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {userImpact > 0 && (
+            <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
+              Dein Beitrag: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+            </p>
+          )}
+
+          <Link href="/impact" style={{
+            display: "inline-flex", alignItems: "center", gap: 7, marginTop: 20,
+            padding: "11px 20px", borderRadius: 12, background: GREEN, color: "#fff",
+            fontSize: 14, fontWeight: 700, fontFamily: HEAD, textDecoration: "none",
+          }}>
+            Mehr über Bee-Impact <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
     </section>
   );
