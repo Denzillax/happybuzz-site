@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { getUserListings, deleteListing, getListingAnalytics } from "@/lib/listings";
+import { redeemNektar, NEKTAR_CATALOG } from "@/lib/gamification";
 import Link from "next/link";
 import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
@@ -33,6 +34,24 @@ export default function ListingsPage() {
   const [statsFor, setStatsFor] = useState(null); // listing object
   const [statsData, setStatsData] = useState(null);
   const [myBoosts, setMyBoosts] = useState({}); // listing_id -> [{reward_type, expires_at}]
+  const [myNektar, setMyNektar] = useState(0);
+  const [boostMenuFor, setBoostMenuFor] = useState(null); // listing id with open boost menu
+  const [boosting, setBoosting] = useState(false);
+
+  const doBoost = async (listingId, reward) => {
+    if (boosting || myNektar < reward.cost) return;
+    setBoosting(true);
+    try {
+      const res = await redeemNektar(reward.key, reward.cost, listingId, reward.durationHours || 0);
+      if (res?.ok) {
+        setMyNektar(res.new_balance);
+        setMyBoosts((prev) => ({ ...prev, [listingId]: [...(prev[listingId] || []), { reward_type: reward.key, expires_at: reward.durationHours ? new Date(Date.now() + reward.durationHours * 3600000).toISOString() : null }] }));
+        setBoostMenuFor(null);
+        if (typeof window !== "undefined") window.dispatchEvent(new Event("beedaro:nektar"));
+      }
+    } catch (e) { console.error(e); }
+    finally { setBoosting(false); }
+  };
 
   const openStats = async (listing) => {
     setStatsFor(listing); setStatsData(null);
@@ -52,6 +71,7 @@ export default function ListingsPage() {
           (data || []).forEach(r => { if (r.listing_id) (bmap[r.listing_id] = bmap[r.listing_id] || []).push(r); });
           setMyBoosts(bmap);
         });
+        supabase.from("profiles").select("nektar").eq("id", user.id).maybeSingle().then(({ data }) => setMyNektar(data?.nektar || 0));
         const auctionIds = items.filter(l => l.listing_type === "auction").map(l => l.id);
         if (auctionIds.length > 0) {
           const { data: historyBids } = await supabase.from("bid_history").select("listing_id").in("listing_id", auctionIds);
@@ -365,6 +385,40 @@ export default function ListingsPage() {
                             onMouseLeave={e => e.currentTarget.style.background = colors.cream}>
                             <BarChart3 size={14} />
                           </button>
+                          {/* Boost (Nektar) — nur bei aktiven Inseraten */}
+                          {l.status === "active" && (
+                            <div style={{ position: "relative" }}>
+                              <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
+                                width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                color: "#C8860A", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
+                              }}>
+                                <Rocket size={14} />
+                              </button>
+                              {boostMenuFor === l.id && (
+                                <>
+                                  <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
+                                  <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 10, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
+                                    <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
+                                    {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
+                                      const aff = myNektar >= r.cost;
+                                      return (
+                                        <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{
+                                          width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
+                                          padding: "9px 8px", borderRadius: 6, border: "none", background: "transparent", cursor: aff ? "pointer" : "default",
+                                          fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt,
+                                        }}
+                                          onMouseEnter={e => { if (aff) e.currentTarget.style.background = colors.cream; }}
+                                          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+                                          <span style={{ fontWeight: 700 }}>{r.name}</span>
+                                          <span style={{ fontWeight: 800, color: aff ? "#C8860A" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {(l.status === "active" || l.status === "paused") && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
