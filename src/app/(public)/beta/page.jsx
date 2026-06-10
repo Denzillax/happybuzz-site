@@ -98,6 +98,7 @@ const TESTS = [
       { id: "lv_business", label: "Unternehmen-Badge + Firmenname beim Verkäufer (falls gewerblich)" },
       { id: "lv_map", label: "Standort-Karte wird angezeigt" },
       { id: "lv_similar", label: "Ähnliche Inserate werden angezeigt" },
+      { id: "lv_recent", label: "Zuletzt angesehen: besuchte Inserate erscheinen auf der Startseite" },
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },

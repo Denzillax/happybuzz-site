@@ -21,6 +21,7 @@ import {
   checkProfileComplete,
 } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
+import { recordView } from "@/lib/recentlyViewed";
 
 // ── LocationMap: Geocoding via Nominatim ──────────────────
 function LocationMap({ city, canton }) {
@@ -108,6 +109,7 @@ export default function ListingDetail() {
       try {
         const data = await getListingPublic(params.id);
         setListing(data);
+        recordView(data);
         if (data.user_id) getUserAvgRating(data.user_id).then(setSellerRating).catch(() => {});
         if (data.category_id) getSimilarListings(params.id, data.category_id).then(setSimilar).catch(() => {});
         if (data.listing_type === "auction") {

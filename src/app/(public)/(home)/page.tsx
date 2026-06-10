@@ -3,6 +3,7 @@ import { CommunityImpact } from '@/components/home/CommunityImpact'
 import { Categories } from '@/components/home/Categories'
 import { NewListings } from '@/components/home/NewListings'
 import { PopularListings } from '@/components/home/PopularListings'
+import { RecentlyViewed } from '@/components/home/RecentlyViewed'
 import { HowItWorks } from '@/components/home/HowItWorks'
 import { WhyBeedaro } from '@/components/home/WhyBeedaro'
 
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Hero />
       <CommunityImpact />
       <Categories />
+      <RecentlyViewed />
       <NewListings />
       <PopularListings />
       <HowItWorks />
