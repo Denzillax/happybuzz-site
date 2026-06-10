@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2, Heart,
+  MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2, Heart, StickyNote,
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { AccountBadge } from "@/components/shared/AccountBadge";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited } from "@/lib/listings";
+import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited, getUserNote, saveUserNote } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
 
 export default function PublicProfilePage() {
@@ -23,6 +23,9 @@ export default function PublicProfilePage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [tab, setTab] = useState("listings");
   const [loading, setLoading] = useState(true);
+  const [note, setNote] = useState("");
+  const [noteSaving, setNoteSaving] = useState(false);
+  const [noteSaved, setNoteSaved] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -43,6 +46,7 @@ export default function PublicProfilePage() {
           setCurrentUser(data?.user || null);
           if (data?.user && data.user.id !== params.id) {
             setIsSellerFav(await isSellerFavorited(data.user.id, params.id));
+            getUserNote(data.user.id, params.id).then(setNote).catch(() => {});
           }
         } catch {}
       } catch (err) { console.error(err); }
@@ -170,6 +174,34 @@ export default function PublicProfilePage() {
               </button>
             )}
           </div>
+
+          {/* Private Notiz (nur für eingeloggte Nutzer, nicht beim eigenen Profil) */}
+          {currentUser && currentUser.id !== params.id && (
+            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: radius.md, background: colors.cream, border: `1px solid ${colors.borderLt}` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <StickyNote size={15} color={colors.muted} />
+                <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>Private Notiz</span>
+                <span style={{ fontSize: 11, color: colors.muted }}>nur für dich sichtbar</span>
+              </div>
+              <textarea
+                value={note}
+                onChange={(e) => { setNote(e.target.value); setNoteSaved(false); }}
+                placeholder="z.B. Schnelle Antwort, faire Preise…"
+                rows={2}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 13, fontFamily: fonts.body, color: colors.dark, resize: "vertical", outline: "none", boxSizing: "border-box" }}
+              />
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                <button
+                  onClick={async () => { setNoteSaving(true); try { await saveUserNote(currentUser.id, params.id, note); setNoteSaved(true); } catch {} finally { setNoteSaving(false); } }}
+                  disabled={noteSaving}
+                  style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
+                >
+                  {noteSaving ? "Speichern…" : "Notiz speichern"}
+                </button>
+                {noteSaved && <span style={{ fontSize: 12, color: colors.green, fontWeight: 600 }}>Gespeichert</span>}
+              </div>
+            </div>
+          )}
 
           {/* Rating Summary Bar */}
           {avgRating.count > 0 && (

@@ -724,6 +724,31 @@ export async function toggleFavoriteSeller(userId, sellerId) {
   return true;
 }
 
+// ─── Private Verkäufer-Notizen ───────────────────────────────
+export async function getUserNote(noterId, notedId) {
+  if (!noterId || !notedId) return "";
+  const { data } = await supabase
+    .from("user_notes")
+    .select("text")
+    .eq("noter_id", noterId)
+    .eq("noted_id", notedId)
+    .maybeSingle();
+  return data?.text || "";
+}
+
+export async function saveUserNote(noterId, notedId, text) {
+  if (!noterId || !notedId) return;
+  const trimmed = (text || "").trim();
+  if (!trimmed) {
+    await supabase.from("user_notes").delete().eq("noter_id", noterId).eq("noted_id", notedId);
+    return;
+  }
+  const { error } = await supabase
+    .from("user_notes")
+    .upsert({ noter_id: noterId, noted_id: notedId, text: trimmed, updated_at: new Date().toISOString() }, { onConflict: "noter_id,noted_id" });
+  if (error) throw error;
+}
+
 // ═════════════════════════════════════════════════════════════
 // CATEGORIES
 // ═════════════════════════════════════════════════════════════
