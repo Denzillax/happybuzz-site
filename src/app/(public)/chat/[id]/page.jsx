@@ -3,9 +3,9 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Send, ArrowLeft, User, Package, Loader2, Plus, X } from "lucide-react";
+import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getMessages, sendMessage, markMessagesRead } from "@/lib/listings";
+import { getMessages, sendMessage, markMessagesRead, uploadChatImage } from "@/lib/listings";
 
 const QUICK_REPLIES = [
   "Ist noch verfügbar",
@@ -16,6 +16,15 @@ const QUICK_REPLIES = [
 ];
 const QR_KEY = "beedaro_quick_replies";
 
+function dayLabel(d) {
+  const date = new Date(d); const now = new Date();
+  const sameDay = (a, b) => a.toDateString() === b.toDateString();
+  if (sameDay(date, now)) return "Heute";
+  const y = new Date(now); y.setDate(now.getDate() - 1);
+  if (sameDay(date, y)) return "Gestern";
+  return date.toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" });
+}
+
 export default function ChatConversation() {
   const params = useParams();
   const [messages, setMessages] = useState([]);
@@ -23,9 +32,12 @@ export default function ChatConversation() {
   const [user, setUser] = useState(null);
   const [conv, setConv] = useState(null);
   const [sending, setSending] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [customReplies, setCustomReplies] = useState([]);
+  const [lightbox, setLightbox] = useState(null);
   const bottomRef = useRef(null);
+  const fileRef = useRef(null);
 
   useEffect(() => {
     try { const a = JSON.parse(localStorage.getItem(QR_KEY) || "[]"); if (Array.isArray(a)) setCustomReplies(a); } catch {}
@@ -41,16 +53,12 @@ export default function ChatConversation() {
         const { data: { user: u } } = await supabase.auth.getUser();
         if (!u) { window.location.href = "/login"; return; }
         setUser(u);
-
-        // Conversation laden
         const { data: c } = await supabase
           .from("conversations")
-          .select("*, listing:listings(id, title, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
+          .select("*, listing:listings(id, title, price, listing_type, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
           .eq("id", params.id)
           .single();
         setConv(c);
-
-        // Messages laden
         const msgs = await getMessages(params.id);
         setMessages(msgs);
         await markMessagesRead(params.id, u.id);
@@ -60,38 +68,42 @@ export default function ChatConversation() {
     load();
   }, [params.id]);
 
-  // Realtime subscription
   useEffect(() => {
     const channel = supabase
       .channel(`chat-${params.id}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${params.id}` },
         (payload) => {
-          setMessages((prev) => [...prev, payload.new]);
-          if (user && payload.new.sender_id !== user.id) {
-            markMessagesRead(params.id, user.id);
-          }
+          setMessages((prev) => prev.some((m) => m.id === payload.new.id) ? prev : [...prev, payload.new]);
+          if (user && payload.new.sender_id !== user.id) markMessagesRead(params.id, user.id);
         }
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [params.id, user]);
 
-  // Auto-scroll
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
   const sendText = async (text) => {
     const t = (text ?? newMsg).trim();
     if (!t || sending) return;
     setSending(true);
-    try {
-      await sendMessage(params.id, user.id, t);
-      if (text === undefined) setNewMsg("");
-    } catch (err) { console.error(err); }
+    try { await sendMessage(params.id, user.id, t); if (text === undefined) setNewMsg(""); }
+    catch (err) { console.error(err); }
     finally { setSending(false); }
   };
   const handleSend = () => sendText();
+
+  const onPickImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (e.target) e.target.value = "";
+    if (!file || !file.type.startsWith("image/") || uploading) return;
+    setUploading(true);
+    try {
+      const url = await uploadChatImage(params.id, file);
+      await sendMessage(params.id, user.id, "", { imageUrl: url });
+    } catch (err) { console.error(err); }
+    finally { setUploading(false); }
+  };
 
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
@@ -101,42 +113,69 @@ export default function ChatConversation() {
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", flexDirection: "column", color: colors.dark }}>
 
       {/* Header */}
-      <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, position: "sticky", top: 0, zIndex: 10 }}>
+      <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "12px 20px", display: "flex", alignItems: "center", gap: 14, position: "sticky", top: 0, zIndex: 10 }}>
         <Link href="/chat" style={{ color: colors.muted, display: "flex" }}><ArrowLeft size={20} /></Link>
         <div style={{ width: 40, height: 40, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
           {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={20} color={colors.yellow} />}
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{otherUser?.display_name || "Benutzer"}</p>
-          {conv?.listing && <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>{conv.listing.title}</p>}
+          <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>Privater Chat</p>
         </div>
-        {conv?.listing && (
-          <Link href={`/listing/${conv.listing.id}`} style={{ width: 40, height: 40, borderRadius: 6, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {conv.listing.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={16} color={colors.mutedLt} />}
-          </Link>
-        )}
       </div>
 
+      {/* Inserat-Kontext */}
+      {conv?.listing && (
+        <Link href={`/listing/${conv.listing.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <div style={{ maxWidth: 800, margin: "10px auto 0", width: "calc(100% - 40px)", display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: colors.surface, borderRadius: radius.md, border: `1px solid ${colors.border}` }}>
+            <div style={{ width: 44, height: 44, borderRadius: 8, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {conv.listing.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={18} color={colors.mutedLt} />}
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ margin: 0, fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{conv.listing.title}</p>
+              {conv.listing.price != null && <p style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 800, color: colors.teal }}>CHF {Number(conv.listing.price).toLocaleString("de-CH")}</p>}
+            </div>
+            <span style={{ fontSize: 12, color: colors.blue, fontWeight: 600, flexShrink: 0 }}>Zum Inserat</span>
+          </div>
+        </Link>
+      )}
+
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 0 && (
           <div style={{ textAlign: "center", padding: 40, color: colors.muted, fontSize: 13 }}>Schreibe die erste Nachricht.</div>
         )}
-        {messages.map((msg) => {
+        {messages.map((msg, i) => {
           const isMe = msg.sender_id === user?.id;
+          const prev = messages[i - 1];
+          const showDay = !prev || new Date(prev.created_at).toDateString() !== new Date(msg.created_at).toDateString();
+          const isImage = msg.message_type === "image" || (!!msg.image_url && !msg.content);
           return (
-            <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 10 }}>
-              <div style={{
-                maxWidth: "70%", padding: "10px 14px", borderRadius: 16,
-                background: isMe ? colors.yellow : colors.surface,
-                border: isMe ? "none" : `1px solid ${colors.border}`,
-                borderBottomRightRadius: isMe ? 4 : 16,
-                borderBottomLeftRadius: isMe ? 16 : 4,
-              }}>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: colors.dark }}>{msg.content}</p>
-                <p style={{ margin: "4px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
-                  {new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
-                </p>
+            <div key={msg.id || i}>
+              {showDay && (
+                <div style={{ textAlign: "center", margin: "12px 0" }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 12 }}>{dayLabel(msg.created_at)}</span>
+                </div>
+              )}
+              <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
+                <div style={{
+                  maxWidth: "72%", padding: isImage ? 4 : "10px 14px", borderRadius: 16,
+                  background: isImage ? "transparent" : (isMe ? colors.yellow : colors.surface),
+                  border: isImage ? "none" : (isMe ? "none" : `1px solid ${colors.border}`),
+                  borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4,
+                }}>
+                  {isImage ? (
+                    <img src={msg.image_url} alt="Bild" onClick={() => setLightbox(msg.image_url)}
+                      style={{ maxWidth: 220, maxHeight: 260, borderRadius: 12, cursor: "pointer", display: "block" }} />
+                  ) : (
+                    <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: colors.dark, whiteSpace: "pre-wrap" }}>{msg.content}</p>
+                  )}
+                  {!isImage && (
+                    <p style={{ margin: "4px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
+                      {new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           );
@@ -166,6 +205,11 @@ export default function ChatConversation() {
           </button>
         </div>
         <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 10, alignItems: "center" }}>
+          <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
+          <button onClick={() => fileRef.current?.click()} disabled={uploading} title="Bild senden"
+            style={{ width: 44, height: 44, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: colors.cream, cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            {uploading ? <Loader2 size={18} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <ImagePlus size={18} color={colors.muted} />}
+          </button>
           <input
             type="text" value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
@@ -174,11 +218,19 @@ export default function ChatConversation() {
             style={{ flex: 1, padding: "12px 16px", borderRadius: 24, border: `1.5px solid ${colors.border}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: colors.cream }}
           />
           <button onClick={handleSend} disabled={!newMsg.trim() || sending}
-            style={{ width: 44, height: 44, borderRadius: "50%", border: "none", background: newMsg.trim() ? colors.yellow : colors.warm, cursor: newMsg.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .15s" }}>
+            style={{ width: 44, height: 44, borderRadius: "50%", border: "none", background: newMsg.trim() ? colors.yellow : colors.warm, cursor: newMsg.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .15s", flexShrink: 0 }}>
             <Send size={18} color={newMsg.trim() ? colors.dark : colors.mutedLt} />
           </button>
         </div>
       </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div onClick={() => setLightbox(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.85)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <img src={lightbox} alt="Bild" style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: 8 }} />
+          <button onClick={() => setLightbox(null)} style={{ position: "absolute", top: 16, right: 16, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.15)", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><X size={20} /></button>
+        </div>
+      )}
     </div>
   );
 }

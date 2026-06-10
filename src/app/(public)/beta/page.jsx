@@ -165,12 +165,14 @@ const TESTS = [
   {
     id: "chat", title: "Chat & Nachrichten", icon: Monitor,
     items: [
-      { id: "ch_list", label: "Chat-Übersicht: Unterhaltungen nach Inserat gruppiert" },
+      { id: "ch_list", label: "Chat-Übersicht: Unterhaltungen als Liste, Klick öffnet den Thread" },
       { id: "ch_unread", label: "Ungelesen-Markierung & Sortierung" },
       { id: "ch_public", label: "Öffentliche Q&A: Frage & Antwort des Verkäufers" },
       { id: "ch_private", label: "Private Nachrichten senden/empfangen" },
       { id: "ch_thread", label: "Einzel-Chat /chat/[id]: Verlauf korrekt" },
       { id: "ch_quick", label: "Schnell-Antworten: vordefinierte Chips senden, eigene anlegen/löschen" },
+      { id: "ch_context", label: "Thread zeigt Inserat-Kontext (Bild, Titel, Preis, 'Zum Inserat') + Datums-Trenner" },
+      { id: "ch_images", label: "Bild im Chat senden (Upload) + Anzeige + Lightbox" },
     ],
   },
   {

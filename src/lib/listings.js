@@ -901,15 +901,27 @@ export async function getMessages(conversationId) {
   return data || [];
 }
 
-export async function sendMessage(conversationId, senderId, content) {
+export async function sendMessage(conversationId, senderId, content, opts = {}) {
+  const row = { conversation_id: conversationId, sender_id: senderId, content };
+  if (opts.imageUrl) { row.image_url = opts.imageUrl; row.message_type = "image"; }
   const { data, error } = await supabase
     .from("messages")
-    .insert({ conversation_id: conversationId, sender_id: senderId, content })
+    .insert(row)
     .select()
     .single();
   if (error) throw error;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
   return data;
+}
+
+// Chat-Bild hochladen (nutzt den listing-images Bucket unter chat/<conv>/).
+export async function uploadChatImage(conversationId, file) {
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const path = `chat/${conversationId}/${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from("listing-images").upload(path, file, { upsert: false });
+  if (error) throw error;
+  const { data: { publicUrl } } = supabase.storage.from("listing-images").getPublicUrl(path);
+  return publicUrl;
 }
 
 export async function markMessagesRead(conversationId, userId) {
