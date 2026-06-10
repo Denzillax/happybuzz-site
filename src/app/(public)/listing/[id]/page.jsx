@@ -205,9 +205,8 @@ export default function ListingDetail() {
     if (!user || !msgText.trim() || sendingMsg) return;
     setSendingMsg(true);
     try {
-      const isSeller = user.id === l.user_id;
-      const sendPublic = isSeller ? true : msgPublic;
-      const filtered = questions.filter(q => sendPublic ? q.is_public : !q.is_public);
+      const sendPublic = true; // Block = öffentliche Fragen; privat läuft über den Chat
+      const filtered = questions.filter(q => q.is_public);
 
       if (filtered.length > 0) {
         // Bestehende Conversation → Antwort hinzufügen
@@ -240,6 +239,28 @@ export default function ListingDetail() {
     } catch (err) { console.error("Send error:", err); }
     finally { setSendingMsg(false); }
   };
+
+  // Private Unterhaltung öffnen/erstellen und zum Chat-Thread navigieren.
+  const startPrivateChat = async () => {
+    if (!user) { router.push("/login"); return; }
+    if (sendingMsg) return;
+    setSendingMsg(true);
+    try {
+      const { data: existing } = await supabase.from("conversations")
+        .select("id").eq("listing_id", l.id).eq("buyer_id", user.id).eq("seller_id", l.user_id).eq("is_public", false).maybeSingle();
+      let convId = existing?.id;
+      if (!convId) {
+        const { data: nc, error } = await supabase.from("conversations")
+          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: false })
+          .select("id").single();
+        if (error) { console.error(error); return; }
+        convId = nc?.id;
+      }
+      if (convId) router.push(`/chat/${convId}`);
+    } catch (err) { console.error(err); }
+    finally { setSendingMsg(false); }
+  };
+
   const handleBuy = async () => {
     if (!user) { router.push("/login"); return; }
     if (buyState === "idle") {
@@ -418,7 +439,7 @@ export default function ListingDetail() {
               <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <MessageCircle size={16} color={colors.muted} />
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Nachrichten</p>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Fragen zum Inserat</p>
                   {questions.length > 0 && (
                     <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 10 }}>
                       {questions.reduce((sum, q) => sum + (q.messages?.length || 0), 0)}
@@ -430,26 +451,19 @@ export default function ListingDetail() {
 
               {msgOpen && (
               <>
-              <div style={{ padding: "0 20px 10px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", justifyContent: "flex-end" }}>
-                {isOwner ? (
-                  <span style={{ fontSize: 11, fontWeight: 600, color: colors.muted, padding: "5px 12px", background: colors.cream, borderRadius: 6 }}>Öffentlich</span>
-                ) : (
-                  <div style={{ display: "flex", background: colors.cream, borderRadius: 6, overflow: "hidden", border: `1px solid ${colors.borderLt}` }}>
-                    <button onClick={() => setMsgPublic(true)} style={{ padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, border: "none", background: msgPublic ? colors.yellow : "transparent", color: colors.dark, transition: "all .15s" }}>
-                      Öffentlich ({questions.filter(q => q.is_public).length})
-                    </button>
-                    <button onClick={() => setMsgPublic(false)} style={{ padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, border: "none", background: !msgPublic ? colors.yellow : "transparent", color: colors.dark, transition: "all .15s" }}>
-                      Privat ({questions.filter(q => !q.is_public).length})
-                    </button>
-                  </div>
+              <div style={{ padding: "10px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 11, color: colors.muted }}>Öffentlich sichtbar. Andere sehen Frage und Antwort.</span>
+                {user && !isOwner && (
+                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                    <MessageCircle size={14} /> Nachricht an Verkäufer
+                  </button>
                 )}
               </div>
 
               {/* Chat-Bereich — feste Höhe, WhatsApp-Style */}
               <div style={{ height: 320, overflowY: "auto", padding: "16px 20px", background: colors.cream }}>
                 {(() => {
-                  const viewPublic = isOwner ? true : msgPublic;
-                  const filtered = questions.filter(q => viewPublic ? q.is_public : !q.is_public);
+                  const filtered = questions.filter(q => q.is_public);
                   const allMsgs = filtered.flatMap(q => q.messages.map(m => ({ ...m, convId: q.id })));
                   allMsgs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
@@ -485,7 +499,7 @@ export default function ListingDetail() {
                   ) : (
                     <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <p style={{ fontSize: 13, color: colors.mutedLt }}>
-                        {(isOwner || msgPublic) ? "Noch keine öffentlichen Nachrichten." : "Noch keine privaten Nachrichten."}
+                        {isOwner ? "Noch keine Fragen zu diesem Inserat." : "Noch keine Fragen. Stell die erste."}
                       </p>
                     </div>
                   );
@@ -497,7 +511,7 @@ export default function ListingDetail() {
                 <div style={{ padding: "10px 16px", borderTop: `1px solid ${colors.borderLt}`, background: colors.surface, display: "flex", gap: 8, alignItems: "center" }}>
                   <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
-                    placeholder={isOwner ? "Öffentliche Nachricht als Verkäufer..." : (msgPublic ? "Öffentliche Nachricht..." : "Private Nachricht...")}
+                    placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
                     style={{ flex: 1, padding: "10px 14px", borderRadius: 20, border: `1.5px solid ${colors.borderLt}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: colors.cream }} />
                   <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
                     style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .15s" }}>
