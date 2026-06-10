@@ -103,6 +103,7 @@ const TESTS = [
       { id: "lv_similar", label: "Ähnliche Inserate werden angezeigt" },
       { id: "lv_recent", label: "Zuletzt angesehen: besuchte Inserate erscheinen auf der Startseite" },
       { id: "lv_qr", label: "QR-Code: Modal zeigt scanbaren Code zum Inserat + Drucken" },
+      { id: "lv_live", label: "Live-Zähler: 'X schauen gerade' bei >2 aktiven Betrachtern (Realtime)" },
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_offer", label: "Preis vorschlagen (verhandelbar): Vorschlag → Chat; Annehmen/Ablehnen/Gegenvorschlag, max 3 Runden" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },

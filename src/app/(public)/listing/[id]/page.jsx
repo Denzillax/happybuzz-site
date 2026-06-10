@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye,
 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
@@ -108,6 +108,7 @@ export default function ListingDetail() {
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerAmount, setOfferAmount] = useState("");
   const [offerSending, setOfferSending] = useState(false);
+  const [viewerCount, setViewerCount] = useState(1);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
 
@@ -165,6 +166,19 @@ export default function ListingDetail() {
     });
     return () => subscription?.unsubscribe();
   }, []);
+
+  // Live-Zähler: aktive Betrachter via Realtime-Presence
+  useEffect(() => {
+    if (!params.id) return;
+    const key = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const ch = supabase.channel(`presence-listing-${params.id}`, { config: { presence: { key } } });
+    ch.on("presence", { event: "sync" }, () => {
+      setViewerCount(Object.keys(ch.presenceState()).length || 1);
+    }).subscribe((status) => {
+      if (status === "SUBSCRIBED") ch.track({ at: Date.now() });
+    });
+    return () => { supabase.removeChannel(ch); };
+  }, [params.id]);
 
   // Live countdown timer for auctions
   useEffect(() => {
@@ -576,6 +590,11 @@ export default function ListingDetail() {
                 <Clock size={13} /> {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}
                 {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span>{l.view_count} Aufrufe</>}
               </p>
+              {viewerCount > 2 && (
+                <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, color: colors.teal, display: "flex", alignItems: "center", gap: 5 }}>
+                  <Eye size={13} /> {viewerCount} Leute schauen sich das gerade an
+                </p>
+              )}
 
               {/* Price */}
               <div style={{ marginBottom: 16 }}>
