@@ -5,8 +5,7 @@ import { supabase } from '@/lib/supabase/supabase'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
-import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, ShoppingCart, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
-import { cartCount } from '@/lib/cart'
+import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
 import NotificationBell from '@/components/shared/NotificationBell'
 import { MegaMenu } from '@/components/shared/MegaMenu'
 
@@ -27,14 +26,6 @@ export function Header() {
   const [favOpen, setFavOpen] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
-  const [cartN, setCartN] = useState(0)
-  useEffect(() => {
-    const upd = () => setCartN(cartCount())
-    upd()
-    window.addEventListener('beedaro:cart', upd)
-    window.addEventListener('storage', upd)
-    return () => { window.removeEventListener('beedaro:cart', upd); window.removeEventListener('storage', upd) }
-  }, [])
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const favRef = useRef<HTMLDivElement>(null)
@@ -253,14 +244,6 @@ export function Header() {
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
                   <span style={{ position: 'absolute', top: 2, right: 2, width: 14, height: 14, borderRadius: '50%', background: '#e53e3e', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>{unreadCount > 9 ? '9+' : unreadCount}</span>
-                )}
-              </button>
-
-              {/* Warenkorb */}
-              <button className="hdr-icon-btn" onClick={() => router.push('/cart')} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
-                <ShoppingCart size={20} />
-                {cartN > 0 && (
-                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 14, height: 14, padding: '0 3px', borderRadius: 8, background: '#0E9493', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>{cartN > 9 ? '9+' : cartN}</span>
                 )}
               </button>
             </div>

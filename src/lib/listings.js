@@ -239,7 +239,7 @@ export async function getListing(listingId) {
 // ─── Get Single (public + seller) ────────────────────────────
 export async function getListingPublic(listingId) {
   const { data, error } = await supabase.from("listings")
-    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, avg_rating, rating_count, bundle_min_items, bundle_discount_pct)")
+    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, avg_rating, rating_count)")
     .eq("id", listingId).not("status", "eq", "deleted").single();
   if (error) throw error;
 
@@ -545,15 +545,6 @@ export async function createPurchaseAtPrice(buyerId, listingId, price) {
   return data;
 }
 
-// Kauf mit Preis- UND Versand-Override (Warenkorb / gebuendelter Versand).
-export async function createPurchaseBundled(buyerId, listingId, price, shipping) {
-  const { data, error } = await supabase.rpc("create_purchase", {
-    p_listing_id: listingId, p_buyer_id: buyerId, p_price: price, p_shipping: shipping,
-  });
-  if (error) throw new Error(error.message);
-  return data;
-}
-
 export async function getMyPurchases(userId) {
   const { data, error } = await supabase
     .from("purchases")
@@ -664,7 +655,7 @@ export async function getMyBeeProfile(userId) {
 export async function getPublicProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, bundle_min_items, bundle_discount_pct")
+    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total")
     .eq("id", userId)
     .single();
   if (error) throw error;
