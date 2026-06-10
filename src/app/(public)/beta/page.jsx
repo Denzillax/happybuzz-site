@@ -101,6 +101,7 @@ const TESTS = [
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },
+      { id: "lv_bidder_anon", label: "Gebotsverlauf zeigt anonyme Bieter (Bieter 1/2, eigene = 'Du'), keine echten Namen" },
       { id: "lv_auction_end", label: "Auktion: Auto-Finalisierung nach Ablauf" },
       { id: "lv_rental_book", label: "Mieten: Zeitraum wählen & buchen" },
     ],

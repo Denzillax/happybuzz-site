@@ -1155,7 +1155,7 @@ export async function removePreislimit(listingId, userId) {
 export async function getBids(listingId) {
   const { data, error } = await supabase
     .from("bids")
-    .select("*, bidder:profiles!bids_bidder_id_fkey(id, display_name)")
+    .select("*")
     .eq("listing_id", listingId)
     .order("amount", { ascending: false })
     .limit(20);
@@ -1532,7 +1532,7 @@ export async function submitServiceInvoice(purchaseId, sellerId, hours, hourlyRa
 export async function getBidHistory(listingId) {
   const { data, error } = await supabase
     .from("bid_history")
-    .select("id, listing_id, bidder_id, amount, bid_type, created_at, bidder:profiles(id, display_name)")
+    .select("id, listing_id, bidder_id, amount, bid_type, created_at")
     .eq("listing_id", listingId)
     .order("created_at", { ascending: false })
     .limit(50);

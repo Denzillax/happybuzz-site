@@ -668,6 +668,17 @@ export default function ListingDetail() {
                     const totalBids = allBids.length;
                     const visibleBids = showAllBids ? allBids : allBids.slice(0, 3);
                     const topBidderId = bids[0]?.bidder_id || bids[0]?.bidder?.id;
+                    // Anonyme, pro Auktion stabile Bieter-Pseudonyme (Bieter 1 = frühestes Gebot).
+                    const bidderNum = {};
+                    [...allBids].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).forEach(b => {
+                      const bid = b.bidder_id || b.bidder?.id;
+                      if (bid && !(bid in bidderNum)) bidderNum[bid] = Object.keys(bidderNum).length + 1;
+                    });
+                    const bidderLabel = (b) => {
+                      const bid = b.bidder_id || b.bidder?.id;
+                      if (bid && user?.id && bid === user.id) return "Du";
+                      return bid ? `Bieter ${bidderNum[bid]}` : "Bieter";
+                    };
                     return (
                     <div style={{ fontSize: 13, marginTop: 8 }}>
                       <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
@@ -680,7 +691,7 @@ export default function ListingDetail() {
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                             <span style={{ fontWeight: isTopBidder ? 700 : 500, color: isTopBidder ? colors.dark : colors.muted, fontSize: 12 }}>
-                              {b.bidder?.display_name || "Bieter"}
+                              {bidderLabel(b)}
                             </span>
                             {b.bid_type === "auto" && (
                               <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 4 }}>automatisch</span>
