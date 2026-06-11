@@ -13,11 +13,22 @@ const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 
 const chf = (n) => Math.round(Number(n || 0)).toLocaleString("de-CH");
 
+const PHOTOS = [
+  { src: "/images/bee-impact.jpg", alt: "Biene auf einer Blume mit Vintage-Polaroid-Kamera" },
+  { src: "/images/bee-impact_GB.jpg", alt: "Biene auf einer Blume mit einem Nintendo Game Boy" },
+  { src: "/images/bee-impact_Vinyl.jpg", alt: "Biene auf einer Blume mit einer Vinyl-Schallplatte" },
+];
+
 export function CommunityImpact() {
   const [stats, setStats] = useState({ impact: 0, articles: 0 });
   const [userImpact, setUserImpact] = useState(0);
   const [firstName, setFirstName] = useState("");
-  const [imgOk, setImgOk] = useState(true);
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setSlide((s) => (s + 1) % PHOTOS.length), 4500);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     getCommunityImpactStats().then(setStats).catch(() => {});
@@ -51,19 +62,30 @@ export function CommunityImpact() {
       padding: "44px 20px",
     }}>
       <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        {/* ── Foto ── */}
+        {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
           position: "relative", borderRadius: 20, overflow: "hidden",
           boxShadow: "0 14px 40px rgba(91,140,90,0.22)", background: "#E8EFE6",
-          aspectRatio: "3 / 2", display: "flex", alignItems: "center", justifyContent: "center",
+          aspectRatio: "3 / 2",
         }}>
-          {imgOk ? (
-            <img src="/images/bee-impact.jpg" alt="Biene auf einer Blume mit Vintage-Polaroid-Kamera"
-              onError={() => setImgOk(false)}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            <Leaf size={56} color={GREEN} strokeWidth={1.5} style={{ opacity: 0.5 }} />
-          )}
+          {PHOTOS.map((p, i) => (
+            <img key={p.src} src={p.src} alt={p.alt}
+              style={{
+                position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+                opacity: i === slide ? 1 : 0, transition: "opacity .8s ease-in-out",
+              }} />
+          ))}
+          {/* Punkte */}
+          <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 7, zIndex: 2 }}>
+            {PHOTOS.map((p, i) => (
+              <button key={p.src} onClick={() => setSlide(i)} aria-label={`Bild ${i + 1}`}
+                style={{
+                  width: i === slide ? 22 : 8, height: 8, padding: 0, borderRadius: 4, border: "none", cursor: "pointer",
+                  background: i === slide ? "#fff" : "rgba(255,255,255,.55)", boxShadow: "0 1px 3px rgba(0,0,0,.25)",
+                  transition: "width .3s, background .3s",
+                }} />
+            ))}
+          </div>
         </div>
 
         {/* ── Inhalt ── */}
