@@ -400,7 +400,7 @@ export default function AdminPage() {
                       <p style={{ margin: "1px 0 0", fontSize: 11, color: colors.muted }}>{u.city} · {u.created_at ? fmtDate(u.created_at) : ""}</p>
                     </div>
                     {pill(colors.yellowSoft, colors.dark, u.bee_level || "starter")}
-                    <span style={{ fontSize: 11, color: "#5B8C5A", fontWeight: 600, minWidth: 70, textAlign: "right" }}>{Math.round((parseFloat(u.bee_impact_total) || 0) * 10).toLocaleString("de-CH")} Blüten</span>
+                    <span style={{ fontSize: 11, color: "#5B8C5A", fontWeight: 600, minWidth: 70, textAlign: "right" }}>{(u.blueten || 0).toLocaleString("de-CH")} Blüten</span>
                     {isOpen ? <ChevronUp size={14} color={colors.muted} /> : <ChevronDown size={14} color={colors.muted} />}
                   </div>
 

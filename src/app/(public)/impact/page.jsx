@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Heart, TreePine, Droplets, Bird, ArrowRight, TrendingUp, Users, ShoppingBag } from "lucide-react";
+import { Heart, TreePine, Droplets, Bird, ArrowRight, TrendingUp, Users, ShoppingBag, Flower2 } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { supabase } from "@/lib/supabase/supabase";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -12,12 +12,10 @@ const PROJECTS = [
   { icon: Bird, title: "Biodiversität Alpenraum", desc: "Schutz und Förderung bedrohter Tier- und Pflanzenarten in den Schweizer Alpen.", status: "Geplant", color: "#F4A100" },
 ];
 
-const LEVELS = [
-  { name: "Bee Starter", min: 0, max: 10, desc: "Willkommen bei BEEDARO" },
-  { name: "Busy Bee", min: 10, max: 50, desc: "Du bist aktiv dabei" },
-  { name: "Hive Builder", min: 50, max: 150, desc: "Du baust mit an der Community" },
-  { name: "Queen Bee", min: 150, max: 500, desc: "Top-Contributor" },
-  { name: "Bee Legend", min: 500, max: null, desc: "Legende der Community" },
+const FUNNEL = [
+  { icon: Flower2, color: "#5B8C5A", title: "Blüten", desc: "Jede Transaktion (Kauf & Verkauf) bringt Blüten — dein Naturschutz-Beitrag in Punkten." },
+  { icon: null, color: "#F4C03F", title: "Pollen", desc: "100 Blüten = 1 Pollen. Plus Pollen fürs Mitmachen (inserieren, bewerten). Pollen heben dein Bee-Level." },
+  { icon: Droplets, color: "#C8860A", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
 ];
 
 export default function ImpactPage() {
@@ -152,33 +150,22 @@ export default function ImpactPage() {
           </div>
         </div>
 
-        {/* Bee-Level */}
+        {/* So wirst du belohnt — Trichter Blüten -> Pollen -> Nektar */}
         <div style={{ marginBottom: 48 }}>
           <div style={{ textAlign: "center", marginBottom: 28 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Gamification</div>
-            <h2 style={{ fontSize: 22, fontWeight: 900, margin: 0 }}>Dein Bee-Level</h2>
-            <p style={{ fontSize: 13, color: colors.muted, marginTop: 6 }}>Je mehr Blüten du sammelst, desto höher dein Level.</p>
+            <h2 style={{ fontSize: 22, fontWeight: 900, margin: 0 }}>So wirst du belohnt</h2>
+            <p style={{ fontSize: 13, color: colors.muted, marginTop: 6 }}>Blüten werden zu Pollen, Pollen heben dein Bee-Level, Level schenken Nektar für Belohnungen.</p>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {LEVELS.map((l, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 14, padding: "12px 16px",
-                borderRadius: 10, background: "#fff", border: `1px solid ${colors.border}`,
-              }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: "50%", display: "flex",
-                  alignItems: "center", justifyContent: "center", flexShrink: 0,
-                  background: i === 0 ? colors.cream : colors.yellowSoft,
-                }}>
-                  <BeeIcon size={18} color={i === 0 ? colors.muted : colors.yellow} />
+          <div className="impact-funnel" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {FUNNEL.map((s, i) => (
+              <div key={i} style={{ padding: "18px 16px", borderRadius: 12, background: "#fff", border: `1px solid ${colors.border}`, textAlign: "center" }}>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${s.color}1A`, display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+                  {s.icon ? <s.icon size={20} color={s.color} /> : <BeeIcon size={20} color={s.color} />}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700 }}>{l.name}</div>
-                  <div style={{ fontSize: 12, color: colors.muted }}>{l.desc}</div>
-                </div>
-                <div style={{ fontSize: 12, color: colors.muted, fontWeight: 600 }}>
-                  {l.max ? `${(l.min * 10).toLocaleString("de-CH")} – ${(l.max * 10).toLocaleString("de-CH")} Blüten` : `ab ${(l.min * 10).toLocaleString("de-CH")} Blüten`}
-                </div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: s.color, marginBottom: 4, letterSpacing: ".04em" }}>SCHRITT {i + 1}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 6 }}>{s.title}</div>
+                <div style={{ fontSize: 12.5, color: colors.muted, lineHeight: 1.5 }}>{s.desc}</div>
               </div>
             ))}
           </div>

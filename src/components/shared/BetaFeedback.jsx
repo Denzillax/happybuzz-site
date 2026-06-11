@@ -134,6 +134,7 @@ const PAGE_TESTS = {
   ],
   "/hive": [
     { id: "hv_level", label: "Level + Pollen-Balken korrekt" },
+    { id: "hv_blueten", label: "Blüten-Guthaben + 'In Pollen umwandeln' (100:1)" },
     { id: "hv_streak", label: "Streak angezeigt" },
     { id: "hv_challenges", label: "Challenges mit Fortschritt" },
     { id: "hv_achievements", label: "Achievements gesperrt/offen" },

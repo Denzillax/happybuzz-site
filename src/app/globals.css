@@ -154,6 +154,7 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 600px) { .featured-sellers-grid { grid-template-columns: 1fr !important; } }
 .impact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
 .impact-content { text-align: left; }
+@media (max-width: 600px) { .impact-funnel { grid-template-columns: 1fr !important; } }
 @media (max-width: 768px) {
   .impact-layout { grid-template-columns: 1fr !important; gap: 22px !important; max-width: 560px; }
   .impact-content { text-align: center; }

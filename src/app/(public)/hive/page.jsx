@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift } from "lucide-react";
+import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift, Flower2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -11,6 +11,7 @@ import {
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
   getCommunityStats, getXPHistory, touchStreak,
   NEKTAR_CATALOG, redeemNektar,
+  convertBlueten, BLUETEN_PER_POLLEN,
 } from "@/lib/gamification";
 
 const REASON_LABEL = {
@@ -22,6 +23,7 @@ const REASON_LABEL = {
   rating_received_positive: "Gute Bewertung erhalten",
   rental_completed: "Vermietung abgeschlossen",
   daily_streak: "Täglicher Streak",
+  blueten_converted: "Blüten umgewandelt",
 };
 const reasonLabel = (r) => REASON_LABEL[r] || (r?.startsWith("achievement:") ? "Achievement freigeschaltet" : r);
 
@@ -57,6 +59,26 @@ export default function HivePage() {
   const [pickedListing, setPickedListing] = useState(null);
   const [redeeming, setRedeeming] = useState(false);
   const [redeemError, setRedeemError] = useState("");
+  const [converting, setConverting] = useState(false);
+  const [convertMsg, setConvertMsg] = useState("");
+
+  async function convertAll() {
+    const bal = profile?.blueten || 0;
+    const convertible = Math.floor(bal / BLUETEN_PER_POLLEN) * BLUETEN_PER_POLLEN;
+    if (convertible < BLUETEN_PER_POLLEN || converting) return;
+    setConverting(true); setConvertMsg("");
+    try {
+      const res = await convertBlueten(convertible);
+      if (res?.ok) {
+        setProfile((p) => ({ ...p, blueten: res.blueten, xp_total: res.xp_total }));
+        setConvertMsg(`+${res.pollen_gained} Pollen`);
+        window.dispatchEvent(new Event("beedaro:nektar"));
+      } else {
+        setConvertMsg("Umwandlung fehlgeschlagen.");
+      }
+    } catch { setConvertMsg("Umwandlung fehlgeschlagen."); }
+    finally { setConverting(false); }
+  }
 
   async function startRedeem(reward) {
     if ((profile?.nektar || 0) < reward.cost) return;
@@ -97,7 +119,7 @@ export default function HivePage() {
       await touchStreak(user.id);
 
       const [{ data: p }, ach, chs, lb, comm, hist] = await Promise.all([
-        supabase.from("profiles").select("display_name, xp_total, nektar, bee_level, current_streak, longest_streak, bee_impact_total").eq("id", user.id).maybeSingle(),
+        supabase.from("profiles").select("display_name, xp_total, nektar, blueten, bee_level, current_streak, longest_streak, bee_impact_total").eq("id", user.id).maybeSingle(),
         getUserAchievements(user.id),
         getChallengesWithProgress(user.id),
         getWeeklyLeaderboard(10),
@@ -129,6 +151,8 @@ export default function HivePage() {
   const progress = Math.round(levelProgress(xp) * 100);
   const toNext = xpToNext(xp);
   const nektar = profile?.nektar || 0;
+  const blueten = profile?.blueten || 0;
+  const convertiblePollen = Math.floor(blueten / BLUETEN_PER_POLLEN);
   const unlockedKeys = new Set(achievements.map(a => a.achievement_key));
   const streak = profile?.current_streak || 0;
 
@@ -172,9 +196,37 @@ export default function HivePage() {
             )}
           </div>
 
+          {/* Blüten-Balance + Umwandlung in Pollen */}
+          <div style={{
+            marginTop: 16, padding: "12px 14px", borderRadius: 12,
+            background: "#5B8C5A12", border: `1px solid #5B8C5A33`,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#5B8C5A22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Flower2 size={18} color="#5B8C5A" />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: 16, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>{blueten.toLocaleString("de-CH")} Blüten</p>
+                <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Aus deinen Transaktionen. {BLUETEN_PER_POLLEN} Blüten = 1 Pollen.</p>
+              </div>
+              {convertMsg && <span style={{ fontSize: 12, fontWeight: 800, color: "#5B8C5A", whiteSpace: "nowrap" }}>{convertMsg}</span>}
+            </div>
+            {convertiblePollen >= 1 ? (
+              <button onClick={convertAll} disabled={converting} style={{
+                width: "100%", marginTop: 10, padding: "9px 0", borderRadius: 8, border: "none",
+                background: "#5B8C5A", color: "#fff", fontSize: 13, fontWeight: 800, fontFamily: fonts.body,
+                cursor: converting ? "default" : "pointer", opacity: converting ? 0.6 : 1,
+              }}>
+                {converting ? "Wird umgewandelt..." : `${(convertiblePollen * BLUETEN_PER_POLLEN).toLocaleString("de-CH")} Blüten in ${convertiblePollen.toLocaleString("de-CH")} Pollen umwandeln`}
+              </button>
+            ) : (
+              <p style={{ margin: "10px 0 0", fontSize: 12, color: colors.muted }}>Noch {(BLUETEN_PER_POLLEN - blueten).toLocaleString("de-CH")} Blüten bis zur ersten Umwandlung.</p>
+            )}
+          </div>
+
           {/* Nektar-Balance */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 10, marginTop: 16, padding: "12px 14px",
+            display: "flex", alignItems: "center", gap: 10, marginTop: 12, padding: "12px 14px",
             borderRadius: 12, background: "#E8A82014", border: `1px solid #E8A82033`,
           }}>
             <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#E8A82022", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

@@ -173,6 +173,17 @@ export async function redeemNektar(reward, cost, listingId = null, durationHours
   return data || { ok: false, error: "unknown" };
 }
 
+// Blüten -> Pollen Umwandlungsrate (100 Blüten = 1 Pollen).
+export const BLUETEN_PER_POLLEN = 100;
+
+// Blüten manuell in Pollen umwandeln (serverseitig, RLS-sicher, 100er-Schritte).
+// Gibt { ok, blueten, pollen_gained, xp_total } oder { ok:false, error } zurück.
+export async function convertBlueten(amount) {
+  const { data, error } = await supabase.rpc("convert_blueten_to_pollen", { p_amount: amount });
+  if (error) { console.error("convert_blueten_to_pollen:", error); return { ok: false, error: "rpc" }; }
+  return data || { ok: false, error: "unknown" };
+}
+
 // Aktive Boosts für eine Liste von Inseraten (Badge-Anzeige auf Cards).
 export async function getActiveBoosts(listingIds) {
   if (!listingIds?.length) return {};

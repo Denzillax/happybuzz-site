@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Droplets, ChevronDown, Gift } from "lucide-react";
+import { Droplets, ChevronDown, Gift, Flower2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { calculateLevel, levelProgress, xpToNext, BEE_LEVELS } from "@/lib/gamification";
@@ -14,8 +14,8 @@ export default function NektarBadge() {
   const load = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setData(null); return; }
-    const { data: p } = await supabase.from("profiles").select("xp_total, nektar").eq("id", user.id).maybeSingle();
-    if (p) setData({ xp: p.xp_total || 0, nektar: p.nektar || 0 });
+    const { data: p } = await supabase.from("profiles").select("xp_total, nektar, blueten").eq("id", user.id).maybeSingle();
+    if (p) setData({ xp: p.xp_total || 0, nektar: p.nektar || 0, blueten: p.blueten || 0 });
   };
 
   useEffect(() => {
@@ -72,6 +72,10 @@ export default function NektarBadge() {
           <p style={{ margin: "0 0 12px", fontSize: 11, color: "#757575" }}>
             {next ? `Noch ${toNext.toLocaleString("de-CH")} Pollen bis ${next.name}` : "Maximales Level erreicht"}
           </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: 10, background: "#5B8C5A14", border: "1px solid #5B8C5A33", marginBottom: 8 }}>
+            <span style={{ fontSize: 12, color: "#757575", fontWeight: 600 }}>Blüten</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#5B8C5A" }}><Flower2 size={14} color="#5B8C5A" /> {data.blueten.toLocaleString("de-CH")}</span>
+          </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: 10, background: "#E8A82014", border: "1px solid #E8A82033", marginBottom: 12 }}>
             <span style={{ fontSize: 12, color: "#757575", fontWeight: 600 }}>Nektar</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#C8860A" }}><Droplets size={14} color="#C8860A" /> {data.nektar}</span>

@@ -151,7 +151,7 @@ export default function PublicProfilePage() {
               </div>
               <div style={{ textAlign: "center" }}>
                 <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: fonts.head, color: colors.green }}>
-                  {Math.round((parseFloat(profile.bee_impact_total) || 0) * 10).toLocaleString("de-CH")}
+                  {(profile.blueten || 0).toLocaleString("de-CH")}
                 </p>
                 <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Blüten</p>
               </div>
