@@ -113,7 +113,7 @@ export default function ImpactPage() {
             Du verkaufst einen Artikel für <strong style={{ color: colors.dark }}>CHF 100.00</strong> mit der Bee-Rate <strong style={{ color: colors.dark }}>Supporter (5%)</strong>.<br />
             Gebühr: CHF 5.00 — davon <strong style={{ color: "#5B8C5A" }}>CHF 1.00 Bee-Impact</strong> für den Naturschutz.<br />
             Du erhältst: <strong style={{ color: colors.dark }}>CHF 95.00</strong>.
-            Käufer und Verkäufer erhalten den gleichen Bee-Impact Credit für ihr Bee-Level.
+            Käufer und Verkäufer sammeln dafür gleich viele Blüten für ihr Bee-Level.
           </div>
         </div>
 
@@ -157,7 +157,7 @@ export default function ImpactPage() {
           <div style={{ textAlign: "center", marginBottom: 28 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Gamification</div>
             <h2 style={{ fontSize: 22, fontWeight: 900, margin: 0 }}>Dein Bee-Level</h2>
-            <p style={{ fontSize: 13, color: colors.muted, marginTop: 6 }}>Je mehr Bee-Impact du sammelst, desto höher dein Level.</p>
+            <p style={{ fontSize: 13, color: colors.muted, marginTop: 6 }}>Je mehr Blüten du sammelst, desto höher dein Level.</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {LEVELS.map((l, i) => (
@@ -177,7 +177,7 @@ export default function ImpactPage() {
                   <div style={{ fontSize: 12, color: colors.muted }}>{l.desc}</div>
                 </div>
                 <div style={{ fontSize: 12, color: colors.muted, fontWeight: 600 }}>
-                  {l.max ? `CHF ${l.min} – ${l.max}` : `ab CHF ${l.min}`}
+                  {l.max ? `${(l.min * 10).toLocaleString("de-CH")} – ${(l.max * 10).toLocaleString("de-CH")} Blüten` : `ab ${(l.min * 10).toLocaleString("de-CH")} Blüten`}
                 </div>
               </div>
             ))}

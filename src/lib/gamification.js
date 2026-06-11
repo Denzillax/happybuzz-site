@@ -114,7 +114,7 @@ export const ACHIEVEMENTS = {
   profile_complete: { name: "Vollständig", desc: "Profil vollständig verifiziert", xp: 30 },
   bee_hero: { name: "Bee Hero", desc: "Inserat mit 10% Bee-Rate erstellt", xp: 50 },
   first_rental: { name: "Teilen ist Caring", desc: "Erstes Miet-Inserat erstellt", xp: 50 },
-  community_25: { name: "Community Supporter", desc: "CHF 25 Bee-Impact erreicht", xp: 150 },
+  community_25: { name: "Community Supporter", desc: "250 Blüten gesammelt", xp: 150 },
 };
 
 // Achievement freischalten UND zugehörige XP vergeben (idempotent, serverseitig via RPC)
