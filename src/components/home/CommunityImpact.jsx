@@ -34,13 +34,14 @@ export function CommunityImpact() {
     getCommunityImpactStats().then(setStats).catch(() => {});
     async function loadUser() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase.from("profiles").select("first_name, display_name, bee_impact_total").eq("id", session.user.id).maybeSingle();
-        if (profile) {
-          setUserImpact(profile.bee_impact_total || 0);
-          setFirstName(profile.first_name || profile.display_name || "");
-        }
-      }
+      if (!session?.user) return;
+      const { data: profile } = await supabase.from("profiles").select("first_name, display_name").eq("id", session.user.id).maybeSingle();
+      if (profile) setFirstName(profile.first_name || profile.display_name || "");
+      // Eigener Beitrag = Bee-Impact aus den EIGENEN Verkäufen (fee_ledger),
+      // gleiche Basis wie der Community-Zähler -> alle Einzelbeiträge summieren
+      // sich exakt zum Gesamtbetrag. RLS: jeder sieht nur eigene Zeilen.
+      const { data: rows } = await supabase.from("fee_ledger").select("bee_impact").eq("seller_id", session.user.id).neq("status", "cancelled");
+      if (rows) setUserImpact(rows.reduce((s, r) => s + Number(r.bee_impact || 0), 0));
     }
     loadUser();
   }, []);
@@ -112,7 +113,7 @@ export function CommunityImpact() {
 
           {userImpact > 0 && (
             <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
-              Dein Beitrag: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+              Durch deine Verkäufe: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
             </p>
           )}
 
