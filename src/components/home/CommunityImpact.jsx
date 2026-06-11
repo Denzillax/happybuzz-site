@@ -113,7 +113,7 @@ export function CommunityImpact() {
 
           {userImpact > 0 && (
             <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
-              Durch deine Verkäufe: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+              Von dir beigetragen: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
             </p>
           )}
 
