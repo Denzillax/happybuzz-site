@@ -26,8 +26,8 @@ export default function ImpactPage() {
   useEffect(() => {
     async function load() {
       try {
-        const { data } = await supabase.rpc("get_community_bee_impact");
-        if (data) setStats({ total: data.total_impact || 0, count: data.transaction_count || 0 });
+        const { data } = await supabase.rpc("get_community_impact_stats");
+        if (data) setStats({ total: Number(data.impact) || 0, count: data.articles || 0 });
       } catch {}
     }
     load();

@@ -629,13 +629,6 @@ export async function getPurchase(purchaseId) {
 // BEE-IMPACT GAMIFICATION
 // ═════════════════════════════════════════════════════════════
 
-// Community-Total (für Startseite)
-export async function getCommunityBeeImpact() {
-  const { data, error } = await supabase.rpc("get_community_bee_impact");
-  if (error) return 0;
-  return data || 0;
-}
-
 // Impact-Summe + Anzahl geretteter Artikel (fuer die Homepage-Section).
 export async function getCommunityImpactStats() {
   const { data, error } = await supabase.rpc("get_community_impact_stats");
