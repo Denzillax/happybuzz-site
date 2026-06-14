@@ -59,9 +59,9 @@ export const fonts = {
 
 export const radius = {
   sm: 8,
-  md: 10,
-  lg: 14,
-  xl: 18,
+  md: 14,
+  lg: 20,
+  xl: 26,
   full: 9999,
 };
 
@@ -78,7 +78,8 @@ export const shadows = {
   sm:   "0 2px 8px rgba(0,0,0,.04)",
   md:   "0 4px 16px rgba(0,0,0,.06)",
   lg:   "0 8px 30px rgba(0,0,0,.1)",
-  card: "0 6px 20px rgba(0,0,0,.06)",
+  card:      "0 4px 16px rgba(0,0,0,.05)",   // dezenter Dauer-Schatten (Karten-Ruhezustand)
+  cardHover: "0 10px 30px rgba(0,0,0,.10)",  // Hover-Lift
 };
 
 export const T = { ...colors, ...fonts, ...radius, ...spacing };

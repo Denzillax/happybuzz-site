@@ -618,7 +618,7 @@ export default function ListingDetail() {
                   }} disabled={isOwner}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      padding: "15px", borderRadius: radius.sm, border: "none", width: "100%",
+                      padding: "15px", borderRadius: radius.full, border: "none", width: "100%",
                       background: isOwner ? colors.warm : colors.yellow,
                       color: isOwner ? colors.mutedLt : colors.dark,
                       fontSize: 15, fontWeight: 800, fontFamily: fonts.body, letterSpacing: ".03em",
@@ -628,7 +628,7 @@ export default function ListingDetail() {
                   </button>
                   {!isOwner && l.is_negotiable && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setOfferAmount(""); setShowOfferModal(true); }}
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.full, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
                       <Tag size={16} /> Preis vorschlagen
                     </button>
                   )}
@@ -744,7 +744,7 @@ export default function ListingDetail() {
                   {/* Sofortkauf Button */}
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
-                      style={{ width: "100%", padding: "14px", borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      style={{ width: "100%", padding: "14px", borderRadius: radius.full, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> SOFORT KAUFEN · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -756,7 +756,7 @@ export default function ListingDetail() {
                       const minBid = (bids[0]?.amount || l.start_price || 0) + 1;
                       setBidAmount(myBid ? String(myBid.max_amount) : String(Math.ceil(minBid)));
                       setBidModal("bid");
-                    }} style={{ width: "100%", padding: "14px", borderRadius: radius.sm, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    }} style={{ width: "100%", padding: "14px", borderRadius: radius.full, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <Gavel size={18} /> GEBOT ABGEBEN
                     </button>
                   )}
@@ -1099,7 +1099,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); setBookingError("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.sm, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.full, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> MIETE ANFRAGEN
                       </button>
                       {bookingError && (
@@ -1155,7 +1155,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); }
                       }}
                         disabled={!bookStart}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.sm, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.full, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> SERVICE ANFRAGEN
                       </button>
                       {bookingSuccess && (
@@ -1194,7 +1194,7 @@ export default function ListingDetail() {
               {/* Favorit */}
               <button onClick={handleFav} style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                padding: "13px", borderRadius: radius.sm, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
+                padding: "13px", borderRadius: radius.full, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
                 background: isFav ? colors.yellowSoft : colors.surface, color: isFav ? colors.dark : colors.muted,
                 fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 10,
                 letterSpacing: ".03em",

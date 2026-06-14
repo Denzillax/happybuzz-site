@@ -89,11 +89,11 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          background: colors.surface, borderRadius: radius.md,
-          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${colors.border}`,
+          background: colors.surface, borderRadius: radius.lg,
+          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${colors.borderLt}`,
           overflow: "hidden", transition: "box-shadow .2s, transform .2s",
-          transform: hover ? "translateY(-2px)" : "none",
-          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.card : "none"),
+          transform: hover ? "translateY(-3px)" : "none",
+          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.cardHover : shadows.card),
           display: "flex", flexDirection: "column", height: "100%",
         }}
       >
@@ -107,52 +107,52 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>
             {hasFeatured && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} fill="#fff" /> Featured
               </span>
             )}
             {hasSpotlight && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} /> Gesponsert
               </span>
             )}
             {isNew && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
             )}
             {isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Flame size={9} /> Beliebt
               </span>
             )}
             {endingSoon && !isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
             )}
           </div>
 
           {/* Top-right: colored type badge */}
           <div style={{ position: "absolute", top: 8, right: 8 }}>
             {isAuction && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gavel size={10} /> Auktion
               </span>
             )}
             {isRent && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Home size={10} /> Miete
               </span>
             )}
             {isFree && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gift size={10} /> Gratis
               </span>
             )}
             {isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Wrench size={10} /> Service
               </span>
             )}
             {!isAuction && !isRent && !isFree && !isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
                 <ShoppingBag size={10} /> Festpreis
               </span>
             )}
@@ -165,7 +165,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         </div>
 
         {/* Info — flex-grow for equal height */}
-        <div style={{ padding: "10px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "12px 16px 16px", flex: 1, display: "flex", flexDirection: "column" }}>
           <p style={{
             fontSize: 14, fontWeight: 600, fontFamily: fonts.body,
             lineHeight: 1.35, margin: "0 0 4px",

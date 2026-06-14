@@ -115,7 +115,7 @@ export function Hero() {
           transform: transitioning ? 'translateY(10px)' : 'translateY(0)',
         }}>
           <span style={{
-            display: 'inline-block', padding: '6px 14px', borderRadius: 6,
+            display: 'inline-block', padding: '6px 14px', borderRadius: 999,
             background: 'rgba(244, 192, 63, 0.2)', backdropFilter: 'blur(8px)',
             color: '#F4C03F', fontSize: 13, fontWeight: 700, marginBottom: 20,
             letterSpacing: '0.03em', fontFamily: BODY,
@@ -143,7 +143,7 @@ export function Hero() {
           {/* Suchfeld — höchste Intent-Aktion direkt im Hero */}
           <form onSubmit={submitSearch} style={{
             display: 'flex', alignItems: 'center', gap: 8, maxWidth: 480,
-            background: '#fff', borderRadius: 12, padding: 6,
+            background: '#fff', borderRadius: 999, padding: 6,
             boxShadow: '0 8px 30px rgba(0,0,0,0.18)', marginBottom: 16,
           }}>
             <Search size={20} color="#9A9490" style={{ marginLeft: 10, flexShrink: 0 }} />
@@ -159,7 +159,7 @@ export function Hero() {
             />
             <button type="submit" style={{
               padding: '10px 18px', background: '#F4C03F', color: '#1a1a1a',
-              fontWeight: 700, fontSize: 15, borderRadius: 8, border: 'none',
+              fontWeight: 700, fontSize: 15, borderRadius: 999, border: 'none',
               cursor: 'pointer', fontFamily: BODY, flexShrink: 0,
             }}>
               Suchen
@@ -171,7 +171,7 @@ export function Hero() {
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '14px 28px', background: 'rgba(255,255,255,0.12)',
               backdropFilter: 'blur(8px)', border: '1.5px solid rgba(255,255,255,0.25)',
-              color: '#fff', fontWeight: 700, fontSize: 16, borderRadius: 8,
+              color: '#fff', fontWeight: 700, fontSize: 16, borderRadius: 999,
               textDecoration: 'none', fontFamily: BODY, transition: 'all 0.15s',
             }}>
               <Plus size={18} /> Gratis inserieren
@@ -180,7 +180,7 @@ export function Hero() {
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '14px 28px', background: 'transparent',
               border: '1.5px solid rgba(255,255,255,0.25)',
-              color: '#fff', fontWeight: 600, fontSize: 16, borderRadius: 8,
+              color: '#fff', fontWeight: 600, fontSize: 16, borderRadius: 999,
               textDecoration: 'none', fontFamily: BODY, transition: 'all 0.15s',
             }}>
               So funktionierts <ArrowRight size={16} />

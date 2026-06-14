@@ -161,8 +161,11 @@ input:focus, textarea:focus, select:focus {
   .impact-content > div:first-child { justify-content: center; }
 }
 /* Brand-Button (Tailwind-Utility, gespiegelt zu theme.js Werten) */
-.btn-honey { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 24px; background:#F4C03F; color:#191615; font-weight:700; border-radius:10px; border:none; cursor:pointer; text-decoration:none; transition:background .15s ease, transform .15s ease; }
+.btn-honey { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; background:#F4C03F; color:#191615; font-weight:700; border-radius:9999px; border:none; cursor:pointer; text-decoration:none; transition:background .15s ease, transform .15s ease; }
 .btn-honey:hover { background:#D9A005; transform:translateY(-1px); }
+/* Geteilter Button-Hover/-Active für Pill-Buttons (Btn-Komponente etc.) */
+.bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
+.bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
 .tab { position:relative; background:none; border:none; padding:11px 0; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
 .tab.active { color:#191615; }

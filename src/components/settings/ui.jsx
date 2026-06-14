@@ -1,7 +1,7 @@
 // Wiederverwendbare, rein präsentationale UI-Helfer für die Settings-Seite.
 // Ausgelagert aus settings/page.jsx (props-only, keine Seiten-State-Kopplung).
 import { Check, Loader2 } from "lucide-react";
-import { colors } from "@/lib/theme";
+import { colors, radius } from "@/lib/theme";
 
 const C = colors;
 
@@ -109,21 +109,21 @@ export function Toggle({ checked, onChange, label, description }) {
 
 export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
-    padding: small ? "8px 16px" : "12px 24px",
-    borderRadius: 8, border: "none", cursor: disabled ? "not-allowed" : "pointer",
+    padding: small ? "10px 20px" : "14px 28px",
+    borderRadius: radius.full, border: "none", cursor: disabled ? "not-allowed" : "pointer",
     fontFamily: "'Manrope', sans-serif", fontWeight: 700,
     fontSize: small ? 12 : 14, transition: "all .2s",
-    display: "inline-flex", alignItems: "center", gap: 6,
+    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: C.teal, color: "#fff" },
+    primary:   { background: C.teal, color: "#fff", boxShadow: "0 6px 16px rgba(14,148,147,.28)" },
     secondary: { background: "transparent", color: C.dark, border: `1.5px solid ${C.border}` },
     danger:    { background: C.redSoft, color: C.red },
     ghost:     { background: "transparent", color: C.muted },
   };
   return (
-    <button style={{ ...base, ...variants[variant], ...s }} onClick={onClick} disabled={disabled || loading}>
+    <button className="bd-btn" style={{ ...base, ...variants[variant], ...s }} onClick={onClick} disabled={disabled || loading}>
       {loading && <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />}
       {children}
     </button>

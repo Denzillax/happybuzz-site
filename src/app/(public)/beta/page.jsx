@@ -299,6 +299,8 @@ const TESTS = [
       { id: "ds_load", label: "Seiten laden in < 3 Sekunden" },
       { id: "ds_fonts", label: "Schriften korrekt (General Sans + Manrope)" },
       { id: "ds_colors", label: "Farben konsistent (Gelb = Marke, Teal = Buttons)" },
+      { id: "ds_buttons_pill", label: "Buttons als Pillen (Hero-CTAs, Kaufen/Gebot/Miete, Favoriten) durchgehend rund" },
+      { id: "ds_cards_round", label: "Inserat-Karten: runde Ecken, dezenter Schatten, Pill-Badges (überall gleich)" },
       { id: "ds_console", label: "Keine Fehler in der Browser-Konsole" },
       { id: "ds_typos", label: "Keine Tippfehler in Texten" },
       { id: "ds_links", label: "Keine toten Links" },
