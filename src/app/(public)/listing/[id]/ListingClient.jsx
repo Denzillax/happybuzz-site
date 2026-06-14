@@ -682,8 +682,8 @@ export default function ListingDetail() {
                 </div>
               )}
 
-              {/* ── AUCTION UI ────────────────────────── */}
-              {l.listing_type === "auction" && l.status === "active" && (
+              {/* ── AUCTION UI (Steuerung nur aktiv, Gebotsverlauf immer) ── */}
+              {l.listing_type === "auction" && l.status !== "paused" && (
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 12 }}>
                     <span><Gavel size={14} /> {bidHistory.length || bids.length} Gebote</span>
@@ -698,6 +698,7 @@ export default function ListingDetail() {
                     )}
                   </div>
 
+                  {l.status === "active" && (<>
                   {/* Timer-Verlängerung Hinweis */}
                   <p style={{ fontSize: 11, color: colors.muted, marginBottom: 12, lineHeight: 1.4 }}>
                     Gebot in den letzten 3 Minuten? Auktion verlängert sich automatisch um 3 Minuten.
@@ -760,8 +761,9 @@ export default function ListingDetail() {
                     </button>
                   )}
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
+                  </>)}
 
-                  {/* Bid History — Collapsible */}
+                  {/* Bid History — Collapsible (immer sichtbar, auch nach Ablauf) */}
                   {(bidHistory.length > 0 || bids.length > 0) && (() => {
                     const allBids = bidHistory.length > 0 ? bidHistory : bids.map(b => ({ ...b, bid_type: "manual", bidder: b.bidder }));
                     const totalBids = allBids.length;
