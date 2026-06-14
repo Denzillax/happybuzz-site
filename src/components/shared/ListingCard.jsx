@@ -146,7 +146,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
               </span>
             )}
             {isFree && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: "#5B8C5A", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 4, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gift size={10} /> Gratis
               </span>
             )}
@@ -220,7 +220,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
                 </span>
               </>
             ) : isFree ? (
-              <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: "#5B8C5A" }}>Gratis</span>
+              <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: colors.nature }}>Gratis</span>
             ) : (
               <PriceDisplay listing={listing} size="md" />
             )}
