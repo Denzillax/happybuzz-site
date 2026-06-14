@@ -3,14 +3,29 @@ import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
 import GamificationProvider from '@/components/shared/GamificationProvider'
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL('https://happybuzz.ch'),
   title: {
-    default: 'BEEDARO – Kaufen, Verkaufen & Gutes tun',
+    default: 'BEEDARO: Kaufen, Verkaufen & Gutes tun',
     template: '%s | BEEDARO',
   },
-  description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten. Ab 3% Gebühr – ein Teil fliesst in Bienen- und Naturprojekte.',
+  description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten. Ab 3% Gebühr, ein Teil fliesst in Bienen- und Naturprojekte.',
   icons: {
     icon: '/favicon.svg',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'de_CH',
+    siteName: 'BEEDARO',
+    title: 'BEEDARO: Kaufen, Verkaufen & Gutes tun',
+    description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten. Ab 3% Gebühr, ein Teil fliesst in Bienen- und Naturprojekte.',
+    images: [{ url: '/images/bee-impact.jpg', width: 1923, height: 1292, alt: 'BEEDARO' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BEEDARO: Kaufen, Verkaufen & Gutes tun',
+    description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten.',
+    images: ['/images/bee-impact.jpg'],
   },
 }
 
