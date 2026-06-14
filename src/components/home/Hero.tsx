@@ -1,8 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Search, ArrowRight, Plus } from 'lucide-react'
+import { ArrowRight, Plus } from 'lucide-react'
 import BeeIcon from '@/components/shared/BeeIcon'
 
 // ─── Slides ──────────────────────────────────────────────────
@@ -40,18 +39,8 @@ const FONT = "'General Sans', 'Manrope', system-ui, sans-serif"
 const BODY = "'Manrope', system-ui, sans-serif"
 
 export function Hero() {
-  const router = useRouter()
   const [current, setCurrent] = useState(0)
   const [transitioning, setTransitioning] = useState(false)
-  const [q, setQ] = useState('')
-
-  const submitSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    router.push(q.trim() ? `/search?q=${encodeURIComponent(q.trim())}` : '/search')
-  }
-
-  useEffect(() => {
-  }, [])
 
   const goTo = useCallback((i: number) => {
     if (transitioning) return
@@ -139,32 +128,6 @@ export function Hero() {
           }}>
             {s.description}
           </p>
-
-          {/* Suchfeld — höchste Intent-Aktion direkt im Hero */}
-          <form onSubmit={submitSearch} style={{
-            display: 'flex', alignItems: 'center', gap: 8, maxWidth: 480,
-            background: '#fff', borderRadius: 999, padding: 6,
-            boxShadow: '0 8px 30px rgba(0,0,0,0.18)', marginBottom: 16,
-          }}>
-            <Search size={20} color="#9A9490" style={{ marginLeft: 10, flexShrink: 0 }} />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Wonach suchst du?"
-              aria-label="Marktplatz durchsuchen"
-              style={{
-                flex: 1, border: 'none', outline: 'none', background: 'transparent',
-                fontSize: 16, color: '#191615', fontFamily: BODY, minWidth: 0, padding: '8px 0',
-              }}
-            />
-            <button type="submit" style={{
-              padding: '10px 18px', background: '#F4C03F', color: '#1a1a1a',
-              fontWeight: 700, fontSize: 15, borderRadius: 999, border: 'none',
-              cursor: 'pointer', fontFamily: BODY, flexShrink: 0,
-            }}>
-              Suchen
-            </button>
-          </form>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/listings/new" style={{
