@@ -408,7 +408,11 @@ export default function SearchPage() {
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <Search size={32} color="#ccc" style={{ marginBottom: 16 }} />
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
-            <p style={{ fontSize: 14, color: colors.muted }}>Andere Suchbegriffe probieren. Oder einfach stöbern.</p>
+            <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>Andere Suchbegriffe probieren oder die Filter zurücksetzen.</p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 10, background: colors.surface, border: `1px solid ${colors.border}`, color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+            </div>
           </div>
         )}
       </div>

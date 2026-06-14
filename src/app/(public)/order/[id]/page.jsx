@@ -214,7 +214,19 @@ export default function OrderDetailPage() {
 ;
 
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
-  if (!purchase) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Bestellung nicht gefunden</p></div>;
+  if (!purchase) return (
+    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ textAlign: "center", maxWidth: 360 }}>
+        <Package size={40} color={colors.mutedLt} style={{ marginBottom: 10 }} />
+        <p style={{ fontSize: 17, fontWeight: 800, color: colors.dark, margin: "0 0 4px" }}>Bestellung nicht gefunden</p>
+        <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Diese Bestellung existiert nicht mehr oder gehört nicht zu deinem Konto.</p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+          <Link href="/purchases" style={{ padding: "10px 20px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Meine Käufe</Link>
+          <Link href="/sales" style={{ padding: "10px 20px", borderRadius: 10, background: colors.surface, border: `1px solid ${colors.border}`, color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
+        </div>
+      </div>
+    </div>
+  );
 
   const p = purchase;
   const isBuyer = user?.id === p.buyer_id;

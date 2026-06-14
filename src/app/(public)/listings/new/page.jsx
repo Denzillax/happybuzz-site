@@ -27,7 +27,7 @@ export default function NewListingPage() {
   useEffect(() => {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { router.push("/login"); return; }
+      if (!session?.user) { router.push("/login?redirect=/listings/new"); return; }
       setUser(session.user);
       setCategories(await getCategories());
       if (dupId) {
