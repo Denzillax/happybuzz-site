@@ -17,7 +17,7 @@ function getSeason(month) {
   if (month >= 5 && month <= 7) return {
     key: "summer", icon: Sun, title: "Sommer-Saison",
     subtitle: "Camping, Velo, Grill und Wassersport",
-    image: "/images/seasonal/sommer.jpg",
+    image: "/images/seasonal/sommer.webp",
     items: [{ label: "Camping", q: "camping" }, { label: "Velo", q: "velo" }, { label: "Grill", q: "grill" }, { label: "Wassersport", q: "wassersport" }],
   };
   if (month >= 8 && month <= 10) return {
