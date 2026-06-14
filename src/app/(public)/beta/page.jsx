@@ -257,6 +257,8 @@ const TESTS = [
     items: [
       { id: "pg_home", label: "Homepage lädt korrekt" },
       { id: "pg_showcase", label: "Schaufenster: Verkäufer mit aktivem Showcase + Inserate-Grid sichtbar (Nektar-Einlösung)" },
+      { id: "pg_hero_search", label: "Hero: Suchfeld (Enter -> /search?q=) + 'Gratis inserieren'-CTA -> /listings/new" },
+      { id: "pg_empty_ctas", label: "Leere Zustände mit CTA (Verkäufe, Suche, Bestellung-404 -> Käufe/Verkäufe)" },
       { id: "pg_help", label: "Hilfe: FAQ-Suche & aufklappbare Antworten" },
       { id: "pg_how", label: "So funktionierts-Seite" },
       { id: "pg_impact", label: "Bee-Impact-Seite mit Live-Counter" },

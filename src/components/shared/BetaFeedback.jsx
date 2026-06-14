@@ -14,6 +14,7 @@ const PAGE_TESTS = {
     { id: "pg_howit", label: "So funktionierts Sektion" },
     { id: "pg_impact_counter", label: "Bee-Impact Counter sichtbar" },
     { id: "pg_showcase", label: "Schaufenster: eingelöste Verkäufer mit Inseraten" },
+    { id: "pg_hero_search", label: "Hero: Suchfeld führt zu /search, 'Gratis inserieren' zu /listings/new" },
   ],
   "/search": [
     { id: "sr_text", label: "Textsuche findet Inserate" },
