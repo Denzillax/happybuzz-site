@@ -46,7 +46,7 @@ function showXpToast(row, uid) {
           </div>
           <div>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", color: newLevel.color }}>Level aufgestiegen</p>
-            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#04151F", fontFamily: "'General Sans','Manrope',sans-serif" }}>{newLevel.name}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#191615", fontFamily: "'General Sans','Manrope',sans-serif" }}>{newLevel.name}</p>
             {newLevel.perk && <p style={{ margin: "2px 0 0", fontSize: 12, color: "#757575" }}>Neu: {newLevel.perk}</p>}
           </div>
         </div>

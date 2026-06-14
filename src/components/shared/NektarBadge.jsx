@@ -62,7 +62,7 @@ export default function NektarBadge() {
               <BeeIcon size={19} color={level.color} />
             </div>
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: "#04151F" }}>{level.name}</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: "#191615" }}>{level.name}</p>
               <p style={{ margin: 0, fontSize: 11, color: "#757575" }}>{data.xp.toLocaleString("de-CH")} Pollen</p>
             </div>
           </div>

@@ -4,8 +4,8 @@
 // ═══════════════════════════════════════════════════════════════
 
 export const colors = {
-  // Brand (Gold = nur Marke, Logo, Featured)
-  yellow:     "#F4C03E",
+  // Brand (Gold = nur Marke, Logo, Featured) — Werte gemäß Brand-Spec (CLAUDE.md)
+  yellow:     "#F4C03F",
   yellowSoft: "#FFF5D8",
   yellowHover:"#D9A005",
   yellowLight:"#FFF5D8",
@@ -20,16 +20,16 @@ export const colors = {
   redSoft:    "#FFF0F0",
 
   // Text
-  dark:       "#04151F",
+  dark:       "#191615",
   graphite:   "#34343B",
   muted:      "#757575",
   mutedLt:    "#9E9E9E",
 
   // Surface
-  cream:      "#F6F6F4",
+  cream:      "#F9F4EC",
   surface:    "#FFFFFF",
-  warm:       "#F6F6F4",
-  cloud:      "#F6F6F4",
+  warm:       "#F9F4EC",
+  cloud:      "#F9F4EC",
 
   // Borders
   border:     "#E2E2E2",

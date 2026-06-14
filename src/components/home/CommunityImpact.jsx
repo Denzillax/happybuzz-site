@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
 
 const GREEN = "#5B8C5A";
-const DARK = "#04151F";
+const DARK = "#191615";
 const MUTED = "#757575";
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 

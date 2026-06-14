@@ -108,7 +108,7 @@ export default function NewListingPage() {
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
               borderRadius: 10, border: "1.5px solid #E2E2E2", background: "#fff",
-              color: "#04151F", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
+              color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
             }}
           >
             <Copy size={15} color="#0E9493" /> Letztes Inserat als Vorlage verwenden

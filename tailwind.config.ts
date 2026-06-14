@@ -7,14 +7,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Spiegelt src/lib/theme.js (Single Source of Truth, Brand-Spec)
         honey:         '#F4C03F',
         'honey-light': '#F8D76E',
-        'honey-dark':  '#D4A020',
-        'honey-soft':  '#FDF6E3',
-        text:          '#111018',
-        'text-md':     '#4A4754',
-        'text-lt':     '#8A8694',
-        bg:            '#FAF8F5',
+        'honey-dark':  '#D9A005',
+        'honey-soft':  '#FFF5D8',
+        text:          '#191615',
+        'text-md':     '#34343B',
+        'text-lt':     '#9E9E9E',
+        bg:            '#F9F4EC',
         'bg-alt':      '#F2EFEA',
         surface:       '#FFFFFF',
         border:        '#E5E2DD',
