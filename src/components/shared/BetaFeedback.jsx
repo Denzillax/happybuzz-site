@@ -115,7 +115,9 @@ const PAGE_TESTS = {
     { id: "sa_order", label: "Link zur Bestellseite" },
   ],
   "/chat": [
-    { id: "cht_list", label: "Unterhaltungen nach Inserat gruppiert" },
+    { id: "cht_list", label: "Liste: Inserat-Anker + Rollen-Chip (Kaufen/Verkaufen)" },
+    { id: "cht_filter", label: "Filter Alle/Ungelesen funktioniert" },
+    { id: "cht_thread_bar", label: "Thread: eine Leiste (Inserat + Profil-Link), eigene Bubbles teal" },
     { id: "cht_unread", label: "Ungelesen-Markierung" },
     { id: "cht_send", label: "Nachricht senden/empfangen" },
     { id: "cht_toggle", label: "Öffentlich ↔ Privat umschalten" },

@@ -136,6 +136,7 @@ export default function ChatConversation() {
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
   const otherUser = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
+  const isBuyer = conv?.buyer_id === user?.id;
   const offerMsgs = messages.filter((m) => m.message_type === "offer");
   const lastOffer = offerMsgs[offerMsgs.length - 1] || null;
   const offerResolved = lastOffer && messages.some((m) => m.message_type === "system" && new Date(m.created_at) >= new Date(lastOffer.created_at));
@@ -144,33 +145,35 @@ export default function ChatConversation() {
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", flexDirection: "column", color: colors.dark }}>
 
-      {/* Header */}
-      <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "12px 20px", display: "flex", alignItems: "center", gap: 14, position: "sticky", top: 0, zIndex: 10 }}>
-        <Link href="/chat" style={{ color: colors.muted, display: "flex" }}><ArrowLeft size={20} /></Link>
-        <div style={{ width: 40, height: 40, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
-          {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={20} color={colors.yellow} />}
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{otherUser?.display_name || "Benutzer"}</p>
-          <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>Privater Chat</p>
-        </div>
-      </div>
+      {/* Eine kompakte Leiste: Was (Inserat) + Wer (Gegenüber) */}
+      <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, position: "sticky", top: 0, zIndex: 10 }}>
+        <Link href="/chat" style={{ color: colors.muted, display: "flex", flexShrink: 0 }}><ArrowLeft size={20} /></Link>
 
-      {/* Inserat-Kontext */}
-      {conv?.listing && (
-        <Link href={`/listing/${conv.listing.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-          <div style={{ maxWidth: 800, margin: "10px auto 0", width: "calc(100% - 40px)", display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: colors.surface, borderRadius: radius.md, border: `1px solid ${colors.border}` }}>
-            <div style={{ width: 44, height: 44, borderRadius: 8, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {conv.listing.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={18} color={colors.mutedLt} />}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ margin: 0, fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{conv.listing.title}</p>
-              {conv.listing.price != null && <p style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 800, color: colors.teal }}>CHF {Number(conv.listing.price).toLocaleString("de-CH")}</p>}
-            </div>
-            <span style={{ fontSize: 12, color: colors.blue, fontWeight: 600, flexShrink: 0 }}>Zum Inserat</span>
+        {/* Inserat (Anker) */}
+        <Link href={conv?.listing ? `/listing/${conv.listing.id}` : "#"} style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
+          <div style={{ width: 40, height: 40, borderRadius: 8, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {conv?.listing?.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={17} color={colors.mutedLt} />}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ margin: 0, fontSize: 14, fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{conv?.listing?.title || "Gelöschtes Inserat"}</p>
+            <p style={{ margin: "1px 0 0", fontSize: 12, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {conv?.listing?.price != null && <span style={{ color: colors.teal, fontWeight: 700 }}>CHF {Number(conv.listing.price).toLocaleString("de-CH")} · </span>}
+              {isBuyer ? "Du kaufst" : "Du verkaufst"}
+            </p>
           </div>
         </Link>
-      )}
+
+        {/* Gegenüber (Profil) */}
+        <Link href={otherUser?.id ? `/user/${otherUser.id}` : "#"} style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", color: "inherit", flexShrink: 0 }}>
+          <div style={{ textAlign: "right", maxWidth: 110 }}>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{otherUser?.display_name || "Benutzer"}</p>
+            <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Profil ansehen</p>
+          </div>
+          <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+            {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
+          </div>
+        </Link>
+      </div>
 
       {/* Messages */}
       <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
@@ -228,7 +231,7 @@ export default function ChatConversation() {
               <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
                 <div style={{
                   maxWidth: "72%", padding: isImage ? 4 : "10px 14px", borderRadius: 16,
-                  background: isImage ? "transparent" : (isMe ? colors.yellow : colors.surface),
+                  background: isImage ? "transparent" : (isMe ? colors.teal : colors.surface),
                   border: isImage ? "none" : (isMe ? "none" : `1px solid ${colors.border}`),
                   borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4,
                 }}>
@@ -236,10 +239,10 @@ export default function ChatConversation() {
                     <img src={msg.image_url} alt="Bild" onClick={() => setLightbox(msg.image_url)}
                       style={{ maxWidth: 220, maxHeight: 260, borderRadius: 12, cursor: "pointer", display: "block" }} />
                   ) : (
-                    <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: colors.dark, whiteSpace: "pre-wrap" }}>{msg.content}</p>
+                    <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: isMe ? "#fff" : colors.dark, whiteSpace: "pre-wrap" }}>{msg.content}</p>
                   )}
                   {!isImage && (
-                    <p style={{ margin: "4px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
+                    <p style={{ margin: "4px 0 0", fontSize: 10, color: isMe ? "rgba(255,255,255,.7)" : colors.mutedLt, textAlign: "right" }}>
                       {new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
                     </p>
                   )}
