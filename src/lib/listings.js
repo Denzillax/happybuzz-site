@@ -1130,7 +1130,7 @@ export async function finalizeAuction(listingId) {
 
   // 3. Purchase erstellen
   const finalPrice = topBid.amount;
-  const feePct = listing.fee_percentage || 5;
+  const feePct = listing.fee_percentage || 7; // Default-Bee-Rate 7% (konsistent mit createListing)
   const feeAmount = finalPrice * feePct / 100;
   const platformFee = feeAmount * 0.8;
   const beeImpact = feeAmount * 0.2;
@@ -1533,7 +1533,7 @@ export async function updateBookingStatus(bookingId, status) {
       .eq("id", bookingId).single();
     if (booking) {
       const price = parseFloat(booking.total_price || 0);
-      const feePerc = parseFloat(booking.listing?.fee_percentage || 5);
+      const feePerc = parseFloat(booking.listing?.fee_percentage || 7); // Default-Bee-Rate 7%
       const feeAmount = price * feePerc / 100;
       const beeImpact = feeAmount * 0.20;
       const { data: purchase } = await supabase.from("purchases").insert({
