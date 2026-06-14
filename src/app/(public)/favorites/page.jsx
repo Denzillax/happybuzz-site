@@ -140,7 +140,7 @@ export default function FavoritesPage() {
           {filteredFavorites.length > 0 ? (
             <div className="listing-grid">
               {filteredFavorites.map(listing => (
-                <ListingCard key={listing.id} listing={listing} userId={user?.id} />
+                <ListingCard key={listing.id} listing={listing} userId={user?.id} onUnfavorite={(id) => setFavorites(prev => prev.filter(f => f.id !== id))} />
               ))}
             </div>
           ) : (

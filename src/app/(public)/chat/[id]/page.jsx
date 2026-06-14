@@ -57,7 +57,7 @@ export default function ChatConversation() {
           .from("conversations")
           .select("*, listing:listings(id, title, price, listing_type, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
           .eq("id", params.id)
-          .single();
+          .maybeSingle();
         setConv(c);
         const msgs = await getMessages(params.id);
         setMessages(msgs);
@@ -138,7 +138,7 @@ export default function ChatConversation() {
   const otherUser = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
   const offerMsgs = messages.filter((m) => m.message_type === "offer");
   const lastOffer = offerMsgs[offerMsgs.length - 1] || null;
-  const offerResolved = lastOffer && messages.some((m) => m.message_type === "system" && new Date(m.created_at) > new Date(lastOffer.created_at));
+  const offerResolved = lastOffer && messages.some((m) => m.message_type === "system" && new Date(m.created_at) >= new Date(lastOffer.created_at));
   const canCounter = offerMsgs.length < 3;
 
   return (

@@ -92,6 +92,7 @@ export default function ListingDetail() {
   const [bookStart, setBookStart] = useState("");
   const [bookEnd, setBookEnd] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingError, setBookingError] = useState("");
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState("");
   const [replyText, setReplyText] = useState({});
@@ -1081,19 +1082,28 @@ export default function ListingDetail() {
                         const check = await checkProfileComplete(user.id, "rent");
                         if (!check.complete) { setProfileWarning(check.missing); return; }
                         setProfileWarning(null);
+                        setBookingError("");
                         try {
                           const days = Math.ceil((new Date(bookEnd) - new Date(bookStart)) / (1000 * 60 * 60 * 24));
-                          if (l.min_rent_days && days < l.min_rent_days) { return; }
+                          if (l.min_rent_days && days < l.min_rent_days) {
+                            setBookingError(`Mindestmietdauer: ${l.min_rent_days} Tage. Bitte einen längeren Zeitraum wählen.`);
+                            return;
+                          }
                           const total = days * parseFloat(l.rent_price || l.price);
                           await createBooking(l.id, user.id, l.user_id, bookStart, bookEnd, total, l.deposit_amount || 0);
                           setBookingSuccess(true);
                           setBookStart(""); setBookEnd("");
-                        } catch (err) { console.error(err); }
+                        } catch (err) { console.error(err); setBookingError("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
                         style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.sm, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> MIETE ANFRAGEN
                       </button>
+                      {bookingError && (
+                        <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.redSoft, textAlign: "center" }}>
+                          <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.red }}>{bookingError}</p>
+                        </div>
+                      )}
                       {bookingSuccess && (
                         <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
                           <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet!</p>

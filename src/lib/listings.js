@@ -898,10 +898,11 @@ export async function getMyConversations(userId) {
     let last = null;
     for (const m of msgs) { if (!last || new Date(m.created_at) > new Date(last.created_at)) last = m; }
     const hasUnread = msgs.some((m) => m.sender_id !== userId && !m.is_read);
+    const imgs = (c.listing?.listing_images || []).slice().sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
     return {
       ...c,
       listingTitle: c.listing?.title || "Gelöschtes Inserat",
-      listingImage: c.listing?.listing_images?.[0]?.url || null,
+      listingImage: imgs[0]?.url || null,
       otherUser: c.buyer_id === userId ? c.seller : c.buyer,
       hasUnread,
       lastMessagePreview: last?.content || "",

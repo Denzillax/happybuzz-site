@@ -46,10 +46,18 @@ function AuctionCountdown({ endDate }) {
   );
 }
 
-export function ListingCard({ listing, userId, boost }) {
+export function ListingCard({ listing, userId, boost, onUnfavorite }) {
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const cover = getCoverUrl(listing);
+
+  // Optional: Eltern benachrichtigen, wenn ein Favorit entfernt wurde
+  // (z.B. Favoriten-Seite entfernt die Karte aus der Liste).
+  const handleToggleFav = async () => {
+    const wasFav = isFav;
+    await toggleFav();
+    if (wasFav && onUnfavorite) onUnfavorite(listing.id);
+  };
 
   const isAuction = listing.listing_type === "auction";
   const isRent = listing.listing_type === "rent";
@@ -144,7 +152,7 @@ export function ListingCard({ listing, userId, boost }) {
 
           {/* Bottom-right: favorite heart */}
           <div style={{ position: "absolute", bottom: 8, right: 8 }}>
-            <FavoriteButton isFav={isFav} onToggle={toggleFav} />
+            <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
           </div>
         </div>
 

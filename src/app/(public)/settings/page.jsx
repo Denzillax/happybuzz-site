@@ -15,7 +15,7 @@ const C = colors; // Alias for brevity in this file
 
 import FeeModel from "@/components/listings/FeeModel";
 import { FEE_TIERS } from "@/lib/constants";
-import { Badge, Input, Toggle, Btn, Section, TrustMeter } from "@/components/settings/ui";
+import { Input, Toggle, Btn, Section, TrustMeter } from "@/components/settings/ui";
 
 const TABS = [
   { id: "profile",        label: "Profil",              icon: User },
