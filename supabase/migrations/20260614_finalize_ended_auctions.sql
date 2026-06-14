@@ -1,10 +1,9 @@
 -- ════════════════════════════════════════════════════════════
--- Beendete Auktionen serverseitig finalisieren
+-- Beendete Auktionen serverseitig finalisieren + benachrichtigen
 -- Vorher lief finalizeAuction() nur client-seitig beim Öffnen der Inserat-Seite
 -- -> ungeöffnete, beendete Auktionen blieben 'active' ohne Kauf (Gewinner sah
--- den Kauf nie). Jetzt per pg_cron alle 5 Minuten.
--- Spiegelt lib/listings.js finalizeAuction(): Höchstgebot -> purchase (confirmed),
--- Listing 'sold'; keine Gebote -> 'expired'. Idempotent.
+-- nichts). Jetzt per pg_cron alle 5 Minuten, inkl. Notification an Gewinner +
+-- Verkäufer. Spiegelt lib/listings.js finalizeAuction(). Idempotent.
 -- ════════════════════════════════════════════════════════════
 
 create or replace function public.finalize_ended_auctions()
@@ -18,10 +17,12 @@ declare
   top_bid record;
   fee numeric;
   fee_amt numeric;
+  new_pid uuid;
+  price_txt text;
   n integer := 0;
 begin
   for l in
-    select id, user_id, fee_percentage
+    select id, user_id, title, fee_percentage
     from public.listings
     where listing_type = 'auction'
       and status = 'active'
@@ -49,9 +50,21 @@ begin
     insert into public.purchases
       (listing_id, buyer_id, seller_id, price, fee_percentage, fee_amount, platform_fee, bee_impact, status)
     values
-      (l.id, top_bid.bidder_id, l.user_id, top_bid.amount, fee, fee_amt, fee_amt * 0.8, fee_amt * 0.2, 'confirmed');
+      (l.id, top_bid.bidder_id, l.user_id, top_bid.amount, fee, fee_amt, fee_amt * 0.8, fee_amt * 0.2, 'confirmed')
+    returning id into new_pid;
 
     update public.listings set status = 'sold', price = top_bid.amount where id = l.id;
+
+    price_txt := 'CHF ' || trim(to_char(top_bid.amount, 'FM999990D00'));
+
+    insert into public.notifications (user_id, type, title, message, link, is_read) values
+      (top_bid.bidder_id, 'purchase', 'Auktion gewonnen',
+       '"' || coalesce(l.title, 'Inserat') || '" für ' || price_txt || '. Jetzt bezahlen.',
+       '/order/' || new_pid, false),
+      (l.user_id, 'purchase', 'Auktion verkauft',
+       '"' || coalesce(l.title, 'Inserat') || '" für ' || price_txt || ' verkauft.',
+       '/order/' || new_pid, false);
+
     n := n + 1;
   end loop;
   return n;

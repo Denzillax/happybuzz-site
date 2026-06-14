@@ -1158,6 +1158,13 @@ export async function finalizeAuction(listingId) {
     price: finalPrice,
   }).eq("id", listingId);
 
+  // 5. Gewinner + Verkäufer benachrichtigen (Parität zur Cron-Finalisierung)
+  try {
+    const priceTxt = `CHF ${Number(finalPrice).toFixed(2)}`;
+    await createNotification(topBid.bidder_id, "purchase", "Auktion gewonnen", `"${listing.title}" für ${priceTxt}. Jetzt bezahlen.`, `/order/${purchase.id}`);
+    await createNotification(listing.user_id, "purchase", "Auktion verkauft", `"${listing.title}" für ${priceTxt} verkauft.`, `/order/${purchase.id}`);
+  } catch (e) { console.error("Auktions-Benachrichtigung:", e); }
+
   return {
     status: "sold",
     winner: topBid.bidder_id,
