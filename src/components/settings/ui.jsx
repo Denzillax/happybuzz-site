@@ -1,8 +1,11 @@
-import { colors } from "@/lib/theme";
+// Wiederverwendbare, rein präsentationale UI-Helfer für die Settings-Seite.
+// Ausgelagert aus settings/page.jsx (props-only, keine Seiten-State-Kopplung).
 import { Check, Loader2 } from "lucide-react";
+import { colors } from "@/lib/theme";
+
 const C = colors;
 
-function Badge({ verified, label, sublabel, icon: Icon, pending }) {
+export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
@@ -36,7 +39,7 @@ function Badge({ verified, label, sublabel, icon: Icon, pending }) {
   );
 }
 
-function Input({ label, value, onChange, type = "text", disabled, placeholder, suffix, maxLength }) {
+export function Input({ label, value, onChange, type = "text", disabled, placeholder, suffix, maxLength }) {
   return (
     <div style={{ marginBottom: 18 }}>
       <label style={{
@@ -75,7 +78,7 @@ function Input({ label, value, onChange, type = "text", disabled, placeholder, s
   );
 }
 
-function Toggle({ checked, onChange, label, description }) {
+export function Toggle({ checked, onChange, label, description }) {
   return (
     <div
       style={{
@@ -87,7 +90,7 @@ function Toggle({ checked, onChange, label, description }) {
     >
       <div style={{
         width: 44, height: 24, borderRadius: 12, flexShrink: 0, marginTop: 2,
-        background: checked ? C.yellow : C.border, transition: "background .25s",
+        background: checked ? C.teal : C.border, transition: "background .25s",
         position: "relative",
       }}>
         <div style={{
@@ -104,7 +107,7 @@ function Toggle({ checked, onChange, label, description }) {
   );
 }
 
-function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
+export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
     padding: small ? "8px 16px" : "12px 24px",
     borderRadius: 8, border: "none", cursor: disabled ? "not-allowed" : "pointer",
@@ -114,7 +117,7 @@ function Btn({ children, variant = "primary", onClick, style: s, small, disabled
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: C.yellow, color: C.dark },
+    primary:   { background: C.teal, color: "#fff" },
     secondary: { background: "transparent", color: C.dark, border: `1.5px solid ${C.border}` },
     danger:    { background: C.redSoft, color: C.red },
     ghost:     { background: "transparent", color: C.muted },
@@ -127,13 +130,13 @@ function Btn({ children, variant = "primary", onClick, style: s, small, disabled
   );
 }
 
-function Section({ title, description, children, badge }) {
+export function Section({ title, description, children, badge }) {
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 8 }}>
         <h3 style={{
-          fontFamily: "'General Sans', sans-serif", fontSize: 18, fontWeight: 400,
-          letterSpacing: ".5px", color: C.dark, margin: 0,
+          fontFamily: "'General Sans', sans-serif", fontSize: 16, fontWeight: 700,
+          letterSpacing: "0", color: C.dark, margin: 0,
         }}>{title}</h3>
         {badge}
       </div>
@@ -143,7 +146,7 @@ function Section({ title, description, children, badge }) {
   );
 }
 
-function TrustMeter({ level }) {
+export function TrustMeter({ level }) {
   const segments = 4;
   const labels = ["Starter", "Basis", "Vertraut", "Vollständig"];
   return (
@@ -170,5 +173,3 @@ function TrustMeter({ level }) {
     </div>
   );
 }
-
-export { Badge, Input, Toggle, Btn, Section, TrustMeter };
