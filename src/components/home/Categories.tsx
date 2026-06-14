@@ -4,12 +4,15 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/supabase'
 import { CategoryIcon } from '@/components/shared/CategoryIcon'
 import { ChevronRight } from 'lucide-react'
-import { colors, fonts } from '@/lib/theme'
+import { colors, fonts, radius, shadows } from '@/lib/theme'
 
 const YELLOW = colors.yellow
 const DARK = colors.dark
 const BODY = fonts.body
 const HEAD = fonts.head
+
+// Auf der Startseite nur die wichtigsten Kategorien zeigen (Rest via "Alle Kategorien")
+const SHOWN = 8
 
 export function Categories() {
   const [categories, setCategories] = useState<any[]>([])
@@ -31,12 +34,12 @@ export function Categories() {
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
-        .cat-circle-item:hover .cat-circle-icon { background: ${colors.teal}; border-color: ${colors.teal}; color: #fff; transform: scale(1.05); box-shadow: 0 6px 16px rgba(14,148,147,.25); }
+        .cat-circle-item:hover .cat-circle-icon { background: ${colors.teal}; color: #fff; transform: scale(1.06); }
         .cat-circle-item:hover .cat-circle-label { color: ${colors.teal}; }
         @media (max-width: 767px) {
           .cat-header { padding: 0 4px !important; }
           .cat-header h2 { font-size: 20px !important; }
-          .cat-circles { gap: 16px 12px !important; }
+          .cat-circles { gap: 22px 14px !important; padding: 22px 14px !important; }
         }
       `}</style>
 
@@ -57,9 +60,14 @@ export function Categories() {
       {/* Horizontal scrollable circles */}
       <div className="cat-circles" style={{
         display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-        gap: 24,
+        gap: 32,
+        background: colors.surface,
+        border: `1px solid ${colors.borderLt}`,
+        borderRadius: radius.lg,
+        boxShadow: shadows.card,
+        padding: '32px 24px',
       }}>
-        {categories.map((cat) => (
+        {categories.slice(0, SHOWN).map((cat) => (
           <Link
             key={cat.id}
             href={`/search?category=${cat.slug}`}
@@ -74,9 +82,8 @@ export function Categories() {
           >
             <div className="cat-circle-icon" style={{
               width: 64, height: 64, borderRadius: '50%',
-              background: colors.sand,
-              border: `1px solid ${colors.borderLt}`,
-              color: colors.dark,
+              background: colors.greenSoft,
+              color: colors.teal,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.2s ease',
             }}>

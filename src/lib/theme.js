@@ -35,7 +35,6 @@ export const colors = {
   surface:    "#FFFFFF",
   warm:       "#F9F4EC",
   cloud:      "#F9F4EC",
-  sand:       "#EFE7D6",   // wärmerer Cream-Ton, sichtbar auf cream-Hintergrund (z.B. Kategorie-Kreise)
 
   // Borders
   border:     "#E2E2E2",
