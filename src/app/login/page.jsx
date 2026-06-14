@@ -1,6 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
+import { Check, Circle } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
@@ -73,7 +74,7 @@ function PasswordStrength({ password }) {
   return (
     <div style={{ marginTop:-10, marginBottom:16 }}>
       <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius:2, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
-      <div style={{ display:"flex", gap:10 }}>{checks.map((c,i)=><span key={i} style={{ fontSize:11, color:c.ok?C.green:C.muted, fontWeight:500 }}>{c.ok?"✓":"○"} {c.l}</span>)}</div>
+      <div style={{ display:"flex", gap:10 }}>{checks.map((c,i)=><span key={i} style={{ display:"inline-flex", alignItems:"center", gap:3, fontSize:11, color:c.ok?C.green:C.muted, fontWeight:500 }}>{c.ok?<Check size={12}/>:<Circle size={12}/>} {c.l}</span>)}</div>
     </div>
   );
 }

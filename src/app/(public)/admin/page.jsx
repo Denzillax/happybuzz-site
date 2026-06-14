@@ -573,7 +573,7 @@ export default function AdminPage() {
                             const dir = r.rater_id === u.id ? `an ${r.revieweeName}` : `von ${r.reviewerName}`;
                             return (
                               <div key={r.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
-                                <span style={{ color: "#F4C03F", fontSize: 12, minWidth: 70 }}>{"★".repeat(r.rating || 0)}{"☆".repeat(5 - (r.rating || 0))}</span>
+                                <span style={{ display: "inline-flex", gap: 1, minWidth: 70 }}>{[1,2,3,4,5].map(n => <Star key={n} size={11} color="#F4C03F" fill={n <= (r.rating || 0) ? "#F4C03F" : "none"} />)}</span>
                                 <span style={{ fontSize: 11, color: colors.muted, minWidth: 80 }}>{dir}</span>
                                 <span style={{ flex: 1, fontSize: 11, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.comment || r.text || "—"}</span>
                                 <span style={{ fontSize: 10, color: colors.muted }}>{fmtDate(r.created_at)}</span>

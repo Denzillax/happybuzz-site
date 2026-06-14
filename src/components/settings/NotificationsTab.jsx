@@ -175,7 +175,7 @@ const C = colors;
           ]}
         />
 
-        <Btn onClick={() => showToast("Benachrichtigungen gespeichert ✓")} style={{ width: "100%" }}>
+        <Btn onClick={() => showToast("Benachrichtigungen gespeichert")} style={{ width: "100%" }}>
           Änderungen speichern
         </Btn>
       </>

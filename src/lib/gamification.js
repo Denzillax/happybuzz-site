@@ -20,16 +20,6 @@ export function getLevelByKey(key) {
   return BEE_LEVELS.find(l => l.key === key) || BEE_LEVELS[0];
 }
 
-// Perk: höhere (selbst gewählte) Bee-Rate = mehr XP pro Verkauf.
-// Großzügigkeit wird mit Status belohnt — nicht mit Rabatt.
-export function feeXpMultiplier(feePercent) {
-  const f = parseFloat(feePercent) || 0;
-  if (f >= 10) return 2.5;
-  if (f >= 7) return 1.8;
-  if (f >= 5) return 1.4;
-  return 1;
-}
-
 // XP bis zum nächsten Level (0 wenn max)
 export function xpToNext(xp) {
   const cur = calculateLevel(xp);
@@ -37,21 +27,6 @@ export function xpToNext(xp) {
   if (idx >= BEE_LEVELS.length - 1) return 0;
   return BEE_LEVELS[idx + 1].minXp - xp;
 }
-
-// XP-Belohnungen pro Aktion
-export const XP_REWARDS = {
-  listing_created: 10,
-  listing_published: 5,
-  sale_completed: 25,
-  purchase_completed: 15,
-  rating_given: 10,
-  rating_received_positive: 5,
-  rental_completed: 20,
-  first_listing: 50,
-  first_sale: 100,
-  profile_verified: 30,
-  referral: 75,
-};
 
 // Level berechnen basierend auf XP
 export function calculateLevel(xp) {
@@ -71,35 +46,6 @@ export function levelProgress(xp) {
   const range = next.minXp - current.minXp;
   const progress = xp - current.minXp;
   return Math.min(progress / range, 1);
-}
-
-// XP vergeben — serverseitig via RPC (RLS-sicher, auch user-übergreifend)
-export async function awardXP(userId, amount, reason, referenceId = null) {
-  const { data, error } = await supabase.rpc("award_xp", {
-    p_user_id: userId, p_amount: amount, p_reason: reason, p_reference_id: referenceId,
-  });
-  if (error) { console.error("award_xp:", error); return null; }
-  const newXp = data;
-  const newLevel = calculateLevel(newXp);
-  const leveledUp = calculateLevel(Math.max(0, newXp - amount)).key !== newLevel.key;
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("beedaro:xp", { detail: { userId, amount, reason, newXp, leveledUp, newLevel } }));
-  }
-  return { newXp, newLevel, leveledUp };
-}
-
-// Achievement freischalten
-export async function unlockAchievement(userId, achievementKey) {
-  const { data: existing } = await supabase.from("user_achievements")
-    .select("id").eq("user_id", userId).eq("achievement_key", achievementKey).maybeSingle();
-  
-  if (existing) return false; // Schon freigeschaltet
-
-  await supabase.from("user_achievements").insert({
-    user_id: userId, achievement_key: achievementKey,
-  });
-
-  return true;
 }
 
 // Achievement-Definitionen
