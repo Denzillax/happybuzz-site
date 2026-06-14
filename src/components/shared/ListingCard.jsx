@@ -9,52 +9,48 @@ import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { useFavorite } from "@/hooks/useFavorite";
 
-function AuctionCountdown({ endDate }) {
+// Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
+// < 24h -> Live-Countdown ("3h 5m" / "12m 9s"), abgelaufen -> endedLabel.
+// Live-Intervall nur bei < 24h (Performance bei vielen Karten im Grid).
+function Countdown({ endDate, endedLabel = "Beendet" }) {
   const [text, setText] = useState("");
   const [urgent, setUrgent] = useState(false);
 
   useEffect(() => {
-    if (!endDate) return;
+    if (!endDate) { setText(""); return; }
+    let iv;
     const tick = () => {
-      const now = new Date();
-      const end = new Date(endDate);
-      const diff = end.getTime() - now.getTime();
-      if (diff <= 0) { setText("Beendet"); setUrgent(true); return; }
-      const h24 = 24 * 60 * 60 * 1000;
-      if (diff > h24) {
-        setText(end.toLocaleDateString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }));
+      const diff = new Date(endDate).getTime() - Date.now();
+      if (diff <= 0) {
+        setText(endedLabel); setUrgent(true);
+        if (iv) { clearInterval(iv); iv = null; }
+        return;
+      }
+      if (diff > 86400000) {
+        const end = new Date(endDate);
+        const d = end.toLocaleDateString("de-CH", { day: "numeric", month: "short" });
+        const t = end.toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" });
+        setText(`bis ${d}, ${t}`);
         setUrgent(false);
       } else {
         const hrs = Math.floor(diff / 3600000);
         const mins = Math.floor((diff % 3600000) / 60000);
         const secs = Math.floor((diff % 60000) / 1000);
-        if (hrs > 0) setText(`${hrs}h ${mins}m`);
-        else setText(`${mins}m ${secs}s`);
-        setUrgent(diff < 3600000);
+        setText(hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m ${secs}s`);
+        setUrgent(true);
       }
     };
     tick();
-    const iv = setInterval(tick, 1000);
-    return () => clearInterval(iv);
-  }, [endDate]);
+    if (new Date(endDate).getTime() - Date.now() <= 86400000) iv = setInterval(tick, 1000);
+    return () => { if (iv) clearInterval(iv); };
+  }, [endDate, endedLabel]);
 
   if (!text) return null;
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: urgent ? "#c62828" : colors.muted }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: urgent ? 700 : 400, color: urgent ? "#c62828" : colors.muted, whiteSpace: "nowrap" }}>
       <Clock size={10} /> {text}
     </span>
   );
-}
-
-// Restlaufzeit (Laufzeit/expires_at) für Nicht-Auktionen — Tage, urgent < 3 Tage.
-function formatRemaining(expiresAt) {
-  if (!expiresAt) return null;
-  const diff = new Date(expiresAt).getTime() - Date.now();
-  if (diff <= 0) return { text: "Abgelaufen", urgent: true };
-  const days = Math.floor(diff / 86400000);
-  if (days >= 1) return { text: `noch ${days} ${days === 1 ? "Tag" : "Tage"}`, urgent: days <= 3 };
-  const hrs = Math.max(1, Math.floor(diff / 3600000));
-  return { text: `noch ${hrs} Std`, urgent: true };
 }
 
 export function ListingCard({ listing, userId, boost, onUnfavorite }) {
@@ -85,7 +81,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
   const hasSpotlight = boosts.includes("spotlight") || boosts.includes("mega_boost");
   const hasFeatured = boosts.includes("golden_stamp") || boosts.includes("mega_boost");
   const endingSoon = isAuction && listing.auction_end && (new Date(listing.auction_end).getTime() - Date.now()) < 24 * 60 * 60 * 1000 && (new Date(listing.auction_end).getTime() - Date.now()) > 0;
-  const remaining = !isAuction ? formatRemaining(listing.expires_at) : null;
+  const endDate = isAuction ? (listing.auction_end || listing.expires_at) : listing.expires_at;
 
   return (
     <Link href={`/listing/${listing.id}`} style={{ textDecoration: "none", color: "inherit", height: "100%" }}>
@@ -194,9 +190,6 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
                     Sofortkauf: CHF {listing.buy_now_price.toFixed(2)}
                   </div>
                 )}
-                <div style={{ marginTop: 4 }}>
-                  <AuctionCountdown endDate={listing.auction_end} />
-                </div>
               </>
             ) : isRent ? (
               <>
@@ -238,11 +231,9 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
               <MapPin size={11} style={{ flexShrink: 0 }} />
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing.city || "–"}</span>
             </span>
-            {remaining && (
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 3, marginLeft: "auto", whiteSpace: "nowrap", color: remaining.urgent ? "#c62828" : colors.muted, fontWeight: remaining.urgent ? 700 : 400 }}>
-                <Clock size={11} /> {remaining.text}
-              </span>
-            )}
+            <span style={{ marginLeft: "auto", flexShrink: 0 }}>
+              <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
+            </span>
           </div>
 
           {/* Seller */}
