@@ -131,7 +131,7 @@ export default function SearchPage() {
     if (sort) setSortBy(sort);
   }, [searchParams, categories]);
 
-  useEffect(() => { doSearch(); }, [query, type, subCatId, subSubCatId, mainCatId, condition, sortBy, page, delivery]);
+  useEffect(() => { doSearch(); }, [query, type, subCatId, subSubCatId, mainCatId, condition, sortBy, page, delivery, attrFilters]);
 
   // Load category-specific attributes
   useEffect(() => {
@@ -332,8 +332,7 @@ export default function SearchPage() {
                     onChange={v => {
                       setAttrFilters(prev => ({ ...prev, [attr.attribute_key]: v }));
                       setPage(1);
-                      // Trigger search after attribute change
-                      setTimeout(doSearch, 50);
+                      // Suche läuft via useEffect-Dependency auf attrFilters (frischer State)
                     }}
                   />
                 );

@@ -391,7 +391,7 @@ export default function OrderDetailPage() {
                     <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
                   </div>
                 )}
-                {isSeller && p.status === "paid" && (
+                {!isService && isSeller && p.status === "paid" && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Versand / Übergabe</h3>
                     {listing?.shipping_available && (
@@ -416,8 +416,19 @@ export default function OrderDetailPage() {
                     )}
                   </div>
                 )}
-                {isBuyer && p.status === "paid" && (
+                {!isService && isBuyer && p.status === "paid" && (
                   <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#94B9C9" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Bezahlt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer bereitet den Versand vor.</p></div>
+                )}
+                {/* SERVICE: Zahlung bestätigt -> Auftrag abschliessen */}
+                {isService && isSeller && p.status === "paid" && (
+                  <div>
+                    <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Auftrag abschliessen</h3>
+                    <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Zahlung erhalten. Schliesse den Service-Auftrag ab.</p>
+                    <button onClick={() => doAction(completeTransaction, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Auftrag abschliessen"}</button>
+                  </div>
+                )}
+                {isService && isBuyer && p.status === "paid" && (
+                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Anbieter schliesst den Auftrag ab.</p></div>
                 )}
                 {isBuyer && (p.status === "shipped" || p.status === "picked_up") && (
                   <div>
