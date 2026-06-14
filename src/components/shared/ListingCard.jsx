@@ -46,6 +46,17 @@ function AuctionCountdown({ endDate }) {
   );
 }
 
+// Restlaufzeit (Laufzeit/expires_at) für Nicht-Auktionen — Tage, urgent < 3 Tage.
+function formatRemaining(expiresAt) {
+  if (!expiresAt) return null;
+  const diff = new Date(expiresAt).getTime() - Date.now();
+  if (diff <= 0) return { text: "Abgelaufen", urgent: true };
+  const days = Math.floor(diff / 86400000);
+  if (days >= 1) return { text: `noch ${days} ${days === 1 ? "Tag" : "Tage"}`, urgent: days <= 3 };
+  const hrs = Math.max(1, Math.floor(diff / 3600000));
+  return { text: `noch ${hrs} Std`, urgent: true };
+}
+
 export function ListingCard({ listing, userId, boost, onUnfavorite }) {
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
@@ -74,6 +85,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
   const hasSpotlight = boosts.includes("spotlight") || boosts.includes("mega_boost");
   const hasFeatured = boosts.includes("golden_stamp") || boosts.includes("mega_boost");
   const endingSoon = isAuction && listing.auction_end && (new Date(listing.auction_end).getTime() - Date.now()) < 24 * 60 * 60 * 1000 && (new Date(listing.auction_end).getTime() - Date.now()) > 0;
+  const remaining = !isAuction ? formatRemaining(listing.expires_at) : null;
 
   return (
     <Link href={`/listing/${listing.id}`} style={{ textDecoration: "none", color: "inherit", height: "100%" }}>
@@ -217,13 +229,20 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
           {/* Spacer to push location to bottom */}
           <div style={{ flex: 1 }} />
 
-          {/* Location */}
+          {/* Location + Restlaufzeit */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 4, marginTop: 8,
+            display: "flex", alignItems: "center", gap: 8, marginTop: 8,
             fontSize: 12, fontFamily: fonts.body, color: colors.muted,
           }}>
-            <MapPin size={11} />
-            <span>{listing.city || "–"}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, minWidth: 0 }}>
+              <MapPin size={11} style={{ flexShrink: 0 }} />
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing.city || "–"}</span>
+            </span>
+            {remaining && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 3, marginLeft: "auto", whiteSpace: "nowrap", color: remaining.urgent ? "#c62828" : colors.muted, fontWeight: remaining.urgent ? 700 : 400 }}>
+                <Clock size={11} /> {remaining.text}
+              </span>
+            )}
           </div>
 
           {/* Seller */}
