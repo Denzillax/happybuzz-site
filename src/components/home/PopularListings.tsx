@@ -35,9 +35,9 @@ export function PopularListings() {
           ...l,
           seller: l.profiles,
           price: l.listing_type === 'auction' && l.bids?.length > 0
-            ? Math.max(...l.bids.map((b: any) => b.amount))
+            ? Math.max(...l.bids.map((b: any) => Number(b.amount)))
             : l.price,
-          bid_count: l.bids?.length || 0,
+          // bid_count aus der Spalte (Anzahl Gebots-Events)
         }))
         setListings(mapped)
       }

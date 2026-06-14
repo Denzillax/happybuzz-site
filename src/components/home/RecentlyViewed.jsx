@@ -33,7 +33,7 @@ export function RecentlyViewed() {
           price: l.listing_type === "auction" && l.bids?.length > 0
             ? Math.max(...l.bids.map((b) => Number(b.amount)))
             : l.price,
-          bid_count: l.bids?.length || 0,
+          // bid_count kommt aus der Spalte (Anzahl Gebots-Events), nicht Bieter-Zeilen
         }))
         .sort((a, b) => (order.get(a.id) ?? 99) - (order.get(b.id) ?? 99));
       setItems(mapped);

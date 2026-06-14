@@ -65,7 +65,17 @@ export function Header() {
     }
     load()
     const iv = setInterval(load, 30000)
-    return () => { active = false; clearInterval(iv) }
+    // Sofort aktualisieren beim Zurückkehren + wenn Nachrichten gelesen wurden
+    const onRefresh = () => load()
+    window.addEventListener('focus', onRefresh)
+    document.addEventListener('visibilitychange', onRefresh)
+    window.addEventListener('beedaro:messages-read', onRefresh)
+    return () => {
+      active = false; clearInterval(iv)
+      window.removeEventListener('focus', onRefresh)
+      document.removeEventListener('visibilitychange', onRefresh)
+      window.removeEventListener('beedaro:messages-read', onRefresh)
+    }
   }, [user?.id])
 
   // ── Auth ──
@@ -244,7 +254,7 @@ export function Header() {
               <button className="hdr-icon-btn" onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
-                  <span style={{ position: 'absolute', top: 2, right: 2, width: 14, height: 14, borderRadius: '50%', background: '#e53e3e', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 8, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
                 )}
               </button>
             </div>

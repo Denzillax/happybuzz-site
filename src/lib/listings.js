@@ -948,6 +948,8 @@ export async function uploadChatImage(conversationId, file) {
 export async function markMessagesRead(conversationId, userId) {
   await supabase.from("messages").update({ is_read: true })
     .eq("conversation_id", conversationId).neq("sender_id", userId).eq("is_read", false);
+  // Header-Badge sofort aktualisieren
+  if (typeof window !== "undefined") window.dispatchEvent(new Event("beedaro:messages-read"));
 }
 
 export async function getUnreadCount(userId) {
@@ -977,6 +979,14 @@ async function recordBid(listingId, bidderId, amount, bidType = "manual") {
   } catch (e) { console.error("recordBid:", e); }
 }
 
+// Entthronten Bieter benachrichtigen (Einstellung: buy_outbid). Fire-and-forget.
+function notifyOutbid(outbidUserId, newBidderId, listingId, title, amount) {
+  if (!outbidUserId || outbidUserId === newBidderId) return;
+  createNotification(outbidUserId, "bid", "Du wurdest überboten",
+    `Bei "${title || "einem Inserat"}" liegt das Höchstgebot jetzt bei CHF ${Number(amount).toFixed(2)}.`,
+    `/listing/${listingId}`, "buy_outbid").catch(() => {});
+}
+
 export async function placeBid(listingId, bidderId, maxAmount) {
   // ── PROXY BIDDING (Ricardo-Style) ──
   // maxAmount = Preislimit des Bieters (geheim)
@@ -984,7 +994,7 @@ export async function placeBid(listingId, bidderId, maxAmount) {
 
   // 1. Listing holen
   const { data: listing } = await supabase.from("listings")
-    .select("start_price, buy_now_price, price, auction_end")
+    .select("title, start_price, buy_now_price, price, auction_end")
     .eq("id", listingId).single();
   if (!listing) throw new Error("Inserat nicht gefunden");
 
@@ -1029,6 +1039,7 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         await supabase.from("bids").update({ amount: newPrice }).eq("id", existingBid.id);
         await supabase.from("listings").update({ price: newPrice }).eq("id", listingId);
         await recordBid(listingId, bidderId, newPrice, "manual");
+        notifyOutbid(currentTop.bidder_id, bidderId, listingId, listing.title, newPrice);
         await extendAuctionIfNeeded(listingId, listing.auction_end);
         return { displayPrice: newPrice, isTopBidder: true, message: "Du führst jetzt!" };
       } else {
@@ -1063,6 +1074,7 @@ export async function placeBid(listingId, bidderId, maxAmount) {
     newDisplayPrice = Math.min(maxAmount, currentTop.max_amount + inc);
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
     await recordBid(listingId, bidderId, newDisplayPrice, "manual");
+    notifyOutbid(currentTop.bidder_id, bidderId, listingId, listing.title, newDisplayPrice);
   } else {
     // Bestehender Bieter bleibt vorne (Auto-Bid verteidigt)
     const inc = getBidIncrement(maxAmount);
@@ -1081,8 +1093,8 @@ export async function placeBid(listingId, bidderId, maxAmount) {
   // 5. Timer-Verlängerung prüfen
   await extendAuctionIfNeeded(listingId, listing.auction_end);
 
-  // 6. bid_count aktualisieren
-  const { count } = await supabase.from("bids").select("*", { count: "exact", head: true }).eq("listing_id", listingId);
+  // 6. bid_count = Anzahl Gebots-Events (bid_history), nicht Bieter-Zeilen
+  const { count } = await supabase.from("bid_history").select("*", { count: "exact", head: true }).eq("listing_id", listingId);
   await supabase.from("listings").update({ bid_count: count || 0 }).eq("id", listingId);
 
   return {
