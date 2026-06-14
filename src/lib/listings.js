@@ -884,30 +884,29 @@ export async function getOrCreateConversation(listingId, buyerId, sellerId) {
 }
 
 export async function getMyConversations(userId) {
+  // Messages verschachtelt laden (vorher 2 Queries pro Conversation -> N+1).
+  // Unread-Status + letzte Nachricht werden in JS abgeleitet.
   const { data, error } = await supabase
     .from("conversations")
-    .select("*, listing:listings(id, title, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
+    .select("*, listing:listings(id, title, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url), messages(content, sender_id, is_read, created_at)")
     .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
     .order("last_message_at", { ascending: false });
   if (error) return [];
 
-  // Ungelesen-Status + letzte Nachricht pro Conversation laden
-  const result = [];
-  for (const c of (data || [])) {
-    const { count } = await supabase.from("messages").select("*", { count: "exact", head: true })
-      .eq("conversation_id", c.id).neq("sender_id", userId).eq("is_read", false);
-    const { data: lastMsg } = await supabase.from("messages").select("content")
-      .eq("conversation_id", c.id).order("created_at", { ascending: false }).limit(1);
-    result.push({
+  return (data || []).map((c) => {
+    const msgs = c.messages || [];
+    let last = null;
+    for (const m of msgs) { if (!last || new Date(m.created_at) > new Date(last.created_at)) last = m; }
+    const hasUnread = msgs.some((m) => m.sender_id !== userId && !m.is_read);
+    return {
       ...c,
       listingTitle: c.listing?.title || "Gelöschtes Inserat",
       listingImage: c.listing?.listing_images?.[0]?.url || null,
       otherUser: c.buyer_id === userId ? c.seller : c.buyer,
-      hasUnread: (count || 0) > 0,
-      lastMessagePreview: lastMsg?.[0]?.content || "",
-    });
-  }
-  return result;
+      hasUnread,
+      lastMessagePreview: last?.content || "",
+    };
+  });
 }
 
 export async function getMessages(conversationId) {
@@ -1447,24 +1446,18 @@ export async function getMyBookings(userId) {
 
 // ─── Public Q&A on Listings ──────────────────────────────────
 export async function getListingQuestions(listingId) {
-  // RLS handles visibility: public für alle, private nur für Beteiligte
+  // RLS handles visibility: public für alle, private nur für Beteiligte.
+  // Messages verschachtelt in EINER Query laden (vorher N+1: 1 Query pro Thread).
   const { data, error } = await supabase
     .from("conversations")
-    .select("id, buyer_id, seller_id, is_public, created_at, buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url)")
+    .select("id, buyer_id, seller_id, is_public, created_at, buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), messages(*, sender:profiles!messages_sender_id_fkey(id, display_name, avatar_url))")
     .eq("listing_id", listingId)
     .order("created_at", { ascending: true });
   if (error) return [];
-  // Lade Messages für jede Conversation
-  const result = [];
-  for (const conv of (data || [])) {
-    const { data: msgs } = await supabase
-      .from("messages")
-      .select("*, sender:profiles!messages_sender_id_fkey(id, display_name, avatar_url)")
-      .eq("conversation_id", conv.id)
-      .order("created_at", { ascending: true });
-    result.push({ ...conv, messages: msgs || [] });
-  }
-  return result;
+  return (data || []).map((conv) => ({
+    ...conv,
+    messages: (conv.messages || []).slice().sort((a, b) => new Date(a.created_at) - new Date(b.created_at)),
+  }));
 }
 
 export async function askPublicQuestion(listingId, buyerId, sellerId, content) {
