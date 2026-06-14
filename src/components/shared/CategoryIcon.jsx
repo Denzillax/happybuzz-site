@@ -15,7 +15,7 @@ import {
   Guitar, Piano, Drum,
   Footprints, Glasses, Flower, Table, DoorOpen,
   Plane, CircleDot, Clapperboard,
-  HardDrive, Keyboard, Box, Clock, Brush, Train, Pencil, MapPin, Sparkles,
+  HardDrive, Keyboard, Box, Clock, Brush, Train, Pencil, MapPin, Sparkles, Handshake,
 } from "lucide-react";
 
 const ICON_MAP = {
@@ -35,7 +35,7 @@ const ICON_MAP = {
   Footprints, Glasses, Plane,
   CookingPot: Wrench,
   HardDrive, Keyboard, Box, Clock, Brush, Train, Pencil, MapPin, Sparkles,
-  Wine: Briefcase,
+  Wine: Briefcase, Handshake, HandHelping: Handshake,
 };
 
 /**

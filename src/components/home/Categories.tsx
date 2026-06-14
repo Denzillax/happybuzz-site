@@ -31,6 +31,11 @@ export function Categories() {
 
   if (!categories.length) return null
 
+  // Wichtigste Kategorien + Dienstleistungen (Differenzierungs-Kategorie) immer zeigen
+  const shown = categories.slice(0, SHOWN)
+  const service = categories.find((c) => c.slug === 'dienstleistungen')
+  if (service && !shown.some((c) => c.id === service.id)) shown.push(service)
+
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
@@ -67,7 +72,7 @@ export function Categories() {
         boxShadow: shadows.card,
         padding: '32px 24px',
       }}>
-        {categories.slice(0, SHOWN).map((cat) => (
+        {shown.map((cat) => (
           <Link
             key={cat.id}
             href={`/search?category=${cat.slug}`}
