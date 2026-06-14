@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Leaf, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
@@ -70,11 +71,9 @@ export function CommunityImpact() {
           aspectRatio: "3 / 2",
         }}>
           {PHOTOS.map((p, i) => (
-            <img key={p.src} src={p.src} alt={p.alt}
-              style={{
-                position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
-                opacity: i === slide ? 1 : 0, transition: "opacity .8s ease-in-out",
-              }} />
+            <Image key={p.src} src={p.src} alt={p.alt} fill priority={i === 0}
+              sizes="(max-width: 768px) 100vw, 540px"
+              style={{ objectFit: "cover", opacity: i === slide ? 1 : 0, transition: "opacity .8s ease-in-out" }} />
           ))}
           {/* Punkte */}
           <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 7, zIndex: 2 }}>

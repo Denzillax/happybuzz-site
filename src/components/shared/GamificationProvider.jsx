@@ -77,76 +77,37 @@ export default function GamificationProvider() {
     return () => sub?.subscription?.unsubscribe?.();
   }, []);
 
+  // Ein gemeinsamer Poller für xp_log + nektar_log (statt zwei getrennte
+  // 6s-Intervalle). Beide Abfragen laufen parallel, Intervall 15s.
   useEffect(() => {
     if (!uid) return;
-    let lastSeen = null; // wird aus DB gesetzt (vermeidet Browser/DB-Clock-Skew)
+    let lastXp = null, lastNektar = null;
     let stopped = false;
 
     (async () => {
-      const { data } = await supabase.from("xp_log").select("created_at").eq("user_id", uid)
-        .order("created_at", { ascending: false }).limit(1);
-      if (!stopped) lastSeen = data?.[0]?.created_at || new Date(0).toISOString();
+      const [{ data: xp }, { data: nk }] = await Promise.all([
+        supabase.from("xp_log").select("created_at").eq("user_id", uid).order("created_at", { ascending: false }).limit(1),
+        supabase.from("nektar_log").select("created_at").eq("user_id", uid).order("created_at", { ascending: false }).limit(1),
+      ]);
+      if (!stopped) {
+        lastXp = xp?.[0]?.created_at || new Date(0).toISOString();
+        lastNektar = nk?.[0]?.created_at || new Date(0).toISOString();
+      }
     })();
 
     async function poll() {
-      if (stopped || document.hidden || lastSeen === null) return;
+      if (stopped || document.hidden || lastXp === null || lastNektar === null) return;
       try {
-        const { data } = await supabase
-          .from("xp_log")
-          .select("id, amount, reason, created_at")
-          .eq("user_id", uid)
-          .gt("created_at", lastSeen)
-          .order("created_at", { ascending: true })
-          .limit(10);
-        if (data && data.length) {
-          lastSeen = data[data.length - 1].created_at;
-          data.forEach((row) => showXpToast(row, uid));
-        }
+        const [{ data: xp }, { data: nk }] = await Promise.all([
+          supabase.from("xp_log").select("id, amount, reason, created_at").eq("user_id", uid).gt("created_at", lastXp).order("created_at", { ascending: true }).limit(10),
+          supabase.from("nektar_log").select("id, amount, reason, created_at").eq("user_id", uid).gt("created_at", lastNektar).order("created_at", { ascending: true }).limit(10),
+        ]);
+        if (xp && xp.length) { lastXp = xp[xp.length - 1].created_at; xp.forEach((row) => showXpToast(row, uid)); }
+        if (nk && nk.length) { lastNektar = nk[nk.length - 1].created_at; nk.forEach((row) => showNektarToast(row)); }
       } catch {}
     }
 
-    const iv = setInterval(poll, 6000);
-    const onFocus = () => poll();
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onFocus);
-    return () => {
-      stopped = true;
-      clearInterval(iv);
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onFocus);
-    };
-  }, [uid]);
-
-  // Zweiter Poller: Nektar (nektar_log)
-  useEffect(() => {
-    if (!uid) return;
-    let lastSeen = null;
-    let stopped = false;
-
-    (async () => {
-      const { data } = await supabase.from("nektar_log").select("created_at").eq("user_id", uid)
-        .order("created_at", { ascending: false }).limit(1);
-      if (!stopped) lastSeen = data?.[0]?.created_at || new Date(0).toISOString();
-    })();
-
-    async function poll() {
-      if (stopped || document.hidden || lastSeen === null) return;
-      try {
-        const { data } = await supabase
-          .from("nektar_log")
-          .select("id, amount, reason, created_at")
-          .eq("user_id", uid)
-          .gt("created_at", lastSeen)
-          .order("created_at", { ascending: true })
-          .limit(10);
-        if (data && data.length) {
-          lastSeen = data[data.length - 1].created_at;
-          data.forEach((row) => showNektarToast(row));
-        }
-      } catch {}
-    }
-
-    const iv = setInterval(poll, 6000);
+    const iv = setInterval(poll, 15000);
     const onFocus = () => poll();
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onFocus);
