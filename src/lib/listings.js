@@ -970,6 +970,13 @@ function getBidIncrement(price) {
   return 20;
 }
 
+// Bietaktion im Gebotsverlauf festhalten (jede preisverändernde Aktion).
+async function recordBid(listingId, bidderId, amount, bidType = "manual") {
+  try {
+    await supabase.from("bid_history").insert({ listing_id: listingId, bidder_id: bidderId, amount, bid_type: bidType });
+  } catch (e) { console.error("recordBid:", e); }
+}
+
 export async function placeBid(listingId, bidderId, maxAmount) {
   // ── PROXY BIDDING (Ricardo-Style) ──
   // maxAmount = Preislimit des Bieters (geheim)
@@ -1021,6 +1028,7 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         const newPrice = Math.min(maxAmount, currentTop.max_amount + inc);
         await supabase.from("bids").update({ amount: newPrice }).eq("id", existingBid.id);
         await supabase.from("listings").update({ price: newPrice }).eq("id", listingId);
+        await recordBid(listingId, bidderId, newPrice, "manual");
         await extendAuctionIfNeeded(listingId, listing.auction_end);
         return { displayPrice: newPrice, isTopBidder: true, message: "Du führst jetzt!" };
       } else {
@@ -1030,6 +1038,8 @@ export async function placeBid(listingId, bidderId, maxAmount) {
         await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
         await supabase.from("bids").update({ amount: maxAmount }).eq("id", existingBid.id);
         await supabase.from("listings").update({ price: autoPrice }).eq("id", listingId);
+        await recordBid(listingId, bidderId, maxAmount, "manual");
+        await recordBid(listingId, currentTop.bidder_id, autoPrice, "auto");
         await extendAuctionIfNeeded(listingId, listing.auction_end);
         return { displayPrice: autoPrice, isTopBidder: false, message: "Du wurdest automatisch überboten." };
       }
@@ -1046,17 +1056,21 @@ export async function placeBid(listingId, bidderId, maxAmount) {
     // Erster Bieter
     newDisplayPrice = startPrice;
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
+    await recordBid(listingId, bidderId, newDisplayPrice, "manual");
   } else if (maxAmount > currentTop.max_amount) {
     // Neuer Bieter überbietet
     const inc = getBidIncrement(currentTop.max_amount);
     newDisplayPrice = Math.min(maxAmount, currentTop.max_amount + inc);
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
+    await recordBid(listingId, bidderId, newDisplayPrice, "manual");
   } else {
-    // Bestehender Bieter bleibt vorne
+    // Bestehender Bieter bleibt vorne (Auto-Bid verteidigt)
     const inc = getBidIncrement(maxAmount);
     const autoPrice = Math.min(currentTop.max_amount, maxAmount + inc);
     await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: maxAmount, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
     await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
+    await recordBid(listingId, bidderId, maxAmount, "manual");
+    await recordBid(listingId, currentTop.bidder_id, autoPrice, "auto");
     newDisplayPrice = autoPrice;
     isTop = false;
   }

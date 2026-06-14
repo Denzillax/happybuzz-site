@@ -1003,6 +1003,7 @@ export default function ListingDetail() {
                                     const result = await placeBid(l.id, user.id, amount);
                                     const newBids = await getBids(l.id);
                                     setBids(newBids);
+                                    getBidHistory(l.id).then(setBidHistory).catch(() => {});
                                     const newMyBid = await getMyBid(l.id, user.id);
                                     setMyBid(newMyBid);
                                     setListing(prev => ({ ...prev, price: result.displayPrice || newBids[0]?.amount || prev.price }));
