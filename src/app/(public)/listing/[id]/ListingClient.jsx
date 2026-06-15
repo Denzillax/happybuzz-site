@@ -5,8 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation,
 } from "lucide-react";
+import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
 import { AccountBadge } from "@/components/shared/AccountBadge";
@@ -24,31 +25,71 @@ import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { createNotification } from "@/lib/notifications";
 
-// ── LocationMap: Geocoding via Nominatim ──────────────────
+// ── LocationMap: interaktive Leaflet-Karte mit Gemeindegrenze ──
+// - rote Gemeindegrenze (Polygon via Nominatim polygon_geojson)
+// - auf das Gebiet gezoomt (fitBounds)
+// - Strg+Scrollen zum Zoomen; normales Scrollen scrollt die Seite (+ Hinweis)
 function LocationMap({ city, canton }) {
-  const [coords, setCoords] = useState(null);
+  const elRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [hint, setHint] = useState(false);
+
   useEffect(() => {
-    async function geocode() {
+    if (!city || !elRef.current) return;
+    let map, hintTimer, onWheel, cancelled = false;
+    const el = elRef.current;
+    (async () => {
+      let place;
       try {
         const q = `${city}${canton ? `, ${canton}` : ""}, Switzerland`;
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`);
-        const data = await res.json();
-        if (data?.[0]) setCoords({ lat: data[0].lat, lon: data[0].lon });
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&polygon_geojson=1&limit=1`);
+        place = (await res.json())?.[0];
       } catch {}
-    }
-    if (city) geocode();
+      if (cancelled || !el || !place) { if (!cancelled) setLoading(false); return; }
+      const lat = parseFloat(place.lat), lon = parseFloat(place.lon);
+      const L = (await import("leaflet")).default;
+      if (cancelled || !el || el._leaflet_id) return;
+
+      map = L.map(el, { scrollWheelZoom: false, zoomControl: true, center: [lat, lon], zoom: 13 });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(map);
+
+      let bounds = null;
+      if (place.geojson && place.geojson.type !== "Point") {
+        const poly = L.geoJSON(place.geojson, { style: { color: "#EB5E55", weight: 2.5, fillColor: "#EB5E55", fillOpacity: 0.12 } }).addTo(map);
+        bounds = poly.getBounds();
+      }
+      L.circleMarker([lat, lon], { radius: 8, color: "#fff", weight: 2.5, fillColor: "#5B8C5A", fillOpacity: 1 }).addTo(map);
+      if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [24, 24] });
+      else map.setView([lat, lon], 13);
+      setLoading(false);
+
+      onWheel = (e) => {
+        if (e.ctrlKey || e.metaKey) { e.preventDefault(); map.setZoom(map.getZoom() + (e.deltaY < 0 ? 1 : -1)); }
+        else { setHint(true); clearTimeout(hintTimer); hintTimer = setTimeout(() => setHint(false), 1300); }
+      };
+      el.addEventListener("wheel", onWheel, { passive: false });
+    })();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(hintTimer);
+      if (onWheel && el) el.removeEventListener("wheel", onWheel);
+      if (map) map.remove();
+    };
   }, [city, canton]);
 
-  if (!coords) return <div style={{ height: 300, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 13 }}>Karte wird geladen...</div>;
-
-  const bbox = `${(parseFloat(coords.lon) - 0.05).toFixed(4)},${(parseFloat(coords.lat) - 0.03).toFixed(4)},${(parseFloat(coords.lon) + 0.05).toFixed(4)},${(parseFloat(coords.lat) + 0.03).toFixed(4)}`;
   return (
-    <iframe
-      title="Standort"
-      width="100%" height="440" frameBorder="0" style={{ border: 0, display: "block" }}
-      src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${coords.lat},${coords.lon}`}
-      loading="lazy"
-    />
+    <div style={{ position: "relative" }}>
+      <div ref={elRef} style={{ height: 480, width: "100%", background: "#eef1f3" }} />
+      {loading && (
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 13, pointerEvents: "none" }}>Karte wird geladen...</div>
+      )}
+      {hint && (
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,.35)", color: "#fff", fontSize: 15, fontWeight: 700, fontFamily: fonts.body, pointerEvents: "none", zIndex: 401 }}>
+          Mit Strg + Scrollen zoomen
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -472,11 +513,17 @@ export default function ListingDetail() {
             {/* ── STANDORT (KARTE) ──────────────────── */}
             {l.city && (
               <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
-                <div style={{ padding: "16px 28px 12px" }}>
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
-                  <p style={{ margin: "4px 0 0", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
-                    <MapPin size={13} /> {l.city}, Schweiz
-                  </p>
+                <div style={{ padding: "16px 28px 12px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                  <div>
+                    <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
+                    <p style={{ margin: "4px 0 0", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
+                      <MapPin size={13} /> {l.city}, Schweiz
+                    </p>
+                  </div>
+                  <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: radius.full, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    <Navigation size={15} /> Route planen
+                  </a>
                 </div>
                 <LocationMap city={l.city} canton={l.canton} />
               </div>
