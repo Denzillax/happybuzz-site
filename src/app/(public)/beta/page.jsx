@@ -221,6 +221,11 @@ const TESTS = [
       { id: "adm_invoices", label: "Rechnungen-Tab: Typ-Filter Alle/BEE/FEE, Nummernsuche über beide, Inline-QR + Öffnen" },
       { id: "adm_invoices_dunning", label: "Gebühren-Rechnungen (FEE) behalten das Mahnwesen (Stufen 1-3, Bezahlt+reaktivieren)" },
       { id: "adm_overview_openinv", label: "Übersicht-Karte 'Offene Rechnungen' springt gefiltert in den Rechnungen-Tab" },
+      { id: "adm_fee_ref_unique", label: "Neue FEE-Rechnung erhält eindeutige Nr (FEE-JJJJ-MM-XXXXXX); bestehende unverändert" },
+      { id: "adm_fee_bee_pos", label: "FEE-Monatsrechnung (Seite + Admin) zeigt BEE-Nr je Position" },
+      { id: "adm_csv", label: "CSV-Export für Bestellungen/Rechnungen/Benutzer exportiert die gefilterte Ansicht; Umlaute korrekt" },
+      { id: "adm_emaillog", label: "E-Mails-Tab listet email_log, Suche + aufklappbarer Context funktionieren" },
+      { id: "adm_mini_analytics", label: "Übersicht zeigt GMV, Ø Bestellwert und Top-5-Verkäufer (nicht-storniert)" },
     ],
   },
   {
