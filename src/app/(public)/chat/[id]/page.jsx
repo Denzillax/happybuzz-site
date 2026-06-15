@@ -3,9 +3,10 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus } from "lucide-react";
+import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus, ShieldCheck } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice } from "@/lib/listings";
+import { maskContactInfo } from "@/lib/contactFilter";
 
 const QUICK_REPLIES = [
   "Ist noch verfügbar",
@@ -31,6 +32,7 @@ export default function ChatConversation() {
   const [newMsg, setNewMsg] = useState("");
   const [user, setUser] = useState(null);
   const [conv, setConv] = useState(null);
+  const [dealActive, setDealActive] = useState(false);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -59,6 +61,10 @@ export default function ChatConversation() {
           .eq("id", params.id)
           .maybeSingle();
         setConv(c);
+        if (c?.listing_id && c?.buyer_id) {
+          const { data: deals } = await supabase.from("purchases").select("id").eq("listing_id", c.listing_id).eq("buyer_id", c.buyer_id).neq("status", "cancelled").limit(1);
+          setDealActive(!!(deals && deals.length));
+        }
         const msgs = await getMessages(params.id);
         setMessages(msgs);
         await markMessagesRead(params.id, u.id);
@@ -87,8 +93,9 @@ export default function ChatConversation() {
   const appendMsg = (m) => { if (m) setMessages((prev) => prev.some((x) => x.id === m.id) ? prev : [...prev, m]); };
 
   const sendText = async (text) => {
-    const t = (text ?? newMsg).trim();
+    let t = (text ?? newMsg).trim();
     if (!t || sending) return;
+    if (!dealActive) t = maskContactInfo(t).masked;
     setSending(true);
     try { const m = await sendMessage(params.id, user.id, t); appendMsg(m); if (text === undefined) setNewMsg(""); }
     catch (err) { console.error(err); }
@@ -175,6 +182,12 @@ export default function ChatConversation() {
           </div>
         </Link>
       </div>
+
+      {!dealActive && (
+        <div style={{ background: "#E6F5F5", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
+          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln = Käuferschutz und Bewertung. Kontaktdaten erscheinen erst nach Abschluss.
+        </div>
+      )}
 
       {/* Messages */}
       <div className="chat-scroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
