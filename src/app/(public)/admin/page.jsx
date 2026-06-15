@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
@@ -307,8 +307,9 @@ export default function AdminPage() {
   const NAV = [
     { key: "overview", label: "Übersicht", Icon: LayoutDashboard },
     { key: "users", label: "Benutzer", Icon: Users },
+    { key: "orders", label: "Bestellungen", Icon: ShoppingBag },
+    { key: "invoices", label: "Rechnungen", Icon: ReceiptText },
     { key: "listings", label: "Inserate", Icon: Package },
-    { key: "fees", label: "Gebühren", Icon: Receipt },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
@@ -335,10 +336,10 @@ export default function AdminPage() {
     <div className="admin-shell" style={{ fontFamily: fonts.body, background: "#fff", color: colors.dark, minHeight: "100vh" }}>
 
       {/* ═══ SIDEBAR ═══ */}
-      <aside className="admin-sidebar" style={{ background: "#191615", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <aside className="admin-sidebar" style={{ background: "#1a1a1a", color: "#fff", display: "flex", flexDirection: "column" }}>
         <div className="admin-brand" style={{ display: "flex", alignItems: "center", gap: 11, padding: "20px 20px 18px" }}>
           <div style={{ width: 32, height: 32, borderRadius: 10, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <BeeIcon size={18} color="#191615" />
+            <BeeIcon size={18} color="#1a1a1a" />
           </div>
           <div>
             <div style={{ fontSize: 15, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1 }}>BEEDARO</div>
@@ -380,10 +381,10 @@ export default function AdminPage() {
         <header style={{ display: "flex", alignItems: "center", gap: 16, padding: "20px 28px", borderBottom: `1px solid ${colors.borderLt}`, flexWrap: "wrap" }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: 0 }}>{pageTitle}</h1>
           <div style={{ flex: 1 }} />
-          {(tab === "users" || tab === "listings") && (
+          {(tab === "users" || tab === "listings" || tab === "orders" || tab === "invoices") && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, background: colors.cream, borderRadius: 999, padding: "8px 15px", minWidth: 220 }}>
               <Search size={15} color={colors.muted} />
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : "Inserate suchen..."}
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : "Nummer (BEE/FEE) oder Name..."}
                 style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
             </div>
           )}
