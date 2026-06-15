@@ -390,15 +390,15 @@ export default function AdminPage() {
   const exportCurrent = () => {
     if (tab === "orders") {
       downloadCSV(`beedaro-bestellungen-${today()}.csv`,
-        ["BEE-Nr", "Datum", "Artikel", "Kaeufer", "Verkaeufer", "Preis", "Versand", "Status"],
+        ["BEE-Nr", "Datum", "Artikel", "Käufer", "Verkäufer", "Preis", "Versand", "Status"],
         filteredOrders.map(o => [makeBeeRef(o.id), fmtDate(o.created_at), o.listingTitle, o.buyerName, o.sellerName, fmtCHF(o.price), fmtCHF(o.shipping_cost), o.status]));
     } else if (tab === "invoices") {
       downloadCSV(`beedaro-rechnungen-${today()}.csv`,
-        ["Typ", "Nr", "Zahler", "Empfaenger", "Betrag", "Status", "Datum"],
+        ["Typ", "Nr", "Zahler", "Empfänger", "Betrag", "Status", "Datum"],
         invoiceRows.map(r => [r.kind.toUpperCase(), r.ref, r.payer, r.payee, fmtCHF(r.amount), r.status, fmtDate(r.date)]));
     } else if (tab === "users") {
       downloadCSV(`beedaro-benutzer-${today()}.csv`,
-        ["Name", "Username", "Stadt", "Level", "Blueten", "Kontaktverstoeße", "Gesperrt", "Erstellt"],
+        ["Name", "Username", "Stadt", "Level", "Blüten", "Kontaktverstöße", "Gesperrt", "Erstellt"],
         visibleUsers.map(u => [u.display_name, u.username, u.city, u.bee_level || "starter", u.blueten || 0, u.contact_violations || 0, u.is_banned ? "ja" : "nein", u.created_at ? fmtDate(u.created_at) : ""]));
     }
   };
