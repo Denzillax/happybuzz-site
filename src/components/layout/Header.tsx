@@ -268,10 +268,10 @@ export function Header() {
                 onClick={() => { if (!user) { router.push('/login'); return; } setDropdownOpen(!dropdownOpen); setFavOpen(false); }}
                 style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 0, border: 'none', background: 'transparent', cursor: 'pointer' }}
               >
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: DARK, transition: 'box-shadow 0.15s', boxShadow: dropdownOpen ? `0 0 0 2px #fff, 0 0 0 4px ${YELLOW}` : 'none' }}>
-                  {getInitials()}
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: user ? YELLOW : '#EDEDEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: user ? DARK : '#666', transition: 'box-shadow 0.15s', boxShadow: dropdownOpen ? `0 0 0 2px #fff, 0 0 0 4px ${YELLOW}` : 'none' }}>
+                  {user ? getInitials() : <User size={18} />}
                 </div>
-                <ChevronDown size={14} style={{ color: '#888', transition: 'transform 0.15s', transform: dropdownOpen ? 'rotate(180deg)' : 'none' }} />
+                {user && <ChevronDown size={14} style={{ color: '#888', transition: 'transform 0.15s', transform: dropdownOpen ? 'rotate(180deg)' : 'none' }} />}
               </button>
 
               {dropdownOpen && (
