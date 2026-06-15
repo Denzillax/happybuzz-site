@@ -8,6 +8,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { makeBeeRef } from "@/lib/fees";
 
 
 const f = "'Manrope', sans-serif";
@@ -108,7 +109,10 @@ export default function FeeInvoicePage() {
             {fees.map(fee => (
               <tr key={fee.id} style={{ borderBottom: "1px solid #eee" }}>
                 <td style={{ ...cp, fontSize: 11 }}>{new Date(fee.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</td>
-                <td style={{ ...cp, fontSize: 11, fontWeight: 600 }}>{fee.listing_title}</td>
+                <td style={{ ...cp, fontSize: 11, fontWeight: 600 }}>
+                  {fee.listing_title}
+                  {fee.purchase_id && <span style={{ display: "block", fontSize: 9, color: g, fontWeight: 400 }}>{makeBeeRef(fee.purchase_id)}</span>}
+                </td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "right" }}>CHF {fmtCHF(fee.sale_price)}</td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "center", color: g }}>{parseFloat(fee.fee_percent)}%</td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "right", fontWeight: 600 }}>CHF {fmtCHF(fee.fee_amount)}</td>
