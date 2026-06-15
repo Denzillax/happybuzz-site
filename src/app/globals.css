@@ -176,8 +176,10 @@ input:focus, textarea:focus, select:focus {
 .bd-link:hover { text-decoration: underline; }
 /* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
 .chat-thread-back { display: none !important; }
+@media (max-width: 1100px) { .chat-info { display: none !important; } }
 @media (max-width: 860px) {
-  .chat-shell { height: calc(100dvh - 64px - 56px) !important; }
+  .chat-backdrop { padding: 0 !important; height: calc(100dvh - 64px - 56px) !important; }
+  .chat-shell { border-radius: 0 !important; box-shadow: none !important; border: none !important; max-width: none !important; }
   .chat-sidebar { width: 100% !important; border-right: none !important; }
   .chat-sidebar.is-hidden-mobile { display: none !important; }
   .chat-main.is-hidden-mobile { display: none !important; }

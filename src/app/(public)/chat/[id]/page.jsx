@@ -143,7 +143,8 @@ export default function ChatConversation() {
   const canCounter = offerMsgs.length < 3;
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: colors.surface, flex: 1, minHeight: 0, display: "flex", flexDirection: "row", color: colors.dark }}>
+      <div className="chat-thread-col" style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: colors.cream }}>
 
       {/* Eine kompakte Leiste: Was (Inserat) + Wer (Gegenüber) */}
       <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, position: "sticky", top: 0, zIndex: 10 }}>
@@ -297,6 +298,36 @@ export default function ChatConversation() {
           </button>
         </div>
       </div>
+      </div>
+
+      {/* ── Inserat-Info (rechte Spalte, ab Desktop) ── */}
+      {conv?.listing && (
+        <aside className="chat-info" style={{ width: 280, flexShrink: 0, borderLeft: `1px solid ${colors.borderLt}`, background: colors.surface, padding: 18, overflowY: "auto", display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".5px", textTransform: "uppercase", color: colors.mutedLt }}>Inserat</div>
+          <Link href={`/listing/${conv.listing.id}`} style={{ display: "block", width: "100%", aspectRatio: "4 / 3", borderRadius: 12, overflow: "hidden", background: colors.warm }}>
+            {conv.listing.listing_images?.[0]?.url
+              ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={32} color={colors.mutedLt} /></div>}
+          </Link>
+          <div>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: colors.dark, lineHeight: 1.3 }}>{conv.listing.title}</p>
+            <p style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{conv.listing.listing_type === "free" ? "Gratis" : `CHF ${Number(conv.listing.price || 0).toLocaleString("de-CH")}`}</p>
+            <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted }}>{isBuyer ? "Du kaufst" : "Du verkaufst"}</p>
+          </div>
+          <Link href={`/listing/${conv.listing.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 14px", borderRadius: radius.full, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>Zum Inserat</Link>
+          {otherUser?.id && (
+            <Link href={`/user/${otherUser.id}`} style={{ display: "flex", alignItems: "center", gap: 10, borderTop: `1px solid ${colors.borderLt}`, paddingTop: 14, textDecoration: "none", color: "inherit" }}>
+              <div style={{ width: 38, height: 38, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                {otherUser.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.dark, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{otherUser.display_name || "Benutzer"}</p>
+                <p style={{ margin: 0, fontSize: 11, color: colors.teal }}>Profil ansehen</p>
+              </div>
+            </Link>
+          )}
+        </aside>
+      )}
 
       {/* Lightbox */}
       {lightbox && (

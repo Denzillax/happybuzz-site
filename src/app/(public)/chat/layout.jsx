@@ -61,10 +61,11 @@ export default function ChatLayout({ children }) {
   };
 
   return (
-    <div className="chat-shell" style={{ display: "flex", background: colors.surface, height: "calc(100dvh - 64px)", overflow: "hidden", fontFamily: fonts.body, color: colors.dark, maxWidth: 1100, margin: "0 auto", borderLeft: `1px solid ${colors.borderLt}`, borderRight: `1px solid ${colors.borderLt}` }}>
+    <div className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#ECEEF1", padding: 16, display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
+      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1360, height: "100%", overflow: "hidden", borderRadius: 16, border: `1px solid ${colors.borderLt}`, boxShadow: "0 6px 24px rgba(0,0,0,.07)" }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
-      <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 340, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>
+      <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 320, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <div style={{ padding: "14px 16px 12px", borderBottom: `1px solid ${colors.borderLt}` }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
             <h1 style={{ fontSize: 20, fontWeight: 900, margin: 0, fontFamily: fonts.head }}>Nachrichten</h1>
@@ -140,6 +141,7 @@ export default function ChatLayout({ children }) {
       <main className={`chat-main${onThread ? "" : " is-hidden-mobile"}`} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
         {children}
       </main>
+      </div>
     </div>
   );
 }
