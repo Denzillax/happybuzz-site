@@ -8,7 +8,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef } from "@/lib/fees";
-import { orderQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
@@ -32,8 +32,11 @@ export default function AdminPage() {
   const [openInvoice, setOpenInvoice] = useState(null);
   const [userListings, setUserListings] = useState({});
   const [userFees, setUserFees] = useState({});
-  const [feeFilter, setFeeFilter] = useState("all");
   const [userMod, setUserMod] = useState("all");
+  const [invoiceType, setInvoiceType] = useState("all");
+  const [openInvoiceKey, setOpenInvoiceKey] = useState(null);
+  const [feeLedger, setFeeLedger] = useState({});
+  const [feeSeller, setFeeSeller] = useState({});
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -176,6 +179,23 @@ export default function AdminPage() {
     if (openOrder === orderId) { setOpenOrder(null); return; }
     setOpenOrder(orderId);
     await loadOrderDetail(orderId);
+  };
+  const loadFeeDetail = async (inv) => {
+    if (!feeLedger[inv.id]) {
+      const { data: items } = await supabase.from("fee_ledger").select("*").eq("fee_invoice_id", inv.id).order("created_at", { ascending: true });
+      setFeeLedger(prev => ({ ...prev, [inv.id]: items || [] }));
+    }
+    if (!feeSeller[inv.id]) {
+      const { data: prof } = await supabase.from("profiles").select("*").eq("id", inv.seller_id).maybeSingle();
+      setFeeSeller(prev => ({ ...prev, [inv.id]: prof }));
+    }
+  };
+  const toggleInvoiceRow = async (kind, idOrInv) => {
+    const key = `${kind}:${kind === "bee" ? idOrInv : idOrInv.id}`;
+    if (openInvoiceKey === key) { setOpenInvoiceKey(null); return; }
+    setOpenInvoiceKey(key);
+    if (kind === "bee") await loadOrderDetail(idOrInv);
+    else await loadFeeDetail(idOrInv);
   };
   const orderStatusGroup = (s) => s === "cancelled" ? "cancelled" : (["completed", "delivered", "picked_up"].includes(s) ? "done" : "open");
   const beeRefIncludes = (id, q) => {
@@ -322,13 +342,26 @@ export default function AdminPage() {
     return pill("#E3F2FD", "#1565C0", map[s] || (s || "Offen"));
   };
 
-  const filteredFees = feeFilter === "all" ? feeInvoices : feeInvoices.filter(i => i.status === feeFilter);
   const filteredUsers = users.filter(u => !search || u.display_name?.toLowerCase().includes(search.toLowerCase()) || u.username?.toLowerCase().includes(search.toLowerCase()) || u.city?.toLowerCase().includes(search.toLowerCase()));
   const filteredListings = listings.filter(l => !search || l.title?.toLowerCase().includes(search.toLowerCase()) || l.sellerName?.toLowerCase().includes(search.toLowerCase()));
   const filteredOrders = orders.filter(o =>
     (!search || beeRefIncludes(o.id, search) || o.listingTitle?.toLowerCase().includes(search.toLowerCase()) || o.buyerName?.toLowerCase().includes(search.toLowerCase()) || o.sellerName?.toLowerCase().includes(search.toLowerCase()))
     && (orderStatusFilter === "all" || orderStatusGroup(o.status) === orderStatusFilter)
   );
+
+  const beeInvoiceRows = orders.map(o => ({
+    kind: "bee", id: o.id, ref: makeBeeRef(o.id), payer: o.buyerName, payee: o.sellerName,
+    amount: parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0), status: o.status, date: o.created_at,
+  }));
+  const feeInvoiceRows = feeInvoices.map(inv => ({
+    kind: "fee", id: inv.id, ref: inv.invoice_ref, payer: inv.sellerName, payee: "BEEDARO",
+    amount: parseFloat(inv.total_fees || 0), status: inv.status, date: inv.created_at, inv,
+  }));
+  const invoiceRows = [
+    ...(invoiceType === "fee" ? [] : beeInvoiceRows),
+    ...(invoiceType === "bee" ? [] : feeInvoiceRows),
+  ].filter(r => !search || (r.ref || "").toLowerCase().includes(search.toLowerCase()) || (r.payer || "").toLowerCase().includes(search.toLowerCase()) || (r.payee || "").toLowerCase().includes(search.toLowerCase()))
+   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Moderation: abgeleitete Mengen
   const flaggedUsers = users.filter(u => (u.contact_violations || 0) > 0);
@@ -474,48 +507,6 @@ export default function AdminPage() {
                   ))}
                 </div>
               )}
-            </div>
-          )}
-
-          {/* ═══ GEBÜHREN ═══ */}
-          {tab === "fees" && (
-            <div>
-              <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-                {[{ key: "all", label: "Alle" }, { key: "pending_payment", label: "Ausstehend" }, { key: "open", label: "Offen" }, { key: "paid", label: "Bezahlt" }].map(f => (
-                  <button key={f.key} onClick={() => setFeeFilter(f.key)} style={modPill(feeFilter === f.key)}>{f.label}</button>
-                ))}
-              </div>
-              <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead><tr style={{ borderBottom: `1px solid ${colors.border}`, background: colors.cream }}>
-                    <th style={th}>Verkäufer</th><th style={th}>Referenz</th><th style={th}>Periode</th>
-                    <th style={{ ...th, textAlign: "right" }}>Betrag</th><th style={{ ...th, textAlign: "right" }}>Impact</th>
-                    <th style={{ ...th, textAlign: "center" }}>Status</th><th style={{ ...th, textAlign: "center" }}>Aktion</th>
-                  </tr></thead>
-                  <tbody>
-                    {filteredFees.map(inv => {
-                      const s = sc[inv.status] || sc.open;
-                      return (
-                        <tr key={inv.id} style={{ borderBottom: `1px solid ${colors.borderLt}`, background: inv.status === "pending_payment" ? `${colors.blue}05` : "transparent" }}>
-                          <td style={{ ...td, fontWeight: 600 }}>{inv.sellerName}</td>
-                          <td style={{ ...td, color: colors.muted, fontSize: 11 }}>{inv.invoice_ref}</td>
-                          <td style={td}>{new Date(inv.period_year, inv.period_month - 1).toLocaleString("de-CH", { month: "short", year: "numeric" })}</td>
-                          <td style={{ ...td, textAlign: "right", fontWeight: 700 }}>CHF {fmtCHF(inv.total_fees)}</td>
-                          <td style={{ ...td, textAlign: "right", color: "#5B8C5A", fontSize: 11 }}>CHF {fmtCHF(inv.total_bee_impact)}</td>
-                          <td style={{ ...td, textAlign: "center" }}>{pill(s.bg, s.color, s.label)}</td>
-                          <td style={{ ...td, textAlign: "center" }}>
-                            {(inv.status === "open" || inv.status === "pending_payment" || inv.status === "overdue") && (
-                              <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#2E7D32", color: "#fff", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
-                            )}
-                            {inv.status === "paid" && <span style={{ fontSize: 10, color: "#2E7D32" }}>{fmtDate(inv.paid_at)}</span>}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    {filteredFees.length === 0 && <tr><td colSpan={7} style={{ ...td, textAlign: "center", padding: 30, color: colors.muted }}>Keine Rechnungen</td></tr>}
-                  </tbody>
-                </table>
-              </div>
             </div>
           )}
 
@@ -826,6 +817,89 @@ export default function AdminPage() {
                         </div>
                       </div>
                     )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ═══ RECHNUNGEN ═══ */}
+          {tab === "invoices" && (
+            <div>
+              <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+                {[{ k: "all", l: "Alle" }, { k: "bee", l: "Bestell-Rechnungen (BEE)" }, { k: "fee", l: "Gebühren-Rechnungen (FEE)" }].map(f => (
+                  <button key={f.k} onClick={() => setInvoiceType(f.k)} style={modPill(invoiceType === f.k)}>{f.l}</button>
+                ))}
+              </div>
+
+              {invoiceRows.length === 0 && (
+                <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Keine Rechnungen gefunden.</div>
+              )}
+
+              {invoiceRows.map(r => {
+                const key = `${r.kind}:${r.id}`;
+                const isOpen = openInvoiceKey === key;
+                const typeBadge = r.kind === "bee" ? pill("#E6F5F5", "#0A7170", "BEE") : pill("#FFF5D8", "#5c4708", "FEE");
+                const sc2 = sc[r.status] || (r.status === "cancelled" ? { bg: "#FFEBEE", color: "#c62828", label: "Storniert" } : { bg: "#E3F2FD", color: "#1565C0", label: r.status || "—" });
+                return (
+                  <div key={key} style={{ marginBottom: 10, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${isOpen ? colors.teal : colors.border}`, overflow: "hidden" }}>
+                    <div onClick={() => toggleInvoiceRow(r.kind, r.kind === "bee" ? r.id : r.inv)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 16px", cursor: "pointer", background: isOpen ? "#F3FAFA" : "transparent" }}>
+                      <span style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0A7170" : colors.muted, minWidth: 110 }}>{r.ref}</span>
+                      {typeBadge}
+                      <span style={{ flex: 1, minWidth: 0, fontSize: 12, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.payer} → {r.payee}</span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>CHF {fmtCHF(r.amount)}</span>
+                      {pill(sc2.bg, sc2.color, sc2.label)}
+                      {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
+                    </div>
+                    {isOpen && r.kind === "bee" && (() => {
+                      const det = orderDetail[r.id];
+                      const qrUrl = det ? qrImageUrl(orderQrPayload(det, { deposit: false }), 220) : null;
+                      return (
+                        <div style={{ display: "flex", gap: 18, padding: 16, borderTop: `1px solid ${colors.borderLt}`, flexWrap: "wrap", alignItems: "flex-start" }}>
+                          <div style={{ flex: 1, minWidth: 220, fontSize: 12, lineHeight: 1.9 }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${colors.borderLt}` }}><span style={{ color: colors.muted }}>Käufer → Verkäufer</span><span style={{ fontWeight: 500 }}>{r.payer} → {r.payee}</span></div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: colors.muted }}>Betrag</span><span style={{ fontWeight: 600 }}>CHF {fmtCHF(r.amount)}</span></div>
+                          </div>
+                          <div style={{ width: 200, flexShrink: 0, border: `1px solid ${colors.border}`, borderRadius: 12, padding: 14, textAlign: "center" }}>
+                            <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 10 }}>QR-Rechnung</div>
+                            {qrUrl ? <img src={qrUrl} alt="QR" style={{ width: 110, height: 110, border: "1px solid #eee", borderRadius: 6 }} /> : <div style={{ height: 110, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 11 }}>Lade…</div>}
+                            <a href={`/order/${r.id}/invoice`} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 10, fontSize: 11, fontWeight: 600, color: "#fff", background: colors.teal, borderRadius: 999, padding: "7px 0", textDecoration: "none" }}>Volle Rechnung öffnen</a>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                    {isOpen && r.kind === "fee" && (() => {
+                      const inv = r.inv;
+                      const seller = feeSeller[inv.id];
+                      const ledger = feeLedger[inv.id] || [];
+                      const rl = inv.reminder_level || 0;
+                      const qrUrl = seller ? qrImageUrl(feeQrPayload(inv, seller), 220) : null;
+                      return (
+                        <div style={{ display: "flex", gap: 18, padding: 16, borderTop: `1px solid ${colors.borderLt}`, flexWrap: "wrap", alignItems: "flex-start" }}>
+                          <div style={{ flex: 1, minWidth: 220, fontSize: 12 }}>
+                            {ledger.map(f => (
+                              <div key={f.id} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+                                <span>{fmtDate(f.created_at)} — {f.listing_title}</span><span style={{ fontWeight: 600 }}>CHF {fmtCHF(f.fee_amount)}</span>
+                              </div>
+                            ))}
+                            <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", color: "#5B8C5A" }}><span>Bee-Impact</span><span>CHF {fmtCHF(inv.total_bee_impact)}</span></div>
+                            {inv.status !== "paid" ? (
+                              <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+                                {rl < 1 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 1)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Erinnerung</button>}
+                                {rl === 1 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 2)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFE0B2", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Mahnung</button>}
+                                {rl === 2 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 3)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFCDD2", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserate pausieren</button>}
+                                <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bezahlt</button>
+                              </div>
+                            ) : <p style={{ margin: "6px 0 0", fontSize: 10, color: "#2E7D32" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
+                          </div>
+                          <div style={{ width: 200, flexShrink: 0, border: `1px solid ${colors.border}`, borderRadius: 12, padding: 14, textAlign: "center" }}>
+                            <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 10 }}>QR-Rechnung</div>
+                            {qrUrl ? <img src={qrUrl} alt="QR" style={{ width: 110, height: 110, border: "1px solid #eee", borderRadius: 6 }} /> : <div style={{ height: 110, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 11 }}>Lade…</div>}
+                            <a href={`/fees/invoice/${inv.id}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 10, fontSize: 11, fontWeight: 600, color: "#fff", background: colors.teal, borderRadius: 999, padding: "7px 0", textDecoration: "none" }}>Volle Rechnung öffnen</a>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })}
