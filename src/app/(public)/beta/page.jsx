@@ -216,6 +216,11 @@ const TESTS = [
       { id: "adm_listings", label: "Inserate: Liste mit Pause/Aktiv-Schalter + Ansehen" },
       { id: "adm_fees", label: "Gebühren: Rechnungs-Tabelle filterbar; Bestätigen reaktiviert Inserate; Mahnstufen 1-3" },
       { id: "adm_reports", label: "Meldungen: offene Meldungen mit Zähler-Badge in der Nav; Erledigt / Inserat pausieren / Ansehen" },
+      { id: "adm_orders", label: "Bestellungen-Tab: alle Käufe, Suche per BEE-Nummer/Name, Status-Filter; Detail mit QR-Vorschau + 'Volle Rechnung öffnen' + Stornieren" },
+      { id: "adm_orders_rent", label: "Miet-Bestellung: Umschalter Rechnung/Kaution zeigt den korrekten zweiten QR" },
+      { id: "adm_invoices", label: "Rechnungen-Tab: Typ-Filter Alle/BEE/FEE, Nummernsuche über beide, Inline-QR + Öffnen" },
+      { id: "adm_invoices_dunning", label: "Gebühren-Rechnungen (FEE) behalten das Mahnwesen (Stufen 1-3, Bezahlt+reaktivieren)" },
+      { id: "adm_overview_openinv", label: "Übersicht-Karte 'Offene Rechnungen' springt gefiltert in den Rechnungen-Tab" },
     ],
   },
   {
