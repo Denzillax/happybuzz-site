@@ -176,7 +176,7 @@ export default function ChatConversation() {
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      <div className="chat-scroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 0 && (
           <div style={{ textAlign: "center", padding: 40, color: colors.muted, fontSize: 13 }}>Schreibe die erste Nachricht.</div>
         )}
@@ -230,10 +230,10 @@ export default function ChatConversation() {
               {dayChip}
               <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 5 }}>
                 <div style={{
-                  maxWidth: "70%", padding: isImage ? 4 : "8px 12px", borderRadius: 14,
+                  maxWidth: "70%", padding: isImage ? 4 : "8px 13px", borderRadius: 16,
                   background: isImage ? "transparent" : (isMe ? colors.teal : colors.surface),
-                  border: isImage ? "none" : (isMe ? "none" : `1px solid ${colors.border}`),
-                  borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4,
+                  boxShadow: (isImage || isMe) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
+                  borderBottomRightRadius: isMe ? 5 : 16, borderBottomLeftRadius: isMe ? 16 : 5,
                 }}>
                   {isImage ? (
                     <img src={msg.image_url} alt="Bild" onClick={() => setLightbox(msg.image_url)}
@@ -257,7 +257,8 @@ export default function ChatConversation() {
       {/* Input */}
       <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "10px 18px", position: "sticky", bottom: 0 }}>
         {/* Schnell-Antworten — ausgeblendet sobald getippt wird (hält den Chat übersichtlich) */}
-        <div style={{ maxWidth: 800, margin: "0 auto 10px", display: newMsg.trim() ? "none" : "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
+        <div style={{ maxWidth: 800, margin: "0 auto 10px", position: "relative", display: newMsg.trim() ? "none" : "block" }}>
+          <div className="chat-quickreplies" style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
           {QUICK_REPLIES.map((q) => (
             <button key={q} onClick={() => sendText(q)} disabled={sending}
               style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: `1.5px solid ${colors.border}`, background: colors.cream, color: colors.dark, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
@@ -274,6 +275,8 @@ export default function ChatConversation() {
             style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, padding: "6px 10px", borderRadius: 16, border: `1.5px dashed ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
             <Plus size={12} /> Eigene
           </button>
+          </div>
+          <div style={{ position: "absolute", top: 0, bottom: 2, right: 0, width: 36, background: "linear-gradient(90deg, rgba(255,255,255,0), #fff)", pointerEvents: "none" }} />
         </div>
         <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 10, alignItems: "center" }}>
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
