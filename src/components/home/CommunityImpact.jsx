@@ -67,7 +67,7 @@ export function CommunityImpact() {
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
           position: "relative", borderRadius: 20, overflow: "hidden",
-          boxShadow: "0 14px 40px rgba(91,140,90,0.22)", background: "#E8EFE6",
+          background: "#E8EFE6",
           aspectRatio: "3 / 2",
         }}>
           {PHOTOS.map((p, i) => (

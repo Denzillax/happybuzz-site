@@ -93,7 +93,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
           border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${colors.border}`,
           overflow: "hidden", transition: "box-shadow .2s, transform .2s",
           transform: hover ? "translateY(-3px)" : "none",
-          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.cardHover : shadows.card),
+          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.card : "none"),
           display: "flex", flexDirection: "column", height: "100%",
         }}
       >
