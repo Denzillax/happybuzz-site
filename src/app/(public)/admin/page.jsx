@@ -3,7 +3,8 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download } from "lucide-react";
+import { downloadCSV } from "@/lib/csv";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
@@ -385,6 +386,23 @@ export default function AdminPage() {
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
 
+  const today = () => new Date().toISOString().slice(0, 10);
+  const exportCurrent = () => {
+    if (tab === "orders") {
+      downloadCSV(`beedaro-bestellungen-${today()}.csv`,
+        ["BEE-Nr", "Datum", "Artikel", "Kaeufer", "Verkaeufer", "Preis", "Versand", "Status"],
+        filteredOrders.map(o => [makeBeeRef(o.id), fmtDate(o.created_at), o.listingTitle, o.buyerName, o.sellerName, fmtCHF(o.price), fmtCHF(o.shipping_cost), o.status]));
+    } else if (tab === "invoices") {
+      downloadCSV(`beedaro-rechnungen-${today()}.csv`,
+        ["Typ", "Nr", "Zahler", "Empfaenger", "Betrag", "Status", "Datum"],
+        invoiceRows.map(r => [r.kind.toUpperCase(), r.ref, r.payer, r.payee, fmtCHF(r.amount), r.status, fmtDate(r.date)]));
+    } else if (tab === "users") {
+      downloadCSV(`beedaro-benutzer-${today()}.csv`,
+        ["Name", "Username", "Stadt", "Level", "Blueten", "Kontaktverstoeße", "Gesperrt", "Erstellt"],
+        visibleUsers.map(u => [u.display_name, u.username, u.city, u.bee_level || "starter", u.blueten || 0, u.contact_violations || 0, u.is_banned ? "ja" : "nein", u.created_at ? fmtDate(u.created_at) : ""]));
+    }
+  };
+
   const modPill = (on) => ({ padding: "7px 15px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, border: "none", background: on ? colors.dark : colors.cream, color: on ? "#fff" : colors.muted });
 
   // Übersicht-Karten
@@ -459,6 +477,11 @@ export default function AdminPage() {
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : "Nummer (BEE/FEE) oder Name..."}
                 style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
             </div>
+          )}
+          {(tab === "orders" || tab === "invoices" || tab === "users") && (
+            <button onClick={exportCurrent} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: colors.cream, color: colors.dark, border: `1px solid ${colors.border}`, borderRadius: 999, padding: "8px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body }}>
+              <Download size={14} /> CSV
+            </button>
           )}
         </header>
 
