@@ -184,6 +184,7 @@ const TESTS = [
       { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
       { id: "ch_contactescalate", label: "Wiederholte Kontaktversuche: nach mehreren Malen rote AGB-Warnung im Chat (Versuche werden pro Konto gezählt)" },
+      { id: "ch_ban", label: "Admin (Users-Tab): Konto sperren/entsperren; gesperrtes Konto sieht 'Konto gesperrt'-Overlay + kann nicht mehr chatten" },
     ],
   },
   {
