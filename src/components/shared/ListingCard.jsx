@@ -70,6 +70,8 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
   const isRent = listing.listing_type === "rent";
   const isFree = listing.listing_type === "free";
   const isService = listing.listing_type === "service";
+  // Hover-Border passend zum Inserattyp (gleiche Farbe wie das Typ-Badge)
+  const accent = isAuction ? "#94B9C9" : isRent ? "#8B6DB0" : isFree ? colors.nature : isService ? "#E67E22" : colors.yellow;
 
   const createdAt = listing.created_at ? new Date(listing.created_at) : null;
   const isNew = createdAt && (Date.now() - createdAt.getTime()) < 24 * 60 * 60 * 1000;
@@ -90,7 +92,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         onMouseLeave={() => setHover(false)}
         style={{
           background: colors.surface, borderRadius: radius.lg,
-          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${hover ? colors.teal : colors.border}`,
+          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${hover ? accent : colors.border}`,
           overflow: "hidden", transition: "border-color .2s ease",
           boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : "none",
           display: "flex", flexDirection: "column", height: "100%",
