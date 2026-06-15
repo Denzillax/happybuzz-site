@@ -376,6 +376,15 @@ export default function AdminPage() {
   const bannedUsers = users.filter(u => u.is_banned);
   const openReports = reports.filter(r => !r.is_resolved);
   const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
+  const nonCancelledOrders = orders.filter(o => o.status !== "cancelled");
+  const gmv = nonCancelledOrders.reduce((s, o) => s + parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0), 0);
+  const avgOrder = nonCancelledOrders.length ? gmv / nonCancelledOrders.length : 0;
+  const topSellers = Object.values(nonCancelledOrders.reduce((acc, o) => {
+    const k = o.seller_id || "?";
+    if (!acc[k]) acc[k] = { name: o.sellerName || "—", count: 0, sum: 0 };
+    acc[k].count += 1; acc[k].sum += parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0);
+    return acc;
+  }, {})).sort((a, b) => b.count - a.count).slice(0, 5);
   const visibleUsers = filteredUsers.filter(u =>
     userMod === "flagged" ? (u.contact_violations || 0) > 0 :
     userMod === "banned" ? u.is_banned : true);
@@ -510,6 +519,23 @@ export default function AdminPage() {
                     <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginTop: 6 }}>{s.label}</div>
                   </div>
                 ))}
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12, marginBottom: 32 }}>
+                <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted }}>Umsatz (GMV)</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, fontFamily: fonts.head, marginTop: 8 }}>CHF {fmtCHF(gmv)}</div>
+                  <div style={{ fontSize: 12, color: colors.muted, marginTop: 4 }}>Ø Bestellwert: {avgOrder ? `CHF ${fmtCHF(avgOrder)}` : "—"} · {nonCancelledOrders.length} Käufe</div>
+                </div>
+                <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginBottom: 10 }}>Top-Verkäufer</div>
+                  {topSellers.length === 0 ? <div style={{ fontSize: 12, color: colors.muted }}>Noch keine Verkäufe.</div> : topSellers.map((s, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, padding: "3px 0" }}>
+                      <span style={{ fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{i + 1}. {s.name}</span>
+                      <span style={{ color: colors.muted, flexShrink: 0, marginLeft: 8 }}>{s.count} · CHF {fmtCHF(s.sum)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <h2 style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".07em", color: colors.muted, margin: "0 0 13px" }}>Zu prüfen</h2>
