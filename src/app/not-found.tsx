@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F9F4EC", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FAFAF8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 480 }}>
         <div style={{ fontSize: 72, fontWeight: 900, fontFamily: "'General Sans', sans-serif", color: "#F4C03F", letterSpacing: ".05em", lineHeight: 1 }}>404</div>
         <h1 style={{ fontSize: 22, fontWeight: 800, margin: "16px 0 8px", fontFamily: "'General Sans', sans-serif", letterSpacing: ".03em" }}>SEITE NICHT GEFUNDEN</h1>

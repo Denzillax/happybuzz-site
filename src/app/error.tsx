@@ -2,7 +2,7 @@
 
 export default function Error({ error, reset }) {
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F9F4EC", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FAFAF8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 480 }}>
         <div style={{ fontSize: 48, fontWeight: 900, fontFamily: "'General Sans', sans-serif", color: "#c62828", letterSpacing: ".05em", lineHeight: 1, marginBottom: 8 }}>OOPS</div>
         <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 8px", fontFamily: "'General Sans', sans-serif", letterSpacing: ".03em" }}>ETWAS IST SCHIEFGELAUFEN</h1>
