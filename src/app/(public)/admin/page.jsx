@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
@@ -42,6 +42,8 @@ export default function AdminPage() {
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
   const [orderDeposit, setOrderDeposit] = useState({});
+  const [emailLog, setEmailLog] = useState([]);
+  const [openEmail, setOpenEmail] = useState(null);
 
   const flash = (m) => { setToast(m); setTimeout(() => setToast(""), 2500); };
 
@@ -128,6 +130,10 @@ export default function AdminPage() {
         ordsWithNames.push({ ...o, buyerName, sellerName, listingTitle: lst?.title || "—" });
       }
       setOrders(ordsWithNames);
+
+      // E-Mail-Log
+      const { data: mails } = await supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(500);
+      setEmailLog(mails || []);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -344,6 +350,7 @@ export default function AdminPage() {
   };
 
   const filteredUsers = users.filter(u => !search || u.display_name?.toLowerCase().includes(search.toLowerCase()) || u.username?.toLowerCase().includes(search.toLowerCase()) || u.city?.toLowerCase().includes(search.toLowerCase()));
+  const filteredEmails = emailLog.filter(e => !search || (e.recipient_email || "").toLowerCase().includes(search.toLowerCase()) || (e.subject || "").toLowerCase().includes(search.toLowerCase()) || (e.template || "").toLowerCase().includes(search.toLowerCase()));
   const filteredListings = listings.filter(l => !search || l.title?.toLowerCase().includes(search.toLowerCase()) || l.sellerName?.toLowerCase().includes(search.toLowerCase()));
   const filteredOrders = orders.filter(o =>
     (!search || beeRefIncludes(o.id, search) || o.listingTitle?.toLowerCase().includes(search.toLowerCase()) || o.buyerName?.toLowerCase().includes(search.toLowerCase()) || o.sellerName?.toLowerCase().includes(search.toLowerCase()))
@@ -382,6 +389,7 @@ export default function AdminPage() {
     { key: "orders", label: "Bestellungen", Icon: ShoppingBag },
     { key: "invoices", label: "Rechnungen", Icon: ReceiptText },
     { key: "listings", label: "Inserate", Icon: Package },
+    { key: "emails", label: "E-Mails", Icon: Mail },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
@@ -471,10 +479,10 @@ export default function AdminPage() {
         <header style={{ display: "flex", alignItems: "center", gap: 16, padding: "20px 28px", borderBottom: `1px solid ${colors.borderLt}`, flexWrap: "wrap" }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: 0 }}>{pageTitle}</h1>
           <div style={{ flex: 1 }} />
-          {(tab === "users" || tab === "listings" || tab === "orders" || tab === "invoices") && (
+          {(tab === "users" || tab === "listings" || tab === "orders" || tab === "invoices" || tab === "emails") && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, background: colors.cream, borderRadius: 999, padding: "8px 15px", minWidth: 220 }}>
               <Search size={15} color={colors.muted} />
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : "Nummer (BEE/FEE) oder Name..."}
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : tab === "emails" ? "Empfänger, Betreff oder Template..." : "Nummer (BEE/FEE) oder Name..."}
                 style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
             </div>
           )}
@@ -925,6 +933,39 @@ export default function AdminPage() {
                         </div>
                       );
                     })()}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ═══ E-MAILS ═══ */}
+          {tab === "emails" && (
+            <div>
+              {filteredEmails.length === 0 && (
+                <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Keine E-Mails protokolliert.</div>
+              )}
+              {filteredEmails.map(e => {
+                const isOpen = openEmail === e.id;
+                const statusColor = e.status === "sent" ? ["#E8F5E9", "#2E7D32"] : e.status === "failed" ? ["#FFEBEE", "#c62828"] : ["#FFF3E0", "#E65100"];
+                return (
+                  <div key={e.id} style={{ marginBottom: 8, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${isOpen ? colors.teal : colors.border}`, overflow: "hidden" }}>
+                    <div onClick={() => setOpenEmail(isOpen ? null : e.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", cursor: "pointer", background: isOpen ? "#F3FAFA" : "transparent" }}>
+                      <Mail size={15} color={colors.muted} style={{ flexShrink: 0 }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.subject || "(kein Betreff)"}</div>
+                        <div style={{ fontSize: 11, color: colors.muted }}>{e.recipient_email || "—"}</div>
+                      </div>
+                      {e.template && pill(colors.cream, colors.muted, e.template)}
+                      {e.status && pill(statusColor[0], statusColor[1], e.status)}
+                      <span style={{ fontSize: 11, color: colors.muted, minWidth: 80, textAlign: "right" }}>{e.created_at ? fmtDate(e.created_at) : ""}</span>
+                      {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
+                    </div>
+                    {isOpen && (
+                      <div style={{ borderTop: `1px solid ${colors.borderLt}`, padding: 14, background: "#FAFAF8" }}>
+                        <pre style={{ margin: 0, fontSize: 11, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word", color: colors.dark }}>{e.context ? JSON.stringify(e.context, null, 2) : "(kein Context)"}</pre>
+                      </div>
+                    )}
                   </div>
                 );
               })}
