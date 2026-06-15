@@ -133,7 +133,7 @@ export default function ChatConversation() {
     catch (e) { console.error(e); } finally { setSending(false); }
   };
 
-  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
   const otherUser = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
   const isBuyer = conv?.buyer_id === user?.id;
@@ -143,11 +143,11 @@ export default function ChatConversation() {
   const canCounter = offerMsgs.length < 3;
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", flexDirection: "column", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", color: colors.dark }}>
 
       {/* Eine kompakte Leiste: Was (Inserat) + Wer (Gegenüber) */}
       <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.border}`, padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, position: "sticky", top: 0, zIndex: 10 }}>
-        <Link href="/chat" style={{ color: colors.muted, display: "flex", flexShrink: 0 }}><ArrowLeft size={20} /></Link>
+        <Link href="/chat" className="chat-thread-back" style={{ color: colors.muted, display: "flex", flexShrink: 0 }}><ArrowLeft size={20} /></Link>
 
         {/* Inserat (Anker) */}
         <Link href={conv?.listing ? `/listing/${conv.listing.id}` : "#"} style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
@@ -176,7 +176,7 @@ export default function ChatConversation() {
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 0 && (
           <div style={{ textAlign: "center", padding: 40, color: colors.muted, fontSize: 13 }}>Schreibe die erste Nachricht.</div>
         )}

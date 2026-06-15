@@ -13,7 +13,7 @@ export function FloatingButton() {
   const pathname = usePathname()
 
   // Auf den Inserat-Formular-Routen ausblenden (redundant + kollidiert mit Sticky-Bar)
-  if (pathname === '/listings/new' || pathname?.endsWith('/edit')) return null
+  if (pathname === '/listings/new' || pathname?.endsWith('/edit') || pathname?.startsWith('/chat')) return null
 
   return (
     <button

@@ -174,6 +174,15 @@ input:focus, textarea:focus, select:focus {
 .link:hover { color:#191615; text-decoration:underline; }
 .bd-link { text-decoration: none; }
 .bd-link:hover { text-decoration: underline; }
+/* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
+.chat-thread-back { display: none !important; }
+@media (max-width: 860px) {
+  .chat-shell { height: calc(100dvh - 64px - 56px) !important; }
+  .chat-sidebar { width: 100% !important; border-right: none !important; }
+  .chat-sidebar.is-hidden-mobile { display: none !important; }
+  .chat-main.is-hidden-mobile { display: none !important; }
+  .chat-thread-back { display: flex !important; }
+}
 
 /* Print */
 @media print {
