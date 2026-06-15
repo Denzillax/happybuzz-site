@@ -45,7 +45,7 @@ export default function AuthCallback() {
       alignItems: "center",
       justifyContent: "center",
       fontFamily: "'Manrope', sans-serif",
-      background: "#FAFAF8",
+      background: "#FFFFFF",
     }}>
       <div style={{ textAlign: "center" }}>
         <div style={{

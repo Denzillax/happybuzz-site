@@ -84,13 +84,13 @@ export default function NewListingPage() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FAFAF8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>
       Lade…
     </div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FAFAF8", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh" }}>
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
           <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 10, padding: "16px 20px" }}>

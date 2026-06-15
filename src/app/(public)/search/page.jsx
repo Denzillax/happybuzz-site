@@ -187,7 +187,7 @@ export default function SearchPage() {
   const deliveryOpts = [{ value: "shipping", label: "Versand" }, { value: "pickup", label: "Abholung" }];
 
   return (
-    <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#FAFAF8" }}>
+    <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#FFFFFF" }}>
 
       <div style={{ maxWidth: 1320, margin: "0 auto", padding: "24px 24px 48px" }}>
 

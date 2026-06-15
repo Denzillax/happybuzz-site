@@ -66,7 +66,7 @@ export function Categories() {
       <div className="cat-circles" style={{
         display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
         gap: 32,
-        background: colors.surface,
+        background: colors.cream,
         border: `1px solid ${colors.borderLt}`,
         borderRadius: radius.lg,
         boxShadow: shadows.card,
