@@ -7,10 +7,8 @@ import { Printer } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
+import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 
-function buildSwissQR({ iban, name, street, plzCity, amount, currency, dName, dStreet, dPlzCity, message }) {
-  return ["SPC","0200","1",iban,"K",name,street||"",plzCity||"","","","CH","","","","","","","",amount,currency,"K",dName||"",dStreet||"",dPlzCity||"","","","CH","NON","",message||"","EPD"].join("\r\n");
-}
 
 const f = "'Manrope', sans-serif";
 const g = "#888";
@@ -54,13 +52,8 @@ export default function FeeInvoicePage() {
   const beedaroIbanDisplay = "CH12 3456 7890 1234 5678 9";
 
   // QR für Zahlung an BEEDARO
-  const qrPayload = buildSwissQR({
-    iban: beedaroIban, name: "BEEDARO", street: "Gemeindehausstrasse 11B", plzCity: "6010 Kriens",
-    amount: total.toFixed(2), currency: "CHF",
-    dName: fullName(seller), dStreet: seller?.street || "", dPlzCity: `${seller?.postal_code || ""} ${seller?.city || ""}`.trim(),
-    message: `Gebuehren ${ref}`,
-  });
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=${encodeURIComponent(qrPayload)}`;
+  const qrPayload = feeQrPayload(invoice, seller);
+  const qrUrl = qrImageUrl(qrPayload);
 
   const sellerAddr = [fullName(seller), seller?.street, `${seller?.postal_code || ""} ${seller?.city || ""}`.trim()].filter(Boolean);
 

@@ -7,11 +7,9 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate } from "@/lib/fees";
+import { orderQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { fmtCHF, fmtDateLong, fullName } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
-function buildSwissQR({ iban, name, street, plzCity, amount, currency, dName, dStreet, dPlzCity, message }) {
-  return ["SPC","0200","1",iban,"K",name,street||"",plzCity||"","","","CH","","","","","","","",amount,currency,"K",dName||"",dStreet||"",dPlzCity||"","","","CH","NON","",message||"","EPD"].join("\r\n");
-}
 const f = "'Manrope', sans-serif";
 const g = "#888";
 export default function InvoicePage() {
@@ -71,9 +69,8 @@ export default function InvoicePage() {
   const payeePlz = `${payee?.postal_code || ""} ${payee?.city || ""}`.trim();
   const payerStreet = payer?.street || "";
   const payerPlz = `${payer?.postal_code || ""} ${payer?.city || ""}`.trim();
-  const qrMessage = isDeposit ? `Kaution ${ref}` : `Rechnung ${ref}`;
-  const qrPayload = buildSwissQR({ iban: payeeIban, name: payeeName, street: payeeStreet, plzCity: payeePlz, amount: total.toFixed(2), currency: "CHF", dName: fullName(payer), dStreet: payerStreet, dPlzCity: payerPlz, message: qrMessage });
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&ecc=M&data=${encodeURIComponent(qrPayload)}`;
+  const qrPayload = orderQrPayload(order, { deposit: isDeposit });
+  const qrUrl = qrImageUrl(qrPayload);
   const addr = (p) => {
     const isBiz = p?.account_type === "business" && p?.company_name;
     const lines = [isBiz ? p.company_name : fullName(p), p?.street, `${p?.postal_code || ""} ${p?.city || ""}`.trim()].filter(Boolean);
