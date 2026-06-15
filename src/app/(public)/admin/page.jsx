@@ -7,6 +7,8 @@ import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptT
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
+import { makeBeeRef } from "@/lib/fees";
+import { orderQrPayload, qrImageUrl } from "@/lib/swissQR";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
@@ -32,6 +34,10 @@ export default function AdminPage() {
   const [userFees, setUserFees] = useState({});
   const [feeFilter, setFeeFilter] = useState("all");
   const [userMod, setUserMod] = useState("all");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [openOrder, setOpenOrder] = useState(null);
+  const [orderDetail, setOrderDetail] = useState({});
+  const [orderDeposit, setOrderDeposit] = useState({});
 
   const flash = (m) => { setToast(m); setTimeout(() => setToast(""), 2500); };
 
@@ -108,7 +114,7 @@ export default function AdminPage() {
       setReports(enrichedReps);
 
       // Orders (purchases) with buyer/seller names
-      const { data: ords } = await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(50);
+      const { data: ords } = await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(1000);
       const ordsWithNames = [];
       for (const o of (ords || [])) {
         const buyerName = cache[o.buyer_id] || (await supabase.from("profiles").select("display_name").eq("id", o.buyer_id).single()).data?.display_name || "—";
@@ -155,6 +161,27 @@ export default function AdminPage() {
       const { data } = await supabase.from("fee_invoices").select("*").eq("seller_id", userId).order("created_at", { ascending: false });
       setUserInvoices(prev => ({ ...prev, [userId]: data || [] }));
     }
+  };
+
+  const ORDER_DETAIL_SELECT = "*, listing:listings(id, title, price, listing_type, rent_price, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping)";
+  const loadOrderDetail = async (orderId) => {
+    if (orderDetail[orderId]) return;
+    const { data: p } = await supabase.from("purchases").select(ORDER_DETAIL_SELECT).eq("id", orderId).maybeSingle();
+    if (!p) return;
+    const { data: buyer } = await supabase.from("profiles").select("*").eq("id", p.buyer_id).maybeSingle();
+    const { data: seller } = await supabase.from("profiles").select("*").eq("id", p.seller_id).maybeSingle();
+    setOrderDetail(prev => ({ ...prev, [orderId]: { ...p, buyer, seller } }));
+  };
+  const toggleOrder = async (orderId) => {
+    if (openOrder === orderId) { setOpenOrder(null); return; }
+    setOpenOrder(orderId);
+    await loadOrderDetail(orderId);
+  };
+  const orderStatusGroup = (s) => s === "cancelled" ? "cancelled" : (["completed", "delivered", "picked_up"].includes(s) ? "done" : "open");
+  const beeRefIncludes = (id, q) => {
+    const ref = makeBeeRef(id).toLowerCase();
+    const qq = (q || "").toLowerCase().trim();
+    return ref.includes(qq) || ref.replace("bee-", "").startsWith(qq.replace("bee-", ""));
   };
 
   // Konto sperren / entsperren
@@ -288,10 +315,20 @@ export default function AdminPage() {
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };
+  const orderStatusPill = (s) => {
+    if (s === "cancelled") return pill("#FFEBEE", "#c62828", "Storniert");
+    if (orderStatusGroup(s) === "done") return pill("#E8F5E9", "#2E7D32", "Abgeschlossen");
+    const map = { confirmed: "Bestätigt", payment_marked: "Zahlung gemeldet", paid: "Bezahlt", shipped: "Versendet", payment_pending: "Rechnung offen" };
+    return pill("#E3F2FD", "#1565C0", map[s] || (s || "Offen"));
+  };
 
   const filteredFees = feeFilter === "all" ? feeInvoices : feeInvoices.filter(i => i.status === feeFilter);
   const filteredUsers = users.filter(u => !search || u.display_name?.toLowerCase().includes(search.toLowerCase()) || u.username?.toLowerCase().includes(search.toLowerCase()) || u.city?.toLowerCase().includes(search.toLowerCase()));
   const filteredListings = listings.filter(l => !search || l.title?.toLowerCase().includes(search.toLowerCase()) || l.sellerName?.toLowerCase().includes(search.toLowerCase()));
+  const filteredOrders = orders.filter(o =>
+    (!search || beeRefIncludes(o.id, search) || o.listingTitle?.toLowerCase().includes(search.toLowerCase()) || o.buyerName?.toLowerCase().includes(search.toLowerCase()) || o.sellerName?.toLowerCase().includes(search.toLowerCase()))
+    && (orderStatusFilter === "all" || orderStatusGroup(o.status) === orderStatusFilter)
+  );
 
   // Moderation: abgeleitete Mengen
   const flaggedUsers = users.filter(u => (u.contact_violations || 0) > 0);
@@ -723,6 +760,70 @@ export default function AdminPage() {
                             }) : <p style={{ margin: 0, padding: "12px 0", fontSize: 11, color: colors.muted, textAlign: "center" }}>Keine Bewertungen</p>}
                           </div>
                         )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ═══ BESTELLUNGEN ═══ */}
+          {tab === "orders" && (
+            <div>
+              <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+                {[{ k: "all", l: "Alle" }, { k: "open", l: "Offen" }, { k: "done", l: "Abgeschlossen" }, { k: "cancelled", l: "Storniert" }].map(f => (
+                  <button key={f.k} onClick={() => setOrderStatusFilter(f.k)} style={modPill(orderStatusFilter === f.k)}>{f.l}</button>
+                ))}
+              </div>
+
+              {filteredOrders.length === 0 && (
+                <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Keine Bestellungen gefunden.</div>
+              )}
+
+              {filteredOrders.map(o => {
+                const ref = makeBeeRef(o.id);
+                const isOpen = openOrder === o.id;
+                const det = orderDetail[o.id];
+                const deposit = !!orderDeposit[o.id];
+                const total = parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0);
+                const canDeposit = det?.listing?.listing_type === "rent" && parseFloat(det?.listing?.deposit_amount || 0) > 0;
+                const qrUrl = det ? qrImageUrl(orderQrPayload(det, { deposit }), 220) : null;
+                const invoiceHref = `/order/${o.id}/invoice${deposit ? "?type=deposit" : ""}`;
+                return (
+                  <div key={o.id} style={{ marginBottom: 10, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${isOpen ? colors.teal : colors.border}`, overflow: "hidden", opacity: o.status === "cancelled" ? 0.7 : 1 }}>
+                    <div onClick={() => toggleOrder(o.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 16px", cursor: "pointer", background: isOpen ? "#F3FAFA" : "transparent" }}>
+                      <span style={{ fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0A7170" : colors.muted, minWidth: 90 }}>{ref}</span>
+                      <span style={{ flex: 1, minWidth: 0, fontSize: 12.5, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.listingTitle} <span style={{ fontWeight: 400, color: colors.muted }}>· {o.buyerName} → {o.sellerName}</span></span>
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>CHF {fmtCHF(total)}</span>
+                      {orderStatusPill(o.status)}
+                      {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
+                    </div>
+                    {isOpen && (
+                      <div style={{ display: "flex", gap: 18, padding: 16, borderTop: `1px solid ${colors.borderLt}`, flexWrap: "wrap" }}>
+                        <div style={{ flex: 1, minWidth: 220, fontSize: 12, lineHeight: 1.9 }}>
+                          {[["Artikel", o.listingTitle], ["Käufer", o.buyerName], ["Verkäufer", o.sellerName], ["Betrag + Versand", `CHF ${fmtCHF(parseFloat(o.price || 0))} + ${fmtCHF(parseFloat(o.shipping_cost || 0))}`]].map(([k, v], i) => (
+                            <div key={i} style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${colors.borderLt}` }}><span style={{ color: colors.muted }}>{k}</span><span style={{ fontWeight: 500 }}>{v}</span></div>
+                          ))}
+                          <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: colors.muted }}>Status</span><span>{orderStatusPill(o.status)}</span></div>
+                          <div style={{ display: "flex", gap: 7, marginTop: 12, flexWrap: "wrap" }}>
+                            <a href={`/order/${o.id}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, fontWeight: 600, color: colors.muted, background: colors.cream, borderRadius: 999, padding: "6px 13px", textDecoration: "none" }}>Bestellung ansehen</a>
+                            {o.status !== "cancelled" && <button onClick={() => { if (confirm(`${ref} stornieren?`)) cancelOrder(o.id, o.listing_id); }} style={{ fontSize: 11, fontWeight: 600, color: "#c0392b", background: "#fff", border: "1px solid #e6a6a6", borderRadius: 999, padding: "6px 13px", cursor: "pointer" }}>Stornieren</button>}
+                          </div>
+                        </div>
+                        <div style={{ width: 200, flexShrink: 0, border: `1px solid ${colors.border}`, borderRadius: 12, padding: 14, textAlign: "center" }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 10 }}>QR-Rechnung</div>
+                          {qrUrl ? <img src={qrUrl} alt="QR" style={{ width: 110, height: 110, border: "1px solid #eee", borderRadius: 6 }} /> : <div style={{ height: 110, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 11 }}>Lade…</div>}
+                          <div style={{ fontSize: 10, color: colors.muted, marginTop: 8 }}>{deposit ? "Kaution " : "Rechnung "}{ref}</div>
+                          {canDeposit && (
+                            <div style={{ display: "inline-flex", marginTop: 10, background: colors.cream, borderRadius: 999, padding: 2 }}>
+                              {[["Rechnung", false], ["Kaution", true]].map(([lbl, val]) => (
+                                <button key={lbl} onClick={() => setOrderDeposit(prev => ({ ...prev, [o.id]: val }))} style={{ fontSize: 10, fontWeight: 600, padding: "4px 10px", borderRadius: 999, border: "none", cursor: "pointer", background: deposit === val ? "#fff" : "transparent", color: deposit === val ? colors.dark : colors.muted }}>{lbl}</button>
+                              ))}
+                            </div>
+                          )}
+                          <a href={invoiceHref} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 10, fontSize: 11, fontWeight: 600, color: "#fff", background: colors.teal, borderRadius: 999, padding: "7px 0", textDecoration: "none" }}>Volle Rechnung öffnen</a>
+                        </div>
                       </div>
                     )}
                   </div>
