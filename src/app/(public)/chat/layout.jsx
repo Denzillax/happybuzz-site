@@ -61,7 +61,7 @@ export default function ChatLayout({ children }) {
   };
 
   return (
-    <div className="chat-shell" style={{ display: "flex", background: colors.surface, height: "calc(100dvh - 64px)", overflow: "hidden", fontFamily: fonts.body, color: colors.dark }}>
+    <div className="chat-shell" style={{ display: "flex", background: colors.surface, height: "calc(100dvh - 64px)", overflow: "hidden", fontFamily: fonts.body, color: colors.dark, maxWidth: 1100, margin: "0 auto", borderLeft: `1px solid ${colors.borderLt}`, borderRight: `1px solid ${colors.borderLt}` }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
       <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 340, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>
@@ -80,7 +80,7 @@ export default function ChatLayout({ children }) {
           <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted }}>{totalUnread > 0 ? `${totalUnread} ungelesen` : "Alles gelesen"}</p>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>
+        <div className="chat-scroll" style={{ flex: 1, overflowY: "auto", minHeight: 0 }}>
           {loading && <div style={{ padding: 20, color: colors.muted, fontSize: 13 }}>Lädt…</div>}
 
           {!loading && convs.length === 0 && (
