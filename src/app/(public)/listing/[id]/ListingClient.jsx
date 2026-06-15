@@ -39,7 +39,7 @@ function LocationMap({ city, canton }) {
     if (city) geocode();
   }, [city, canton]);
 
-  if (!coords) return <div style={{ height: 300, background: colors.warm, display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 13 }}>Karte wird geladen...</div>;
+  if (!coords) return <div style={{ height: 300, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: colors.muted, fontSize: 13 }}>Karte wird geladen...</div>;
 
   const bbox = `${(parseFloat(coords.lon) - 0.05).toFixed(4)},${(parseFloat(coords.lat) - 0.03).toFixed(4)},${(parseFloat(coords.lon) + 0.05).toFixed(4)},${(parseFloat(coords.lat) + 0.03).toFixed(4)}`;
   return (
@@ -213,8 +213,8 @@ export default function ListingDetail() {
     return () => clearInterval(iv);
   }, [l?.auction_end, l?.status]);
 
-  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
-  if (!l) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (!l) return <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
 
   const imgs = l.images || [];
   const isOwner = user && user.id === l.user_id;
@@ -331,7 +331,7 @@ export default function ListingDetail() {
   };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: colors.dark }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 80px" }}>
 
         {/* ── BREADCRUMBS ─────────────────────────────── */}
@@ -352,7 +352,7 @@ export default function ListingDetail() {
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
             <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
-              <div style={{ position: "relative", aspectRatio: "4/3", background: colors.warm, cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
+              <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => imgs.length > 0 && setLightbox(true)}
                 onMouseMove={(e) => {
                   if (imgs.length === 0) return;
@@ -367,7 +367,7 @@ export default function ListingDetail() {
                   if (img) { img.style.transform = "scale(1)"; }
                 }}>
                 {imgs.length > 0
-                  ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: colors.warm, pointerEvents: "none", transition: "transform 0.15s ease-out" }} />
+                  ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", pointerEvents: "none", transition: "transform 0.15s ease-out" }} />
                   : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Camera size={60} color={colors.mutedLt} /></div>
                 }
                 {/* Favorite Heart */}
@@ -435,9 +435,9 @@ export default function ListingDetail() {
                 </>}
                 <span style={{ color: colors.muted }}>Bezahlung</span>
                 <span style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {l.pay_twint && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>TWINT</span>}
-                  {l.pay_bank && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>Banküberweisung</span>}
-                  {l.pay_cash && <span style={{ padding: "3px 10px", borderRadius: 4, background: colors.cream, fontSize: 12, fontWeight: 600 }}>Barzahlung</span>}
+                  {l.pay_twint && <span style={{ padding: "3px 10px", borderRadius: 999, background: "#fff", border: `1px solid ${colors.border}`, fontSize: 12, fontWeight: 600 }}>TWINT</span>}
+                  {l.pay_bank && <span style={{ padding: "3px 10px", borderRadius: 999, background: "#fff", border: `1px solid ${colors.border}`, fontSize: 12, fontWeight: 600 }}>Banküberweisung</span>}
+                  {l.pay_cash && <span style={{ padding: "3px 10px", borderRadius: 999, background: "#fff", border: `1px solid ${colors.border}`, fontSize: 12, fontWeight: 600 }}>Barzahlung</span>}
                 </span>
               </div>
             </div>
@@ -510,7 +510,7 @@ export default function ListingDetail() {
               </div>
 
               {/* Chat-Bereich — feste Höhe, WhatsApp-Style */}
-              <div style={{ height: 320, overflowY: "auto", padding: "16px 20px", background: colors.cream }}>
+              <div style={{ height: 320, overflowY: "auto", padding: "16px 20px", background: "#fff" }}>
                 {(() => {
                   const filtered = questions.filter(q => q.is_public);
                   const allMsgs = filtered.flatMap(q => q.messages.map(m => ({ ...m, convId: q.id })));
@@ -561,7 +561,7 @@ export default function ListingDetail() {
                   <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
                     placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
-                    style={{ flex: 1, padding: "10px 14px", borderRadius: 20, border: `1.5px solid ${colors.borderLt}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: colors.cream }} />
+                    style={{ flex: 1, padding: "10px 14px", borderRadius: 20, border: `1.5px solid ${colors.borderLt}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
                   <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
                     style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .15s" }}>
                     <MessageCircle size={16} color={msgText.trim() ? colors.dark : colors.mutedLt} />

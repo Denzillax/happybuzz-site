@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase/supabase'
 import { CategoryIcon } from '@/components/shared/CategoryIcon'
 import { ChevronRight } from 'lucide-react'
-import { colors, fonts, radius, shadows } from '@/lib/theme'
+import { colors, fonts } from '@/lib/theme'
 
 const YELLOW = colors.yellow
 const DARK = colors.dark
@@ -44,7 +44,7 @@ export function Categories() {
         @media (max-width: 767px) {
           .cat-header { padding: 0 4px !important; }
           .cat-header h2 { font-size: 20px !important; }
-          .cat-circles { gap: 22px 14px !important; padding: 22px 14px !important; }
+          .cat-circles { gap: 22px 14px !important; }
         }
       `}</style>
 
@@ -66,11 +66,6 @@ export function Categories() {
       <div className="cat-circles" style={{
         display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
         gap: 32,
-        background: colors.cream,
-        border: `1px solid ${colors.borderLt}`,
-        borderRadius: radius.lg,
-        boxShadow: shadows.card,
-        padding: '32px 24px',
       }}>
         {shown.map((cat) => (
           <Link

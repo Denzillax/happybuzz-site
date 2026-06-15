@@ -60,7 +60,7 @@ export function CommunityImpact() {
   return (
     <section style={{
       width: "100%",
-      background: "linear-gradient(180deg, rgba(91,140,90,0.10) 0%, rgba(91,140,90,0.03) 100%)",
+      background: "#fff",
       padding: "44px 20px",
     }}>
       <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
