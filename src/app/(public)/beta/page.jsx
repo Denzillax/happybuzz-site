@@ -181,6 +181,8 @@ const TESTS = [
       { id: "ch_quick", label: "Schnell-Antworten: vordefinierte Chips senden, eigene anlegen/löschen" },
       { id: "ch_context", label: "Thread zeigt Inserat-Kontext (Bild, Titel, Preis, 'Zum Inserat') + Datums-Trenner" },
       { id: "ch_images", label: "Bild im Chat senden (Upload) + Anzeige + Lightbox" },
+      { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
+      { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
     ],
   },
   {
