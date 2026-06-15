@@ -176,7 +176,7 @@ export default function ChatConversation() {
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 0 && (
           <div style={{ textAlign: "center", padding: 40, color: colors.muted, fontSize: 13 }}>Schreibe die erste Nachricht.</div>
         )}
@@ -208,7 +208,7 @@ export default function ChatConversation() {
             return (
               <div key={msg.id || i}>
                 {dayChip}
-                <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
+                <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 5 }}>
                   <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: 16, background: "#FFF9E6", border: `1.5px solid ${colors.yellow}`, borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }}>
                     <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".04em", textTransform: "uppercase", color: colors.yellowDark }}>Preisvorschlag</p>
                     <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>CHF {amount.toLocaleString("de-CH")}</p>
@@ -228,9 +228,9 @@ export default function ChatConversation() {
           return (
             <div key={msg.id || i}>
               {dayChip}
-              <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 5 }}>
                 <div style={{
-                  maxWidth: "72%", padding: isImage ? 4 : "10px 14px", borderRadius: 16,
+                  maxWidth: "70%", padding: isImage ? 4 : "8px 12px", borderRadius: 14,
                   background: isImage ? "transparent" : (isMe ? colors.teal : colors.surface),
                   border: isImage ? "none" : (isMe ? "none" : `1px solid ${colors.border}`),
                   borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4,
@@ -255,9 +255,9 @@ export default function ChatConversation() {
       </div>
 
       {/* Input */}
-      <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "12px 20px", position: "sticky", bottom: 0 }}>
-        {/* Schnell-Antworten */}
-        <div style={{ maxWidth: 800, margin: "0 auto 10px", display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
+      <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "10px 18px", position: "sticky", bottom: 0 }}>
+        {/* Schnell-Antworten — ausgeblendet sobald getippt wird (hält den Chat übersichtlich) */}
+        <div style={{ maxWidth: 800, margin: "0 auto 10px", display: newMsg.trim() ? "none" : "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
           {QUICK_REPLIES.map((q) => (
             <button key={q} onClick={() => sendText(q)} disabled={sending}
               style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: `1.5px solid ${colors.border}`, background: colors.cream, color: colors.dark, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
