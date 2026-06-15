@@ -33,6 +33,7 @@ export default function ChatConversation() {
   const [user, setUser] = useState(null);
   const [conv, setConv] = useState(null);
   const [dealActive, setDealActive] = useState(false);
+  const [myViolations, setMyViolations] = useState(0);
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -55,6 +56,7 @@ export default function ChatConversation() {
         const { data: { user: u } } = await supabase.auth.getUser();
         if (!u) { window.location.href = "/login"; return; }
         setUser(u);
+        supabase.from("profiles").select("contact_violations").eq("id", u.id).maybeSingle().then(({ data }) => setMyViolations(data?.contact_violations || 0)).catch(() => {});
         const { data: c } = await supabase
           .from("conversations")
           .select("*, listing:listings(id, title, price, listing_type, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
@@ -95,7 +97,7 @@ export default function ChatConversation() {
   const sendText = async (text) => {
     let t = (text ?? newMsg).trim();
     if (!t || sending) return;
-    if (!dealActive) t = maskContactInfo(t).masked;
+    if (!dealActive) { const r = maskContactInfo(t); t = r.masked; if (r.hadContact) setMyViolations((v) => v + 1); }
     setSending(true);
     try { const m = await sendMessage(params.id, user.id, t); appendMsg(m); if (text === undefined) setNewMsg(""); }
     catch (err) { console.error(err); }
@@ -183,11 +185,15 @@ export default function ChatConversation() {
         </Link>
       </div>
 
-      {!dealActive && (
+      {!dealActive && (myViolations >= 2 ? (
+        <div style={{ background: colors.redSoft, borderBottom: `1px solid #F3C0C0`, padding: "8px 16px", fontSize: 12, fontWeight: 700, color: colors.red, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
+          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Wiederholtes Teilen von Kontaktdaten verstösst gegen die AGB und kann zur Kontosperre führen.
+        </div>
+      ) : (
         <div style={{ background: "#E6F5F5", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
           <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln = Käuferschutz und Bewertung. Kontaktdaten erscheinen erst nach Abschluss.
         </div>
-      )}
+      ))}
 
       {/* Messages */}
       <div className="chat-scroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "12px 18px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
