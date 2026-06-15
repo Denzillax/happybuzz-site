@@ -205,6 +205,20 @@ const TESTS = [
     ],
   },
   {
+    id: "admin", title: "Admin-Bereich", icon: Monitor,
+    items: [
+      { id: "adm_access", label: "Nur das Admin-Konto sieht /admin (andere werden auf die Startseite umgeleitet)" },
+      { id: "adm_shell", label: "Navigations-Sidebar (Übersicht/Benutzer/Inserate/Gebühren/Meldungen): Tab-Wechsel funktioniert, mobil als Top-Leiste" },
+      { id: "adm_overview", label: "Übersicht: Stat-Karten + 'Zu prüfen'-Karten (Geflaggt/Gesperrt/Offene Meldungen) springen gefiltert in den passenden Tab" },
+      { id: "adm_users_filter", label: "Benutzer: Filter Alle/Geflaggt/Gesperrt mit Live-Zähler; Suche; Zeile aufklappbar (Inserate/Bestellungen/Rechnungen/Bewertungen)" },
+      { id: "adm_users_mod", label: "Benutzer: Sperren/Entsperren direkt in der Zeile sichtbar (ohne Aufklappen); Verstoss- und GESPERRT-Badge; markierte Zeilen für geflaggt/gesperrt" },
+      { id: "adm_id", label: "Benutzer: ID-Dokument prüfen (Ansehen / Bestätigen / Ablehnen)" },
+      { id: "adm_listings", label: "Inserate: Liste mit Pause/Aktiv-Schalter + Ansehen" },
+      { id: "adm_fees", label: "Gebühren: Rechnungs-Tabelle filterbar; Bestätigen reaktiviert Inserate; Mahnstufen 1-3" },
+      { id: "adm_reports", label: "Meldungen: offene Meldungen mit Zähler-Badge in der Nav; Erledigt / Inserat pausieren / Ansehen" },
+    ],
+  },
+  {
     id: "hive", title: "Hive & Gamification", icon: Monitor,
     items: [
       { id: "hive_menu", label: "'Mein Hive' im Profil-Menü erreichbar" },

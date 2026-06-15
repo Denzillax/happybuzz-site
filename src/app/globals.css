@@ -194,6 +194,21 @@ input:focus, textarea:focus, select:focus {
 .chat-quickreplies { scrollbar-width: none; -ms-overflow-style: none; }
 .chat-quickreplies::-webkit-scrollbar { display: none; }
 
+/* ── Admin: dunkle Navigations-Sidebar (Desktop) / Top-Leiste (Mobile) ── */
+.admin-shell { display: flex; align-items: stretch; }
+.admin-sidebar { width: 222px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
+.admin-main { flex: 1; min-width: 0; }
+.admin-hide-narrow { display: inline-flex; }
+@media (max-width: 860px) {
+  .admin-shell { flex-direction: column; }
+  .admin-sidebar { width: 100% !important; height: auto !important; position: static !important; }
+  .admin-nav { flex-direction: row !important; overflow-x: auto; }
+  .admin-nav button { flex-shrink: 0; }
+  .admin-brand { padding-bottom: 12px !important; }
+  .admin-back { display: none !important; }
+  .admin-hide-narrow { display: none !important; }
+}
+
 /* Print */
 @media print {
   .no-print { display: none !important; }
