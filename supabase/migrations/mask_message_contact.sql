@@ -3,14 +3,21 @@
 -- Telefon/E-Mail/Messenger/Links ausgetauscht werden, um den Deal off-platform
 -- (ohne Bee-Rate/Käuferschutz) abzuschliessen. Server-seitig (BEFORE INSERT) =
 -- auch per API nicht umgehbar. Nach Kaufbestätigung erlaubt (Abholung koordinieren).
--- Zudem: zählt erkannte Versuche pro Konto (profiles.contact_violations) für die
--- Eskalation (stärkere Warnung im Chat + Admin-Review).
+--
+-- Zusätzlich:
+--  * zählt erkannte Versuche pro Konto (profiles.contact_violations) für die
+--    Eskalation (stärkere Warnung im Chat + Admin-Review),
+--  * blockiert gesperrte Konten (profiles.is_banned) am Senden von Nachrichten.
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS contact_violations integer NOT NULL DEFAULT 0;
 
 CREATE OR REPLACE FUNCTION public.mask_message_contact()
  RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public' AS $function$
 DECLARE deal_exists boolean; orig text;
 BEGIN
+  -- Gesperrte Konten koennen keine Nachrichten senden
+  IF EXISTS (SELECT 1 FROM public.profiles WHERE id = NEW.sender_id AND is_banned = true) THEN
+    RAISE EXCEPTION 'Konto gesperrt';
+  END IF;
   IF NEW.content IS NULL OR NEW.content = '' THEN RETURN NEW; END IF;
   IF NEW.message_type IN ('system','offer','image') THEN RETURN NEW; END IF;
   SELECT EXISTS (

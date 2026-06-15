@@ -396,6 +396,8 @@ export default function AdminPage() {
                       <p style={{ margin: 0, fontSize: 13, fontWeight: 700 }}>{u.display_name || "—"} <span style={{ fontWeight: 400, color: colors.muted, fontSize: 11 }}>@{u.username || "—"}</span>
                         {u.id_verified && <span style={{ marginLeft: 4, fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "#E8F5E9", color: "#2E7D32", fontWeight: 700 }}>ID</span>}
                         {u.id_document_url && !u.id_verified && <span style={{ marginLeft: 4, fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "#FFF8E1", color: "#E65100", fontWeight: 700 }}>ID?</span>}
+                        {u.contact_violations > 0 && <span style={{ marginLeft: 4, fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "#FFEBEE", color: "#c62828", fontWeight: 700 }}>{u.contact_violations}× Kontakt</span>}
+                        {u.is_banned && <span style={{ marginLeft: 4, fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "#c62828", color: "#fff", fontWeight: 700 }}>GESPERRT</span>}
                       </p>
                       <p style={{ margin: "1px 0 0", fontSize: 11, color: colors.muted }}>{u.city} · {u.created_at ? fmtDate(u.created_at) : ""}</p>
                     </div>
@@ -450,6 +452,22 @@ export default function AdminPage() {
                           )}
                         </div>
                       )}
+
+                      {/* Moderation: Kontaktverstösse + Sperre */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", background: u.is_banned ? "#FFEBEE" : "#FAFAFA", borderBottom: `1px solid ${colors.borderLt}` }}>
+                        <Flag size={16} color={u.is_banned ? "#c62828" : colors.muted} />
+                        <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: u.is_banned ? "#c62828" : colors.muted }}>
+                          {u.is_banned ? "Konto gesperrt" : `${u.contact_violations || 0} Kontaktversuch(e) ausserhalb BEEDARO`}
+                        </span>
+                        <button onClick={async () => {
+                          const next = !u.is_banned;
+                          await supabase.from("profiles").update({ is_banned: next }).eq("id", u.id);
+                          setUsers(prev => prev.map(x => x.id === u.id ? { ...x, is_banned: next } : x));
+                          flash(next ? "Konto gesperrt" : "Konto entsperrt");
+                        }} style={{ padding: "4px 12px", borderRadius: 4, border: "none", background: u.is_banned ? "#E8F5E9" : "#FFEBEE", color: u.is_banned ? "#2E7D32" : "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+                          {u.is_banned ? "Entsperren" : "Sperren"}
+                        </button>
+                      </div>
 
                       {/* Tabs: Inserate | Bestellungen | Rechnungen | Bewertungen */}
                       <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}` }}>
