@@ -367,6 +367,7 @@ export default function AdminPage() {
   const flaggedUsers = users.filter(u => (u.contact_violations || 0) > 0);
   const bannedUsers = users.filter(u => u.is_banned);
   const openReports = reports.filter(r => !r.is_resolved);
+  const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
   const visibleUsers = filteredUsers.filter(u =>
     userMod === "flagged" ? (u.contact_violations || 0) > 0 :
     userMod === "banned" ? u.is_banned : true);
@@ -400,6 +401,7 @@ export default function AdminPage() {
     { n: flaggedUsers.length, label: "Geflaggte Konten", desc: "Kontaktversuche ausserhalb BEEDARO", Icon: Flag, color: "#EB5E55", onClick: () => { setTab("users"); setSearch(""); setUserMod("flagged"); } },
     { n: bannedUsers.length, label: "Gesperrte Konten", desc: "Aktuell blockiert", Icon: Ban, color: "#c0392b", onClick: () => { setTab("users"); setSearch(""); setUserMod("banned"); } },
     { n: openReports.length, label: "Offene Meldungen", desc: "Von Nutzern gemeldet", Icon: AlertTriangle, color: "#E65100", onClick: () => { setTab("reports"); setSearch(""); } },
+    { n: openFeeInvoices.length, label: "Offene Rechnungen", desc: "Gebühren-Rechnungen unbezahlt", Icon: ReceiptText, color: "#E65100", onClick: () => { setTab("invoices"); setSearch(""); setInvoiceType("fee"); } },
   ];
 
   return (
