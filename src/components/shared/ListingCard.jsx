@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Package, Star, Gavel, Clock, Home, Gift, Flame, ShoppingBag, Wrench } from "lucide-react";
-import { colors, fonts, radius, shadows } from "@/lib/theme";
+import { colors, fonts, radius } from "@/lib/theme";
 import { getCoverUrl } from "@/lib/formatters";
 import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
@@ -90,17 +90,16 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         onMouseLeave={() => setHover(false)}
         style={{
           background: colors.surface, borderRadius: radius.lg,
-          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${colors.border}`,
-          overflow: "hidden", transition: "box-shadow .2s, transform .2s",
-          transform: hover ? "translateY(-3px)" : "none",
-          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : (hover ? shadows.card : "none"),
+          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${hover ? colors.teal : colors.border}`,
+          overflow: "hidden", transition: "border-color .2s ease",
+          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : "none",
           display: "flex", flexDirection: "column", height: "100%",
         }}
       >
         {/* Image */}
         <div style={{ position: "relative", aspectRatio: "4/3", background: colors.warm, overflow: "hidden" }}>
           {cover
-            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.04)" : "scale(1)", transition: "transform .3s ease" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={40} color="#ccc" /></div>
           }
 
