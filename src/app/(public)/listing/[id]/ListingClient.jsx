@@ -367,7 +367,7 @@ export default function ListingDetail() {
                   if (img) { img.style.transform = "scale(1)"; }
                 }}>
                 {imgs.length > 0
-                  ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", pointerEvents: "none", transition: "transform 0.15s ease-out" }} />
+                  ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", pointerEvents: "none" }} />
                   : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Camera size={60} color={colors.mutedLt} /></div>
                 }
                 {/* Favorite Heart */}
@@ -406,7 +406,7 @@ export default function ListingDetail() {
               {l.categoryName && (
                 <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
                   <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Kategorie</p>
-                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.categoryName}</p>
+                  <Link href={`/search?category=${l.categoryPath?.[l.categoryPath.length - 1]?.slug || ""}`} className="bd-link" style={{ display: "inline-block", margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.categoryName}</Link>
                 </div>
               )}
               {l.city && (
