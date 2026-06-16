@@ -244,13 +244,6 @@ export default function AdminPage() {
     flash(next ? "Konto gesperrt" : "Konto entsperrt");
   };
 
-  const confirmPayment = async (invId) => {
-    await supabase.from("fee_invoices").update({ status: "paid", paid_at: new Date().toISOString() }).eq("id", invId);
-    await supabase.from("fee_ledger").update({ status: "paid" }).eq("fee_invoice_id", invId);
-    setFeeInvoices(prev => prev.map(i => i.id === invId ? { ...i, status: "paid", paid_at: new Date().toISOString() } : i));
-    flash("Zahlung bestätigt");
-  };
-
   const toggleListingStatus = async (listingId, newStatus) => {
     await supabase.from("listings").update({ status: newStatus }).eq("id", listingId);
     setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: newStatus } : l));
@@ -1077,10 +1070,11 @@ export default function AdminPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                     <div style={{ width: 34, height: 34, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13, fontWeight: 700, color: colors.dark }}>{(inv.sellerName || "?")[0].toUpperCase()}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{inv.sellerName} <span style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, fontWeight: 400 }}>· {inv.invoice_ref}</span></div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}><span onClick={() => { setTab("users"); setSearch(inv.sellerName || ""); }} style={{ cursor: "pointer", textDecoration: "underline", textDecorationColor: "#d8b8b8" }}>{inv.sellerName}</span> <span style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, fontWeight: 400 }}>· {inv.invoice_ref}</span></div>
                       <div style={{ fontSize: 11, color: "#c0392b", fontWeight: 600 }}>CHF {fmtCHF(inv.total_fees)} · fällig seit {daysOverdue(inv)} Tagen</div>
                     </div>
                     {mahnButton(inv)}
+                    <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: "#2E7D32", background: "#E8F5E9", border: "none", borderRadius: 999, padding: "7px 12px", cursor: "pointer", fontFamily: fonts.body }}>Bezahlt</button>
                   </div>
                   {dunningTimeline(inv)}
                 </div>
