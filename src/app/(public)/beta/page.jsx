@@ -226,6 +226,11 @@ const TESTS = [
       { id: "adm_csv", label: "CSV-Export für Bestellungen/Rechnungen/Benutzer exportiert die gefilterte Ansicht; Umlaute korrekt" },
       { id: "adm_emaillog", label: "E-Mails-Tab listet email_log, Suche + aufklappbarer Context funktionieren" },
       { id: "adm_mini_analytics", label: "Übersicht zeigt GMV, Ø Bestellwert und Top-5-Verkäufer (nicht-storniert)" },
+      { id: "adm_dunning_tab", label: "Mahnungen-Tab listet überfällige FEE-Rechnungen mit Eskalations-Timeline + Fälligkeit; Nav-Badge stimmt" },
+      { id: "adm_dunning_preview", label: "Stufen-Button öffnet E-Mail-Vorschau; 'Senden' erhöht Stufe + protokolliert lesbaren Text" },
+      { id: "adm_dunning_escalation", label: "Stufe 3 pausiert Inserate; 'Bezahlt' reaktiviert" },
+      { id: "adm_email_readable", label: "E-Mails-Tab zeigt An/Betreff/Text lesbar (kein JSON)" },
+      { id: "adm_user_emails", label: "Benutzer-Detail 'E-Mails'-Sub-Tab zeigt die Mails dieses Nutzers" },
     ],
   },
   {
