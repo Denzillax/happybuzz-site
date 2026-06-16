@@ -10,7 +10,7 @@ import { bucketDaily, countByType } from "@/lib/adminAnalytics";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
-import { makeBeeRef } from "@/lib/fees";
+import { makeBeeRef, parseArtRef, artIdRange, artRefMatches } from "@/lib/fees";
 import { PURCHASE_STATUS } from "@/lib/orderStatus";
 import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { buildDunningEmail } from "@/lib/dunning";
@@ -40,6 +40,7 @@ export function useAdminData() {
   const [openInvoiceKey, setOpenInvoiceKey] = useState(null);
   const [feeLedger, setFeeLedger] = useState({});
   const [feeSeller, setFeeSeller] = useState({});
+  const [refListings, setRefListings] = useState([]);
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -192,6 +193,26 @@ export function useAdminData() {
     })();
     return () => { active = false; };
   }, [tab, analyticsRange]);
+
+  useEffect(() => {
+    if (tab !== "listings") { setRefListings([]); return; }
+    const range = artIdRange(parseArtRef(search));
+    if (!range) { setRefListings([]); return; }
+    let active = true;
+    (async () => {
+      const { data } = await supabase.from("listings").select("*").gte("id", range.lo).lte("id", range.hi);
+      if (!active) return;
+      const rows = data || [];
+      const ids = [...new Set(rows.map(r => r.user_id).filter(Boolean))];
+      let nameMap = {};
+      if (ids.length) {
+        const { data: profs } = await supabase.from("profiles").select("id, display_name").in("id", ids);
+        nameMap = Object.fromEntries((profs || []).map(p => [p.id, p.display_name]));
+      }
+      setRefListings(rows.map(r => ({ ...r, sellerName: nameMap[r.user_id] || "—" })));
+    })();
+    return () => { active = false; };
+  }, [tab, search]);
 
   useEffect(() => {
     if (tab !== "audit") return;
@@ -447,7 +468,11 @@ export function useAdminData() {
 
   const filteredUsers = users.filter(u => !search || u.display_name?.toLowerCase().includes(search.toLowerCase()) || u.username?.toLowerCase().includes(search.toLowerCase()) || u.city?.toLowerCase().includes(search.toLowerCase()));
   const filteredEmails = emailLog.filter(e => !search || (e.recipient_email || "").toLowerCase().includes(search.toLowerCase()) || (e.subject || "").toLowerCase().includes(search.toLowerCase()) || (e.template || "").toLowerCase().includes(search.toLowerCase()));
-  const filteredListings = listings.filter(l => !search || l.title?.toLowerCase().includes(search.toLowerCase()) || l.sellerName?.toLowerCase().includes(search.toLowerCase()));
+  const filteredListings = listings.filter(l => !search || l.title?.toLowerCase().includes(search.toLowerCase()) || l.sellerName?.toLowerCase().includes(search.toLowerCase()) || artRefMatches(l.id, search));
+  const visibleListings = (() => {
+    const ids = new Set(filteredListings.map(l => l.id));
+    return [...filteredListings, ...refListings.filter(r => !ids.has(r.id))];
+  })();
   const filteredOrders = orders.filter(o =>
     (!search || beeRefIncludes(o.id, search) || o.listingTitle?.toLowerCase().includes(search.toLowerCase()) || o.buyerName?.toLowerCase().includes(search.toLowerCase()) || o.sellerName?.toLowerCase().includes(search.toLowerCase()))
     && (orderStatusFilter === "all" || orderStatusGroup(o.status) === orderStatusFilter)
@@ -605,7 +630,7 @@ export function useAdminData() {
   return {
     user, loading, toast, flash, tab, setTab, search, setSearch,
     stats, users, setUsers, listings, reports, setReports, orders, feeInvoices, reviews, setReviews, emailLog, setEmailLog,
-    filteredUsers, visibleUsers, filteredListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
+    filteredUsers, visibleUsers, filteredListings, visibleListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,

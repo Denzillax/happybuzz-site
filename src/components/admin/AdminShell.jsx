@@ -41,7 +41,7 @@ export function AdminShell({ admin }) {
   const {
     user, loading, toast, flash, tab, setTab, search, setSearch,
     stats, users, setUsers, listings, reports, setReports, orders, feeInvoices, reviews, setReviews, emailLog, setEmailLog,
-    filteredUsers, visibleUsers, filteredListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
+    filteredUsers, visibleUsers, filteredListings, visibleListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
@@ -681,7 +681,7 @@ export function AdminShell({ admin }) {
                   <th style={{ ...th, textAlign: "right" }}>Preis</th><th style={{ ...th, textAlign: "center" }}>Status</th><th style={{ ...th, textAlign: "center" }}>Aktionen</th>
                 </tr></thead>
                 <tbody>
-                  {filteredListings.map(l => (
+                  {visibleListings.map(l => (
                     <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
                       <td style={{ ...td, fontWeight: 600, maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         <Link href={`/listing/${l.id}`} style={{ color: colors.dark, textDecoration: "none" }}>{l.title}</Link>
