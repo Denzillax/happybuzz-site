@@ -72,6 +72,8 @@ export default function AdminPage() {
   const [bcMessage, setBcMessage] = useState("");
   const [bcLink, setBcLink] = useState("");
   const [bcSending, setBcSending] = useState(false);
+  const [bcUserIds, setBcUserIds] = useState([]);
+  const [bcUserQuery, setBcUserQuery] = useState("");
 
   const flash = (m) => { setToast(m); setTimeout(() => setToast(""), 2500); };
 
@@ -296,10 +298,12 @@ export default function AdminPage() {
     flash(next ? "Konto gesperrt" : "Konto entsperrt");
   };
 
-  const bcTargets = users.filter(u =>
-    bcSegment === "all" ? true :
-    bcSegment === "business" ? u.account_type === "business" :
-    u.account_type !== "business");
+  const bcTargets = bcSegment === "selected"
+    ? users.filter(u => bcUserIds.includes(u.id))
+    : users.filter(u =>
+        bcSegment === "all" ? true :
+        bcSegment === "business" ? u.account_type === "business" :
+        u.account_type !== "business");
   const sendBroadcast = async () => {
     if (!bcTitle.trim() || !bcMessage.trim() || bcTargets.length === 0 || bcSending) return;
     setBcSending(true);
@@ -312,7 +316,7 @@ export default function AdminPage() {
     setBcSending(false);
     if (error) { flash("Fehler beim Senden"); return; }
     flash(`Ankündigung an ${rows.length} Nutzer gesendet`);
-    setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all");
+    setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery("");
   };
 
   const toggleListingStatus = async (listingId, newStatus) => {
@@ -1321,12 +1325,29 @@ export default function AdminPage() {
                 <div style={bcFieldLabel}>Zielgruppe</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
                   <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3 }}>
-                    {[["all", "Alle"], ["private", "Privat"], ["business", "Unternehmen"]].map(([k, l]) => (
+                    {[["all", "Alle"], ["private", "Privat"], ["business", "Unternehmen"], ["selected", "Einzelne"]].map(([k, l]) => (
                       <button key={k} onClick={() => setBcSegment(k)} style={{ fontSize: 11, fontWeight: bcSegment === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: bcSegment === k ? colors.dark : "transparent", color: bcSegment === k ? "#fff" : colors.muted }}>{l}</button>
                     ))}
                   </div>
                   <span style={{ fontSize: 11, color: "#0A7170", fontWeight: 600 }}>geht an {bcTargets.length} Nutzer</span>
                 </div>
+                {bcSegment === "selected" && (
+                  <div style={{ marginTop: 8 }}>
+                    <input value={bcUserQuery} onChange={e => setBcUserQuery(e.target.value)} placeholder="Nutzer suchen…" style={{ ...bcInput, marginBottom: 6 }} />
+                    <div style={{ maxHeight: 160, overflowY: "auto", border: `1px solid ${colors.border}`, borderRadius: 10 }}>
+                      {users.filter(u => { const q = bcUserQuery.toLowerCase().trim(); return !q || (u.display_name || "").toLowerCase().includes(q) || (u.username || "").toLowerCase().includes(q); }).slice(0, 30).map(u => {
+                        const on = bcUserIds.includes(u.id);
+                        return (
+                          <div key={u.id} onClick={() => setBcUserIds(prev => on ? prev.filter(id => id !== u.id) : [...prev, u.id])} style={{ display: "flex", alignItems: "center", gap: 9, padding: "7px 10px", cursor: "pointer", borderBottom: `1px solid ${colors.borderLt}`, background: on ? "#F3FAFA" : "transparent" }}>
+                            {on ? <CheckCircle size={16} color={colors.teal} /> : <span style={{ width: 16, height: 16, borderRadius: 4, border: "1.5px solid #ccc", flexShrink: 0 }} />}
+                            <span style={{ fontSize: 12, color: colors.dark }}>{u.display_name || "—"} <span style={{ color: colors.muted }}>@{u.username || "—"}</span></span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div style={{ fontSize: 10, color: colors.muted, marginTop: 4 }}>{bcUserIds.length} ausgewählt</div>
+                  </div>
+                )}
               </div>
               <div>
                 <div style={bcFieldLabel}>Titel</div>

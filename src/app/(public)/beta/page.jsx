@@ -236,6 +236,7 @@ const TESTS = [
       { id: "adm_analytics_empty", label: "Leerer Zeitraum zeigt 0-Linien statt Fehler" },
       { id: "adm_broadcast_open", label: "'Ankündigung senden'-Button auf der Übersicht öffnet den Composer" },
       { id: "adm_broadcast_segment", label: "Zielgruppe Alle/Privat/Unternehmen ändert die Live-Empfängerzahl" },
+      { id: "adm_broadcast_single", label: "Zielgruppe 'Einzelne': Nutzer-Suche + Mehrfachauswahl, sendet nur an die Gewählten" },
       { id: "adm_broadcast_send", label: "Senden legt In-App-Notifications an; Empfänger sehen sie in der Glocke (Megafon-Icon)" },
       { id: "adm_broadcast_validate", label: "Leeres Titel-/Nachricht-Feld lässt sich nicht senden" },
     ],
