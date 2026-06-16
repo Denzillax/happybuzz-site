@@ -242,6 +242,11 @@ const TESTS = [
       { id: "adm_audit_tab", label: "Protokoll-Tab zeigt Admin-Aktionen als tages-gruppierte Timeline (Icon, Ziel, Zeit, Admin)" },
       { id: "adm_audit_logging", label: "Jede Admin-Aktion (Sperren/Meldung/Mahnung/Storno/Ankündigung/...) erzeugt einen Protokoll-Eintrag" },
       { id: "adm_audit_search", label: "Protokoll-Suche filtert nach Aktion/Ziel" },
+      { id: "adm_no_qr", label: "Bestellungen/Rechnungen-Detail zeigt keinen QR mehr, nur 'Volle Rechnung öffnen' (+ bei Miete Rechnung/Kaution-Umschalter)" },
+      { id: "art_ref_visible", label: "ART-Nr (ART-XXXXXXXX) erscheint auf Inserat-Detail, Admin-Inserate, Bestell-Rechnung und FEE-Rechnung je Position" },
+      { id: "adm_status_de", label: "Alle Bestell-/Rechnungs-Status im Admin sind deutsch (kein payment_marked/disputed o.ä.)" },
+      { id: "art_ref_search_admin", label: "Admin-Inserate-Suche findet ein Inserat per ART-Nr, auch wenn beendet/alt" },
+      { id: "art_ref_search_public", label: "Öffentliche Suche findet ein Inserat per ART-Nr (auch nicht-aktiv, ausser gelöscht)" },
     ],
   },
   {
