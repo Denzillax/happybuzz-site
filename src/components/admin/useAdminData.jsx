@@ -74,16 +74,16 @@ export function useAdminData() {
       const { count: listingCount } = await supabase.from("listings").select("*", { count: "exact", head: true });
       const { count: activeCount } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "active");
       const { count: purchaseCount } = await supabase.from("purchases").select("*", { count: "exact", head: true });
-      const { data: feeData } = await supabase.from("fee_ledger").select("fee_amount, bee_impact");
-      const { data: invData } = await supabase.from("fee_invoices").select("total_fees, total_bee_impact");
-      const ledgerFees = (feeData || []).reduce((s, f) => s + parseFloat(f.fee_amount), 0);
-      const invoiceFees = (invData || []).reduce((s, f) => s + parseFloat(f.total_fees), 0);
-      const ledgerImpact = (feeData || []).reduce((s, f) => s + parseFloat(f.bee_impact), 0);
-      const invoiceImpact = (invData || []).reduce((s, f) => s + parseFloat(f.total_bee_impact), 0);
-      const totalFees = Math.max(ledgerFees, invoiceFees);
-      const totalImpact = Math.max(ledgerImpact, invoiceImpact);
+      const { data: invData } = await supabase.from("fee_invoices").select("total_fees, total_bee_impact, status");
+      const sumWhere = (pred, field) => (invData || []).filter(pred).reduce((s, f) => s + parseFloat(f[field] || 0), 0);
+      const isPaidInv = (f) => f.status === "paid";
+      const isOpenInv = (f) => f.status !== "paid" && f.status !== "cancelled";
+      const feesPaid = sumWhere(isPaidInv, "total_fees");
+      const feesOpen = sumWhere(isOpenInv, "total_fees");
+      const impactPaid = sumWhere(isPaidInv, "total_bee_impact");
+      const impactOpen = sumWhere(isOpenInv, "total_bee_impact");
       const { count: reportCount } = await supabase.from("reports").select("*", { count: "exact", head: true });
-      setStats({ users: userCount, listings: listingCount, active: activeCount, purchases: purchaseCount, totalFees, totalImpact, reports: reportCount || 0 });
+      setStats({ users: userCount, listings: listingCount, active: activeCount, purchases: purchaseCount, feesPaid, feesOpen, impactPaid, impactOpen, reports: reportCount || 0 });
 
       // Fee invoices with seller names
       const { data: invs } = await supabase.from("fee_invoices").select("*").order("created_at", { ascending: false });
@@ -669,8 +669,7 @@ export function useAdminData() {
     { label: "Benutzer", value: (stats.users ?? 0).toLocaleString("de-CH"), Icon: Users, tint: "#0E9493" },
     { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#0E9493" },
     { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#0E9493" },
-    { label: "Gebühren", value: `CHF ${fmtCHF(stats.totalFees || 0)}`, Icon: Receipt, tint: "#D9A005" },
-    { label: "Bee-Impact", value: `CHF ${fmtCHF(stats.totalImpact || 0)}`, Bee: true, tint: "#5B8C5A" },
+    { feeToggle: true, label: "Gebühren", Icon: Receipt, tint: "#D9A005" },
     { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#EB5E55" : "#999", danger: stats.reports > 0 },
   ];
 

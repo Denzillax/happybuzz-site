@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import Link from "next/link";
@@ -56,6 +57,7 @@ export function AdminShell({ admin }) {
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
     NAV, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
   } = admin;
+  const [feeView, setFeeView] = useState("paid");
 
   return (
     <div className="admin-shell" style={{ fontFamily: fonts.body, background: "#fff", color: colors.dark, minHeight: "100vh" }}>
@@ -131,17 +133,44 @@ export function AdminShell({ admin }) {
                 </button>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(165px, 1fr))", gap: 12, marginBottom: 32 }}>
-                {STAT_CARDS.map((s, i) => (
-                  <div key={i} style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
-                    <span style={{ width: 34, height: 34, borderRadius: 11, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                      {s.Bee ? <BeeIcon size={17} color={s.tint} /> : <s.Icon size={17} color={s.tint} />}
-                    </span>
-                    <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: s.danger ? "#EB5E55" : colors.dark }}>
-                      {s.value}{s.sub && <span style={{ fontSize: 13, fontWeight: 600, color: colors.muted }}> {s.sub}</span>}
+                {STAT_CARDS.map((s, i) => {
+                  if (s.feeToggle) {
+                    const FEE = {
+                      paid:  ["Gebühren bezahlt", stats.feesPaid, stats.impactPaid],
+                      open:  ["Gebühren offen",   stats.feesOpen, stats.impactOpen],
+                      total: ["Gebühren gesamt",  (stats.feesPaid || 0) + (stats.feesOpen || 0), (stats.impactPaid || 0) + (stats.impactOpen || 0)],
+                    };
+                    const [feeLabel, feeVal, feeImp] = FEE[feeView];
+                    return (
+                      <div key={i} style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <span style={{ width: 34, height: 34, borderRadius: 11, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                            <Receipt size={17} color={s.tint} />
+                          </span>
+                          <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 2 }}>
+                            {[["paid", "Bezahlt"], ["open", "Offen"], ["total", "Gesamt"]].map(([k, lbl]) => (
+                              <button key={k} onClick={() => setFeeView(k)} style={{ fontSize: 10, fontWeight: 600, padding: "3px 9px", borderRadius: 999, border: "none", cursor: "pointer", background: feeView === k ? "#fff" : "transparent", color: feeView === k ? colors.dark : colors.muted }}>{lbl}</button>
+                            ))}
+                          </div>
+                        </div>
+                        <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: colors.dark }}>CHF {fmtCHF(feeVal || 0)}</div>
+                        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginTop: 6 }}>{feeLabel}</div>
+                        <div style={{ fontSize: 11.5, color: colors.muted, marginTop: 8, borderTop: `1px solid ${colors.borderLt}`, paddingTop: 7 }}>davon Bee-Impact CHF {fmtCHF(feeImp || 0)}</div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={i} style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
+                      <span style={{ width: 34, height: 34, borderRadius: 11, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                        {s.Bee ? <BeeIcon size={17} color={s.tint} /> : <s.Icon size={17} color={s.tint} />}
+                      </span>
+                      <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: s.danger ? "#EB5E55" : colors.dark }}>
+                        {s.value}{s.sub && <span style={{ fontSize: 13, fontWeight: 600, color: colors.muted }}> {s.sub}</span>}
+                      </div>
+                      <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginTop: 6 }}>{s.label}</div>
                     </div>
-                    <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginTop: 6 }}>{s.label}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12, marginBottom: 32 }}>
