@@ -33,6 +33,28 @@ export function makeArtRef(listingId) {
   return `ART-${(listingId || "").substring(0, 8).toUpperCase()}`;
 }
 
+// "ART-1A2B3C4D" oder nackte "1a2b3c4d" (4–8 Hex) → Hex-Präfix (lowercase), sonst null.
+// Verhindert Hijack normaler Suchen: verlangt "ART-"-Präfix ODER exakt 8 Hex.
+export function parseArtRef(q) {
+  const m = (q || "").trim().toLowerCase().match(/^art-?([0-9a-f]{4,8})$|^([0-9a-f]{8})$/);
+  return m ? (m[1] || m[2]) : null;
+}
+
+// Hex-Präfix (4–8) → UUID-Bereich, der exakt alle IDs mit diesem Präfix umfasst.
+export function artIdRange(prefix) {
+  if (!prefix) return null;
+  return {
+    lo: `${prefix.padEnd(8, "0")}-0000-0000-0000-000000000000`,
+    hi: `${prefix.padEnd(8, "f")}-ffff-ffff-ffff-ffffffffffff`,
+  };
+}
+
+// Treffer im bereits geladenen Bestand (Teilstring der ART-Nr).
+export function artRefMatches(id, q) {
+  const qq = (q || "").toLowerCase().trim();
+  return !!qq && makeArtRef(id).toLowerCase().includes(qq);
+}
+
 export function makeFeeRef(yearOrInvoiceRef, month) {
   if (month !== undefined) return `FEE-${yearOrInvoiceRef}-${String(month).padStart(2, "0")}`;
   return `FEE-${(yearOrInvoiceRef || "").substring(0, 8).toUpperCase()}`;
