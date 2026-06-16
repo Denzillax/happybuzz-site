@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -44,6 +44,8 @@ export function useAdminData() {
   const [orderDetail, setOrderDetail] = useState({});
   const [orderDeposit, setOrderDeposit] = useState({});
   const [emailLog, setEmailLog] = useState([]);
+  const [auditLog, setAuditLog] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
   const [openEmail, setOpenEmail] = useState(null);
   const [mahnModal, setMahnModal] = useState(null); // { inv, level, subject, body } | null
   const [analyticsRange, setAnalyticsRange] = useState(30);
@@ -190,6 +192,17 @@ export function useAdminData() {
     return () => { active = false; };
   }, [tab, analyticsRange]);
 
+  useEffect(() => {
+    if (tab !== "audit") return;
+    let active = true;
+    (async () => {
+      setAuditLoading(true);
+      const { data } = await supabase.from("admin_audit_log").select("*").order("created_at", { ascending: false }).limit(200);
+      if (active) { setAuditLog(data || []); setAuditLoading(false); }
+    })();
+    return () => { active = false; };
+  }, [tab]);
+
   const [userTab, setUserTab] = useState({});
   const [userInvoices, setUserInvoices] = useState({});
 
@@ -273,12 +286,19 @@ export function useAdminData() {
     setMahnModal(null);
   };
 
+  const logAdmin = async (action, targetType, targetLabel, detail = null) => {
+    const row = { admin_id: user?.id || null, action, target_type: targetType, target_label: targetLabel, detail };
+    const { data } = await supabase.from("admin_audit_log").insert(row).select().maybeSingle();
+    setAuditLog(prev => [data || { ...row, id: `tmp-${Date.now()}`, created_at: new Date().toISOString() }, ...prev]);
+  };
+
   // Konto sperren / entsperren
   const toggleBan = async (u) => {
     const next = !u.is_banned;
     await supabase.from("profiles").update({ is_banned: next }).eq("id", u.id);
     setUsers(prev => prev.map(x => x.id === u.id ? { ...x, is_banned: next } : x));
     flash(next ? "Konto gesperrt" : "Konto entsperrt");
+    logAdmin(next ? "ban" : "unban", "user", u.display_name || u.username);
   };
 
   const bcTargets = bcSegment === "selected"
@@ -299,6 +319,7 @@ export function useAdminData() {
     setBcSending(false);
     if (error) { flash("Fehler beim Senden"); return; }
     flash(`Ankündigung an ${rows.length} Nutzer gesendet`);
+    logAdmin("broadcast", "broadcast", bcTitle.trim(), { count: rows.length, segment: bcSegment });
     setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery("");
   };
 
@@ -314,6 +335,7 @@ export function useAdminData() {
       return updated;
     });
     flash(`Status → ${newStatus}`);
+    const _l = listings.find(x => x.id === listingId); logAdmin(newStatus === "paused" ? "listing_pause" : "listing_activate", "listing", _l?.title || listingId);
   };
 
   // Mahnung senden — speichert die gerenderte Mail (subject + body) lesbar im email_log.
@@ -341,6 +363,7 @@ export function useAdminData() {
     setUserInvoices(prev => { const u = { ...prev }; Object.keys(u).forEach(k => { u[k] = (u[k] || []).map(i => i.id === inv.id ? { ...i, ...patch } : i); }); return u; });
     const row = logged || { id: `tmp-${inv.id}-${level}-${Date.now()}`, recipient_id: inv.seller_id, recipient_email: "noreply@beedaro.ch", subject, template: `reminder_${level}`, status: "sent", context: ctx, created_at: new Date().toISOString() };
     setEmailLog(prev => [row, ...prev]);
+    logAdmin("reminder", "invoice", inv.invoice_ref, { level, seller: inv.sellerName });
   };
 
   // Zahlung bestätigen + Inserate reaktivieren
@@ -361,6 +384,7 @@ export function useAdminData() {
       return updated;
     });
     flash("Bezahlt + Inserate reaktiviert");
+    const _i = feeInvoices.find(x => x.id === invId); logAdmin("fee_paid", "invoice", _i?.invoice_ref || invId);
   };
 
   // Bestellung stornieren
@@ -370,6 +394,7 @@ export function useAdminData() {
     if (listingId) await supabase.from("listings").update({ status: "active" }).eq("id", listingId);
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: "cancelled" } : o));
     flash("Bestellung storniert — Gebühr entfernt, Artikel reaktiviert");
+    logAdmin("order_cancel", "order", makeBeeRef(orderId));
   };
 
   // Bewertung löschen
@@ -377,6 +402,7 @@ export function useAdminData() {
     await supabase.from("ratings").delete().eq("id", reviewId);
     setReviews(prev => prev.filter(r => r.id !== reviewId));
     flash("Bewertung gelöscht");
+    const _rv = reviews.find(x => x.id === reviewId); logAdmin("review_delete", "review", _rv ? `${_rv.reviewerName} → ${_rv.revieweeName}` : reviewId);
   };
 
   // Report erledigen
@@ -384,6 +410,7 @@ export function useAdminData() {
     await supabase.from("reports").update({ is_resolved: true }).eq("id", reportId);
     setReports(prev => prev.map(r => r.id === reportId ? { ...r, is_resolved: true } : r));
     flash("Meldung als erledigt markiert");
+    const _r = reports.find(x => x.id === reportId); logAdmin("report_resolve", "report", _r?.listingTitle || _r?.reason || reportId);
   };
 
   // Gemeldetes Inserat pausieren
@@ -392,6 +419,7 @@ export function useAdminData() {
     await supabase.from("reports").update({ is_resolved: true }).eq("id", reportId);
     setReports(prev => prev.map(r => r.id === reportId ? { ...r, is_resolved: true } : r));
     flash("Inserat pausiert + Meldung erledigt");
+    const _r = reports.find(x => x.id === reportId); logAdmin("report_pause_listing", "listing", _r?.listingTitle || listingId);
   };
 
   const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
@@ -523,6 +551,7 @@ export function useAdminData() {
     { key: "listings", label: "Inserate", Icon: Package },
     { key: "emails", label: "E-Mails", Icon: Mail },
     { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
+    { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
@@ -576,6 +605,7 @@ export function useAdminData() {
     mahnModal, setMahnModal, openMahn, confirmMahn, sendReminder, confirmAndReactivate, isOverdue, daysOverdue, nextStage, stageDate, STAGE_LABELS, dunningTimeline, mahnButton,
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
     analyticsRange, setAnalyticsRange, analyticsLoading,
+    auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
     NAV, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
   };
