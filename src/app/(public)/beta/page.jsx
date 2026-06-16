@@ -231,6 +231,9 @@ const TESTS = [
       { id: "adm_dunning_escalation", label: "Stufe 3 pausiert Inserate; 'Bezahlt' reaktiviert" },
       { id: "adm_email_readable", label: "E-Mails-Tab zeigt An/Betreff/Text lesbar (kein JSON)" },
       { id: "adm_user_emails", label: "Benutzer-Detail 'E-Mails'-Sub-Tab zeigt die Mails dieses Nutzers" },
+      { id: "adm_analytics_tab", label: "Analytik-Tab zeigt 4 Diagramme (Neue Nutzer, GMV, Neue Inserate, Inserate nach Typ)" },
+      { id: "adm_analytics_range", label: "Zeitraum 7/30/90 Tage umschalten lädt die Reihen neu" },
+      { id: "adm_analytics_empty", label: "Leerer Zeitraum zeigt 0-Linien statt Fehler" },
     ],
   },
   {
