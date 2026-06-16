@@ -25,21 +25,21 @@ export function AnnouncementBar() {
   };
 
   const isMarquee = a.effect === "marquee";
-  const barClass = a.effect === "slide" ? "ann-slide" : a.effect === "pulse" ? "ann-pulse" : "";
+  const barClass = a.effect === "slide" ? "ann-slide" : "";
 
   return (
     <div className={barClass} style={{ background: a.bg_color, color: a.text_color, fontSize: 13, fontWeight: 600, position: "relative", fontFamily: "'Manrope', sans-serif", lineHeight: 1.4, overflow: "hidden" }}>
       {isMarquee ? (
         <div style={{ padding: "9px 0" }}>
           <span className="ann-marquee-track">
-            <Megaphone size={15} style={{ verticalAlign: "-3px", marginRight: 6, opacity: 0.9 }} />
+            <Megaphone size={15} style={{ opacity: 0.9, flexShrink: 0 }} />
             {a.message}
           </span>
         </div>
       ) : (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "9px 36px" }}>
           <Megaphone size={15} style={{ marginRight: 6, opacity: 0.9, flexShrink: 0 }} />
-          <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.message}</span>
+          <span className={a.effect === "pulse" ? "ann-pulse" : ""} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.message}</span>
         </div>
       )}
       <button onClick={dismiss} aria-label="Schliessen" style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "transparent", border: "none", color: a.text_color, cursor: "pointer", opacity: 0.85, display: "inline-flex", padding: 4, zIndex: 1 }}>
