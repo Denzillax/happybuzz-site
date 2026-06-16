@@ -197,8 +197,12 @@ export function useAdminData() {
     let active = true;
     (async () => {
       setAuditLoading(true);
-      const { data } = await supabase.from("admin_audit_log").select("*").order("created_at", { ascending: false }).limit(200);
-      if (active) { setAuditLog(data || []); setAuditLoading(false); }
+      try {
+        const { data } = await supabase.from("admin_audit_log").select("*").order("created_at", { ascending: false }).limit(200);
+        if (active) setAuditLog(data || []);
+      } finally {
+        if (active) setAuditLoading(false);
+      }
     })();
     return () => { active = false; };
   }, [tab]);
