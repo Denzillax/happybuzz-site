@@ -573,9 +573,9 @@ export function useAdminData() {
                 </div>
                 <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#9e9e9e", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
                 {reached ? (
-                  <span style={{ fontSize: 10.5, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 3 }}><Eye size={12} /> Mail{d ? ` · ${d}` : ""}</span>
+                  <span style={{ fontSize: 11, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 3 }}><Eye size={12} /> Mail{d ? ` · ${d}` : ""}</span>
                 ) : isNext ? (
-                  <span style={{ fontSize: 10.5, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 8px", borderRadius: 999 }}>senden</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 8px", borderRadius: 999 }}>senden</span>
                 ) : null}
               </div>
             </div>
