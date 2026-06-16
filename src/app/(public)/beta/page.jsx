@@ -239,6 +239,9 @@ const TESTS = [
       { id: "adm_broadcast_single", label: "Zielgruppe 'Einzelne': Nutzer-Suche + Mehrfachauswahl, sendet nur an die Gewählten" },
       { id: "adm_broadcast_send", label: "Senden legt In-App-Notifications an; Empfänger sehen sie in der Glocke (Megafon-Icon)" },
       { id: "adm_broadcast_validate", label: "Leeres Titel-/Nachricht-Feld lässt sich nicht senden" },
+      { id: "adm_audit_tab", label: "Protokoll-Tab zeigt Admin-Aktionen als tages-gruppierte Timeline (Icon, Ziel, Zeit, Admin)" },
+      { id: "adm_audit_logging", label: "Jede Admin-Aktion (Sperren/Meldung/Mahnung/Storno/Ankündigung/...) erzeugt einen Protokoll-Eintrag" },
+      { id: "adm_audit_search", label: "Protokoll-Suche filtert nach Aktion/Ziel" },
     ],
   },
   {
