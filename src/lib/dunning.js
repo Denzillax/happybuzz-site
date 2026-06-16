@@ -33,7 +33,7 @@ deine Gebührenrechnung ${ref} über CHF ${amount} ist seit ${daysOverdue} Tagen
 
 Sobald deine Zahlung eingegangen ist, schalten wir die Inserate wieder frei. Bitte begleiche den Betrag per QR-Rechnung in deinem Konto.
 
-Bei Fragen: support@happybuzz.ch
+Bei Fragen: support@beedaro.ch
 Dein BEEDARO-Team`,
   },
 };

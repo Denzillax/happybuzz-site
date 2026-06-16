@@ -4,7 +4,7 @@ import BetaFeedback from '@/components/shared/BetaFeedback'
 import GamificationProvider from '@/components/shared/GamificationProvider'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://happybuzz.ch'),
+  metadataBase: new URL('https://beedaro.ch'),
   title: {
     default: 'BEEDARO: Kaufen, Verkaufen & Gutes tun',
     template: '%s | BEEDARO',

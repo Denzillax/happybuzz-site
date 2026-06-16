@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase/supabase'
 
-const BASE = 'https://happybuzz.ch'
+const BASE = 'https://beedaro.ch'
 
 // Statische, öffentlich indexierbare Seiten
 const STATIC_PATHS = ['', '/search', '/impact', '/about', '/how-it-works', '/fees', '/help', '/terms', '/privacy', '/imprint']

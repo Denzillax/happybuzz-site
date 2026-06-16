@@ -29,7 +29,7 @@ export function BannedGate() {
         </div>
         <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 10px", fontFamily: "'General Sans', system-ui, sans-serif" }}>Konto gesperrt</h1>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,.8)", margin: "0 0 22px" }}>
-          Dein Konto wurde gesperrt. Wiederholtes Austauschen von Kontaktdaten, um Geschäfte ausserhalb von BEEDARO abzuschliessen, verstösst gegen die Nutzungsbedingungen. Bei Fragen: support@happybuzz.ch
+          Dein Konto wurde gesperrt. Wiederholtes Austauschen von Kontaktdaten, um Geschäfte ausserhalb von BEEDARO abzuschliessen, verstösst gegen die Nutzungsbedingungen. Bei Fragen: support@beedaro.ch
         </p>
         <button onClick={() => supabase.auth.signOut().then(() => { window.location.href = "/login"; })}
           style={{ padding: "11px 24px", borderRadius: 999, border: "none", background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
