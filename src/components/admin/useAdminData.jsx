@@ -12,7 +12,6 @@ import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef, parseArtRef, artIdRange, artRefMatches } from "@/lib/fees";
 import { PURCHASE_STATUS } from "@/lib/orderStatus";
-import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { buildDunningEmail } from "@/lib/dunning";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 
