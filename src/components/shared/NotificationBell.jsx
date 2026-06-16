@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck, X, Gavel, ShoppingBag, MessageCircle, Star, CalendarDays, Trash2 } from "lucide-react";
+import { Bell, Check, CheckCheck, X, Gavel, ShoppingBag, MessageCircle, Star, CalendarDays, Trash2, Megaphone } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import {
@@ -21,6 +21,7 @@ const ICONS = {
   booking: CalendarDays,
   system: Bell,
   rental: CalendarDays,
+  announcement: Megaphone,
 };
 
 const TIME_AGO = (date) => {
