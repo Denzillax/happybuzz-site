@@ -327,7 +327,7 @@ export async function searchListings({
     const { data: purchases } = await supabase.from("purchases").select("listing_id").gte("id", range.gte).lte("id", range.lte);
     const listingIds = (purchases || []).map(p => p.listing_id).filter(Boolean);
     if (listingIds.length > 0) {
-      const { data, count } = await supabase.from("listings").select(selectRef, { count: "exact" }).in("id", listingIds);
+      const { data, count } = await supabase.from("listings").select(selectRef, { count: "exact" }).in("id", listingIds).neq("status", "deleted");
       return { listings: mapListings(data), total: count || 0, page: 1, per_page, total_pages: 1 };
     }
     return { listings: [], total: 0, page: 1, per_page, total_pages: 0 };
@@ -347,7 +347,7 @@ export async function searchListings({
     const { data: purchases } = await supabase.from("purchases").select("listing_id").gte("id", range.gte).lte("id", range.lte);
     const listingIds = (purchases || []).map(p => p.listing_id).filter(Boolean);
     if (listingIds.length > 0) {
-      const { data, count } = await supabase.from("listings").select(selectRef, { count: "exact" }).in("id", listingIds);
+      const { data, count } = await supabase.from("listings").select(selectRef, { count: "exact" }).in("id", listingIds).neq("status", "deleted");
       return { listings: mapListings(data), total: count || 0, page: 1, per_page, total_pages: 1 };
     }
   }
