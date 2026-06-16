@@ -10,6 +10,7 @@ import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef } from "@/lib/fees";
 import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { buildDunningEmail } from "@/lib/dunning";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
@@ -44,6 +45,7 @@ export default function AdminPage() {
   const [orderDeposit, setOrderDeposit] = useState({});
   const [emailLog, setEmailLog] = useState([]);
   const [openEmail, setOpenEmail] = useState(null);
+  const [mahnModal, setMahnModal] = useState(null); // { inv, level, subject, body } | null
 
   const flash = (m) => { setToast(m); setTimeout(() => setToast(""), 2500); };
 
@@ -211,6 +213,29 @@ export default function AdminPage() {
     return ref.includes(qq) || ref.replace("bee-", "").startsWith(qq.replace("bee-", ""));
   };
 
+  const STAGE_LABELS = { 1: "Erinnerung", 2: "Mahnung", 3: "Letzte Mahnung" };
+  const isOverdue = (inv) => inv.status !== "paid" && !!inv.due_date && new Date(inv.due_date).getTime() < Date.now();
+  const daysOverdue = (inv) => inv.due_date ? Math.max(0, Math.floor((Date.now() - new Date(inv.due_date).getTime()) / 86400000)) : 0;
+  const nextStage = (inv) => { const n = (inv.reminder_level || 0) + 1; return n <= 3 ? n : null; };
+  const stageDate = (invId, level) => {
+    const e = emailLog.find(x => x.context && x.context.invoice_id === invId && x.context.level === level);
+    return e && e.created_at ? fmtDate(e.created_at) : null;
+  };
+  const openMahn = (inv) => {
+    const level = nextStage(inv);
+    if (!level) return;
+    const mail = buildDunningEmail({
+      level, sellerName: inv.sellerName || "Verkäufer", ref: inv.invoice_ref,
+      amount: fmtCHF(inv.total_fees), dueDate: inv.due_date ? fmtDate(inv.due_date) : "—", daysOverdue: daysOverdue(inv),
+    });
+    setMahnModal({ inv, level, subject: mail.subject, body: mail.body });
+  };
+  const confirmMahn = async () => {
+    if (!mahnModal) return;
+    await sendReminder(mahnModal.inv, mahnModal.level, mahnModal.subject, mahnModal.body);
+    setMahnModal(null);
+  };
+
   // Konto sperren / entsperren
   const toggleBan = async (u) => {
     const next = !u.is_banned;
@@ -240,49 +265,31 @@ export default function AdminPage() {
     flash(`Status → ${newStatus}`);
   };
 
-  // Mahnung senden (3 Eskalationsstufen)
-  const sendReminder = async (invId, sellerId, level) => {
-    const templates = {
-      1: { subject: "Erinnerung: Offene Gebührenrechnung", template: "reminder_1" },
-      2: { subject: "2. Mahnung: Inserate werden bald pausiert", template: "reminder_2" },
-      3: { subject: "Letzte Mahnung: Inserate pausiert", template: "reminder_3" },
-    };
-    const t = templates[level];
-
-    // Invoice updaten
+  // Mahnung senden — speichert die gerenderte Mail (subject + body) lesbar im email_log.
+  const sendReminder = async (inv, level, subject, body) => {
     await supabase.from("fee_invoices").update({
-      reminder_level: level,
-      reminder_sent_at: new Date().toISOString(),
-      status: "overdue",
+      reminder_level: level, reminder_sent_at: new Date().toISOString(), status: "overdue",
       ...(level >= 3 ? { listings_paused: true } : {}),
-    }).eq("id", invId);
+    }).eq("id", inv.id);
 
-    // Bei Stufe 3: Inserate smart pausieren
     if (level >= 3) {
-      const { data: result } = await supabase.rpc("pause_seller_listings", { p_seller_id: sellerId });
-      const paused = result?.paused || 0;
-      const prot = result?.protected || 0;
-      if (prot > 0) flash(`Stufe 3: ${paused} pausiert, ${prot} geschützt (aktive Gebote/Buchungen)`);
-      else flash(`Stufe 3: ${paused} Inserate pausiert`);
+      const { data: result } = await supabase.rpc("pause_seller_listings", { p_seller_id: inv.seller_id });
+      const paused = result?.paused || 0, prot = result?.protected || 0;
+      flash(prot > 0 ? `Stufe 3: ${paused} pausiert, ${prot} geschützt` : `Stufe 3: ${paused} Inserate pausiert`);
     } else {
-      flash(`Mahnung Stufe ${level} gesendet`);
+      flash(`${STAGE_LABELS[level]} gesendet`);
     }
 
-    // Email loggen
-    const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", sellerId).single();
-    await supabase.from("email_log").insert({
-      recipient_id: sellerId, recipient_email: "noreply@beedaro.ch",
-      subject: t.subject, template: t.template,
-      context: { seller_name: profile?.display_name, invoice_id: invId, level },
-    });
+    const ctx = { invoice_id: inv.id, level, body, seller_name: inv.sellerName, invoice_ref: inv.invoice_ref, amount: inv.total_fees };
+    const { data: logged } = await supabase.from("email_log")
+      .insert({ recipient_id: inv.seller_id, recipient_email: "noreply@beedaro.ch", subject, template: `reminder_${level}`, status: "sent", context: ctx })
+      .select().maybeSingle();
 
-    // State updaten
-    setUserInvoices(prev => {
-      const u = { ...prev };
-      if (u[sellerId]) u[sellerId] = u[sellerId].map(i => i.id === invId ? { ...i, reminder_level: level, status: "overdue", listings_paused: level >= 3 } : i);
-      return u;
-    });
-    setFeeInvoices(prev => prev.map(i => i.id === invId ? { ...i, reminder_level: level, status: "overdue", listings_paused: level >= 3 } : i));
+    const patch = { reminder_level: level, status: "overdue", listings_paused: level >= 3, reminder_sent_at: new Date().toISOString() };
+    setFeeInvoices(prev => prev.map(i => i.id === inv.id ? { ...i, ...patch } : i));
+    setUserInvoices(prev => { const u = { ...prev }; Object.keys(u).forEach(k => { u[k] = (u[k] || []).map(i => i.id === inv.id ? { ...i, ...patch } : i); }); return u; });
+    const row = logged || { id: `tmp-${inv.id}-${level}-${Date.now()}`, recipient_id: inv.seller_id, recipient_email: "noreply@beedaro.ch", subject, template: `reminder_${level}`, status: "sent", context: ctx, created_at: new Date().toISOString() };
+    setEmailLog(prev => [row, ...prev]);
   };
 
   // Zahlung bestätigen + Inserate reaktivieren
@@ -388,6 +395,41 @@ export default function AdminPage() {
   const visibleUsers = filteredUsers.filter(u =>
     userMod === "flagged" ? (u.contact_violations || 0) > 0 :
     userMod === "banned" ? u.is_banned : true);
+
+  const dunningTimeline = (inv) => {
+    const rl = inv.reminder_level || 0;
+    return (
+      <div style={{ display: "flex", alignItems: "center", margin: "10px 0 2px" }}>
+        {[1, 2, 3].map((s) => {
+          const reached = rl >= s;
+          const isNext = (rl + 1 === s) && inv.status !== "paid";
+          const d = stageDate(inv.id, s);
+          const ring = reached ? "#2E7D32" : isNext ? "#E65100" : "#ccc";
+          return (
+            <div key={s} style={{ display: "flex", alignItems: "center", flex: s === 1 ? "0 0 auto" : "1 1 auto" }}>
+              {s > 1 && <div style={{ flex: 1, height: 2, background: rl >= s ? "#2E7D32" : "#E2E2E2", margin: "0 4px", marginBottom: 18 }} />}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, opacity: (!reached && !isNext) ? 0.5 : 1 }}>
+                <div style={{ width: 18, height: 18, borderRadius: "50%", background: reached ? "#2E7D32" : "#fff", border: reached ? "none" : `2px solid ${ring}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {reached ? <CheckCircle size={11} color="#fff" /> : isNext ? <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#E65100" }} /> : null}
+                </div>
+                <span style={{ fontSize: 8.5, lineHeight: 1.2, textAlign: "center", color: isNext ? "#E65100" : "#757575", fontWeight: isNext ? 700 : 400 }}>
+                  {STAGE_LABELS[s]}<br />{reached ? (d || "gesendet") : isNext ? "fällig" : ""}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+  const mahnButton = (inv) => {
+    if (inv.status === "paid") return null;
+    const level = nextStage(inv);
+    if (!level) return <span style={{ fontSize: 11, color: "#c62828", fontWeight: 600 }}>Inserate pausiert</span>;
+    const bg = level === 1 ? colors.yellow : level === 2 ? "#E65100" : "#c62828";
+    const fg = level === 1 ? "#191615" : "#fff";
+    return <button onClick={() => openMahn(inv)} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: fg, background: bg, border: "none", borderRadius: 999, padding: "7px 14px", cursor: "pointer", fontFamily: fonts.body }}>{STAGE_LABELS[level]} senden →</button>;
+  };
 
   if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: colors.muted }}>Lade Admin...</div>;
   if (!user) return null;
@@ -752,15 +794,13 @@ export default function AdminPage() {
                                       </div>
 
                                       {/* Aktionen */}
-                                      {inv.status !== "paid" && (
-                                        <div style={{ display: "flex", gap: 4, marginTop: 6, flexWrap: "wrap" }}>
-                                          {rl < 1 && <button onClick={() => sendReminder(inv.id, u.id, 1)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Erinnerung</button>}
-                                          {rl === 1 && <button onClick={() => sendReminder(inv.id, u.id, 2)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFE0B2", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Mahnung</button>}
-                                          {rl === 2 && <button onClick={() => sendReminder(inv.id, u.id, 3)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFCDD2", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserate pausieren</button>}
-                                          <button onClick={() => confirmAndReactivate(inv.id, u.id)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bezahlt</button>
-                                        </div>
-                                      )}
-                                      {inv.status === "paid" && <p style={{ margin: "4px 0 0", fontSize: 10, color: "#2E7D32" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
+                                        {dunningTimeline(inv)}
+                                        {inv.status !== "paid" ? (
+                                          <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap", alignItems: "center" }}>
+                                            {mahnButton({ ...inv, sellerName: u.display_name })}
+                                            <button onClick={() => confirmAndReactivate(inv.id, u.id)} style={{ padding: "7px 14px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Bezahlt</button>
+                                          </div>
+                                        ) : <p style={{ margin: "8px 0 0", fontSize: 11, color: "#2E7D32" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
                                     </div>
                                   )}
                                 </div>
@@ -942,14 +982,13 @@ export default function AdminPage() {
                               </div>
                             ))}
                             <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", color: "#5B8C5A" }}><span>Bee-Impact</span><span>CHF {fmtCHF(inv.total_bee_impact)}</span></div>
+                            {dunningTimeline(inv)}
                             {inv.status !== "paid" ? (
-                              <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-                                {rl < 1 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 1)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Erinnerung</button>}
-                                {rl === 1 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 2)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFE0B2", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Mahnung</button>}
-                                {rl === 2 && <button onClick={() => sendReminder(inv.id, inv.seller_id, 3)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FFCDD2", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserate pausieren</button>}
-                                <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bezahlt</button>
+                              <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap", alignItems: "center" }}>
+                                {mahnButton(inv)}
+                                <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ padding: "7px 14px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Bezahlt</button>
                               </div>
-                            ) : <p style={{ margin: "6px 0 0", fontSize: 10, color: "#2E7D32" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
+                            ) : <p style={{ margin: "8px 0 0", fontSize: 11, color: "#2E7D32" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
                           </div>
                           <div style={{ width: 200, flexShrink: 0, border: `1px solid ${colors.border}`, borderRadius: 12, padding: 14, textAlign: "center" }}>
                             <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 10 }}>QR-Rechnung</div>
@@ -1072,6 +1111,27 @@ export default function AdminPage() {
 
         </div>
       </div>
+
+      {mahnModal && (
+        <div onClick={() => setMahnModal(null)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: 440, maxWidth: "100%", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
+            <div style={{ background: "#F3FAFA", padding: "13px 18px", borderBottom: "1px solid #E6F0F0", display: "flex", alignItems: "center", gap: 8 }}>
+              <Mail size={16} color="#0A7170" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#0A7170" }}>Vorschau · wird gesendet an {mahnModal.inv.sellerName || "Verkäufer"}</span>
+            </div>
+            <div style={{ padding: "16px 18px", maxHeight: "60vh", overflowY: "auto" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "3px 0 12px" }}>{mahnModal.subject}</div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" }}>Text</div>
+              <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6, marginTop: 4 }}>{mahnModal.body}</div>
+            </div>
+            <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEEEE" }}>
+              <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+              <button onClick={confirmMahn} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Senden</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast */}
       {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "#fff", padding: "9px 22px", borderRadius: 999, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
