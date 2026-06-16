@@ -13,26 +13,9 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef } from "@/lib/fees";
 import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { buildDunningEmail } from "@/lib/dunning";
+import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
-const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
-const td = { padding: "12px 14px", fontSize: 12.5, fontFamily: fonts.body };
-const pill = (bg, color, label) => <span style={{ padding: "2px 9px", borderRadius: 20, fontSize: 10, fontWeight: 700, background: bg, color }}>{label}</span>;
-
-const bcFieldLabel = { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 4 };
-const bcInput = { width: "100%", boxSizing: "border-box", border: "1px solid #E2E2E2", borderRadius: 10, padding: "9px 12px", fontSize: 13, fontFamily: fonts.body, color: "#191615", outline: "none" };
-
-const chartCard = { border: `1px solid ${colors.border}`, borderRadius: 14, padding: 14, background: "#fff" };
-const chartHead = { display: "flex", justifyContent: "space-between", alignItems: "baseline" };
-const chartLabel = { fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted };
-const chartBig = { fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: "2px 0 8px" };
-const chartSub = { fontSize: 11, fontWeight: 600, color: colors.muted };
-const sumSeries = (s) => Math.round((s || []).reduce((a, d) => a + d.value, 0));
-const axisLabels = (s) => s && s.length ? (
-  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 9, color: colors.muted }}>
-    <span>{fmtDate(s[0].date)}</span><span>heute</span>
-  </div>
-) : null;
 
 export default function AdminPage() {
   const [user, setUser] = useState(null);
