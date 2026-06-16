@@ -202,6 +202,8 @@ const TESTS = [
       { id: "fee_invoices", label: "Gebühren-Rechnungen werden aufgelistet" },
       { id: "fee_invoice_detail", label: "Gebühren-Rechnung /fees/invoice/[id] mit Aufstellung" },
       { id: "fee_impact", label: "Bee-Impact Anteil (20%) korrekt berechnet" },
+      { id: "impact_canonical", label: "Bee-Impact zählt app-weit nur bezahlte Gebühren (Startseite/Impact/Hive/Profil identisch, keine Doppelzählung)" },
+      { id: "impact_milestone", label: "Startseite zeigt Meilenstein-Fortschritt zum nächsten Projekt (geflossen + unterwegs) plus Artikel/CO2" },
     ],
   },
   {

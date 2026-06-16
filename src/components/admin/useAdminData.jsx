@@ -457,6 +457,7 @@ export function useAdminData() {
       listings_paused: false, account_suspended: false,
     }).eq("id", invId);
     await supabase.from("fee_ledger").update({ status: "paid" }).eq("fee_invoice_id", invId);
+    await supabase.rpc("recalc_bee_impact", { p_user_id: sellerId });
     await supabase.rpc("reactivate_seller_listings", { p_seller_id: sellerId });
 
     setFeeInvoices(prev => prev.map(i => i.id === invId ? { ...i, status: "paid", paid_at: new Date().toISOString(), listings_paused: false } : i));
