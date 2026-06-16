@@ -9,7 +9,7 @@ import { bucketDaily, countByType } from "@/lib/adminAnalytics";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
-import { makeBeeRef } from "@/lib/fees";
+import { makeBeeRef, makeArtRef } from "@/lib/fees";
 import { buildDunningEmail } from "@/lib/dunning";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 
@@ -685,6 +685,7 @@ export function AdminShell({ admin }) {
                     <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
                       <td style={{ ...td, fontWeight: 600, maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         <Link href={`/listing/${l.id}`} style={{ color: colors.dark, textDecoration: "none" }}>{l.title}</Link>
+                        <span style={{ display: "block", fontFamily: "monospace", fontSize: 10, color: colors.muted, fontWeight: 500 }}>{makeArtRef(l.id)}</span>
                       </td>
                       <td style={{ ...td, color: colors.muted }}>{l.sellerName}</td>
                       <td style={td}><TypeBadge type={l.listing_type} /></td>

@@ -24,6 +24,7 @@ import {
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { createNotification } from "@/lib/notifications";
+import { makeArtRef } from "@/lib/fees";
 
 // ── LocationMap: interaktive Leaflet-Karte mit Gemeindegrenze ──
 // - rote Gemeindegrenze (Polygon via Nominatim polygon_geojson)
@@ -634,6 +635,7 @@ export default function ListingDetail() {
             {/* ── TITLE + PRICE CARD ─────────────────── */}
             <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 14 }}>
               <h1 style={{ fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.3 }}>{l.title}</h1>
+              <div style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, marginBottom: 8 }}>{makeArtRef(l.id)}</div>
               <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
                 <Clock size={13} /> {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}
                 {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span>{l.view_count} Aufrufe</>}
