@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
@@ -383,6 +383,8 @@ export default function AdminPage() {
   const bannedUsers = users.filter(u => u.is_banned);
   const openReports = reports.filter(r => !r.is_resolved);
   const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
+  const overdueInvoices = feeInvoices.filter(isOverdue).sort((a, b) => ((b.reminder_level || 0) - (a.reminder_level || 0)) || (daysOverdue(b) - daysOverdue(a)));
+  const overdueSum = overdueInvoices.reduce((s, i) => s + parseFloat(i.total_fees || 0), 0);
   const nonCancelledOrders = orders.filter(o => o.status !== "cancelled");
   const gmv = nonCancelledOrders.reduce((s, o) => s + parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0), 0);
   const avgOrder = nonCancelledOrders.length ? gmv / nonCancelledOrders.length : 0;
@@ -441,6 +443,7 @@ export default function AdminPage() {
     { key: "invoices", label: "Rechnungen", Icon: ReceiptText },
     { key: "listings", label: "Inserate", Icon: Package },
     { key: "emails", label: "E-Mails", Icon: Mail },
+    { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
@@ -1034,6 +1037,38 @@ export default function AdminPage() {
                   </div>
                 );
               })}
+            </div>
+          )}
+
+          {/* ═══ MAHNUNGEN ═══ */}
+          {tab === "dunning" && (
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: overdueInvoices.length ? "#c0392b" : colors.muted, background: overdueInvoices.length ? "#FFEBEB" : colors.cream, padding: "5px 12px", borderRadius: 999 }}>
+                  {overdueInvoices.length} überfällig · CHF {fmtCHF(overdueSum)} offen
+                </span>
+              </div>
+              {overdueInvoices.length === 0 ? (
+                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "20px 22px" }}>
+                  <CheckCircle size={22} color={colors.green} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700 }}>Keine überfälligen Rechnungen</div>
+                    <div style={{ fontSize: 12, color: colors.muted }}>Alles bezahlt oder noch nicht fällig.</div>
+                  </div>
+                </div>
+              ) : overdueInvoices.map(inv => (
+                <div key={inv.id} style={{ marginBottom: 10, borderRadius: radius.lg, border: "1px solid #f0c9c9", overflow: "hidden", padding: "14px 16px", background: "#FFF8F8" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+                    <div style={{ width: 34, height: 34, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13, fontWeight: 700, color: colors.dark }}>{(inv.sellerName || "?")[0].toUpperCase()}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{inv.sellerName} <span style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, fontWeight: 400 }}>· {inv.invoice_ref}</span></div>
+                      <div style={{ fontSize: 11, color: "#c0392b", fontWeight: 600 }}>CHF {fmtCHF(inv.total_fees)} · fällig seit {daysOverdue(inv)} Tagen</div>
+                    </div>
+                    {mahnButton(inv)}
+                  </div>
+                  {dunningTimeline(inv)}
+                </div>
+              ))}
             </div>
           )}
 
