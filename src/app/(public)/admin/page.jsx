@@ -433,6 +433,36 @@ export default function AdminPage() {
     return <button onClick={() => openMahn(inv)} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: fg, background: bg, border: "none", borderRadius: 999, padding: "7px 14px", cursor: "pointer", fontFamily: fonts.body }}>{STAGE_LABELS[level]} senden →</button>;
   };
 
+  const emailCard = (e) => {
+    const isOpen = openEmail === e.id;
+    const recName = users.find(x => x.id === e.recipient_id)?.display_name || (e.recipient_email && e.recipient_email !== "noreply@beedaro.ch" ? e.recipient_email : "—");
+    const statusColor = e.status === "sent" ? ["#E8F5E9", "#2E7D32"] : e.status === "failed" ? ["#FFEBEE", "#c62828"] : ["#FFF3E0", "#E65100"];
+    const body = e.context && e.context.body;
+    return (
+      <div key={e.id} style={{ marginBottom: 8, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${isOpen ? colors.teal : colors.border}`, overflow: "hidden" }}>
+        <div onClick={() => setOpenEmail(isOpen ? null : e.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", cursor: "pointer", background: isOpen ? "#F3FAFA" : "transparent" }}>
+          <Mail size={15} color={colors.muted} style={{ flexShrink: 0 }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.subject || "(kein Betreff)"}</div>
+            <div style={{ fontSize: 11, color: colors.muted }}>An: {recName}</div>
+          </div>
+          {e.template && pill(colors.cream, colors.muted, e.template)}
+          {e.status && pill(statusColor[0], statusColor[1], e.status)}
+          <span style={{ fontSize: 11, color: colors.muted, minWidth: 80, textAlign: "right" }}>{e.created_at ? fmtDate(e.created_at) : ""}</span>
+          {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
+        </div>
+        {isOpen && (
+          <div style={{ borderTop: `1px solid ${colors.borderLt}`, padding: 16, background: "#FAFAF8" }}>
+            <div style={{ fontSize: 11, color: colors.muted, marginBottom: 8 }}>An: <strong style={{ color: colors.dark }}>{recName}</strong> · Betreff: <strong style={{ color: colors.dark }}>{e.subject || "—"}</strong></div>
+            {body
+              ? <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{body}</div>
+              : <div style={{ fontSize: 12, color: colors.muted, fontStyle: "italic" }}>(kein Text gespeichert)</div>}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: colors.muted }}>Lade Admin...</div>;
   if (!user) return null;
 
@@ -725,7 +755,7 @@ export default function AdminPage() {
 
                         {/* Tabs: Inserate | Bestellungen | Rechnungen | Bewertungen */}
                         <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}` }}>
-                          {[{ key: "inserate", label: `Inserate (${uLst.length})` }, { key: "bestellungen", label: "Bestellungen" }, { key: "rechnungen", label: `Rechnungen (${(userInvoices[u.id] || []).length})` }, { key: "bewertungen", label: "Bewertungen" }].map(t => (
+                          {[{ key: "inserate", label: `Inserate (${uLst.length})` }, { key: "bestellungen", label: "Bestellungen" }, { key: "rechnungen", label: `Rechnungen (${(userInvoices[u.id] || []).length})` }, { key: "bewertungen", label: "Bewertungen" }, { key: "emails", label: "E-Mails" }].map(t => (
                             <button key={t.key} onClick={() => setUserTab(prev => ({ ...prev, [u.id]: t.key }))} style={{
                               flex: 1, padding: "9px 12px", fontSize: 11, fontWeight: 700, border: "none", cursor: "pointer",
                               fontFamily: fonts.body, background: (userTab[u.id] || "inserate") === t.key ? colors.yellowSoft : "transparent",
@@ -851,6 +881,15 @@ export default function AdminPage() {
                                 </div>
                               );
                             }) : <p style={{ margin: 0, padding: "12px 0", fontSize: 11, color: colors.muted, textAlign: "center" }}>Keine Bewertungen</p>}
+                          </div>
+                        )}
+
+                        {/* Sub-Tab: E-Mails */}
+                        {(userTab[u.id] || "inserate") === "emails" && (
+                          <div style={{ padding: "10px 16px" }}>
+                            {emailLog.filter(e => e.recipient_id === u.id).length > 0
+                              ? emailLog.filter(e => e.recipient_id === u.id).map(e => emailCard(e))
+                              : <p style={{ margin: 0, padding: "12px 0", fontSize: 11, color: colors.muted, textAlign: "center" }}>Keine E-Mails an diesen Nutzer</p>}
                           </div>
                         )}
                       </div>
@@ -1013,30 +1052,7 @@ export default function AdminPage() {
               {filteredEmails.length === 0 && (
                 <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Keine E-Mails protokolliert.</div>
               )}
-              {filteredEmails.map(e => {
-                const isOpen = openEmail === e.id;
-                const statusColor = e.status === "sent" ? ["#E8F5E9", "#2E7D32"] : e.status === "failed" ? ["#FFEBEE", "#c62828"] : ["#FFF3E0", "#E65100"];
-                return (
-                  <div key={e.id} style={{ marginBottom: 8, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${isOpen ? colors.teal : colors.border}`, overflow: "hidden" }}>
-                    <div onClick={() => setOpenEmail(isOpen ? null : e.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", cursor: "pointer", background: isOpen ? "#F3FAFA" : "transparent" }}>
-                      <Mail size={15} color={colors.muted} style={{ flexShrink: 0 }} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 12.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.subject || "(kein Betreff)"}</div>
-                        <div style={{ fontSize: 11, color: colors.muted }}>{e.recipient_email || "—"}</div>
-                      </div>
-                      {e.template && pill(colors.cream, colors.muted, e.template)}
-                      {e.status && pill(statusColor[0], statusColor[1], e.status)}
-                      <span style={{ fontSize: 11, color: colors.muted, minWidth: 80, textAlign: "right" }}>{e.created_at ? fmtDate(e.created_at) : ""}</span>
-                      {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
-                    </div>
-                    {isOpen && (
-                      <div style={{ borderTop: `1px solid ${colors.borderLt}`, padding: 14, background: "#FAFAF8" }}>
-                        <pre style={{ margin: 0, fontSize: 11, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word", color: colors.dark }}>{e.context ? JSON.stringify(e.context, null, 2) : "(kein Context)"}</pre>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {filteredEmails.map(e => emailCard(e))}
             </div>
           )}
 
