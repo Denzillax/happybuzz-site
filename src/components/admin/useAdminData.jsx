@@ -324,7 +324,15 @@ export function useAdminData() {
   const openSentMail = (inv, level) => {
     const e = emailLog.find(x => x.context && x.context.invoice_id === inv.id && x.context.level === level);
     if (!e) { flash("Keine gesendete Mail gefunden"); return; }
-    setMahnModal({ inv, level, subject: e.subject, body: e.context?.body || "", mode: "view", sentAt: e.created_at });
+    let body = e.context?.body;
+    if (!body) {
+      // Altfälle ohne gespeicherten Text: aus der Vorlage rekonstruieren
+      body = buildDunningEmail({
+        level, sellerName: inv.sellerName || "Verkäufer", ref: inv.invoice_ref,
+        amount: fmtCHF(inv.total_fees), dueDate: inv.due_date ? fmtDate(inv.due_date) : "—", daysOverdue: daysOverdue(inv),
+      }).body;
+    }
+    setMahnModal({ inv, level, subject: e.subject, body, mode: "view", sentAt: e.created_at });
   };
   const openMahn = (inv) => {
     const level = nextStage(inv);
