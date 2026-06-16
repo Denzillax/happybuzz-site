@@ -13,6 +13,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef, parseArtRef, artIdRange, artRefMatches } from "@/lib/fees";
 import { PURCHASE_STATUS } from "@/lib/orderStatus";
 import { buildDunningEmail, DUNNING_GAP_DAYS } from "@/lib/dunning";
+import { getAnnouncement } from "@/lib/announcement";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
@@ -40,6 +41,8 @@ export function useAdminData() {
   const [feeLedger, setFeeLedger] = useState({});
   const [feeSeller, setFeeSeller] = useState({});
   const [refListings, setRefListings] = useState([]);
+  const [annOpen, setAnnOpen] = useState(false);
+  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#0E9493", text_color: "#FFFFFF" });
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -407,6 +410,22 @@ export function useAdminData() {
     setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery("");
   };
 
+  const openAnnouncement = async () => {
+    const row = await getAnnouncement();
+    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF" });
+    setAnnOpen(true);
+  };
+  const saveAnnouncement = async () => {
+    const { error } = await supabase.from("site_announcement").update({
+      enabled: ann.enabled, message: ann.message.trim(), bg_color: ann.bg_color, text_color: ann.text_color,
+      updated_at: new Date().toISOString(),
+    }).eq("id", 1);
+    if (error) { flash("Fehler beim Speichern"); return; }
+    flash(ann.enabled ? "Banner gespeichert + aktiv" : "Banner gespeichert (aus)");
+    logAdmin("announcement_bar", "banner", ann.enabled ? "an" : "aus", { message: ann.message.trim() });
+    setAnnOpen(false);
+  };
+
   const toggleListingStatus = async (listingId, newStatus) => {
     await supabase.from("listings").update({ status: newStatus }).eq("id", listingId);
     setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: newStatus } : l));
@@ -699,6 +718,7 @@ export function useAdminData() {
     mahnModal, setMahnModal, openMahn, confirmMahn, sendReminder, confirmAndReactivate, isOverdue, daysOverdue, nextStage, stageDate, STAGE_LABELS, dunningTimeline, mahnButton,
     nextStageInfo, dunningDue, dunningSoon, dunningPaused, openSentMail, bulkSendDue,
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
+    annOpen, setAnnOpen, ann, setAnn, openAnnouncement, saveAnnouncement,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
