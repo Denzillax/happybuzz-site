@@ -49,6 +49,7 @@ export function AdminShell({ admin }) {
     openOrder, toggleOrder, orderDetail, orderStatusFilter, setOrderStatusFilter, orderDeposit, setOrderDeposit, orderStatusGroup, orderStatusPill, beeRefIncludes,
     invoiceType, setInvoiceType, openInvoiceKey, toggleInvoiceRow, feeLedger, feeSeller,
     mahnModal, setMahnModal, openMahn, confirmMahn, sendReminder, confirmAndReactivate, isOverdue, daysOverdue, nextStage, stageDate, STAGE_LABELS, dunningTimeline, mahnButton,
+    nextStageInfo, dunningDue, dunningSoon, dunningPaused, bulkSendDue,
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading,
@@ -586,37 +587,47 @@ export function AdminShell({ admin }) {
           )}
 
           {/* ═══ MAHNUNGEN ═══ */}
-          {tab === "dunning" && (
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: overdueInvoices.length ? "#c0392b" : colors.muted, background: overdueInvoices.length ? "#FFEBEB" : colors.cream, padding: "5px 12px", borderRadius: 999 }}>
-                  {overdueInvoices.length} überfällig · CHF {fmtCHF(overdueSum)} offen
-                </span>
+          {tab === "dunning" && (() => {
+            const card = (inv, opts = {}) => (
+              <div key={inv.id} style={{ marginBottom: 10, borderRadius: radius.lg, border: `1px solid ${opts.paused ? colors.border : "#f0c9c9"}`, overflow: "hidden", padding: "14px 16px", background: opts.paused ? "#fff" : "#FFF8F8" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13, fontWeight: 700, color: colors.dark }}>{(inv.sellerName || "?")[0].toUpperCase()}</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}><span onClick={() => { setTab("users"); setSearch(inv.sellerName || ""); }} style={{ cursor: "pointer", textDecoration: "underline", textDecorationColor: "#d8b8b8" }}>{inv.sellerName}</span> <span style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, fontWeight: 400 }}>· {inv.invoice_ref}</span></div>
+                    <div style={{ fontSize: 11, color: "#c0392b", fontWeight: 600 }}>CHF {fmtCHF(inv.total_fees)} · {opts.paused ? "alle Stufen gesendet · Inserate pausiert" : `fällig seit ${daysOverdue(inv)} Tagen`}</div>
+                  </div>
+                  {opts.info && <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: opts.info.isDue ? "#E65100" : colors.muted, background: opts.info.isDue ? "#FFF3E0" : colors.cream, padding: "4px 10px", borderRadius: 999 }}>Nächste: {STAGE_LABELS[opts.info.level]} · {opts.info.isDue ? "heute fällig" : `in ${opts.info.daysUntil} Tagen`}</span>}
+                  <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: "#2E7D32", background: "#E8F5E9", border: "none", borderRadius: 999, padding: "7px 12px", cursor: "pointer", fontFamily: fonts.body }}>{opts.paused ? "Bezahlt + reaktivieren" : "Bezahlt"}</button>
+                </div>
+                {dunningTimeline(inv)}
               </div>
-              {overdueInvoices.length === 0 ? (
-                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "20px 22px" }}>
-                  <CheckCircle size={22} color={colors.green} />
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 700 }}>Keine überfälligen Rechnungen</div>
-                    <div style={{ fontSize: 12, color: colors.muted }}>Alles bezahlt oder noch nicht fällig.</div>
-                  </div>
+            );
+            const groupHeader = (label, color) => <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color, margin: "16px 0 8px" }}>{label}</div>;
+            return (
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: overdueInvoices.length ? "#c0392b" : colors.muted, background: overdueInvoices.length ? "#FFEBEB" : colors.cream, padding: "5px 12px", borderRadius: 999 }}>{overdueInvoices.length} überfällig · CHF {fmtCHF(overdueSum)} offen</span>
+                  {dunningDue.length > 0 && <span style={{ fontSize: 12, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "5px 12px", borderRadius: 999 }}>{dunningDue.length} fällig</span>}
+                  {dunningDue.length > 0 && <button onClick={bulkSendDue} style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "8px 16px", cursor: "pointer", fontFamily: fonts.body }}>Alle fälligen senden ({dunningDue.length})</button>}
                 </div>
-              ) : overdueInvoices.map(inv => (
-                <div key={inv.id} style={{ marginBottom: 10, borderRadius: radius.lg, border: "1px solid #f0c9c9", overflow: "hidden", padding: "14px 16px", background: "#FFF8F8" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                    <div style={{ width: 34, height: 34, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13, fontWeight: 700, color: colors.dark }}>{(inv.sellerName || "?")[0].toUpperCase()}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}><span onClick={() => { setTab("users"); setSearch(inv.sellerName || ""); }} style={{ cursor: "pointer", textDecoration: "underline", textDecorationColor: "#d8b8b8" }}>{inv.sellerName}</span> <span style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, fontWeight: 400 }}>· {inv.invoice_ref}</span></div>
-                      <div style={{ fontSize: 11, color: "#c0392b", fontWeight: 600 }}>CHF {fmtCHF(inv.total_fees)} · fällig seit {daysOverdue(inv)} Tagen</div>
-                    </div>
-                    {mahnButton(inv)}
-                    <button onClick={() => confirmAndReactivate(inv.id, inv.seller_id)} style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: "#2E7D32", background: "#E8F5E9", border: "none", borderRadius: 999, padding: "7px 12px", cursor: "pointer", fontFamily: fonts.body }}>Bezahlt</button>
+                {overdueInvoices.length === 0 ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "20px 22px" }}>
+                    <CheckCircle size={22} color={colors.green} />
+                    <div><div style={{ fontSize: 14, fontWeight: 700 }}>Keine überfälligen Rechnungen</div><div style={{ fontSize: 12, color: colors.muted }}>Alles bezahlt oder noch nicht fällig.</div></div>
                   </div>
-                  {dunningTimeline(inv)}
-                </div>
-              ))}
-            </div>
-          )}
+                ) : (
+                  <>
+                    {dunningDue.length > 0 && groupHeader("Jetzt fällig", "#c0392b")}
+                    {dunningDue.map(inv => card(inv, { info: nextStageInfo(inv) }))}
+                    {dunningSoon.length > 0 && groupHeader("Bald fällig", colors.muted)}
+                    {dunningSoon.map(inv => card(inv, { info: nextStageInfo(inv) }))}
+                    {dunningPaused.length > 0 && groupHeader("Pausiert", colors.muted)}
+                    {dunningPaused.map(inv => card(inv, { paused: true }))}
+                  </>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ═══ ANALYTIK ═══ */}
           {tab === "analytics" && (
@@ -785,7 +796,7 @@ export function AdminShell({ admin }) {
           <div onClick={e => e.stopPropagation()} style={{ width: 440, maxWidth: "100%", background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
             <div style={{ background: "#F3FAFA", padding: "13px 18px", borderBottom: "1px solid #E6F0F0", display: "flex", alignItems: "center", gap: 8 }}>
               <Mail size={16} color="#0A7170" />
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#0A7170" }}>Vorschau · wird gesendet an {mahnModal.inv.sellerName || "Verkäufer"}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#0A7170" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
             </div>
             <div style={{ padding: "16px 18px", maxHeight: "60vh", overflowY: "auto" }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
@@ -794,8 +805,14 @@ export function AdminShell({ admin }) {
               <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6, marginTop: 4 }}>{mahnModal.body}</div>
             </div>
             <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEEEE" }}>
-              <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
-              <button onClick={confirmMahn} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Senden</button>
+              {mahnModal.mode === "view" ? (
+                <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
+              ) : (
+                <>
+                  <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                  <button onClick={confirmMahn} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Senden</button>
+                </>
+              )}
             </div>
           </div>
         </div>
