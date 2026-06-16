@@ -633,8 +633,8 @@ export async function getPurchase(purchaseId) {
 // Impact-Summe + Anzahl geretteter Artikel (fuer die Homepage-Section).
 export async function getCommunityImpactStats() {
   const { data, error } = await supabase.rpc("get_community_impact_stats");
-  if (error) return { impact: 0, articles: 0 };
-  return data || { impact: 0, articles: 0 };
+  if (error) return { impact: 0, unterwegs: 0, articles: 0 };
+  return data || { impact: 0, unterwegs: 0, articles: 0 };
 }
 
 // Mein Impact-Profil laden

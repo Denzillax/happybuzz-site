@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Leaf, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
+import { nextMilestone } from "@/lib/impact";
 
 const GREEN = "#5B8C5A";
 const DARK = "#191615";
@@ -21,7 +22,7 @@ const PHOTOS = [
 ];
 
 export function CommunityImpact() {
-  const [stats, setStats] = useState({ impact: 0, articles: 0 });
+  const [stats, setStats] = useState({ impact: 0, unterwegs: 0, articles: 0 });
   const [userImpact, setUserImpact] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [slide, setSlide] = useState(0);
@@ -41,20 +42,20 @@ export function CommunityImpact() {
       // Eigener Beitrag = Bee-Impact aus den EIGENEN Verkäufen (fee_ledger),
       // gleiche Basis wie der Community-Zähler -> alle Einzelbeiträge summieren
       // sich exakt zum Gesamtbetrag. RLS: jeder sieht nur eigene Zeilen.
-      const { data: rows } = await supabase.from("fee_ledger").select("bee_impact").eq("seller_id", session.user.id).neq("status", "cancelled");
+      const { data: rows } = await supabase.from("fee_ledger").select("bee_impact").eq("seller_id", session.user.id).eq("status", "paid");
       if (rows) setUserImpact(rows.reduce((s, r) => s + Number(r.bee_impact || 0), 0));
     }
     loadUser();
   }, []);
 
-  if (!stats || stats.impact <= 0) return null;
+  if (!stats || (Number(stats.impact || 0) <= 0 && Number(stats.unterwegs || 0) <= 0)) return null;
 
   // CO2-Schaetzung: ~25 kg vermieden pro wiederverwendetem Artikel.
   const co2t = (stats.articles * 25 / 1000);
   const cards = [
     { value: Number(stats.articles).toLocaleString("de-CH"), label: "Artikel gerettet" },
     { value: `${co2t.toFixed(1)}t`, label: "CO2 vermieden" },
-    { value: `CHF ${chf(stats.impact)}`, label: "für Naturschutz" },
+    { value: `CHF ${chf(stats.impact)}`, label: "geflossen" },
   ];
 
   return (
@@ -109,6 +110,31 @@ export function CommunityImpact() {
               </div>
             ))}
           </div>
+
+          {(() => {
+            const ms = nextMilestone(stats.impact);
+            const span = Math.max(1, ms.target - ms.prev);
+            const paidPct = Math.max(0, Math.min(100, ((Number(stats.impact || 0) - ms.prev) / span) * 100));
+            const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
+            const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
+            return (
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid #E2E2E2" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: DARK }}>Nächstes Ziel: {ms.name}</span>
+                  <span style={{ fontSize: 12, color: MUTED }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
+                </div>
+                <div style={{ height: 12, borderRadius: 999, background: "#EAF3DE", marginTop: 10, overflow: "hidden", display: "flex" }}>
+                  <div style={{ width: `${paidPct}%`, background: GREEN }} />
+                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#C0DD97,#C0DD97 5px,#EAF3DE 5px,#EAF3DE 10px)" }} />
+                </div>
+                <p style={{ margin: "8px 0 0", fontSize: 12.5, color: MUTED }}>
+                  {ms.reached
+                    ? <>Alle Ziele erreicht. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
+                    : <>Noch <b style={{ color: GREEN }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <> — <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs</b>.</> : "."}</>}
+                </p>
+              </div>
+            );
+          })()}
 
           {userImpact > 0 && (
             <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
