@@ -234,6 +234,10 @@ const TESTS = [
       { id: "adm_analytics_tab", label: "Analytik-Tab zeigt 4 Diagramme (Neue Nutzer, GMV, Neue Inserate, Inserate nach Typ)" },
       { id: "adm_analytics_range", label: "Zeitraum 7/30/90 Tage umschalten lädt die Reihen neu" },
       { id: "adm_analytics_empty", label: "Leerer Zeitraum zeigt 0-Linien statt Fehler" },
+      { id: "adm_broadcast_open", label: "'Ankündigung senden'-Button auf der Übersicht öffnet den Composer" },
+      { id: "adm_broadcast_segment", label: "Zielgruppe Alle/Privat/Unternehmen ändert die Live-Empfängerzahl" },
+      { id: "adm_broadcast_send", label: "Senden legt In-App-Notifications an; Empfänger sehen sie in der Glocke (Megafon-Icon)" },
+      { id: "adm_broadcast_validate", label: "Leeres Titel-/Nachricht-Feld lässt sich nicht senden" },
     ],
   },
   {
