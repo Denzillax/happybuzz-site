@@ -11,6 +11,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef } from "@/lib/fees";
+import { PURCHASE_STATUS } from "@/lib/orderStatus";
 import { orderQrPayload, feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { buildDunningEmail } from "@/lib/dunning";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
@@ -428,15 +429,14 @@ export function useAdminData() {
 
   const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
-    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"] };
+    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#f5f5f5", "#666", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };
   const orderStatusPill = (s) => {
     if (s === "cancelled") return pill("#FFEBEE", "#c62828", "Storniert");
     if (orderStatusGroup(s) === "done") return pill("#E8F5E9", "#2E7D32", "Abgeschlossen");
-    const map = { confirmed: "Bestätigt", payment_marked: "Zahlung gemeldet", paid: "Bezahlt", shipped: "Versendet", payment_pending: "Rechnung offen" };
-    return pill("#E3F2FD", "#1565C0", map[s] || (s || "Offen"));
+    return pill("#E3F2FD", "#1565C0", PURCHASE_STATUS[s]?.label || "Offen");
   };
 
   const filteredUsers = users.filter(u => !search || u.display_name?.toLowerCase().includes(search.toLowerCase()) || u.username?.toLowerCase().includes(search.toLowerCase()) || u.city?.toLowerCase().includes(search.toLowerCase()));
