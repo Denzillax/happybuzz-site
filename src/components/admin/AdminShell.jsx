@@ -877,6 +877,14 @@ export function AdminShell({ admin }) {
                 </div>
               </div>
               <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Animation</div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {[["none", "Keine"], ["marquee", "Laufschrift"], ["slide", "Einfliegen"], ["pulse", "Pulsieren"]].map(([k, lbl]) => (
+                    <button key={k} onClick={() => setAnn({ ...ann, effect: k })} style={{ background: ann.effect === k ? colors.dark : "#fff", color: ann.effect === k ? "#fff" : colors.dark, border: `1px solid ${colors.border}`, borderRadius: 999, padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
                 <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Vorschau</div>
                 <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 13, fontWeight: 600, padding: "9px 14px", borderRadius: 8, textAlign: "center" }}>
                   <Megaphone size={14} style={{ verticalAlign: "-2px", marginRight: 6 }} />{ann.message || "Vorschau-Text"}

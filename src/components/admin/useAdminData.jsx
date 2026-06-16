@@ -42,7 +42,7 @@ export function useAdminData() {
   const [feeSeller, setFeeSeller] = useState({});
   const [refListings, setRefListings] = useState([]);
   const [annOpen, setAnnOpen] = useState(false);
-  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#0E9493", text_color: "#FFFFFF" });
+  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#0E9493", text_color: "#FFFFFF", effect: "none" });
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -412,12 +412,12 @@ export function useAdminData() {
 
   const openAnnouncement = async () => {
     const row = await getAnnouncement();
-    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF" });
+    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
     setAnnOpen(true);
   };
   const saveAnnouncement = async () => {
     const { error } = await supabase.from("site_announcement").update({
-      enabled: ann.enabled, message: ann.message.trim(), bg_color: ann.bg_color, text_color: ann.text_color,
+      enabled: ann.enabled, message: ann.message.trim(), bg_color: ann.bg_color, text_color: ann.text_color, effect: ann.effect,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     if (error) { flash("Fehler beim Speichern"); return; }

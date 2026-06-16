@@ -140,6 +140,14 @@ input:focus, textarea:focus, select:focus {
 .fab-btn::after { content:''; position:absolute; inset:0; border-radius:inherit; animation:fab-pulse 2.4s ease-out infinite; pointer-events:none; }
 .fab-btn:hover::after { animation:none; }
 .card-enter { animation: fadeIn .4s ease-out; }
+
+/* Ankündigungsbalken-Effekte */
+@keyframes annSlideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes annPulse { 0%,100% { opacity: 1; } 50% { opacity: .82; } }
+@keyframes annMarquee { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+.ann-slide { animation: annSlideDown .5s ease-out; }
+.ann-pulse { animation: annPulse 2.4s ease-in-out infinite; }
+.ann-marquee-track { display: inline-block; white-space: nowrap; will-change: transform; animation: annMarquee 18s linear infinite; }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
