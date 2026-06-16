@@ -46,3 +46,5 @@ export function buildDunningEmail({ level, sellerName, ref, amount, dueDate, day
     template: `reminder_${level}`,
   };
 }
+
+export const DUNNING_GAP_DAYS = 7; // Tage zwischen den Mahnstufen

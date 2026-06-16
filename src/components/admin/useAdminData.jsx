@@ -12,7 +12,7 @@ import { TypeBadge } from "@/components/shared/Badge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { makeBeeRef, parseArtRef, artIdRange, artRefMatches } from "@/lib/fees";
 import { PURCHASE_STATUS } from "@/lib/orderStatus";
-import { buildDunningEmail } from "@/lib/dunning";
+import { buildDunningEmail, DUNNING_GAP_DAYS } from "@/lib/dunning";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
@@ -302,6 +302,30 @@ export function useAdminData() {
     const e = emailLog.find(x => x.context && x.context.invoice_id === invId && x.context.level === level);
     return e && e.created_at ? fmtDate(e.created_at) : null;
   };
+  const stageSentAt = (invId, level) => {
+    const e = emailLog.find(x => x.context && x.context.invoice_id === invId && x.context.level === level);
+    return e?.created_at ? new Date(e.created_at) : null;
+  };
+  const nextStageInfo = (inv) => {
+    if (inv.status === "paid") return null;
+    const level = nextStage(inv);
+    if (!level) return null;
+    let dueDate;
+    if (level === 1) {
+      dueDate = inv.due_date ? new Date(inv.due_date) : null;
+    } else {
+      const prevAt = stageSentAt(inv.id, level - 1) || (inv.reminder_sent_at ? new Date(inv.reminder_sent_at) : null);
+      dueDate = prevAt ? new Date(prevAt.getTime() + DUNNING_GAP_DAYS * 86400000) : null;
+    }
+    const isDue = !!dueDate && dueDate.getTime() <= Date.now();
+    const daysUntil = dueDate ? Math.max(0, Math.ceil((dueDate.getTime() - Date.now()) / 86400000)) : 0;
+    return { level, dueDate, isDue, daysUntil };
+  };
+  const openSentMail = (inv, level) => {
+    const e = emailLog.find(x => x.context && x.context.invoice_id === inv.id && x.context.level === level);
+    if (!e) { flash("Keine gesendete Mail gefunden"); return; }
+    setMahnModal({ inv, level, subject: e.subject, body: e.context?.body || "", mode: "view", sentAt: e.created_at });
+  };
   const openMahn = (inv) => {
     const level = nextStage(inv);
     if (!level) return;
@@ -309,12 +333,28 @@ export function useAdminData() {
       level, sellerName: inv.sellerName || "Verkäufer", ref: inv.invoice_ref,
       amount: fmtCHF(inv.total_fees), dueDate: inv.due_date ? fmtDate(inv.due_date) : "—", daysOverdue: daysOverdue(inv),
     });
-    setMahnModal({ inv, level, subject: mail.subject, body: mail.body });
+    setMahnModal({ inv, level, subject: mail.subject, body: mail.body, mode: "send" });
   };
   const confirmMahn = async () => {
     if (!mahnModal) return;
     await sendReminder(mahnModal.inv, mahnModal.level, mahnModal.subject, mahnModal.body);
     setMahnModal(null);
+  };
+  const bulkSendDue = async () => {
+    if (dunningDue.length === 0) return;
+    if (!confirm(`${dunningDue.length} fällige Mahnung(en) senden?`)) return;
+    let n = 0;
+    for (const inv of dunningDue) {
+      const info = nextStageInfo(inv);
+      if (!info) continue;
+      const mail = buildDunningEmail({
+        level: info.level, sellerName: inv.sellerName || "Verkäufer", ref: inv.invoice_ref,
+        amount: fmtCHF(inv.total_fees), dueDate: inv.due_date ? fmtDate(inv.due_date) : "—", daysOverdue: daysOverdue(inv),
+      });
+      await sendReminder(inv, info.level, mail.subject, mail.body);
+      n++;
+    }
+    flash(`${n} Mahnung(en) gesendet`);
   };
 
   const logAdmin = async (action, targetType, targetLabel, detail = null) => {
@@ -498,6 +538,9 @@ export function useAdminData() {
   const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
   const overdueInvoices = feeInvoices.filter(isOverdue).sort((a, b) => ((b.reminder_level || 0) - (a.reminder_level || 0)) || (daysOverdue(b) - daysOverdue(a)));
   const overdueSum = overdueInvoices.reduce((s, i) => s + parseFloat(i.total_fees || 0), 0);
+  const dunningDue    = overdueInvoices.filter(i => nextStageInfo(i)?.isDue).sort((a, b) => daysOverdue(b) - daysOverdue(a));
+  const dunningSoon   = overdueInvoices.filter(i => { const n = nextStageInfo(i); return n && !n.isDue; }).sort((a, b) => nextStageInfo(a).daysUntil - nextStageInfo(b).daysUntil);
+  const dunningPaused = overdueInvoices.filter(i => !nextStageInfo(i)).sort((a, b) => daysOverdue(b) - daysOverdue(a));
   const nonCancelledOrders = orders.filter(o => o.status !== "cancelled");
   const gmv = nonCancelledOrders.reduce((s, o) => s + parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0), 0);
   const avgOrder = nonCancelledOrders.length ? gmv / nonCancelledOrders.length : 0;
@@ -514,22 +557,26 @@ export function useAdminData() {
   const dunningTimeline = (inv) => {
     const rl = inv.reminder_level || 0;
     return (
-      <div style={{ display: "flex", alignItems: "center", margin: "10px 0 2px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", margin: "12px 0 2px" }}>
         {[1, 2, 3].map((s) => {
           const reached = rl >= s;
           const isNext = (rl + 1 === s) && inv.status !== "paid";
           const d = stageDate(inv.id, s);
-          const ring = reached ? "#2E7D32" : isNext ? "#E65100" : "#ccc";
+          const clickable = reached || isNext;
+          const onClick = reached ? () => openSentMail(inv, s) : isNext ? () => openMahn(inv) : undefined;
           return (
-            <div key={s} style={{ display: "flex", alignItems: "center", flex: s === 1 ? "0 0 auto" : "1 1 auto" }}>
-              {s > 1 && <div style={{ flex: 1, height: 2, background: rl >= s ? "#2E7D32" : "#E2E2E2", margin: "0 4px", marginBottom: 18 }} />}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, opacity: (!reached && !isNext) ? 0.5 : 1 }}>
-                <div style={{ width: 18, height: 18, borderRadius: "50%", background: reached ? "#2E7D32" : "#fff", border: reached ? "none" : `2px solid ${ring}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {reached ? <CheckCircle size={11} color="#fff" /> : isNext ? <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#E65100" }} /> : null}
+            <div key={s} style={{ display: "flex", alignItems: "flex-start", flex: s === 1 ? "0 0 auto" : "1 1 auto" }}>
+              {s > 1 && <div style={{ flex: 1, height: 2, background: rl >= s ? "#2E7D32" : "#E2E2E2", margin: "0 6px", marginTop: 12 }} />}
+              <div onClick={onClick} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: 96, cursor: clickable ? "pointer" : "default", opacity: (!reached && !isNext) ? 0.5 : 1 }}>
+                <div style={{ width: 26, height: 26, borderRadius: "50%", background: reached ? "#2E7D32" : "#fff", border: reached ? "none" : `2px solid ${isNext ? "#E65100" : "#ccc"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {reached ? <CheckCircle size={15} color="#fff" /> : isNext ? <div style={{ width: 9, height: 9, borderRadius: "50%", background: "#E65100" }} /> : null}
                 </div>
-                <span style={{ fontSize: 8.5, lineHeight: 1.2, textAlign: "center", color: isNext ? "#E65100" : "#757575", fontWeight: isNext ? 700 : 400 }}>
-                  {STAGE_LABELS[s]}<br />{reached ? (d || "gesendet") : isNext ? "fällig" : ""}
-                </span>
+                <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#9e9e9e", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
+                {reached ? (
+                  <span style={{ fontSize: 10.5, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 3 }}><Eye size={12} /> Mail{d ? ` · ${d}` : ""}</span>
+                ) : isNext ? (
+                  <span style={{ fontSize: 10.5, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 8px", borderRadius: 999 }}>senden</span>
+                ) : null}
               </div>
             </div>
           );
@@ -637,6 +684,7 @@ export function useAdminData() {
     openOrder, toggleOrder, orderDetail, orderStatusFilter, setOrderStatusFilter, orderDeposit, setOrderDeposit, orderStatusGroup, orderStatusPill, beeRefIncludes,
     invoiceType, setInvoiceType, openInvoiceKey, toggleInvoiceRow, feeLedger, feeSeller,
     mahnModal, setMahnModal, openMahn, confirmMahn, sendReminder, confirmAndReactivate, isOverdue, daysOverdue, nextStage, stageDate, STAGE_LABELS, dunningTimeline, mahnButton,
+    nextStageInfo, dunningDue, dunningSoon, dunningPaused, openSentMail, bulkSendDue,
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
