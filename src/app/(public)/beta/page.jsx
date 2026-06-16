@@ -9,6 +9,8 @@ const TESTS = [
   {
     id: "nav", title: "Navigation & Header", icon: Monitor,
     items: [
+      { id: "ann_bar_admin", label: "Admin 'Banner': Text/Farbe (Presets+Hex)/An-Aus mit Live-Vorschau, Speichern wirkt" },
+      { id: "ann_bar_public", label: "Balken über dem Header sichtbar (auch ausgeloggt); X blendet aus + bleibt nach Reload; neuer Text bringt ihn zurück" },
       { id: "nav_logo", label: "Logo klicken → Homepage" },
       { id: "nav_search_auto", label: "Suchfeld: Autocomplete-Vorschläge erscheinen" },
       { id: "nav_search_submit", label: "Suche absenden → /search mit Ergebnissen" },
