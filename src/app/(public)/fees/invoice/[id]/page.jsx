@@ -8,7 +8,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
-import { makeBeeRef } from "@/lib/fees";
+import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 
 const f = "'Manrope', sans-serif";
@@ -30,7 +30,13 @@ export default function FeeInvoicePage() {
         if (!inv) { setLoading(false); return; }
         setInvoice(inv);
         const { data: items } = await supabase.from("fee_ledger").select("*").eq("fee_invoice_id", inv.id).order("created_at", { ascending: true });
-        setFees(items || []);
+        const pids = [...new Set((items || []).map(i => i.purchase_id).filter(Boolean))];
+        let lidMap = {};
+        if (pids.length) {
+          const { data: purs } = await supabase.from("purchases").select("id, listing_id").in("id", pids);
+          lidMap = Object.fromEntries((purs || []).map(p => [p.id, p.listing_id]));
+        }
+        setFees((items || []).map(i => ({ ...i, listing_id: lidMap[i.purchase_id] || null })));
         const { data: prof } = await supabase.from("profiles").select("*").eq("id", inv.seller_id).single();
         setSeller(prof);
       } catch (err) { console.error(err); }
@@ -111,7 +117,7 @@ export default function FeeInvoicePage() {
                 <td style={{ ...cp, fontSize: 11 }}>{new Date(fee.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</td>
                 <td style={{ ...cp, fontSize: 11, fontWeight: 600 }}>
                   {fee.listing_title}
-                  {fee.purchase_id && <span style={{ display: "block", fontSize: 9, color: g, fontWeight: 400 }}>{makeBeeRef(fee.purchase_id)}</span>}
+                  {fee.purchase_id && <span style={{ display: "block", fontSize: 9, color: g, fontWeight: 400 }}>{makeBeeRef(fee.purchase_id)}{fee.listing_id ? ` · ${makeArtRef(fee.listing_id)}` : ""}</span>}
                 </td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "right" }}>CHF {fmtCHF(fee.sale_price)}</td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "center", color: g }}>{parseFloat(fee.fee_percent)}%</td>

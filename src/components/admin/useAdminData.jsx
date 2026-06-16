@@ -247,7 +247,13 @@ export function useAdminData() {
   const loadFeeDetail = async (inv) => {
     if (!feeLedger[inv.id]) {
       const { data: items } = await supabase.from("fee_ledger").select("*").eq("fee_invoice_id", inv.id).order("created_at", { ascending: true });
-      setFeeLedger(prev => ({ ...prev, [inv.id]: items || [] }));
+      const pids = [...new Set((items || []).map(i => i.purchase_id).filter(Boolean))];
+      let lidMap = {};
+      if (pids.length) {
+        const { data: purs } = await supabase.from("purchases").select("id, listing_id").in("id", pids);
+        lidMap = Object.fromEntries((purs || []).map(p => [p.id, p.listing_id]));
+      }
+      setFeeLedger(prev => ({ ...prev, [inv.id]: (items || []).map(i => ({ ...i, listing_id: lidMap[i.purchase_id] || null })) }));
     }
     if (!feeSeller[inv.id]) {
       const { data: prof } = await supabase.from("profiles").select("*").eq("id", inv.seller_id).maybeSingle();
