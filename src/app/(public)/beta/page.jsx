@@ -247,6 +247,9 @@ const TESTS = [
       { id: "adm_status_de", label: "Alle Bestell-/Rechnungs-Status im Admin sind deutsch (kein payment_marked/disputed o.ä.)" },
       { id: "art_ref_search_admin", label: "Admin-Inserate-Suche findet ein Inserat per ART-Nr, auch wenn beendet/alt" },
       { id: "art_ref_search_public", label: "Öffentliche Suche findet ein Inserat per ART-Nr (auch nicht-aktiv, ausser gelöscht)" },
+      { id: "adm_mahn_groups", label: "Mahnungen-Cockpit gruppiert nach Jetzt fällig / Bald fällig / Pausiert; je Fall 'nächste Stufe heute/in N Tagen'" },
+      { id: "adm_mahn_stepper_click", label: "Mahn-Stepper klickbar: erledigte Stufe öffnet die gesendete Mail (Text), fällige Stufe öffnet die Senden-Vorschau" },
+      { id: "adm_mahn_bulk", label: "'Alle fälligen senden (N)' verschickt die fälligen Mahnungen gebündelt" },
     ],
   },
   {
