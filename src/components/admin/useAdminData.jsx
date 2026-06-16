@@ -82,8 +82,13 @@ export function useAdminData() {
       const feesOpen = sumWhere(isOpenInv, "total_fees");
       const impactPaid = sumWhere(isPaidInv, "total_bee_impact");
       const impactOpen = sumWhere(isOpenInv, "total_bee_impact");
+      // Aufgelaufen: Ledger-Gebühren ohne Monatsrechnung (noch nicht fakturiert), exkl. storniert
+      const { data: ledgerData } = await supabase.from("fee_ledger").select("fee_amount, bee_impact, status, fee_invoice_id");
+      const accrued = (ledgerData || []).filter(f => !f.fee_invoice_id && f.status !== "cancelled");
+      const feesAccrued = accrued.reduce((s, f) => s + parseFloat(f.fee_amount || 0), 0);
+      const impactAccrued = accrued.reduce((s, f) => s + parseFloat(f.bee_impact || 0), 0);
       const { count: reportCount } = await supabase.from("reports").select("*", { count: "exact", head: true });
-      setStats({ users: userCount, listings: listingCount, active: activeCount, purchases: purchaseCount, feesPaid, feesOpen, impactPaid, impactOpen, reports: reportCount || 0 });
+      setStats({ users: userCount, listings: listingCount, active: activeCount, purchases: purchaseCount, feesPaid, feesOpen, impactPaid, impactOpen, feesAccrued, impactAccrued, reports: reportCount || 0 });
 
       // Fee invoices with seller names
       const { data: invs } = await supabase.from("fee_invoices").select("*").order("created_at", { ascending: false });

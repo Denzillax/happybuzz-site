@@ -136,26 +136,25 @@ export function AdminShell({ admin }) {
                 {STAT_CARDS.map((s, i) => {
                   if (s.feeToggle) {
                     const FEE = {
-                      paid:  ["Gebühren bezahlt", stats.feesPaid, stats.impactPaid],
-                      open:  ["Gebühren offen",   stats.feesOpen, stats.impactOpen],
-                      total: ["Gebühren gesamt",  (stats.feesPaid || 0) + (stats.feesOpen || 0), (stats.impactPaid || 0) + (stats.impactOpen || 0)],
+                      paid:    ["Gebühren bezahlt",     stats.feesPaid,    stats.impactPaid],
+                      open:    ["Gebühren offen",       stats.feesOpen,    stats.impactOpen],
+                      accrued: ["Gebühren aufgelaufen", stats.feesAccrued, stats.impactAccrued],
+                      total:   ["Gebühren gesamt",      (stats.feesPaid || 0) + (stats.feesOpen || 0) + (stats.feesAccrued || 0), (stats.impactPaid || 0) + (stats.impactOpen || 0) + (stats.impactAccrued || 0)],
                     };
-                    const [feeLabel, feeVal, feeImp] = FEE[feeView];
+                    const [feeLabel, feeVal, feeImp] = FEE[feeView] || FEE.paid;
                     return (
-                      <div key={i} style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <span style={{ width: 34, height: 34, borderRadius: 11, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                            <Receipt size={17} color={s.tint} />
-                          </span>
-                          <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 2 }}>
-                            {[["paid", "Bezahlt"], ["open", "Offen"], ["total", "Gesamt"]].map(([k, lbl]) => (
-                              <button key={k} onClick={() => setFeeView(k)} style={{ fontSize: 10, fontWeight: 600, padding: "3px 9px", borderRadius: 999, border: "none", cursor: "pointer", background: feeView === k ? "#fff" : "transparent", color: feeView === k ? colors.dark : colors.muted }}>{lbl}</button>
-                            ))}
-                          </div>
-                        </div>
+                      <div key={i} style={{ gridColumn: "span 2", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
+                        <span style={{ width: 34, height: 34, borderRadius: 11, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                          <Receipt size={17} color={s.tint} />
+                        </span>
                         <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: colors.dark }}>CHF {fmtCHF(feeVal || 0)}</div>
                         <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginTop: 6 }}>{feeLabel}</div>
-                        <div style={{ fontSize: 11.5, color: colors.muted, marginTop: 8, borderTop: `1px solid ${colors.borderLt}`, paddingTop: 7 }}>davon Bee-Impact CHF {fmtCHF(feeImp || 0)}</div>
+                        <div style={{ fontSize: 11.5, color: colors.muted, marginTop: 3 }}>davon Bee-Impact CHF {fmtCHF(feeImp || 0)}</div>
+                        <div style={{ display: "flex", background: colors.cream, borderRadius: 999, padding: 2, marginTop: 11 }}>
+                          {[["paid", "Bezahlt"], ["open", "Offen"], ["accrued", "Aufgelaufen"], ["total", "Gesamt"]].map(([k, lbl]) => (
+                            <button key={k} onClick={() => setFeeView(k)} style={{ flex: 1, textAlign: "center", fontSize: 11, fontWeight: 600, padding: "5px 0", borderRadius: 999, border: "none", cursor: "pointer", background: feeView === k ? "#fff" : "transparent", color: feeView === k ? colors.dark : colors.muted, fontFamily: fonts.body }}>{lbl}</button>
+                          ))}
+                        </div>
                       </div>
                     );
                   }

@@ -250,7 +250,7 @@ const TESTS = [
       { id: "adm_mahn_groups", label: "Mahnungen-Cockpit gruppiert nach Jetzt fällig / Bald fällig / Pausiert; je Fall 'nächste Stufe heute/in N Tagen'" },
       { id: "adm_mahn_stepper_click", label: "Mahn-Stepper klickbar: erledigte Stufe öffnet die gesendete Mail (Text), fällige Stufe öffnet die Senden-Vorschau" },
       { id: "adm_mahn_bulk", label: "'Alle fälligen senden (N)' verschickt die fälligen Mahnungen gebündelt" },
-      { id: "adm_fee_switch", label: "Übersicht-Gebühren-Karte hat Bezahlt/Offen/Gesamt-Switch; Hauptzahl + 'davon Bee-Impact' folgen der Auswahl; keine separate Bee-Impact-Karte" },
+      { id: "adm_fee_switch", label: "Übersicht-Gebühren-Karte (breit) hat Switch Bezahlt/Offen/Aufgelaufen/Gesamt; Hauptzahl + 'davon Bee-Impact' folgen der Auswahl; keine separate Bee-Impact-Karte; Switch overflowt nicht auf Mobile" },
     ],
   },
   {
