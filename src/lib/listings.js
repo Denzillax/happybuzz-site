@@ -317,7 +317,8 @@ export async function searchListings({
     const range = uuidRange(idPrefix);
     const { data, count } = await supabase.from("listings")
       .select(selectRef, { count: "exact" })
-      .gte("id", range.gte).lte("id", range.lte);
+      .gte("id", range.gte).lte("id", range.lte)
+      .neq("status", "deleted");
     return { listings: mapListings(data), total: count || 0, page: 1, per_page, total_pages: 1 };
   }
   if (upperQ.startsWith("BEE-")) {
@@ -338,7 +339,7 @@ export async function searchListings({
     const range = uuidRange(idPrefix);
     // Try as listing ID first
     const { data: listingData, count: listingCount } = await supabase.from("listings")
-      .select(selectRef, { count: "exact" }).gte("id", range.gte).lte("id", range.lte);
+      .select(selectRef, { count: "exact" }).gte("id", range.gte).lte("id", range.lte).neq("status", "deleted");
     if (listingData && listingData.length > 0) {
       return { listings: mapListings(listingData), total: listingCount || 0, page: 1, per_page, total_pages: 1 };
     }
