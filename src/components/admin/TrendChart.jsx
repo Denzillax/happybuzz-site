@@ -28,6 +28,7 @@ export function TrendChart({ data = [], color = "#0E9493", type = "area", height
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height }} preserveAspectRatio="none">
       {type === "area" && <polygon points={`0,${H} ${pts} ${W},${H}`} fill={color} fillOpacity="0.16" />}
       <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      {data.map((d, i) => <circle key={i} cx={x(i)} cy={y(d.value)} r="4" fill="transparent"><title>{d.date}: {Math.round(d.value)}</title></circle>)}
     </svg>
   );
 }

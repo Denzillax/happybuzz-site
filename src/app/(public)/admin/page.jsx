@@ -1148,7 +1148,7 @@ export default function AdminPage() {
                   </div>
                   <div style={chartCard}>
                     <div style={chartHead}><span style={chartLabel}>Umsatz (GMV)</span><span style={{ fontSize: 11, color: colors.muted }}>{analytics.sales} Verkäufe</span></div>
-                    <div style={chartBig}>CHF {fmtCHF(sumSeries(analytics.gmv))}</div>
+                    <div style={chartBig}>CHF {fmtCHF(analytics.gmv.reduce((a, d) => a + d.value, 0))}</div>
                     <TrendChart data={analytics.gmv} color="#D9A005" type="bar" />
                     {axisLabels(analytics.gmv)}
                   </div>
