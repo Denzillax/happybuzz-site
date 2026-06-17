@@ -15,6 +15,8 @@ import { PURCHASE_STATUS } from "@/lib/orderStatus";
 import { buildDunningEmail, DUNNING_GAP_DAYS } from "@/lib/dunning";
 import { getAnnouncement } from "@/lib/announcement";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
+import { reviewListing } from "@/lib/listings";
+import { createNotification } from "@/lib/notifications";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 
@@ -36,6 +38,7 @@ export function useAdminData() {
   const [userListings, setUserListings] = useState({});
   const [userFees, setUserFees] = useState({});
   const [userMod, setUserMod] = useState("all");
+  const [listingMod, setListingMod] = useState("all");
   const [invoiceType, setInvoiceType] = useState("all");
   const [openInvoiceKey, setOpenInvoiceKey] = useState(null);
   const [feeLedger, setFeeLedger] = useState({});
@@ -441,6 +444,23 @@ export function useAdminData() {
     const _l = listings.find(x => x.id === listingId); logAdmin(newStatus === "paused" ? "listing_pause" : "listing_activate", "listing", _l?.title || listingId);
   };
 
+  // Freigabe-Queue: Inserat freigeben (→active) bzw. ablehnen (→draft + Grund + Benachrichtigung).
+  const approveListing = async (listingId) => {
+    const _l = listings.find(x => x.id === listingId);
+    await reviewListing(listingId, "approve");
+    setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: "active" } : l));
+    flash("Inserat freigegeben");
+    logAdmin("listing_approve", "listing", _l?.title || listingId);
+  };
+  const rejectListing = async (listingId, reason) => {
+    const _l = listings.find(x => x.id === listingId);
+    await reviewListing(listingId, "reject", reason);
+    setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: "draft", review_reason: reason } : l));
+    flash("Inserat abgelehnt");
+    logAdmin("listing_reject", "listing", _l?.title || listingId, { reason });
+    if (_l?.user_id) createNotification(_l.user_id, "listing_rejected", "Inserat abgelehnt", reason, "/listings");
+  };
+
   // Mahnung senden — speichert die gerenderte Mail (subject + body) lesbar im email_log.
   const sendReminder = async (inv, level, subject, body) => {
     await supabase.from("fee_invoices").update({
@@ -528,7 +548,7 @@ export function useAdminData() {
 
   const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
-    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#f5f5f5", "#666", "Abgelaufen"] };
+    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#f5f5f5", "#666", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };
@@ -656,13 +676,17 @@ export function useAdminData() {
     );
   };
 
+  // Freigabe-Queue: wartende Inserate (Admin-Liste lädt limit(100) — bei >100 Inseraten ggf. nicht alle alten pending).
+  const pendingListings = listings.filter(l => l.status === "pending_review")
+    .sort((a, b) => new Date(a.submitted_at || a.created_at) - new Date(b.submitted_at || b.created_at));
+
   const NAV = [
     { key: "overview", label: "Übersicht", Icon: LayoutDashboard },
     { key: "analytics", label: "Analytik", Icon: LineChart },
     { key: "users", label: "Benutzer", Icon: Users },
     { key: "orders", label: "Bestellungen", Icon: ShoppingBag },
     { key: "invoices", label: "Rechnungen", Icon: ReceiptText },
-    { key: "listings", label: "Inserate", Icon: Package },
+    { key: "listings", label: "Inserate", Icon: Package, badge: pendingListings.length },
     { key: "emails", label: "E-Mails", Icon: Mail },
     { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
     { key: "audit", label: "Protokoll", Icon: ScrollText },
@@ -703,6 +727,7 @@ export function useAdminData() {
     { n: bannedUsers.length, label: "Gesperrte Konten", desc: "Aktuell blockiert", Icon: Ban, color: "#c0392b", onClick: () => { setTab("users"); setSearch(""); setUserMod("banned"); } },
     { n: openReports.length, label: "Offene Meldungen", desc: "Von Nutzern gemeldet", Icon: AlertTriangle, color: "#E65100", onClick: () => { setTab("reports"); setSearch(""); } },
     { n: openFeeInvoices.length, label: "Offene Rechnungen", desc: "Gebühren-Rechnungen unbezahlt", Icon: ReceiptText, color: "#E65100", onClick: () => { setTab("invoices"); setSearch(""); setInvoiceType("fee"); } },
+    { n: pendingListings.length, label: "Wartet auf Freigabe", desc: "Neue Inserate zur Prüfung", Icon: Package, color: "#E65100", onClick: () => { setTab("listings"); setSearch(""); setListingMod("pending"); } },
   ];
 
   return {
@@ -722,6 +747,7 @@ export function useAdminData() {
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
+    pendingListings, approveListing, rejectListing, listingMod, setListingMod,
     NAV, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
   };
 }
