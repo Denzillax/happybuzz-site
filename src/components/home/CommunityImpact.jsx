@@ -8,10 +8,15 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
-const GREEN = "#5B8C5A";
-const DARK = "#191615";
-const MUTED = "#757575";
+const MOSS = "#5B8C5A";
+const INK = "#14110D";
+const PAPER = "#FBF8F2";
+const SAND = "#ECE3D2";
+const HONEY = "#F4C03F";
+const PETROL = "#0B5E5C";
+const MUTED = "rgba(20,17,13,0.55)";
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+const MONO = "'Space Mono', ui-monospace, monospace";
 
 const chf = (n) => Math.round(Number(n || 0)).toLocaleString("de-CH");
 
@@ -61,14 +66,14 @@ export function CommunityImpact() {
   return (
     <section style={{
       width: "100%",
-      background: "#fff",
-      padding: "44px 20px",
+      background: PAPER,
+      padding: "56px 20px",
     }}>
       <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
-          position: "relative", borderRadius: 20, overflow: "hidden",
-          background: "#E8EFE6",
+          position: "relative", borderRadius: 14, overflow: "hidden",
+          background: SAND, border: `1.5px solid ${INK}`,
           aspectRatio: "3 / 2",
         }}>
           {PHOTOS.map((p, i) => (
@@ -91,22 +96,22 @@ export function CommunityImpact() {
 
         {/* ── Inhalt ── */}
         <div className="impact-content">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <Leaf size={15} color={GREEN} />
-            <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: GREEN }}>Bee-Impact</span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
+            <Leaf size={14} color={MOSS} />
+            <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL }}>Bee-Impact</span>
           </div>
-          <h2 style={{ margin: "0 0 18px", fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 800, fontFamily: HEAD, color: DARK, letterSpacing: ".01em", lineHeight: 1.1 }}>
+          <h2 style={{ margin: "0 0 20px", fontSize: "clamp(28px, 4.2vw, 40px)", fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.05 }}>
             Gemeinsam bewirken
           </h2>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
-            {cards.map((c) => (
+          <div style={{ display: "flex", border: `1.5px solid ${INK}`, borderRadius: 12, overflow: "hidden", background: "#fff" }}>
+            {cards.map((c, i) => (
               <div key={c.label} style={{
-                background: "#fff", border: "1px solid #E2E2E2", borderRadius: 16,
-                padding: "16px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                flex: 1, padding: "16px 10px 14px", borderLeft: i ? `1px solid ${INK}1a` : "none",
+                display: "flex", flexDirection: "column", gap: 7, minWidth: 0,
               }}>
-                <span style={{ fontFamily: HEAD, fontWeight: 800, color: DARK, lineHeight: 1.1, fontSize: "clamp(18px, 4.4vw, 28px)" }}>{c.value}</span>
-                <span style={{ fontSize: "clamp(10px, 2.4vw, 12px)", color: MUTED, fontWeight: 600, textAlign: "center" }}>{c.label}</span>
+                <span style={{ fontFamily: MONO, fontSize: "clamp(9px, 2vw, 10.5px)", letterSpacing: ".1em", textTransform: "uppercase", color: MUTED, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.label}</span>
+                <span style={{ fontFamily: HEAD, fontWeight: 700, color: INK, lineHeight: 1, fontSize: "clamp(19px, 4.4vw, 28px)", letterSpacing: "-0.01em" }}>{c.value}</span>
               </div>
             ))}
           </div>
@@ -118,19 +123,19 @@ export function CommunityImpact() {
             const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
             const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
             return (
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid #E2E2E2" }}>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${INK}1f` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: DARK }}>Nächstes Ziel: {ms.name}</span>
-                  <span style={{ fontSize: 12, color: MUTED }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
+                  <span style={{ fontFamily: HEAD, fontSize: 13.5, fontWeight: 700, color: INK }}>Nächstes Ziel: {ms.name}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: MUTED }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
                 </div>
-                <div style={{ height: 12, borderRadius: 999, background: "#EAF3DE", marginTop: 10, overflow: "hidden", display: "flex" }}>
-                  <div style={{ width: `${paidPct}%`, background: GREEN }} />
-                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#C0DD97,#C0DD97 5px,#EAF3DE 5px,#EAF3DE 10px)" }} />
+                <div style={{ height: 12, borderRadius: 999, background: SAND, marginTop: 10, overflow: "hidden", display: "flex", border: `1px solid ${INK}22` }}>
+                  <div style={{ width: `${paidPct}%`, background: MOSS }} />
+                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#F7E3A8 5px,#F7E3A8 10px)" }} />
                 </div>
-                <p style={{ margin: "8px 0 0", fontSize: 12.5, color: MUTED }}>
+                <p style={{ margin: "9px 0 0", fontSize: 12.5, color: MUTED }}>
                   {ms.reached
                     ? <>Alle Ziele erreicht. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
-                    : <>Noch <b style={{ color: GREEN }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <> — <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs</b>.</> : "."}</>}
+                    : <>Noch <b style={{ color: MOSS }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <>. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs.</b></> : "."}</>}
                 </p>
               </div>
             );
@@ -138,13 +143,13 @@ export function CommunityImpact() {
 
           {userImpact > 0 && (
             <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
-              Von dir beigetragen: <b style={{ color: GREEN }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+              Von dir beigetragen: <b style={{ color: MOSS }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
             </p>
           )}
 
-          <Link href="/impact" style={{
-            display: "inline-flex", alignItems: "center", gap: 7, marginTop: 20,
-            padding: "11px 20px", borderRadius: 12, background: GREEN, color: "#fff",
+          <Link href="/impact" className="bd-btn" style={{
+            display: "inline-flex", alignItems: "center", gap: 8, marginTop: 22,
+            padding: "12px 22px", borderRadius: 10, background: INK, color: PAPER,
             fontSize: 14, fontWeight: 700, fontFamily: HEAD, textDecoration: "none",
           }}>
             Mehr über Bee-Impact <ArrowRight size={16} />
