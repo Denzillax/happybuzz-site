@@ -1,181 +1,196 @@
 "use client";
 import Link from "next/link";
 import { Heart, Users, Leaf, ShieldCheck, Briefcase, ArrowRight } from "lucide-react";
-import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
 
+// ── Katalog-Design-Tokens ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PAPER = "#FBF8F2";
+const HONEY = "#F4C03F";
+const PETROL = "#0B5E5C";
+const MOSS = "#5B8C5A";
+const MUTED = "rgba(20,17,13,0.6)";
+const MONO = "'Space Mono', ui-monospace, monospace";
+const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+const BODY = "'Manrope', system-ui, sans-serif";
+
 const VALUES = [
-  { icon: Heart, title: "Secondhand mit Haltung", desc: "Wir glauben daran, dass jedes Ding eine zweite Chance verdient. Nicht aus Mitleid, sondern weil es besser ist." },
+  { icon: Heart, title: "Secondhand mit Haltung", desc: "Jedes Ding verdient eine zweite Chance. Nicht aus Mitleid, sondern weil es besser ist." },
   { icon: Users, title: "Community First", desc: "BEEDARO gehört der Community. Faire Gebühren, transparente Regeln, kein Bullshit." },
   { icon: Leaf, title: "Bee-Impact", desc: "20% jeder Gebühr fliessen in Schweizer Naturschutzprojekte. Kein Greenwashing, echte Projekte." },
-  { icon: ShieldCheck, title: "Vertrauen & Sicherheit", desc: "Trust Level, Verifizierung und Bewertungen schaffen ein sicheres Handelsumfeld." },
+  { icon: ShieldCheck, title: "Vertrauen & Sicherheit", desc: "Geprüfte Inserate, Verifizierung und Bewertungen schaffen ein sicheres Handelsumfeld." },
 ];
 
-function Placeholder({ text, height = 320, color = "#e8e5e0" }) {
+const DIFF = [
+  "Festpreis, Auktion, Miete, Service & Gratis",
+  "Selbst gewählte Bee-Rate (3 bis 10%)",
+  "20% für Schweizer Naturschutz",
+  "Privat- und Unternehmenskonten",
+  "Geprüfte Inserate & gegenseitige Bewertungen",
+  "Bee-Level: Blüten, Pollen, Nektar",
+];
+
+function Eyebrow({ children, color = PETROL }) {
   return (
-    <div style={{
-      width: "100%", height, borderRadius: 16, background: color,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: 13, color: "#999", fontWeight: 600, fontFamily: fonts.body,
-      border: "2px dashed #d0cdc8",
-    }}>
-      {text}
+    <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color, marginBottom: 10 }}>
+      {children}
     </div>
   );
 }
 
 export default function AboutPage() {
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: BODY, background: PAPER, minHeight: "100vh", color: INK }}>
 
       {/* ── Hero ── */}
       <div style={{
-        background: `linear-gradient(135deg, ${colors.dark} 0%, #2a2520 100%)`,
-        padding: "64px 20px 72px", textAlign: "center", color: "#fff",
+        background: SAND, padding: "64px 24px 68px", textAlign: "center",
+        borderBottom: `1px solid ${INK}`,
+        backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
-        <div style={{ maxWidth: 700, margin: "0 auto" }}>
-          <BeeIcon size={40} color={colors.yellow} />
-          <h1 style={{ fontSize: 36, fontWeight: 900, fontFamily: fonts.head, margin: "12px 0 8px", letterSpacing: ".03em" }}>
-            Über BEEDARO
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <Eyebrow>Über uns</Eyebrow>
+          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02 }}>
+            Der Katalog der{" "}
+            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>zweiten Leben</span>
           </h1>
-          <p style={{ fontSize: 17, color: "rgba(255,255,255,.6)", lineHeight: 1.6 }}>
-            Der Schweizer Marktplatz für Dinge mit Geschichte.
-            Kaufen, verkaufen, mieten, verschenken. Und dabei Gutes tun.
+          <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, lineHeight: 1.6 }}>
+            Der Schweizer Marktplatz für Dinge mit Geschichte. Kaufen, verkaufen, mieten, buchen, verschenken. Und dabei Gutes tun.
           </p>
         </div>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 20px 80px" }}>
+      <div style={{ maxWidth: 940, margin: "0 auto", padding: "0 24px 88px" }}>
 
         {/* ── Story ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, margin: "48px 0", alignItems: "center" }}>
+        <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, margin: "56px 0", alignItems: "center" }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 8 }}>Unsere Geschichte</div>
-            <h2 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 14px" }}>Nicht neu. Nur interessanter.</h2>
-            <p style={{ fontSize: 14, color: colors.muted, lineHeight: 1.7, marginBottom: 12 }}>
-              BEEDARO entstand aus einer einfachen Idee: Ein Schweizer Marktplatz, der Secondhand nicht als Notlösung behandelt, sondern als bewusste Entscheidung. Einer, der fair ist. Für Verkäufer, Käufer und die Umwelt.
+            <Eyebrow>Unsere Geschichte</Eyebrow>
+            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Nicht neu. Nur interessanter.</h2>
+            <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 12 }}>
+              BEEDARO entstand aus einer einfachen Idee: ein Schweizer Marktplatz, der Secondhand nicht als Notlösung behandelt, sondern als bewusste Entscheidung. Fair, für Verkäufer, Käufer und die Umwelt.
             </p>
-            <p style={{ fontSize: 14, color: colors.muted, lineHeight: 1.7 }}>
-              Anders als andere Plattformen kombiniert BEEDARO Festpreis, Auktionen, Vermietung und Verschenken in einem. Mit der selbst gewählten Bee-Rate bestimmst du, wie viel du beitragen willst. 20% davon gehen direkt in Schweizer Naturschutzprojekte.
+            <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75 }}>
+              Anders als andere Plattformen kombiniert BEEDARO Festpreis, Auktion, Miete, Service und Verschenken in einem. Mit der selbst gewählten Bee-Rate bestimmst du, wie viel du beiträgst. 20% davon gehen direkt in Schweizer Naturschutzprojekte.
             </p>
           </div>
-          <Placeholder text="Bild: Gründer / Team (Platzhalter)" height={340} />
+          {/* Specimen-Statement statt Platzhalter */}
+          <div style={{ position: "relative" }}>
+            <div aria-hidden style={{ position: "absolute", inset: "16px -10px -10px 16px", border: `1.5px solid ${INK}`, borderRadius: 12, transform: "rotate(2.5deg)", opacity: .25 }} />
+            <div style={{ position: "relative", background: INK, color: PAPER, borderRadius: 12, padding: "30px 28px", transform: "rotate(-1.5deg)", border: `1.5px solid ${INK}` }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: "rgba(251,248,242,0.7)", borderBottom: "1px solid rgba(251,248,242,0.2)", paddingBottom: 10, marginBottom: 16 }}>
+                <span>№ 0001</span>
+                <span style={{ background: HONEY, color: INK, padding: "3px 8px", borderRadius: 4, fontWeight: 700, fontSize: 10 }}>MANIFEST</span>
+              </div>
+              <p style={{ fontFamily: HEAD, fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 600, lineHeight: 1.25, margin: 0, letterSpacing: "-0.01em" }}>
+                Dein Keller hat Inventar. Wir haben Käufer.
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 18, fontFamily: MONO, fontSize: 11, color: "rgba(251,248,242,0.7)" }}>
+                <BeeIcon size={16} color={HONEY} /> Geprüft & katalogisiert
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ── Values ── */}
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ textAlign: "center", marginBottom: 32 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 8 }}>Was uns antreibt</div>
-            <h2 style={{ fontSize: 24, fontWeight: 900, margin: 0 }}>Unsere Werte</h2>
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ textAlign: "center", marginBottom: 30 }}>
+            <Eyebrow>Was uns antreibt</Eyebrow>
+            <h2 style={{ fontSize: "clamp(24px, 3.4vw, 32px)", fontWeight: 700, fontFamily: HEAD, margin: 0, letterSpacing: "-0.01em" }}>Unsere Werte</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 14 }}>
             {VALUES.map((v, i) => (
-              <div key={i} style={{
-                padding: 24, borderRadius: 12, background: "#fff",
-                border: `1px solid ${colors.border}`,
-                textAlign: "center",
-              }}>
-                <div style={{
-                  width: 48, height: 48, borderRadius: 12, margin: "0 auto 12px",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  background: colors.yellowSoft,
-                }}>
-                  <v.icon size={22} color={colors.yellow} />
+              <div key={i} style={{ padding: 24, borderRadius: 12, background: "#fff", border: `1px solid ${INK}`, textAlign: "center" }}>
+                <div style={{ width: 48, height: 48, borderRadius: 10, margin: "0 auto 14px", display: "flex", alignItems: "center", justifyContent: "center", background: SAND, border: `1px solid ${INK}` }}>
+                  <v.icon size={22} color={PETROL} />
                 </div>
-                <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 6px" }}>{v.title}</h3>
-                <p style={{ fontSize: 13, color: colors.muted, lineHeight: 1.5, margin: 0 }}>{v.desc}</p>
+                <h3 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>{v.title}</h3>
+                <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.55, margin: 0 }}>{v.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* ── Difference ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, margin: "48px 0", alignItems: "center" }}>
-          <Placeholder text="Bild: Plattform / App Screenshot (Platzhalter)" height={300} color="#f0ece6" />
+        <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, margin: "56px 0", alignItems: "center" }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 8 }}>Was uns unterscheidet</div>
-            <h2 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 14px" }}>Mehr als nur kaufen und verkaufen</h2>
-            <p style={{ fontSize: 14, color: colors.muted, lineHeight: 1.7, marginBottom: 12 }}>
+            <Eyebrow>Was uns unterscheidet</Eyebrow>
+            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Mehr als kaufen und verkaufen</h2>
+            <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 16 }}>
               Ricardo hat Auktionen. Tutti hat Gratis-Inserate. Vinted hat Mode. BEEDARO hat alles. Und dazu ein Modell, das allen etwas zurückgibt.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {["Festpreis, Auktionen, Mieten & Verschenken", "Selbst gewählte Bee-Rate (3-10%)", "20% für Schweizer Naturschutz", "Trust Level durch Verifizierung", "Bee-Level Gamification"].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: colors.dark }}>
-                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: colors.yellow, flexShrink: 0 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {DIFF.map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13.5, color: INK }}>
+                  <span style={{ fontFamily: MONO, fontSize: 11, color: PETROL, flexShrink: 0 }}>0{i + 1}</span>
+                  <span style={{ width: 14, height: 1, background: `${INK}33`, flexShrink: 0 }} />
                   {item}
                 </div>
               ))}
             </div>
           </div>
+          <div style={{ padding: "30px 28px", borderRadius: 12, background: SAND, border: `1px solid ${INK}` }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: MUTED, marginBottom: 14, textTransform: "uppercase" }}>Differenzierung</div>
+            <p style={{ fontFamily: HEAD, fontSize: "clamp(19px, 2.4vw, 24px)", fontWeight: 600, lineHeight: 1.3, margin: 0, color: INK, letterSpacing: "-0.01em" }}>
+              Fünf Inserattypen. Eine wählbare Gebühr. Ein Beitrag, der bei der Natur ankommt.
+            </p>
+          </div>
         </div>
 
-        {/* ── Bee-Impact ── */}
-        <div style={{
-          padding: 32, borderRadius: 16, textAlign: "center", marginBottom: 48,
-          background: `linear-gradient(135deg, ${colors.dark} 0%, #2a2520 100%)`, color: "#fff",
-        }}>
-          <BeeIcon size={32} color={colors.yellow} />
-          <h2 style={{ fontSize: 22, fontWeight: 900, margin: "12px 0 8px" }}>Bee-Impact: Dein Beitrag zählt</h2>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,.6)", maxWidth: 500, margin: "0 auto 20px", lineHeight: 1.6 }}>
-            Jede Transaktion auf BEEDARO unterstützt Schweizer Naturschutzprojekte. Nicht als Marketing-Gag, sondern als fester Bestandteil unseres Modells.
+        {/* ── Bee-Impact Band ── */}
+        <div style={{ padding: 34, borderRadius: 12, textAlign: "center", marginBottom: 56, background: INK, color: PAPER }}>
+          <BeeIcon size={30} color={HONEY} />
+          <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Bee-Impact: dein Beitrag zählt</h2>
+          <p style={{ fontSize: 14.5, color: "rgba(251,248,242,0.65)", maxWidth: 520, margin: "0 auto 22px", lineHeight: 1.6 }}>
+            Jede Transaktion unterstützt Schweizer Naturschutzprojekte. Nicht als Marketing-Gag, sondern als fester Bestandteil unseres Modells.
           </p>
-          <Link href="/impact" style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "12px 24px", borderRadius: 8, background: colors.yellow,
-            color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none",
+          <Link href="/impact" className="bd-btn" style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "13px 26px", borderRadius: 10, background: HONEY,
+            color: INK, fontSize: 14.5, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
           }}>
             Mehr erfahren <ArrowRight size={16} />
           </Link>
         </div>
 
         {/* ── Team ── */}
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ textAlign: "center", marginBottom: 32 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: colors.yellow, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 8 }}>Das Team</div>
-            <h2 style={{ fontSize: 24, fontWeight: 900, margin: 0 }}>Die Menschen hinter BEEDARO</h2>
+        <div style={{ marginBottom: 56 }}>
+          <div style={{ textAlign: "center", marginBottom: 30 }}>
+            <Eyebrow>Das Team</Eyebrow>
+            <h2 style={{ fontSize: "clamp(24px, 3.4vw, 32px)", fontWeight: 700, fontFamily: HEAD, margin: 0, letterSpacing: "-0.01em" }}>Die Menschen hinter BEEDARO</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 20 }}>
-            {[
-              { name: "Denis Mihaljevic", role: "Gründer & Design", placeholder: "Foto (Platzhalter)" },
-              { name: "Dein Name?", role: "Entwicklung", placeholder: "Foto (Platzhalter)" },
-              { name: "Dein Name?", role: "Community", placeholder: "Foto (Platzhalter)" },
-            ].map((m, i) => (
-              <div key={i} style={{ textAlign: "center" }}>
-                <div style={{
-                  width: "100%", aspectRatio: "1", borderRadius: 12, marginBottom: 12,
-                  background: "#e8e5e0", display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 12, color: "#999", fontWeight: 600, border: "2px dashed #d0cdc8",
-                }}>
-                  {m.placeholder}
-                </div>
-                <h4 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 2px" }}>{m.name}</h4>
-                <p style={{ fontSize: 12, color: colors.muted, margin: 0 }}>{m.role}</p>
-              </div>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, maxWidth: 640, margin: "0 auto" }}>
+            <div style={{ textAlign: "center", padding: "24px 18px", borderRadius: 12, background: "#fff", border: `1px solid ${INK}` }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 22, fontWeight: 700, color: INK }}>DM</div>
+              <h4 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 2px", color: INK }}>Denis Mihaljevic</h4>
+              <p style={{ fontFamily: MONO, fontSize: 11, color: MUTED, margin: 0, letterSpacing: ".04em" }}>GRÜNDER & DESIGN</p>
+            </div>
+            <div style={{ textAlign: "center", padding: "24px 18px", borderRadius: 12, background: SAND, border: `1px dashed ${INK}66`, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: PAPER, border: `1px dashed ${INK}66`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 26, fontWeight: 700, color: MUTED }}>+</div>
+              <h4 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 2px", color: INK }}>Wir wachsen</h4>
+              <p style={{ fontFamily: MONO, fontSize: 11, color: MUTED, margin: 0, letterSpacing: ".04em" }}>DEIN PLATZ?</p>
+            </div>
           </div>
         </div>
 
         {/* ── Jobs ── */}
-        <div id="jobs" style={{ marginBottom: 32 }}>
+        <div id="jobs">
           <div style={{ textAlign: "center", marginBottom: 24 }}>
-            <Briefcase size={28} color={colors.yellow} style={{ marginBottom: 8 }} />
-            <h2 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>Jobs</h2>
-            <p style={{ fontSize: 14, color: colors.muted }}>Arbeiten bei BEEDARO</p>
+            <Briefcase size={26} color={PETROL} style={{ marginBottom: 8 }} />
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 6px", letterSpacing: "-0.01em" }}>Jobs</h2>
+            <p style={{ fontSize: 14, color: MUTED }}>Arbeiten bei BEEDARO</p>
           </div>
-          <div style={{
-            padding: 32, borderRadius: 12, background: "#fff",
-            border: `1px solid ${colors.border}`, textAlign: "center",
-          }}>
-            <Briefcase size={36} color={colors.muted} style={{ marginBottom: 12, opacity: 0.4 }} />
-            <h3 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 6px", color: colors.dark }}>Zurzeit keine offenen Stellen</h3>
-            <p style={{ fontSize: 13, color: colors.muted, maxWidth: 400, margin: "0 auto", lineHeight: 1.5 }}>
-              Wir sind ein kleines Team mit grossen Plänen. Initiativbewerbungen sind willkommen — schreib uns an <a href="mailto:jobs@beedaro.ch" style={{ color: colors.yellow, fontWeight: 700 }}>jobs@beedaro.ch</a>
+          <div style={{ padding: 32, borderRadius: 12, background: "#fff", border: `1px solid ${INK}`, textAlign: "center" }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, margin: "0 0 6px", color: INK }}>Zurzeit keine offenen Stellen</h3>
+            <p style={{ fontSize: 13.5, color: MUTED, maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>
+              Wir sind ein kleines Team mit grossen Plänen. Initiativbewerbungen sind willkommen. Schreib uns an <a href="mailto:jobs@beedaro.ch" style={{ color: PETROL, fontWeight: 700 }}>jobs@beedaro.ch</a>.
             </p>
           </div>
         </div>
       </div>
 
-      <style>{`@media (max-width: 700px) { .about-grid { grid-template-columns: 1fr !important; } }`}</style>
+      <style>{`@media (max-width: 760px) { .about-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   );
 }
