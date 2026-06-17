@@ -32,7 +32,7 @@ const slides = [
   },
 ]
 
-const DISPLAY = "'Clash Display', 'General Sans', system-ui, sans-serif"
+const DISPLAY = "'General Sans', 'Manrope', system-ui, sans-serif"
 const BODY = "'Manrope', system-ui, sans-serif"
 const MONO = "'Space Mono', ui-monospace, monospace"
 const INK = '#14110D'
@@ -147,13 +147,13 @@ export function Hero() {
             </div>
             {/* Exponat */}
             <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: SAND, borderRadius: 8 }}>
-              <img src={s.image} alt={s.specimen} style={{ maxWidth: '86%', maxHeight: 260, objectFit: 'contain' }} />
+              <img src={s.image} alt="" style={{ maxWidth: '86%', maxHeight: 260, objectFit: 'contain' }} />
             </div>
-            {/* Fuss: Bezeichnung + Wachssiegel */}
+            {/* Fuss: Echtheit + Wachssiegel */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(20,17,13,0.5)' }}>EXPONAT</div>
-                <div style={{ fontFamily: DISPLAY, fontSize: 19, fontWeight: 600, color: INK, lineHeight: 1.1 }}>{s.specimen}</div>
+                <div style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(20,17,13,0.5)' }}>EXPONAT № {s.cat}</div>
+                <div style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 600, color: INK, lineHeight: 1.1 }}>Geprüft &amp; katalogisiert</div>
               </div>
               <span style={{ width: 38, height: 38, borderRadius: '50%', background: HONEY, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1.5px solid ${INK}` }} title="Geprüft von BEEDARO">
                 <BeeIcon size={19} color={INK} />
