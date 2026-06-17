@@ -240,6 +240,9 @@ export function useAdminData() {
 
   const [userTab, setUserTab] = useState({});
   const [userInvoices, setUserInvoices] = useState({});
+  const [openProfile, setOpenProfile] = useState(null);
+  const [userNote, setUserNote] = useState("");
+  const [profileAudit, setProfileAudit] = useState([]);
 
   // User aufklappen
   const toggleUser = async (userId) => {
@@ -258,6 +261,38 @@ export function useAdminData() {
       const { data } = await supabase.from("fee_invoices").select("*").eq("seller_id", userId).order("created_at", { ascending: false });
       setUserInvoices(prev => ({ ...prev, [userId]: data || [] }));
     }
+  };
+
+  // 360°-Profil-Ansicht: öffnen (lädt Per-Nutzer-Daten + Notiz + Audit), schliessen, Notiz speichern.
+  const openUserProfile = async (userId) => {
+    setOpenProfile(userId);
+    setUserNote(""); setProfileAudit([]);
+    if (!userListings[userId]) {
+      const { data } = await supabase.from("listings").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+      setUserListings(prev => ({ ...prev, [userId]: data || [] }));
+    }
+    if (!userFees[userId]) {
+      const { data } = await supabase.from("fee_ledger").select("*").eq("seller_id", userId).order("created_at", { ascending: false });
+      setUserFees(prev => ({ ...prev, [userId]: data || [] }));
+    }
+    if (!userInvoices[userId]) {
+      const { data } = await supabase.from("fee_invoices").select("*").eq("seller_id", userId).order("created_at", { ascending: false });
+      setUserInvoices(prev => ({ ...prev, [userId]: data || [] }));
+    }
+    if (!userTab[userId]) setUserTab(prev => ({ ...prev, [userId]: "inserate" }));
+    const u = users.find(x => x.id === userId);
+    const { data: note } = await supabase.from("user_notes").select("text").eq("noter_id", ADMIN_ID).eq("noted_id", userId).maybeSingle();
+    setUserNote(note?.text || "");
+    if (u?.display_name) {
+      const { data: aud } = await supabase.from("admin_audit_log").select("*").eq("target_label", u.display_name).order("created_at", { ascending: false }).limit(50);
+      setProfileAudit(aud || []);
+    }
+  };
+  const closeProfile = () => setOpenProfile(null);
+  const saveUserNote = async (userId, text) => {
+    await supabase.from("user_notes").upsert({ noter_id: ADMIN_ID, noted_id: userId, text, updated_at: new Date().toISOString() }, { onConflict: "noter_id,noted_id" });
+    setUserNote(text);
+    flash("Notiz gespeichert");
   };
 
   const ORDER_DETAIL_SELECT = "*, listing:listings(id, title, price, listing_type, rent_price, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping)";
@@ -736,6 +771,7 @@ export function useAdminData() {
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
+    openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,
     openInvoice, setOpenInvoice,
     openOrder, toggleOrder, orderDetail, orderStatusFilter, setOrderStatusFilter, orderDeposit, setOrderDeposit, orderStatusGroup, orderStatusPill, beeRefIncludes,
     invoiceType, setInvoiceType, openInvoiceKey, toggleInvoiceRow, feeLedger, feeSeller,
