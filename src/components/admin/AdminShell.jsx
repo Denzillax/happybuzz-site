@@ -13,6 +13,7 @@ import { UsersTab } from "@/components/admin/tabs/UsersTab";
 import { OrdersTab } from "@/components/admin/tabs/OrdersTab";
 import { InvoicesTab } from "@/components/admin/tabs/InvoicesTab";
 import { DunningTab } from "@/components/admin/tabs/DunningTab";
+import { CompanyTab } from "@/components/admin/tabs/CompanyTab";
 import { MahnPreviewModal } from "@/components/admin/modals/MahnPreviewModal";
 import { BannerModal } from "@/components/admin/modals/BannerModal";
 import { BroadcastComposer } from "@/components/admin/modals/BroadcastComposer";
@@ -114,6 +115,9 @@ export function AdminShell({ admin }) {
 
           {/* ═══ PROTOKOLL ═══ */}
           {tab === "audit" && <AuditTab admin={admin} />}
+
+          {/* ═══ FIRMA ═══ */}
+          {tab === "company" && <CompanyTab admin={admin} />}
 
         </div>
       </div>

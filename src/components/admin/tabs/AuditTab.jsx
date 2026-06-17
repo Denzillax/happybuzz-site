@@ -1,5 +1,5 @@
 "use client";
-import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Megaphone, Clock } from "lucide-react";
+import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Megaphone, Clock, Building2 } from "lucide-react";
 import { colors, radius } from "@/lib/theme";
 
 export const AUDIT_META = {
@@ -19,6 +19,7 @@ export const AUDIT_META = {
   review_delete:        { label: "Bewertung gelöscht",    Icon: Star,        color: "#c62828", bg: "#FFEBEE" },
   broadcast:            { label: "Ankündigung gesendet",  Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
   announcement_bar:     { label: "Banner geändert",       Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
+  company_update:       { label: "Firmendaten geändert",  Icon: Building2,   color: "#0E9493", bg: "#E6F5F5" },
 };
 const dayLabel = (ds) => {
   const d = new Date(ds), now = new Date(), DAY = 86400000;

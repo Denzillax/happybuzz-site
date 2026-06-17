@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2 } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -17,6 +17,7 @@ import { getAnnouncement } from "@/lib/announcement";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 import { reviewListing } from "@/lib/listings";
 import { createNotification } from "@/lib/notifications";
+import { getCompanySettings, DEFAULT_COMPANY } from "@/lib/company";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 
@@ -244,6 +245,7 @@ export function useAdminData() {
   const [openProfile, setOpenProfile] = useState(null);
   const [userNote, setUserNote] = useState("");
   const [profileAudit, setProfileAudit] = useState([]);
+  const [company, setCompany] = useState(DEFAULT_COMPANY);
 
   // User aufklappen
   const toggleUser = async (userId) => {
@@ -294,6 +296,15 @@ export function useAdminData() {
     await supabase.from("user_notes").upsert({ noter_id: ADMIN_ID, noted_id: userId, text, updated_at: new Date().toISOString() }, { onConflict: "noter_id,noted_id" });
     setUserNote(text);
     flash("Notiz gespeichert");
+  };
+
+  useEffect(() => { getCompanySettings().then(c => setCompany(c)); }, []);
+  const saveCompany = async (next) => {
+    const { error } = await supabase.from("company_settings").upsert({ id: 1, ...next, updated_at: new Date().toISOString() }, { onConflict: "id" });
+    if (error) { flash("Fehler beim Speichern"); return; }
+    setCompany(next);
+    flash("Firmendaten gespeichert");
+    logAdmin("company_update", "company", next.name);
   };
 
   const ORDER_DETAIL_SELECT = "*, listing:listings(id, title, price, listing_type, rent_price, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping)";
@@ -726,6 +737,7 @@ export function useAdminData() {
     { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
     { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
+    { key: "company", label: "Firma", Icon: Building2 },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
 
@@ -773,6 +785,7 @@ export function useAdminData() {
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,
+    company, setCompany, saveCompany,
     openInvoice, setOpenInvoice,
     openOrder, toggleOrder, orderDetail, orderStatusFilter, setOrderStatusFilter, orderDeposit, setOrderDeposit, orderStatusGroup, orderStatusPill, beeRefIncludes,
     invoiceType, setInvoiceType, openInvoiceKey, toggleInvoiceRow, feeLedger, feeSeller,
