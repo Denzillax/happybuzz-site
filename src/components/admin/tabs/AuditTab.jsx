@@ -2,7 +2,7 @@
 import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Megaphone, Clock } from "lucide-react";
 import { colors, radius } from "@/lib/theme";
 
-const AUDIT_META = {
+export const AUDIT_META = {
   ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#EB5E55", bg: "#FFEBEB" },
   unban:                { label: "Konto entsperrt",       Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   report_resolve:       { label: "Meldung erledigt",      Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
