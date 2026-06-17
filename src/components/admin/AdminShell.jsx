@@ -14,31 +14,11 @@ import { makeBeeRef, makeArtRef } from "@/lib/fees";
 import { ANNOUNCEMENT_PRESETS } from "@/lib/announcement";
 import { buildDunningEmail } from "@/lib/dunning";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
-
-const AUDIT_META = {
-  ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#EB5E55", bg: "#FFEBEB" },
-  unban:                { label: "Konto entsperrt",       Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
-  report_resolve:       { label: "Meldung erledigt",      Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
-  report_pause_listing: { label: "Inserat pausiert (Meldung)", Icon: Pause,  color: "#E65100", bg: "#FFF3E0" },
-  listing_pause:        { label: "Inserat pausiert",      Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
-  listing_activate:     { label: "Inserat aktiviert",     Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
-  reminder:             { label: "Mahnung gesendet",      Icon: BellRing,    color: "#E65100", bg: "#FFF3E0" },
-  fee_paid:             { label: "Bezahlt + reaktiviert", Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
-  order_cancel:         { label: "Bestellung storniert",  Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
-  id_verify:            { label: "ID verifiziert",        Icon: ShieldCheck, color: "#0A7170", bg: "#E6F5F5" },
-  id_reject:            { label: "ID abgelehnt",          Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
-  review_delete:        { label: "Bewertung gelöscht",    Icon: Star,        color: "#c62828", bg: "#FFEBEE" },
-  broadcast:            { label: "Ankündigung gesendet",  Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
-  announcement_bar:     { label: "Banner geändert",       Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
-};
-const dayLabel = (ds) => {
-  const d = new Date(ds), now = new Date(), DAY = 86400000;
-  const t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const t = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-  if (t === t0) return "Heute";
-  if (t === t0 - DAY) return "Gestern";
-  return d.toLocaleDateString("de-CH", { weekday: "short", day: "numeric", month: "long" });
-};
+import { ReportsTab } from "@/components/admin/tabs/ReportsTab";
+import { ListingsTab } from "@/components/admin/tabs/ListingsTab";
+import { EmailsTab } from "@/components/admin/tabs/EmailsTab";
+import { AnalyticsTab } from "@/components/admin/tabs/AnalyticsTab";
+import { AuditTab } from "@/components/admin/tabs/AuditTab";
 
 export function AdminShell({ admin }) {
   const {
@@ -611,14 +591,7 @@ export function AdminShell({ admin }) {
           )}
 
           {/* ═══ E-MAILS ═══ */}
-          {tab === "emails" && (
-            <div>
-              {filteredEmails.length === 0 && (
-                <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Keine E-Mails protokolliert.</div>
-              )}
-              {filteredEmails.map(e => emailCard(e))}
-            </div>
-          )}
+          {tab === "emails" && <EmailsTab admin={admin} />}
 
           {/* ═══ MAHNUNGEN ═══ */}
           {tab === "dunning" && (() => {
@@ -664,163 +637,16 @@ export function AdminShell({ admin }) {
           })()}
 
           {/* ═══ ANALYTIK ═══ */}
-          {tab === "analytics" && (
-            <div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginBottom: 16 }}>
-                <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3 }}>
-                  {[7, 30, 90].map(d => (
-                    <button key={d} onClick={() => setAnalyticsRange(d)} style={{ fontSize: 11, fontWeight: analyticsRange === d ? 700 : 500, padding: "6px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: analyticsRange === d ? colors.dark : "transparent", color: analyticsRange === d ? "#fff" : colors.muted }}>{d} Tage</button>
-                  ))}
-                </div>
-              </div>
-              {(!analytics || analyticsLoading) ? (
-                <div style={{ padding: 40, textAlign: "center", color: colors.muted, fontSize: 13 }}>Lade Analytik…</div>
-              ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
-                  <div style={chartCard}>
-                    <div style={chartHead}><span style={chartLabel}>Neue Nutzer</span><span style={{ fontSize: 11, color: "#2E7D32", fontWeight: 700 }}>+{sumSeries(analytics.users)}</span></div>
-                    <div style={chartBig}>{sumSeries(analytics.users)} <span style={chartSub}>in {analyticsRange} Tagen</span></div>
-                    <TrendChart data={analytics.users} color="#0E9493" type="area" />
-                    {axisLabels(analytics.users)}
-                  </div>
-                  <div style={chartCard}>
-                    <div style={chartHead}><span style={chartLabel}>Umsatz (GMV)</span><span style={{ fontSize: 11, color: colors.muted }}>{analytics.sales} Verkäufe</span></div>
-                    <div style={chartBig}>CHF {fmtCHF(analytics.gmv.reduce((a, d) => a + d.value, 0))}</div>
-                    <TrendChart data={analytics.gmv} color="#D9A005" type="bar" />
-                    {axisLabels(analytics.gmv)}
-                  </div>
-                  <div style={chartCard}>
-                    <div style={chartHead}><span style={chartLabel}>Neue Inserate</span><span style={{ fontSize: 11, color: "#2E7D32", fontWeight: 700 }}>+{sumSeries(analytics.listings)}</span></div>
-                    <div style={chartBig}>{sumSeries(analytics.listings)} <span style={chartSub}>in {analyticsRange} Tagen</span></div>
-                    <TrendChart data={analytics.listings} color="#5B8C5A" type="line" />
-                    {axisLabels(analytics.listings)}
-                  </div>
-                  <div style={chartCard}>
-                    <span style={chartLabel}>Inserate nach Typ</span>
-                    <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 7 }}>
-                      {(() => {
-                        const maxT = Math.max(1, ...analytics.byType.map(t => t.count));
-                        const lbl = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
-                        const col = { sell: "#F4C03F", auction: "#94B9C9", rent: "#8B6DB0", free: "#5B8C5A", service: "#E67E22" };
-                        return analytics.byType.map(t => (
-                          <div key={t.type} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11 }}>
-                            <span style={{ width: 62, color: "#3a3a3a" }}>{lbl[t.type]}</span>
-                            <div style={{ flex: 1, background: colors.cream, borderRadius: 999, height: 10 }}><div style={{ width: `${(t.count / maxT) * 100}%`, height: 10, borderRadius: 999, background: col[t.type] }} /></div>
-                            <span style={{ color: colors.muted, width: 22, textAlign: "right" }}>{t.count}</span>
-                          </div>
-                        ));
-                      })()}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          {tab === "analytics" && <AnalyticsTab admin={admin} />}
 
           {/* ═══ INSERATE ═══ */}
-          {tab === "listings" && (
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead><tr style={{ borderBottom: `1px solid ${colors.border}`, background: colors.cream }}>
-                  <th style={th}>Titel</th><th style={th}>Verkäufer</th><th style={th}>Typ</th>
-                  <th style={{ ...th, textAlign: "right" }}>Preis</th><th style={{ ...th, textAlign: "center" }}>Status</th><th style={{ ...th, textAlign: "center" }}>Aktionen</th>
-                </tr></thead>
-                <tbody>
-                  {visibleListings.map(l => (
-                    <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
-                      <td style={{ ...td, fontWeight: 600, maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        <Link href={`/listing/${l.id}`} style={{ color: colors.dark, textDecoration: "none" }}>{l.title}</Link>
-                        <span style={{ display: "block", fontFamily: "monospace", fontSize: 10, color: colors.muted, fontWeight: 500 }}>{makeArtRef(l.id)}</span>
-                      </td>
-                      <td style={{ ...td, color: colors.muted }}>{l.sellerName}</td>
-                      <td style={td}><TypeBadge type={l.listing_type} /></td>
-                      <td style={{ ...td, textAlign: "right", fontWeight: 600 }}>{l.listing_type === "free" ? "Gratis" : `CHF ${fmtCHF(l.price)}`}</td>
-                      <td style={{ ...td, textAlign: "center" }}>{statusPill(l.status)}</td>
-                      <td style={{ ...td, textAlign: "center" }}>
-                        <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
-                          {l.status === "active" && <button onClick={() => toggleListingStatus(l.id, "paused")} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><Pause size={10} /> Pause</button>}
-                          {(l.status === "paused" || l.status === "draft") && <button onClick={() => toggleListingStatus(l.id, "active")} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><Play size={10} /> Aktiv</button>}
-                          <Link href={`/listing/${l.id}`} style={{ padding: "4px 10px", borderRadius: 999, background: colors.warm, color: colors.muted, fontSize: 10, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center" }}><Eye size={10} /></Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {tab === "listings" && <ListingsTab admin={admin} />}
 
           {/* ═══ MELDUNGEN ═══ */}
-          {tab === "reports" && (
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
-              {reports.length === 0 ? (
-                <div style={{ padding: 40, textAlign: "center" }}>
-                  <CheckCircle size={32} color={colors.green} style={{ marginBottom: 8 }} />
-                  <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Keine Meldungen</p>
-                  <p style={{ fontSize: 12, color: colors.muted, margin: 0 }}>Alles sauber!</p>
-                </div>
-              ) : reports.map(r => (
-                <div key={r.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: r.is_resolved ? "#fafafa" : "transparent", opacity: r.is_resolved ? 0.6 : 1 }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    <Flag size={16} color={r.is_resolved ? colors.muted : "#c62828"} style={{ marginTop: 2, flexShrink: 0 }} />
-                    <div style={{ flex: 1 }}>
-                      {/* Inserat */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        {r.listing_id && <Link href={`/listing/${r.listing_id}`} style={{ fontSize: 13, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{r.listingTitle}</Link>}
-                        {pill("#FFF3E0", "#E65100", r.reason || "—")}
-                        {pill(r.is_resolved ? "#E8F5E9" : "#FFEBEE", r.is_resolved ? "#2E7D32" : "#c62828", r.is_resolved ? "Erledigt" : "Offen")}
-                      </div>
-                      {/* Details */}
-                      <p style={{ margin: "0 0 4px", fontSize: 11, color: colors.muted }}>
-                        Gemeldet von <strong>{r.reporterName}</strong> · Besitzer: <strong>{r.ownerName}</strong> · {fmtDate(r.created_at)}
-                      </p>
-                      {r.description && <p style={{ margin: "0 0 6px", fontSize: 12, color: "#666" }}>{r.description}</p>}
-                      {/* Aktionen */}
-                      {!r.is_resolved && (
-                        <div style={{ display: "flex", gap: 4 }}>
-                          <button onClick={() => resolveReport(r.id)} style={{ padding: "4px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Erledigt</button>
-                          {r.listing_id && <button onClick={() => pauseReportedListing(r.id, r.listing_id)} style={{ padding: "4px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserat pausieren</button>}
-                          {r.listing_id && <Link href={`/listing/${r.listing_id}`} style={{ padding: "4px 12px", borderRadius: 999, background: colors.warm, color: colors.muted, fontSize: 10, fontWeight: 700, textDecoration: "none" }}>Ansehen</Link>}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {tab === "reports" && <ReportsTab admin={admin} />}
 
           {/* ═══ PROTOKOLL ═══ */}
-          {tab === "audit" && (
-            <div>
-              {(() => {
-                const filtered = auditLog.filter(a => !search || (a.target_label || "").toLowerCase().includes(search.toLowerCase()) || ((AUDIT_META[a.action]?.label) || a.action).toLowerCase().includes(search.toLowerCase()));
-                if (auditLoading && filtered.length === 0) return <div style={{ padding: 40, textAlign: "center", color: colors.muted, fontSize: 13 }}>Lade Protokoll…</div>;
-                if (filtered.length === 0) return <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Noch keine protokollierten Aktionen.</div>;
-                return filtered.map((a, i) => {
-                  const meta = AUDIT_META[a.action] || { label: a.action, Icon: Clock, color: colors.muted, bg: colors.cream };
-                  const Icon = meta.Icon;
-                  const day = dayLabel(a.created_at);
-                  const showHeader = i === 0 || day !== dayLabel(filtered[i - 1].created_at);
-                  const adminName = users.find(u => u.id === a.admin_id)?.display_name || "Admin";
-                  const time = a.created_at ? new Date(a.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) : "";
-                  return (
-                    <div key={a.id}>
-                      {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#9E9E9E", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
-                      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "9px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
-                        <span style={{ width: 34, height: 34, borderRadius: 10, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={17} color={meta.color} /></span>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{meta.label}{a.action === "reminder" && a.detail?.level ? <span style={{ fontSize: 10, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>Stufe {a.detail.level}</span> : null}</div>
-                          <div style={{ fontSize: 11.5, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.target_label || "—"}</div>
-                        </div>
-                        <div style={{ textAlign: "right", flexShrink: 0 }}><div style={{ fontSize: 11, color: colors.muted }}>{time}</div><div style={{ fontSize: 10, color: "#bbb" }}>{adminName}</div></div>
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          )}
+          {tab === "audit" && <AuditTab admin={admin} />}
 
         </div>
       </div>
