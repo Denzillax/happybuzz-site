@@ -22,62 +22,60 @@ const steps = [
   },
 ]
 
-const FONT = "'General Sans', 'Manrope', system-ui, sans-serif"
+const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
+const MONO = "'Space Mono', ui-monospace, monospace"
+const INK = '#14110D'
+const SAND = '#ECE3D2'
+const PAPER = '#FBF8F2'
+const HONEY = '#F4C03F'
+const PETROL = '#0B5E5C'
 
 export function HowItWorks() {
   return (
-    <section style={{ padding: '72px 0', background: '#fff', borderTop: '1px solid #f0ede8', borderBottom: '1px solid #f0ede8' }}>
+    <section style={{ padding: '72px 0', background: PAPER, borderTop: `1px solid ${INK}`, borderBottom: `1px solid ${INK}` }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <span style={{ display: 'inline-block', padding: '5px 14px', borderRadius: 6, background: '#FDF6E3', color: '#D4A020', fontSize: 13, fontWeight: 700, marginBottom: 16, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: PETROL, marginBottom: 16 }}>
             In 3 Schritten
-          </span>
-          <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: '-0.025em', margin: 0, fontFamily: FONT }}>
-            So funktioniert <span style={{ color: '#F4C03F' }}>Beedaro</span>
+          </div>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, fontFamily: HEAD, color: INK, lineHeight: 1.05 }}>
+            So funktioniert{' '}
+            <span style={{ background: HONEY, color: INK, padding: '0 .1em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' }}>Beedaro</span>
           </h2>
         </div>
 
-        {/* Steps Grid */}
-        <div className="steps-grid" style={{ display: 'grid', gap: 32 }}>
+        {/* Steps Grid — echte Sequenz, daher Mono-Schrittnummern */}
+        <div className="steps-grid" style={{ display: 'grid', gap: 20 }}>
           {steps.map((s, i) => {
             const Icon = s.icon
             return (
-              <div key={i} style={{ textAlign: 'center', padding: '0 12px' }}>
-                {/* Step Number + Icon */}
-                <div style={{ position: 'relative', display: 'inline-flex', marginBottom: 24 }}>
-                  <div style={{
-                    width: 72, height: 72, borderRadius: 16, background: '#FDF6E3',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4A020',
-                  }}>
-                    <Icon size={32} strokeWidth={1.8} />
-                  </div>
-                  <span style={{
-                    position: 'absolute', top: -8, right: -12,
-                    width: 28, height: 28, borderRadius: '50%', background: '#F4C03F',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 12, fontWeight: 800, color: '#1a1a1a',
-                  }}>
+              <div key={i} style={{
+                background: '#fff', border: `1px solid ${INK}`, borderRadius: 12,
+                padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16,
+              }}>
+                {/* Schrittnummer + Icon-Tafel */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 34, fontWeight: 700, color: INK, lineHeight: 1, letterSpacing: '-0.02em' }}>
                     {s.step}
                   </span>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 10, background: SAND, border: `1px solid ${INK}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: PETROL,
+                  }}>
+                    <Icon size={23} strokeWidth={1.8} />
+                  </div>
                 </div>
 
                 {/* Text */}
-                <h3 style={{ fontSize: 20, fontWeight: 400, marginBottom: 10, fontFamily: FONT, letterSpacing: '-0.01em' }}>
-                  {s.title}
-                </h3>
-                <p style={{ fontSize: 15, lineHeight: 1.6, color: '#666', margin: 0 }}>
-                  {s.description}
-                </p>
-
-                {/* Connector line (between steps) */}
-                {i < steps.length - 1 && (
-                  <div style={{
-                    position: 'absolute', top: 36, right: -16,
-                    width: 32, height: 2, background: '#e5e5e5',
-                    display: 'none', // hidden for now, would need relative parent
-                  }} />
-                )}
+                <div>
+                  <h3 style={{ fontSize: 19, fontWeight: 600, margin: '0 0 7px', fontFamily: HEAD, letterSpacing: '-0.01em', color: INK }}>
+                    {s.title}
+                  </h3>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.55, color: 'rgba(20,17,13,0.6)', margin: 0 }}>
+                    {s.description}
+                  </p>
+                </div>
               </div>
             )
           })}
