@@ -8,6 +8,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { getCompanySettings, formatIban } from "@/lib/company";
 import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 
@@ -21,6 +22,7 @@ export default function FeeInvoicePage() {
   const [invoice, setInvoice] = useState(null);
   const [fees, setFees] = useState([]);
   const [seller, setSeller] = useState(null);
+  const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function FeeInvoicePage() {
         setFees((items || []).map(i => ({ ...i, listing_id: lidMap[i.purchase_id] || null })));
         const { data: prof } = await supabase.from("profiles").select("*").eq("id", inv.seller_id).single();
         setSeller(prof);
+        setCompany(await getCompanySettings());
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }
@@ -54,12 +57,13 @@ export default function FeeInvoicePage() {
   const dueDate = fmtDate(invoice.due_date);
   const ref = invoice.invoice_ref;
 
-  // BEEDARO als Empfänger
-  const beedaroIban = "CH1234567890123456789";
-  const beedaroIbanDisplay = "CH12 3456 7890 1234 5678 9";
+  // Firma als Empfänger (aus company_settings)
+  const co = company || {};
+  const beedaroIbanDisplay = formatIban(co.iban);
+  const coAddr = [co.name, co.street, `${co.postal_code || ""} ${co.city || ""}`.trim()].filter(Boolean);
 
-  // QR für Zahlung an BEEDARO
-  const qrPayload = feeQrPayload(invoice, seller);
+  // QR für Zahlung an die Firma
+  const qrPayload = feeQrPayload(invoice, seller, company);
   const qrUrl = qrImageUrl(qrPayload);
 
   const sellerAddr = [fullName(seller), seller?.street, `${seller?.postal_code || ""} ${seller?.city || ""}`.trim()].filter(Boolean);
@@ -89,9 +93,10 @@ export default function FeeInvoicePage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
           <div>
             <p style={lbl}>Rechnungssteller</p>
-            <p style={{ margin: 0, fontSize: 12, fontWeight: 700, fontFamily: f }}>BEEDARO</p>
-            <p style={{ margin: "1px 0", fontSize: 11, color: "#666", fontFamily: f }}>Gemeindehausstrasse 11B</p>
-            <p style={{ margin: 0, fontSize: 11, color: "#666", fontFamily: f }}>6010 Kriens, Schweiz</p>
+            <p style={{ margin: 0, fontSize: 12, fontWeight: 700, fontFamily: f }}>{co.name}</p>
+            <p style={{ margin: "1px 0", fontSize: 11, color: "#666", fontFamily: f }}>{co.street}</p>
+            <p style={{ margin: 0, fontSize: 11, color: "#666", fontFamily: f }}>{`${co.postal_code || ""} ${co.city || ""}`.trim()}{co.country === "CH" ? ", Schweiz" : co.country ? `, ${co.country}` : ""}</p>
+            {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#888", fontFamily: f }}>{co.uid}</p>}
           </div>
           <div>
             <p style={lbl}>Verkäufer / Rechnungsempfänger</p>
@@ -145,7 +150,7 @@ export default function FeeInvoicePage() {
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>Zahlungsinformationen</p>
             {[
-              { l: "Konto / Zahlbar an", v: "BEEDARO\nGemeindehausstrasse 11B\n6010 Kriens" },
+              { l: "Konto / Zahlbar an", v: coAddr.join("\n") },
               { l: "IBAN", v: beedaroIbanDisplay },
               { l: "Betrag", v: `CHF ${fmtCHF(total)}` },
               { l: "Verwendungszweck", v: ref },
@@ -169,7 +174,8 @@ export default function FeeInvoicePage() {
 
         {/* Footer */}
         <div style={{ textAlign: "center", fontSize: 9, color: g, fontFamily: f }}>
-          <p style={{ margin: 0 }}>BEEDARO · Gemeindehausstrasse 11B · 6010 Kriens</p>
+          <p style={{ margin: 0 }}>{coAddr.join(" · ")}{co.uid ? ` · ${co.uid}` : ""}</p>
+          {(co.contact_email || co.contact_phone) && <p style={{ margin: "2px 0 0" }}>{[co.contact_email, co.contact_phone].filter(Boolean).join(" · ")}</p>}
           <p style={{ margin: "2px 0 0", color: "#5B8C5A", display: "flex", alignItems: "center", justifyContent: "center", gap: 3 }}>
             <BeeIcon size={9} color="#5B8C5A" /> CHF {fmtCHF(beeImpact)} fliessen in Schweizer Bienenprojekte
           </p>
