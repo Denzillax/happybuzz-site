@@ -2,12 +2,20 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Package, Star, Gavel, Clock, Home, Gift, Flame, ShoppingBag, Wrench } from "lucide-react";
-import { colors, fonts, radius } from "@/lib/theme";
-import { getCoverUrl } from "@/lib/formatters";
+import { colors, fonts } from "@/lib/theme";
+import { getCoverUrl, conditionLabel } from "@/lib/formatters";
+import { makeArtRef } from "@/lib/fees";
 import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { useFavorite } from "@/hooks/useFavorite";
+
+// ── Katalog-Design-Tokens (Hero/CommunityImpact-konsistent) ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PAPER = "#FBF8F2";
+const HONEY = "#F4C03F";
+const MONO = "'Space Mono', ui-monospace, monospace";
 
 // Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
 // < 24h -> Live-Countdown ("3h 5m" / "12m 9s"), abgelaufen -> endedLabel.
@@ -91,15 +99,19 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          background: colors.surface, borderRadius: radius.lg,
-          border: hasSpotlight ? `2px solid ${colors.yellow}` : `1px solid ${hover ? accent : colors.border}`,
-          overflow: "hidden", transition: "border-color .2s ease",
-          boxShadow: hasSpotlight ? `0 0 0 3px ${colors.yellow}22` : "none",
+          background: colors.surface, borderRadius: 12,
+          border: hasSpotlight ? `1.5px solid ${HONEY}` : `1px solid ${INK}`,
+          overflow: "hidden",
+          transition: "transform .2s ease, box-shadow .2s ease",
+          transform: hover ? "translateY(-3px)" : "translateY(0)",
+          boxShadow: hasSpotlight
+            ? `0 0 0 3px ${HONEY}33, 0 12px 26px rgba(20,17,13,.13)`
+            : hover ? "0 12px 26px rgba(20,17,13,.13)" : "none",
           display: "flex", flexDirection: "column", height: "100%",
         }}
       >
-        {/* Image */}
-        <div style={{ position: "relative", aspectRatio: "4/3", background: colors.warm, overflow: "hidden" }}>
+        {/* Image — Katalog-Tafel mit Trennlinie */}
+        <div style={{ position: "relative", aspectRatio: "4/3", background: SAND, overflow: "hidden", borderBottom: `1px solid ${INK}` }}>
           {cover
             ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.04)" : "scale(1)", transition: "transform .3s ease" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={40} color="#ccc" /></div>
@@ -108,52 +120,52 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>
             {hasFeatured && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} fill="#fff" /> Featured
               </span>
             )}
             {hasSpotlight && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} /> Gesponsert
               </span>
             )}
             {isNew && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
             )}
             {isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Flame size={9} /> Beliebt
               </span>
             )}
             {endingSoon && !isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
             )}
           </div>
 
           {/* Top-right: colored type badge */}
           <div style={{ position: "absolute", top: 8, right: 8 }}>
             {isAuction && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gavel size={10} /> Auktion
               </span>
             )}
             {isRent && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Home size={10} /> Miete
               </span>
             )}
             {isFree && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gift size={10} /> Gratis
               </span>
             )}
             {isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Wrench size={10} /> Service
               </span>
             )}
             {!isAuction && !isRent && !isFree && !isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 999, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
                 <ShoppingBag size={10} /> Festpreis
               </span>
             )}
@@ -166,12 +178,28 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
         </div>
 
         {/* Info — flex-grow for equal height */}
-        <div style={{ padding: "12px 16px 16px", flex: 1, display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "11px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
+          {/* Katalog-Kopf: Referenznummer + Zustands-Stempel */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 7 }}>
+            <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".04em", color: colors.muted, whiteSpace: "nowrap" }}>
+              {makeArtRef(listing.id)}
+            </span>
+            {listing.condition && (
+              <span style={{
+                fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase",
+                color: INK, border: `1px solid ${INK}`, borderRadius: 3, padding: "2px 6px",
+                whiteSpace: "nowrap", flexShrink: 0,
+              }}>
+                {conditionLabel(listing.condition)}
+              </span>
+            )}
+          </div>
+
           <p style={{
-            fontSize: 14, fontWeight: 600, fontFamily: fonts.body,
-            lineHeight: 1.35, margin: "0 0 4px",
+            fontSize: 14.5, fontWeight: 600, fontFamily: fonts.head,
+            lineHeight: 1.3, margin: "0 0 4px", letterSpacing: "-0.01em",
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-            color: colors.dark,
+            color: INK,
           }}>
             {listing.title}
           </p>
@@ -181,7 +209,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
             {isAuction ? (
               <>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                  <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>
+                  <span style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, letterSpacing: "-0.01em" }}>
                     CHF {(listing.price || listing.start_price || 0).toFixed(2)}
                   </span>
                   {bidCount > 0 && <span style={{ fontSize: 11, color: colors.muted }}>{bidCount} {bidCount === 1 ? "Gebot" : "Gebote"}</span>}
@@ -194,7 +222,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
               </>
             ) : isRent ? (
               <>
-                <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>
+                <span style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, letterSpacing: "-0.01em" }}>
                   CHF {(listing.rent_price || listing.price || 0).toFixed(2)}
                 </span>
                 <span style={{ fontSize: 11, color: colors.muted, marginLeft: 4 }}>
@@ -206,7 +234,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
               </>
             ) : isService ? (
               <>
-                <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>
+                <span style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, letterSpacing: "-0.01em" }}>
                   CHF {(listing.rent_price || listing.price || 0).toFixed(2)}
                 </span>
                 <span style={{ fontSize: 11, color: colors.muted, marginLeft: 4 }}>
@@ -214,7 +242,7 @@ export function ListingCard({ listing, userId, boost, onUnfavorite }) {
                 </span>
               </>
             ) : isFree ? (
-              <span style={{ fontSize: 17, fontWeight: 900, fontFamily: fonts.head, color: colors.nature }}>Gratis</span>
+              <span style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: colors.nature, letterSpacing: "-0.01em" }}>Gratis</span>
             ) : (
               <PriceDisplay listing={listing} size="md" />
             )}
