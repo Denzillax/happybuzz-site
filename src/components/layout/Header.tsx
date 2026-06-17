@@ -189,10 +189,10 @@ export function Header() {
             {/* Kategorien Button */}
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
-              border: megaMenuOpen ? '1.5px solid #F4C03F' : '1.5px solid #e0ddd8',
-              borderRadius: 8, background: megaMenuOpen ? '#FDF8E8' : '#fff',
+              border: megaMenuOpen ? `1.5px solid ${INK}` : '1.5px solid #d8d4cd',
+              borderRadius: 8, background: megaMenuOpen ? '#ECE3D2' : '#fff',
               cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
-              color: DARK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
+              color: INK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}>
               <AlignJustify size={15} />
               Alle Kategorien

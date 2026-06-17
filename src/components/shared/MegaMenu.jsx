@@ -3,8 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { CategoryIcon } from "@/components/shared/CategoryIcon";
-import { colors, fonts, radius } from "@/lib/theme";
+import { colors, fonts } from "@/lib/theme";
 import { getAllCategories } from "@/lib/listings";
+
+// ── Katalog-Design-Tokens ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PETROL = "#0B5E5C";
+const MONO = "'Space Mono', ui-monospace, monospace";
 
 function buildTree(cats) {
   const map = {};
@@ -57,23 +63,23 @@ export function MegaMenu({ open, onClose }) {
   const itemStyle = (active) => ({
     display: "flex", alignItems: "center", justifyContent: "space-between",
     padding: "10px 16px", fontSize: 13, fontFamily: fonts.body,
-    color: active ? colors.dark : colors.muted, fontWeight: active ? 700 : 500,
-    background: active ? colors.yellowSoft : "transparent",
+    color: active ? INK : colors.muted, fontWeight: active ? 700 : 500,
+    background: active ? SAND : "transparent",
     cursor: "pointer", transition: "all .1s", textDecoration: "none",
-    borderLeft: active ? `3px solid ${colors.yellow}` : "3px solid transparent",
+    borderLeft: active ? `3px solid ${PETROL}` : "3px solid transparent",
   });
 
   return (
     <div ref={ref} style={{
       position: "absolute", top: "100%", left: 0, zIndex: 1000,
-      background: colors.surface, borderRadius: `0 0 ${radius.lg}px ${radius.lg}px`,
-      border: `1px solid ${colors.border}`, borderTop: `2px solid ${colors.yellow}`,
-      boxShadow: "0 12px 40px rgba(0,0,0,.12)",
+      background: colors.surface, borderRadius: "0 0 12px 12px",
+      border: `1px solid ${INK}`, borderTop: "none",
+      boxShadow: "0 16px 40px rgba(20,17,13,.16)",
       display: "flex", minHeight: 300,
     }}>
       {/* Column 1: Main Categories */}
       <div style={colStyle}>
-        <div style={{ padding: "8px 16px 12px", fontSize: 11, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".06em" }}>
+        <div style={{ padding: "8px 16px 12px", fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: PETROL, textTransform: "uppercase", letterSpacing: ".14em" }}>
           Alle Kategorien
         </div>
         {categories.map((cat) => (
@@ -105,7 +111,7 @@ export function MegaMenu({ open, onClose }) {
       {mainCat && mainCat.children.length > 0 && (
         <div style={colStyle}>
           <Link href={`/search?category=${mainCat.slug}`} onClick={onClose}
-            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: PETROL, textDecoration: "none" }}>
             Alle in {mainCat.name}
           </Link>
           {mainCat.children.map((sub) => (
@@ -138,7 +144,7 @@ export function MegaMenu({ open, onClose }) {
       {subCat && subCat.children.length > 0 && (
         <div style={{ ...colStyle, borderRight: subSubCat ? `1px solid ${colors.borderLt}` : "none" }}>
           <Link href={`/search?category=${subCat.slug}`} onClick={onClose}
-            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: PETROL, textDecoration: "none" }}>
             Alle in {subCat.name}
           </Link>
           {subCat.children.map((subsub) => (
@@ -167,7 +173,7 @@ export function MegaMenu({ open, onClose }) {
       {subSubCat && subSubCat.children.length > 0 && (
         <div style={{ ...colStyle, borderRight: "none" }}>
           <Link href={`/search?category=${subSubCat.slug}`} onClick={onClose}
-            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>
+            style={{ display: "block", padding: "8px 16px 12px", fontSize: 13, fontWeight: 700, color: PETROL, textDecoration: "none" }}>
             Alle in {subSubCat.name}
           </Link>
           {subSubCat.children.map((item) => (
