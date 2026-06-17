@@ -10,6 +10,14 @@ import {
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
 
+// ── Katalog-Design-Tokens ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PAPER = "#FBF8F2";
+const PETROL = "#0B5E5C";
+const MONO = "'Space Mono', ui-monospace, monospace";
+const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+
 // ─── Help Categories ──────────────────────────────────────────
 const CATEGORIES = [
   {
@@ -47,7 +55,7 @@ const CATEGORIES = [
     desc: "Inserate erstellen, Versand & Gebühren",
     color: "#F4C03F",
     faqs: [
-      { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du kannst zwischen Festpreis, Auktion, Vermieten und Gratis verschenken wählen." },
+      { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Jedes Inserat wird vor Veröffentlichung kurz geprüft." },
       { q: "Was kostet es, ein Inserat zu erstellen?", a: "Das Erstellen eines Inserats ist kostenlos. Erst bei einem erfolgreichen Verkauf fällt die Bee-Rate Gebühr an (3-10%, je nach gewählter Stufe)." },
       { q: "Was ist die Bee-Rate?", a: "Die Bee-Rate ist deine selbst gewählte Gebühr (Fair 3%, Supporter 5%, Impact 7% oder Bee Hero 10%). Sie wird nur bei erfolgreichem Verkauf vom Erlös abgezogen. 20% davon fliessen als Bee-Impact in Schweizer Naturschutzprojekte." },
       { q: "Wie funktioniert der Versand?", a: "Beim Inserieren wählst du Paket, Brief, Sperrgut oder andere Versandarten. Die Versandkosten basieren auf den aktuellen Post-Tarifen. Du kannst maximal CHF 5 über den Post-Tarif aufschlagen." },
@@ -57,13 +65,14 @@ const CATEGORIES = [
   {
     id: "rent",
     icon: Home,
-    title: "Mieten & Verschenken",
-    desc: "Artikel vermieten oder gratis abgeben",
+    title: "Miete, Service & Gratis",
+    desc: "Vermieten, Dienstleistungen anbieten oder gratis abgeben",
     color: "#8B6DB0",
     faqs: [
-      { q: "Wie vermiete ich einen Artikel?", a: "Beim Inserieren wählst du «Vermieten» als Inserattyp. Setze den Mietpreis pro Stunde, Tag, Woche oder Monat und optional eine Kaution." },
+      { q: "Wie vermiete ich einen Artikel?", a: "Beim Inserieren wählst du «Miete» als Inserattyp. Setze den Mietpreis pro Stunde, Tag, Woche oder Monat und optional eine Kaution." },
       { q: "Wie buche ich einen Mietartikel?", a: "Wähle deinen gewünschten Zeitraum und klicke auf «Buchen». Du erhältst die Kontaktdaten des Vermieters." },
-      { q: "Wie verschenke ich etwas?", a: "Beim Inserieren aktivierst du «Gratis verschenken». Der Artikel wird kostenlos angeboten. Nur Abholung, keine Gebühren." },
+      { q: "Wie biete ich eine Dienstleistung an?", a: "Wähle «Service» als Inserattyp und lege deinen Preis pro Stunde, Tag, Woche oder Monat fest. Kunden fragen einen Termin an, abgerechnet wird nach Abschluss über eine Service-Rechnung." },
+      { q: "Wie verschenke ich etwas?", a: "Beim Inserieren wählst du «Gratis». Der Artikel wird kostenlos angeboten. Nur Abholung, keine Gebühren." },
     ],
   },
   {
@@ -172,38 +181,34 @@ export default function HelpPage() {
   })).filter(cat => cat.faqs.length > 0 || cat.title.toLowerCase().includes(q) || cat.desc.toLowerCase().includes(q));
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: PAPER, minHeight: "100vh", color: INK }}>
 
       {/* ── Hero ── */}
       <div style={{
-        background: `linear-gradient(135deg, ${colors.dark} 0%, #2a2520 100%)`,
-        padding: "48px 20px 52px", textAlign: "center",
+        background: SAND, padding: "60px 20px 56px", textAlign: "center",
+        borderBottom: `1px solid ${INK}`,
+        backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 12 }}>
-            <BeeIcon size={28} color={colors.yellow} />
-            <h1 style={{
-              fontSize: 28, fontWeight: 900, fontFamily: fonts.head,
-              color: "#fff", margin: 0, letterSpacing: ".03em",
-            }}>
-              Wie können wir helfen?
-            </h1>
-          </div>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,.5)", margin: "0 0 24px" }}>
+          <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 12 }}>Hilfe-Katalog</div>
+          <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
+            Wie können wir helfen?
+          </h1>
+          <p style={{ fontSize: 15, color: "rgba(20,17,13,0.6)", margin: "0 0 24px" }}>
             Finde Antworten zu Konto, Kaufen, Verkaufen, Gebühren und mehr.
           </p>
 
           {/* Search */}
           <div style={{ position: "relative", maxWidth: 480, margin: "0 auto" }}>
-            <Search size={18} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.3)" }} />
+            <Search size={18} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: INK }} />
             <input
               value={search}
               onChange={e => { setSearch(e.target.value); setOpenCat(null); setOpenFaq(null); }}
               placeholder="Suchbegriff eingeben..."
               style={{
-                width: "100%", padding: "14px 16px 14px 42px", borderRadius: 10,
-                border: "1.5px solid rgba(255,255,255,.15)", background: "rgba(255,255,255,.08)",
-                fontSize: 15, fontFamily: fonts.body, color: "#fff", outline: "none",
+                width: "100%", padding: "13px 16px 13px 42px", borderRadius: 8,
+                border: `1.5px solid ${INK}`, background: "#fff",
+                fontSize: 15, fontFamily: fonts.body, color: INK, outline: "none",
                 boxSizing: "border-box",
               }}
             />
@@ -224,7 +229,7 @@ export default function HelpPage() {
               <div style={{ textAlign: "center", padding: "40px 0" }}>
                 <HelpCircle size={40} color={colors.muted} style={{ marginBottom: 12 }} />
                 <p style={{ fontSize: 15, color: colors.muted }}>Keine Ergebnisse gefunden.</p>
-                <p style={{ fontSize: 13, color: colors.muted }}>Schreibe uns an <a href="mailto:support@beedaro.ch" style={{ color: colors.yellow, fontWeight: 700 }}>support@beedaro.ch</a></p>
+                <p style={{ fontSize: 13, color: colors.muted }}>Schreibe uns an <a href="mailto:support@beedaro.ch" style={{ color: PETROL, fontWeight: 700 }}>support@beedaro.ch</a></p>
               </div>
             )}
             {filtered.map(cat => (
@@ -232,7 +237,7 @@ export default function HelpPage() {
                 <h3 style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 6 }}>
                   <cat.icon size={16} color={cat.color} /> {cat.title}
                 </h3>
-                <div style={{ borderRadius: 10, border: `1px solid ${colors.border}`, overflow: "hidden", background: "#fff" }}>
+                <div style={{ borderRadius: 10, border: `1px solid ${INK}`, overflow: "hidden", background: "#fff" }}>
                   {cat.faqs.map((f, i) => (
                     <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                       onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -257,18 +262,18 @@ export default function HelpPage() {
                     onClick={() => { setOpenCat(isOpen ? null : cat.id); setOpenFaq(null); }}
                     style={{
                       padding: "20px", borderRadius: 12, cursor: "pointer",
-                      background: "#fff", border: `1px solid ${isOpen ? cat.color : colors.border}`,
-                      boxShadow: isOpen ? `0 2px 12px rgba(0,0,0,.08)` : "none",
+                      background: "#fff", border: `1px solid ${INK}`,
+                      boxShadow: isOpen ? `0 10px 24px rgba(20,17,13,.12)` : "none",
                       transition: "all .2s",
                     }}
-                    onMouseEnter={e => { if (!isOpen) e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,.06)"; }}
+                    onMouseEnter={e => { if (!isOpen) e.currentTarget.style.boxShadow = "0 8px 20px rgba(20,17,13,.1)"; }}
                     onMouseLeave={e => { if (!isOpen) e.currentTarget.style.boxShadow = "none"; }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <div style={{
                         width: 40, height: 40, borderRadius: 10, display: "flex",
                         alignItems: "center", justifyContent: "center",
-                        background: `${cat.color}15`,
+                        background: SAND, border: `1px solid ${INK}`,
                       }}>
                         <Icon size={20} color={cat.color} />
                       </div>
@@ -297,7 +302,7 @@ export default function HelpPage() {
                     <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: colors.dark }}>{cat.title}</h2>
                     <span style={{ fontSize: 12, color: colors.muted }}>· {cat.faqs.length} Artikel</span>
                   </div>
-                  <div style={{ borderRadius: 12, border: `1px solid ${colors.border}`, overflow: "hidden", background: "#fff" }}>
+                  <div style={{ borderRadius: 12, border: `1px solid ${INK}`, overflow: "hidden", background: "#fff" }}>
                     {cat.faqs.map((f, i) => (
                       <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                         onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -311,19 +316,19 @@ export default function HelpPage() {
 
         {/* ── Contact Box ── */}
         <div style={{
-          padding: 24, borderRadius: 12, background: "#fff",
-          border: `1px solid ${colors.border}`, textAlign: "center",
+          padding: 28, borderRadius: 12, background: "#fff",
+          border: `1px solid ${INK}`, textAlign: "center",
         }}>
-          <Mail size={28} color={colors.yellow} style={{ marginBottom: 8 }} />
-          <h3 style={{ fontSize: 16, fontWeight: 800, margin: "0 0 6px" }}>Nicht gefunden was du suchst?</h3>
-          <p style={{ fontSize: 13, color: colors.muted, margin: "0 0 16px" }}>
+          <Mail size={26} color={PETROL} style={{ marginBottom: 8 }} />
+          <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>Nicht gefunden, was du suchst?</h3>
+          <p style={{ fontSize: 13.5, color: "rgba(20,17,13,0.6)", margin: "0 0 18px" }}>
             Unser Team hilft dir gerne weiter.
           </p>
-          <a href="mailto:support@beedaro.ch" style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "12px 28px", borderRadius: 8, background: colors.yellow,
-            color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none",
-            fontFamily: fonts.body,
+          <a href="mailto:support@beedaro.ch" className="bd-btn" style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "12px 26px", borderRadius: 10, background: INK,
+            color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none",
+            fontFamily: fonts.body, border: `1.5px solid ${INK}`,
           }}>
             <Mail size={16} /> support@beedaro.ch
           </a>
