@@ -14,6 +14,8 @@ import { getMyRole } from '@/lib/staff'
 
 const YELLOW = '#F4C03F'
 const DARK = '#191615'
+const INK = '#14110D'
+const PAPER = '#FBF8F2'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -199,7 +201,7 @@ export function Header() {
 
             {/* Search Bar — fills available space */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: '2px solid #F4C03F', borderRadius: 8, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `1.5px solid ${INK}`, borderRadius: 8, overflow: 'hidden' }}>
                 <Search size={17} style={{ marginLeft: 14, color: '#999', flexShrink: 0, alignSelf: 'center' }} />
                 <input
                   ref={searchInputRef}
@@ -212,7 +214,7 @@ export function Header() {
                   placeholder="Suche nach Artikel, Verkäufer oder Artikelnummer"
                   style={{ flex: 1, padding: '9px 12px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
                 />
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ padding: '0 24px', background: YELLOW, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14, color: DARK, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ padding: '0 24px', background: INK, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14, color: PAPER, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   Suchen
                 </button>
               </div>
@@ -365,11 +367,11 @@ export function Header() {
             </div>
           )}
           <div style={{ padding: '16px 24px' }}>
-            <div style={{ display: 'flex', borderRadius: 10, border: `2px solid ${YELLOW}`, overflow: 'hidden' }}>
+            <div style={{ display: 'flex', borderRadius: 8, border: `1.5px solid ${INK}`, overflow: 'hidden' }}>
               <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setMobileOpen(false); } }}
                 placeholder="Suchen..." style={{ flex: 1, padding: '12px 14px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit' }} />
-              <button onClick={() => { handleSearch(); setMobileOpen(false); }} style={{ padding: '0 20px', background: YELLOW, border: 'none', cursor: 'pointer' }}>
-                <Search size={18} color={DARK} />
+              <button onClick={() => { handleSearch(); setMobileOpen(false); }} style={{ padding: '0 20px', background: INK, border: 'none', cursor: 'pointer' }}>
+                <Search size={18} color={PAPER} />
               </button>
             </div>
           </div>
