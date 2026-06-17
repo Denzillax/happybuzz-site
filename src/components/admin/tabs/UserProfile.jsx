@@ -26,6 +26,8 @@ export function UserProfile({ admin }) {
   const totalUserFees = uFee.reduce((s, f) => s + parseFloat(f.fee_amount), 0);
   const totalUserImpact = uFee.reduce((s, f) => s + parseFloat(f.bee_impact), 0);
   const uOrders = orders.filter(o => o.buyer_id === u.id || o.seller_id === u.id);
+  const uReviews = reviews.filter(r => r.rater_id === u.id || r.rated_id === u.id);
+  const uEmails = emailLog.filter(e => e.recipient_id === u.id);
   const sales = uOrders.filter(o => o.seller_id === u.id && o.status !== "cancelled");
   const purchases = uOrders.filter(o => o.buyer_id === u.id && o.status !== "cancelled");
   const revenue = sales.reduce((s, o) => s + parseFloat(o.price || 0), 0);
@@ -127,15 +129,28 @@ export function UserProfile({ admin }) {
 
       {/* Sub-Daten */}
       <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
-        {/* Tabs: Inserate | Bestellungen | Rechnungen | Bewertungen | E-Mails */}
-        <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}` }}>
-          {[{ key: "inserate", label: `Inserate (${uLst.length})` }, { key: "bestellungen", label: "Bestellungen" }, { key: "rechnungen", label: `Rechnungen (${(userInvoices[u.id] || []).length})` }, { key: "bewertungen", label: "Bewertungen" }, { key: "emails", label: "E-Mails" }].map(t => (
-            <button key={t.key} onClick={() => setUserTab(prev => ({ ...prev, [u.id]: t.key }))} style={{
-              flex: 1, padding: "9px 12px", fontSize: 11, fontWeight: 700, border: "none", cursor: "pointer",
-              fontFamily: fonts.body, background: (userTab[u.id] || "inserate") === t.key ? colors.yellowSoft : "transparent",
-              color: colors.dark, borderBottom: (userTab[u.id] || "inserate") === t.key ? `2px solid ${colors.yellow}` : "2px solid transparent",
-            }}>{t.label}</button>
-          ))}
+        {/* Sub-Tabs mit Zählern auf allen Reitern */}
+        <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}`, background: "#FCFBF9" }}>
+          {[
+            { key: "inserate", label: "Inserate", n: uLst.length },
+            { key: "bestellungen", label: "Bestellungen", n: uOrders.length },
+            { key: "rechnungen", label: "Rechnungen", n: (userInvoices[u.id] || []).length },
+            { key: "bewertungen", label: "Bewertungen", n: uReviews.length },
+            { key: "emails", label: "E-Mails", n: uEmails.length },
+          ].map(t => {
+            const on = (userTab[u.id] || "inserate") === t.key;
+            return (
+              <button key={t.key} onClick={() => setUserTab(prev => ({ ...prev, [u.id]: t.key }))} style={{
+                flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
+                padding: "13px 8px", fontSize: 12.5, fontWeight: on ? 700 : 600, border: "none", cursor: "pointer",
+                fontFamily: fonts.body, background: on ? "#fff" : "transparent", color: on ? colors.dark : colors.muted,
+                borderBottom: on ? `2.5px solid ${colors.yellow}` : "2.5px solid transparent", transition: "color .12s, background .12s",
+              }}>
+                {t.label}
+                {t.n > 0 && <span style={{ fontSize: 10.5, fontWeight: 700, lineHeight: 1, padding: "2px 7px", borderRadius: 999, background: on ? colors.yellowSoft : "#ECE9E3", color: on ? "#8a6d00" : colors.muted }}>{t.n}</span>}
+              </button>
+            );
+          })}
         </div>
 
         {/* Tab: Inserate */}
@@ -234,7 +249,7 @@ export function UserProfile({ admin }) {
         {/* Sub-Tab: Bewertungen */}
         {(userTab[u.id] || "inserate") === "bewertungen" && (
           <div style={{ padding: "10px 16px" }}>
-            {reviews.filter(r => r.rater_id === u.id || r.rated_id === u.id).length > 0 ? reviews.filter(r => r.rater_id === u.id || r.rated_id === u.id).map(r => {
+            {uReviews.length > 0 ? uReviews.map(r => {
               const dir = r.rater_id === u.id ? `an ${r.revieweeName}` : `von ${r.reviewerName}`;
               return (
                 <div key={r.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
@@ -252,8 +267,8 @@ export function UserProfile({ admin }) {
         {/* Sub-Tab: E-Mails */}
         {(userTab[u.id] || "inserate") === "emails" && (
           <div style={{ padding: "10px 16px" }}>
-            {emailLog.filter(e => e.recipient_id === u.id).length > 0
-              ? emailLog.filter(e => e.recipient_id === u.id).map(e => emailCard(e))
+            {uEmails.length > 0
+              ? uEmails.map(e => emailCard(e))
               : <p style={{ margin: 0, padding: "12px 0", fontSize: 11, color: colors.muted, textAlign: "center" }}>Keine E-Mails an diesen Nutzer</p>}
           </div>
         )}
