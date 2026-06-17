@@ -9,6 +9,7 @@ import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, Shopp
 import NotificationBell from '@/components/shared/NotificationBell'
 import NektarBadge from '@/components/shared/NektarBadge'
 import { MegaMenu } from '@/components/shared/MegaMenu'
+import { getMyRole } from '@/lib/staff'
 
 
 const YELLOW = '#F4C03F'
@@ -27,6 +28,7 @@ export function Header() {
   const [favOpen, setFavOpen] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
+  const [canAdmin, setCanAdmin] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const favRef = useRef<HTMLDivElement>(null)
@@ -92,6 +94,15 @@ export function Header() {
     return () => subscription.unsubscribe()
   }, [])
 
+  // ── Admin-/Mitarbeiter-Zugang (Owner oder zugewiesene Rolle) ──
+  useEffect(() => {
+    if (!user) { setCanAdmin(false); return }
+    if (user.id === '48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0') { setCanAdmin(true); return }
+    let active = true
+    getMyRole(user.id).then(r => { if (active) setCanAdmin(!!r) }).catch(() => {})
+    return () => { active = false }
+  }, [user?.id])
+
   // ── Click outside ──
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -137,7 +148,7 @@ export function Header() {
     { href: '/bookings', icon: CalendarDays, label: 'Buchungen' },
     { href: '/chat', icon: MessageCircle, label: 'Nachrichten' },
     { href: '/fees', icon: Receipt, label: 'Gebühren & Beiträge' },
-    ...(user?.id === '48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0' ? [{ divider: true }, { href: '/admin', icon: ShieldCheck, label: 'Admin Dashboard' }] : []),
+    ...(canAdmin ? [{ divider: true }, { href: '/admin', icon: ShieldCheck, label: 'Admin Dashboard' }] : []),
   ]
 
   const favSubItems = [
