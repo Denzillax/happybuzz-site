@@ -11,6 +11,12 @@ import { ListingCard } from "@/components/shared/ListingCard";
 import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/recentSearches";
 import { getActiveBoosts } from "@/lib/gamification";
 
+// ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
+const INK = "#14110D";
+const PAPER = "#FBF8F2";
+const PETROL = "#0B5E5C";
+const MONO = "'Space Mono', ui-monospace, monospace";
+
 const SORT_OPTS = [
   { value: "relevanz", label: "Relevanz" },
   { value: "newest", label: "Neueste" },
@@ -39,10 +45,10 @@ function FilterPill({ label, value, options, onChange, active }) {
         onClick={() => setOpen(!open)}
         style={{
           display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 14px", borderRadius: 20,
-          border: active ? "1.5px solid #0E9493" : "1.5px solid #e0ddd8",
+          padding: "8px 14px", borderRadius: 8,
+          border: active ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
-          color: active ? "#0A7170" : colors.dark,
+          color: active ? "#0A7170" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
           fontFamily: fonts.body, cursor: "pointer",
           transition: "all .15s", whiteSpace: "nowrap",
@@ -59,8 +65,8 @@ function FilterPill({ label, value, options, onChange, active }) {
       {open && (
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-          background: "#fff", borderRadius: 12,
-          boxShadow: "0 8px 30px rgba(0,0,0,.12)", border: "1px solid #e8e5e0",
+          background: "#fff", borderRadius: 10,
+          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: `1px solid ${INK}`,
           minWidth: 180, maxHeight: 280, overflowY: "auto",
           padding: "6px 0",
         }}>
@@ -201,7 +207,7 @@ export default function SearchPage() {
                 onClick={() => { setQuery(term); setPage(1); }}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "6px 12px", borderRadius: 20, cursor: "pointer",
+                  padding: "6px 12px", borderRadius: 8, cursor: "pointer",
                   border: `1.5px solid ${colors.border}`, background: "#fff",
                   fontSize: 13, fontFamily: fonts.body, color: colors.dark, whiteSpace: "nowrap",
                 }}
@@ -237,13 +243,16 @@ export default function SearchPage() {
         })()}
 
         {/* ── Page Title ── */}
-        <h1 style={{ fontFamily: fonts.head, fontSize: 28, fontWeight: 800, color: colors.dark, margin: "0 0 20px", letterSpacing: "-0.02em" }}>
+        <div style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 8 }}>
+          Katalogsuche
+        </div>
+        <h1 style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: "0 0 20px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
           {query ? `Ergebnisse für "${query}"` : mainCatId ? (mainCats.find(c => c.id === mainCatId)?.name || "Suche") : "Alle Inserate"}
         </h1>
 
         {/* ── Filter Pills Row ── */}
         <div style={{
-          background: "#fff", borderRadius: 14, border: "1px solid #e8e5e0",
+          background: "#fff", borderRadius: 12, border: `1px solid ${INK}`,
           padding: "16px 18px", marginBottom: 20,
         }}>
           {/* Row 1: Main filters */}
@@ -278,10 +287,10 @@ export default function SearchPage() {
             <div ref={priceRef} style={{ position: "relative" }}>
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 20,
-                border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #e0ddd8",
+                padding: "8px 14px", borderRadius: 8,
+                border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
-                color: (minPrice || maxPrice) ? "#0A7170" : colors.dark,
+                color: (minPrice || maxPrice) ? "#0A7170" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
                 fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",
               }}>
@@ -293,8 +302,8 @@ export default function SearchPage() {
               {showPrice && (
                 <div style={{
                   position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,.12)",
-                  border: "1px solid #e8e5e0", padding: 16, width: 220,
+                  background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
+                  border: `1px solid ${INK}`, padding: 16, width: 220,
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
                   <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
@@ -409,8 +418,8 @@ export default function SearchPage() {
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
             <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>Andere Suchbegriffe probieren oder die Filter zurücksetzen.</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Alle Inserate ansehen</a>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "10px 20px", borderRadius: 10, background: colors.surface, border: `1px solid ${colors.border}`, color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: "#fff", border: `1.5px solid ${INK}`, color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>
         )}
