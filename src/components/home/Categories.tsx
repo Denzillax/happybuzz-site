@@ -3,13 +3,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/supabase'
 import { CategoryIcon } from '@/components/shared/CategoryIcon'
-import { ChevronRight } from 'lucide-react'
 import { colors, fonts } from '@/lib/theme'
+import { SectionHeader } from './SectionHeader'
 
-const YELLOW = colors.yellow
-const DARK = colors.dark
 const BODY = fonts.body
-const HEAD = fonts.head
 
 // Auf der Startseite nur die wichtigsten Kategorien zeigen (Rest via "Alle Kategorien")
 const SHOWN = 8
@@ -42,25 +39,12 @@ export function Categories() {
         .cat-circle-item:hover .cat-circle-icon { background: ${colors.teal}; color: #fff; transform: scale(1.06); }
         .cat-circle-item:hover .cat-circle-label { color: ${colors.teal}; }
         @media (max-width: 767px) {
-          .cat-header { padding: 0 4px !important; }
-          .cat-header h2 { font-size: 20px !important; }
           .cat-circles { gap: 22px 14px !important; }
         }
       `}</style>
 
       {/* Header */}
-      <div className="cat-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2 style={{ fontSize: 24, fontWeight: 800, fontFamily: HEAD, color: DARK, margin: 0 }}>
-          Kategorien
-        </h2>
-        <Link href="/search" style={{
-          display: 'flex', alignItems: 'center', gap: 4,
-          fontSize: 14, fontWeight: 600, color: YELLOW,
-          textDecoration: 'none', fontFamily: BODY,
-        }}>
-          Alle Kategorien <ChevronRight size={16} />
-        </Link>
-      </div>
+      <SectionHeader title="Kategorien" href="/search" linkLabel="Alle Kategorien" />
 
       {/* Horizontal scrollable circles */}
       <div className="cat-circles" style={{

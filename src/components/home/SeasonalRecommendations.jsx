@@ -41,7 +41,7 @@ export function SeasonalRecommendations() {
     <section style={{ padding: "16px 24px 32px", maxWidth: 1280, margin: "0 auto" }}>
       <div style={{
         position: "relative", overflow: "hidden",
-        borderRadius: 18, padding: hasImage ? 0 : "22px 24px",
+        borderRadius: 14, padding: hasImage ? 0 : "22px 24px",
         minHeight: hasImage ? 190 : undefined,
         background: hasImage ? `linear-gradient(135deg, ${TEAL}, ${DARK})` : `linear-gradient(135deg, ${TEAL}12, #F4C03F18)`,
         border: hasImage ? "none" : "1px solid #0E949322",
@@ -70,8 +70,8 @@ export function SeasonalRecommendations() {
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingLeft: 44 }}>
             {season.items.map((it) => (
               <Link key={it.q} href={`/search?q=${encodeURIComponent(it.q)}`} style={{
-                padding: "8px 16px", borderRadius: 20, background: "#fff",
-                border: "1.5px solid #E2E2E2", fontSize: 13, fontWeight: 600,
+                padding: "8px 16px", borderRadius: 8, background: "#fff",
+                border: "1.5px solid #14110D", fontSize: 13, fontWeight: 600,
                 color: DARK, textDecoration: "none", fontFamily: "'Manrope', sans-serif",
               }}>
                 {it.label}
