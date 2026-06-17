@@ -1,7 +1,7 @@
 "use client"
 import { supabase } from "@/lib/supabase/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createListing, uploadListingImages, updateListingStatus, getCategories, checkProfileComplete, getListing } from "@/lib/listings";
+import { createListing, uploadListingImages, submitForReview, getCategories, checkProfileComplete, getListing } from "@/lib/listings";
 import { saveListingAttributes } from "@/lib/api/attributes";
 import { useState, useEffect } from "react";
 import { Copy } from "lucide-react";
@@ -77,7 +77,7 @@ export default function NewListingPage() {
       await saveListingAttributes(listing.id, formData.attributeValues);
     }
     if (formData.publish) {
-      await updateListingStatus(listing.id, "active");
+      await submitForReview(listing.id);
     }
     router.push("/listings");
     return listing;

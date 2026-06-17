@@ -198,6 +198,25 @@ export async function updateListingStatus(listingId, status) {
   if (error) throw error;
 }
 
+// ─── Freigabe-Queue ──────────────────────────────────────────
+// Inserat zur Admin-Freigabe einreichen (statt direkt active).
+export async function submitForReview(listingId) {
+  const { error } = await supabase
+    .from("listings")
+    .update({ status: "pending_review", submitted_at: new Date().toISOString() })
+    .eq("id", listingId);
+  if (error) throw error;
+}
+
+// Admin: Inserat freigeben / ablehnen (RPC umgeht owner-RLS).
+export async function reviewListing(listingId, decision, reason = null) {
+  const { data, error } = await supabase.rpc("admin_review_listing", {
+    p_listing_id: listingId, p_decision: decision, p_reason: reason,
+  });
+  if (error) throw error;
+  return data;
+}
+
 // ─── Laufzeit verlängern ─────────────────────────────────────
 // Setzt expires_at auf 60 Tage ab jetzt und reaktiviert abgelaufene Inserate.
 export async function renewListing(listingId) {
