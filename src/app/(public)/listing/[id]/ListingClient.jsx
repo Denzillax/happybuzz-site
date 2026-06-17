@@ -26,6 +26,13 @@ import { recordView } from "@/lib/recentlyViewed";
 import { createNotification } from "@/lib/notifications";
 import { makeArtRef } from "@/lib/fees";
 
+// ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PAPER = "#FBF8F2";
+const PETROL = "#0B5E5C";
+const MONO = "'Space Mono', ui-monospace, monospace";
+
 // ── LocationMap: interaktive Leaflet-Karte mit Gemeindegrenze ──
 // - rote Gemeindegrenze (Polygon via Nominatim polygon_geojson)
 // - auf das Gebiet gezoomt (fitBounds)
@@ -393,7 +400,7 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
               <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => imgs.length > 0 && setLightbox(true)}
                 onMouseMove={(e) => {
@@ -438,35 +445,35 @@ export default function ListingDetail() {
             </div>
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
-            <div style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+            <div style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, overflow: "hidden" }}>
               {l.condition && (
                 <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
-                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Zustand</p>
-                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{condLabel}</p>
+                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Zustand</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{condLabel}</p>
                 </div>
               )}
               {l.categoryName && (
                 <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
-                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Kategorie</p>
-                  <Link href={`/search?category=${l.categoryPath?.[l.categoryPath.length - 1]?.slug || ""}`} className="bd-link" style={{ display: "inline-block", margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: colors.blue }}>{l.categoryName}</Link>
+                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Kategorie</p>
+                  <Link href={`/search?category=${l.categoryPath?.[l.categoryPath.length - 1]?.slug || ""}`} className="bd-link" style={{ display: "inline-block", margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.categoryName}</Link>
                 </div>
               )}
               {l.city && (
                 <div style={{ flex: 1, padding: "14px 18px" }}>
-                  <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontWeight: 600 }}>Standort</p>
-                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700 }}>{l.city}</p>
+                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Standort</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.city}</p>
                 </div>
               )}
             </div>
 
             {/* ── BESCHREIBUNG ───────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
               <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
               <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
             </div>
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
               <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "12px 20px", fontSize: 13 }}>
                 <span style={{ color: colors.muted }}>Lieferung</span>
@@ -485,7 +492,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── VERKÄUFER ──────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
@@ -513,7 +520,7 @@ export default function ListingDetail() {
 
             {/* ── STANDORT (KARTE) ──────────────────── */}
             {l.city && (
-              <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
                 <div style={{ padding: "16px 28px 12px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div>
                     <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
@@ -522,7 +529,7 @@ export default function ListingDetail() {
                     </p>
                   </div>
                   <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: radius.full, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 10, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
@@ -531,7 +538,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── NACHRICHTEN (aufklappbar) ─────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
               {/* Header mit Toggle */}
               <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -633,9 +640,15 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "24px 28px", marginBottom: 14 }}>
-              <h1 style={{ fontSize: 22, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.3 }}>{l.title}</h1>
-              <div style={{ fontFamily: "monospace", fontSize: 11, color: colors.muted, marginBottom: 8 }}>{makeArtRef(l.id)}</div>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
+              {/* Exponat-Kopf: Referenznummer + Zustands-Stempel */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
+                <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: ".04em", color: colors.muted }}>{makeArtRef(l.id)}</span>
+                {l.condition && (
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: PAPER, background: PETROL, borderRadius: 4, padding: "3px 9px", whiteSpace: "nowrap" }}>{condLabel}</span>
+                )}
+              </div>
+              <h1 style={{ fontSize: 23, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.2, letterSpacing: "-0.01em", color: INK }}>{l.title}</h1>
               <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
                 <Clock size={13} /> {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}
                 {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span>{l.view_count} Aufrufe</>}
@@ -667,7 +680,7 @@ export default function ListingDetail() {
                   }} disabled={isOwner}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      padding: "15px", borderRadius: radius.full, border: "none", width: "100%",
+                      padding: "15px", borderRadius: 10, border: "none", width: "100%",
                       background: isOwner ? colors.warm : colors.yellow,
                       color: isOwner ? colors.mutedLt : colors.dark,
                       fontSize: 15, fontWeight: 800, fontFamily: fonts.body, letterSpacing: ".03em",
@@ -677,7 +690,7 @@ export default function ListingDetail() {
                   </button>
                   {!isOwner && l.is_negotiable && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setOfferAmount(""); setShowOfferModal(true); }}
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: radius.full, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
                       <Tag size={16} /> Preis vorschlagen
                     </button>
                   )}
@@ -793,7 +806,7 @@ export default function ListingDetail() {
                   {/* Sofortkauf Button */}
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
-                      style={{ width: "100%", padding: "14px", borderRadius: radius.full, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      style={{ width: "100%", padding: "14px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> SOFORT KAUFEN · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -805,7 +818,7 @@ export default function ListingDetail() {
                       const minBid = (bids[0]?.amount || l.start_price || 0) + 1;
                       setBidAmount(myBid ? String(myBid.max_amount) : String(Math.ceil(minBid)));
                       setBidModal("bid");
-                    }} style={{ width: "100%", padding: "14px", borderRadius: radius.full, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    }} style={{ width: "100%", padding: "14px", borderRadius: 10, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <Gavel size={18} /> GEBOT ABGEBEN
                     </button>
                   )}
@@ -1148,7 +1161,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); setBookingError("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.full, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 10, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> MIETE ANFRAGEN
                       </button>
                       {bookingError && (
@@ -1204,7 +1217,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); }
                       }}
                         disabled={!bookStart}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: radius.full, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 10, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> SERVICE ANFRAGEN
                       </button>
                       {bookingSuccess && (
@@ -1243,7 +1256,7 @@ export default function ListingDetail() {
               {/* Favorit */}
               <button onClick={handleFav} style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                padding: "13px", borderRadius: radius.full, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
+                padding: "13px", borderRadius: 10, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
                 background: isFav ? colors.yellowSoft : colors.surface, color: isFav ? colors.dark : colors.muted,
                 fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 10,
                 letterSpacing: ".03em",
@@ -1255,7 +1268,7 @@ export default function ListingDetail() {
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
-              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
+              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100" }}>• {m}</p>)}
                 <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 6, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
@@ -1264,7 +1277,7 @@ export default function ListingDetail() {
 
             {/* ── BEE-IMPACT BOX ─────────────────────── */}
             {l.status === "active" && beeImpact > 0 && (
-              <div style={{ background: colors.greenSoft, borderRadius: radius.lg, border: `1px solid ${colors.green}22`, padding: "18px 22px", marginBottom: 14 }}>
+              <div style={{ background: colors.greenSoft, borderRadius: 12, border: `1px solid ${colors.green}22`, padding: "18px 22px", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <BeeIcon size={20} color={colors.green} />
                   <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
@@ -1276,7 +1289,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── LIEFERUNG SIDEBAR ──────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Lieferung</p>
               <p style={{ margin: 0, fontWeight: 600 }}>
                 {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}
@@ -1285,7 +1298,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── SELLER MINI-CARD ───────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 22px", marginBottom: 14 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: `1px solid ${INK}`, padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
@@ -1406,8 +1419,8 @@ export default function ListingDetail() {
 
         {/* ── ÄHNLICHE ARTIKEL ─────────────────────────── */}
         {similar.length > 0 && (
-          <div style={{ marginTop: 40 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head, marginBottom: 20, letterSpacing: ".02em" }}>Ähnliche Artikel</h2>
+          <div style={{ marginTop: 48 }}>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: `1.5px solid ${INK}`, letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
               {similar.map((item) => (
                 <ListingCard key={item.id} listing={item} userId={user?.id} />
