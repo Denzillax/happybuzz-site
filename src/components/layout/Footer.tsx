@@ -2,6 +2,8 @@
 import Link from 'next/link'
 import { Logo } from '@/components/shared/Logo'
 
+const MONO = "'Space Mono', ui-monospace, monospace"
+
 const links = {
   marktplatz: [
     { label: 'Stöbern', href: '/search' },
@@ -22,7 +24,7 @@ const links = {
 
 export function Footer() {
   return (
-    <footer style={{ background: '#1a1a1a', color: '#fff' }}>
+    <footer style={{ background: '#14110D', color: '#fff' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 32px 24px' }}>
         {/* Top Grid */}
         <div className="ftr-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
@@ -40,7 +42,7 @@ export function Footer() {
 
           {/* Marktplatz */}
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 16 }}>
+            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: 'rgba(251,248,242,0.92)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
               Marktplatz
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -58,7 +60,7 @@ export function Footer() {
 
           {/* Unternehmen */}
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 16 }}>
+            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: 'rgba(251,248,242,0.92)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
               Über uns
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -76,7 +78,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 16 }}>
+            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: 'rgba(251,248,242,0.92)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
               Support
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -94,7 +96,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="ftr-bottom" style={{ borderTop: '1px solid #2a2a2a', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="ftr-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontSize: 12, color: '#555', margin: 0 }}>
             © 2026 BEEDARO. Alle Rechte vorbehalten.
           </p>

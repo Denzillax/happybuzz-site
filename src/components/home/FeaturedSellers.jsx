@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Star, User, Package, Store } from 'lucide-react'
+import { Star, User, Package } from 'lucide-react'
 import { getShowcaseSellers } from '@/lib/gamification'
 import { AccountBadge } from '@/components/shared/AccountBadge'
+import { SectionHeader } from './SectionHeader'
 
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const MUTED = '#9A9490'
 const YELLOW = '#F4C03F'
-const DARK = '#191615'
-const CREAM = '#F9F4EC'
-const BORDER = '#ECE6DB'
+const INK = '#14110D'
+const SAND = '#ECE3D2'
+const PETROL = '#0B5E5C'
 
 const PERIOD = { hour: 'Std', day: 'Tag', week: 'Wo', month: 'Mt' }
 function priceLabel(l) {
@@ -34,26 +34,20 @@ export function FeaturedSellers() {
 
   return (
     <section style={{ padding: '16px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-        <Store size={20} color={YELLOW} />
-        <h2 style={{ fontSize: 24, fontWeight: 800, fontFamily: HEAD, color: DARK, margin: 0 }}>
-          Schaufenster
-        </h2>
-      </div>
-      <p style={{ fontSize: 14, color: MUTED, margin: '0 0 16px' }}>Verkäufer, die diese Woche im Rampenlicht stehen</p>
+      <SectionHeader title="Schaufenster" subtitle="Verkäufer, die diese Woche im Rampenlicht stehen" />
 
       <div className="featured-sellers-grid">
         {sellers.map((s) => {
           const name = s.account_type === 'business' && s.company_name ? s.company_name : (s.display_name || 'Verkäufer')
           return (
-            <div key={s.id} style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div key={s.id} style={{ background: '#fff', border: `1px solid ${INK}`, borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
               <Link href={`/user/${s.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 14, textDecoration: 'none', color: 'inherit' }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                  {s.avatar_url ? <img src={s.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color={YELLOW} />}
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: SAND, border: `1px solid ${INK}`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                  {s.avatar_url ? <img src={s.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color={PETROL} />}
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 15, fontWeight: 700, color: DARK, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: INK, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
                     <AccountBadge accountType={s.account_type} />
                   </div>
                   {s.rating_count > 0 ? (
@@ -71,7 +65,7 @@ export function FeaturedSellers() {
                   {s.listings.map((l) => {
                     const pl = priceLabel(l)
                     return (
-                    <Link key={l.id} href={`/listing/${l.id}`} title={l.title} style={{ position: 'relative', aspectRatio: '1 / 1', background: CREAM, borderRadius: 8, overflow: 'hidden', textDecoration: 'none', display: 'flex', alignItems: 'flex-end' }}>
+                    <Link key={l.id} href={`/listing/${l.id}`} title={l.title} style={{ position: 'relative', aspectRatio: '1 / 1', background: SAND, borderRadius: 6, overflow: 'hidden', textDecoration: 'none', display: 'flex', alignItems: 'flex-end' }}>
                       {l.cover
                         ? <img src={l.cover} alt={l.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         : <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={20} color="#CFC8BC" /></div>}
@@ -83,7 +77,7 @@ export function FeaturedSellers() {
                 <div style={{ padding: '0 14px 14px', fontSize: 12.5, color: MUTED }}>Keine aktiven Inserate</div>
               )}
 
-              <Link href={`/user/${s.id}`} style={{ marginTop: 'auto', textAlign: 'center', padding: '10px 14px', borderTop: `1px solid ${BORDER}`, fontSize: 13, fontWeight: 700, color: YELLOW, textDecoration: 'none' }}>
+              <Link href={`/user/${s.id}`} style={{ marginTop: 'auto', textAlign: 'center', padding: '10px 14px', borderTop: `1px solid ${INK}1f`, fontSize: 13, fontWeight: 700, color: INK, textDecoration: 'none' }}>
                 Profil ansehen
               </Link>
             </div>
