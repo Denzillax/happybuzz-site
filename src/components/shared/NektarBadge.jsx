@@ -42,8 +42,8 @@ export default function NektarBadge() {
   return (
     <div ref={ref} className="nektar-badge" style={{ position: "relative" }}>
       <button onClick={() => setOpen((o) => !o)} style={{
-        display: "flex", alignItems: "center", gap: 8, padding: "7px 12px", borderRadius: 20,
-        border: "1px solid #E2E2E2", background: "#fff", cursor: "pointer", fontFamily: "'Manrope', sans-serif",
+        display: "flex", alignItems: "center", gap: 8, padding: "7px 12px", borderRadius: 8,
+        border: "1px solid #14110D", background: "#fff", cursor: "pointer", fontFamily: "'Manrope', sans-serif",
       }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 800, color: level.color, whiteSpace: "nowrap" }}>
           <BeeIcon size={13} color={level.color} /> <span className="nektar-level-name">{level.name}</span>
@@ -56,7 +56,7 @@ export default function NektarBadge() {
       </button>
 
       {open && (
-        <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, zIndex: 200, width: 264, background: "#fff", borderRadius: 14, boxShadow: "0 10px 34px rgba(0,0,0,.14)", border: "1px solid #eee", padding: 16, fontFamily: "'Manrope', sans-serif" }}>
+        <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, zIndex: 200, width: 264, background: "#fff", borderRadius: 12, boxShadow: "0 16px 38px rgba(20,17,13,.16)", border: "1px solid #14110D", padding: 16, fontFamily: "'Manrope', sans-serif" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${level.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <BeeIcon size={19} color={level.color} />
@@ -66,7 +66,7 @@ export default function NektarBadge() {
               <p style={{ margin: 0, fontSize: 11, color: "#757575" }}>{data.xp.toLocaleString("de-CH")} Pollen</p>
             </div>
           </div>
-          <div style={{ height: 8, borderRadius: 4, background: "#EEE", overflow: "hidden", marginBottom: 6 }}>
+          <div style={{ height: 8, borderRadius: 4, background: "#ECE3D2", overflow: "hidden", marginBottom: 6 }}>
             <div style={{ height: "100%", borderRadius: 4, background: level.color, width: `${next ? progress : 100}%`, transition: "width .4s" }} />
           </div>
           <p style={{ margin: "0 0 12px", fontSize: 11, color: "#757575" }}>
