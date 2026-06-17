@@ -16,7 +16,6 @@ import { buildDunningEmail, DUNNING_GAP_DAYS } from "@/lib/dunning";
 import { getAnnouncement } from "@/lib/announcement";
 import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
 import { reviewListing } from "@/lib/listings";
-import { createNotification } from "@/lib/notifications";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 
@@ -458,7 +457,7 @@ export function useAdminData() {
     setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: "draft", review_reason: reason } : l));
     flash("Inserat abgelehnt");
     logAdmin("listing_reject", "listing", _l?.title || listingId, { reason });
-    if (_l?.user_id) createNotification(_l.user_id, "listing_rejected", "Inserat abgelehnt", reason, "/listings");
+    if (_l?.user_id) await supabase.from("notifications").insert({ user_id: _l.user_id, type: "listing_rejected", title: "Inserat abgelehnt", message: reason, link: "/listings", is_read: false });
   };
 
   // Mahnung senden — speichert die gerenderte Mail (subject + body) lesbar im email_log.
