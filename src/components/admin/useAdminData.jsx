@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2 } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2 } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -18,6 +18,7 @@ import { th, td, pill, bcFieldLabel, bcInput, chartCard, chartHead, chartLabel, 
 import { reviewListing } from "@/lib/listings";
 import { createNotification } from "@/lib/notifications";
 import { getCompanySettings, DEFAULT_COMPANY } from "@/lib/company";
+import { getMyRole, getStaffRoles, setStaffRole as setStaffRoleRpc, ROLE_TABS } from "@/lib/staff";
 
 const ADMIN_ID = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
 
@@ -73,8 +74,15 @@ export function useAdminData() {
   useEffect(() => {
     async function load() {
       const { data: { user: u } } = await supabase.auth.getUser();
-      if (!u || u.id !== ADMIN_ID) { window.location.href = "/"; return; }
+      if (!u) { window.location.href = "/"; return; }
+      let role = null;
+      if (u.id !== ADMIN_ID) {
+        role = await getMyRole(u.id);
+        if (!role) { window.location.href = "/"; return; }
+      }
       setUser(u);
+      setMyRole(role);
+      if (u.id === ADMIN_ID) getStaffRoles().then(setStaffRoles);
 
       // Stats
       const { count: userCount } = await supabase.from("profiles").select("*", { count: "exact", head: true });
@@ -246,6 +254,8 @@ export function useAdminData() {
   const [userNote, setUserNote] = useState("");
   const [profileAudit, setProfileAudit] = useState([]);
   const [company, setCompany] = useState(DEFAULT_COMPANY);
+  const [myRole, setMyRole] = useState(null);
+  const [staffRoles, setStaffRoles] = useState({});
 
   // User aufklappen
   const toggleUser = async (userId) => {
@@ -305,6 +315,14 @@ export function useAdminData() {
     setCompany(next);
     flash("Firmendaten gespeichert");
     logAdmin("company_update", "company", next.name);
+  };
+
+  const setStaffRole = async (userId, role) => {
+    await setStaffRoleRpc(userId, role);
+    setStaffRoles(prev => { const n = { ...prev }; if (role) n[userId] = role; else delete n[userId]; return n; });
+    const _u = users.find(x => x.id === userId);
+    flash(role ? "Rolle gesetzt" : "Rolle entfernt");
+    logAdmin("staff_role_set", "user", _u?.display_name || userId, { role: role || null });
   };
 
   const ORDER_DETAIL_SELECT = "*, listing:listings(id, title, price, listing_type, rent_price, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping)";
@@ -738,8 +756,12 @@ export function useAdminData() {
     { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
     { key: "company", label: "Firma", Icon: Building2 },
+    { key: "mitarbeiter", label: "Mitarbeiter", Icon: Users2 },
   ];
   const pageTitle = NAV.find(n => n.key === tab)?.label || "Übersicht";
+  const isOwner = user?.id === ADMIN_ID;
+  const allowedTabs = isOwner ? NAV.map(n => n.key) : (ROLE_TABS[myRole] || ["overview"]);
+  const visibleNav = NAV.filter(n => allowedTabs.includes(n.key));
 
   const today = () => new Date().toISOString().slice(0, 10);
   const exportCurrent = () => {
@@ -797,6 +819,7 @@ export function useAdminData() {
     auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
     pendingListings, approveListing, rejectListing, listingMod, setListingMod,
-    NAV, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
+    NAV: visibleNav, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
+    isOwner, myRole, staffRoles, setStaffRole, allowedTabs,
   };
 }

@@ -14,6 +14,7 @@ import { OrdersTab } from "@/components/admin/tabs/OrdersTab";
 import { InvoicesTab } from "@/components/admin/tabs/InvoicesTab";
 import { DunningTab } from "@/components/admin/tabs/DunningTab";
 import { CompanyTab } from "@/components/admin/tabs/CompanyTab";
+import { StaffTab } from "@/components/admin/tabs/StaffTab";
 import { MahnPreviewModal } from "@/components/admin/modals/MahnPreviewModal";
 import { BannerModal } from "@/components/admin/modals/BannerModal";
 import { BroadcastComposer } from "@/components/admin/modals/BroadcastComposer";
@@ -118,6 +119,9 @@ export function AdminShell({ admin }) {
 
           {/* ═══ FIRMA ═══ */}
           {tab === "company" && <CompanyTab admin={admin} />}
+
+          {/* ═══ MITARBEITER ═══ */}
+          {tab === "mitarbeiter" && <StaffTab admin={admin} />}
 
         </div>
       </div>
