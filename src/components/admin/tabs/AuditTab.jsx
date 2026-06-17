@@ -9,6 +9,8 @@ const AUDIT_META = {
   report_pause_listing: { label: "Inserat pausiert (Meldung)", Icon: Pause,  color: "#E65100", bg: "#FFF3E0" },
   listing_pause:        { label: "Inserat pausiert",      Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
   listing_activate:     { label: "Inserat aktiviert",     Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
+  listing_approve:      { label: "Inserat freigegeben",   Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
+  listing_reject:       { label: "Inserat abgelehnt",     Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
   reminder:             { label: "Mahnung gesendet",      Icon: BellRing,    color: "#E65100", bg: "#FFF3E0" },
   fee_paid:             { label: "Bezahlt + reaktiviert", Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   order_cancel:         { label: "Bestellung storniert",  Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },

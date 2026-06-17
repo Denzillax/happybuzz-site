@@ -11,6 +11,7 @@ import { TypeBadge } from "@/components/shared/Badge";
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
+  pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
   paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
   rented:   { label: "Vermietet", color: colors.blue, icon: CheckCircle },
@@ -100,7 +101,7 @@ export default function ListingsPage() {
   if (typeFilter !== "all") filtered = filtered.filter(l => l.listing_type === typeFilter);
 
   // Sort — status priority first (active/paused on top, sold/archived bottom)
-  const statusPriority = { active: 0, paused: 1, draft: 2, rented: 3, sold: 4, expired: 5, archived: 6, inactive: 7 };
+  const statusPriority = { pending_review: 0, active: 1, paused: 2, draft: 3, rented: 4, sold: 5, expired: 6, archived: 7, inactive: 8 };
   filtered = [...filtered].sort((a, b) => {
     const sp = (statusPriority[a.status] ?? 9) - (statusPriority[b.status] ?? 9);
     if (sp !== 0) return sp;
@@ -304,6 +305,7 @@ export default function ListingsPage() {
                           <div style={{ minWidth: 0 }}>
                             <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 220 }}>{l.title}</Link>
                             <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
+                            {l.status === "draft" && l.review_reason && <div style={{ fontSize: 11, color: "#c62828", marginTop: 3, maxWidth: 220, whiteSpace: "normal", lineHeight: 1.3 }}>Abgelehnt: {l.review_reason}</div>}
                           </div>
                         </div>
                       </td>
