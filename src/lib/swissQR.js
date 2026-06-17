@@ -34,12 +34,14 @@ export function orderQrPayload(order, { deposit = false } = {}) {
   return buildSwissQR({ iban: payeeIban, name: payeeName, street: payeeStreet, plzCity: payeePlz, amount: total.toFixed(2), currency: "CHF", dName: fullName(payer), dStreet: payerStreet, dPlzCity: payerPlz, message });
 }
 
-// Gebühren-Rechnung: Verkäufer -> BEEDARO.
-export function feeQrPayload(invoice, seller) {
+// Gebühren-Rechnung: Verkäufer -> Firma (company_settings). `company` = Creditor.
+export function feeQrPayload(invoice, seller, company = {}) {
   const total = parseFloat(invoice.total_fees || 0);
   const ref = invoice.invoice_ref;
+  const iban = (company.iban || "CH1234567890123456789").replace(/\s/g, "");
+  const plzCity = `${company.postal_code || ""} ${company.city || ""}`.trim() || "6010 Kriens";
   return buildSwissQR({
-    iban: "CH1234567890123456789", name: "BEEDARO", street: "Gemeindehausstrasse 11B", plzCity: "6010 Kriens",
+    iban, name: company.name || "BEEDARO", street: company.street || "Gemeindehausstrasse 11B", plzCity,
     amount: total.toFixed(2), currency: "CHF",
     dName: fullName(seller), dStreet: seller?.street || "", dPlzCity: `${seller?.postal_code || ""} ${seller?.city || ""}`.trim(),
     message: `Gebuehren ${ref}`,
