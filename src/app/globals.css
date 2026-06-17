@@ -143,10 +143,10 @@ input:focus, textarea:focus, select:focus {
 
 /* Ankündigungsbalken-Effekte */
 @keyframes annSlideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-@keyframes annPulse { 0%,100% { opacity: 1; } 50% { opacity: .82; } }
+@keyframes annPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(1.06); } }
 @keyframes annMarquee { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 .ann-slide { animation: annSlideDown .5s ease-out; }
-.ann-pulse { animation: annPulse 2.4s ease-in-out infinite; }
+.ann-pulse { display: inline-block; animation: annPulse 1.5s ease-in-out infinite; }
 .ann-marquee-track { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; will-change: transform; animation: annMarquee 18s linear infinite; }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:not([type=file]):focus,
