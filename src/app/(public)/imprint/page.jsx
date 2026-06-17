@@ -1,20 +1,34 @@
 "use client";
-import { Building } from "lucide-react";
-import { colors, fonts } from "@/lib/theme";
+
+// ── Katalog-Design-Tokens ──
+const INK = "#14110D";
+const SAND = "#ECE3D2";
+const PAPER = "#FBF8F2";
+const PETROL = "#0B5E5C";
+const MUTED = "rgba(20,17,13,0.62)";
+const MONO = "'Space Mono', ui-monospace, monospace";
+const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+const BODY = "'Manrope', system-ui, sans-serif";
 
 export default function ImprintPage() {
-  const L = { fontSize: 13, fontWeight: 700, color: colors.dark, marginBottom: 2 };
-  const V = { fontSize: 14, color: colors.muted, lineHeight: 1.6, marginBottom: 16 };
+  const L = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 6 };
+  const V = { fontSize: 14, color: INK, lineHeight: 1.65, marginBottom: 20 };
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 740, margin: "0 auto", padding: "48px 20px 80px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
-          <Building size={24} color={colors.yellow} />
-          <h1 style={{ fontSize: 28, fontWeight: 900, fontFamily: fonts.head, margin: 0 }}>Impressum</h1>
+    <div style={{ fontFamily: BODY, background: PAPER, minHeight: "100vh", color: INK }}>
+      <div style={{
+        background: SAND, padding: "52px 24px 44px", borderBottom: `1px solid ${INK}`,
+        backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
+      }}>
+        <div style={{ maxWidth: 740, margin: "0 auto" }}>
+          <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 10 }}>Rechtliches</div>
+          <h1 style={{ fontSize: "clamp(26px, 3.6vw, 36px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>Impressum</h1>
+          <p style={{ fontFamily: MONO, fontSize: 12, color: MUTED, margin: 0, letterSpacing: ".03em" }}>Stand: Juni 2026</p>
         </div>
+      </div>
 
-        <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${colors.border}`, padding: "28px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px 40px" }}>
+      <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
+        <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: "30px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 40px" }}>
             <div>
               <p style={L}>Betreiber</p>
               <p style={V}>BEEDARO<br />Denis Mihaljevic<br />Einzelunternehmen</p>
@@ -41,9 +55,9 @@ export default function ImprintPage() {
             </div>
           </div>
 
-          <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: 20, marginTop: 8 }}>
+          <div style={{ borderTop: `1px solid ${INK}1f`, paddingTop: 20, marginTop: 4 }}>
             <p style={L}>Haftungsausschluss</p>
-            <p style={{ fontSize: 13, color: colors.muted, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.65, margin: 0 }}>
               BEEDARO ist eine Vermittlungsplattform. Für die Inhalte der Inserate und die Abwicklung von Transaktionen zwischen Nutzern übernimmt BEEDARO keine Haftung. Trotz sorgfältiger Kontrolle übernehmen wir keine Gewähr für die Richtigkeit externer Links.
             </p>
           </div>
