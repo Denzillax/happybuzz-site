@@ -13,6 +13,12 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited, getUserNote, saveUserNote, getSellerStats } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: "#8A8580" };
+
 export default function PublicProfilePage() {
   const params = useParams();
   const [profile, setProfile] = useState(null);
@@ -84,25 +90,27 @@ export default function PublicProfilePage() {
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" });
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
+
+        <div style={{ ...monoLabel, color: K.ink, marginBottom: 12 }}>Verkäuferprofil · Katalog der zweiten Leben</div>
 
         {/* ── PROFIL HEADER ─────────────────────────────── */}
         <div style={{
-          background: colors.surface, borderRadius: radius.lg,
-          border: `1px solid ${colors.border}`, padding: "28px 30px",
-          marginBottom: 24,
+          background: "#fff", borderRadius: 0,
+          border: `2px solid ${K.ink}`, padding: "28px 30px",
+          marginBottom: 24, boxShadow: "6px 6px 0 rgba(20,17,13,.1)",
         }}>
           <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
 
             {/* Avatar */}
             <div style={{
-              width: 88, height: 88, borderRadius: "50%", overflow: "hidden", flexShrink: 0,
+              width: 88, height: 88, borderRadius: 0, border: `2px solid ${K.ink}`, overflow: "hidden", flexShrink: 0,
               background: profile.avatar_url
                 ? `url(${profile.avatar_url}) center/cover`
-                : `linear-gradient(135deg, ${colors.yellow}, #E8A820)`,
+                : K.honey,
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 36, fontWeight: 800, color: colors.dark,
+              fontSize: 36, fontWeight: 800, color: K.ink, fontFamily: HEAD,
             }}>
               {!profile.avatar_url && initial}
             </div>
@@ -110,7 +118,7 @@ export default function PublicProfilePage() {
             {/* Info */}
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, fontFamily: fonts.head }}>
+                <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>
                   {profile.account_type === "business" && profile.company_name ? profile.company_name : (profile.display_name || profile.username)}
                 </h1>
                 <AccountBadge accountType={profile.account_type} size="lg" />
@@ -138,22 +146,22 @@ export default function PublicProfilePage() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
+            <div style={{ display: "flex", gap: 20, flexShrink: 0 }}>
               <div style={{ textAlign: "center" }}>
-                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: fonts.head }}>{listings.length}</p>
-                <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Inserate</p>
+                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: HEAD }}>{listings.length}</p>
+                <p style={{ margin: 0, ...monoLabel }}>Inserate</p>
               </div>
               <div style={{ textAlign: "center" }}>
-                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: fonts.head, color: avgRating.avg >= 4 ? colors.green : colors.dark }}>
+                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: avgRating.avg >= 4 ? colors.green : K.ink }}>
                   {avgRating.count > 0 ? avgRating.avg.toFixed(1) : "–"}
                 </p>
-                <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>{avgRating.count} Bewert.</p>
+                <p style={{ margin: 0, ...monoLabel }}>{avgRating.count} Bewert.</p>
               </div>
               <div style={{ textAlign: "center" }}>
-                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: fonts.head, color: colors.green }}>
+                <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: colors.green }}>
                   {(profile.blueten || 0).toLocaleString("de-CH")}
                 </p>
-                <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Blüten</p>
+                <p style={{ margin: 0, ...monoLabel }}>Blüten</p>
               </div>
             </div>
 
@@ -164,14 +172,14 @@ export default function PublicProfilePage() {
                 setIsSellerFav(result);
               }} style={{
                 display: "flex", alignItems: "center", gap: 8,
-                padding: "10px 20px", borderRadius: radius.sm,
-                border: `1.5px solid ${isSellerFav ? colors.yellow : colors.border}`,
-                background: isSellerFav ? `${colors.yellow}15` : "transparent",
+                padding: "10px 20px", borderRadius: 0,
+                border: `1.5px solid ${K.ink}`,
+                background: isSellerFav ? K.honey : "transparent",
                 cursor: "pointer", fontFamily: fonts.body,
-                fontSize: 13, fontWeight: 700, color: colors.dark,
+                fontSize: 13, fontWeight: 700, color: K.ink,
                 flexShrink: 0,
               }}>
-                <Heart size={16} fill={isSellerFav ? colors.yellow : "none"} color={isSellerFav ? colors.yellow : colors.muted} />
+                <Heart size={16} fill={isSellerFav ? K.ink : "none"} color={isSellerFav ? K.ink : colors.muted} />
                 {isSellerFav ? "Gemerkt" : "Verkäufer merken"}
               </button>
             )}
@@ -188,9 +196,9 @@ export default function PublicProfilePage() {
             return (
               <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
                 {tiles.map((t) => (
-                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: radius.md, background: colors.cream, border: `1px solid ${colors.borderLt}`, textAlign: "center" }}>
-                    <p style={{ margin: 0, fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: colors.dark }}>{t.v}</p>
-                    <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{t.l}</p>
+                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: 0, background: K.paper, border: `1.5px solid ${K.ink}`, textAlign: "center" }}>
+                    <p style={{ margin: 0, fontSize: 18, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>{t.v}</p>
+                    <p style={{ margin: "3px 0 0", ...monoLabel }}>{t.l}</p>
                   </div>
                 ))}
               </div>
@@ -199,10 +207,10 @@ export default function PublicProfilePage() {
 
           {/* Private Notiz (nur für eingeloggte Nutzer, nicht beim eigenen Profil) */}
           {currentUser && currentUser.id !== params.id && (
-            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: radius.md, background: colors.cream, border: `1px solid ${colors.borderLt}` }}>
+            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 0, background: K.sand, border: `1.5px solid ${K.ink}` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <StickyNote size={15} color={colors.muted} />
-                <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>Private Notiz</span>
+                <StickyNote size={15} color={K.ink} />
+                <span style={{ ...monoLabel, color: K.ink }}>Private Notiz</span>
                 <span style={{ fontSize: 11, color: colors.muted }}>nur für dich sichtbar</span>
               </div>
               <textarea
@@ -210,13 +218,13 @@ export default function PublicProfilePage() {
                 onChange={(e) => { setNote(e.target.value); setNoteSaved(false); }}
                 placeholder="z.B. Schnelle Antwort, faire Preise…"
                 rows={2}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 13, fontFamily: fonts.body, color: colors.dark, resize: "vertical", outline: "none", boxSizing: "border-box" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", fontSize: 13, fontFamily: fonts.body, color: K.ink, resize: "vertical", outline: "none", boxSizing: "border-box" }}
               />
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
                 <button
                   onClick={async () => { setNoteSaving(true); try { await saveUserNote(currentUser.id, params.id, note); setNoteSaved(true); } catch {} finally { setNoteSaving(false); } }}
                   disabled={noteSaving}
-                  style={{ padding: "7px 16px", borderRadius: 8, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
+                  style={{ padding: "7px 16px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
                 >
                   {noteSaving ? "Speichern…" : "Notiz speichern"}
                 </button>
@@ -252,7 +260,7 @@ export default function PublicProfilePage() {
 
         {/* ── TABS ─────────────────────────────────────── */}
         <div style={{
-          display: "flex", gap: 0, borderBottom: `2px solid ${colors.border}`,
+          display: "flex", gap: 0, borderBottom: `2px solid ${K.ink}`,
           marginBottom: 24,
         }}>
           {TABS.map(t => {
@@ -261,10 +269,10 @@ export default function PublicProfilePage() {
             return (
               <button key={t.key} onClick={() => setTab(t.key)} style={{
                 padding: "12px 24px", background: "none", border: "none",
-                borderBottom: active ? `2px solid ${colors.yellow}` : "2px solid transparent",
+                borderBottom: active ? `3px solid ${K.honey}` : "3px solid transparent",
                 marginBottom: -2, cursor: "pointer",
-                fontSize: 14, fontWeight: active ? 700 : 500,
-                fontFamily: fonts.body, color: active ? colors.dark : colors.muted,
+                fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
+                color: active ? K.ink : colors.muted,
                 display: "flex", alignItems: "center", gap: 6,
                 transition: "all .15s",
               }}>
@@ -308,7 +316,7 @@ export default function PublicProfilePage() {
               return (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
                   {sorted.map(([t, c]) => (
-                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 20, background: "#E6F5F5", border: `1px solid ${colors.teal}33`, fontSize: 13, color: colors.tealDark, fontFamily: fonts.body }}>
+                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 0, background: "#fff", border: `1.5px solid ${K.ink}`, fontSize: 12.5, color: K.ink, fontFamily: fonts.body }}>
                       <b style={{ fontWeight: 800 }}>{c}×</b> {t}
                     </span>
                   ))}
@@ -327,13 +335,13 @@ export default function PublicProfilePage() {
                   const sentColor = r.rating >= 4 ? colors.green : r.rating === 3 ? colors.muted : colors.red;
                   return (
                     <div key={r.id} style={{
-                      background: colors.surface, borderRadius: radius.lg,
-                      border: `1px solid ${colors.border}`, padding: "18px 22px",
+                      background: "#fff", borderRadius: 0,
+                      border: `1.5px solid ${K.ink}`, padding: "18px 22px",
                       display: "flex", gap: 16, alignItems: "flex-start",
                     }}>
                       {/* Rater Avatar */}
                       <div style={{
-                        width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
+                        width: 44, height: 44, borderRadius: 0, border: `1.5px solid ${K.ink}`, flexShrink: 0,
                         background: r.raterAvatar
                           ? `url(${r.raterAvatar}) center/cover`
                           : colors.yellowSoft,
