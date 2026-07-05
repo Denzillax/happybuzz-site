@@ -26,7 +26,7 @@ const slides = [
     kicker: 'ZWEITES LEBEN',
     title: 'Nicht neu.',
     highlight: 'Nur interessanter.',
-    description: 'Gebrauchte Dinge sind Legenden mit Geschichte. Gemeinsam geben wir ihnen ein zweites Leben.',
+    description: 'Gebrauchte Dinge haben Geschichte. Hier bekommen sie ihr zweites Leben.',
     image: '/images/hero/vinyl.png',
     cat: '0173', cond: 'VINTAGE', specimen: 'Schallplatte',
   },
@@ -86,10 +86,10 @@ export function Hero() {
 
           <h1 style={{
             fontFamily: DISPLAY, fontSize: 'clamp(40px, 5.6vw, 72px)', fontWeight: 600,
-            lineHeight: 0.98, letterSpacing: '-0.02em', color: INK, margin: '0 0 20px',
+            lineHeight: 1.08, letterSpacing: '-0.02em', color: INK, margin: '0 0 20px',
           }}>
             {s.title}<br />
-            <span style={{ background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' }}>{s.highlight}</span>
+            <span style={{ background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>{s.highlight}</span>
           </h1>
 
           <p style={{

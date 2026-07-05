@@ -44,7 +44,7 @@ export function PopularListings() {
 
   return (
     <section style={{ padding: '16px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
-      <SectionHeader title="Beliebt gerade" subtitle="Die beliebtesten Artikel der Community" href="/search?sort=relevanz" />
+      <SectionHeader title="Gerade beliebt" subtitle="Die meistgemerkten Artikel der Community" href="/search?sort=relevanz" />
 
       <div className="listing-grid">
         {listings.map(listing => (

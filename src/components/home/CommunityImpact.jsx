@@ -60,7 +60,7 @@ export function CommunityImpact() {
   const cards = [
     { value: Number(stats.articles).toLocaleString("de-CH"), label: "Artikel gerettet" },
     { value: `${co2t.toFixed(1)}t`, label: "CO2 vermieden" },
-    { value: `CHF ${chf(stats.impact)}`, label: "geflossen" },
+    { value: `CHF ${chf(stats.impact)}`, label: "an Projekte" },
   ];
 
   return (

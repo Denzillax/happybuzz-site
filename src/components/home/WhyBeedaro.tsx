@@ -48,7 +48,7 @@ export function WhyBeedaro() {
             Fair handeln, Natur schützen
           </h2>
           <p style={{ fontSize: 16, color: 'rgba(20,17,13,0.6)', margin: 0, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto' }}>
-            Mit jeder Transaktion. Kein Werbeversprechen, sondern ins Modell eingebaut.
+            Kein Werbeversprechen: Der Naturbeitrag ist fest ins Gebührenmodell eingebaut, bei jedem Verkauf.
           </p>
         </div>
 
