@@ -7,6 +7,11 @@ import { useState, useEffect } from "react";
 
 const C = colors; // Alias for brevity in this file
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
+const MONO = "'Space Mono', monospace";
+const BODY = "Manrope, sans-serif";
+
 // ─── Logo SVG ───────────────────────────────────────────────────────────
 function Logo({ width = 220 }) {
   return (
@@ -54,11 +59,11 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
   const isPw = type === "password";
   return (
     <div style={{ marginBottom: 18 }}>
-      <label style={{ display:"block", fontSize:13, fontWeight:600, color:C.dark, marginBottom:5 }}>{label}</label>
+      <label style={{ display:"block", fontSize:10, fontWeight:700, fontFamily:MONO, letterSpacing:".12em", textTransform:"uppercase", color:K.ink, marginBottom:6 }}>{label}</label>
       <div style={{ position:"relative" }}>
-        {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?C.yellow:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
+        {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
-          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius:12, border:`1.5px solid ${error?C.red:f?C.yellow:C.border}`, background:C.surface, fontSize:15, fontFamily:"'Plus Jakarta Sans',sans-serif", color:C.dark, outline:"none", transition:"all .2s", boxShadow:f?`0 0 0 3px ${C.yellow}22`:"none", boxSizing:"border-box" }}/>
+          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius:0, border:`1.5px solid ${error?C.red:f?K.petrol:K.ink}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?`3px 3px 0 ${K.honey}`:"none", boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
       {error && <p style={{ color:C.red, fontSize:12, marginTop:3, fontWeight:500 }}>{error}</p>}
@@ -81,16 +86,17 @@ function PasswordStrength({ password }) {
 
 function SocialBtn({ icon, label, onClick }) {
   const [h, setH] = useState(false);
-  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:12, border:`1.5px solid ${C.border}`, background:h?"#F5F0E8":C.surface, cursor:"pointer", fontSize:14, fontWeight:600, color:C.dark, fontFamily:"'Plus Jakarta Sans',sans-serif", transition:"all .2s" }}>{icon}{label}</button>;
+  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:0, border:`1.5px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
 }
 
 function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
-      width:"100%", padding:"13px", border:secondary?`1.5px solid ${C.border}`:"none", borderRadius:12,
-      background:secondary?"transparent":C.yellow, color:C.dark, fontSize:15, fontWeight:700,
-      fontFamily:"'Plus Jakarta Sans',sans-serif", cursor:loading?"default":"pointer",
-      transition:"all .25s", opacity:loading?.7:1,
+      width:"100%", padding:"13px", border:`1.5px solid ${K.ink}`, borderRadius:0,
+      background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
+      fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
+      boxShadow:loading?"none":`3px 3px 0 ${K.ink}`,
+      transition:"all .15s", opacity:loading?.7:1,
     }}>
       {loading ? <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
         <svg width="16" height="16" viewBox="0 0 24 24" style={{ animation:"spin .8s linear infinite" }}><circle cx="12" cy="12" r="10" stroke={C.dark} strokeWidth="2.5" fill="none" strokeDasharray="50" strokeLinecap="round" opacity=".4"/></svg>
@@ -100,9 +106,15 @@ function Btn({ children, onClick, loading, secondary, type="button" }) {
   );
 }
 
-function HexBg() {
-  const hs = [{x:8,y:12,s:38,o:.06,d:0},{x:75,y:8,s:52,o:.05,d:1.2},{x:90,y:55,s:30,o:.07,d:.6},{x:5,y:70,s:44,o:.04,d:1.8},{x:60,y:85,s:36,o:.06,d:2.4}];
-  return <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:0, overflow:"hidden" }}>{hs.map((h,i)=><div key={i} style={{ position:"absolute", left:`${h.x}%`, top:`${h.y}%`, width:h.s, height:h.s, opacity:h.o, background:C.yellow, clipPath:"polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)", animation:`floatHex 8s ease-in-out ${h.d}s infinite alternate` }}/>)}</div>;
+function KatalogBg() {
+  // Dezente Katalog-Passmarken in den Ecken
+  const mark = (pos) => <div style={{ position:"absolute", width:18, height:18, ...pos }}>
+    <div style={{ position:"absolute", left:8, top:0, width:2, height:18, background:K.ink, opacity:.14 }}/>
+    <div style={{ position:"absolute", left:0, top:8, width:18, height:2, background:K.ink, opacity:.14 }}/>
+  </div>;
+  return <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:0 }}>
+    {mark({ left:22, top:22 })}{mark({ right:22, top:22 })}{mark({ left:22, bottom:22 })}{mark({ right:22, bottom:22 })}
+  </div>;
 }
 
 // ─── Auth Page ──────────────────────────────────────────────────────────
@@ -280,7 +292,7 @@ export default function AuthPage() {
 
     forgot: () => <>
       {renderBack("login", "Zurück zum Login")}
-      <h2 style={{ fontSize:20, fontWeight:800, color:C.dark, marginBottom:6 }}>Passwort vergessen?</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Passwort vergessen?</h2>
       <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Gib deine E-Mail ein und wir senden dir einen Link zum Zurücksetzen.</p>
       {renderError()}
       <Input label="E-Mail" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="hallo@beispiel.ch" icon={<MailIcon/>} error={fieldErrors.email}/>
@@ -289,7 +301,7 @@ export default function AuthPage() {
 
     "forgot-sent": () => <div style={{ textAlign:"center", padding:"16px 0" }}>
       <MailOpen/>
-      <h2 style={{ fontSize:20, fontWeight:800, color:C.dark, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben einen Link an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Prüfe dein Postfach.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
       <p style={{ fontSize:12, color:C.muted, marginTop:16 }}>Keine E-Mail? Prüfe deinen Spam-Ordner.</p>
@@ -297,13 +309,13 @@ export default function AuthPage() {
 
     verify: () => <div style={{ textAlign:"center", padding:"16px 0" }}>
       <MailOpen/>
-      <h2 style={{ fontSize:20, fontWeight:800, color:C.dark, marginTop:12, marginBottom:8 }}>Bestätige deine E-Mail</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>Bestätige deine E-Mail</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben eine Bestätigung an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Klicke auf den Link um deinen Account zu aktivieren.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
     </div>,
 
     reset: () => <>
-      <h2 style={{ fontSize:20, fontWeight:800, color:C.dark, marginBottom:6 }}>Neues Passwort wählen</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Neues Passwort wählen</h2>
       <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Wähle ein sicheres neues Passwort für deinen Account.</p>
       {renderError()}
       <Input label="Neues Passwort" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mind. 8 Zeichen" icon={<LockIcon/>} error={fieldErrors.password}/>
@@ -315,19 +327,19 @@ export default function AuthPage() {
 
   return (
     <>
-      <div style={{ minHeight:"100vh", background:`linear-gradient(165deg,${C.cream} 0%,#F5EDE0 50%,#FFF8EB 100%)`, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Plus Jakarta Sans',sans-serif", padding:"24px 16px", position:"relative" }}>
-        <HexBg/>
+      <div style={{ minHeight:"100vh", background:K.sand, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:BODY, padding:"24px 16px", position:"relative" }}>
+        <KatalogBg/>
         <div style={{ position:"relative", zIndex:1, width:"100%", maxWidth:420, opacity:mounted?1:0, transition:"opacity .4s" }}>
-          <div style={{ textAlign:"center", marginBottom:24 }}>
-            <a href="/" className="logo-p" style={{ display:"inline-block", marginBottom:6 }}><img src="/logo.svg" alt="BEEDARO" style={{ width: 250, height: 'auto' }} /></a>
-            <p style={{ fontSize:13, color:C.muted, fontWeight:500 }}>
-              {view==="login"?"Willkommen zurück!":view==="register"?"Erstelle deinen Account":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft!":"Neues Passwort"}
+          <div style={{ textAlign:"center", marginBottom:22 }}>
+            <a href="/" style={{ display:"inline-block", marginBottom:8 }}><img src="/logo.svg" alt="BEEDARO" style={{ width: 230, height: 'auto' }} /></a>
+            <p style={{ fontSize:10, color:K.ink, fontWeight:700, fontFamily:MONO, letterSpacing:".18em", textTransform:"uppercase" }}>
+              {view==="login"?"Zugang · Katalog der zweiten Leben":view==="register"?"Neuer Eintrag · Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:"rgba(255,255,255,.85)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderRadius:20, padding:"0 28px 28px", boxShadow:"0 4px 32px rgba(25,22,21,.06),0 1px 4px rgba(25,22,21,.04)", border:"1px solid rgba(232,223,211,.6)" }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius:0, padding:"0 28px 28px", border:`2px solid ${K.ink}`, boxShadow:`8px 8px 0 rgba(20,17,13,.12)` }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
-          <p style={{ textAlign:"center", fontSize:11, color:`${C.muted}99`, marginTop:20, fontWeight:500 }}>© 2026 beedaro.ch — Kaufen. Verkaufen. Gutes tun.</p>
+          <p style={{ textAlign:"center", fontSize:10, color:C.muted, marginTop:18, fontWeight:700, fontFamily:MONO, letterSpacing:".1em", textTransform:"uppercase" }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>
         </div>
       </div>
     </>

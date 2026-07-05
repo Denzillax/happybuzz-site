@@ -183,11 +183,11 @@ input:focus, textarea:focus, select:focus {
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
-.tab { position:relative; background:none; border:none; padding:11px 0; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
-.tab.active { color:#191615; }
-.tab.active::after { content:''; position:absolute; bottom:0; left:15%; width:70%; height:2.5px; background:#F4C03F; border-radius:2px; }
-.link { color:#D4A017; font-weight:600; cursor:pointer; text-decoration:none; font-size:13px; }
-.link:hover { color:#191615; text-decoration:underline; }
+.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Space Mono',monospace; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
+.tab.active { color:#14110D; }
+.tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
+.link { color:#0B5E5C; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
+.link:hover { color:#14110D; }
 .bd-link { text-decoration: none; }
 .bd-link:hover { text-decoration: underline; }
 /* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
