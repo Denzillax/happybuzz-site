@@ -21,6 +21,7 @@ export function PopularListings() {
           bids:bids(amount)
         `)
         .eq('status', 'active')
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
         .order('view_count', { ascending: false })
         .limit(8)
 

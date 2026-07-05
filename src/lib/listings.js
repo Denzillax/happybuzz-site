@@ -375,6 +375,9 @@ export async function searchListings({
     .select("*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count)", { count: "exact" })
     .eq("status", "active");
 
+  // Abgelaufene Inserate ausblenden (expires_at überschritten, Status noch nicht umgestellt)
+  q = q.or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
+
   if (query) q = q.or(`title.ilike.%${query}%,description.ilike.%${query}%`);
 
   // Kategorie: Entweder direkte ID oder alle Kinder einer Eltern-Kategorie (rekursiv)
@@ -444,14 +447,29 @@ export async function searchListings({
 
 // ─── Upload Images ───────────────────────────────────────────
 // listing_images: url (NICHT image_url), sort_order (NICHT position)
+export const ALLOWED_IMAGE_EXT = ["jpg", "jpeg", "png", "webp", "gif"];
+export const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild
+
 export async function uploadListingImages(listingId, files) {
+  // Validierung VOR dem Upload: keine Teil-Uploads bei ungültigen Dateien
+  for (const fileObj of files) {
+    const f = fileObj.file;
+    const fext = (f.name.split(".").pop() || "").toLowerCase();
+    if (!ALLOWED_IMAGE_EXT.includes(fext) || !(f.type || "").startsWith("image/")) {
+      throw new Error(`"${f.name}" ist kein unterstütztes Bildformat (JPG, PNG, WEBP oder GIF).`);
+    }
+    if (f.size > MAX_IMAGE_BYTES) {
+      throw new Error(`"${f.name}" ist zu gross (max. 5 MB pro Bild).`);
+    }
+  }
+
   const results = [];
   for (let i = 0; i < files.length; i++) {
     const fileObj = files[i];
     const file = fileObj.file;
     const sortOrder = fileObj.sortOrder ?? i;
     const isCover = sortOrder === 0;
-    const ext = file.name.split(".").pop();
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
     const path = `${listingId}/${Date.now()}_${i}.${ext}`;
 
     const { error: uploadErr } = await supabase.storage.from("listing-images").upload(path, file, { upsert: false });

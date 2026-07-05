@@ -21,7 +21,8 @@ export function RecentlyViewed() {
         .from("listings")
         .select("*, listing_images(url, sort_order), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, avg_rating, rating_count), bids:bids(amount)")
         .in("id", ids)
-        .eq("status", "active");
+        .eq("status", "active")
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
       if (!data) return;
       const order = new Map(ids.map((id, i) => [id, i]));
       const mapped = data

@@ -367,9 +367,20 @@ export default function ListingForm({
   };
 
   // ── Image handling ─────────────────────────────────────────
+  const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Upload-Check)
   const addFiles = useCallback((fileList) => {
-    const newImages = Array.from(fileList)
-      .filter((f) => f.type.startsWith("image/"))
+    const all = Array.from(fileList);
+    const rejected = all.filter((f) => !f.type.startsWith("image/") || f.size > MAX_IMG_BYTES);
+    if (rejected.length > 0) {
+      setErrors((prev) => ({
+        ...prev,
+        images: `${rejected.length} Datei(en) übersprungen: nur Bilder (JPG, PNG, WEBP, GIF) bis 5 MB.`,
+      }));
+    } else {
+      setErrors((prev) => { const { images: _drop, ...rest } = prev; return rest; });
+    }
+    const newImages = all
+      .filter((f) => f.type.startsWith("image/") && f.size <= MAX_IMG_BYTES)
       .slice(0, 10 - images.length)
       .map((file, i) => ({
         file,
@@ -435,6 +446,7 @@ export default function ListingForm({
     const e = {};
     // Allgemein
     if (!form.title.trim()) e.title = "Titel ist erforderlich";
+    if (!(form.description || "").trim()) e.description = "Beschreibung ist erforderlich";
     if (!form.category_id) e.category = "Kategorie ist erforderlich";
     if (!form.condition) e.condition = "Zustand ist erforderlich";
     if (!form.postal_code || !form.city) e.location = "Standort (PLZ/Ort) ist erforderlich";
@@ -445,16 +457,19 @@ export default function ListingForm({
     // Versand / Abholung
     if (!form.shipping_available && !form.pickup_only) e.delivery = "Versand oder Abholung muss aktiviert sein";
 
-    // Typ-spezifisch
-    if (form.listing_type === "sell" && !isFree && !form.price) e.price = "Preis eingeben";
+    // Typ-spezifisch — Preise müssen gültige Zahlen > 0 sein ("0" oder "abc" reicht nicht)
+    const validPrice = (v) => Number.isFinite(parseFloat(v)) && parseFloat(v) > 0;
+    if (form.listing_type === "sell" && !isFree && !validPrice(form.price)) e.price = "Gültigen Preis (grösser als 0) eingeben";
     if (form.listing_type === "auction") {
-      if (!form.start_price) e.start_price = "Startpreis eingeben";
+      if (!validPrice(form.start_price)) e.start_price = "Gültigen Startpreis (grösser als 0) eingeben";
+      if (form.buy_now_price && parseFloat(form.buy_now_price) <= parseFloat(form.start_price || 0)) e.buy_now_price = "Sofortkauf-Preis muss über dem Startpreis liegen";
       if (!form.auction_duration) e.auction_duration = "Auktionsdauer wählen";
     }
     if (form.listing_type === "rent") {
-      if (!form.rent_price) e.rent_price = "Mietpreis eingeben";
+      if (!validPrice(form.rent_price)) e.rent_price = "Gültigen Mietpreis (grösser als 0) eingeben";
       if (!form.min_rent_days) e.min_rent_days = "Mindest-Mietdauer eingeben";
     }
+    if (form.listing_type === "service" && !validPrice(form.rent_price)) e.rent_price = "Gültigen Preis (grösser als 0) eingeben";
 
     setErrors(e);
     if (Object.keys(e).length > 0) {

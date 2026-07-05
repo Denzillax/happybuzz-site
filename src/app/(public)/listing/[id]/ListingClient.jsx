@@ -286,13 +286,13 @@ export default function ListingDetail() {
         const lastConv = filtered[filtered.length - 1];
         await replyToQuestion(lastConv.id, user.id, msgText.trim());
       } else {
-        // Neue Conversation erstellen
-        const buyerId = isSeller ? user.id : user.id;
-        const sellerId = isSeller ? user.id : l.user_id;
+        // Neue Conversation erstellen — Besitzer kann nur auf bestehende Fragen
+        // antworten, nicht mit sich selbst eine Unterhaltung eröffnen.
+        if (user.id === l.user_id) { setSendingMsg(false); return; }
 
         const { data: newConv, error: convErr } = await supabase
           .from("conversations")
-          .insert({ listing_id: l.id, buyer_id: buyerId, seller_id: l.user_id, is_public: sendPublic })
+          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: sendPublic })
           .select()
           .single();
         if (convErr) { console.error("Conv error:", convErr); return; }
@@ -316,6 +316,7 @@ export default function ListingDetail() {
   // Private Unterhaltung öffnen/erstellen und zum Chat-Thread navigieren.
   const startPrivateChat = async () => {
     if (!user) { router.push("/login"); return; }
+    if (user.id === l.user_id) return; // kein Chat mit sich selbst
     if (sendingMsg) return;
     setSendingMsg(true);
     try {

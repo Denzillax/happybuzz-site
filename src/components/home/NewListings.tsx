@@ -21,6 +21,7 @@ export function NewListings() {
           bids:bids(amount)
         `)
         .eq('status', 'active')
+        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
         .order('created_at', { ascending: false })
         .limit(8)
 
