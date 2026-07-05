@@ -20,6 +20,7 @@ export function Categories() {
         .from('categories')
         .select('id, name, slug, icon, sort_order')
         .is('parent_id', null)
+        .neq('is_active', false)
         .order('sort_order')
       setCategories(data || [])
     }

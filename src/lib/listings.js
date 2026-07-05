@@ -61,8 +61,11 @@ export async function checkProfileComplete(userId, action = "sell") {
 
 // ─── Categories ──────────────────────────────────────────────
 export async function getCategories() {
+  // Picker/Filter: deaktivierte Kategorien ausblenden (bestehende Inserate
+  // behalten ihre Kategorie, nur Neuauswahl ist gesperrt)
   const { data, error } = await supabase
     .from("categories").select("*")
+    .neq("is_active", false)
     .order("sort_order");
   if (error) throw error;
   return data || [];
@@ -820,9 +823,11 @@ export async function saveUserNote(noterId, notedId, text) {
 
 // Alle Kategorien laden (mit Hierarchie)
 export async function getAllCategories() {
+  // MegaMenu: nur aktive Kategorien anzeigen
   const { data, error } = await supabase
     .from("categories")
     .select("id, name, slug, icon, parent_id, sort_order")
+    .neq("is_active", false)
     .order("sort_order");
   if (error) return [];
   return data || [];

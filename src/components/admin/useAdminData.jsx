@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2, MessageSquareWarning } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2, MessageSquareWarning, FolderTree } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -33,6 +33,7 @@ export function useAdminData() {
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [feedback, setFeedback] = useState([]);
+  const [adminCategories, setAdminCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [search, setSearch] = useState("");
@@ -175,6 +176,10 @@ export function useAdminData() {
       // Beta-Feedback
       const { data: fb } = await supabase.from("beta_feedback").select("*").order("created_at", { ascending: false }).limit(200);
       setFeedback(fb || []);
+
+      // Kategorien (ALLE, auch deaktivierte — die Verwaltung braucht den Vollbestand)
+      const { data: cats } = await supabase.from("categories").select("*").order("sort_order");
+      setAdminCategories(cats || []);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -615,6 +620,58 @@ export function useAdminData() {
     logAdmin("feedback_note", "feedback", _f?.title || id);
   };
 
+  // ── Kategorien verwalten (deaktivieren statt löschen — Inserate behalten ihre Kategorie) ──
+  const slugifyCat = (s) => s.toLowerCase()
+    .replace(/[äöüß]/g, (c) => ({ "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss" }[c]))
+    .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const createCategory = async (name, parentId = null) => {
+    const clean = (name || "").trim();
+    if (!clean) return;
+    const siblings = adminCategories.filter(c => (c.parent_id || null) === (parentId || null));
+    const sort = siblings.length ? Math.max(...siblings.map(c => c.sort_order || 0)) + 1 : 0;
+    const { data, error } = await supabase.from("categories")
+      .insert({ name: clean, slug: `${slugifyCat(clean)}-${Date.now().toString(36)}`, parent_id: parentId, icon: "Package", sort_order: sort, is_active: true })
+      .select().single();
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setAdminCategories(prev => [...prev, data]);
+    flash(`Kategorie "${clean}" angelegt`);
+    logAdmin("category_create", "category", clean);
+  };
+  const renameCategory = async (id, name) => {
+    const clean = (name || "").trim();
+    if (!clean) return;
+    const { error } = await supabase.from("categories").update({ name: clean }).eq("id", id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setAdminCategories(prev => prev.map(c => c.id === id ? { ...c, name: clean } : c));
+    flash("Kategorie umbenannt");
+    logAdmin("category_update", "category", clean);
+  };
+  const toggleCategoryActive = async (cat) => {
+    const next = cat.is_active === false; // false → aktivieren, sonst deaktivieren
+    const { error } = await supabase.from("categories").update({ is_active: next }).eq("id", cat.id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setAdminCategories(prev => prev.map(c => c.id === cat.id ? { ...c, is_active: next } : c));
+    flash(next ? `"${cat.name}" aktiviert` : `"${cat.name}" deaktiviert`);
+    logAdmin("category_toggle", "category", cat.name, { aktiv: next });
+  };
+  const moveCategory = async (cat, dir) => {
+    const siblings = adminCategories
+      .filter(c => (c.parent_id || null) === (cat.parent_id || null))
+      .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || (a.name || "").localeCompare(b.name || ""));
+    const idx = siblings.findIndex(c => c.id === cat.id);
+    const target = idx + dir;
+    if (idx === -1 || target < 0 || target >= siblings.length) return;
+    const order = [...siblings];
+    [order[idx], order[target]] = [order[target], order[idx]];
+    // Sequentiell neu nummerieren — stabil, auch wenn alle sort_order gleich waren
+    await Promise.all(order.map((c, i) => supabase.from("categories").update({ sort_order: i }).eq("id", c.id)));
+    setAdminCategories(prev => prev.map(c => {
+      const i = order.findIndex(o => o.id === c.id);
+      return i === -1 ? c : { ...c, sort_order: i };
+    }));
+    logAdmin("category_move", "category", cat.name);
+  };
+
   // Meldungs-Workflow: offen → in_pruefung → erledigt/abgelehnt.
   // is_resolved bleibt als abgeleitetes Feld synchron (Badges/alte Filter).
   const REPORT_STATUS_LABELS = { offen: "Offen", in_pruefung: "In Prüfung", erledigt: "Erledigt", abgelehnt: "Abgelehnt" };
@@ -784,6 +841,7 @@ export function useAdminData() {
     { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
     { key: "feedback", label: "Feedback", Icon: MessageSquareWarning, badge: openFeedback.length },
+    { key: "categories", label: "Kategorien", Icon: FolderTree },
     { key: "company", label: "Firma", Icon: Building2 },
     { key: "mitarbeiter", label: "Mitarbeiter", Icon: Users2 },
   ];
@@ -834,6 +892,7 @@ export function useAdminData() {
     filteredUsers, visibleUsers, filteredListings, visibleListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
+    adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,
