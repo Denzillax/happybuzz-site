@@ -1,6 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { getMyRentalRequests, getMyBookings, updateBookingStatus } from "@/lib/listings";
 import Link from "next/link";
 import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home } from "lucide-react";
@@ -51,7 +52,7 @@ export default function BookingsPage() {
       if (status === "confirmed" && purchaseId) {
         window.location.href = `/order/${purchaseId}`;
       }
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); }
   };
 
   const TABS = [

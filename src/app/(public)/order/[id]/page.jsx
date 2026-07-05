@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 import {
   Package, CreditCard, Truck, CheckCircle, Clock, MapPin, X, ExternalLink,
@@ -194,7 +195,7 @@ export default function OrderDetailPage() {
   };
   const doAction = async (fn, ...args) => {
     setActing(true);
-    try { await fn(...args); await reload(); } catch (err) { console.error(err); } finally { setActing(false); }
+    try { await fn(...args); await reload(); } catch (err) { console.error(err); toast.error(err?.message || "Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setActing(false); }
   };
 ;
 
@@ -543,7 +544,7 @@ export default function OrderDetailPage() {
                               const [det, ev] = await Promise.all([getPurchaseDetail(p.id), getPurchaseEvents(p.id)]);
                               setPurchase(det); setEvents(ev);
                               setShowDamageForm(false); setDamageFiles([]);
-                            } catch (err) { console.error(err); }
+                            } catch (err) { console.error(err); toast.error("Schadenmeldung fehlgeschlagen. Bitte erneut versuchen."); }
                             setActing(false);
                           }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
                           <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>

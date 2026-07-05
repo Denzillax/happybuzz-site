@@ -1,6 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { getMyPurchases } from "@/lib/listings";
 import Link from "next/link";
 import { ShoppingBag, Package, Clock, CreditCard, Truck, CheckCircle, Star, X, AlertTriangle, Loader2 } from "lucide-react";
@@ -29,7 +30,7 @@ export default function PurchasesPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session?.user) { window.location.href = "/login"; return; }
         setPurchases(await getMyPurchases(session.user.id));
-      } catch (err) { console.error(err); }
+      } catch (err) { console.error(err); toast.error("Käufe konnten nicht geladen werden."); }
       finally { setLoading(false); }
     }
     load();

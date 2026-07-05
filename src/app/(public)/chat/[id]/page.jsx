@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus, ShieldCheck } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
@@ -100,7 +101,7 @@ export default function ChatConversation() {
     if (!dealActive) { const r = maskContactInfo(t); t = r.masked; if (r.hadContact) setMyViolations((v) => v + 1); }
     setSending(true);
     try { const m = await sendMessage(params.id, user.id, t); appendMsg(m); if (text === undefined) setNewMsg(""); }
-    catch (err) { console.error(err); }
+    catch (err) { console.error(err); toast.error("Nachricht konnte nicht gesendet werden."); }
     finally { setSending(false); }
   };
   const handleSend = () => sendText();
@@ -114,7 +115,7 @@ export default function ChatConversation() {
       const url = await uploadChatImage(params.id, file);
       const m = await sendMessage(params.id, user.id, "", { imageUrl: url });
       appendMsg(m);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); toast.error("Bild konnte nicht gesendet werden."); }
     finally { setUploading(false); }
   };
 
@@ -131,7 +132,7 @@ export default function ChatConversation() {
   const rejectOffer = async (amount) => {
     if (sending) return; setSending(true);
     try { appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag über CHF ${Number(amount).toLocaleString("de-CH")} abgelehnt.`, { messageType: "system" })); }
-    catch (e) { console.error(e); } finally { setSending(false); }
+    catch (e) { console.error(e); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setSending(false); }
   };
   const counterOffer = async () => {
     const raw = (window.prompt("Dein Gegenvorschlag (CHF):") || "").replace(",", ".");
@@ -139,7 +140,7 @@ export default function ChatConversation() {
     if (!v || v <= 0 || sending) return;
     setSending(true);
     try { appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v })); }
-    catch (e) { console.error(e); } finally { setSending(false); }
+    catch (e) { console.error(e); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setSending(false); }
   };
 
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;

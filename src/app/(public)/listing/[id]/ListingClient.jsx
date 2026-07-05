@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
@@ -309,7 +310,7 @@ export default function ListingDetail() {
       setMsgSent(true);
       setTimeout(() => setMsgSent(false), 3000);
       getListingQuestions(params.id).then(setQuestions);
-    } catch (err) { console.error("Send error:", err); }
+    } catch (err) { console.error("Send error:", err); toast.error("Nachricht konnte nicht gesendet werden."); }
     finally { setSendingMsg(false); }
   };
 
@@ -331,7 +332,7 @@ export default function ListingDetail() {
         convId = nc?.id;
       }
       if (convId) router.push(`/chat/${convId}`);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); toast.error("Chat konnte nicht geöffnet werden."); }
     finally { setSendingMsg(false); }
   };
 
@@ -356,7 +357,7 @@ export default function ListingDetail() {
       try { await createNotification(l.user_id, "offer", "Neuer Preisvorschlag", `CHF ${v.toLocaleString("de-CH")} für "${l.title}"`, `/chat/${convId}`); } catch {}
       setShowOfferModal(false);
       router.push(`/chat/${convId}`);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); toast.error("Preisvorschlag konnte nicht gesendet werden."); }
     finally { setOfferSending(false); }
   };
 
@@ -1215,7 +1216,7 @@ export default function ListingDetail() {
                           await createBooking(l.id, user.id, l.user_id, startWithTime, bookStart, parseFloat(l.rent_price || 0), 0);
                           setBookingSuccess(true);
                           setBookStart(""); setBookEnd("");
-                        } catch (err) { console.error(err); }
+                        } catch (err) { console.error(err); toast.error("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart}
                         style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 10, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>

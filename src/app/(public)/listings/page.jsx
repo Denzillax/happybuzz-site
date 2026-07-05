@@ -1,6 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { getUserListings, deleteListing, getListingAnalytics } from "@/lib/listings";
 import { redeemNektar, NEKTAR_CATALOG } from "@/lib/gamification";
 import Link from "next/link";
@@ -161,7 +162,7 @@ export default function ListingsPage() {
         setListings(prev => prev.filter(l => !ids.includes(l.id) || bidCounts[l.id]?.count > 0));
       }
       setSelected(new Set());
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error(err); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); }
     finally { setBatchAction(null); }
   };
 
