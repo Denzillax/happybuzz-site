@@ -55,6 +55,7 @@ const POST_TARIFE = {
   },
 };
 const MAX_MARKUP = 5; // Max CHF 5 über Post-Tarif
+const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Upload-Check in listings.js)
 
 // ─── Shared Styles ──────────────────────────────────────────
 const inputBase = {
@@ -367,7 +368,6 @@ export default function ListingForm({
   };
 
   // ── Image handling ─────────────────────────────────────────
-  const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Upload-Check)
   const addFiles = useCallback((fileList) => {
     const all = Array.from(fileList);
     const rejected = all.filter((f) => !f.type.startsWith("image/") || f.size > MAX_IMG_BYTES);

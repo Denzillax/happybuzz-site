@@ -2,10 +2,10 @@ import { supabase } from "@/lib/supabase/supabase";
 
 export const ROLE_LABELS = { support: "Support", finance: "Buchhaltung", moderation: "Moderation", manager: "Manager" };
 export const ROLE_TABS = {
-  support: ["overview", "users", "orders", "reports", "emails"],
+  support: ["overview", "users", "orders", "reports", "emails", "feedback"],
   finance: ["overview", "invoices", "dunning", "analytics"],
   moderation: ["overview", "listings", "reports", "users"],
-  manager: ["overview", "analytics", "users", "orders", "invoices", "listings", "emails", "dunning", "audit", "reports"],
+  manager: ["overview", "analytics", "users", "orders", "invoices", "listings", "emails", "dunning", "audit", "reports", "feedback"],
 };
 
 export async function getMyRole(userId) {

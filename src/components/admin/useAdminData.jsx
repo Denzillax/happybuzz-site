@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2 } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2, MessageSquareWarning } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -32,6 +32,7 @@ export function useAdminData() {
   const [reports, setReports] = useState([]);
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [search, setSearch] = useState("");
@@ -170,6 +171,10 @@ export function useAdminData() {
       // E-Mail-Log
       const { data: mails } = await supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(500);
       setEmailLog(mails || []);
+
+      // Beta-Feedback
+      const { data: fb } = await supabase.from("beta_feedback").select("*").order("created_at", { ascending: false }).limit(200);
+      setFeedback(fb || []);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -593,6 +598,23 @@ export function useAdminData() {
     const _rv = reviews.find(x => x.id === reviewId); logAdmin("review_delete", "review", _rv ? `${_rv.reviewerName} → ${_rv.revieweeName}` : reviewId);
   };
 
+  // Beta-Feedback: Status setzen + Admin-Notiz speichern
+  const FEEDBACK_STATUS_LABELS = { neu: "Neu", in_arbeit: "In Arbeit", erledigt: "Erledigt", verworfen: "Verworfen" };
+  const setFeedbackStatus = async (id, status) => {
+    await supabase.from("beta_feedback").update({ status }).eq("id", id);
+    setFeedback(prev => prev.map(f => f.id === id ? { ...f, status } : f));
+    flash(`Status: ${FEEDBACK_STATUS_LABELS[status] || status}`);
+    const _f = feedback.find(x => x.id === id);
+    logAdmin("feedback_status", "feedback", _f?.title || id, { status });
+  };
+  const saveFeedbackNote = async (id, note) => {
+    await supabase.from("beta_feedback").update({ admin_note: note }).eq("id", id);
+    setFeedback(prev => prev.map(f => f.id === id ? { ...f, admin_note: note } : f));
+    flash("Notiz gespeichert");
+    const _f = feedback.find(x => x.id === id);
+    logAdmin("feedback_note", "feedback", _f?.title || id);
+  };
+
   // Report erledigen
   const resolveReport = async (reportId) => {
     await supabase.from("reports").update({ is_resolved: true }).eq("id", reportId);
@@ -652,6 +674,7 @@ export function useAdminData() {
   const flaggedUsers = users.filter(u => (u.contact_violations || 0) > 0);
   const bannedUsers = users.filter(u => u.is_banned);
   const openReports = reports.filter(r => !r.is_resolved);
+  const openFeedback = feedback.filter(f => !f.status || f.status === "neu");
   const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
   const overdueInvoices = feeInvoices.filter(isOverdue).sort((a, b) => ((b.reminder_level || 0) - (a.reminder_level || 0)) || (daysOverdue(b) - daysOverdue(a)));
   const overdueSum = overdueInvoices.reduce((s, i) => s + parseFloat(i.total_fees || 0), 0);
@@ -755,6 +778,7 @@ export function useAdminData() {
     { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
     { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
+    { key: "feedback", label: "Feedback", Icon: MessageSquareWarning, badge: openFeedback.length },
     { key: "company", label: "Firma", Icon: Building2 },
     { key: "mitarbeiter", label: "Mitarbeiter", Icon: Users2 },
   ];
@@ -804,6 +828,7 @@ export function useAdminData() {
     stats, users, setUsers, listings, reports, setReports, orders, feeInvoices, reviews, setReviews, emailLog, setEmailLog,
     filteredUsers, visibleUsers, filteredListings, visibleListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
+    feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,

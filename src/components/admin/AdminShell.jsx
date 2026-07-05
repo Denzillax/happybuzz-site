@@ -15,6 +15,7 @@ import { InvoicesTab } from "@/components/admin/tabs/InvoicesTab";
 import { DunningTab } from "@/components/admin/tabs/DunningTab";
 import { CompanyTab } from "@/components/admin/tabs/CompanyTab";
 import { StaffTab } from "@/components/admin/tabs/StaffTab";
+import { FeedbackTab } from "@/components/admin/tabs/FeedbackTab";
 import { MahnPreviewModal } from "@/components/admin/modals/MahnPreviewModal";
 import { BannerModal } from "@/components/admin/modals/BannerModal";
 import { BroadcastComposer } from "@/components/admin/modals/BroadcastComposer";
@@ -113,6 +114,8 @@ export function AdminShell({ admin }) {
 
           {/* ═══ MELDUNGEN ═══ */}
           {tab === "reports" && <ReportsTab admin={admin} />}
+
+          {tab === "feedback" && <FeedbackTab admin={admin} />}
 
           {/* ═══ PROTOKOLL ═══ */}
           {tab === "audit" && <AuditTab admin={admin} />}
