@@ -5,33 +5,43 @@ import { colors, radius } from "@/lib/theme";
 
 const C = colors;
 
+// Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
+// Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const monoLabel = {
+  display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
+  letterSpacing: ".12em", textTransform: "uppercase", color: K.ink, marginBottom: 6,
+};
+
 export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
+  const accent = verified ? K.moss : pending ? K.honey : "#fff";
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
-      padding: "14px 16px", borderRadius: 10,
-      background: verified ? C.greenSoft : pending ? C.yellowSoft : C.cream,
-      border: `1px solid ${verified ? "#B8D8B8" : pending ? "#F0D68A" : C.border}`,
+      padding: "14px 16px", borderRadius: 0,
+      background: verified ? "#EEF4EC" : pending ? "#FBF1D2" : "#fff",
+      border: `1.5px solid ${K.ink}`,
     }}>
       <div style={{
-        width: 36, height: 36, borderRadius: "50%",
+        width: 36, height: 36, borderRadius: 0, border: `1.5px solid ${K.ink}`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: verified ? C.green : pending ? C.yellow : C.border,
-        color: verified ? "#fff" : pending ? C.dark : C.muted,
+        background: accent,
+        color: verified ? "#fff" : K.ink,
         flexShrink: 0,
       }}>
         {verified ? <Check size={18} /> : <Icon size={18} />}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontWeight: 700, fontSize: 14, color: C.dark }}>{label}</div>
+        <div style={{ fontWeight: 700, fontSize: 14, color: K.ink }}>{label}</div>
         <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{sublabel}</div>
       </div>
       <div style={{
-        fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px",
-        padding: "4px 10px", borderRadius: 20, whiteSpace: "nowrap",
-        background: verified ? C.green : pending ? C.yellow : "transparent",
-        color: verified ? "#fff" : pending ? C.dark : C.muted,
-        border: !verified && !pending ? `1px solid ${C.border}` : "none",
+        fontSize: 9.5, fontWeight: 700, fontFamily: MONO, textTransform: "uppercase", letterSpacing: ".1em",
+        padding: "4px 9px", borderRadius: 0, whiteSpace: "nowrap",
+        background: verified ? K.moss : pending ? K.honey : "transparent",
+        color: verified ? "#fff" : K.ink,
+        border: `1.5px solid ${verified ? K.moss : pending ? K.ink : C.border}`,
       }}>
         {verified ? "Verifiziert" : pending ? "Ausstehend" : "Offen"}
       </div>
@@ -42,11 +52,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
 export function Input({ label, value, onChange, type = "text", disabled, placeholder, suffix, maxLength }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <label style={{
-        display: "block", fontSize: 12, fontWeight: 700,
-        color: C.muted, marginBottom: 6,
-        textTransform: "uppercase", letterSpacing: ".5px",
-      }}>{label}</label>
+      <label style={monoLabel}>{label}</label>
       <div style={{ position: "relative" }}>
         <input
           type={type}
@@ -58,14 +64,14 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
           style={{
             width: "100%", padding: "12px 14px",
             paddingRight: suffix ? 44 : 14,
-            borderRadius: 8, border: `1.5px solid ${C.border}`,
-            background: disabled ? C.cream : "#fff",
+            borderRadius: 0, border: `1.5px solid ${K.ink}`,
+            background: disabled ? K.sand : "#fff",
             fontSize: 14, fontFamily: "'Manrope', sans-serif",
-            color: C.dark, outline: "none", boxSizing: "border-box",
-            transition: "border-color .2s",
+            color: K.ink, outline: "none", boxSizing: "border-box",
+            transition: "border-color .2s, box-shadow .2s",
           }}
-          onFocus={e => { e.target.style.borderColor = C.yellow; }}
-          onBlur={e => { e.target.style.borderColor = C.border; }}
+          onFocus={e => { e.target.style.borderColor = K.petrol; e.target.style.boxShadow = `3px 3px 0 ${K.honey}`; }}
+          onBlur={e => { e.target.style.borderColor = K.ink; e.target.style.boxShadow = "none"; }}
         />
         {suffix && (
           <div style={{
@@ -89,18 +95,18 @@ export function Toggle({ checked, onChange, label, description }) {
       onClick={() => onChange?.(!checked)}
     >
       <div style={{
-        width: 44, height: 24, borderRadius: 12, flexShrink: 0, marginTop: 2,
-        background: checked ? C.teal : C.border, transition: "background .25s",
-        position: "relative",
+        width: 44, height: 24, borderRadius: 0, flexShrink: 0, marginTop: 2,
+        background: checked ? K.petrol : "#fff", border: `1.5px solid ${K.ink}`,
+        transition: "background .25s", position: "relative",
       }}>
         <div style={{
-          width: 18, height: 18, borderRadius: "50%", background: "#fff",
-          position: "absolute", top: 3, left: checked ? 23 : 3,
-          transition: "left .25s", boxShadow: "0 1px 3px rgba(0,0,0,.15)",
+          width: 16, height: 16, borderRadius: 0, background: "#fff", border: `1.5px solid ${K.ink}`,
+          position: "absolute", top: 2, left: checked ? 23 : 2,
+          transition: "left .25s",
         }} />
       </div>
       <div>
-        <div style={{ fontWeight: 600, fontSize: 14, color: C.dark }}>{label}</div>
+        <div style={{ fontWeight: 600, fontSize: 14, color: K.ink }}>{label}</div>
         {description && <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{description}</div>}
       </div>
     </div>
@@ -109,18 +115,18 @@ export function Toggle({ checked, onChange, label, description }) {
 
 export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
-    padding: small ? "10px 20px" : "14px 28px",
-    borderRadius: radius.full, border: "none", cursor: disabled ? "not-allowed" : "pointer",
-    fontFamily: "'Manrope', sans-serif", fontWeight: 700,
-    fontSize: small ? 12 : 14, transition: "all .2s",
+    padding: small ? "10px 20px" : "13px 26px",
+    borderRadius: 0, border: `1.5px solid ${K.ink}`, cursor: disabled ? "not-allowed" : "pointer",
+    fontFamily: "'Manrope', sans-serif", fontWeight: 800,
+    fontSize: small ? 12 : 14, transition: "all .15s",
     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: C.teal, color: "#fff", boxShadow: "0 6px 16px rgba(14,148,147,.28)" },
-    secondary: { background: "transparent", color: C.dark, border: `1.5px solid ${C.border}` },
-    danger:    { background: C.redSoft, color: C.red },
-    ghost:     { background: "transparent", color: C.muted },
+    primary:   { background: K.honey, color: K.ink, boxShadow: disabled ? "none" : `3px 3px 0 ${K.ink}` },
+    secondary: { background: "transparent", color: K.ink },
+    danger:    { background: "#fff", color: C.red, borderColor: C.red },
+    ghost:     { background: "transparent", color: C.muted, border: "none" },
   };
   return (
     <button className="bd-btn" style={{ ...base, ...variants[variant], ...s }} onClick={onClick} disabled={disabled || loading}>
@@ -135,8 +141,8 @@ export function Section({ title, description, children, badge }) {
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 8 }}>
         <h3 style={{
-          fontFamily: "'General Sans', sans-serif", fontSize: 16, fontWeight: 700,
-          letterSpacing: "0", color: C.dark, margin: 0,
+          fontFamily: "'General Sans', sans-serif", fontSize: 17, fontWeight: 700,
+          letterSpacing: "-0.01em", color: K.ink, margin: 0,
         }}>{title}</h3>
         {badge}
       </div>
@@ -151,24 +157,24 @@ export function TrustMeter({ level }) {
   const labels = ["Starter", "Basis", "Vertraut", "Vollständig"];
   return (
     <div style={{
-      padding: 20, borderRadius: 12, color: "#fff",
-      background: `linear-gradient(135deg, ${C.dark} 0%, #2a2520 100%)`,
+      padding: 20, borderRadius: 0, color: "#fff",
+      background: K.ink, border: `1.5px solid ${K.ink}`,
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-        <div style={{ fontFamily: "'Manrope', sans-serif", fontSize: 14, fontWeight: 700, letterSpacing: ".5px", textTransform: "uppercase" }}>Trust Level</div>
-        <div style={{ fontSize: 13, color: C.yellow, fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "—"}</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Trust Level</div>
+        <div style={{ fontSize: 13, color: K.honey, fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "—"}</div>
       </div>
       <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
         {Array.from({ length: segments }).map((_, i) => (
           <div key={i} style={{
-            flex: 1, height: 6, borderRadius: 3,
-            background: i < level ? C.yellow : "rgba(255,255,255,.15)",
+            flex: 1, height: 8, borderRadius: 0,
+            background: i < level ? K.honey : "rgba(255,255,255,.15)",
             transition: "all .4s", transitionDelay: `${i * .08}s`,
           }} />
         ))}
       </div>
       <div style={{ fontSize: 11, color: "rgba(255,255,255,.5)" }}>
-        {level === 4 ? "Alle Verifizierungen abgeschlossen!" : `${level}/4 verifiziert. Vervollständige dein Profil für mehr Vertrauen.`}
+        {level === 4 ? "Alle Verifizierungen abgeschlossen." : `${level}/4 verifiziert. Vervollständige dein Profil für mehr Vertrauen.`}
       </div>
     </div>
   );

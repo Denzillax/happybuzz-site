@@ -54,14 +54,14 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
 
   return (
     <div style={{
-      background: colors.surface, borderRadius: radius.lg,
-      border: `1px solid ${colors.border}`, padding: "22px 24px",
+      background: "#fff", borderRadius: 0,
+      border: `1.5px solid #14110D`, padding: "22px 24px",
     }}>
       {/* Level + XP */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
-            width: 44, height: 44, borderRadius: "50%",
+            width: 44, height: 44, borderRadius: 0, border: `1.5px solid #14110D`,
             background: `${level.color}18`, display: "flex",
             alignItems: "center", justifyContent: "center",
           }}>
@@ -81,11 +81,11 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
 
       {/* Progress Bar */}
       <div style={{
-        height: 8, borderRadius: 4, background: colors.borderLt,
-        overflow: "hidden", marginBottom: 8,
+        height: 8, borderRadius: 0, background: colors.borderLt,
+        border: `1px solid #14110D22`, overflow: "hidden", marginBottom: 8,
       }}>
         <div style={{
-          height: "100%", borderRadius: 4,
+          height: "100%", borderRadius: 0,
           background: level.color,
           width: `${next ? progress : 100}%`,
           transition: "width .5s ease-out",
@@ -105,11 +105,11 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
       )}
 
       {nektar != null && (
-        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 10, background: "#E8A82014", border: "1px solid #E8A82033", textDecoration: "none" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#C8860A" }}>
-            <Droplets size={15} color="#C8860A" /> {Number(nektar).toLocaleString("de-CH")} Nektar
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 0, background: "#FBF1D2", border: "1.5px solid #14110D", textDecoration: "none" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#854F0B" }}>
+            <Droplets size={15} color="#854F0B" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: colors.teal }}>Einlösen →</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#0B5E5C" }}>Einlösen →</span>
         </a>
       )}
     </div>
