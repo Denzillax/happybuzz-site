@@ -615,19 +615,24 @@ export function useAdminData() {
     logAdmin("feedback_note", "feedback", _f?.title || id);
   };
 
-  // Report erledigen
-  const resolveReport = async (reportId) => {
-    await supabase.from("reports").update({ is_resolved: true }).eq("id", reportId);
-    setReports(prev => prev.map(r => r.id === reportId ? { ...r, is_resolved: true } : r));
-    flash("Meldung als erledigt markiert");
-    const _r = reports.find(x => x.id === reportId); logAdmin("report_resolve", "report", _r?.listingTitle || _r?.reason || reportId);
+  // Meldungs-Workflow: offen → in_pruefung → erledigt/abgelehnt.
+  // is_resolved bleibt als abgeleitetes Feld synchron (Badges/alte Filter).
+  const REPORT_STATUS_LABELS = { offen: "Offen", in_pruefung: "In Prüfung", erledigt: "Erledigt", abgelehnt: "Abgelehnt" };
+  const setReportStatus = async (reportId, status) => {
+    const resolved = status === "erledigt" || status === "abgelehnt";
+    await supabase.from("reports").update({ status, is_resolved: resolved }).eq("id", reportId);
+    setReports(prev => prev.map(r => r.id === reportId ? { ...r, status, is_resolved: resolved } : r));
+    flash(`Meldung: ${REPORT_STATUS_LABELS[status] || status}`);
+    const _r = reports.find(x => x.id === reportId);
+    logAdmin("report_status", "report", _r?.listingTitle || _r?.reason || reportId, { status });
   };
+  const resolveReport = (reportId) => setReportStatus(reportId, "erledigt");
 
   // Gemeldetes Inserat pausieren
   const pauseReportedListing = async (reportId, listingId) => {
     await supabase.from("listings").update({ status: "paused" }).eq("id", listingId);
-    await supabase.from("reports").update({ is_resolved: true }).eq("id", reportId);
-    setReports(prev => prev.map(r => r.id === reportId ? { ...r, is_resolved: true } : r));
+    await supabase.from("reports").update({ status: "erledigt", is_resolved: true }).eq("id", reportId);
+    setReports(prev => prev.map(r => r.id === reportId ? { ...r, status: "erledigt", is_resolved: true } : r));
     flash("Inserat pausiert + Meldung erledigt");
     const _r = reports.find(x => x.id === reportId); logAdmin("report_pause_listing", "listing", _r?.listingTitle || listingId);
   };
@@ -842,7 +847,7 @@ export function useAdminData() {
     annOpen, setAnnOpen, ann, setAnn, openAnnouncement, saveAnnouncement,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
-    toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, pauseReportedListing, statusPill, modPill, emailCard,
+    toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, setReportStatus, pauseReportedListing, statusPill, modPill, emailCard,
     pendingListings, approveListing, rejectListing, listingMod, setListingMod,
     NAV: visibleNav, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
     isOwner, myRole, staffRoles, setStaffRole, allowedTabs,
