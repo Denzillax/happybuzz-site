@@ -720,7 +720,7 @@ export default function ListingDetail() {
               {l.status === "sold" && (
                 <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   {l.listing_type === "auction" ? "Auktion beendet. Verkauft" : "Verkauft"}
-                  {auctionResult?.winner === user?.id && <div style={{ fontSize: 12, marginTop: 4 }}>Du hast die Auktion gewonnen! CHF {fmtPrice(auctionResult.price)}</div>}
+                  {auctionResult && user && auctionResult.winner === user.id && <div style={{ fontSize: 12, marginTop: 4 }}>Du hast die Auktion gewonnen! CHF {fmtPrice(auctionResult.price)}</div>}
                 </div>
               )}
               {l.status === "rented" && (

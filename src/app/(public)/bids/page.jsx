@@ -43,9 +43,9 @@ export default function MeinGebotePage() {
         const listing = bid.listing;
         if (!listing) return null;
 
-        // Höchstes Gebot für dieses Listing
+        // Höchstes Gebot für dieses Listing (public_bids: fremde Gebote ohne max_amount)
         const { data: topBid } = await supabase
-          .from("bids")
+          .from("public_bids")
           .select("bidder_id, amount")
           .eq("listing_id", bid.listing_id)
           .order("amount", { ascending: false })

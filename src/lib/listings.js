@@ -982,22 +982,8 @@ export async function getUnreadCount(userId) {
 // PHASE 6: AUKTIONEN
 // ═════════════════════════════════════════════════════════════
 
-// ─── Erhöhungsschritte (wie Ricardo) ───────────────────────
-function getBidIncrement(price) {
-  if (price < 10) return 0.50;
-  if (price < 50) return 1;
-  if (price < 100) return 2;
-  if (price < 500) return 5;
-  if (price < 1000) return 10;
-  return 20;
-}
-
-// Bietaktion im Gebotsverlauf festhalten (jede preisverändernde Aktion).
-async function recordBid(listingId, bidderId, amount, bidType = "manual") {
-  try {
-    await supabase.from("bid_history").insert({ listing_id: listingId, bidder_id: bidderId, amount, bid_type: bidType });
-  } catch (e) { console.error("recordBid:", e); }
-}
+// Erhöhungsschritte + Gebotsverlauf leben serverseitig in der proxy_bid-RPC
+// (bid_increment SQL-Funktion) — hier gibt es keine Bietlogik mehr.
 
 // Entthronten Bieter benachrichtigen (Einstellung: buy_outbid). Fire-and-forget.
 function notifyOutbid(outbidUserId, newBidderId, listingId, title, amount) {
@@ -1008,134 +994,26 @@ function notifyOutbid(outbidUserId, newBidderId, listingId, title, amount) {
 }
 
 export async function placeBid(listingId, bidderId, maxAmount) {
-  // ── PROXY BIDDING (Ricardo-Style) ──
-  // maxAmount = Preislimit des Bieters (geheim)
-  // System bietet automatisch das Minimum
+  // ── PROXY BIDDING (Ricardo-Style) — läuft komplett serverseitig ──
+  // Die proxy_bid-RPC (SECURITY DEFINER) prüft Identität via auth.uid(),
+  // sperrt das Inserat (keine Races), führt Auto-Bid/Preis/Verlauf/Timer-
+  // Verlängerung atomar aus. maxAmount = geheimes Preislimit des Bieters.
+  const { data, error } = await supabase.rpc("proxy_bid", {
+    p_listing_id: listingId,
+    p_max_amount: maxAmount,
+  });
+  if (error) throw new Error(error.message);
 
-  // 1. Listing holen
-  const { data: listing } = await supabase.from("listings")
-    .select("title, start_price, buy_now_price, price, auction_end")
-    .eq("id", listingId).single();
-  if (!listing) throw new Error("Inserat nicht gefunden");
-
-  // Cap bei buy_now_price
-  if (listing.buy_now_price > 0 && maxAmount >= listing.buy_now_price) {
-    throw new Error(`Max. Preislimit: CHF ${(listing.buy_now_price - 1).toFixed(2)}. Nutze Sofortkauf.`);
+  // Entthronten Bieter benachrichtigen (Kanal-Einstellungen in notifications.js)
+  if (data?.outbid_user_id) {
+    notifyOutbid(data.outbid_user_id, bidderId, listingId, data.listing_title, Number(data.display_price));
   }
-
-  // 2. Höchstes bestehendes Gebot holen (nach max_amount sortiert)
-  const { data: topBids } = await supabase.from("bids")
-    .select("id, bidder_id, amount, max_amount")
-    .eq("listing_id", listingId)
-    .order("max_amount", { ascending: false })
-    .order("created_at", { ascending: true })
-    .limit(1);
-
-  const currentTop = topBids?.[0] || null;
-  const startPrice = listing.start_price || 1;
-  const currentDisplayPrice = listing.price || startPrice;
-
-  // 3. Prüfe ob dieser Bieter schon ein Gebot hat
-  const { data: existingBid } = await supabase.from("bids")
-    .select("id, max_amount, amount")
-    .eq("listing_id", listingId)
-    .eq("bidder_id", bidderId)
-    .maybeSingle();
-
-  if (existingBid) {
-    // ── Gleiches Preislimit erhöhen ──
-    if (maxAmount <= existingBid.max_amount) {
-      throw new Error(`Dein aktuelles Preislimit ist bereits CHF ${existingBid.max_amount.toFixed(2)}. Gib ein höheres ein.`);
-    }
-    // Update bestehendes Gebot
-    await supabase.from("bids").update({ max_amount: maxAmount }).eq("id", existingBid.id);
-
-    // Prüfe ob jetzt ein anderer Top-Bieter überboten wird
-    if (currentTop && currentTop.bidder_id !== bidderId) {
-      if (maxAmount > currentTop.max_amount) {
-        // Wir überbieten den aktuellen Top-Bieter
-        const inc = getBidIncrement(currentTop.max_amount);
-        const newPrice = Math.min(maxAmount, currentTop.max_amount + inc);
-        await supabase.from("bids").update({ amount: newPrice }).eq("id", existingBid.id);
-        await supabase.from("listings").update({ price: newPrice }).eq("id", listingId);
-        await recordBid(listingId, bidderId, newPrice, "manual");
-        notifyOutbid(currentTop.bidder_id, bidderId, listingId, listing.title, newPrice);
-        await extendAuctionIfNeeded(listingId, listing.auction_end);
-        return { displayPrice: newPrice, isTopBidder: true, message: "Du führst jetzt!" };
-      } else {
-        // Immer noch überboten — Auto-Bid des Top-Bieters
-        const inc = getBidIncrement(maxAmount);
-        const autoPrice = Math.min(currentTop.max_amount, maxAmount + inc);
-        await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
-        await supabase.from("bids").update({ amount: maxAmount }).eq("id", existingBid.id);
-        await supabase.from("listings").update({ price: autoPrice }).eq("id", listingId);
-        await recordBid(listingId, bidderId, maxAmount, "manual");
-        await recordBid(listingId, currentTop.bidder_id, autoPrice, "auto");
-        await extendAuctionIfNeeded(listingId, listing.auction_end);
-        return { displayPrice: autoPrice, isTopBidder: false, message: "Du wurdest automatisch überboten." };
-      }
-    }
-    // Wir SIND der Top-Bieter — nur Maximum erhöht, Preis bleibt
-    return { displayPrice: currentDisplayPrice, isTopBidder: true, message: "Preislimit erhöht." };
-  }
-
-  // ── Neuer Bieter ──
-  let newDisplayPrice;
-  let isTop = true;
-
-  if (!currentTop) {
-    // Erster Bieter
-    newDisplayPrice = startPrice;
-    await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
-    await recordBid(listingId, bidderId, newDisplayPrice, "manual");
-  } else if (maxAmount > currentTop.max_amount) {
-    // Neuer Bieter überbietet
-    const inc = getBidIncrement(currentTop.max_amount);
-    newDisplayPrice = Math.min(maxAmount, currentTop.max_amount + inc);
-    await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: newDisplayPrice, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
-    await recordBid(listingId, bidderId, newDisplayPrice, "manual");
-    notifyOutbid(currentTop.bidder_id, bidderId, listingId, listing.title, newDisplayPrice);
-  } else {
-    // Bestehender Bieter bleibt vorne (Auto-Bid verteidigt)
-    const inc = getBidIncrement(maxAmount);
-    const autoPrice = Math.min(currentTop.max_amount, maxAmount + inc);
-    await supabase.from("bids").upsert({ listing_id: listingId, bidder_id: bidderId, amount: maxAmount, max_amount: maxAmount }, { onConflict: "listing_id,bidder_id" });
-    await supabase.from("bids").update({ amount: autoPrice }).eq("id", currentTop.id);
-    await recordBid(listingId, bidderId, maxAmount, "manual");
-    await recordBid(listingId, currentTop.bidder_id, autoPrice, "auto");
-    newDisplayPrice = autoPrice;
-    isTop = false;
-  }
-
-  // 4. Listing-Preis aktualisieren
-  await supabase.from("listings").update({ price: newDisplayPrice }).eq("id", listingId);
-
-  // 5. Timer-Verlängerung prüfen
-  await extendAuctionIfNeeded(listingId, listing.auction_end);
-
-  // 6. bid_count = Anzahl Gebots-Events (bid_history), nicht Bieter-Zeilen
-  const { count } = await supabase.from("bid_history").select("*", { count: "exact", head: true }).eq("listing_id", listingId);
-  await supabase.from("listings").update({ bid_count: count || 0 }).eq("id", listingId);
 
   return {
-    displayPrice: newDisplayPrice,
-    isTopBidder: isTop,
-    message: isTop ? "Du führst!" : "Du wurdest automatisch überboten.",
+    displayPrice: Number(data.display_price),
+    isTopBidder: !!data.is_top_bidder,
+    message: data.message || "",
   };
-}
-
-// ─── Timer-Verlängerung: Gebot in letzten 3 Min → +3 Min ──
-async function extendAuctionIfNeeded(listingId, auctionEnd) {
-  if (!auctionEnd) return;
-  const endTime = new Date(auctionEnd);
-  const now = new Date();
-  const diffMs = endTime.getTime() - now.getTime();
-  const threeMin = 3 * 60 * 1000;
-
-  if (diffMs > 0 && diffMs < threeMin) {
-    const newEnd = new Date(now.getTime() + threeMin);
-    await supabase.from("listings").update({ auction_end: newEnd.toISOString() }).eq("id", listingId);
-  }
 }
 
 // ─── Auktion abschliessen (wird beim Laden der Seite geprüft) ──
@@ -1160,8 +1038,8 @@ export async function finalizeAuction(listingId) {
     .select("id").eq("listing_id", listingId).limit(1).maybeSingle();
   if (existingPurchase) return { status: "already_sold", purchaseId: existingPurchase.id };
 
-  // 2. Höchstes Gebot finden
-  const { data: topBid } = await supabase.from("bids")
+  // 2. Höchstes Gebot finden (public_bids: öffentliche Sicht ohne max_amount)
+  const { data: topBid } = await supabase.from("public_bids")
     .select("bidder_id, amount")
     .eq("listing_id", listingId)
     .order("amount", { ascending: false })
@@ -1230,56 +1108,43 @@ export async function getMyBid(listingId, userId) {
   return data;
 }
 
-// ─── Preislimit anpassen (hoch ODER runter, aber nie unter aktuelles Gebot) ──
+// ─── Preislimit senken (Validierung + Schreiben serverseitig in der RPC) ──
 export async function adjustPreislimit(listingId, userId, newMax) {
   if (!userId) throw new Error("Nicht eingeloggt");
-  
-  const { data: myBid } = await supabase.from("bids")
-    .select("id, amount, max_amount")
-    .eq("listing_id", listingId)
-    .eq("bidder_id", userId)
-    .maybeSingle();
-  
-  if (!myBid) throw new Error("Du hast noch kein Gebot abgegeben");
-  if (newMax < myBid.amount) throw new Error(`Preislimit kann nicht unter dein aktuelles Gebot von CHF ${myBid.amount.toFixed(2)} gesenkt werden.`);
-  if (newMax === myBid.max_amount) throw new Error("Das ist bereits dein aktuelles Preislimit.");
-
-  const { data: listing } = await supabase.from("listings")
-    .select("buy_now_price").eq("id", listingId).single();
-  if (listing?.buy_now_price > 0 && newMax >= listing.buy_now_price) {
-    throw new Error(`Preislimit muss unter dem Sofortkauf-Preis von CHF ${listing.buy_now_price.toFixed(2)} liegen.`);
-  }
-
-  await supabase.from("bids").update({ max_amount: newMax }).eq("id", myBid.id);
-  return { newMax, amount: myBid.amount };
+  const { data, error } = await supabase.rpc("set_bid_limit_down", {
+    p_listing_id: listingId, p_new_max: newMax,
+  });
+  if (error) throw new Error(error.message);
+  return { newMax: Number(data.new_max), amount: Number(data.amount) };
 }
 
 // ─── Preislimit entfernen (= auf aktuelles Gebot setzen, NICHT löschen) ──
 export async function removePreislimit(listingId, userId) {
   if (!userId) throw new Error("Nicht eingeloggt");
-  
-  const { data: myBid } = await supabase.from("bids")
-    .select("id, amount")
-    .eq("listing_id", listingId)
-    .eq("bidder_id", userId)
-    .maybeSingle();
-  
+  const myBid = await getMyBid(listingId, userId);
   if (!myBid) throw new Error("Du hast noch kein Gebot abgegeben");
-
-  // max_amount = amount → kein Auto-Bieten mehr, aber Gebot bleibt
-  await supabase.from("bids").update({ max_amount: myBid.amount }).eq("id", myBid.id);
+  if (myBid.max_amount === myBid.amount) return { amount: myBid.amount }; // nichts zu tun
+  const { error } = await supabase.rpc("set_bid_limit_down", {
+    p_listing_id: listingId, p_new_max: myBid.amount,
+  });
+  if (error) throw new Error(error.message);
   return { amount: myBid.amount };
 }
 
 export async function getBids(listingId) {
+  // Öffentliche Gebotsliste via View (ohne geheimes max_amount)
   const { data, error } = await supabase
-    .from("bids")
-    .select("*, bidder:profiles!bids_bidder_id_fkey(id, display_name)")
+    .from("public_bids")
+    .select("id, listing_id, bidder_id, amount, created_at, bidder_name")
     .eq("listing_id", listingId)
     .order("amount", { ascending: false })
     .limit(20);
   if (error) return [];
-  return data || [];
+  // Shape kompatibel zu bisherigen Aufrufern (b.bidder.display_name)
+  return (data || []).map((b) => ({
+    ...b,
+    bidder: { id: b.bidder_id, display_name: b.bidder_name },
+  }));
 }
 
 // ═════════════════════════════════════════════════════════════

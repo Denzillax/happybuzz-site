@@ -80,10 +80,10 @@ export default function ListingsPage() {
           auctionIds.forEach(id => { countMap[id] = { count: 0, topBid: 0 }; });
           (historyBids || []).forEach(b => { countMap[b.listing_id].count++; });
           if (historyBids?.length === 0) {
-            const { data: bidsAlt } = await supabase.from("bids").select("listing_id").in("listing_id", auctionIds);
+            const { data: bidsAlt } = await supabase.from("public_bids").select("listing_id").in("listing_id", auctionIds);
             (bidsAlt || []).forEach(b => { countMap[b.listing_id].count++; });
           }
-          const { data: topBids } = await supabase.from("bids").select("listing_id, amount").in("listing_id", auctionIds).order("amount", { ascending: false });
+          const { data: topBids } = await supabase.from("public_bids").select("listing_id, amount").in("listing_id", auctionIds).order("amount", { ascending: false });
           (topBids || []).forEach(b => { if (countMap[b.listing_id] && !countMap[b.listing_id].topBid) countMap[b.listing_id].topBid = b.amount; });
           setBidCounts(countMap);
         }
