@@ -24,9 +24,9 @@ export function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchParams = useSearchParams()
-  const [suggestions, setSuggestions] = useState([])
+  const [suggestions, setSuggestions] = useState<any[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
-  const suggestTimer = useRef(null)
+  const suggestTimer = useRef<any>(null)
   const [favOpen, setFavOpen] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
@@ -38,7 +38,7 @@ export function Header() {
   const router = useRouter()
 
   // ── Autocomplete ──
-  const handleQueryChange = (val) => {
+  const handleQueryChange = (val: string) => {
     setSearchQuery(val)
     if (suggestTimer.current) clearTimeout(suggestTimer.current)
     if (val.trim().length < 2) { setSuggestions([]); setShowSuggestions(false); return }
@@ -138,7 +138,7 @@ export function Header() {
 
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Benutzer'
 
-  const menuItems = [
+  const menuItems: any[] = [
     { href: '/search', icon: ShoppingBag, label: 'Stöbern' },
     { href: '/how-it-works', icon: Star, label: 'So funktionierts' },
     { divider: true },

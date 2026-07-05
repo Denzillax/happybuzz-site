@@ -1,6 +1,6 @@
 "use client";
 
-export default function Error({ error, reset }) {
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 480 }}>

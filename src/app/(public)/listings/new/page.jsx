@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createListing, uploadListingImages, submitForReview, getCategories, checkProfileComplete, getListing } from "@/lib/listings";
 import { saveListingAttributes } from "@/lib/api/attributes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Copy } from "lucide-react";
 import ListingForm from "@/components/listings/ListingForm";
 
@@ -14,7 +14,16 @@ function stripForTemplate(listing) {
   return { ...rest, title: "", listing_images: [] };
 }
 
+// Suspense-Wrapper: useSearchParams braucht eine Boundary fürs Prerendering
 export default function NewListingPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewListingPageInner />
+    </Suspense>
+  );
+}
+
+function NewListingPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dupId = searchParams.get("duplicate");

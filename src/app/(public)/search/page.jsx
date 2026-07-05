@@ -1,6 +1,6 @@
 "use client"
 import { supabase } from "@/lib/supabase/supabase";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, X, ChevronDown } from "lucide-react";
 import { searchListings, getCategories } from "@/lib/listings";
@@ -95,7 +95,16 @@ function FilterPill({ label, value, options, onChange, active }) {
 }
 
 // ── Main Search Page ─────────────────────────────────────────
+// Suspense-Wrapper: useSearchParams braucht eine Boundary fürs Prerendering
 export default function SearchPage() {
+  return (
+    <Suspense fallback={null}>
+      <SearchPageInner />
+    </Suspense>
+  );
+}
+
+function SearchPageInner() {
   const searchParams = useSearchParams();
   const [results, setResults] = useState([]);
   const [boosts, setBoosts] = useState({});

@@ -61,7 +61,8 @@ function Countdown({ endDate, endedLabel = "Beendet" }) {
   );
 }
 
-export function ListingCard({ listing, userId, boost, onUnfavorite }) {
+export function ListingCard(props) {
+  const { listing, userId = null, boost = null, onUnfavorite = null } = props;
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const cover = getCoverUrl(listing);
