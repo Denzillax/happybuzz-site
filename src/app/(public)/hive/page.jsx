@@ -34,7 +34,7 @@ const HEAD = "'General Sans','Manrope',sans-serif";
 
 function Card({ children, style }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: "20px 22px", ...style }}>
+    <div style={{ background: "#fff", borderRadius: 10, border: `1px solid ${K.ink}`, padding: "20px 22px", ...style }}>
       {children}
     </div>
   );

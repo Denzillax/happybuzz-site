@@ -74,7 +74,7 @@ export default function BookingsPage() {
         display: "flex", gap: 16, padding: "18px 20px", alignItems: "center",
         borderBottom: `1px solid ${colors.borderLt}`,
       }}>
-        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 64, height: 64, borderRadius: 10, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
           {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
         </div>
         <div style={{ flex: 1 }}>
@@ -100,12 +100,12 @@ export default function BookingsPage() {
         </div>
         {isOwner && b.status === "pending" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 6, marginLeft: 8 }}>
-            <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "7px 14px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>Bestätigen</button>
-            <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "7px 14px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Absagen</button>
+            <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "7px 14px", borderRadius: 10, border: `1px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>Bestätigen</button>
+            <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "7px 14px", borderRadius: 10, border: `1px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Absagen</button>
           </div>
         )}
         {b.purchase_id && (
-          <Link href={`/order/${b.purchase_id}`} style={{ marginLeft: 8, padding: "7px 14px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}` }}>
+          <Link href={`/order/${b.purchase_id}`} style={{ marginLeft: 8, padding: "7px 14px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}` }}>
             Zur Bestellung
           </Link>
         )}
@@ -120,7 +120,7 @@ export default function BookingsPage() {
         <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 0, borderBottom: `2px solid ${K.ink}`, marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${K.ink}`, marginBottom: 24 }}>
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               padding: "12px 24px", background: "none", border: "none",
@@ -134,7 +134,7 @@ export default function BookingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && (
-          <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 10, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
             {tab === "incoming" && (
               incoming.length === 0
                 ? <div style={{ textAlign: "center", padding: 60, color: colors.muted }}><CalendarDays size={32} color={colors.mutedLt} style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 600 }}>Keine Anfragen</p></div>

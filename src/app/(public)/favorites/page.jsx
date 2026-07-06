@@ -130,7 +130,7 @@ export default function FavoritesPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={tab === 'listings' ? 'Favoriten durchsuchen...' : 'Verkäufer suchen...'}
-            className="w-full pl-10 pr-4 py-3 rounded-none border-[1.5px] border-[#14110D] bg-white text-sm focus:outline-none focus:border-[#0B5E5C] transition-colors"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#14110D] bg-white text-sm focus:outline-none focus:border-[#0B5E5C] transition-colors"
           />
         </div>
       )}
@@ -146,7 +146,7 @@ export default function FavoritesPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border-2 border-[#14110D] bg-honey/20 mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-xl border border-[#14110D] bg-honey/20 mb-6">
                 <Heart size={36} className="text-honey" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Favoriten'}</h2>
@@ -169,9 +169,9 @@ export default function FavoritesPage() {
           {filteredSellers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredSellers.map(s => (
-                <div key={s.seller_id} className="bg-white rounded-none border-[1.5px] border-[#14110D] p-6 flex items-center gap-4 hover:shadow-[4px_4px_0_#14110D] transition-shadow">
+                <div key={s.seller_id} className="bg-white rounded-xl border border-[#14110D] p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
                   <Link href={`/user/${s.seller_id}`} className="flex items-center gap-4 flex-1 min-w-0 no-underline">
-                    <div className="w-14 h-14 rounded-none border-[1.5px] border-[#14110D] bg-honey/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-14 h-14 rounded-xl border border-[#14110D] bg-honey/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                       {s.seller?.avatar_url
                         ? <img src={s.seller.avatar_url} alt="" className="w-full h-full object-cover" />
                         : <User size={24} className="text-honey" />
@@ -190,7 +190,7 @@ export default function FavoritesPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border-2 border-[#14110D] bg-honey/20 mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-xl border border-[#14110D] bg-honey/20 mb-6">
                 <User size={36} className="text-honey" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Verkäufer gemerkt'}</h2>

@@ -86,13 +86,13 @@ function PasswordStrength({ password }) {
 
 function SocialBtn({ icon, label, onClick }) {
   const [h, setH] = useState(false);
-  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:0, border:`1.5px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
+  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:0, border:`1px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
 }
 
 function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
-      width:"100%", padding:"13px", border:`1.5px solid ${K.ink}`, borderRadius:0,
+      width:"100%", padding:"13px", border:`1px solid ${K.ink}`, borderRadius:0,
       background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":`3px 3px 0 ${K.ink}`,
@@ -336,7 +336,7 @@ export default function AuthPage() {
               {view==="login"?"Zugang · Katalog der zweiten Leben":view==="register"?"Neuer Eintrag · Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius:0, padding:"0 28px 28px", border:`2px solid ${K.ink}`, boxShadow:`8px 8px 0 rgba(20,17,13,.12)` }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius:0, padding:"0 28px 28px", border:`1px solid ${K.ink}`, boxShadow:`8px 8px 0 rgba(20,17,13,.12)` }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:10, color:C.muted, marginTop:18, fontWeight:700, fontFamily:MONO, letterSpacing:".1em", textTransform:"uppercase" }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>
