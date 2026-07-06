@@ -9,6 +9,10 @@ import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
@@ -174,19 +178,20 @@ export default function ListingsPage() {
   };
 
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };
-  const selectStyle = { padding: "7px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
+  const selectStyle = { padding: "7px 12px", borderRadius: 0, fontSize: 12, fontWeight: 600, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px 80px" }}>
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 4px", fontFamily: fonts.head, letterSpacing: ".03em" }}>MEINE INSERATE</h1>
+            <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Verkäuferpult · Katalog der zweiten Leben</div>
+            <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'General Sans','Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{counts.all} Inserate · {counts.active} aktiv</p>
           </div>
-          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", borderRadius: radius.sm, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>
+          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: `1.5px solid ${K.ink}`, boxShadow: `3px 3px 0 ${K.ink}` }}>
             <Plus size={16} /> Neues Inserat
           </Link>
         </div>
@@ -195,9 +200,9 @@ export default function ListingsPage() {
         <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
             <button key={f.key} onClick={() => { setFilter(f.key); setVisibleCount(PAGE_SIZE); }} style={{
-              padding: "7px 14px", borderRadius: radius.sm, fontSize: 12, fontWeight: filter === f.key ? 700 : 500,
-              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${filter === f.key ? colors.yellow : colors.border}`,
-              background: filter === f.key ? colors.yellowSoft : colors.surface, color: filter === f.key ? colors.dark : colors.muted,
+              padding: "7px 14px", borderRadius: 0, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
+              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${K.ink}`,
+              background: filter === f.key ? K.honey : "#fff", color: K.ink,
             }}>{f.label}</button>
           ))}
         </div>
@@ -227,19 +232,19 @@ export default function ListingsPage() {
         {selected.size > 0 && (
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", marginBottom: 12,
-            background: colors.yellowSoft, borderRadius: 8, border: `1.5px solid ${colors.yellow}`,
+            background: K.sand, borderRadius: 0, border: `1.5px solid ${K.ink}`,
           }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
             <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 0, fontSize: 12, fontWeight: 700, border: `1.5px solid ${K.ink}`, background:"#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 0, fontSize: 12, fontWeight: 700, border: `1.5px solid ${K.ink}`, background:"#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Play size={12} /> Aktivieren
             </button>
             <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, border: "none", background: "#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 0, fontSize: 12, fontWeight: 700, border: `1.5px solid ${K.ink}`, background:"#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Trash2 size={12} /> Löschen
             </button>
             <button onClick={() => setSelected(new Set())} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
@@ -251,11 +256,11 @@ export default function ListingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}` }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}` }}>
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Keine Inserate</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Erstelle dein erstes Inserat.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", padding: "10px 24px", borderRadius: radius.sm, background: colors.yellow, color: colors.dark, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}`, boxShadow: `3px 3px 0 ${K.ink}` }}>
               <Plus size={16} style={{ marginRight: 6 }} /> Inserat erstellen
             </Link>
           </div>
@@ -263,7 +268,7 @@ export default function ListingsPage() {
 
         {/* Table */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, overflow: "hidden" }}>
             <div className="ml-table">
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
@@ -300,7 +305,7 @@ export default function ListingsPage() {
                       {/* Artikel */}
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
                         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                          <div style={{ width: 56, height: 56, borderRadius: 6, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <div style={{ width: 56, height: 56, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
                           </div>
                           <div style={{ minWidth: 0 }}>
@@ -364,7 +369,7 @@ export default function ListingsPage() {
                         <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center" }}>
                           {/* Bearbeiten — immer sichtbar */}
                           <Link href={`/listings/${l.id}`} title="Bearbeiten" style={{
-                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.blue, background: `${colors.blue}10`, border: "none", textDecoration: "none", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = `${colors.blue}20`}
@@ -373,7 +378,7 @@ export default function ListingsPage() {
                           </Link>
                           {/* Ähnliches Inserat erstellen (Duplikat als Vorlage) */}
                           <Link href={`/listings/new?duplicate=${l.id}`} title="Ähnliches Inserat erstellen" style={{
-                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.teal, background: `${colors.teal}10`, border: "none", textDecoration: "none", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = `${colors.teal}20`}
@@ -382,7 +387,7 @@ export default function ListingsPage() {
                           </Link>
                           {/* Statistik */}
                           <button onClick={() => openStats(l)} title="Statistik" style={{
-                            width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.muted, background: colors.cream, border: "none", cursor: "pointer", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = colors.warm}
@@ -393,7 +398,7 @@ export default function ListingsPage() {
                           {l.status === "active" && (
                             <div style={{ position: "relative" }}>
                               <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
-                                width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                 color: "#C8860A", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
                               }}>
                                 <Rocket size={14} />
@@ -426,7 +431,7 @@ export default function ListingsPage() {
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {(l.status === "active" || l.status === "paused") && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
-                              width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                              width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                               border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
                               color: l.status === "paused" ? "#2E7D32" : "#E65100",
                               background: l.status === "paused" ? "#E8F5E910" : "#FFF3E0",
@@ -441,11 +446,11 @@ export default function ListingsPage() {
                             deleteId === l.id ? (
                               <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
                                 <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} title="Bestätigen" style={{
-                                  width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 28, height: 28, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   background: "#c62828", border: "none", cursor: "pointer", color: "#fff",
                                 }}><CheckCircle size={12} /></button>
                                 <button onClick={() => setDeleteId(null)} title="Abbrechen" style={{
-                                  width: 28, height: 28, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 28, height: 28, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   background: colors.cream, border: "none", cursor: "pointer", color: colors.muted,
                                 }}><XCircle size={12} /></button>
                               </div>
@@ -454,7 +459,7 @@ export default function ListingsPage() {
                                 title={hasBids ? "Kann nicht gelöscht werden (aktive Gebote)" : "Löschen"}
                                 disabled={hasBids}
                                 style={{
-                                  width: 32, height: 32, borderRadius: 6, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 32, height: 32, borderRadius: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   border: "none", fontFamily: fonts.body, transition: "all .15s",
                                   color: hasBids ? colors.borderLt : "#c62828",
                                   background: hasBids ? "transparent" : "#FFEBEE",
@@ -484,11 +489,11 @@ export default function ListingsPage() {
                 const hasBids = bidCounts[l.id]?.count > 0;
                 const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
                 const boost = myBoosts[l.id]?.[0];
-                const actBtn = { display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 11px", borderRadius: 8, border: `1px solid ${colors.borderLt}`, background: "#fff", fontSize: 12.5, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark };
+                const actBtn = { display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 11px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", fontSize: 12.5, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark };
                 return (
                   <div key={l.id} style={{ padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
                     <div style={{ display: "flex", gap: 12 }}>
-                      <div style={{ width: 60, height: 60, borderRadius: 8, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <div style={{ width: 60, height: 60, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -561,8 +566,8 @@ export default function ListingsPage() {
             {hasMore && (
               <div style={{ textAlign: "center", padding: "16px 0", borderTop: `1px solid ${colors.borderLt}` }}>
                 <button onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)} style={{
-                  padding: "10px 28px", borderRadius: 8, fontSize: 13, fontWeight: 700,
-                  border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark,
+                  padding: "10px 28px", borderRadius: 0, fontSize: 13, fontWeight: 700,
+                  border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink,
                   cursor: "pointer", fontFamily: fonts.body, display: "inline-flex", alignItems: "center", gap: 6,
                 }}>
                   <ChevronDown size={14} /> Weitere {Math.min(PAGE_SIZE, totalFiltered - visibleCount)} von {totalFiltered} laden
@@ -576,10 +581,10 @@ export default function ListingsPage() {
       {/* ── STATISTIK-MODAL ── */}
       {statsFor && (
         <div onClick={() => setStatsFor(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 16, padding: "22px 24px", maxWidth: 460, width: "100%", fontFamily: fonts.body, maxHeight: "85vh", overflowY: "auto" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 0, border: `2px solid ${K.ink}`, boxShadow: `8px 8px 0 rgba(20,17,13,.18)`, padding: "22px 24px", maxWidth: 460, width: "100%", fontFamily: fonts.body, maxHeight: "85vh", overflowY: "auto" }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
               <div>
-                <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>Statistik</p>
+                <p style={{ margin: 0, fontSize: 10, fontWeight: 700, fontFamily: MONO, color: K.petrol, textTransform: "uppercase", letterSpacing: ".14em" }}>Statistik</p>
                 <h3 style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 800, color: colors.dark }}>{statsFor.title}</h3>
               </div>
               <button onClick={() => setStatsFor(null)} style={{ background: "none", border: "none", cursor: "pointer", color: colors.muted, padding: 2 }}><X size={20} /></button>
@@ -595,8 +600,8 @@ export default function ListingsPage() {
                     { v: statsData.favorites ?? 0, l: "Favoriten", icon: Heart },
                     { v: statsData.chat_requests ?? 0, l: "Chat-Anfragen", icon: MessageCircle },
                   ].map(t => (
-                    <div key={t.l} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, background: colors.cream, border: `1px solid ${colors.borderLt}`, textAlign: "center" }}>
-                      <t.icon size={15} color={colors.teal} style={{ marginBottom: 4 }} />
+                    <div key={t.l} style={{ flex: 1, padding: "12px 10px", borderRadius: 0, background: "#fff", border: `1.5px solid ${K.ink}`, textAlign: "center" }}>
+                      <t.icon size={15} color={K.petrol} style={{ marginBottom: 4 }} />
                       <p style={{ margin: 0, fontSize: 20, fontWeight: 800, fontFamily: fonts.head, color: colors.dark }}>{t.v}</p>
                       <p style={{ margin: "1px 0 0", fontSize: 10, color: colors.muted }}>{t.l}</p>
                     </div>
@@ -613,7 +618,7 @@ export default function ListingsPage() {
                       {daily.map((d, i) => (
                         <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                           <div style={{ fontSize: 9, color: colors.muted }}>{d.count}</div>
-                          <div style={{ width: "100%", height: `${Math.round((d.count / max) * 64)}px`, minHeight: 3, background: d.count > 0 ? colors.teal : colors.borderLt, borderRadius: 4 }} />
+                          <div style={{ width: "100%", height: `${Math.round((d.count / max) * 64)}px`, minHeight: 3, background: d.count > 0 ? K.petrol : colors.borderLt, borderRadius: 0 }} />
                           <div style={{ fontSize: 9, color: colors.mutedLt }}>{d.day}</div>
                         </div>
                       ))}
@@ -628,7 +633,7 @@ export default function ListingsPage() {
                     <p style={{ margin: "0 0 6px", fontSize: 12, fontWeight: 700, color: colors.dark }}>Woher kommen Aufrufe</p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                       {Object.entries(statsData.sources).map(([s, c]) => (
-                        <span key={s} style={{ fontSize: 12, padding: "5px 10px", borderRadius: 16, background: colors.cream, border: `1px solid ${colors.borderLt}`, color: colors.dark }}>
+                        <span key={s} style={{ fontSize: 12, padding: "5px 10px", borderRadius: 0, background: "#fff", border: `1.5px solid ${K.ink}`, color: colors.dark }}>
                           {({ search: "Suche", intern: "Intern", extern: "Extern", direct: "Direkt" })[s] || s}: <b>{c}</b>
                         </span>
                       ))}
