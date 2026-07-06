@@ -6,6 +6,7 @@ import { INVOICE_TEMPLATES, getInvoiceItems, submitServiceInvoiceWithItems } fro
 import { calcFeeFromPrice } from "@/lib/fees";
 import BeeIcon from "@/components/shared/BeeIcon";
 
+const K = { ink: "#14110D", petrol: "#0B5E5C", honey: "#F4C03F" };
 const ICONS = { Car, Clock, Package, Trash2, Pencil };
 
 function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitted }) {
@@ -70,7 +71,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
     return (
       <div style={{ textAlign: "center", padding: "32px 20px" }}>
         <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#E6F5F5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
-          <Send size={20} color={colors.teal} />
+          <Send size={20} color={K.petrol} />
         </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: colors.dark, fontFamily: fonts.head }}>Rechnung gesendet</div>
         <div style={{ fontSize: 13, color: colors.muted, marginTop: 4 }}>Der Käufer wurde benachrichtigt.</div>
@@ -79,7 +80,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
   }
 
   const inputStyle = {
-    padding: "9px 12px", border: `1.5px solid ${colors.border}`, borderRadius: 8,
+    padding: "9px 12px", border: `1px solid ${K.ink}`, borderRadius: 8,
     fontSize: 13, fontFamily: fonts.body, color: colors.dark, outline: "none",
     background: "#fff", transition: "border-color .15s",
   };
@@ -102,7 +103,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
           <div key={item.id} style={{
             display: "flex", gap: 10, alignItems: "flex-start",
             padding: "12px 14px", background: "#fff", borderRadius: 12,
-            border: `1px solid ${colors.borderLt}`, marginBottom: 8,
+            border: `1px solid ${K.ink}`, marginBottom: 8,
           }}>
             {/* Icon */}
             <div style={{
@@ -120,7 +121,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                 type="text" value={item.label} placeholder="Bezeichnung"
                 onChange={e => updateItem(item.id, "label", e.target.value)}
                 style={{ ...inputStyle, fontWeight: 600, width: "100%" }}
-                onFocus={e => e.target.style.borderColor = colors.yellow}
+                onFocus={e => e.target.style.borderColor = K.petrol}
                 onBlur={e => e.target.style.borderColor = colors.border}
               />
 
@@ -131,7 +132,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                     type="number" value={item.quantity} min="0.5" step="0.5"
                     onChange={e => updateItem(item.id, "quantity", e.target.value)}
                     style={{ ...inputStyle, width: 60, textAlign: "center" }}
-                    onFocus={e => e.target.style.borderColor = colors.yellow}
+                    onFocus={e => e.target.style.borderColor = K.petrol}
                     onBlur={e => e.target.style.borderColor = colors.border}
                   />
                   <span style={{ fontSize: 12, color: colors.muted }}>x</span>
@@ -142,7 +143,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                     type="number" value={item.unit_price} min="0" step="0.50"
                     onChange={e => updateItem(item.id, "unit_price", e.target.value)}
                     style={{ ...inputStyle, width: 90 }}
-                    onFocus={e => e.target.style.borderColor = colors.yellow}
+                    onFocus={e => e.target.style.borderColor = K.petrol}
                     onBlur={e => e.target.style.borderColor = colors.border}
                   />
                 </div>
@@ -156,7 +157,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                 type="text" value={item.description || ""} placeholder="Bemerkung (optional)"
                 onChange={e => updateItem(item.id, "description", e.target.value)}
                 style={{ ...inputStyle, fontSize: 12, color: colors.muted }}
-                onFocus={e => e.target.style.borderColor = colors.yellow}
+                onFocus={e => e.target.style.borderColor = K.petrol}
                 onBlur={e => e.target.style.borderColor = colors.border}
               />
             </div>
@@ -184,7 +185,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
           color: colors.muted, fontSize: 13, fontWeight: 600, fontFamily: fonts.body,
           cursor: "pointer", transition: "all .15s",
         }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = colors.teal; e.currentTarget.style.color = colors.teal; }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = K.petrol; e.currentTarget.style.color = K.petrol; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = colors.border; e.currentTarget.style.color = colors.muted; }}
         >
           <Plus size={16} /> Position hinzufügen
@@ -227,7 +228,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Totals */}
       {items.length > 0 && (
         <div style={{
-          background: "#fff", borderRadius: 12, border: `1px solid ${colors.borderLt}`,
+          background: "#fff", borderRadius: 12, border: `1px solid ${K.ink}`,
           padding: "16px 18px", marginBottom: 16,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
@@ -239,10 +240,10 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
             <span style={{ fontSize: 13, color: colors.muted }}>- CHF {fee.toFixed(2)}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-            <span style={{ fontSize: 12, color: colors.teal, display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 12, color: K.petrol, display: "flex", alignItems: "center", gap: 4 }}>
               <BeeIcon size={12} /> Bee-Impact (20% der Gebühr)
             </span>
-            <span style={{ fontSize: 12, color: colors.teal }}>CHF {beeImpact.toFixed(2)}</span>
+            <span style={{ fontSize: 12, color: K.petrol }}>CHF {beeImpact.toFixed(2)}</span>
           </div>
           <div style={{ height: 1, background: colors.borderLt, margin: "8px 0" }} />
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -255,7 +256,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Submit */}
       <button onClick={handleSubmit} disabled={items.length === 0 || saving || subtotal <= 0} style={{
         width: "100%", padding: "13px 20px", borderRadius: 10, border: "none",
-        background: items.length > 0 && subtotal > 0 ? colors.teal : "#ddd",
+        background: items.length > 0 && subtotal > 0 ? K.petrol : "#ddd",
         color: items.length > 0 && subtotal > 0 ? "#fff" : colors.muted,
         fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: items.length > 0 ? "pointer" : "default",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
