@@ -7,6 +7,11 @@ import Link from "next/link";
 import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+
 const STATUS_CONFIG = {
   pending:   { label: "Angefragt", color: "#8a6d0a", icon: Clock },
   confirmed: { label: "Bestätigt", color: colors.green, icon: CheckCircle },
@@ -69,11 +74,11 @@ export default function BookingsPage() {
         display: "flex", gap: 16, padding: "18px 20px", alignItems: "center",
         borderBottom: `1px solid ${colors.borderLt}`,
       }}>
-        <div style={{ width: 64, height: 64, borderRadius: radius.sm, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
           {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
         </div>
         <div style={{ flex: 1 }}>
-          <Link href={`/listing/${b.listing_id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none" }}>{b.listing?.title || "Inserat"}</Link>
+          <Link href={`/listing/${b.listing_id}`} style={{ fontSize: 14, fontWeight: 700, color: K.petrol, textDecoration: "none" }}>{b.listing?.title || "Inserat"}</Link>
           <div style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>
             {b.listing?.listing_type === "service"
               ? `Wunschtermin: ${fmtDate(b.start_date)}${b.start_date?.includes("T") ? ", " + new Date(b.start_date).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) + " Uhr" : ""}`
@@ -95,12 +100,12 @@ export default function BookingsPage() {
         </div>
         {isOwner && b.status === "pending" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 6, marginLeft: 8 }}>
-            <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "6px 14px", borderRadius: 6, border: "none", background: colors.green, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Bestätigen</button>
-            <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "6px 14px", borderRadius: 6, border: `1px solid ${colors.border}`, background: colors.surface, color: colors.muted, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Absagen</button>
+            <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "7px 14px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>Bestätigen</button>
+            <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "7px 14px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Absagen</button>
           </div>
         )}
         {b.purchase_id && (
-          <Link href={`/order/${b.purchase_id}`} style={{ marginLeft: 8, padding: "6px 14px", borderRadius: 6, background: colors.yellow, color: colors.dark, fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+          <Link href={`/order/${b.purchase_id}`} style={{ marginLeft: 8, padding: "7px 14px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}` }}>
             Zur Bestellung
           </Link>
         )}
@@ -109,18 +114,19 @@ export default function BookingsPage() {
   };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 24px", fontFamily: fonts.head, letterSpacing: ".03em" }}>BUCHUNGEN</h1>
+        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Termine & Mieten · Katalog der zweiten Leben</div>
+        <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 0, borderBottom: `2px solid ${colors.border}`, marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 0, borderBottom: `2px solid ${K.ink}`, marginBottom: 24 }}>
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               padding: "12px 24px", background: "none", border: "none",
-              borderBottom: tab === t.key ? `2px solid ${colors.yellow}` : "2px solid transparent",
-              marginBottom: -2, cursor: "pointer", fontSize: 14, fontWeight: tab === t.key ? 700 : 500,
-              fontFamily: fonts.body, color: tab === t.key ? colors.dark : colors.muted,
+              borderBottom: tab === t.key ? `3px solid ${K.honey}` : "3px solid transparent",
+              marginBottom: -2, cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
+              color: tab === t.key ? K.ink : colors.muted,
             }}>{t.label}</button>
           ))}
         </div>
@@ -128,7 +134,7 @@ export default function BookingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && (
-          <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, overflow: "hidden" }}>
             {tab === "incoming" && (
               incoming.length === 0
                 ? <div style={{ textAlign: "center", padding: 60, color: colors.muted }}><CalendarDays size={32} color={colors.mutedLt} style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 600 }}>Keine Anfragen</p></div>
