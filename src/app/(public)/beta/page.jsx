@@ -100,6 +100,7 @@ const TESTS = [
       { id: "lv_favorite", label: "Herz-Button → Favorit speichern/entfernen" },
       { id: "lv_share", label: "Teilen: WhatsApp / E-Mail / Link kopieren (bzw. native Share auf Mobile)" },
       { id: "lv_report", label: "Melden → Report-Modal & Absenden" },
+      { id: "lv_report_ratelimit", label: "Melde-Spam-Schutz: sehr viele Meldungen in kurzer Zeit (10/Stunde) werden serverseitig blockiert mit Hinweis 'Zu viele Meldungen in kurzer Zeit'" },
       { id: "lv_chat_public", label: "Fragen zum Inserat: öffentliche Q&A (kein Privat-Umschalter mehr)" },
       { id: "lv_chat_private", label: "'Nachricht an Verkäufer' öffnet privaten Chat-Thread" },
       { id: "lv_seller", label: "Verkäufer-Info: Name, Trust-Badge, Bewertung" },
@@ -112,6 +113,7 @@ const TESTS = [
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_offer", label: "Preis vorschlagen (verhandelbar): Vorschlag → Chat; Annehmen/Ablehnen/Gegenvorschlag, max 3 Runden" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
+      { id: "lv_bid_ratelimit", label: "Gebots-Spam-Schutz: sehr viele Gebote in kurzer Zeit (20/Minute) werden serverseitig blockiert mit Hinweis 'Zu viele Gebote in kurzer Zeit'" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },
       { id: "lv_bidder_anon", label: "Gebotsverlauf maskiert Bieter (z.B. 'Ze****', eigene = 'Du'), kein voller Name" },
       { id: "lv_auction_end", label: "Auktion: Auto-Finalisierung nach Ablauf" },
@@ -189,6 +191,7 @@ const TESTS = [
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
       { id: "ch_contactescalate", label: "Wiederholte Kontaktversuche: nach mehreren Malen rote AGB-Warnung im Chat (Versuche werden pro Konto gezählt)" },
       { id: "ch_ban", label: "Admin (Users-Tab): Konto sperren/entsperren; gesperrtes Konto sieht 'Konto gesperrt'-Overlay + kann nicht mehr chatten" },
+      { id: "ch_ratelimit", label: "Spam-Schutz: sehr viele Nachrichten in kurzer Zeit (30/Minute) werden serverseitig blockiert mit Hinweis 'Zu viele Nachrichten in kurzer Zeit'" },
     ],
   },
   {
