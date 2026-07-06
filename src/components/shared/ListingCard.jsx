@@ -8,6 +8,7 @@ import { makeArtRef } from "@/lib/fees";
 import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
+import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
 import { useFavorite } from "@/hooks/useFavorite";
 
 // ── Katalog-Design-Tokens (Hero/CommunityImpact-konsistent) ──
@@ -275,6 +276,7 @@ export function ListingCard(props) {
                   : listing.seller.display_name}
               </span>
               <AccountBadge accountType={listing.seller.account_type} />
+              <VerifiedSellerBadge profile={listing.seller} size="sm" label={false} />
               {listing.seller.avg_rating > 0 && (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: "auto", fontSize: 11, color: colors.muted }}>
                   <Star size={10} fill={colors.yellow} color={colors.yellow} />

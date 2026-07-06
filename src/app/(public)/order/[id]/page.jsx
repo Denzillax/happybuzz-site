@@ -22,6 +22,7 @@ import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
 import OrderTimeline from "@/components/order/OrderTimeline";
 import RatingSection from "@/components/order/RatingSection";
+import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
 
 import { PURCHASE_STATUS as STATUS_MAP } from "@/lib/orderStatus";
 
@@ -691,7 +692,10 @@ export default function OrderDetailPage() {
               )}
               <SidebarSection icon={User} title={counterpartLabel}>
                 <div style={{ lineHeight: 1.7 }}>
-                  <Link href={`/user/${counterpart?.id}`} style={{ fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{fullName(counterpart)}</Link><br />
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                    <Link href={`/user/${counterpart?.id}`} style={{ fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{fullName(counterpart)}</Link>
+                    <VerifiedSellerBadge profile={counterpart} size="sm" />
+                  </span><br />
                   <Link href={`/user/${counterpart?.id}`} style={{ fontSize: 12, color: K.petrol, fontWeight: 600, textDecoration: "none" }}>@{counterpart?.display_name}</Link><br />
                   {counterpart?.email && <><a href={`mailto:${counterpart.email}`} style={{ fontSize: 12, color: K.petrol, textDecoration: "none" }}>{counterpart.email}</a><br /></>}
                   {counterpart?.phone && <span style={{ fontSize: 12, color: colors.muted }}>{counterpart.phone}</span>}

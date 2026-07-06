@@ -45,6 +45,7 @@ const TESTS = [
       { id: "sr_type", label: "Typ-Filter (Festpreis/Auktion/Miete/Gratis/Service)" },
       { id: "sr_sort", label: "Sortierung: Relevanz, Neueste, Preis, Endet bald, Gebote" },
       { id: "sr_cards", label: "Ergebnis-Cards: Bild, Preis, Verkäufer korrekt" },
+      { id: "trust_verified_badge", label: "'Verifiziert'-Abzeichen (grüner Haken) erscheint bei verifizierten Verkäufern (Ausweis geprüft + E-Mail) auf Karte, Inserat-Detail, Profil und Bestellung; nicht-verifizierte zeigen es nicht" },
       { id: "sr_no_results", label: "Keine Ergebnisse → sinnvolle Meldung" },
       { id: "sr_url_params", label: "Filter bleiben nach Reload in der URL erhalten" },
       { id: "sr_recent", label: "Letzte Suchen als Chips: klickbar, neueste zuerst, löschbar" },

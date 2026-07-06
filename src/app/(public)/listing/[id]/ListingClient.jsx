@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
 import { AccountBadge } from "@/components/shared/AccountBadge";
+import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
 import { CategoryIcon } from "@/components/shared/CategoryIcon";
 import { colors, fonts, radius } from "@/lib/theme";
 import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS } from "@/lib/constants";
@@ -506,6 +507,7 @@ export default function ListingDetail() {
                       {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
                     </Link>
                     <AccountBadge accountType={l.seller?.account_type} />
+                    <VerifiedSellerBadge profile={l.seller} size="md" />
                     <BeeLevelBadge xp={l.sellerXp} size="md" />
                   </div>
                   {sellerRating.count > 0 && (
@@ -1310,6 +1312,7 @@ export default function ListingDetail() {
                   {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
                 </span>
                 <AccountBadge accountType={l.seller?.account_type} />
+                <VerifiedSellerBadge profile={l.seller} size="sm" label={false} />
                 {sellerRating.count > 0 && (
                   <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 4, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
                     {sellerRating.avg.toFixed(1)}
