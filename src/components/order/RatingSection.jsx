@@ -60,8 +60,8 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           {(myRating?.comment || ratingComment) && <span style={{ fontSize: 12, color: colors.muted, marginLeft: "auto" }}>"{myRating?.comment || ratingComment}"</span>}
         </div>
       ) : (
-        <button onClick={() => setShowModal(true)} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: `3px 3px 0 ${K.ink}` }}>
-          <Star size={18} color={K.ink} /> {counterpartName} bewerten
+        <button onClick={() => setShowModal(true)} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <Star size={18} color={K.honey} /> {counterpartName} bewerten
         </button>
       )}
     </div>
