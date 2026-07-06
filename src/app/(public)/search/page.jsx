@@ -2,7 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Search, X, ChevronDown } from "lucide-react";
+import { Search, X, ChevronDown, BadgeCheck } from "lucide-react";
 import { searchListings, getCategories } from "@/lib/listings";
 import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/attributes";
 import { colors, fonts, radius } from "@/lib/theme";
@@ -123,6 +123,7 @@ function SearchPageInner() {
   const [maxPrice, setMaxPrice] = useState("");
   const [city, setCity] = useState("");
   const [delivery, setDelivery] = useState("");
+  const [verifiedOnly, setVerifiedOnly] = useState(searchParams.get("verified") === "1");
   const [sortBy, setSortBy] = useState("relevanz");
   const [page, setPage] = useState(1);
   const [categoryAttrs, setCategoryAttrs] = useState([]);
@@ -146,7 +147,7 @@ function SearchPageInner() {
     if (sort) setSortBy(sort);
   }, [searchParams, categories]);
 
-  useEffect(() => { doSearch(); }, [query, type, subCatId, subSubCatId, mainCatId, condition, sortBy, page, delivery, attrFilters]);
+  useEffect(() => { doSearch(); }, [query, type, subCatId, subSubCatId, mainCatId, condition, sortBy, page, delivery, verifiedOnly, attrFilters]);
 
   // Load category-specific attributes
   useEffect(() => {
@@ -183,6 +184,7 @@ function SearchPageInner() {
         min_price: minPrice || undefined, max_price: maxPrice || undefined,
         city: city || undefined, sort: sortBy, page, per_page: 24,
         delivery: delivery || undefined, listing_ids: attrListingIds,
+        verified_only: verifiedOnly || undefined,
       });
       setResults(res.listings);
       setTotal(res.total);
@@ -193,7 +195,7 @@ function SearchPageInner() {
   }
 
   const totalPages = Math.ceil(total / 24);
-  const activeFilterCount = [mainCatId, condition, type, minPrice || maxPrice, city, delivery, ...Object.values(attrFilters)].filter(Boolean).length;
+  const activeFilterCount = [mainCatId, condition, type, minPrice || maxPrice, city, delivery, verifiedOnly, ...Object.values(attrFilters)].filter(Boolean).length;
 
   const categoryOpts = [{ value: "", label: "Alle Kategorien" }, ...mainCats.map(c => ({ value: c.id, label: c.name }))];
   const subCatOpts = subCats.length > 0 ? [{ value: "", label: "Alle" }, ...subCats.map(c => ({ value: c.id, label: c.name }))] : [];
@@ -332,6 +334,20 @@ function SearchPageInner() {
             <FilterPill label="Zustand" value={condition} active={!!condition} options={conditionOpts} onChange={v => { setCondition(v); setPage(1); }} />
             <FilterPill label="Angebotsart" value={type} active={!!type} options={typeOpts} onChange={v => { setType(v); setPage(1); }} />
             <FilterPill label="Lieferung" value={delivery} active={!!delivery} options={deliveryOpts} onChange={v => { setDelivery(v); setPage(1); }} />
+            <button
+              onClick={() => { setVerifiedOnly(v => !v); setPage(1); }}
+              title="Nur Verkäufer mit geprüftem Ausweis + E-Mail"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                padding: "8px 14px", borderRadius: 8, cursor: "pointer",
+                fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
+                border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#14110D"}`,
+                background: verifiedOnly ? "#EEF4EC" : "#fff",
+                color: verifiedOnly ? "#5B8C5A" : "#14110D",
+              }}
+            >
+              <BadgeCheck size={15} color={verifiedOnly ? "#5B8C5A" : "#14110D"} strokeWidth={2.2} /> Verifiziert
+            </button>
           </div>
 
           {/* Row 2: Dynamic category attributes */}
@@ -368,7 +384,7 @@ function SearchPageInner() {
             {activeFilterCount > 0 && (
               <button onClick={() => {
                 setMainCatId(""); setSubCatId(""); setSubSubCatId(""); setCondition(""); setType("");
-                setMinPrice(""); setMaxPrice(""); setCity(""); setDelivery(""); setAttrFilters({}); setPage(1);
+                setMinPrice(""); setMaxPrice(""); setCity(""); setDelivery(""); setVerifiedOnly(false); setAttrFilters({}); setPage(1);
               }} style={{ fontSize: 13, fontWeight: 600, color: colors.teal, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}>
                 <X size={13} /> Alle Filter zurücksetzen
               </button>

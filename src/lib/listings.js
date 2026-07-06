@@ -319,6 +319,7 @@ export async function searchListings({
   listing_type = null, condition = null,
   min_price = null, max_price = null,
   city = null, canton = null, delivery = null,
+  verified_only = false,
   sort = "relevanz", page = 1, per_page = 24,
 } = {}) {
   // ── ART-/BEE-/Hex Prefix-Suche (UUID-Range statt text cast) ──
@@ -418,6 +419,13 @@ export async function searchListings({
   if (canton) q = q.eq("canton", canton);
   if (delivery === "shipping") q = q.eq("shipping_available", true);
   if (delivery === "pickup") q = q.eq("pickup_only", true);
+
+  // Nur verifizierte Verkäufer (E-Mail + Ausweis geprüft) — zweistufig,
+  // da PostgREST auf eingebettete Relationen nicht zuverlässig filtert.
+  if (verified_only) {
+    const { data: vids } = await supabase.from("profiles").select("id").eq("is_verified", true).eq("id_verified", true);
+    q = q.in("user_id", (vids || []).map(v => v.id));
+  }
 
   switch (sort) {
     case "relevanz":   q = q.order("fee_percentage", { ascending: false }).order("created_at", { ascending: false }); break;

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   User, Shield, CreditCard, MapPin, Landmark, Bell,
   Check, Camera, Eye, Lock, AlertTriangle, Pencil,
-  Star, X, Loader2, ChevronRight, ExternalLink,
+  Star, X, Loader2, ChevronRight, ExternalLink, BadgeCheck,
 } from "lucide-react";
 import { BeeLevelCard } from "@/components/shared/BeeLevel";
 
@@ -553,6 +553,15 @@ export default function SettingsPage() {
 
   const VerifyTab = () => (
     <>
+      {emailVerified && idVerified && (
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 12, background: "#EEF4EC", border: `1px solid ${K.moss}` }}>
+          <BadgeCheck size={26} color={K.moss} strokeWidth={2.2} />
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'General Sans','Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
+            <div style={{ fontSize: 12.5, color: C.muted, marginTop: 1 }}>Dein Ausweis und deine E-Mail sind bestätigt. Käufer sehen bei deinen Inseraten und deinem Profil das grüne „Verifiziert"-Abzeichen.</div>
+          </div>
+        </div>
+      )}
       <TrustMeter level={trustCount} />
       <div style={{ height: 20 }} />
       <Section
