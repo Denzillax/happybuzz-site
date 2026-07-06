@@ -1440,7 +1440,8 @@ export async function askPublicQuestion(listingId, buyerId, sellerId, content) {
 }
 
 export async function replyToQuestion(conversationId, senderId, content) {
-  await supabase.from("messages").insert({ conversation_id: conversationId, sender_id: senderId, content });
+  const { error } = await supabase.from("messages").insert({ conversation_id: conversationId, sender_id: senderId, content });
+  if (error) throw error;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
 }
 

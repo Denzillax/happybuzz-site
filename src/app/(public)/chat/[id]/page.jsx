@@ -101,7 +101,7 @@ export default function ChatConversation() {
     if (!dealActive) { const r = maskContactInfo(t); t = r.masked; if (r.hadContact) setMyViolations((v) => v + 1); }
     setSending(true);
     try { const m = await sendMessage(params.id, user.id, t); appendMsg(m); if (text === undefined) setNewMsg(""); }
-    catch (err) { console.error(err); toast.error("Nachricht konnte nicht gesendet werden."); }
+    catch (err) { console.error(err); toast.error(err?.message || "Nachricht konnte nicht gesendet werden."); }
     finally { setSending(false); }
   };
   const handleSend = () => sendText();

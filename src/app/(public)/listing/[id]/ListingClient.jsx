@@ -302,7 +302,7 @@ export default function ListingDetail() {
         const { error: msgErr } = await supabase
           .from("messages")
           .insert({ conversation_id: newConv.id, sender_id: user.id, content: msgText.trim() });
-        if (msgErr) { console.error("Msg error:", msgErr); return; }
+        if (msgErr) { console.error("Msg error:", msgErr); toast.error(msgErr.message || "Nachricht konnte nicht gesendet werden."); return; }
 
         await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", newConv.id);
       }
@@ -311,7 +311,7 @@ export default function ListingDetail() {
       setMsgSent(true);
       setTimeout(() => setMsgSent(false), 3000);
       getListingQuestions(params.id).then(setQuestions);
-    } catch (err) { console.error("Send error:", err); toast.error("Nachricht konnte nicht gesendet werden."); }
+    } catch (err) { console.error("Send error:", err); toast.error(err?.message || "Nachricht konnte nicht gesendet werden."); }
     finally { setSendingMsg(false); }
   };
 
@@ -1410,7 +1410,8 @@ export default function ListingDetail() {
                       style={{ flex: 1, padding: "10px", borderRadius: 6, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                     <button onClick={async () => {
                       if (!reportReason) return;
-                      await supabase.from("reports").insert({ reporter_id: user.id, listing_id: l.id, reason: reportReason, description: reportText || null, report_type: "listing" });
+                      const { error: reportError } = await supabase.from("reports").insert({ reporter_id: user.id, listing_id: l.id, reason: reportReason, description: reportText || null, report_type: "listing" });
+                      if (reportError) { alert(reportError.message || "Meldung konnte nicht gesendet werden. Bitte versuche es später erneut."); return; }
                       setShowReportModal(false); setReportReason(""); setReportText("");
                       alert("Danke für deine Meldung. Wir prüfen das Inserat.");
                     }} disabled={!reportReason}
