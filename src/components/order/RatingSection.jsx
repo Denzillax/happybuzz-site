@@ -52,7 +52,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
 
   return (
     <>
-    <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
+    <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
       {myRating || ratingDone ? (
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ display: "flex", gap: 3 }}>{[1,2,3,4,5].map(s => <Star key={s} size={16} fill={s <= (myRating?.rating || rating) ? colors.yellow : "none"} color={s <= (myRating?.rating || rating) ? colors.yellow : colors.muted} />)}</div>
@@ -60,7 +60,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           {(myRating?.comment || ratingComment) && <span style={{ fontSize: 12, color: colors.muted, marginLeft: "auto" }}>"{myRating?.comment || ratingComment}"</span>}
         </div>
       ) : (
-        <button onClick={() => setShowModal(true)} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        <button onClick={() => setShowModal(true)} style={{ width: "100%", padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
           <Star size={18} color={K.honey} /> {counterpartName} bewerten
         </button>
       )}
@@ -68,7 +68,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
 
     {showModal && (
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setShowModal(false)}>
-        <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 0, border: `2px solid ${K.ink}`, padding: "28px 24px", maxWidth: 420, width: "100%", boxShadow: `8px 8px 0 rgba(20,17,13,.18)` }}>
+        <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 14, border: `1px solid ${K.ink}`, padding: "28px 24px", maxWidth: 420, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
           <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, fontFamily: fonts.body }}>Bewertung</h3>
           <p style={{ margin: "0 0 20px", fontSize: 13, color: colors.muted, fontFamily: fonts.body }}>Wie war deine Erfahrung mit {counterpartName}?</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
@@ -85,17 +85,17 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
               const on = selectedTags.includes(t);
               return (
                 <button key={t} type="button" onClick={() => setSelectedTags(prev => on ? prev.filter(x => x !== t) : [...prev, t])}
-                  style={{ padding: "6px 12px", borderRadius: 0, cursor: "pointer", fontFamily: fonts.body, fontSize: 12, fontWeight: on ? 700 : 500,
-                    border: `1.5px solid ${K.ink}`, background: on ? K.honey : "#fff", color: K.ink }}>
+                  style={{ padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontFamily: fonts.body, fontSize: 12, fontWeight: on ? 700 : 500,
+                    border: `1px solid ${K.ink}`, background: on ? K.honey : "#fff", color: K.ink }}>
                   {t}
                 </button>
               );
             })}
           </div>
-          <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: 0, border: `1.5px solid ${K.ink}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
+          <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: `1.5px solid ${K.ink}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: rating ? K.honey : "#ddd", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? `3px 3px 0 ${K.ink}` : "none" }}>Bewertung abgeben</button>
-            <button onClick={() => setShowModal(false)} style={{ padding: "14px 20px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: rating ? K.honey : "#ddd", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? `3px 3px 0 ${K.ink}` : "none" }}>Bewertung abgeben</button>
+            <button onClick={() => setShowModal(false)} style={{ padding: "14px 20px", borderRadius: 10, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           </div>
         </div>
       </div>
