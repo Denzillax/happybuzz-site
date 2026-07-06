@@ -25,6 +25,11 @@ import RatingSection from "@/components/order/RatingSection";
 
 import { PURCHASE_STATUS as STATUS_MAP } from "@/lib/orderStatus";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+
 const EVENT_ICONS = {
   purchased: ShoppingBag, payment_marked: CreditCard, payment_confirmed: CheckCircle,
   payment_rejected: X, shipped: Truck, picked_up: MapPin,
@@ -68,7 +73,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
     <div>
       <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 12px" }}>Service-Rechnung</h3>
       {items.length > 0 ? (
-        <div style={{ background: "#F9F4EC", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
+        <div style={{ background: "#F9F4EC", borderRadius: 0, padding: "14px 16px", marginBottom: 12 }}>
           {items.map((item, i) => (
             <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid #e8e4df" : "none" }}>
               <div>
@@ -91,7 +96,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
         </div>
       )}
       {qrUrl && (
-        <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 10, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
+        <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 0, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
           <img src={qrUrl} alt="QR" style={{ width: 100, height: 100, borderRadius: 4, flexShrink: 0 }} />
           <div style={{ fontSize: 12, color: colors.muted }}>
             <div style={{ fontWeight: 700, color: colors.dark, marginBottom: 4 }}>QR-Zahlung</div>
@@ -199,16 +204,16 @@ export default function OrderDetailPage() {
   };
 ;
 
-  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
   if (!purchase) return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ textAlign: "center", maxWidth: 360 }}>
         <Package size={40} color={colors.mutedLt} style={{ marginBottom: 10 }} />
         <p style={{ fontSize: 17, fontWeight: 800, color: colors.dark, margin: "0 0 4px" }}>Bestellung nicht gefunden</p>
         <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Diese Bestellung existiert nicht mehr oder gehört nicht zu deinem Konto.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/purchases" style={{ padding: "10px 20px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Meine Käufe</Link>
-          <Link href="/sales" style={{ padding: "10px 20px", borderRadius: 10, background: colors.surface, border: `1px solid ${colors.border}`, color: colors.dark, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
+          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}`, boxShadow: `3px 3px 0 ${K.ink}` }}>Meine Käufe</Link>
+          <Link href="/sales" style={{ padding: "11px 20px", borderRadius: 0, background: "#fff", border: `1.5px solid ${K.ink}`, color: K.ink, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
         </div>
       </div>
     </div>
@@ -276,7 +281,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: colors.dark }}>
 
       {/* Verkaufs-Popup (Verkäufer, einmalig) */}
       {salePopup && (
@@ -292,8 +297,8 @@ export default function OrderDetailPage() {
             </div>
             <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#C8860A" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
             <div style={{ display: "flex", gap: 10 }}>
-              <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 10, background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
-              <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
+              <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 0, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
+              <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
             </div>
           </div>
         </div>
@@ -305,13 +310,14 @@ export default function OrderDetailPage() {
           <ArrowLeft size={16} /> Zurück
         </button>
 
-        <h1 style={{ fontSize: 22, fontWeight: 900, fontFamily: fonts.head, letterSpacing: ".03em", margin: "0 0 20px" }}>
-          {pageTitle} <span style={{ fontWeight: 400, color: colors.muted, fontSize: 16 }}>{beeRef}</span>
+        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 8 }}>Übergabe-Protokoll · Katalog der zweiten Leben</div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em", margin: "0 0 20px", display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+          {pageTitle} <span style={{ fontWeight: 700, color: colors.muted, fontSize: 13, fontFamily: MONO }}>{beeRef}</span>
         </h1>
 
         {/* Produkt-Card */}
-        <div style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
-          <div style={{ width: 80, height: 80, borderRadius: radius.sm, overflow: "hidden", background: colors.cream, border: `1px solid ${colors.borderLt}`, flexShrink: 0 }}>
+        <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
+          <div style={{ width: 80, height: 80, borderRadius: 0, overflow: "hidden", background: colors.cream, border: `1.5px solid ${K.ink}`, flexShrink: 0 }}>
             {img ? <img src={img.startsWith("http") ? img : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${img}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={24} color={colors.muted} /></div>}
           </div>
           <div>
@@ -328,7 +334,7 @@ export default function OrderDetailPage() {
           <div>
             {/* Status-Banner */}
             {isFinished && (
-              <div style={{ background: "#E8F5E9", borderRadius: radius.md, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ background: "#E8F5E9", borderRadius: 0, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <CheckCircle size={20} color="#5B8C5A" />
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: "#5B8C5A" }}>{finishedLabel}</div>
@@ -339,7 +345,7 @@ export default function OrderDetailPage() {
 
             {/* Aktions-Box */}
             {!isFinished && (
-              <div style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
 
                 {/* SERVICE: Anbieter erstellt Rechnung mit Positionen */}
                 {isService && isSeller && p.status === "confirmed" && (
@@ -375,7 +381,7 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Überweise den Betrag an den Verkäufer und bestätige die Zahlung.</p>
-                    <button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button>
+                    <button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button>
                   </div>
                 )}
                 {!isService && isBuyer && (p.status === "payment_pending" || p.status === "payment_marked") && (
@@ -389,7 +395,7 @@ export default function OrderDetailPage() {
                     ) : (
                       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Sobald die Zahlung bei dir eingegangen ist, bestätige den Eingang — auch wenn der Käufer noch nicht markiert hat.</p>
                     )}
-                    <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
+                    <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
                   </div>
                 )}
                 {!isService && isSeller && p.status === "paid" && (
@@ -398,22 +404,22 @@ export default function OrderDetailPage() {
                     {listing?.shipping_available && (
                       <>
                         <p style={{ fontSize: 13, color: colors.muted, marginBottom: 8 }}>Lieferadresse:</p>
-                        <div style={{ padding: 12, background: colors.cream, borderRadius: radius.sm, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
+                        <div style={{ padding: 12, background: K.sand, borderRadius: 0, border: `1.5px solid ${K.ink}`, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
                           <strong>{fullName(p.buyer)}</strong><br />{p.buyer?.street && <>{p.buyer.street}<br /></>}{(p.buyer?.postal_code || p.buyer?.city) && <>{p.buyer.postal_code} {p.buyer.city}</>}
                         </div>
                         {!showTracking ? (
-                          <button onClick={() => setShowTracking(true)} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Als versendet markieren</button>
+                          <button onClick={() => setShowTracking(true)} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Als versendet markieren</button>
                         ) : (
                           <div>
                             <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Sendungsnummer (optional)</label>
-                            <input value={trackingInput} onChange={e => setTrackingInput(e.target.value)} placeholder="z.B. 996000648206316303" style={{ width: "100%", padding: "10px 12px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
-                            <button onClick={() => doAction(markAsShipped, p.id, user.id, trackingInput)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Versand bestätigen"}</button>
+                            <input value={trackingInput} onChange={e => setTrackingInput(e.target.value)} placeholder="z.B. 996000648206316303" style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1.5px solid ${K.ink}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
+                            <button onClick={() => doAction(markAsShipped, p.id, user.id, trackingInput)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Versand bestätigen"}</button>
                           </div>
                         )}
                       </>
                     )}
                     {listing?.pickup_only && !listing?.shipping_available && (
-                      <button onClick={() => doAction(markAsPickedUp, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Als übergeben markieren"}</button>
+                      <button onClick={() => doAction(markAsPickedUp, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Als übergeben markieren"}</button>
                     )}
                   </div>
                 )}
@@ -425,7 +431,7 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Auftrag abschliessen</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Zahlung erhalten. Schliesse den Service-Auftrag ab.</p>
-                    <button onClick={() => doAction(completeTransaction, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Auftrag abschliessen"}</button>
+                    <button onClick={() => doAction(completeTransaction, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Auftrag abschliessen"}</button>
                   </div>
                 )}
                 {isService && isBuyer && p.status === "paid" && (
@@ -435,12 +441,12 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{p.status === "shipped" ? "Artikel unterwegs" : "Artikel übergeben"}</h3>
                     {trackingEvent && (
-                      <div style={{ padding: 12, background: colors.cream, borderRadius: radius.sm, marginBottom: 14, fontSize: 13 }}>
+                      <div style={{ padding: 12, background: K.sand, borderRadius: 0, border: `1.5px solid ${K.ink}`, marginBottom: 14, fontSize: 13 }}>
                         <span style={{ color: colors.muted }}>Sendungsnummer: </span>
-                        <a href={`https://service.post.ch/ekp-web/ui/entry/search/${trackingEvent.tracking_number}?lang=de`} target="_blank" rel="noopener" style={{ color: colors.yellow, fontWeight: 700, textDecoration: "none" }}>{trackingEvent.tracking_number} <ExternalLink size={12} /></a>
+                        <a href={`https://service.post.ch/ekp-web/ui/entry/search/${trackingEvent.tracking_number}?lang=de`} target="_blank" rel="noopener" style={{ color: K.petrol, fontWeight: 700, textDecoration: "none" }}>{trackingEvent.tracking_number} <ExternalLink size={12} /></a>
                       </div>
                     )}
-                    <button onClick={() => doAction(confirmDelivery, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Empfang bestätigen"}</button>
+                    <button onClick={() => doAction(confirmDelivery, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Empfang bestätigen"}</button>
                   </div>
                 )}
                 {isSeller && (p.status === "shipped" || p.status === "picked_up") && (
@@ -473,7 +479,7 @@ export default function OrderDetailPage() {
                     })()}
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Du hast den Artikel erhalten. Wenn du ihn zurückgibst, markiere die Rückgabe.</p>
                     {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)} — wird nach Rückgabe zurückerstattet.</p>}
-                    <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
+                    <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
                   </div>
                 )}
                 {isRental && isSeller && p.status === "delivered" && (
@@ -511,15 +517,15 @@ export default function OrderDetailPage() {
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Mieter hat den Artikel zurückgegeben. Prüfe den Zustand.</p>
                     {!showDamageForm ? (
                       <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK — Kaution zurück"}</button>
-                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
+                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK — Kaution zurück"}</button>
+                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
                       </div>
                     ) : (
                       <div>
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Schadenshöhe (CHF)</label>
-                        <input type="number" value={damageAmount} onChange={e => setDamageAmount(e.target.value)} placeholder="z.B. 20" style={{ width: "100%", padding: "10px 12px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
+                        <input type="number" value={damageAmount} onChange={e => setDamageAmount(e.target.value)} placeholder="z.B. 20" style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1.5px solid ${K.ink}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Beschreibung</label>
-                        <textarea value={damageDesc} onChange={e => setDamageDesc(e.target.value)} placeholder="Was ist beschädigt?" rows={2} style={{ width: "100%", padding: "10px 12px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 10 }} />
+                        <textarea value={damageDesc} onChange={e => setDamageDesc(e.target.value)} placeholder="Was ist beschädigt?" rows={2} style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 10 }} />
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Fotos (optional)</label>
                         <input type="file" accept="image/*" multiple onChange={e => setDamageFiles(Array.from(e.target.files || []))} style={{ fontSize: 12, fontFamily: fonts.body, marginBottom: 6 }} />
                         {damageFiles.length > 0 && (
@@ -546,8 +552,8 @@ export default function OrderDetailPage() {
                               setShowDamageForm(false); setDamageFiles([]);
                             } catch (err) { console.error(err); toast.error("Schadenmeldung fehlgeschlagen. Bitte erneut versuchen."); }
                             setActing(false);
-                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
-                          <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: 0, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
+                          <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                         </div>
                       </div>
                     )}
@@ -572,7 +578,7 @@ export default function OrderDetailPage() {
                       </div>
                     )}
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
+                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
                     </div>
                   </div>
                 )}
@@ -598,15 +604,15 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Kaution zurückerstatten</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Rückgabe bestätigt. Überweise die Kaution an den Mieter und bestätige.</p>
-                    <div style={{ padding: 12, background: colors.cream, borderRadius: radius.sm, marginBottom: 14, fontSize: 13 }}>
+                    <div style={{ padding: 12, background: K.sand, borderRadius: 0, border: `1.5px solid ${K.ink}`, marginBottom: 14, fontSize: 13 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}><span>Kaution</span><span>CHF {fmtCHF(depositAmount)}</span></div>
                       {parseFloat(p.damage_amount || 0) > 0 && (
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, color: "#c62828" }}><span>Schaden</span><span>- CHF {fmtCHF(p.damage_amount)}</span></div>
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: radius.sm, border: `1.5px solid #5B8C5A`, background: "#E8F5E9", color: "#5B8C5A", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
-                    <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: radius.sm, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 0, border: `1.5px solid #5B8C5A`, background: "#E8F5E9", color: "#5B8C5A", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
                 {isRental && isBuyer && p.status === "returned" && (
@@ -638,8 +644,8 @@ export default function OrderDetailPage() {
                         {/* Action Links */}
             {isFinished && (
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
-                <Link href={`/order/${p.id}/invoice`} style={{ fontSize: 13, fontWeight: 700, color: colors.yellow, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>{isRental ? (isBuyer ? "Mietbestätigung ansehen" : "Vermietungsbestätigung ansehen") : (isBuyer ? "Kaufbestätigung ansehen" : "Verkaufsbestätigung ansehen")}</Link>
-                {isBuyer && <Link href="/listings/new" style={{ fontSize: 13, fontWeight: 700, color: colors.yellow, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>Artikel weiterverkaufen</Link>}
+                <Link href={`/order/${p.id}/invoice`} style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>{isRental ? (isBuyer ? "Mietbestätigung ansehen" : "Vermietungsbestätigung ansehen") : (isBuyer ? "Kaufbestätigung ansehen" : "Verkaufsbestätigung ansehen")}</Link>
+                {isBuyer && <Link href="/listings/new" style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>Artikel weiterverkaufen</Link>}
               </div>
             )}
           </div>
@@ -647,7 +653,7 @@ export default function OrderDetailPage() {
           {/* RECHTE SPALTE */}
           <div>
             {/* Kaufübersicht / Verkaufsübersicht */}
-            <div style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20, marginBottom: 16 }}>
+            <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
               <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 4px" }}>{isService ? "Service-Übersicht" : isRental ? (isSeller ? "Vermietungsübersicht" : "Mietübersicht") : (isSeller ? "Verkaufsübersicht" : "Kaufübersicht")}</h3>
               <SidebarSection icon={Tag} title="Preis">
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span style={{ fontWeight: 400, color: colors.muted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing?.title}</span><span>1 x {fmtCHF(p.price)}</span></div>
@@ -670,7 +676,7 @@ export default function OrderDetailPage() {
               )}
               {trackingEvent && (
                 <SidebarSection icon={Truck} title="Sendungsnummer">
-                  <a href={`https://service.post.ch/ekp-web/ui/entry/search/${trackingEvent.tracking_number}?lang=de`} target="_blank" rel="noopener" style={{ color: colors.yellow, textDecoration: "none", fontWeight: 600, fontSize: 13 }}>{trackingEvent.tracking_number}</a>
+                  <a href={`https://service.post.ch/ekp-web/ui/entry/search/${trackingEvent.tracking_number}?lang=de`} target="_blank" rel="noopener" style={{ color: K.petrol, textDecoration: "none", fontWeight: 600, fontSize: 13 }}>{trackingEvent.tracking_number}</a>
                 </SidebarSection>
               )}
               {isRental && depositAmount > 0 && (
@@ -686,14 +692,14 @@ export default function OrderDetailPage() {
               <SidebarSection icon={User} title={counterpartLabel}>
                 <div style={{ lineHeight: 1.7 }}>
                   <Link href={`/user/${counterpart?.id}`} style={{ fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{fullName(counterpart)}</Link><br />
-                  <Link href={`/user/${counterpart?.id}`} style={{ fontSize: 12, color: colors.yellow, fontWeight: 600, textDecoration: "none" }}>@{counterpart?.display_name}</Link><br />
-                  {counterpart?.email && <><a href={`mailto:${counterpart.email}`} style={{ fontSize: 12, color: colors.yellow, textDecoration: "none" }}>{counterpart.email}</a><br /></>}
+                  <Link href={`/user/${counterpart?.id}`} style={{ fontSize: 12, color: K.petrol, fontWeight: 600, textDecoration: "none" }}>@{counterpart?.display_name}</Link><br />
+                  {counterpart?.email && <><a href={`mailto:${counterpart.email}`} style={{ fontSize: 12, color: K.petrol, textDecoration: "none" }}>{counterpart.email}</a><br /></>}
                   {counterpart?.phone && <span style={{ fontSize: 12, color: colors.muted }}>{counterpart.phone}</span>}
                 </div>
               </SidebarSection>
               <SidebarSection icon={FileText} title={pageTitle}>
                 <div style={{ lineHeight: 1.6, fontSize: 13 }}>
-                  <Link href={`/listing/${p.listing_id}`} style={{ color: colors.yellow, textDecoration: "none", fontWeight: 600 }}>Angebotsseite ansehen</Link><br />
+                  <Link href={`/listing/${p.listing_id}`} style={{ color: K.petrol, textDecoration: "none", fontWeight: 600 }}>Angebotsseite ansehen</Link><br />
                   <span style={{ fontWeight: 400, color: colors.muted }}>{pageTitle}:</span> {beeRef}<br />
                   <span style={{ fontWeight: 400, color: colors.muted }}>Artikel:</span> {artRef}
                 </div>
@@ -702,7 +708,7 @@ export default function OrderDetailPage() {
 
             {/* Zahlungsinformationen (nur Käufer) */}
             {isBuyer && p.seller?.iban && (
-              <div id="payment-info" style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20, marginBottom: 16 }}>
+              <div id="payment-info" style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
                 <h3 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 14px", textTransform: "uppercase", letterSpacing: ".5px", color: colors.muted }}>Zahlungsinformationen</h3>
                 <div style={{ fontSize: 13, display: "flex", flexDirection: "column", gap: 12 }}>
                   <div>
@@ -725,14 +731,14 @@ export default function OrderDetailPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><span style={{ fontWeight: 700 }}>{beeRef}</span><CopyBtn text={beeRef} /></div>
                   </div>
                 </div>
-                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16, padding: "12px 16px", borderRadius: radius.sm, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
+                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16, padding: "12px 16px", borderRadius: 0, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
               </div>
             )}
 
             {/* Hilfe-Box */}
-            <div style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, padding: 20 }}>
+            <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: 20 }}>
               <h4 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 6px" }}>{isRental ? (isBuyer ? "Vermieter reagiert nicht?" : "Mieter reagiert nicht?") : (isBuyer ? "Verkäufer reagiert nicht?" : "Käufer reagiert nicht?")}</h4>
-              <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Entdecke unsere <Link href="/help" style={{ color: colors.yellow, fontWeight: 600, textDecoration: "none" }}>Tipps</Link> oder <Link href="/contact" style={{ color: colors.yellow, fontWeight: 600, textDecoration: "none" }}>kontaktiere uns</Link>.</p>
+              <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Entdecke unsere <Link href="/help" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>Tipps</Link> oder <Link href="/contact" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>kontaktiere uns</Link>.</p>
             </div>
           </div>
         </div>
