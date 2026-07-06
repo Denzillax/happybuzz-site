@@ -11,6 +11,11 @@ import { fmtCHF } from "@/lib/formatters";
 import { makeBeeRef } from "@/lib/fees";
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+
 const FILTERS = [
   { key: "all", label: "Alle" },
   { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending","payment_marked"].includes(s) },
@@ -50,15 +55,16 @@ export default function PurchasesPage() {
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 20px 80px" }}>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 4px", fontFamily: fonts.head, letterSpacing: ".03em" }}>MEINE KÄUFE</h1>
+            <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Erworbene Exponate · Katalog der zweiten Leben</div>
+            <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Käufe</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{purchases.length} gekauft{openCount > 0 ? ` · ${openCount} offen` : ""}</p>
           </div>
-          <Link href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: radius.sm, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>
+          <Link href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 18px", borderRadius: 0, border: `1.5px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>
             Weiter stöbern
           </Link>
         </div>
@@ -67,9 +73,9 @@ export default function PurchasesPage() {
         <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: "7px 14px", borderRadius: radius.sm, fontSize: 12, fontWeight: filter === f.key ? 700 : 500,
-              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${filter === f.key ? colors.yellow : colors.border}`,
-              background: filter === f.key ? colors.yellowSoft : colors.surface, color: filter === f.key ? colors.dark : colors.muted,
+              padding: "7px 14px", borderRadius: 0, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
+              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${K.ink}`,
+              background: filter === f.key ? K.honey : "#fff", color: K.ink,
             }}>{f.label}</button>
           ))}
         </div>
@@ -77,17 +83,17 @@ export default function PurchasesPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}><Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}` }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}` }}>
             <ShoppingBag size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Käufe</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Finde Schätze auf dem Marktplatz.</p>
-            <Link href="/search" style={{ display: "inline-flex", padding: "10px 24px", borderRadius: radius.sm, background: colors.yellow, color: colors.dark, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zum Marktplatz</Link>
+            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}`, boxShadow: `3px 3px 0 ${K.ink}` }}>Zum Marktplatz</Link>
           </div>
         )}
 
         {/* Table */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -110,7 +116,7 @@ export default function PurchasesPage() {
                       onMouseEnter={e => e.currentTarget.style.background = colors.cream}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <td style={{ padding: "14px 10px", display: "flex", gap: 12, alignItems: "center" }}>
-                        <div style={{ width: 64, height: 64, borderRadius: radius.sm, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {p.listingImage ? <img src={p.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                         </div>
                         <div>
@@ -135,7 +141,7 @@ export default function PurchasesPage() {
                         </div>
                       </td>
                       <td style={{ padding: "14px 10px", verticalAlign: "middle", textAlign: "center" }}>
-                        <Link href={`/order/${p.id}`} style={{ color: colors.yellow, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Details</Link>
+                        <Link href={`/order/${p.id}`} style={{ color: K.petrol, fontSize: 13, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>Details</Link>
                       </td>
                     </tr>
                   );
@@ -147,12 +153,12 @@ export default function PurchasesPage() {
 
         {/* Bee Impact */}
         {!loading && purchases.length > 0 && (
-          <div style={{ marginTop: 20, background: colors.greenSoft, borderRadius: radius.lg, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ marginTop: 20, background: "#EEF4EC", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <p style={{ margin: 0, fontSize: 12, color: colors.green, fontWeight: 600 }}>Dein Bee-Impact</p>
-              <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: fonts.head, color: colors.green }}>CHF {fmtCHF(totalBee)}</p>
+              <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Dein Bee-Impact</p>
+              <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>
             </div>
-            <BeeIcon size={28} color={colors.green} />
+            <BeeIcon size={28} color={K.moss} />
           </div>
         )}
       </div>

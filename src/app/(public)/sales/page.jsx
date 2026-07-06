@@ -12,6 +12,11 @@ import { makeBeeRef } from "@/lib/fees";
 
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+
 const FILTERS = [
   { key: "all", label: "Alle" },
   { key: "open", label: "Offen", match: s => ["confirmed","pending_payment","payment_pending","payment_marked","paid"].includes(s) },
@@ -51,11 +56,12 @@ export default function SalesPage() {
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 20px 80px" }}>
 
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 4px", fontFamily: fonts.head, letterSpacing: ".03em" }}>MEINE VERKÄUFE</h1>
+          <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Abgegebene Exponate · Katalog der zweiten Leben</div>
+          <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Verkäufe</h1>
           <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{sales.length} verkauft{openCount > 0 ? ` · ${openCount} offen` : ""}</p>
         </div>
 
@@ -63,9 +69,9 @@ export default function SalesPage() {
         <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: "7px 14px", borderRadius: radius.sm, fontSize: 12, fontWeight: filter === f.key ? 700 : 500,
-              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${filter === f.key ? colors.yellow : colors.border}`,
-              background: filter === f.key ? colors.yellowSoft : colors.surface, color: filter === f.key ? colors.dark : colors.muted,
+              padding: "7px 14px", borderRadius: 0, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
+              cursor: "pointer", fontFamily: fonts.body, border: `1.5px solid ${K.ink}`,
+              background: filter === f.key ? K.honey : "#fff", color: K.ink,
             }}>{f.label}</button>
           ))}
         </div>
@@ -73,11 +79,11 @@ export default function SalesPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}><Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}` }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}` }}>
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Verkäufe</p>
             <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Stell dein erstes Inserat ein. Gebühr ab 3%, ein Teil geht in den Naturschutz.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, textDecoration: "none" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: `1.5px solid ${K.ink}`, boxShadow: `3px 3px 0 ${K.ink}` }}>
               Erstes Inserat erstellen
             </Link>
           </div>
@@ -85,7 +91,7 @@ export default function SalesPage() {
 
         {/* Table */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -107,7 +113,7 @@ export default function SalesPage() {
                       onMouseEnter={e => e.currentTarget.style.background = colors.cream}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <td style={{ padding: "14px 10px", display: "flex", gap: 12, alignItems: "center" }}>
-                        <div style={{ width: 64, height: 64, borderRadius: radius.sm, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {s.listingImage ? <img src={s.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                         </div>
                         <div>
@@ -132,7 +138,7 @@ export default function SalesPage() {
                         </div>
                       </td>
                       <td style={{ padding: "14px 10px", verticalAlign: "middle", textAlign: "center" }}>
-                        <Link href={`/order/${s.id}`} style={{ color: colors.yellow, fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Details</Link>
+                        <Link href={`/order/${s.id}`} style={{ color: K.petrol, fontSize: 13, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>Details</Link>
                       </td>
                     </tr>
                   );
@@ -145,16 +151,16 @@ export default function SalesPage() {
         {/* Summary */}
         {!loading && sales.length > 0 && (
           <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 200, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 20px" }}>
-              <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontWeight: 600 }}>Umsatz (nach Gebühren)</p>
-              <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: fonts.head }}>CHF {fmtCHF(totalRevenue)}</p>
+            <div style={{ flex: 1, minWidth: 200, background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: "16px 20px" }}>
+              <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: colors.muted, fontWeight: 700 }}>Umsatz (nach Gebühren)</p>
+              <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>CHF {fmtCHF(totalRevenue)}</p>
             </div>
-            <div style={{ flex: 1, minWidth: 200, background: colors.greenSoft, borderRadius: radius.lg, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ flex: 1, minWidth: 200, background: "#EEF4EC", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
-                <p style={{ margin: 0, fontSize: 12, color: colors.green, fontWeight: 600 }}>Bee-Impact</p>
-                <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: fonts.head, color: colors.green }}>CHF {fmtCHF(totalBee)}</p>
+                <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Bee-Impact</p>
+                <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>
               </div>
-              <BeeIcon size={28} color={colors.green} />
+              <BeeIcon size={28} color={K.moss} />
             </div>
           </div>
         )}
