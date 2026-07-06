@@ -27,9 +27,14 @@ const REASON_LABEL = {
 };
 const reasonLabel = (r) => REASON_LABEL[r] || (r?.startsWith("achievement:") ? "Achievement freigeschaltet" : r);
 
+// Katalog-Tokens (wie öffentliche Seiten)
+const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Space Mono', monospace";
+const HEAD = "'General Sans','Manrope',sans-serif";
+
 function Card({ children, style }) {
   return (
-    <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "20px 22px", ...style }}>
+    <div style={{ background: "#fff", borderRadius: 0, border: `1.5px solid ${K.ink}`, padding: "20px 22px", ...style }}>
       {children}
     </div>
   );
@@ -37,8 +42,8 @@ function Card({ children, style }) {
 function SectionTitle({ icon: Icon, children, right }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-      <Icon size={18} color={colors.teal} />
-      <h2 style={{ margin: 0, fontSize: 16, fontWeight: 800, fontFamily: fonts.head, color: colors.dark, flex: 1 }}>{children}</h2>
+      <Icon size={18} color={K.petrol} />
+      <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: K.ink, flex: 1 }}>{children}</h2>
       {right}
     </div>
   );
@@ -138,7 +143,7 @@ export default function HivePage() {
   }, [router]);
 
   if (loading) return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Loader2 size={26} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} />
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
@@ -157,17 +162,20 @@ export default function HivePage() {
   const streak = profile?.current_streak || 0;
 
   return (
-    <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 920, margin: "0 auto", padding: "28px 20px 80px" }}>
 
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-          <BeeIcon size={26} color={colors.yellow} />
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 900, fontFamily: fonts.head }}>Dein Hive</h1>
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Dein Bienenstock · Katalog der zweiten Leben</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <BeeIcon size={26} color={colors.yellow} />
+            <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Dein Hive</h1>
+          </div>
         </div>
 
         {/* ── LEVEL HERO ── */}
-        <Card style={{ background: `linear-gradient(135deg, ${level.color}14, ${colors.surface} 60%)`, marginBottom: 16 }}>
+        <Card style={{ background: `linear-gradient(135deg, ${level.color}14, #fff 60%)`, marginBottom: 16 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
             <div style={{ width: 58, height: 58, borderRadius: "50%", background: `${level.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <BeeIcon size={30} color={level.color} />
