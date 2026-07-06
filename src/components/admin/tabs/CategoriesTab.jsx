@@ -1,11 +1,48 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ChevronUp, ChevronDown, ChevronRight, Plus, Pencil, Check, X, EyeOff, Eye, Search, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronUp, ChevronDown, ChevronRight, Plus, Pencil, Check, X, EyeOff, Eye, Search, Maximize2, Minimize2, Trash2 } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { pill } from "@/components/admin/adminStyles";
 import { CategoryIcon } from "@/components/shared/CategoryIcon";
 
 const STORAGE_KEY = "beedaro_admin_cat_expanded";
+
+// Kuratierte Auswahl distinkter Icons (Namen aus CategoryIcon/ICON_MAP).
+const ICON_CHOICES = [
+  "Package", "Laptop", "Monitor", "Smartphone", "Tablet", "Cpu", "HardDrive", "Keyboard", "Printer",
+  "Gamepad2", "Joystick", "Tv", "Headphones", "Speaker", "Music", "Camera", "Video", "Aperture",
+  "Shirt", "Footprints", "Glasses", "Watch", "Gem", "Baby", "ShoppingBag",
+  "Dumbbell", "Mountain", "Tent", "Waves", "Bike", "Car", "Truck", "Plane", "Train",
+  "Sofa", "Bed", "Lightbulb", "Home", "Flower", "Wrench", "Brush", "Puzzle",
+  "BookOpen", "Clapperboard", "Guitar", "Piano", "Ticket", "Coins", "Briefcase", "Heart", "Sparkles", "Handshake",
+];
+
+// Kleiner Icon-Auswahl-Popover.
+function IconPicker({ value, onPick, onClose }) {
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
+      <div style={{
+        position: "absolute", top: "100%", left: 0, marginTop: 6, zIndex: 41,
+        width: 268, maxHeight: 240, overflowY: "auto", padding: 8,
+        background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 10,
+        boxShadow: "0 8px 28px rgba(0,0,0,.14)",
+        display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4,
+      }}>
+        {ICON_CHOICES.map(name => {
+          const on = name === value;
+          return (
+            <button key={name} onClick={() => { onPick(name); onClose(); }} title={name}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 7, borderRadius: 8, cursor: "pointer",
+                border: `1.5px solid ${on ? colors.teal : "transparent"}`, background: on ? "#E6F5F5" : colors.cream, color: colors.dark }}>
+              <CategoryIcon name={name} size={17} />
+            </button>
+          );
+        })}
+      </div>
+    </>
+  );
+}
 
 // Kategorien-Verwaltung: erstellen, umbenennen, deaktivieren, sortieren.
 // Baum ist auf-/zuklappbar (Zustand in localStorage gemerkt), mit Live-Suche
@@ -13,13 +50,23 @@ const STORAGE_KEY = "beedaro_admin_cat_expanded";
 // Deaktivieren statt löschen — bestehende Inserate behalten ihre Kategorie,
 // nur in Pickern/Menüs verschwindet sie.
 export function CategoriesTab({ admin }) {
-  const { adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory } = admin;
+  const { adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory } = admin;
   const [newName, setNewName] = useState("");
+  const [newIcon, setNewIcon] = useState("Package");
+  const [newIconOpen, setNewIconOpen] = useState(false);
   const [addingUnder, setAddingUnder] = useState(null); // parent_id für neue Unterkategorie
   const [subName, setSubName] = useState("");
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
+  const [iconPickId, setIconPickId] = useState(null); // Kategorie deren Icon gerade geändert wird
+  const [confirmDelId, setConfirmDelId] = useState(null);
   const [query, setQuery] = useState("");
+
+  const addMain = () => {
+    if (!newName.trim()) return;
+    createCategory(newName, null, newIcon);
+    setNewName(""); setNewIcon("Package");
+  };
 
   // Aufgeklappte IDs — beim ersten Öffnen alles zu, danach gemerkt.
   const [expanded, setExpanded] = useState(() => {
@@ -103,7 +150,18 @@ export function CategoriesTab({ admin }) {
             <button onClick={() => moveCategory(cat, -1)} title="Nach oben" style={{ border: "none", background: "none", cursor: "pointer", padding: 0, lineHeight: 0, color: colors.muted }}><ChevronUp size={13} /></button>
             <button onClick={() => moveCategory(cat, 1)} title="Nach unten" style={{ border: "none", background: "none", cursor: "pointer", padding: 0, lineHeight: 0, color: colors.muted }}><ChevronDown size={13} /></button>
           </span>
-          {depth === 0 && <CategoryIcon name={cat.icon || "Package"} size={15} />}
+          {depth === 0 && (
+            <span style={{ position: "relative", flexShrink: 0 }}>
+              <button onClick={() => setIconPickId(iconPickId === cat.id ? null : cat.id)} title="Icon ändern"
+                style={{ border: "none", background: "none", cursor: "pointer", padding: 2, lineHeight: 0, color: colors.dark, display: "flex" }}>
+                <CategoryIcon name={cat.icon || "Package"} size={16} />
+              </button>
+              {iconPickId === cat.id && (
+                <IconPicker value={cat.icon || "Package"} onClose={() => setIconPickId(null)}
+                  onPick={(name) => setCategoryIcon(cat.id, name)} />
+              )}
+            </span>
+          )}
           {/* Name / Inline-Edit */}
           {isEditing ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
@@ -122,7 +180,16 @@ export function CategoriesTab({ admin }) {
           )}
           {inactive && pill("#f5f5f5", "#666", "Deaktiviert")}
           {/* Aktionen */}
-          {!isEditing && (
+          {!isEditing && confirmDelId === cat.id && (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+              <span style={{ fontSize: 11.5, color: "#c62828", fontWeight: 700 }}>Löschen?</span>
+              <button onClick={async () => { const ok = await deleteCategory(cat); setConfirmDelId(null); }} title="Endgültig löschen"
+                style={{ border: "none", background: "#c62828", color: "#fff", borderRadius: 6, padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ja</button>
+              <button onClick={() => setConfirmDelId(null)} title="Abbrechen"
+                style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 4, cursor: "pointer", lineHeight: 0 }}><X size={13} /></button>
+            </span>
+          )}
+          {!isEditing && confirmDelId !== cat.id && (
             <span style={{ display: "inline-flex", gap: 4, flexShrink: 0 }}>
               <button onClick={() => startEdit(cat)} title="Umbenennen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Pencil size={12} /></button>
               <button onClick={() => { setAddingUnder(addingUnder === cat.id ? null : cat.id); setSubName(""); }} title="Unterkategorie anlegen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Plus size={12} /></button>
@@ -130,6 +197,8 @@ export function CategoriesTab({ admin }) {
                 style={{ border: "none", background: inactive ? "#E8F5E9" : "#FFF3E0", color: inactive ? "#2E7D32" : "#E65100", borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}>
                 {inactive ? <Eye size={12} /> : <EyeOff size={12} />}
               </button>
+              <button onClick={() => { setConfirmDelId(cat.id); }} title="Löschen"
+                style={{ border: "none", background: "#FFEBEE", color: "#c62828", borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Trash2 size={12} /></button>
             </span>
           )}
         </div>
@@ -155,10 +224,19 @@ export function CategoriesTab({ admin }) {
     <div>
       {/* Neue Hauptkategorie */}
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <span style={{ position: "relative", flexShrink: 0 }}>
+          <button onClick={() => setNewIconOpen(v => !v)} title="Icon wählen"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, border: `1px solid ${colors.border}`, borderRadius: 8, background: "#fff", cursor: "pointer", color: colors.dark }}>
+            <CategoryIcon name={newIcon} size={17} />
+          </button>
+          {newIconOpen && (
+            <IconPicker value={newIcon} onClose={() => setNewIconOpen(false)} onPick={setNewIcon} />
+          )}
+        </span>
         <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="Neue Hauptkategorie..."
-          onKeyDown={e => { if (e.key === "Enter" && newName.trim()) { createCategory(newName, null); setNewName(""); } }}
-          style={{ flex: 1, maxWidth: 360, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
-        <button onClick={() => { if (newName.trim()) { createCategory(newName, null); setNewName(""); } }} disabled={!newName.trim()}
+          onKeyDown={e => { if (e.key === "Enter") addMain(); }}
+          style={{ flex: 1, maxWidth: 322, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
+        <button onClick={addMain} disabled={!newName.trim()}
           style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "none", background: newName.trim() ? colors.dark : colors.cream, color: newName.trim() ? "#fff" : colors.muted, borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 700, cursor: newName.trim() ? "pointer" : "default", fontFamily: fonts.body }}>
           <Plus size={13} /> Anlegen
         </button>

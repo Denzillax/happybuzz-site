@@ -272,6 +272,10 @@ const TESTS = [
       { id: "adm_mahn_stepper_click", label: "Mahn-Stepper klickbar: erledigte Stufe öffnet die gesendete Mail (Text), fällige Stufe öffnet die Senden-Vorschau" },
       { id: "adm_mahn_bulk", label: "'Alle fälligen senden (N)' verschickt die fälligen Mahnungen gebündelt" },
       { id: "adm_fee_switch", label: "Übersicht-Gebühren-Karte (breit) hat Switch Bezahlt/Offen/Aufgelaufen/Gesamt; Hauptzahl + 'davon Bee-Impact' folgen der Auswahl; keine separate Bee-Impact-Karte; Switch overflowt nicht auf Mobile" },
+      { id: "adm_cat_tree", label: "Kategorien-Tab: Baum auf-/zuklappbar (Chevron), Zustand bleibt nach Reload gemerkt; Alles auf/Alles zu" },
+      { id: "adm_cat_search", label: "Kategorien-Suche filtert den Baum live + klappt Treffer-Äste auf; Leeren stellt den vorherigen Handzustand wieder her" },
+      { id: "adm_cat_create", label: "Kategorie anlegen: Icon per Picker wählen (Haupt), Unterkategorie klappt Elternteil auf; bestehendes Haupt-Icon per Klick änderbar" },
+      { id: "adm_cat_delete", label: "Kategorie löschen (Papierkorb + Bestätigung); blockt mit Meldung, wenn Unterkategorien oder Inserate hängen (Protokoll-Eintrag 'Kategorie gelöscht')" },
     ],
   },
   {

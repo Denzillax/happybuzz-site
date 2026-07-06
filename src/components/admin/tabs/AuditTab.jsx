@@ -14,6 +14,7 @@ export const AUDIT_META = {
   category_update:      { label: "Kategorie umbenannt",      Icon: Clock,       color: "#0E9493", bg: "#E6F5F5" },
   category_toggle:      { label: "Kategorie (de)aktiviert",  Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
   category_move:        { label: "Kategorie sortiert",       Icon: Clock,       color: "#0E9493", bg: "#E6F5F5" },
+  category_delete:      { label: "Kategorie gelöscht",       Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
   listing_pause:        { label: "Inserat pausiert",      Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
   listing_activate:     { label: "Inserat aktiviert",     Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
   listing_approve:      { label: "Inserat freigegeben",   Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },

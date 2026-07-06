@@ -624,13 +624,13 @@ export function useAdminData() {
   const slugifyCat = (s) => s.toLowerCase()
     .replace(/[äöüß]/g, (c) => ({ "ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss" }[c]))
     .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-  const createCategory = async (name, parentId = null) => {
+  const createCategory = async (name, parentId = null, icon = "Package") => {
     const clean = (name || "").trim();
     if (!clean) return;
     const siblings = adminCategories.filter(c => (c.parent_id || null) === (parentId || null));
     const sort = siblings.length ? Math.max(...siblings.map(c => c.sort_order || 0)) + 1 : 0;
     const { data, error } = await supabase.from("categories")
-      .insert({ name: clean, slug: `${slugifyCat(clean)}-${Date.now().toString(36)}`, parent_id: parentId, icon: "Package", sort_order: sort, is_active: true })
+      .insert({ name: clean, slug: `${slugifyCat(clean)}-${Date.now().toString(36)}`, parent_id: parentId, icon: icon || "Package", sort_order: sort, is_active: true })
       .select().single();
     if (error) { flash(`Fehler: ${error.message}`); return; }
     setAdminCategories(prev => [...prev, data]);
@@ -645,6 +645,27 @@ export function useAdminData() {
     setAdminCategories(prev => prev.map(c => c.id === id ? { ...c, name: clean } : c));
     flash("Kategorie umbenannt");
     logAdmin("category_update", "category", clean);
+  };
+  const setCategoryIcon = async (id, icon) => {
+    const { error } = await supabase.from("categories").update({ icon }).eq("id", id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setAdminCategories(prev => prev.map(c => c.id === id ? { ...c, icon } : c));
+    const _c = adminCategories.find(c => c.id === id);
+    logAdmin("category_update", "category", _c?.name || id);
+  };
+  // Löschen nur wenn leer: keine Unterkategorien, keine Inserate.
+  // FKs sind das letzte Sicherheitsnetz (NO ACTION), category_attributes cascaden.
+  const deleteCategory = async (cat) => {
+    const kids = adminCategories.filter(c => (c.parent_id || null) === cat.id);
+    if (kids.length) { flash(`"${cat.name}" hat ${kids.length} Unterkategorien. Erst diese entfernen.`); return false; }
+    const { count } = await supabase.from("listings").select("id", { count: "exact", head: true }).eq("category_id", cat.id);
+    if (count && count > 0) { flash(`${count} Inserat(e) nutzen "${cat.name}". Deaktivieren statt löschen.`); return false; }
+    const { error } = await supabase.from("categories").delete().eq("id", cat.id);
+    if (error) { flash(`Fehler: ${error.message}`); return false; }
+    setAdminCategories(prev => prev.filter(c => c.id !== cat.id));
+    flash(`Kategorie "${cat.name}" gelöscht`);
+    logAdmin("category_delete", "category", cat.name);
+    return true;
   };
   const toggleCategoryActive = async (cat) => {
     const next = cat.is_active === false; // false → aktivieren, sonst deaktivieren
@@ -892,7 +913,7 @@ export function useAdminData() {
     filteredUsers, visibleUsers, filteredListings, visibleListings, filteredOrders, filteredEmails, invoiceRows, beeInvoiceRows, feeInvoiceRows,
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
-    adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory,
+    adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,
