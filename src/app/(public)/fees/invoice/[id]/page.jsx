@@ -97,6 +97,12 @@ export default function FeeInvoicePage() {
             <p style={{ margin: "1px 0", fontSize: 11, color: "#666", fontFamily: f }}>{co.street}</p>
             <p style={{ margin: 0, fontSize: 11, color: "#666", fontFamily: f }}>{`${co.postal_code || ""} ${co.city || ""}`.trim()}{co.country === "CH" ? ", Schweiz" : co.country ? `, ${co.country}` : ""}</p>
             {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#888", fontFamily: f }}>{co.uid}</p>}
+            {/* Verbindet die Marke im Kopf mit der juristischen Person im Zahlteil.
+                Der Kreditor muss dem Kontoinhaber entsprechen, darum steht die
+                Marke hier als Zusatz und nicht im Empfaengerfeld. */}
+            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#888", fontFamily: f }}>
+              BEEDARO ist eine Marke von MOQRO.
+            </p>
           </div>
           <div>
             <p style={lbl}>Verkäufer / Rechnungsempfänger</p>
@@ -162,8 +168,16 @@ export default function FeeInvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 4 }} />
-            <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
+            {qrUrl ? (
+              <>
+                <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 4 }} />
+                <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
+              </>
+            ) : (
+              <p style={{ margin: 0, fontSize: 9, color: g, fontFamily: f, textAlign: "center", maxWidth: 130 }}>
+                Zahlteil nicht verfügbar. Bitte die IBAN oben manuell erfassen.
+              </p>
+            )}
           </div>
         </div>
 

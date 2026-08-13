@@ -8,6 +8,7 @@ export function buildSwissQR({ iban, name, street, plzCity, amount, currency, dN
 }
 
 export function qrImageUrl(payload, size = 200) {
+  if (!payload) return null;   // kein Zahlteil ohne gültige Daten
   return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&ecc=M&data=${encodeURIComponent(payload)}`;
 }
 
@@ -38,10 +39,17 @@ export function orderQrPayload(order, { deposit = false } = {}) {
 export function feeQrPayload(invoice, seller, company = {}) {
   const total = parseFloat(invoice.total_fees || 0);
   const ref = invoice.invoice_ref;
-  const iban = (company.iban || "CH1234567890123456789").replace(/\s/g, "");
-  const plzCity = `${company.postal_code || ""} ${company.city || ""}`.trim() || "6010 Kriens";
+
+  // Ohne echte Firmendaten KEINEN QR erzeugen. Frueher standen hier eine
+  // Platzhalter-IBAN und "BEEDARO" als Fallback: haette company_settings nicht
+  // geladen, waere ein scanbarer Zahlteil mit falschem Empfaenger entstanden.
+  // Lieber kein QR als ein falscher.
+  if (!company.iban || !company.name) return null;
+
+  const iban = company.iban.replace(/\s/g, "");
+  const plzCity = `${company.postal_code || ""} ${company.city || ""}`.trim();
   return buildSwissQR({
-    iban, name: company.name || "BEEDARO", street: company.street || "Gemeindehausstrasse 11B", plzCity,
+    iban, name: company.name, street: company.street || "", plzCity,
     amount: total.toFixed(2), currency: "CHF",
     dName: fullName(seller), dStreet: seller?.street || "", dPlzCity: `${seller?.postal_code || ""} ${seller?.city || ""}`.trim(),
     message: `Gebuehren ${ref}`,
