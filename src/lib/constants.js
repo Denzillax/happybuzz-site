@@ -72,10 +72,16 @@ export function getNextBeeLevel(impactTotal) {
 }
 export const FEE_TIERS = [
   { pct: 3,  tier: "fair",      dbTier: "starter",  label: "Fair",       desc: "Einstiegstarif" },
-  { pct: 5,  tier: "supporter", dbTier: "basic",    label: "Supporter",  desc: "Empfohlener Beitrag" },
-  { pct: 7,  tier: "impact",    dbTier: "plus",     label: "Impact",     desc: "Top-Platzierung + Badge" },
+  { pct: 5,  tier: "supporter", dbTier: "basic",    label: "Supporter",  desc: "Solider Beitrag" },
+  { pct: 7,  tier: "impact",    dbTier: "plus",     label: "Impact",     desc: "Empfohlen: Top-Platzierung + Badge" },
   { pct: 10, tier: "hero",      dbTier: "pro",      label: "Bee Hero",   desc: "Maximale Power" },
 ];
+
+// Einzige Quelle der Wahrheit für die Standard-Bee-Rate.
+// Muss mit dem DB-Default von listings.fee_tier / fee_percentage übereinstimmen.
+export const DEFAULT_FEE_TIER = "impact";
+export const DEFAULT_FEE_TIER_CONFIG = FEE_TIERS.find((t) => t.tier === DEFAULT_FEE_TIER);
+export const DEFAULT_FEE_PERCENT = DEFAULT_FEE_TIER_CONFIG.pct;
 
 // ─── Rent Periods ────────────────────────────────────────────
 // DB ENUM rent_period: hour, day, week, month

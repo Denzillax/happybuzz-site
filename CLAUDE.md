@@ -88,7 +88,7 @@ src/
 - `condition` (NICHT `condition_type`): new/like_new/good/fair/poor
 - `listing_type`: sell/auction/rent/free/service
 - `fee_percentage` + `fee_tier` (NICHT `bee_rate_percentage`)
-- `fee_tier`: fair/supporter/impact/hero (Default: supporter)
+- `fee_tier`: fair/supporter/impact/hero (Default: impact = 7%)
 - `shipping_available` + `pickup_only` (NICHT `delivery_type`)
 - `shipping_payer` (NICHT `shipping_paid_by`)
 - `contact_phone` = bool, `phone_number` = text
@@ -134,7 +134,9 @@ src/
 5. **Queries**: `.maybeSingle()` statt `.single()` für optionale Queries
 6. **Dedup**: Timeline Events haben 2-Minuten Dedup-Fenster
 7. **Notifications**: Transaktionskritische sind immer an, nur Kanal (Email/Push) konfigurierbar
-8. **Fee-Model**: Bee-Impact = 20% der Gebühr. Default Bee-Rate = 7%
+8. **Fee-Model**: Bee-Impact = 20% der Gebühr. Default Bee-Rate = 7% (Tier `impact`).
+   Einzige Quelle: `DEFAULT_FEE_TIER` / `DEFAULT_FEE_PERCENT` in `src/lib/constants.js`.
+   Nie hartkodieren, auch nicht als Fallback (`fee_percentage || 5` war ein Bug).
 
 ## Kategorie-IDs (korrekt verifiziert)
 ```

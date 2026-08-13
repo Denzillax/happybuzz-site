@@ -11,6 +11,7 @@ import { colors, fonts, radius, shadows } from "@/lib/theme";
 import {
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
+  DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER,
 } from "@/lib/constants";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -166,8 +167,8 @@ export default function ListingForm({
     pay_cash: false,
 
     // Gebühren
-    fee_percentage: 7,
-    fee_tier: "impact",
+    fee_percentage: DEFAULT_FEE_PERCENT,
+    fee_tier: DEFAULT_FEE_TIER,
 
     // Auktion
     start_price: "",
@@ -231,8 +232,8 @@ export default function ListingForm({
       pay_bank: initialData.pay_bank || false,
       pay_cash: initialData.pay_cash || false,
 
-      fee_percentage: initialData.fee_percentage || 7,
-      fee_tier: initialData.fee_tier || "impact",
+      fee_percentage: initialData.fee_percentage || DEFAULT_FEE_PERCENT,
+      fee_tier: initialData.fee_tier || DEFAULT_FEE_TIER,
 
       start_price: initialData.start_price?.toString() || "",
       buy_now_price: initialData.buy_now_price?.toString() || "",
@@ -428,7 +429,7 @@ export default function ListingForm({
 
   // ── Fee select ─────────────────────────────────────────────
   const selectFee = (pct, tierName) => {
-    const tier = tierName || FEE_TIERS.find((t) => t.pct === parseInt(pct))?.tier || "supporter";
+    const tier = tierName || FEE_TIERS.find((t) => t.pct === parseInt(pct))?.tier || DEFAULT_FEE_TIER;
     set("fee_percentage", parseInt(pct));
     set("fee_tier", tier);
   };

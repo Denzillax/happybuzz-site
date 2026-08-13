@@ -1,5 +1,33 @@
 import { describe, it, expect } from "vitest";
-import { makeArtRef, makeBeeRef, makeFeeRef, parseArtRef, artIdRange, artRefMatches } from "@/lib/fees";
+import { makeArtRef, makeBeeRef, makeFeeRef, parseArtRef, artIdRange, artRefMatches, calcFee, calcBeeImpact } from "@/lib/fees";
+import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_TIER, DEFAULT_FEE_PERCENT } from "@/lib/constants";
+
+// Regressionsschutz: Standard-Bee-Rate war frueher an fuenf Stellen unterschiedlich
+// hinterlegt (fees.js 5%, Formular 7%, DB-Default supporter). Diese Tests halten
+// Code und DB-Default auf demselben Tarif.
+describe("Standard-Bee-Rate (eine Quelle der Wahrheit)", () => {
+  it("DEFAULT_FEE_PERCENT entspricht dem Prozentsatz von DEFAULT_FEE_TIER", () => {
+    const tier = FEE_TIERS.find((t) => t.tier === DEFAULT_FEE_TIER);
+    expect(tier).toBeDefined();
+    expect(DEFAULT_FEE_PERCENT).toBe(tier.pct);
+  });
+
+  it("Standard ist Impact / 7% (muss mit dem DB-Default von listings uebereinstimmen)", () => {
+    expect(DEFAULT_FEE_TIER).toBe("impact");
+    expect(DEFAULT_FEE_PERCENT).toBe(7);
+  });
+
+  it("calcFee faellt ohne Satz auf die Standard-Bee-Rate zurueck, nicht auf einen Fremdwert", () => {
+    expect(calcFee(100)).toBe(DEFAULT_FEE_PERCENT);
+    expect(calcFee(100, null)).toBe(DEFAULT_FEE_PERCENT);
+    expect(calcFee(100, 0)).toBe(DEFAULT_FEE_PERCENT);
+  });
+
+  it("Bee-Impact bleibt 20% der Gebuehr", () => {
+    expect(BEE_IMPACT_RATE).toBe(0.2);
+    expect(calcBeeImpact(calcFee(100, 10))).toBeCloseTo(2, 10);
+  });
+});
 
 describe("makeArtRef / makeBeeRef (Referenznummern)", () => {
   it("bildet ART-Nr aus den ersten 8 Hex-Zeichen der UUID", () => {

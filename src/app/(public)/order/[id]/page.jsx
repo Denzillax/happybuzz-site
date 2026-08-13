@@ -17,7 +17,7 @@ import {
 } from "@/lib/listings";
 import { colors, fonts, radius } from "@/lib/theme";
 import { fmtCHF, fullName } from "@/lib/formatters";
-import { makeBeeRef, makeArtRef } from "@/lib/fees";
+import { makeBeeRef, makeArtRef, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
 import OrderTimeline from "@/components/order/OrderTimeline";
@@ -353,7 +353,7 @@ export default function OrderDetailPage() {
                   <ServiceInvoiceEditor
                     purchaseId={p.id}
                     sellerId={user.id}
-                    feePercent={listing?.fee_percentage || 5}
+                    feePercent={listing?.fee_percentage || DEFAULT_FEE_PERCENT}
                     onSubmitted={() => window.location.reload()}
                   />
                 )}

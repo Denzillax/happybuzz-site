@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { createNotification } from "@/lib/notifications";
+import { DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER } from "@/lib/constants";
 
 // ─── Slug ────────────────────────────────────────────────────
 function slugify(text) {
@@ -12,16 +13,8 @@ function slugify(text) {
 }
 
 // ─── Fee Config ──────────────────────────────────────────────
-// fee_tier CHECK constraint: fair, supporter, impact, hero
-// bee_rate_tier ENUM (profiles): starter, basic, plus, pro
-// Bee-Impact: 20% der Gebühr
-export const FEE_TIERS = [
-  { pct: 3,  tier: "fair",      label: "Fair" },
-  { pct: 5,  tier: "supporter", label: "Supporter" },
-  { pct: 7,  tier: "impact",    label: "Impact" },
-  { pct: 10, tier: "hero",      label: "Bee Hero" },
-];
-export const BEE_IMPACT_RATE = 0.20;
+// FEE_TIERS und BEE_IMPACT_RATE leben in @/lib/constants (eine Quelle der
+// Wahrheit). Die frueheren Duplikate hier waren tot und drohten zu driften.
 
 // ─── Profile Completeness Check ──────────────────────────────
 // Returns { complete: boolean, missing: string[], redirect: string }
@@ -111,7 +104,7 @@ export async function createListing(userId, formData) {
     pay_cash: formData.pay_cash || false,
 
     fee_percentage: formData.fee_percentage ? parseFloat(formData.fee_percentage) : 7,
-    fee_tier: formData.fee_tier || "impact",
+    fee_tier: formData.fee_tier || DEFAULT_FEE_TIER,
   };
 
   if (formData.listing_type === "auction") {
@@ -171,7 +164,7 @@ export async function updateListing(listingId, formData) {
     pay_bank: formData.pay_bank || false,
     pay_cash: formData.pay_cash || false,
     fee_percentage: formData.fee_percentage ? parseFloat(formData.fee_percentage) : 7,
-    fee_tier: formData.fee_tier || "impact",
+    fee_tier: formData.fee_tier || DEFAULT_FEE_TIER,
   };
   if (formData.listing_type === "auction") {
     row.start_price = formData.start_price ? parseFloat(formData.start_price) : null;
@@ -1085,7 +1078,7 @@ export async function finalizeAuction(listingId) {
 
   // 3. Purchase erstellen
   const finalPrice = topBid.amount;
-  const feePct = listing.fee_percentage || 7; // Default-Bee-Rate 7% (konsistent mit createListing)
+  const feePct = listing.fee_percentage || DEFAULT_FEE_PERCENT;
   const feeAmount = finalPrice * feePct / 100;
   const platformFee = feeAmount * 0.8;
   const beeImpact = feeAmount * 0.2;
@@ -1483,7 +1476,7 @@ export async function updateBookingStatus(bookingId, status) {
       .eq("id", bookingId).single();
     if (booking) {
       const price = parseFloat(booking.total_price || 0);
-      const feePerc = parseFloat(booking.listing?.fee_percentage || 7); // Default-Bee-Rate 7%
+      const feePerc = parseFloat(booking.listing?.fee_percentage || DEFAULT_FEE_PERCENT);
       const feeAmount = price * feePerc / 100;
       const beeImpact = feeAmount * 0.20;
       const { data: purchase } = await supabase.from("purchases").insert({

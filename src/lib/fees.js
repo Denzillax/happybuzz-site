@@ -4,10 +4,12 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { supabase } from "@/lib/supabase/supabase";
+import { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER } from "@/lib/constants";
 
 // ─── Konstanten ──────────────────────────────────────────────
-export const BEE_IMPACT_RATE = 0.20; // 20% der Gebühr = Bee-Impact
-export const DEFAULT_FEE_PERCENT = 5;
+// Gebührensätze und Bee-Impact-Anteil leben in constants.js (eine Quelle der
+// Wahrheit); hier nur weiterreichen, damit bestehende Importe gültig bleiben.
+export { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER };
 export const PAYMENT_DAYS = 30;
 
 // ─── Fee-Berechnung ──────────────────────────────────────────

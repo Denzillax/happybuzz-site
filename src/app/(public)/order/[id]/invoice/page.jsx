@@ -6,7 +6,7 @@ import { Printer } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
-import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate } from "@/lib/fees";
+import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import { orderQrPayload, qrImageUrl } from "@/lib/swissQR";
 import { fmtCHF, fmtDateLong, fullName } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
@@ -48,7 +48,7 @@ export default function InvoicePage() {
   const damageAmount = parseFloat(order.damage_amount || 0);
   const refundAmount = Math.max(0, depositAmount - damageAmount);
   const total = isDeposit ? refundAmount : price + shipping;
-  const feePercent = order.listing?.fee_percentage || 5;
+  const feePercent = order.listing?.fee_percentage || DEFAULT_FEE_PERCENT;
   const { fee, beeImpact } = calcFeeFromPrice(price, feePercent);
   const fmt = fmtCHF;
   const orderDate = fmtDateLong(order.created_at);

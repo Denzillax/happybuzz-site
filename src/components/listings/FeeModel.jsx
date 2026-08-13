@@ -1,13 +1,13 @@
 "use client";
 
 import { colors, fonts, radius } from "@/lib/theme";
-import { FEE_TIERS, BEE_IMPACT_RATE } from "@/lib/constants";
+import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG } from "@/lib/constants";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 export default function FeeModel({ price, selected, onSelect, defaultTier }) {
   const numPrice = parseFloat(price) || 0;
-  const numSelected = typeof selected === "number" ? selected : parseInt(selected) || 5;
-  const activeTier = FEE_TIERS.find((t) => t.pct === numSelected) || FEE_TIERS[1];
+  const numSelected = typeof selected === "number" ? selected : parseInt(selected) || DEFAULT_FEE_PERCENT;
+  const activeTier = FEE_TIERS.find((t) => t.pct === numSelected) || DEFAULT_FEE_TIER_CONFIG;
 
   return (
     <div>
