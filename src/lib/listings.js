@@ -255,7 +255,7 @@ export async function getListing(listingId) {
 // ─── Get Single (public + seller) ────────────────────────────
 export async function getListingPublic(listingId) {
   const { data, error } = await supabase.from("listings")
-    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, avg_rating, rating_count, is_verified, id_verified)")
+    .select("*, category:categories(id, name, slug, parent_id, icon), listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, created_at, account_type, company_name, bee_impact_total, bee_level, xp_total, avg_rating, rating_count, is_verified, id_verified, founder_number)")
     .eq("id", listingId).not("status", "eq", "deleted").single();
   if (error) throw error;
 
@@ -318,7 +318,7 @@ export async function searchListings({
 } = {}) {
   // ── ART-/BEE-/Hex Prefix-Suche (UUID-Range statt text cast) ──
   const upperQ = (query || "").trim().toUpperCase();
-  const selectRef = "*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified)";
+  const selectRef = "*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified, founder_number)";
   const mapListings = (data) => (data || []).map(listing => {
     const sorted = (listing.listing_images || []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
     return { ...listing, cover_image: sorted[0]?.url || null, categoryName: listing.category?.name || null, sellerName: listing.seller?.display_name || "Benutzer" };
@@ -370,7 +370,7 @@ export async function searchListings({
   }
 
   let q = supabase.from("listings")
-    .select("*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified)", { count: "exact" })
+    .select("*, listing_images(*), category:categories(id, name, slug, icon, parent_id), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified, founder_number)", { count: "exact" })
     .eq("status", "active");
 
   // Abgelaufene Inserate ausblenden (expires_at überschritten, Status noch nicht umgestellt)
@@ -523,7 +523,7 @@ export async function toggleFavorite(userId, listingId) {
 
 export async function getUserFavorites(userId) {
   const { data, error } = await supabase.from("favorites")
-    .select("listing_id, listing:listings(*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified))")
+    .select("listing_id, listing:listings(*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified, founder_number))")
     .eq("user_id", userId);
   if (error) throw error;
   return (data || []).map(fav => {
@@ -698,7 +698,7 @@ export async function getMyBeeProfile(userId) {
 export async function getPublicProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, blueten, bee_level, xp_total, is_verified, id_verified")
+    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, blueten, bee_level, xp_total, is_verified, id_verified, founder_number")
     .eq("id", userId)
     .single();
   if (error) throw error;
@@ -883,7 +883,7 @@ export async function getSimilarListings(listingId, categoryId, limit = 6) {
   // Erst gleiche Kategorie versuchen
   let { data, error } = await supabase
     .from("listings")
-    .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified)")
+    .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified, founder_number)")
     .eq("status", "active")
     .eq("category_id", categoryId)
     .neq("id", listingId)
@@ -900,7 +900,7 @@ export async function getSimilarListings(listingId, categoryId, limit = 6) {
       sibIds.push(cat.parent_id);
       const { data: parentData } = await supabase
         .from("listings")
-        .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified)")
+        .select("*, listing_images(*), seller:profiles!listings_user_id_fkey(id, display_name, avatar_url, account_type, company_name, bee_impact_total, bee_level, avg_rating, rating_count, is_verified, id_verified, founder_number)")
         .eq("status", "active")
         .in("category_id", sibIds)
         .neq("id", listingId)

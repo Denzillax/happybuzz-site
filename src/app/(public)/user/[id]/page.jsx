@@ -10,6 +10,7 @@ import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { AccountBadge } from "@/components/shared/AccountBadge";
 import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
+import { FounderBadge } from "@/components/shared/FounderBadge";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRating, toggleFavoriteSeller, isSellerFavorited, getUserNote, saveUserNote, getSellerStats } from "@/lib/listings";
 import { supabase } from "@/lib/supabase/supabase";
@@ -124,6 +125,7 @@ export default function PublicProfilePage() {
                 </h1>
                 <AccountBadge accountType={profile.account_type} size="lg" />
                 <VerifiedSellerBadge profile={profile} size="lg" />
+                <FounderBadge profile={profile} size="lg" />
                 <BeeLevelBadge xp={profile.xp_total} size="md" />
               </div>
 

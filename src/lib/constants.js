@@ -94,6 +94,11 @@ export function isFeeFree(price) {
   return (parseFloat(price) || 0) < FEE_FREE_BELOW;
 }
 
+// Gruendungsmitglieder: die ersten N Verkaeufer mit einem echten Verkauf.
+// ACHTUNG: Muss mit der Obergrenze im DB-Trigger assign_founder_number
+// uebereinstimmen, der die Nummern tatsaechlich vergibt.
+export const FOUNDER_LIMIT = 500;
+
 // ─── Rent Periods ────────────────────────────────────────────
 // DB ENUM rent_period: hour, day, week, month
 export const RENT_PERIODS = [

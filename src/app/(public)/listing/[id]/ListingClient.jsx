@@ -13,6 +13,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";
 import { AccountBadge } from "@/components/shared/AccountBadge";
 import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
+import { FounderBadge } from "@/components/shared/FounderBadge";
 import { CategoryIcon } from "@/components/shared/CategoryIcon";
 import { colors, fonts, radius } from "@/lib/theme";
 import { BEE_IMPACT_RATE, CONDITIONS, FEE_TIERS, DEFAULT_FEE_PERCENT } from "@/lib/constants";
@@ -508,6 +509,7 @@ export default function ListingDetail() {
                     </Link>
                     <AccountBadge accountType={l.seller?.account_type} />
                     <VerifiedSellerBadge profile={l.seller} size="md" />
+                    <FounderBadge profile={l.seller} size="md" />
                     <BeeLevelBadge xp={l.sellerXp} size="md" />
                   </div>
                   {sellerRating.count > 0 && (
