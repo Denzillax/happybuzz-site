@@ -11,8 +11,9 @@ import { colors, fonts, radius, shadows } from "@/lib/theme";
 import {
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
-  DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER,
+  DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree,
 } from "@/lib/constants";
+import { calcFee } from "@/lib/fees";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { checkProfileComplete } from "@/lib/listings";
@@ -1779,9 +1780,20 @@ export default function ListingForm({
           {/* Cost breakdown */}
           {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
             const price = parseFloat(form.price);
-            const fee = price * form.fee_percentage / 100;
+            const fee = calcFee(price, form.fee_percentage);
             const platform = fee * 0.8;
             const beeImpact = fee * 0.2;
+            if (isFeeFree(price)) return (
+              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 12, border: `1px solid ${colors.borderLt}` }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: fonts.body }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: colors.green }}>Gebührenfrei</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: colors.green }}>CHF 0.00</span>
+                </div>
+                <p style={{ margin: "6px 0 0", fontSize: 11, color: colors.muted, fontFamily: fonts.body }}>
+                  Verkäufe unter CHF {FEE_FREE_BELOW}.00 kosten dich nichts. Entsprechend fliesst hier auch kein Bee-Impact.
+                </p>
+              </div>
+            );
             return (
               <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 12, border: `1px solid ${colors.borderLt}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>

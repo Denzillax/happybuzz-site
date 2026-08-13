@@ -83,6 +83,17 @@ export const DEFAULT_FEE_TIER = "impact";
 export const DEFAULT_FEE_TIER_CONFIG = FEE_TIERS.find((t) => t.tier === DEFAULT_FEE_TIER);
 export const DEFAULT_FEE_PERCENT = DEFAULT_FEE_TIER_CONFIG.pct;
 
+// Bagatellgrenze: Verkaeufe UNTER diesem Betrag sind komplett gebuehrenfrei
+// (keine Gebuehr, kein Bee-Impact). Spart dem Verkaeufer Kleinbetraege und uns
+// die Rechnungsverwaltung dafuer.
+// ACHTUNG: Muss mit der Grenze im DB-Trigger create_fee_ledger_entry
+// uebereinstimmen, sonst zeigt die UI 0 und die Rechnung kommt trotzdem.
+export const FEE_FREE_BELOW = 20;
+
+export function isFeeFree(price) {
+  return (parseFloat(price) || 0) < FEE_FREE_BELOW;
+}
+
 // ─── Rent Periods ────────────────────────────────────────────
 // DB ENUM rent_period: hour, day, week, month
 export const RENT_PERIODS = [

@@ -26,7 +26,7 @@ import {
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { createNotification } from "@/lib/notifications";
-import { makeArtRef } from "@/lib/fees";
+import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#14110D";
@@ -271,7 +271,7 @@ export default function ListingDetail() {
   const isOwner = user && user.id === l.user_id;
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
   const displayPrice = (l.listing_type === "auction" && bids.length > 0) ? bids[0].amount : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
-  const beeImpact = displayPrice * (l.fee_percentage || DEFAULT_FEE_PERCENT) / 100 * BEE_IMPACT_RATE;
+  const beeImpact = calcFee(displayPrice, l.fee_percentage || DEFAULT_FEE_PERCENT) * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
   const handleFav = async () => { if (!user) { router.push("/login"); return; } setIsFav(await toggleFavorite(user.id, l.id)); };
@@ -1120,7 +1120,7 @@ export default function ListingDetail() {
                         const days = Math.ceil((new Date(bookEnd) - new Date(bookStart)) / (1000 * 60 * 60 * 24));
                         const rentPrice = parseFloat(l.rent_price || l.price);
                         const total = days * rentPrice;
-                        const fee = total * (l.fee_percentage || DEFAULT_FEE_PERCENT) / 100;
+                        const fee = calcFee(total, l.fee_percentage || DEFAULT_FEE_PERCENT);
                         const impact = fee * BEE_IMPACT_RATE;
                         return (
                           <div style={{ marginBottom: 12, padding: "12px 14px", background: colors.cream, borderRadius: radius.sm, fontSize: 13 }}>

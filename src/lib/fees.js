@@ -4,16 +4,20 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { supabase } from "@/lib/supabase/supabase";
-import { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER } from "@/lib/constants";
+import { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree } from "@/lib/constants";
 
 // ─── Konstanten ──────────────────────────────────────────────
 // Gebührensätze und Bee-Impact-Anteil leben in constants.js (eine Quelle der
 // Wahrheit); hier nur weiterreichen, damit bestehende Importe gültig bleiben.
-export { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER };
+export { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree };
 export const PAYMENT_DAYS = 30;
 
 // ─── Fee-Berechnung ──────────────────────────────────────────
+// Verkäufe unter der Bagatellgrenze sind gebührenfrei. Diese Funktion ist die
+// einzige Stelle, an der die Grenze im Frontend greift, darum immer hierüber
+// rechnen statt inline (price * pct / 100).
 export function calcFee(price, feePercent = DEFAULT_FEE_PERCENT) {
+  if (isFeeFree(price)) return 0;
   return parseFloat(price || 0) * (feePercent || DEFAULT_FEE_PERCENT) / 100;
 }
 

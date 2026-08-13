@@ -1,7 +1,7 @@
 "use client";
 
 import { colors, fonts, radius } from "@/lib/theme";
-import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG } from "@/lib/constants";
+import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG, FEE_FREE_BELOW, isFeeFree } from "@/lib/constants";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 export default function FeeModel({ price, selected, onSelect, defaultTier }) {
@@ -76,8 +76,29 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
         })}
       </div>
 
+      {/* Bagatellgrenze: unter der Schwelle faellt gar keine Gebuehr an */}
+      {numPrice > 0 && isFeeFree(numPrice) && (
+        <div style={{
+          background: colors.surface, border: `1.5px solid ${colors.border}`,
+          borderRadius: radius.sm, padding: "14px 16px",
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: 13, fontFamily: fonts.body, fontWeight: 700, color: colors.green }}>
+              Gebührenfrei
+            </span>
+            <span style={{ fontSize: 15, fontFamily: fonts.body, fontWeight: 800, color: colors.green }}>
+              CHF {numPrice.toFixed(2)}
+            </span>
+          </div>
+          <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
+            Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind gebührenfrei. Du bekommst den vollen Betrag,
+            dafür fliesst hier kein Bee-Impact.
+          </p>
+        </div>
+      )}
+
       {/* Summary */}
-      {numPrice > 0 && (() => {
+      {numPrice > 0 && !isFeeFree(numPrice) && (() => {
         const totalFee = numPrice * activeTier.pct / 100;
         const beeFee = totalFee * BEE_IMPACT_RATE;
         const platFee = totalFee * (1 - BEE_IMPACT_RATE);

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { makeArtRef, makeBeeRef, makeFeeRef, parseArtRef, artIdRange, artRefMatches, calcFee, calcBeeImpact } from "@/lib/fees";
-import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_TIER, DEFAULT_FEE_PERCENT } from "@/lib/constants";
+import { makeArtRef, makeBeeRef, makeFeeRef, parseArtRef, artIdRange, artRefMatches, calcFee, calcBeeImpact, calcFeeFromPrice } from "@/lib/fees";
+import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_TIER, DEFAULT_FEE_PERCENT, FEE_FREE_BELOW, isFeeFree } from "@/lib/constants";
 
 // Regressionsschutz: Standard-Bee-Rate war frueher an fuenf Stellen unterschiedlich
 // hinterlegt (fees.js 5%, Formular 7%, DB-Default supporter). Diese Tests halten
@@ -26,6 +26,36 @@ describe("Standard-Bee-Rate (eine Quelle der Wahrheit)", () => {
   it("Bee-Impact bleibt 20% der Gebuehr", () => {
     expect(BEE_IMPACT_RATE).toBe(0.2);
     expect(calcBeeImpact(calcFee(100, 10))).toBeCloseTo(2, 10);
+  });
+});
+
+// Die Grenze existiert doppelt: hier und im DB-Trigger create_fee_ledger_entry.
+// Weicht eine der beiden ab, zeigt die UI 0 und die Rechnung kommt trotzdem.
+describe("Bagatellgrenze (Verkaeufe unter CHF 20 gebuehrenfrei)", () => {
+  it("liegt bei CHF 20", () => {
+    expect(FEE_FREE_BELOW).toBe(20);
+  });
+
+  it("erkennt Betraege unter der Grenze", () => {
+    expect(isFeeFree(19.99)).toBe(true);
+    expect(isFeeFree(0)).toBe(true);
+    expect(isFeeFree(20)).toBe(false);
+    expect(isFeeFree(20.01)).toBe(false);
+  });
+
+  it("berechnet unter der Grenze keine Gebuehr und keinen Bee-Impact", () => {
+    expect(calcFee(19.99, 7)).toBe(0);
+    expect(calcFee(5, 10)).toBe(0);
+    expect(calcBeeImpact(calcFee(19.99, 7))).toBe(0);
+  });
+
+  it("berechnet ab der Grenze normal weiter", () => {
+    expect(calcFee(20, 7)).toBeCloseTo(1.4, 10);
+    expect(calcFee(100, 7)).toBeCloseTo(7, 10);
+  });
+
+  it("calcFeeFromPrice liefert unter der Grenze beides als 0", () => {
+    expect(calcFeeFromPrice(19.99, 7)).toEqual({ fee: 0, beeImpact: 0 });
   });
 });
 

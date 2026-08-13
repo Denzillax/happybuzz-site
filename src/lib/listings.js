@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { createNotification } from "@/lib/notifications";
 import { DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER } from "@/lib/constants";
+import { calcFee, calcBeeImpact } from "@/lib/fees";
 
 // ─── Slug ────────────────────────────────────────────────────
 function slugify(text) {
@@ -1079,9 +1080,9 @@ export async function finalizeAuction(listingId) {
   // 3. Purchase erstellen
   const finalPrice = topBid.amount;
   const feePct = listing.fee_percentage || DEFAULT_FEE_PERCENT;
-  const feeAmount = finalPrice * feePct / 100;
+  const feeAmount = calcFee(finalPrice, feePct);   // beachtet die Bagatellgrenze
   const platformFee = feeAmount * 0.8;
-  const beeImpact = feeAmount * 0.2;
+  const beeImpact = calcBeeImpact(feeAmount);
 
   const { data: purchase, error: purchErr } = await supabase.from("purchases").insert({
     listing_id: listingId,
@@ -1477,8 +1478,8 @@ export async function updateBookingStatus(bookingId, status) {
     if (booking) {
       const price = parseFloat(booking.total_price || 0);
       const feePerc = parseFloat(booking.listing?.fee_percentage || DEFAULT_FEE_PERCENT);
-      const feeAmount = price * feePerc / 100;
-      const beeImpact = feeAmount * 0.20;
+      const feeAmount = calcFee(price, feePerc);   // beachtet die Bagatellgrenze
+      const beeImpact = calcBeeImpact(feeAmount);
       const { data: purchase } = await supabase.from("purchases").insert({
         listing_id: booking.listing_id,
         buyer_id: booking.renter_id,
