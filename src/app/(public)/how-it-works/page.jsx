@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Camera, Tag, ShoppingBag, Truck, Star, ArrowRight, ShieldCheck, CreditCard, Gavel, Home, Gift, Wrench } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
+import { FEE_TIERS, DEFAULT_FEE_TIER, FEE_FREE_BELOW } from "@/lib/constants";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#14110D";
@@ -38,12 +39,13 @@ const STEPS_BUY = [
   { icon: Star, num: "04", title: "Bewerten", desc: "Empfang bestätigen und bewerten. So hilfst du der Community, Vertrauen aufzubauen." },
 ];
 
-const TIERS = [
-  { label: "Fair", pct: "3%", desc: "Einstiegstarif" },
-  { label: "Supporter", pct: "5%", desc: "Empfohlen" },
-  { label: "Impact", pct: "7%", desc: "Top-Platzierung" },
-  { label: "Bee Hero", pct: "10%", desc: "Maximale Power" },
-];
+// Aus FEE_TIERS abgeleitet, damit Saetze und Empfehlung nie von der App abweichen.
+const TIERS = FEE_TIERS.map((t) => ({
+  label: t.label,
+  pct: `${t.pct}%`,
+  desc: t.tier === DEFAULT_FEE_TIER ? "Empfohlen" : t.desc.replace(/^Empfohlen:\s*/, ""),
+  isDefault: t.tier === DEFAULT_FEE_TIER,
+}));
 
 const SAFETY = [
   { title: "Geprüfte Inserate", desc: "Jedes Inserat wird vor Veröffentlichung kurz von uns kontrolliert." },
@@ -158,13 +160,14 @@ export default function HowItWorksPage() {
           <p style={{ fontSize: 14, color: MUTED, lineHeight: 1.7, marginBottom: 20, maxWidth: 640 }}>
             Inserieren ist gratis. Erst bei erfolgreichem Verkauf fällt die selbst gewählte Bee-Rate an.
             Du entscheidest, wie viel du beiträgst. Das bestimmt auch, wie weit oben dein Inserat erscheint.
+            Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind komplett gebührenfrei.
           </p>
           <div style={{ display: "flex", border: `1.5px solid ${INK}`, borderRadius: 12, overflow: "hidden", background: "#fff", flexWrap: "wrap" }}>
             {TIERS.map((r, i) => (
               <div key={i} style={{
                 flex: "1 1 130px", padding: "16px 12px", textAlign: "center",
                 borderLeft: i ? `1px solid ${INK}1a` : "none",
-                background: i === 1 ? "#FBF1D2" : "#fff",
+                background: r.isDefault ? "#FBF1D2" : "#fff",
               }}>
                 <div style={{ fontFamily: HEAD, fontSize: "clamp(24px, 3vw, 30px)", fontWeight: 700, color: INK, letterSpacing: "-0.01em" }}>{r.pct}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, fontFamily: HEAD, marginTop: 2, color: INK }}>{r.label}</div>

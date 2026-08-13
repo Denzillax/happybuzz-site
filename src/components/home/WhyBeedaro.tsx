@@ -7,7 +7,7 @@ const usps = [
   {
     icon: Percent,
     title: 'Ab 3% Gebühr',
-    description: 'Die tiefsten Plattformgebühren der Schweiz. Kein Abo, keine versteckten Kosten.',
+    description: 'Unter CHF 20 verkaufst du gebührenfrei. Darüber ab 3%, nur bei Erfolg. Kein Abo, keine versteckten Kosten.',
     accent: '#C99A1E', tint: '#FBF1D2',
   },
   {
