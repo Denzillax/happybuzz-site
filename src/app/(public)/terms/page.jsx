@@ -26,7 +26,7 @@ export default function TermsPage() {
         <div style={{ maxWidth: 740, margin: "0 auto" }}>
           <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 10 }}>Rechtliches</div>
           <h1 style={{ fontSize: "clamp(26px, 3.6vw, 36px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>Allgemeine Geschäftsbedingungen</h1>
-          <p style={{ fontFamily: MONO, fontSize: 12, color: MUTED, margin: 0, letterSpacing: ".03em" }}>Gültig ab 1. Juni 2026 · BEEDARO, Gemeindehausstrasse 11B, 6010 Kriens</p>
+          <p style={{ fontFamily: MONO, fontSize: 12, color: MUTED, margin: 0, letterSpacing: ".03em" }}>Gültig ab 1. Juni 2026 · MOQRO by Denis Mihaljevic, Gemeindehausstrasse 11B, 6010 Kriens</p>
         </div>
       </div>
 
@@ -34,6 +34,7 @@ export default function TermsPage() {
         <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
           <h2 style={S.h2}>1. Geltungsbereich</h2>
           <p style={S.p}>Diese AGB regeln die Nutzung der Plattform BEEDARO (beedaro.ch). Mit der Registrierung akzeptiert der Nutzer diese Bedingungen. BEEDARO ist ein Schweizer Peer-to-Peer Marktplatz für den Kauf, Verkauf, die Vermietung, das Anbieten von Dienstleistungen und das Verschenken von Secondhand-Artikeln.</p>
+          <p style={S.p}>BEEDARO ist eine Marke von MOQRO by Denis Mihaljevic (Einzelfirma), Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Vertragspartnerin des Nutzers und Betreiberin der Plattform ist MOQRO. Nennungen von BEEDARO in diesen AGB beziehen sich auf MOQRO als Betreiberin.</p>
 
           <h2 style={S.h2}>2. Registrierung & Konto</h2>
           <p style={S.p}>Nutzer müssen mindestens 18 Jahre alt sein und ihren Wohnsitz in der Schweiz oder im Fürstentum Liechtenstein haben. Konten gibt es als Privat- oder Unternehmenskonto. Jede Person darf nur ein Konto besitzen. Die Angabe wahrheitsgemässer Daten ist Pflicht. BEEDARO behält sich das Recht vor, Konten bei Verstössen zu sperren.</p>

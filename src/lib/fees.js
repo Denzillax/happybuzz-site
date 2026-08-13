@@ -127,14 +127,8 @@ export const ORDER_STATUS = {
   refunded:   { color: "#666",    bg: "#f5f5f5", label: "Erstattet" },
 };
 
-// ─── BEEDARO Zahlungsinfos (für QR-Rechnungen) ───────────────
-export const BEEDARO_PAYMENT = {
-  name: "BEEDARO",
-  street: "Gemeindehausstrasse 11B",
-  plz: "6010",
-  city: "Kriens",
-  country: "CH",
-  iban: "CH12 3456 7890 1234 5678 9",
-  ibanClean: "CH1234567890123456789",
-  email: "noreply@beedaro.ch",
-};
+// Zahlungsinfos für QR-Rechnungen kommen aus der Tabelle company_settings
+// (Admin, Tab "Firma") via src/lib/company.js. Die frühere Konstante
+// BEEDARO_PAYMENT wurde entfernt: sie wurde nirgends importiert und enthielt
+// eine Platzhalter-IBAN, die bei versehentlicher Nutzung falsche
+// Zahlungsdaten auf eine Rechnung gebracht hätte.

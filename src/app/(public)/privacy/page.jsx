@@ -25,14 +25,15 @@ export default function PrivacyPage() {
         <div style={{ maxWidth: 740, margin: "0 auto" }}>
           <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 10 }}>Rechtliches</div>
           <h1 style={{ fontSize: "clamp(26px, 3.6vw, 36px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>Datenschutzerklärung</h1>
-          <p style={{ fontFamily: MONO, fontSize: 12, color: MUTED, margin: 0, letterSpacing: ".03em" }}>Gültig ab 1. Juni 2026 · BEEDARO, Gemeindehausstrasse 11B, 6010 Kriens</p>
+          <p style={{ fontFamily: MONO, fontSize: 12, color: MUTED, margin: 0, letterSpacing: ".03em" }}>Gültig ab 1. Juni 2026 · MOQRO by Denis Mihaljevic, Gemeindehausstrasse 11B, 6010 Kriens</p>
         </div>
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
           <h2 style={S.h2}>1. Verantwortliche Stelle</h2>
-          <p style={S.p}>Verantwortlich für die Datenbearbeitung ist: Denis Mihaljevic, Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Kontakt: datenschutz@beedaro.ch</p>
+          <p style={S.p}>Verantwortlich für die Datenbearbeitung ist: MOQRO by Denis Mihaljevic (Einzelfirma), Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Kontakt: datenschutz@beedaro.ch</p>
+          <p style={S.p}>BEEDARO ist eine Marke von MOQRO. Nennungen von BEEDARO in dieser Erklärung beziehen sich auf MOQRO als verantwortliche Stelle.</p>
 
           <h2 style={S.h2}>2. Welche Daten wir erheben</h2>
           <p style={S.p}>Bei der Registrierung: E-Mail-Adresse, Anzeigename. Optional: Vorname, Nachname, Telefonnummer, Postadresse, IBAN, Profilbild, ID-Dokument (zur Verifizierung). Bei Unternehmenskonten zusätzlich Firmenname und UID. Bei der Nutzung: IP-Adresse, Browser-Typ, Zugriffszeitpunkte, aufgerufene Seiten. Bei Transaktionen: Inserat-Daten, Nachrichten, Bewertungen, Zahlungsinformationen.</p>

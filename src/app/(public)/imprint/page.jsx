@@ -31,7 +31,7 @@ export default function ImprintPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 40px" }}>
             <div>
               <p style={L}>Betreiber</p>
-              <p style={V}>BEEDARO<br />Denis Mihaljevic<br />Einzelunternehmen</p>
+              <p style={V}>MOQRO by Denis Mihaljevic<br />Einzelfirma<br />BEEDARO ist eine Marke von MOQRO.</p>
             </div>
             <div>
               <p style={L}>Adresse</p>
@@ -39,7 +39,7 @@ export default function ImprintPage() {
             </div>
             <div>
               <p style={L}>Kontakt</p>
-              <p style={V}>E-Mail: info@beedaro.ch<br />Support: support@beedaro.ch</p>
+              <p style={V}>E-Mail: info@beedaro.ch<br />Support: support@beedaro.ch<br />Mutterfirma: hello@moqro.ch</p>
             </div>
             <div>
               <p style={L}>Verantwortlich für Inhalte</p>
@@ -58,7 +58,18 @@ export default function ImprintPage() {
           <div style={{ borderTop: `1px solid ${INK}1f`, paddingTop: 20, marginTop: 4 }}>
             <p style={L}>Haftungsausschluss</p>
             <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.65, margin: 0 }}>
-              BEEDARO ist eine Vermittlungsplattform. Für die Inhalte der Inserate und die Abwicklung von Transaktionen zwischen Nutzern übernimmt BEEDARO keine Haftung. Trotz sorgfältiger Kontrolle übernehmen wir keine Gewähr für die Richtigkeit externer Links.
+              BEEDARO ist eine Vermittlungsplattform und eine Marke von MOQRO by Denis Mihaljevic. Für die Inhalte der Inserate und die Abwicklung von Transaktionen zwischen Nutzern übernimmt MOQRO keine Haftung. Trotz sorgfältiger Kontrolle übernehmen wir keine Gewähr für die Richtigkeit externer Links.
+            </p>
+          </div>
+
+          <div style={{ borderTop: `1px solid ${INK}1f`, paddingTop: 20, marginTop: 20 }}>
+            <p style={L}>Marke und Betreiberin</p>
+            <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.65, margin: 0 }}>
+              BEEDARO wird betrieben von MOQRO by Denis Mihaljevic, Gemeindehausstrasse 11B, 6010 Kriens.
+              Weitere Angaben zur Betreiberin unter{" "}
+              <a href="https://www.moqro.ch/impressum/" target="_blank" rel="noopener noreferrer" style={{ color: INK, textDecoration: "underline" }}>
+                moqro.ch/impressum
+              </a>.
             </p>
           </div>
         </div>
