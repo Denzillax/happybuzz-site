@@ -94,6 +94,20 @@ export function isFeeFree(price) {
   return (parseFloat(price) || 0) < FEE_FREE_BELOW;
 }
 
+// Gebuehren-Ranking: die Bee-Rate wirkt wie ein Frischevorsprung. Ein Inserat
+// wird sortiert, als waere es um so viele Tage neuer erstellt worden.
+// Bewusst keine harte Rangfolge, sonst waere der Fair-Tarif wertlos.
+// ACHTUNG: Muss mit der generierten Spalte listings.rank_at uebereinstimmen.
+export const FEE_RANK_BONUS_DAYS = { 3: 0, 5: 3, 7: 7, 10: 14 };
+
+export function feeRankBonusDays(feePercent) {
+  const p = parseFloat(feePercent) || 0;
+  if (p >= 10) return FEE_RANK_BONUS_DAYS[10];
+  if (p >= 7) return FEE_RANK_BONUS_DAYS[7];
+  if (p >= 5) return FEE_RANK_BONUS_DAYS[5];
+  return FEE_RANK_BONUS_DAYS[3];
+}
+
 // Gruendungsmitglieder: die ersten N Verkaeufer mit einem echten Verkauf.
 // ACHTUNG: Muss mit der Obergrenze im DB-Trigger assign_founder_number
 // uebereinstimmen, der die Nummern tatsaechlich vergibt.

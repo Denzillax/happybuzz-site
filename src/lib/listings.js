@@ -422,7 +422,10 @@ export async function searchListings({
   }
 
   switch (sort) {
-    case "relevanz":   q = q.order("fee_percentage", { ascending: false }).order("created_at", { ascending: false }); break;
+    // rank_at = created_at + Bee-Rate-Bonus (siehe FEE_RANK_BONUS_DAYS).
+    // Frueher eine harte Rangfolge nach fee_percentage, wodurch jedes 10%-Inserat
+    // dauerhaft vor jedem frischen 3%-Inserat stand.
+    case "relevanz":   q = q.order("rank_at", { ascending: false }).order("created_at", { ascending: false }); break;
     case "price_asc":  q = q.order("price", { ascending: true, nullsFirst: false }); break;
     case "price_desc": q = q.order("price", { ascending: false }); break;
     case "oldest":     q = q.order("created_at", { ascending: true }); break;

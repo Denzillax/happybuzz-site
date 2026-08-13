@@ -44,6 +44,8 @@ const TESTS = [
       { id: "sr_condition", label: "Zustand-Filter funktioniert" },
       { id: "sr_type", label: "Typ-Filter (Festpreis/Auktion/Miete/Gratis/Service)" },
       { id: "sr_sort", label: "Sortierung: Relevanz, Neueste, Preis, Endet bald, Gebote" },
+      { id: "sr_fee_ranking", label: "Gebühren-Ranking: bei 'Relevanz' stehen Inserate mit höherer Bee-Rate weiter oben, aber ein frisches 3%-Inserat schlägt ein altes 10%-Inserat (Bonus: 5%=3, 7%=7, 10%=14 Tage)" },
+      { id: "sr_fee_ranking_hinweis", label: "Transparenzhinweis 'Relevanz berücksichtigt Aktualität und Bee-Rate' erscheint nur bei Sortierung Relevanz, nicht bei Neueste/Preis" },
       { id: "sr_cards", label: "Ergebnis-Cards: Bild, Preis, Verkäufer korrekt" },
       { id: "trust_verified_badge", label: "'Verifiziert'-Abzeichen (grüner Haken) erscheint bei verifizierten Verkäufern (Ausweis geprüft + E-Mail) auf Karte, Inserat-Detail, Profil und Bestellung; nicht-verifizierte zeigen es nicht" },
       { id: "trust_verified_filter", label: "Suchfilter 'Verifiziert' zeigt nur Inserate von verifizierten Verkäufern; Ergebniszahl sinkt; 'Alle Filter zurücksetzen' schaltet ihn aus" },

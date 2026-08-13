@@ -403,6 +403,15 @@ function SearchPageInner() {
           </div>
         </div>
 
+        {/* Offenlegung der Rangkriterien: die Bee-Rate beeinflusst die Reihenfolge,
+            das gehoert sichtbar dorthin, wo sortiert wird. */}
+        {sortBy === "relevanz" && (
+          <p style={{ margin: "0 0 14px", fontSize: 11.5, color: colors.muted, fontFamily: fonts.body }}>
+            Relevanz berücksichtigt Aktualität und die vom Verkäufer gewählte Bee-Rate.
+            Eine höhere Bee-Rate schiebt ein Inserat so weit nach oben, als wäre es bis zu 14 Tage neuer.
+          </p>
+        )}
+
         {/* ── Results Grid ── */}
         {loading ? (
           <div className="search-results-grid" style={{ display: "grid", gap: 16 }}>
