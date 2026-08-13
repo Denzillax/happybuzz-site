@@ -12,6 +12,7 @@ import {
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
   DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree,
+  MARKET_AUCTION_FEE,
 } from "@/lib/constants";
 import { calcFee } from "@/lib/fees";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
@@ -1281,6 +1282,22 @@ export default function ListingForm({
                   <option key={d} value={d}>{d} Tage</option>
                 ))}
               </SelectWrap>
+            </div>
+
+            {/* Auktionen sind der einzige Typ, bei dem der Preisvorteil wirklich
+                greift: Tutti hat gar kein Auktionsformat, Ricardo nimmt 8-12%. */}
+            <div style={{
+              marginTop: 14, padding: "12px 14px", borderRadius: 10,
+              background: colors.cream, border: `1px solid ${colors.borderLt}`,
+            }}>
+              <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.dark, fontFamily: fonts.body }}>
+                Auktion, ohne die übliche Provision
+              </p>
+              <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted, fontFamily: fonts.body, lineHeight: 1.6 }}>
+                {MARKET_AUCTION_FEE.anbieter} verlangt {MARKET_AUCTION_FEE.min} bis {MARKET_AUCTION_FEE.max}% Erfolgsprovision
+                (Basissatz, mit Rabatten etwas weniger). Hier bestimmst du deinen Satz selbst, ab {FEE_TIERS[0].pct}%.
+                Endet die Auktion unter CHF {FEE_FREE_BELOW}.00, zahlst du gar nichts.
+              </p>
             </div>
           </div>
         )}

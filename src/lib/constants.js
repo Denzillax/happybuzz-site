@@ -99,6 +99,27 @@ export function isFeeFree(price) {
 // uebereinstimmen, der die Nummern tatsaechlich vergibt.
 export const FOUNDER_LIMIT = 500;
 
+// Fremdgebuehren fuer den Auktionsvergleich. Bewusst EINE Stelle, weil es die
+// einzige Aussage im Produkt ist, die von fremden Preisen abhaengt und darum
+// veralten kann. Vergleichende Werbung ist in der Schweiz zulaessig, solange sie
+// wahr und nicht herabsetzend ist, also muss das hier gepflegt werden.
+//
+// 8-12% ist der BASISSATZ laut Ricardos eigener Hilfeseite. Seit April 2026 gibt
+// es Rabatte von bis zu 30%, effektiv sind also ca. 5.6% moeglich. Darum im Text
+// immer als Basissatz kennzeichnen und den Rabatt erwaehnen: sonst waere die
+// Aussage fuer Rabattnutzer irrefuehrend. Auch dann liegt der Vergleich noch
+// klar ueber unseren 3% Einstieg.
+// Drittquellen nennen teils 5-9%; die Zahl hier stammt vom Anbieter selbst.
+// Zuletzt geprueft: 2026-07-06. Naechste Pruefung spaetestens in 6 Monaten.
+export const MARKET_AUCTION_FEE = {
+  anbieter: "Ricardo",
+  min: 8,
+  max: 12,
+  rabattBisProzent: 30,
+  geprueft: "2026-07-06",
+  quelle: "https://help.ricardo.ch/hc/de/articles/8238144523036",
+};
+
 // ─── Rent Periods ────────────────────────────────────────────
 // DB ENUM rent_period: hour, day, week, month
 export const RENT_PERIODS = [

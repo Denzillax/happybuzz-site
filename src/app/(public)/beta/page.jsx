@@ -68,6 +68,7 @@ const TESTS = [
       { id: "lc_category_dropdown", label: "Kategorie-Dropdown (Haupt/Unter/Sub)" },
       { id: "lc_type_festpreis", label: "Festpreis: Preis eingeben" },
       { id: "lc_type_auktion", label: "Auktion: Startpreis + Dauer wählen" },
+      { id: "lc_auktion_vergleich", label: "Auktion: Hinweisbox mit Gebührenvergleich (Ricardo 8-12% Basissatz) erscheint nur beim Typ Auktion, nicht bei Festpreis/Miete/Service/Gratis" },
       { id: "lc_type_mieten", label: "Vermieten: Mietpreis + Periode wählen" },
       { id: "lc_type_gratis", label: "Gratis verschenken (Preis 0)" },
       { id: "lc_type_service", label: "Service-Inserat erstellen" },

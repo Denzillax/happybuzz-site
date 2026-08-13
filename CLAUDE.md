@@ -1,7 +1,24 @@
 # BEEDARO — Projektkontext für Claude Code
 
 ## Was ist BEEDARO?
-Schweizer P2P-Secondhand-Marktplatz. Konkurrenz: Ricardo, Tutti. Differenzierung: Listing-Vielfalt (Festpreis, Auktion, Miete, Gratis, Service), wählbare Bee-Rate Gebühr (3/5/7/10%), Bee-Impact (20% der Gebühr für Bienenschutz).
+Schweizer P2P-Secondhand-Marktplatz. Differenzierung: Listing-Vielfalt (Festpreis, Auktion, Miete, Gratis, Service), wählbare Bee-Rate Gebühr (3/5/7/10%), Bee-Impact (20% der Gebühr für Bienenschutz).
+
+### Konkurrenzlage (Stand Juli 2026)
+Ricardo und Tutti sind **keine zwei getrennten Konkurrenten**, sondern gehören beide zur
+SMG Swiss Marketplace Group (seit Sept. 2025 börsenkotiert), inkl. Cross-Posting zwischen
+den beiden. Ein Konzern mit bewusster Zweiteilung: Tutti gratis für Reichweite, Ricardo
+kostenpflichtig für die Transaktionen.
+
+| BEEDARO-Typ | Echter Konkurrent | Deren Preis |
+|---|---|---|
+| Auktion | nur Ricardo (**Tutti hat kein Auktionsformat**) | 8–12% Erfolgsprovision |
+| Festpreis | Tutti + Ricardo | 0% / 8–12% |
+| Gratis | Tutti | 0% |
+| Miete, Service | keiner | — |
+
+Konsequenz fürs Preisargument: Gegen Tutti gewinnt man nicht über den Preis (die sind
+gratis), gegen Ricardo schon. Der eigentliche Vorteil ist, dass BEEDARO beide Hälften
+plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architektur-Regeln.
 
 ## Tech Stack
 - **Framework**: Next.js 14 App Router
