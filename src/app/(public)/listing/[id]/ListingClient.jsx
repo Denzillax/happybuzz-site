@@ -1242,7 +1242,7 @@ export default function ListingDetail() {
 
               {/* ── FREE ──────────────────────────────── */}
               {l.listing_type === "free" && l.status === "active" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>Gratis — Kontaktiere den Verkäufer</div>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>Gratis. Kontaktiere den Verkäufer</div>
               )}
 
               {/* Success */}

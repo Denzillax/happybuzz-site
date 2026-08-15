@@ -394,7 +394,7 @@ export default function OrderDetailPage() {
                     {(p.status === "payment_pending" || p.status === "payment_marked") ? (
                       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Käufer hat die Zahlung als erledigt markiert. Du kannst den Eingang bestätigen.</p>
                     ) : (
-                      <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Sobald die Zahlung bei dir eingegangen ist, bestätige den Eingang — auch wenn der Käufer noch nicht markiert hat.</p>
+                      <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Sobald die Zahlung bei dir eingegangen ist, bestätige den Eingang, auch wenn der Käufer noch nicht markiert hat.</p>
                     )}
                     <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
                   </div>
@@ -469,7 +469,7 @@ export default function OrderDetailPage() {
                       return (
                         <div style={{ marginBottom: 14 }}>
                           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}>
-                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} — {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
+                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} bis {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
                             <span style={{ fontWeight: 700, color: overdue ? "#c62828" : colors.dark }}>{overdue ? `${Math.abs(daysLeft)} Tage überfällig` : `${daysLeft} Tage übrig`}</span>
                           </div>
                           <div style={{ height: 6, borderRadius: 3, background: colors.borderLt, overflow: "hidden" }}>
@@ -479,7 +479,7 @@ export default function OrderDetailPage() {
                       );
                     })()}
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Du hast den Artikel erhalten. Wenn du ihn zurückgibst, markiere die Rückgabe.</p>
-                    {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)} — wird nach Rückgabe zurückerstattet.</p>}
+                    {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)}, wird nach Rückgabe zurückerstattet.</p>}
                     <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
                   </div>
                 )}
@@ -498,7 +498,7 @@ export default function OrderDetailPage() {
                       return (
                         <div style={{ margin: "10px 0", textAlign: "left" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}>
-                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} — {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
+                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} bis {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
                             <span style={{ fontWeight: 700, color: overdue ? "#c62828" : colors.dark }}>{overdue ? `${Math.abs(daysLeft)} Tage überfällig` : `${daysLeft} Tage übrig`}</span>
                           </div>
                           <div style={{ height: 6, borderRadius: 3, background: colors.borderLt, overflow: "hidden" }}>
@@ -518,7 +518,7 @@ export default function OrderDetailPage() {
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Mieter hat den Artikel zurückgegeben. Prüfe den Zustand.</p>
                     {!showDamageForm ? (
                       <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK — Kaution zurück"}</button>
+                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK, Kaution zurück"}</button>
                         <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: 10, border: `1.5px solid ${K.ink}`, background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
                       </div>
                     ) : (
@@ -665,7 +665,7 @@ export default function OrderDetailPage() {
               {isRental && booking && (
                 <SidebarSection icon={Clock} title="Mietdauer">
                   <div style={{ lineHeight: 1.5 }}>
-                    {new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })} — {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}<br />
+                    {new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })} bis {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}<br />
                     <span style={{ fontSize: 12, color: colors.muted }}>{booking.days || Math.ceil((new Date(booking.end_date) - new Date(booking.start_date)) / (1000 * 60 * 60 * 24))} Tage</span>
                   </div>
                 </SidebarSection>

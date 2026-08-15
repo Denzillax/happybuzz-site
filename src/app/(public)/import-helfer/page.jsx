@@ -72,7 +72,7 @@ export default function ImportHelferPage() {
           </a>
           <p style={{ fontFamily: BODY, fontSize: 11.5, color: MUTED, margin: "12px 0 0", lineHeight: 1.6 }}>
             Ziehen, nicht klicken. In der Lesezeichenleiste erscheint er dann als
-            <strong style={{ color: INK }}> 🐝 BEEDARO Import</strong> — Browser vergeben für solche
+            <strong style={{ color: INK }}> 🐝 BEEDARO Import</strong>. Browser vergeben für solche
             Helfer kein eigenes Symbol, das Bienen-Zeichen im Namen macht ihn trotzdem sofort auffindbar.
             Du kannst ihn per Rechtsklick jederzeit umbenennen.
           </p>

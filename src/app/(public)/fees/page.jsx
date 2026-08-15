@@ -113,7 +113,7 @@ export default function FeesPage() {
           <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF5F5", border: "1.5px solid #FFCDD2", display: "flex", alignItems: "center", gap: 10 }}>
             <AlertCircle size={20} color="#c62828" />
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert — offene Rechnung begleichen</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert: offene Rechnung begleichen</p>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Nach Zahlung werden deine Inserate automatisch reaktiviert.</p>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function FeesPage() {
           <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF8E1", border: "1.5px solid #FFE082", display: "flex", alignItems: "center", gap: 10 }}>
             <AlertCircle size={20} color="#E65100" />
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Mahnung — Inserate werden bald pausiert</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Mahnung: Inserate werden bald pausiert</p>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function FeesPage() {
           <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF3E0", border: "1.5px solid #FFCC80", display: "flex", alignItems: "center", gap: 10 }}>
             <Clock size={20} color="#E65100" />
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Erinnerung — Gebührenrechnung überfällig</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Erinnerung: Gebührenrechnung überfällig</p>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Bitte überweise den offenen Betrag.</p>
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function FeesPage() {
                         {inv.status === "open" && (
                           <button onClick={() => handleMarkPaid(inv.id)} style={{ width: "100%", padding: "11px 16px", borderRadius: 6, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ich habe bezahlt</button>
                         )}
-                        {inv.status === "pending_payment" && <p style={{ margin: 0, fontSize: 12, color: "#1565C0", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Zahlung wird geprüft — danke!</p>}
+                        {inv.status === "pending_payment" && <p style={{ margin: 0, fontSize: 12, color: "#1565C0", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Zahlung wird geprüft, danke!</p>}
                         {inv.status === "paid" && <p style={{ margin: 0, fontSize: 12, color: "#2E7D32", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
                       </div>
                     </div>

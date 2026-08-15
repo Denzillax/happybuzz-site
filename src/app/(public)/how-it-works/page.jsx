@@ -96,7 +96,7 @@ export default function HowItWorksPage() {
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <Eyebrow>№ 00 — Handbuch</Eyebrow>
+          <Eyebrow>№ 00 · Handbuch</Eyebrow>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02 }}>
             So funktioniert{" "}
             <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>BEEDARO</span>

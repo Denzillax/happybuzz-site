@@ -172,14 +172,19 @@ export function Header() {
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }
+          /* 375px-Rechnung: Logo 150 + Abstand 16 + Icons 188 = 354, Platz war
+             aber nur 311 (2x32 Padding) -> die ganze Seite scrollte horizontal.
+             Weniger Padding + kleineres Logo statt Overflow. */
+          .hdr-wrap { padding-left: 14px !important; padding-right: 14px !important; }
+          .hdr-logo img { width: 118px !important; }
         }
       `}</style>
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 32, paddingRight: 32, position: 'relative' }}>
+      <div className="hdr-wrap" style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 32, paddingRight: 32, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', height: 64 }}>
 
           {/* ── Logo ── */}
-          <div style={{ flexShrink: 0, marginRight: 16 }}>
+          <div className="hdr-logo" style={{ flexShrink: 0, marginRight: 16 }}>
             <Logo width={150} />
           </div>
 

@@ -124,7 +124,7 @@ export default function InvoicePage() {
                   <td style={{ ...cp, fontSize: 12 }}>
                     Kaution
                     <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{order.listing?.title || "Artikel"} · {artRef}</span>
-                    {booking && <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Mietdauer: {new Date(booking.start_date).toLocaleDateString("de-CH")} — {new Date(booking.end_date).toLocaleDateString("de-CH")}</span>}
+                    {booking && <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Mietdauer: {new Date(booking.start_date).toLocaleDateString("de-CH")} bis {new Date(booking.end_date).toLocaleDateString("de-CH")}</span>}
                   </td>
                   <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(depositAmount)}</td>
                 </tr>
