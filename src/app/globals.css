@@ -225,6 +225,12 @@ input:focus, textarea:focus, select:focus {
   .admin-hide-narrow { display: none !important; }
 }
 
+/* Admin-Tabellen: klickbare Zeilen bekommen einen dezenten Hover.
+   Muss hier stehen (nicht inline) — Pseudoklassen gehen in style={} nicht.
+   Kein !important: offene Zeilen setzen ihren Hintergrund inline und
+   sollen ihn beim Hovern behalten. */
+.adm-row:hover { background: #FAF8F3; }
+
 /* Print */
 @media print {
   .no-print { display: none !important; }
