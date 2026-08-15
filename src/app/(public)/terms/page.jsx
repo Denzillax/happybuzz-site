@@ -31,7 +31,7 @@ export default function TermsPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
+        <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
           <h2 style={S.h2}>1. Geltungsbereich</h2>
           <p style={S.p}>Diese AGB regeln die Nutzung der Plattform BEEDARO (beedaro.ch). Mit der Registrierung akzeptiert der Nutzer diese Bedingungen. BEEDARO ist ein Schweizer Peer-to-Peer Marktplatz für den Kauf, Verkauf, die Vermietung, das Anbieten von Dienstleistungen und das Verschenken von Secondhand-Artikeln.</p>
           <p style={S.p}>BEEDARO ist eine Marke von MOQRO by Denis Mihaljevic (Einzelfirma), Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Vertragspartnerin des Nutzers und Betreiberin der Plattform ist MOQRO. Nennungen von BEEDARO in diesen AGB beziehen sich auf MOQRO als Betreiberin.</p>

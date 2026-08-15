@@ -4,7 +4,7 @@ export function Badge({ children, bg = colors.warm, color = colors.muted, style 
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", gap: 4,
-      padding: "3px 10px", borderRadius: 20,
+      padding: "3px 10px", borderRadius: 0,
       background: bg, color, fontSize: 11, fontWeight: 700,
       fontFamily: fonts.body, letterSpacing: ".03em",
       lineHeight: 1.4, whiteSpace: "nowrap", ...style,

@@ -38,7 +38,7 @@ export function FounderBadge({ profile, number, size = "sm", label = true }) {
       title={`Gründungsmitglied Nr. ${nr}: einer der ersten 500 Verkäufer auf BEEDARO`}
       style={{
         display: "inline-flex", alignItems: "center", gap: s.gap,
-        padding: s.pad, borderRadius: 8,
+        padding: s.pad, borderRadius: 0,
         background: HONEY_SOFT, color: INK,
         border: `1px solid ${HONEY}`,
         fontFamily: fonts.body, fontSize: s.font, fontWeight: 700,

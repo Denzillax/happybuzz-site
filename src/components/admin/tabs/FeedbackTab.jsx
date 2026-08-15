@@ -80,7 +80,7 @@ export function FeedbackTab({ admin }) {
                 {pill(STATUS_META[st].bg, STATUS_META[st].color, STATUS_META[st].label)}
                 <div style={{ flex: 1 }} />
                 <select value={st} onChange={e => setFeedbackStatus(f.id, e.target.value)}
-                  style={{ border: `1px solid ${colors.border}`, borderRadius: 8, padding: "5px 8px", fontSize: 11, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
+                  style={{ border: `1px solid ${colors.border}`, borderRadius: 0, padding: "5px 8px", fontSize: 11, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
                   {Object.entries(STATUS_META).map(([k, m]) => <option key={k} value={k}>{m.label}</option>)}
                 </select>
               </div>
@@ -108,7 +108,7 @@ export function FeedbackTab({ admin }) {
               <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                 <input value={draft} onChange={e => setNoteDraft(p => ({ ...p, [f.id]: e.target.value }))}
                   placeholder="Admin-Notiz..."
-                  style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "6px 10px", fontSize: 12, fontFamily: fonts.body, outline: "none", background: "#fff", boxSizing: "border-box" }} />
+                  style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 0, padding: "6px 10px", fontSize: 12, fontFamily: fonts.body, outline: "none", background: "#fff", boxSizing: "border-box" }} />
                 <button onClick={() => saveFeedbackNote(f.id, draft)} disabled={!dirty}
                   style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 999, border: "none", background: dirty ? colors.dark : colors.cream, color: dirty ? "#fff" : colors.muted, fontSize: 11, fontWeight: 700, cursor: dirty ? "pointer" : "default", fontFamily: fonts.body, flexShrink: 0 }}>
                   <Save size={12} /> Speichern

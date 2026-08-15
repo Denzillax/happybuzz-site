@@ -14,8 +14,8 @@ const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Manrope', system-ui, sans-serif";
 
 const labelStyle = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", display: "block", marginBottom: 6 };
-const inputStyle = { width: "100%", padding: "11px 13px", borderRadius: 8, border: `1.5px solid ${INK}`, fontSize: 14, fontFamily: BODY, outline: "none", boxSizing: "border-box", background: "#fff", color: INK };
-const sideCard = { background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: 20, marginBottom: 14 };
+const inputStyle = { width: "100%", padding: "11px 13px", borderRadius: 0, border: `1.5px solid ${INK}`, fontSize: 14, fontFamily: BODY, outline: "none", boxSizing: "border-box", background: "#fff", color: INK };
+const sideCard = { background: "#fff", borderRadius: 0, border: `1px solid ${INK}`, padding: 20, marginBottom: 14 };
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -40,7 +40,7 @@ export default function ContactPage() {
         <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 28 }}>
 
           {/* Form */}
-          <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: 28 }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${INK}`, padding: 28 }}>
             {sent ? (
               <div style={{ textAlign: "center", padding: "44px 0" }}>
                 <CheckCircle size={46} color={MOSS} style={{ marginBottom: 12 }} />
@@ -78,7 +78,7 @@ export default function ContactPage() {
                   <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))} placeholder="Beschreibe dein Anliegen..." style={{ ...inputStyle, minHeight: 140, resize: "vertical" }} />
                 </div>
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
-                  width: "100%", padding: "14px", borderRadius: 10, border: `1.5px solid ${INK}`,
+                  width: "100%", padding: "14px", borderRadius: 0, border: `1.5px solid ${INK}`,
                   background: ready ? INK : "#cfcabf",
                   color: ready ? PAPER : "#8a857c", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

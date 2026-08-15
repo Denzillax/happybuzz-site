@@ -63,7 +63,7 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
       <div style={{ position:"relative" }}>
         {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
-          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius:0, border:`1.5px solid ${error?C.red:f?K.petrol:K.ink}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?`3px 3px 0 ${K.honey}`:"none", boxSizing:"border-box" }}/>
+          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 0, border:`1.5px solid ${error?C.red:f?K.petrol:K.ink}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?`3px 3px 0 ${K.honey}`:"none", boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
       {error && <p style={{ color:C.red, fontSize:12, marginTop:3, fontWeight:500 }}>{error}</p>}
@@ -78,7 +78,7 @@ function PasswordStrength({ password }) {
   if (!password) return null;
   return (
     <div style={{ marginTop:-10, marginBottom:16 }}>
-      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius:2, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
+      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius: 0, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
       <div style={{ display:"flex", gap:10 }}>{checks.map((c,i)=><span key={i} style={{ display:"inline-flex", alignItems:"center", gap:3, fontSize:11, color:c.ok?C.green:C.muted, fontWeight:500 }}>{c.ok?<Check size={12}/>:<Circle size={12}/>} {c.l}</span>)}</div>
     </div>
   );
@@ -86,13 +86,13 @@ function PasswordStrength({ password }) {
 
 function SocialBtn({ icon, label, onClick }) {
   const [h, setH] = useState(false);
-  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius:0, border:`1px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
+  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 0, border:`1px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
 }
 
 function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
-      width:"100%", padding:"13px", border:`1px solid ${K.ink}`, borderRadius:0,
+      width:"100%", padding:"13px", border:`1px solid ${K.ink}`, borderRadius: 0,
       background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":`3px 3px 0 ${K.ink}`,
@@ -233,7 +233,7 @@ export default function AuthPage() {
   );
 
   const renderError = () => error && (
-    <div style={{ padding:"10px 14px", borderRadius:10, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:13, color:C.red, fontWeight:500 }}>{error}</div>
+    <div style={{ padding:"10px 14px", borderRadius: 0, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:13, color:C.red, fontWeight:500 }}>{error}</div>
   );
 
   const renderBack = (target, label) => (
@@ -281,7 +281,7 @@ export default function AuthPage() {
       <PasswordStrength password={password}/>
       <Input label="Passwort bestätigen" type="password" value={confirmPw} onChange={e=>setConfirmPw(e.target.value)} placeholder="Passwort wiederholen" icon={<LockIcon/>} error={fieldErrors.confirmPw}/>
       <div style={{ display:"flex", alignItems:"flex-start", gap:10, marginBottom:20 }}>
-        <div onClick={()=>setAgree(!agree)} style={{ width:18, height:18, borderRadius:5, border:`1.5px solid ${fieldErrors.agree?C.red:agree?C.yellow:C.border}`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", background:agree?C.yellow:"transparent", flexShrink:0, marginTop:1 }}>
+        <div onClick={()=>setAgree(!agree)} style={{ width:18, height:18, borderRadius: 0, border:`1.5px solid ${fieldErrors.agree?C.red:agree?C.yellow:C.border}`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", background:agree?C.yellow:"transparent", flexShrink:0, marginTop:1 }}>
           {agree && <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke={C.dark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
         </div>
         <span style={{ fontSize:13, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a className="link">AGB</a> und <a className="link">Datenschutzerklärung</a></span>
@@ -336,7 +336,7 @@ export default function AuthPage() {
               {view==="login"?"Zugang · Katalog der zweiten Leben":view==="register"?"Neuer Eintrag · Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius:0, padding:"0 28px 28px", border:`1px solid ${K.ink}`, boxShadow:`8px 8px 0 rgba(20,17,13,.12)` }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 0, padding:"0 28px 28px", border:`1px solid ${K.ink}`, boxShadow:`8px 8px 0 rgba(20,17,13,.12)` }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:10, color:C.muted, marginTop:18, fontWeight:700, fontFamily:MONO, letterSpacing:".1em", textTransform:"uppercase" }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>

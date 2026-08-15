@@ -102,7 +102,7 @@ export function Hero() {
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/listings/new" className="bd-btn" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
-              background: INK, color: PAPER, fontWeight: 700, fontSize: 15.5, borderRadius: 10,
+              background: INK, color: PAPER, fontWeight: 700, fontSize: 15.5, borderRadius: 0,
               textDecoration: 'none', fontFamily: BODY, border: `1.5px solid ${INK}`,
             }}>
               <Plus size={18} /> Gratis inserieren
@@ -110,7 +110,7 @@ export function Hero() {
             <Link href="/how-it-works" className="bd-btn" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
               background: 'transparent', border: `1.5px solid ${INK}`,
-              color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 10,
+              color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
               textDecoration: 'none', fontFamily: BODY,
             }}>
               So funktioniert&apos;s <ArrowRight size={16} />
@@ -121,7 +121,7 @@ export function Hero() {
             <div style={{ display: 'flex', gap: 8 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`} style={{
-                  width: i === current ? 30 : 9, height: 9, borderRadius: 5,
+                  width: i === current ? 30 : 9, height: 9, borderRadius: 0,
                   background: i === current ? INK : 'rgba(20,17,13,0.22)',
                   border: 'none', cursor: 'pointer', transition: 'all .3s ease', padding: 0,
                 }} />
@@ -134,19 +134,19 @@ export function Hero() {
         {/* ── Exponat-Karte (Specimen) ── */}
         <div style={{ flex: '0 1 440px', position: 'relative', display: 'flex', justifyContent: 'center', ...fade, transform: transitioning ? 'scale(.97)' : 'scale(1)' }}>
           {/* Offset-Karte dahinter (Archiv-Stapel) */}
-          <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 12, transform: 'rotate(4deg)', opacity: .28 }} />
+          <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(4deg)', opacity: .28 }} />
           <div style={{
             position: 'relative', width: '100%', maxWidth: 400, background: PAPER,
-            border: `1.5px solid ${INK}`, borderRadius: 12, transform: 'rotate(-2deg)',
+            border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(-2deg)',
             padding: 18, boxShadow: '0 24px 48px rgba(20,17,13,0.14)',
           }}>
             {/* Katalog-Kopf */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: MONO, fontSize: 11.5, letterSpacing: '.08em', color: INK, borderBottom: `1px solid ${INK}22`, paddingBottom: 10, marginBottom: 12 }}>
               <span style={{ fontWeight: 700 }}>№ {s.cat}</span>
-              <span style={{ background: PETROL, color: PAPER, padding: '3px 8px', borderRadius: 4, fontWeight: 700, fontSize: 10.5 }}>{s.cond}</span>
+              <span style={{ background: PETROL, color: PAPER, padding: '3px 8px', borderRadius: 0, fontWeight: 700, fontSize: 10.5 }}>{s.cond}</span>
             </div>
             {/* Exponat */}
-            <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: SAND, borderRadius: 8 }}>
+            <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: SAND, borderRadius: 0 }}>
               <img src={s.image} alt="" style={{ maxWidth: '86%', maxHeight: 260, objectFit: 'contain' }} />
             </div>
             {/* Fuss: Echtheit + Wachssiegel */}

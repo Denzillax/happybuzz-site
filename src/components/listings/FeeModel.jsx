@@ -60,7 +60,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                     <span style={{
                       fontSize: 9, fontWeight: 800, fontFamily: fonts.body,
                       background: colors.green, color: "#fff",
-                      padding: "2px 6px", borderRadius: 4,
+                      padding: "2px 6px", borderRadius: 0,
                       textTransform: "uppercase", letterSpacing: ".04em",
                     }}>
                       Dein Standard

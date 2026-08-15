@@ -69,7 +69,7 @@ export default function SalesPage() {
         <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
+              padding: "7px 14px", borderRadius: 0, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
               cursor: "pointer", fontFamily: fonts.body, border: `1px solid ${K.ink}`,
               background: filter === f.key ? K.honey : "#fff", color: K.ink,
             }}>{f.label}</button>
@@ -79,11 +79,11 @@ export default function SalesPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}><Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 10, border: `1px solid ${K.ink}` }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}` }}>
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Verkäufe</p>
             <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Stell dein erstes Inserat ein. Gebühr ab 3%, ein Teil geht in den Naturschutz.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}` }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}` }}>
               Erstes Inserat erstellen
             </Link>
           </div>
@@ -91,7 +91,7 @@ export default function SalesPage() {
 
         {/* Table */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: "#fff", borderRadius: 10, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -113,7 +113,7 @@ export default function SalesPage() {
                       onMouseEnter={e => e.currentTarget.style.background = colors.cream}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <td style={{ padding: "14px 10px", display: "flex", gap: 12, alignItems: "center" }}>
-                        <div style={{ width: 64, height: 64, borderRadius: 10, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {s.listingImage ? <img src={s.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                         </div>
                         <div>
@@ -151,11 +151,11 @@ export default function SalesPage() {
         {/* Summary */}
         {!loading && sales.length > 0 && (
           <div style={{ display: "flex", gap: 12, marginTop: 20, flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 200, background: "#fff", borderRadius: 10, border: `1px solid ${K.ink}`, padding: "16px 20px" }}>
+            <div style={{ flex: 1, minWidth: 200, background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, padding: "16px 20px" }}>
               <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: colors.muted, fontWeight: 700 }}>Umsatz (nach Gebühren)</p>
               <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>CHF {fmtCHF(totalRevenue)}</p>
             </div>
-            <div style={{ flex: 1, minWidth: 200, background: "#EEF4EC", borderRadius: 10, border: `1px solid ${K.ink}`, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ flex: 1, minWidth: 200, background: "#EEF4EC", borderRadius: 0, border: `1px solid ${K.ink}`, padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
                 <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Bee-Impact</p>
                 <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>

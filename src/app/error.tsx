@@ -10,10 +10,10 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           Ein unerwarteter Fehler ist aufgetreten. Versuche es nochmal oder geh zurück zur Startseite.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={() => reset()} style={{ padding: "12px 28px", borderRadius: 8, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+          <button onClick={() => reset()} style={{ padding: "12px 28px", borderRadius: 0, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
             Nochmal versuchen
           </button>
-          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 8, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
+          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 0, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
             Zur Startseite
           </a>
         </div>

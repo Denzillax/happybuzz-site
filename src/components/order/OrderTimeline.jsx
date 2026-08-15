@@ -11,7 +11,7 @@ export default function OrderTimeline({ events, isFinished, finishedLabel, isBuy
   const visibleEvents = showFullTimeline ? sortedEvents : sortedEvents.slice(0, 2);
 
   return (
-    <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
+    <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
       {isFinished && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
           <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#5B8C5A" }} />

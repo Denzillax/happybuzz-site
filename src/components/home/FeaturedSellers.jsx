@@ -40,7 +40,7 @@ export function FeaturedSellers() {
         {sellers.map((s) => {
           const name = s.account_type === 'business' && s.company_name ? s.company_name : (s.display_name || 'Verkäufer')
           return (
-            <div key={s.id} style={{ background: '#fff', border: `1px solid ${INK}`, borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div key={s.id} style={{ background: '#fff', border: `1px solid ${INK}`, borderRadius: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
               <Link href={`/user/${s.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: 14, textDecoration: 'none', color: 'inherit' }}>
                 <div style={{ width: 44, height: 44, borderRadius: '50%', background: SAND, border: `1px solid ${INK}`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
                   {s.avatar_url ? <img src={s.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color={PETROL} />}
@@ -65,7 +65,7 @@ export function FeaturedSellers() {
                   {s.listings.map((l) => {
                     const pl = priceLabel(l)
                     return (
-                    <Link key={l.id} href={`/listing/${l.id}`} title={l.title} style={{ position: 'relative', aspectRatio: '1 / 1', background: SAND, borderRadius: 6, overflow: 'hidden', textDecoration: 'none', display: 'flex', alignItems: 'flex-end' }}>
+                    <Link key={l.id} href={`/listing/${l.id}`} title={l.title} style={{ position: 'relative', aspectRatio: '1 / 1', background: SAND, borderRadius: 0, overflow: 'hidden', textDecoration: 'none', display: 'flex', alignItems: 'flex-end' }}>
                       {l.cover
                         ? <img src={l.cover} alt={l.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         : <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={20} color="#CFC8BC" /></div>}

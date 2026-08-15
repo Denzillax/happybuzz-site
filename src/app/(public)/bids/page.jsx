@@ -183,7 +183,7 @@ function BidCard({ bid, fmtPrice, ended }) {
     <Link href={`/listing/${l.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div style={{
         display: "flex", gap: 16, padding: "16px 18px",
-        background: colors.surface, borderRadius: 12,
+        background: colors.surface, borderRadius: 0,
         border: `1px solid ${ended ? colors.borderLt : colors.border}`,
         marginBottom: 10, transition: "all .15s",
         opacity: ended ? 0.55 : 1,
@@ -193,7 +193,7 @@ function BidCard({ bid, fmtPrice, ended }) {
         onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; }}>
         {/* Image */}
         <div style={{
-          width: 90, height: 90, borderRadius: 8, overflow: "hidden", flexShrink: 0,
+          width: 90, height: 90, borderRadius: 0, overflow: "hidden", flexShrink: 0,
           background: colors.warm, display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           {bid.img
@@ -215,7 +215,7 @@ function BidCard({ bid, fmtPrice, ended }) {
             {/* Status Badge */}
             <span style={{
               flexShrink: 0, fontSize: 10, fontWeight: 800, letterSpacing: ".04em",
-              padding: "3px 10px", borderRadius: 20,
+              padding: "3px 10px", borderRadius: 0,
               background: bid.status === "won" ? "#E8F5E9"
                 : bid.status === "leading" ? "#E8F5E9"
                 : bid.status === "outbid" ? "#FFF3E0"

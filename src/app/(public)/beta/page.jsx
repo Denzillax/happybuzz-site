@@ -506,7 +506,7 @@ export default function BetaTestPage() {
         background: `linear-gradient(135deg, ${colors.dark} 0%, #2a2520 100%)`,
         padding: "40px 20px 44px", textAlign: "center", color: "#fff",
       }}>
-        <div style={{ display: "inline-flex", padding: "4px 12px", borderRadius: 6, background: colors.yellow, color: colors.dark, fontSize: 11, fontWeight: 800, marginBottom: 12, letterSpacing: ".06em" }}>BETA TEST</div>
+        <div style={{ display: "inline-flex", padding: "4px 12px", borderRadius: 0, background: colors.yellow, color: colors.dark, fontSize: 11, fontWeight: 800, marginBottom: 12, letterSpacing: ".06em" }}>BETA TEST</div>
         <h1 style={{ fontSize: 26, fontWeight: 900, fontFamily: fonts.head, margin: "0 0 8px" }}>BEEDARO Funktionstest</h1>
         <p style={{ fontSize: 14, color: "rgba(255,255,255,.5)", maxWidth: 500, margin: "0 auto" }}>
           Gehe jede Funktion durch und klicke zum Bewerten. Grau → Grün (OK) → Gelb (Teilweise) → Rot (Kaputt).
@@ -523,13 +523,13 @@ export default function BetaTestPage() {
         </div>
 
         {/* Progress */}
-        <div style={{ background: "#fff", borderRadius: 10, padding: "14px 16px", border: `1px solid ${colors.border}`, marginBottom: 20 }}>
+        <div style={{ background: "#fff", borderRadius: 0, padding: "14px 16px", border: `1px solid ${colors.border}`, marginBottom: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>Fortschritt</span>
             <span style={{ fontSize: 12, color: colors.muted }}>{tested}/{totalItems}</span>
           </div>
-          <div style={{ height: 6, borderRadius: 3, background: colors.border }}>
-            <div style={{ height: "100%", borderRadius: 3, background: colors.yellow, width: `${(tested / totalItems) * 100}%`, transition: "width .3s" }} />
+          <div style={{ height: 6, borderRadius: 0, background: colors.border }}>
+            <div style={{ height: "100%", borderRadius: 0, background: colors.yellow, width: `${(tested / totalItems) * 100}%`, transition: "width .3s" }} />
           </div>
           <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 12 }}>
             <span style={{ color: "#5B8C5A", fontWeight: 600 }}>{okCount} OK</span>
@@ -546,7 +546,7 @@ export default function BetaTestPage() {
           const sTotal = section.items.length;
           return (
             <div key={section.id} style={{
-              marginBottom: 10, borderRadius: 12, overflow: "hidden",
+              marginBottom: 10, borderRadius: 0, overflow: "hidden",
               border: `1.5px solid ${section.highlight ? colors.yellow : colors.border}`,
               background: section.highlight ? colors.yellowSoft : "#fff",
             }}>
@@ -591,7 +591,7 @@ export default function BetaTestPage() {
                           <div style={{ padding: "0 16px 10px 44px" }}>
                             <input value={notes[item.id] || ""} onChange={e => setNotes(p => ({ ...p, [item.id]: e.target.value }))}
                               placeholder="Was genau ist das Problem?" onClick={e => e.stopPropagation()}
-                              style={{ width: "100%", padding: "6px 10px", borderRadius: 6, fontSize: 12, border: `1px solid ${colors.border}`, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "6px 10px", borderRadius: 0, fontSize: 12, border: `1px solid ${colors.border}`, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
                           </div>
                         )}
                       </div>
@@ -604,7 +604,7 @@ export default function BetaTestPage() {
         })}
 
         <button onClick={submitAll} disabled={tested === 0} style={{
-          width: "100%", padding: "16px", borderRadius: 10, border: "none", marginTop: 20,
+          width: "100%", padding: "16px", borderRadius: 0, border: "none", marginTop: 20,
           background: tested > 0 ? colors.yellow : "#ddd", color: colors.dark,
           fontSize: 15, fontWeight: 800, cursor: tested > 0 ? "pointer" : "default",
           fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

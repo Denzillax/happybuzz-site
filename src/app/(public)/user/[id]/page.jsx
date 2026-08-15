@@ -99,7 +99,7 @@ export default function PublicProfilePage() {
 
         {/* ── PROFIL HEADER ─────────────────────────────── */}
         <div style={{
-          background: "#fff", borderRadius: 10,
+          background: "#fff", borderRadius: 0,
           border: `1px solid ${K.ink}`, padding: "28px 30px",
           marginBottom: 24, boxShadow: "6px 6px 0 rgba(20,17,13,.1)",
         }}>
@@ -107,7 +107,7 @@ export default function PublicProfilePage() {
 
             {/* Avatar */}
             <div style={{
-              width: 88, height: 88, borderRadius: 10, border: `1px solid ${K.ink}`, overflow: "hidden", flexShrink: 0,
+              width: 88, height: 88, borderRadius: 0, border: `1px solid ${K.ink}`, overflow: "hidden", flexShrink: 0,
               background: profile.avatar_url
                 ? `url(${profile.avatar_url}) center/cover`
                 : K.honey,
@@ -176,7 +176,7 @@ export default function PublicProfilePage() {
                 setIsSellerFav(result);
               }} style={{
                 display: "flex", alignItems: "center", gap: 8,
-                padding: "10px 20px", borderRadius: 10,
+                padding: "10px 20px", borderRadius: 0,
                 border: `1px solid ${K.ink}`,
                 background: isSellerFav ? K.honey : "transparent",
                 cursor: "pointer", fontFamily: fonts.body,
@@ -200,7 +200,7 @@ export default function PublicProfilePage() {
             return (
               <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
                 {tiles.map((t) => (
-                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: 10, background: K.paper, border: `1px solid ${K.ink}`, textAlign: "center" }}>
+                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: 0, background: K.paper, border: `1px solid ${K.ink}`, textAlign: "center" }}>
                     <p style={{ margin: 0, fontSize: 18, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>{t.v}</p>
                     <p style={{ margin: "3px 0 0", ...monoLabel }}>{t.l}</p>
                   </div>
@@ -211,7 +211,7 @@ export default function PublicProfilePage() {
 
           {/* Private Notiz (nur für eingeloggte Nutzer, nicht beim eigenen Profil) */}
           {currentUser && currentUser.id !== params.id && (
-            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 10, background: K.sand, border: `1px solid ${K.ink}` }}>
+            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 0, background: K.sand, border: `1px solid ${K.ink}` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <StickyNote size={15} color={K.ink} />
                 <span style={{ ...monoLabel, color: K.ink }}>Private Notiz</span>
@@ -222,13 +222,13 @@ export default function PublicProfilePage() {
                 onChange={(e) => { setNote(e.target.value); setNoteSaved(false); }}
                 placeholder="z.B. Schnelle Antwort, faire Preise…"
                 rows={2}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${K.ink}`, background: "#fff", fontSize: 13, fontFamily: fonts.body, color: K.ink, resize: "vertical", outline: "none", boxSizing: "border-box" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", fontSize: 13, fontFamily: fonts.body, color: K.ink, resize: "vertical", outline: "none", boxSizing: "border-box" }}
               />
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
                 <button
                   onClick={async () => { setNoteSaving(true); try { await saveUserNote(currentUser.id, params.id, note); setNoteSaved(true); } catch {} finally { setNoteSaving(false); } }}
                   disabled={noteSaving}
-                  style={{ padding: "7px 16px", borderRadius: 10, border: `1px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
+                  style={{ padding: "7px 16px", borderRadius: 0, border: `1px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
                 >
                   {noteSaving ? "Speichern…" : "Notiz speichern"}
                 </button>
@@ -320,7 +320,7 @@ export default function PublicProfilePage() {
               return (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
                   {sorted.map(([t, c]) => (
-                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 10, background: "#fff", border: `1px solid ${K.ink}`, fontSize: 12.5, color: K.ink, fontFamily: fonts.body }}>
+                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 0, background: "#fff", border: `1px solid ${K.ink}`, fontSize: 12.5, color: K.ink, fontFamily: fonts.body }}>
                       <b style={{ fontWeight: 800 }}>{c}×</b> {t}
                     </span>
                   ))}
@@ -339,13 +339,13 @@ export default function PublicProfilePage() {
                   const sentColor = r.rating >= 4 ? colors.green : r.rating === 3 ? colors.muted : colors.red;
                   return (
                     <div key={r.id} style={{
-                      background: "#fff", borderRadius: 10,
+                      background: "#fff", borderRadius: 0,
                       border: `1px solid ${K.ink}`, padding: "18px 22px",
                       display: "flex", gap: 16, alignItems: "flex-start",
                     }}>
                       {/* Rater Avatar */}
                       <div style={{
-                        width: 44, height: 44, borderRadius: 10, border: `1px solid ${K.ink}`, flexShrink: 0,
+                        width: 44, height: 44, borderRadius: 0, border: `1px solid ${K.ink}`, flexShrink: 0,
                         background: r.raterAvatar
                           ? `url(${r.raterAvatar}) center/cover`
                           : colors.yellowSoft,

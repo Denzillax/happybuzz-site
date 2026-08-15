@@ -10,10 +10,10 @@ export default function NotFound() {
           Diese Seite existiert nicht oder wurde verschoben. Vielleicht findest du was du suchst auf dem Marktplatz.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 8, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
+          <Link href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 0, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
             Zur Startseite
           </Link>
-          <Link href="/search" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 8, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
+          <Link href="/search" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 0, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
             Zum Marktplatz
           </Link>
         </div>

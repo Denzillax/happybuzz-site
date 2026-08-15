@@ -30,7 +30,7 @@ export function AdminShell({ admin }) {
       {/* ═══ SIDEBAR ═══ */}
       <aside className="admin-sidebar" style={{ background: "#1a1a1a", color: "#fff", display: "flex", flexDirection: "column" }}>
         <div className="admin-brand" style={{ display: "flex", alignItems: "center", gap: 11, padding: "20px 20px 18px" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 10, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 0, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <BeeIcon size={18} color="#1a1a1a" />
           </div>
           <div>
@@ -44,7 +44,7 @@ export function AdminShell({ admin }) {
             const on = tab === n.key;
             return (
               <button key={n.key} onClick={() => { setTab(n.key); setSearch(""); }} style={{
-                display: "flex", alignItems: "center", gap: 11, padding: "11px 12px", borderRadius: 10, border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 11, padding: "11px 12px", borderRadius: 0, border: "none", cursor: "pointer",
                 fontFamily: fonts.body, fontSize: 13, fontWeight: on ? 700 : 500, textAlign: "left",
                 background: on ? "rgba(255,255,255,.08)" : "transparent",
                 color: on ? "#fff" : "rgba(255,255,255,.6)",

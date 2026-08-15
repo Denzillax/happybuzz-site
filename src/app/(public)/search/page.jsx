@@ -45,7 +45,7 @@ function FilterPill({ label, value, options, onChange, active }) {
         onClick={() => setOpen(!open)}
         style={{
           display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 14px", borderRadius: 8,
+          padding: "8px 14px", borderRadius: 0,
           border: active ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
           color: active ? "#0A7170" : INK,
@@ -65,7 +65,7 @@ function FilterPill({ label, value, options, onChange, active }) {
       {open && (
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-          background: "#fff", borderRadius: 10,
+          background: "#fff", borderRadius: 0,
           boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: `1px solid ${INK}`,
           minWidth: 180, maxHeight: 280, overflowY: "auto",
           padding: "6px 0",
@@ -218,7 +218,7 @@ function SearchPageInner() {
                 onClick={() => { setQuery(term); setPage(1); }}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "6px 12px", borderRadius: 8, cursor: "pointer",
+                  padding: "6px 12px", borderRadius: 0, cursor: "pointer",
                   border: `1.5px solid ${colors.border}`, background: "#fff",
                   fontSize: 13, fontFamily: fonts.body, color: colors.dark, whiteSpace: "nowrap",
                 }}
@@ -263,7 +263,7 @@ function SearchPageInner() {
 
         {/* ── Filter Pills Row ── */}
         <div style={{
-          background: "#fff", borderRadius: 12, border: `1px solid ${INK}`,
+          background: "#fff", borderRadius: 0, border: `1px solid ${INK}`,
           padding: "16px 18px", marginBottom: 20,
         }}>
           {/* Row 1: Main filters */}
@@ -298,7 +298,7 @@ function SearchPageInner() {
             <div ref={priceRef} style={{ position: "relative" }}>
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 8,
+                padding: "8px 14px", borderRadius: 0,
                 border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
                 color: (minPrice || maxPrice) ? "#0A7170" : INK,
@@ -313,19 +313,19 @@ function SearchPageInner() {
               {showPrice && (
                 <div style={{
                   position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
+                  background: "#fff", borderRadius: 0, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
                   border: `1px solid ${INK}`, padding: 16, width: 220,
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
                   <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                     <input type="number" placeholder="Von" value={minPrice} onChange={e => setMinPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 8, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 0, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                     <input type="number" placeholder="Bis" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 8, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 0, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
                     width: "100%", padding: "8px", background: colors.teal, color: "#fff",
-                    border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
+                    border: "none", borderRadius: 0, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
               )}
@@ -339,7 +339,7 @@ function SearchPageInner() {
               title="Nur Verkäufer mit geprüftem Ausweis + E-Mail"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 8, cursor: "pointer",
+                padding: "8px 14px", borderRadius: 0, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
                 border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#14110D"}`,
                 background: verifiedOnly ? "#EEF4EC" : "#fff",
@@ -419,8 +419,8 @@ function SearchPageInner() {
               <div key={i} style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
                 <div style={{ aspectRatio: "4/3", background: colors.warm }} />
                 <div style={{ padding: 14 }}>
-                  <div style={{ height: 14, background: colors.warm, borderRadius: 4, width: "75%", marginBottom: 8 }} />
-                  <div style={{ height: 18, background: colors.warm, borderRadius: 4, width: "40%" }} />
+                  <div style={{ height: 14, background: colors.warm, borderRadius: 0, width: "75%", marginBottom: 8 }} />
+                  <div style={{ height: 18, background: colors.warm, borderRadius: 0, width: "40%" }} />
                 </div>
               </div>
             ))}
@@ -435,7 +435,7 @@ function SearchPageInner() {
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button key={i} onClick={() => setPage(i + 1)}
                     style={{
-                      width: 36, height: 36, borderRadius: 8, fontSize: 14, fontWeight: 600,
+                      width: 36, height: 36, borderRadius: 0, fontSize: 14, fontWeight: 600,
                       fontFamily: fonts.body, border: "none", cursor: "pointer",
                       background: page === i + 1 ? colors.dark : "transparent",
                       color: page === i + 1 ? "#fff" : colors.muted,
@@ -452,8 +452,8 @@ function SearchPageInner() {
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
             <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>Andere Suchbegriffe probieren oder die Filter zurücksetzen.</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: "#fff", border: `1.5px solid ${INK}`, color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: "#fff", border: `1.5px solid ${INK}`, color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>
         )}

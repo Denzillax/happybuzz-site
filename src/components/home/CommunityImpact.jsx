@@ -72,7 +72,7 @@ export function CommunityImpact() {
       <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
-          position: "relative", borderRadius: 14, overflow: "hidden",
+          position: "relative", borderRadius: 0, overflow: "hidden",
           background: SAND, border: `1.5px solid ${INK}`,
           aspectRatio: "3 / 2",
         }}>
@@ -86,7 +86,7 @@ export function CommunityImpact() {
             {PHOTOS.map((p, i) => (
               <button key={p.src} onClick={() => setSlide(i)} aria-label={`Bild ${i + 1}`}
                 style={{
-                  width: i === slide ? 22 : 8, height: 8, padding: 0, borderRadius: 4, border: "none", cursor: "pointer",
+                  width: i === slide ? 22 : 8, height: 8, padding: 0, borderRadius: 0, border: "none", cursor: "pointer",
                   background: i === slide ? "#fff" : "rgba(255,255,255,.55)", boxShadow: "0 1px 3px rgba(0,0,0,.25)",
                   transition: "width .3s, background .3s",
                 }} />
@@ -104,7 +104,7 @@ export function CommunityImpact() {
             Gemeinsam bewirken
           </h2>
 
-          <div style={{ display: "flex", border: `1.5px solid ${INK}`, borderRadius: 12, overflow: "hidden", background: "#fff" }}>
+          <div style={{ display: "flex", border: `1.5px solid ${INK}`, borderRadius: 0, overflow: "hidden", background: "#fff" }}>
             {cards.map((c, i) => (
               <div key={c.label} style={{
                 flex: 1, padding: "16px 10px 14px", borderLeft: i ? `1px solid ${INK}1a` : "none",
@@ -149,7 +149,7 @@ export function CommunityImpact() {
 
           <Link href="/impact" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8, marginTop: 22,
-            padding: "12px 22px", borderRadius: 10, background: INK, color: PAPER,
+            padding: "12px 22px", borderRadius: 0, background: INK, color: PAPER,
             fontSize: 14, fontWeight: 700, fontFamily: HEAD, textDecoration: "none",
           }}>
             Mehr über Bee-Impact <ArrowRight size={16} />

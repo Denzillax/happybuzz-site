@@ -159,7 +159,7 @@ export function Header() {
     { href: '/favorites?tab=searches', icon: Search, label: 'Suchen' },
   ]
 
-  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 10, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #e5e5e5', zIndex: 100 }
+  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 0, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #e5e5e5', zIndex: 100 }
   const menuItemStyle = { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', fontSize: 14, fontWeight: 500, color: '#444', textDecoration: 'none', transition: 'all 0.12s', cursor: 'pointer', border: 'none', background: 'none', width: '100%', fontFamily: 'inherit' }
 
   return (
@@ -197,7 +197,7 @@ export function Header() {
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
               border: megaMenuOpen ? `1.5px solid ${INK}` : '1.5px solid #d8d4cd',
-              borderRadius: 8, background: megaMenuOpen ? '#ECE3D2' : '#fff',
+              borderRadius: 0, background: megaMenuOpen ? '#ECE3D2' : '#fff',
               cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
               color: INK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}>
@@ -208,7 +208,7 @@ export function Header() {
 
             {/* Search Bar — fills available space */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `1.5px solid ${INK}`, borderRadius: 8, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `1.5px solid ${INK}`, borderRadius: 0, overflow: 'hidden' }}>
                 <Search size={17} style={{ marginLeft: 14, color: '#999', flexShrink: 0, alignSelf: 'center' }} />
                 <input
                   ref={searchInputRef}
@@ -274,7 +274,7 @@ export function Header() {
               <button className="hdr-icon-btn" onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
-                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 8, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 0, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
                 )}
               </button>
             </div>
@@ -317,7 +317,7 @@ export function Header() {
                             <item.icon size={16} style={{ color: '#888' }} />
                             {item.label}
                             {item.label === 'Nachrichten' && unreadCount > 0 && (
-                              <span style={{ marginLeft: 'auto', background: YELLOW, color: DARK, fontSize: 11, fontWeight: 700, borderRadius: 10, padding: '2px 7px', minWidth: 20, textAlign: 'center' }}>{unreadCount}</span>
+                              <span style={{ marginLeft: 'auto', background: YELLOW, color: DARK, fontSize: 11, fontWeight: 700, borderRadius: 0, padding: '2px 7px', minWidth: 20, textAlign: 'center' }}>{unreadCount}</span>
                             )}
                           </Link>
                     ))}
@@ -349,7 +349,7 @@ export function Header() {
               </button>
             )}
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ width: 40, height: 40, borderRadius: 8, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
+              style={{ width: 40, height: 40, borderRadius: 0, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -374,7 +374,7 @@ export function Header() {
             </div>
           )}
           <div style={{ padding: '16px 24px' }}>
-            <div style={{ display: 'flex', borderRadius: 8, border: `1.5px solid ${INK}`, overflow: 'hidden' }}>
+            <div style={{ display: 'flex', borderRadius: 0, border: `1.5px solid ${INK}`, overflow: 'hidden' }}>
               <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setMobileOpen(false); } }}
                 placeholder="Suchen..." style={{ flex: 1, padding: '12px 14px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit' }} />
               <button onClick={() => { handleSearch(); setMobileOpen(false); }} style={{ padding: '0 20px', background: INK, border: 'none', cursor: 'pointer' }}>
@@ -388,7 +388,7 @@ export function Header() {
               { href: '/how-it-works', icon: Star, label: 'So funktionierts' },
             ].map(link => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 8 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 0 }}>
                 <link.icon size={18} style={{ color: '#999' }} />
                 {link.label}
               </Link>
@@ -409,7 +409,7 @@ export function Header() {
                 { href: '/settings', icon: Settings, label: 'Einstellungen' },
               ].map(link => (
                 <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 8 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 0 }}>
                   <link.icon size={18} style={{ color: '#999' }} />
                   {link.label}
                 </Link>
@@ -419,12 +419,12 @@ export function Header() {
           <div style={{ padding: '12px 24px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {user ? (
               <button onClick={() => { handleLogout(); setMobileOpen(false); }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #e8e5e0', color: '#999', fontWeight: 600, fontSize: 14, borderRadius: 10, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #e8e5e0', color: '#999', fontWeight: 600, fontSize: 14, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit' }}>
                 <LogOut size={16} /> Abmelden
               </button>
             ) : (
               <Link href="/login" onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #e8e5e0', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 10, textDecoration: 'none' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #e8e5e0', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 0, textDecoration: 'none' }}>
                 <User size={16} /> Anmelden
               </Link>
             )}

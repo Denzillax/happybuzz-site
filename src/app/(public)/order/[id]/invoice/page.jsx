@@ -87,7 +87,7 @@ export default function InvoicePage() {
   return (
     <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#1a1a1a" }}>
       <div className="no-print" style={{ display: "flex", justifyContent: "center", gap: 12, padding: 16, background: isDeposit ? "#E8F5E9" : colors.cream }}>
-        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 8, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 0, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
@@ -175,19 +175,19 @@ export default function InvoicePage() {
         </table>
         {/* Gebühren-Info (nur bei regulärer Rechnung) */}
         {!isDeposit && (
-          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 5, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 0, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
             Plattformgebühr ({feePercent}%): CHF {fmt(fee)} (Verkäufer) · Ref: {feeRef}. Davon CHF {fmt(beeImpact)} Bee-Impact für Schweizer Naturschutz.
           </p>
         )}
         {isDeposit && (
-          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: damageAmount > 0 ? "#FFF3E0" : "#E8F5E9", borderRadius: 5, fontSize: 10, color: damageAmount > 0 ? "#E65100" : "#5B8C5A", fontFamily: f, lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: damageAmount > 0 ? "#FFF3E0" : "#E8F5E9", borderRadius: 0, fontSize: 10, color: damageAmount > 0 ? "#E65100" : "#5B8C5A", fontFamily: f, lineHeight: 1.5 }}>
             {damageAmount > 0
               ? `Teilrückerstattung: Kaution CHF ${fmt(depositAmount)} abzüglich Schaden CHF ${fmt(damageAmount)} = CHF ${fmt(refundAmount)}.`
               : "Die Kaution wird vollständig an den Mieter zurückerstattet. Keine Gebühren auf Kautionsrückerstattungen."}
           </p>
         )}
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#ddd"}`, borderRadius: 8, marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#ddd"}`, borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
@@ -204,7 +204,7 @@ export default function InvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 4 }} />
+            <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 0 }} />
             <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
           </div>
         </div>

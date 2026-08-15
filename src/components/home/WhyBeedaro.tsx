@@ -60,7 +60,7 @@ export function WhyBeedaro() {
               <div
                 key={i}
                 style={{
-                  background: '#fff', borderRadius: 12, border: `1px solid ${INK}`,
+                  background: '#fff', borderRadius: 0, border: `1px solid ${INK}`,
                   padding: '28px 22px', transition: 'all 0.18s ease', cursor: 'default',
                 }}
                 onMouseEnter={e => {
@@ -78,7 +78,7 @@ export function WhyBeedaro() {
               >
                 {/* Icon-Tafel */}
                 <div style={{
-                  width: 52, height: 52, borderRadius: 10, background: usp.tint, border: `1px solid ${INK}`,
+                  width: 52, height: 52, borderRadius: 0, background: usp.tint, border: `1px solid ${INK}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: usp.accent, marginBottom: 18,
                 }}>

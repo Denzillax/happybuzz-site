@@ -71,7 +71,7 @@ export default function FeeInvoicePage() {
   return (
     <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#1a1a1a" }}>
       <div className="no-print" style={{ display: "flex", justifyContent: "center", padding: 16, background: colors.cream }}>
-        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 8, border: "none", background: colors.yellow, color: "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 0, border: "none", background: colors.yellow, color: "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
@@ -147,12 +147,12 @@ export default function FeeInvoicePage() {
         </table>
 
         {/* Bee-Impact Info */}
-        <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 5, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
+        <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 0, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
           Von den Gebühren (CHF {fmtCHF(total)}) fliessen CHF {fmtCHF(beeImpact)} als Bee-Impact direkt in Schweizer Bienen- und Naturschutzprojekte.
         </p>
 
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #ddd", borderRadius: 8, marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #ddd", borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>Zahlungsinformationen</p>
             {[
@@ -170,7 +170,7 @@ export default function FeeInvoicePage() {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             {qrUrl ? (
               <>
-                <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 4 }} />
+                <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 0 }} />
                 <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
               </>
             ) : (

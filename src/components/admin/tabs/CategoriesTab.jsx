@@ -25,7 +25,7 @@ function IconPicker({ value, onPick, onClose }) {
       <div style={{
         position: "absolute", top: "100%", left: 0, marginTop: 6, zIndex: 41,
         width: 268, maxHeight: 240, overflowY: "auto", padding: 8,
-        background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 10,
+        background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 0,
         boxShadow: "0 8px 28px rgba(0,0,0,.14)",
         display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4,
       }}>
@@ -33,7 +33,7 @@ function IconPicker({ value, onPick, onClose }) {
           const on = name === value;
           return (
             <button key={name} onClick={() => { onPick(name); onClose(); }} title={name}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 7, borderRadius: 8, cursor: "pointer",
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 7, borderRadius: 0, cursor: "pointer",
                 border: `1.5px solid ${on ? colors.teal : "transparent"}`, background: on ? "#E6F5F5" : colors.cream, color: colors.dark }}>
               <CategoryIcon name={name} size={17} />
             </button>
@@ -167,9 +167,9 @@ export function CategoriesTab({ admin }) {
             <span style={{ display: "inline-flex", alignItems: "center", gap: 5, flex: 1, minWidth: 0 }}>
               <input autoFocus value={editName} onChange={e => setEditName(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter") commitEdit(); if (e.key === "Escape") setEditId(null); }}
-                style={{ flex: 1, minWidth: 0, border: `1px solid ${colors.teal}`, borderRadius: 6, padding: "4px 8px", fontSize: 13, fontFamily: fonts.body, outline: "none" }} />
-              <button onClick={commitEdit} title="Speichern" style={{ border: "none", background: "#E8F5E9", color: "#2E7D32", borderRadius: 6, padding: 4, cursor: "pointer", lineHeight: 0 }}><Check size={13} /></button>
-              <button onClick={() => setEditId(null)} title="Abbrechen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 4, cursor: "pointer", lineHeight: 0 }}><X size={13} /></button>
+                style={{ flex: 1, minWidth: 0, border: `1px solid ${colors.teal}`, borderRadius: 0, padding: "4px 8px", fontSize: 13, fontFamily: fonts.body, outline: "none" }} />
+              <button onClick={commitEdit} title="Speichern" style={{ border: "none", background: "#E8F5E9", color: "#2E7D32", borderRadius: 0, padding: 4, cursor: "pointer", lineHeight: 0 }}><Check size={13} /></button>
+              <button onClick={() => setEditId(null)} title="Abbrechen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 0, padding: 4, cursor: "pointer", lineHeight: 0 }}><X size={13} /></button>
             </span>
           ) : (
             <span onClick={() => hasKids && toggle(cat.id)}
@@ -184,21 +184,21 @@ export function CategoriesTab({ admin }) {
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
               <span style={{ fontSize: 11.5, color: "#c62828", fontWeight: 700 }}>Löschen?</span>
               <button onClick={async () => { const ok = await deleteCategory(cat); setConfirmDelId(null); }} title="Endgültig löschen"
-                style={{ border: "none", background: "#c62828", color: "#fff", borderRadius: 6, padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ja</button>
+                style={{ border: "none", background: "#c62828", color: "#fff", borderRadius: 0, padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ja</button>
               <button onClick={() => setConfirmDelId(null)} title="Abbrechen"
-                style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 4, cursor: "pointer", lineHeight: 0 }}><X size={13} /></button>
+                style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 0, padding: 4, cursor: "pointer", lineHeight: 0 }}><X size={13} /></button>
             </span>
           )}
           {!isEditing && confirmDelId !== cat.id && (
             <span style={{ display: "inline-flex", gap: 4, flexShrink: 0 }}>
-              <button onClick={() => startEdit(cat)} title="Umbenennen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Pencil size={12} /></button>
-              <button onClick={() => { setAddingUnder(addingUnder === cat.id ? null : cat.id); setSubName(""); }} title="Unterkategorie anlegen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Plus size={12} /></button>
+              <button onClick={() => startEdit(cat)} title="Umbenennen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 0, padding: 5, cursor: "pointer", lineHeight: 0 }}><Pencil size={12} /></button>
+              <button onClick={() => { setAddingUnder(addingUnder === cat.id ? null : cat.id); setSubName(""); }} title="Unterkategorie anlegen" style={{ border: "none", background: colors.cream, color: colors.muted, borderRadius: 0, padding: 5, cursor: "pointer", lineHeight: 0 }}><Plus size={12} /></button>
               <button onClick={() => toggleCategoryActive(cat)} title={inactive ? "Aktivieren" : "Deaktivieren"}
-                style={{ border: "none", background: inactive ? "#E8F5E9" : "#FFF3E0", color: inactive ? "#2E7D32" : "#E65100", borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}>
+                style={{ border: "none", background: inactive ? "#E8F5E9" : "#FFF3E0", color: inactive ? "#2E7D32" : "#E65100", borderRadius: 0, padding: 5, cursor: "pointer", lineHeight: 0 }}>
                 {inactive ? <Eye size={12} /> : <EyeOff size={12} />}
               </button>
               <button onClick={() => { setConfirmDelId(cat.id); }} title="Löschen"
-                style={{ border: "none", background: "#FFEBEE", color: "#c62828", borderRadius: 6, padding: 5, cursor: "pointer", lineHeight: 0 }}><Trash2 size={12} /></button>
+                style={{ border: "none", background: "#FFEBEE", color: "#c62828", borderRadius: 0, padding: 5, cursor: "pointer", lineHeight: 0 }}><Trash2 size={12} /></button>
             </span>
           )}
         </div>
@@ -207,9 +207,9 @@ export function CategoriesTab({ admin }) {
           <div style={{ display: "flex", gap: 6, padding: "8px 14px", paddingLeft: 14 + (depth + 1) * 26, borderBottom: `1px solid ${colors.borderLt}`, background: "#FBFAF7" }}>
             <input autoFocus value={subName} onChange={e => setSubName(e.target.value)} placeholder={`Neue Unterkategorie in "${cat.name}"...`}
               onKeyDown={e => { if (e.key === "Enter") addSub(cat.id, subName); if (e.key === "Escape") setAddingUnder(null); }}
-              style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 6, padding: "6px 10px", fontSize: 12, fontFamily: fonts.body, outline: "none" }} />
+              style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 0, padding: "6px 10px", fontSize: 12, fontFamily: fonts.body, outline: "none" }} />
             <button onClick={() => addSub(cat.id, subName)}
-              style={{ border: "none", background: colors.dark, color: "#fff", borderRadius: 6, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Anlegen</button>
+              style={{ border: "none", background: colors.dark, color: "#fff", borderRadius: 0, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Anlegen</button>
           </div>
         )}
         {open && kids.filter(k => isVisible(k.id)).map(k => <Row key={k.id} cat={k} depth={depth + 1} />)}
@@ -226,7 +226,7 @@ export function CategoriesTab({ admin }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <span style={{ position: "relative", flexShrink: 0 }}>
           <button onClick={() => setNewIconOpen(v => !v)} title="Icon wählen"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, border: `1px solid ${colors.border}`, borderRadius: 8, background: "#fff", cursor: "pointer", color: colors.dark }}>
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, border: `1px solid ${colors.border}`, borderRadius: 0, background: "#fff", cursor: "pointer", color: colors.dark }}>
             <CategoryIcon name={newIcon} size={17} />
           </button>
           {newIconOpen && (
@@ -235,9 +235,9 @@ export function CategoriesTab({ admin }) {
         </span>
         <input value={newName} onChange={e => setNewName(e.target.value)} placeholder="Neue Hauptkategorie..."
           onKeyDown={e => { if (e.key === "Enter") addMain(); }}
-          style={{ flex: 1, maxWidth: 322, border: `1px solid ${colors.border}`, borderRadius: 8, padding: "8px 12px", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
+          style={{ flex: 1, maxWidth: 322, border: `1px solid ${colors.border}`, borderRadius: 0, padding: "8px 12px", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
         <button onClick={addMain} disabled={!newName.trim()}
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "none", background: newName.trim() ? colors.dark : colors.cream, color: newName.trim() ? "#fff" : colors.muted, borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 700, cursor: newName.trim() ? "pointer" : "default", fontFamily: fonts.body }}>
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "none", background: newName.trim() ? colors.dark : colors.cream, color: newName.trim() ? "#fff" : colors.muted, borderRadius: 0, padding: "8px 16px", fontSize: 12, fontWeight: 700, cursor: newName.trim() ? "pointer" : "default", fontFamily: fonts.body }}>
           <Plus size={13} /> Anlegen
         </button>
         <div style={{ flex: 1 }} />
@@ -254,10 +254,10 @@ export function CategoriesTab({ admin }) {
             style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
           {query && <button onClick={() => setQuery("")} title="Suche leeren" style={{ border: "none", background: "none", cursor: "pointer", padding: 0, lineHeight: 0, color: colors.muted }}><X size={14} /></button>}
         </div>
-        <button onClick={expandAll} title="Alles aufklappen" style={{ display: "inline-flex", alignItems: "center", gap: 6, border: `1px solid ${colors.border}`, background: "#fff", color: colors.dark, borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body }}>
+        <button onClick={expandAll} title="Alles aufklappen" style={{ display: "inline-flex", alignItems: "center", gap: 6, border: `1px solid ${colors.border}`, background: "#fff", color: colors.dark, borderRadius: 0, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body }}>
           <Maximize2 size={13} /> Alles auf
         </button>
-        <button onClick={collapseAll} title="Alles zuklappen" style={{ display: "inline-flex", alignItems: "center", gap: 6, border: `1px solid ${colors.border}`, background: "#fff", color: colors.dark, borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body }}>
+        <button onClick={collapseAll} title="Alles zuklappen" style={{ display: "inline-flex", alignItems: "center", gap: 6, border: `1px solid ${colors.border}`, background: "#fff", color: colors.dark, borderRadius: 0, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body }}>
           <Minimize2 size={13} /> Alles zu
         </button>
       </div>

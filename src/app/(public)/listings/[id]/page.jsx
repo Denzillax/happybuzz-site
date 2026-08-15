@@ -52,11 +52,11 @@ export default function EditListingPage() {
   }
 
   if (loading) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>Lade…</div>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>Lade…</div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FBF8F2", minHeight: "100vh" }}>
       <ListingForm categories={categories} onSave={handleSave} onCancel={() => router.push("/listings")} isEdit={true} initialData={listing} />
     </div>
   );

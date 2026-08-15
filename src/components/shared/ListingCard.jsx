@@ -101,7 +101,7 @@ export function ListingCard(props) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          background: colors.surface, borderRadius: 12,
+          background: colors.surface, borderRadius: 0,
           border: hasSpotlight ? `1.5px solid ${HONEY}` : `1px solid ${INK}`,
           overflow: "hidden",
           transition: "transform .2s ease, box-shadow .2s ease",
@@ -122,52 +122,52 @@ export function ListingCard(props) {
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>
             {hasFeatured && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#E8A820", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} fill="#fff" /> Featured
               </span>
             )}
             {hasSpotlight && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Star size={9} /> Gesponsert
               </span>
             )}
             {isNew && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: colors.yellow, color: colors.dark, textTransform: "uppercase", letterSpacing: ".04em" }}>Neu</span>
             )}
             {isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#FF6B35", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 2 }}>
                 <Flame size={9} /> Beliebt
               </span>
             )}
             {endingSoon && !isPopular && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#c62828", color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>Endet bald</span>
             )}
           </div>
 
           {/* Top-right: colored type badge */}
           <div style={{ position: "absolute", top: 8, right: 8 }}>
             {isAuction && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#94B9C9", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gavel size={10} /> Auktion
               </span>
             )}
             {isRent && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#8B6DB0", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Home size={10} /> Miete
               </span>
             )}
             {isFree && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: colors.nature, color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Gift size={10} /> Gratis
               </span>
             )}
             {isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: "#E67E22", color: "#fff", display: "flex", alignItems: "center", gap: 3 }}>
                 <Wrench size={10} /> Service
               </span>
             )}
             {!isAuction && !isRent && !isFree && !isService && (
-              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 3, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
+              <span style={{ fontSize: 9, fontWeight: 800, padding: "3px 8px", borderRadius: 0, background: colors.yellow, color: colors.dark, display: "flex", alignItems: "center", gap: 3 }}>
                 <ShoppingBag size={10} /> Festpreis
               </span>
             )}
@@ -189,7 +189,7 @@ export function ListingCard(props) {
             {listing.condition && (
               <span style={{
                 fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase",
-                color: INK, border: `1px solid ${INK}`, borderRadius: 3, padding: "2px 6px",
+                color: INK, border: `1px solid ${INK}`, borderRadius: 0, padding: "2px 6px",
                 whiteSpace: "nowrap", flexShrink: 0,
               }}>
                 {conditionLabel(listing.condition)}

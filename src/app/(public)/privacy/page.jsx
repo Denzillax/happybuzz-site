@@ -30,7 +30,7 @@ export default function PrivacyPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 12, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
+        <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
           <h2 style={S.h2}>1. Verantwortliche Stelle</h2>
           <p style={S.p}>Verantwortlich für die Datenbearbeitung ist: MOQRO by Denis Mihaljevic (Einzelfirma), Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Kontakt: datenschutz@beedaro.ch</p>
           <p style={S.p}>BEEDARO ist eine Marke von MOQRO. Nennungen von BEEDARO in dieser Erklärung beziehen sich auf MOQRO als verantwortliche Stelle.</p>

@@ -132,7 +132,7 @@ export default function NotificationBell() {
         {unread > 0 && (
           <span style={{
             position: "absolute", top: 2, right: 2,
-            minWidth: 16, height: 16, borderRadius: 8,
+            minWidth: 16, height: 16, borderRadius: 0,
             background: "#c62828", color: "#fff",
             fontSize: 10, fontWeight: 800,
             display: "flex", alignItems: "center", justifyContent: "center",
@@ -149,7 +149,7 @@ export default function NotificationBell() {
         <div style={{
           position: "absolute", top: "calc(100% + 8px)", right: 0,
           width: 380, maxHeight: 480, background: "#fff",
-          borderRadius: 12, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
+          borderRadius: 0, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
           border: `1px solid ${colors.border}`,
           overflow: "hidden", zIndex: 1000,
           animation: "fadeIn .15s ease",

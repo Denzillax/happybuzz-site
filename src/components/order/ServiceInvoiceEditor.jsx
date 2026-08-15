@@ -80,7 +80,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
   }
 
   const inputStyle = {
-    padding: "9px 12px", border: `1px solid ${K.ink}`, borderRadius: 8,
+    padding: "9px 12px", border: `1px solid ${K.ink}`, borderRadius: 0,
     fontSize: 13, fontFamily: fonts.body, color: colors.dark, outline: "none",
     background: "#fff", transition: "border-color .15s",
   };
@@ -102,12 +102,12 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
         return (
           <div key={item.id} style={{
             display: "flex", gap: 10, alignItems: "flex-start",
-            padding: "12px 14px", background: "#fff", borderRadius: 12,
+            padding: "12px 14px", background: "#fff", borderRadius: 0,
             border: `1px solid ${K.ink}`, marginBottom: 8,
           }}>
             {/* Icon */}
             <div style={{
-              width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+              width: 34, height: 34, borderRadius: 0, flexShrink: 0,
               background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center",
               marginTop: 2,
             }}>
@@ -180,7 +180,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       <div style={{ position: "relative", marginBottom: 20 }}>
         <button onClick={() => setShowTemplates(!showTemplates)} style={{
           display: "flex", alignItems: "center", gap: 6, width: "100%",
-          padding: "11px 14px", borderRadius: 10,
+          padding: "11px 14px", borderRadius: 0,
           border: `1.5px dashed ${colors.border}`, background: "transparent",
           color: colors.muted, fontSize: 13, fontWeight: 600, fontFamily: fonts.body,
           cursor: "pointer", transition: "all .15s",
@@ -195,7 +195,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
         {showTemplates && (
           <div style={{
             position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 50,
-            background: "#fff", borderRadius: 12,
+            background: "#fff", borderRadius: 0,
             boxShadow: "0 12px 40px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04)",
             padding: 6, overflow: "hidden",
           }}>
@@ -205,13 +205,13 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                 <button key={t.key} onClick={() => addItem(t)} style={{
                   display: "flex", alignItems: "center", gap: 10, width: "100%",
                   padding: "10px 12px", border: "none", background: "transparent",
-                  cursor: "pointer", borderRadius: 8, transition: "background .1s",
+                  cursor: "pointer", borderRadius: 0, transition: "background .1s",
                   fontFamily: fonts.body, fontSize: 13, color: colors.dark, textAlign: "left",
                 }}
                   onMouseEnter={e => e.currentTarget.style.background = "#f8f6f3"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
-                  <div style={{ width: 28, height: 28, borderRadius: 6, background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 0, background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <Icon size={14} color={colors.muted} />
                   </div>
                   <div>
@@ -228,7 +228,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Totals */}
       {items.length > 0 && (
         <div style={{
-          background: "#fff", borderRadius: 12, border: `1px solid ${K.ink}`,
+          background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`,
           padding: "16px 18px", marginBottom: 16,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
@@ -255,7 +255,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
 
       {/* Submit */}
       <button onClick={handleSubmit} disabled={items.length === 0 || saving || subtotal <= 0} style={{
-        width: "100%", padding: "13px 20px", borderRadius: 10, border: "none",
+        width: "100%", padding: "13px 20px", borderRadius: 0, border: "none",
         background: items.length > 0 && subtotal > 0 ? K.petrol : "#ddd",
         color: items.length > 0 && subtotal > 0 ? "#fff" : colors.muted,
         fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: items.length > 0 ? "pointer" : "default",
