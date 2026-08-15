@@ -137,6 +137,23 @@ describe("Bookmarklet (Import-Helfer)", () => {
     expect(href.includes("\n")).toBe(false);
   });
 
+  // Dieser Test haette den Bug gefunden, der den Helfer lahmgelegt hat: ein
+  // //-Kommentar im Code hat nach dem Entfernen der Zeilenumbrueche den Rest
+  // der Zeile verschluckt, window.open inklusive. Ergebnis: Klick tut nichts.
+  it("der einzeilige Code ist gueltiges JavaScript und ruft window.open auf", () => {
+    const code = bookmarkletHref("https://beedaro.ch").replace(/^javascript:/, "");
+    expect(() => new Function(code)).not.toThrow();   // parst? (wird nicht ausgefuehrt)
+    expect(code).toContain("window.open");
+    expect(code.trimEnd().endsWith("})();")).toBe(true);
+  });
+
+  it("kein Kommentar ueberlebt das Zusammenfalten auf eine Zeile", () => {
+    const code = bookmarkletHref("https://beedaro.ch").replace(/^javascript:/, "");
+    // erlaubt sind nur die // in URLs (https://), niemals ein Kommentar
+    const ohneUrls = code.replace(/https?:\/\//g, "");
+    expect(ohneUrls.includes("//")).toBe(false);
+  });
+
   it("decodeImportHash ist das exakte Gegenstück zur Bookmarklet-Kodierung", () => {
     const html = "<html><body><h1>Test Ünïcode äöü</h1></body></html>";
     // dieselbe Kette wie im Bookmarklet: encodeURIComponent → unescape → btoa → encodeURIComponent

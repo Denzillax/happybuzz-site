@@ -54,8 +54,17 @@ if(!w)location.href=u;
 
 // href für den <a>-Button auf /import-helfer. Origin dynamisch, damit es in
 // Dev (localhost) und Produktion gleichermassen stimmt.
+//
+// ACHTUNG, hier lag schon ein Bug: das Bookmarklet muss EINZEILIG sein, also
+// fallen alle Zeilenumbrüche weg. Ein //-Kommentar im Code verschluckt dann
+// den kompletten Rest der Zeile — inklusive window.open und der schliessenden
+// Klammer, der Klick tut dann gar nichts. Darum werden Kommentarzeilen
+// entfernt, BEVOR die Umbrüche fallen.
 export function bookmarkletHref(origin) {
-  const code = CODE.replace("%%ORIGIN%%", origin).replace(/\n/g, "");
+  const code = CODE
+    .replace(/^\s*\/\/.*$/gm, "")   // Kommentarzeilen raus (nur am Zeilenanfang, trifft kein https://)
+    .replace(/\n/g, "")
+    .replace("%%ORIGIN%%", origin);
   return "javascript:" + code;
 }
 
