@@ -93,6 +93,8 @@ const TESTS = [
       { id: "lc_draft", label: "Als Entwurf speichern" },
       { id: "lc_type_first", label: "Inserattyp steht zuoberst, Preis-Felder passen sich an" },
       { id: "lc_expiry", label: "Laufzeit-Hinweis: 60 Tage (Auktion = Auktionsdauer)" },
+      { id: "lc_expired_badge", label: "Meine Inserate: abgelaufene Inserate zeigen 'Abgelaufen' (orange) statt 'Aktiv', eigener Filter-Chip 'Abgelaufen (n)', Aktiv-Zähler zählt sie nicht mehr mit" },
+      { id: "lc_expired_renew", label: "Verlängern-Button bei abgelaufenen Inseraten (nicht bei Auktionen): setzt 60 Tage neue Laufzeit, Inserat erscheint wieder in der Suche" },
       { id: "lc_sticky_bar", label: "Aktions-Bar bleibt beim Scrollen unten sichtbar" },
       { id: "lc_duplicate", label: "Ähnliches erstellen / Letztes als Vorlage: Felder übernommen (ausser Titel + Fotos)" },
     ],

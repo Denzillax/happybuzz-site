@@ -2,10 +2,10 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { getUserListings, deleteListing, getListingAnalytics } from "@/lib/listings";
+import { getUserListings, deleteListing, getListingAnalytics, renewListing } from "@/lib/listings";
 import { redeemNektar, NEKTAR_CATALOG } from "@/lib/gamification";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket, RefreshCw } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
@@ -15,6 +15,7 @@ const MONO = "'Space Mono', monospace";
 
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
+  expired:  { label: "Abgelaufen", color: "#E65100", icon: Clock },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
   pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
   paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
@@ -98,11 +99,33 @@ export default function ListingsPage() {
     load();
   }, []);
 
+  const renew = async (l) => {
+    try {
+      // renewListing (lib) setzt expires_at auf +60 Tage und liefert das neue Datum
+      const expires = await renewListing(l.id);
+      setListings(prev => prev.map(x => x.id === l.id ? { ...x, expires_at: expires, status: "active" } : x));
+      toast.success("Inserat verlängert: 60 Tage neue Laufzeit.");
+    } catch (e) {
+      console.error(e);
+      toast.error(e?.message || "Verlängern fehlgeschlagen.");
+    }
+  };
+
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" });
 
+  // Abgelaufen: Status steht zwar auf "active", aber die Laufzeit ist vorbei.
+  // Die Suche filtert solche Inserate aus, der Verkäufer sah aber weiter
+  // "Aktiv" und konnte sich nicht erklären, warum ihn niemand findet.
+  const isExpired = (l) => l.status === "active" && l.expires_at && new Date(l.expires_at) < new Date();
+
   // Filter
-  let filtered = listings.filter((l) => filter === "all" || l.status === filter);
+  let filtered = listings.filter((l) => {
+    if (filter === "all") return true;
+    if (filter === "expired") return isExpired(l);
+    if (filter === "active") return l.status === "active" && !isExpired(l);
+    return l.status === filter;
+  });
   if (typeFilter !== "all") filtered = filtered.filter(l => l.listing_type === typeFilter);
 
   // Sort — status priority first (active/paused on top, sold/archived bottom)
@@ -125,7 +148,8 @@ export default function ListingsPage() {
 
   const counts = {
     all: listings.length,
-    active: listings.filter(l => l.status === "active").length,
+    active: listings.filter(l => l.status === "active" && !isExpired(l)).length,
+    expired: listings.filter(isExpired).length,
     sold: listings.filter(l => l.status === "sold").length,
     paused: listings.filter(l => l.status === "paused").length,
     draft: listings.filter(l => l.status === "draft").length,
@@ -134,6 +158,7 @@ export default function ListingsPage() {
   const FILTERS = [
     { key: "all", label: `Alle (${counts.all})` },
     { key: "active", label: `Aktiv (${counts.active})` },
+    ...(counts.expired > 0 ? [{ key: "expired", label: `Abgelaufen (${counts.expired})` }] : []),
     { key: "sold", label: `Verkauft (${counts.sold})` },
     ...(counts.paused > 0 ? [{ key: "paused", label: `Pausiert (${counts.paused})` }] : []),
     ...(counts.draft > 0 ? [{ key: "draft", label: `Entwürfe (${counts.draft})` }] : []),
@@ -289,7 +314,7 @@ export default function ListingsPage() {
               </thead>
               <tbody>
                 {paginated.map(l => {
-                  const st = STATUS_CONFIG[l.status] || STATUS_CONFIG.active;
+                  const st = isExpired(l) ? STATUS_CONFIG.expired : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active);
                   const StIcon = st.icon;
                   const isSelected = selected.has(l.id);
                   const hasBids = bidCounts[l.id]?.count > 0;
@@ -429,6 +454,19 @@ export default function ListingsPage() {
                             </div>
                           )}
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
+                          {/* Verlängern: nur bei abgelaufener Laufzeit. Auktionen sind
+                              ausgenommen, deren Ende ist Teil des Gebotsablaufs. */}
+                          {isExpired(l) && l.listing_type !== "auction" && (
+                            <button onClick={() => renew(l)} title="Verlängern (60 Tage neue Laufzeit)" style={{
+                              height: 32, padding: "0 10px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5,
+                              border: "none", cursor: "pointer", fontFamily: fonts.body, fontSize: 11, fontWeight: 700,
+                              color: "#fff", background: K.petrol, transition: "all .15s",
+                            }}
+                              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+                              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                              <RefreshCw size={13} /> Verlängern
+                            </button>
+                          )}
                           {(l.status === "active" || l.status === "paused") && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
                               width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -484,7 +522,7 @@ export default function ListingsPage() {
             {/* ── MOBILE: Karten-Liste ── */}
             <div className="ml-cards">
               {paginated.map(l => {
-                const st = STATUS_CONFIG[l.status] || STATUS_CONFIG.active;
+                const st = isExpired(l) ? STATUS_CONFIG.expired : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active);
                 const StIcon = st.icon;
                 const hasBids = bidCounts[l.id]?.count > 0;
                 const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
@@ -519,6 +557,9 @@ export default function ListingsPage() {
                       <Link href={`/listings/${l.id}`} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> Bearbeiten</Link>
                       <Link href={`/listings/new?duplicate=${l.id}`} style={{ ...actBtn, color: colors.teal, borderColor: `${colors.teal}40` }}><Copy size={14} /> Ähnliches</Link>
                       <button onClick={() => openStats(l)} style={actBtn}><BarChart3 size={14} /> Statistik</button>
+                      {isExpired(l) && l.listing_type !== "auction" && (
+                        <button onClick={() => renew(l)} style={{ ...actBtn, color: "#fff", background: K.petrol, borderColor: K.petrol }}><RefreshCw size={14} /> Verlängern</button>
+                      )}
                       {l.status === "active" && (
                         <div style={{ position: "relative" }}>
                           <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#C8860A", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
