@@ -6,6 +6,7 @@ import { saveListingAttributes } from "@/lib/api/attributes";
 import { useState, useEffect, Suspense } from "react";
 import { Copy } from "lucide-react";
 import ListingForm from "@/components/listings/ListingForm";
+import { stashImportHash } from "@/lib/importBookmarklet";
 
 // Übernimmt alle wiederverwendbaren Felder, aber NICHT Titel, Fotos, Id/Status.
 function stripForTemplate(listing) {
@@ -36,7 +37,13 @@ function NewListingPageInner() {
   useEffect(() => {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { router.push("/login?redirect=/listings/new"); return; }
+      if (!session?.user) {
+        // Import-Helfer im ausgeloggten Zustand geklickt: Markup sichern,
+        // sonst ist es nach dem Anmelden verloren (Hash überlebt den Redirect nicht).
+        stashImportHash();
+        router.push("/login?redirect=/listings/new");
+        return;
+      }
       setUser(session.user);
       setCategories(await getCategories());
       if (dupId) {

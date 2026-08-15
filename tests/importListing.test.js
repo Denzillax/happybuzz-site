@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
-  detectSource, parseListingHtml, parsePrice, isAllowedImageHost,
+  parseListingHtml, parsePrice, isAllowedImageHost, IMPORT_SOURCES,
 } from "@/lib/importListing";
+import { bookmarkletHref, decodeImportHash, stashImportHash, takeImportHtml } from "@/lib/importBookmarklet";
 
 // ─── Fixtures (nachgebaut nach echten Seitenstrukturen) ────────
 const TUTTI_HTML = `
@@ -48,18 +49,10 @@ const TUTTI_SSR_HTML = `
 <script>window.__STATE__={"ad":{"images":[{"rendition":{"src":"https://c.tutti.ch/big/1111111111.jpg"}},{"rendition":{"src":"https://c.tutti.ch/big/2222222222.jpg"}},{"rendition":{"src":"https://c.tutti.ch/big/3333333333.jpg"}}],"recommended":true}}</script>
 </body></html>`;
 
-describe("detectSource (Plattform-Erkennung + Whitelist)", () => {
-  it("erkennt die vier Plattformen", () => {
-    expect(detectSource("https://www.tutti.ch/de/vi/x/123").key).toBe("tutti");
-    expect(detectSource("https://www.ricardo.ch/de/a/artikel-123/").key).toBe("ricardo");
-    expect(detectSource("https://www.ebay.ch/itm/12345").key).toBe("ebay");
-    expect(detectSource("https://www.facebook.com/marketplace/item/1/").key).toBe("facebook");
-  });
-  it("lehnt fremde und kaputte URLs ab (SSRF-Schutz)", () => {
-    expect(detectSource("https://evil.example.com/x")).toBeNull();
-    expect(detectSource("https://tutti.ch.evil.com/x")).toBeNull();
-    expect(detectSource("http://169.254.169.254/latest/meta-data")).toBeNull();
-    expect(detectSource("kein-link")).toBeNull();
+describe("IMPORT_SOURCES (Anzeige auf /import-helfer)", () => {
+  it("nennt die vier unterstuetzten Plattformen", () => {
+    expect(IMPORT_SOURCES.map((s) => s.key).sort()).toEqual(["ebay", "facebook", "ricardo", "tutti"]);
+    expect(IMPORT_SOURCES.every((s) => !!s.label)).toBe(true);
   });
 });
 
@@ -136,6 +129,65 @@ describe("parsePrice (Schweizer Formate)", () => {
     expect(parsePrice("gratis")).toBeNull();
     expect(parsePrice(null)).toBeNull();
     expect(parsePrice(-5)).toBeNull();
+  });
+});
+
+describe("Bookmarklet (Import-Helfer)", () => {
+  it("bookmarkletHref ist ein einzeiliges javascript:-URI mit dem Origin", () => {
+    const href = bookmarkletHref("https://beedaro.ch");
+    expect(href.startsWith("javascript:")).toBe(true);
+    expect(href).toContain("https://beedaro.ch/listings/new#import=");
+    expect(href.includes("\n")).toBe(false);
+  });
+
+  it("decodeImportHash ist das exakte Gegenstück zur Bookmarklet-Kodierung", () => {
+    const html = "<html><body><h1>Test Ünïcode äöü</h1></body></html>";
+    // dieselbe Kette wie im Bookmarklet: encodeURIComponent → unescape → btoa → encodeURIComponent
+    const b = Buffer.from(unescape(encodeURIComponent(html)), "binary").toString("base64");
+    expect(decodeImportHash(`#import=${encodeURIComponent(b)}`)).toBe(html);
+  });
+
+  it("decodeImportHash liefert null bei Muell", () => {
+    expect(decodeImportHash("#import=%%%kaputt")).toBeNull();
+    expect(decodeImportHash("#anderes=x")).toBeNull();
+    expect(decodeImportHash("")).toBeNull();
+  });
+
+  it("rettet den Import ueber den Login-Umweg (Hash -> sessionStorage -> Formular)", () => {
+    const html = "<html><body><h1>Gerettet</h1></body></html>";
+    const b = Buffer.from(unescape(encodeURIComponent(html)), "binary").toString("base64");
+
+    // Ausgeloggt: /listings/new#import=… sichert vor dem Redirect
+    const store = {};
+    const win = {
+      location: { hash: `#import=${encodeURIComponent(b)}`, pathname: "/listings/new", search: "" },
+      history: { replaceState: () => {} },
+    };
+    vi.stubGlobal("window", win);
+    vi.stubGlobal("sessionStorage", {
+      setItem: (k, v) => { store[k] = v; },
+      getItem: (k) => store[k] ?? null,
+      removeItem: (k) => { delete store[k]; },
+    });
+    expect(stashImportHash()).toBe(true);
+
+    // Nach dem Login: kein Hash mehr, Markup kommt aus dem Zwischenspeicher
+    win.location.hash = "";
+    expect(takeImportHtml()).toBe(html);
+    // und nur einmal — ein Reload importiert nicht erneut
+    expect(takeImportHtml()).toBeNull();
+
+    vi.unstubAllGlobals();
+  });
+
+  it("Hash-Import ohne bekannte Quelle filtert Tutti-Thumbnails trotzdem", () => {
+    // Quelle null (Bookmarklet weiss nicht, woher) — /big/-Regel muss greifen
+    const html = `<html><body>
+      <img src="https://c.tutti.ch/big/1111111111.jpg" />
+      <img src="https://c.tutti.ch/thumbs/1111111111.jpg" />
+    </body></html>`;
+    const r = parseListingHtml(html, null);
+    expect(r.images).toEqual(["https://c.tutti.ch/big/1111111111.jpg"]);
   });
 });
 

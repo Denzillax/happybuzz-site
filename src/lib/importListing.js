@@ -1,24 +1,24 @@
 // ═══════════════════════════════════════════════════════════════
 // Inserat-Import von Fremdplattformen (Ricardo, Tutti, eBay, FB Marketplace).
-// Der Verkäufer fügt den Link seines EIGENEN Inserats ein (oder den kopierten
-// Seiteninhalt, wenn die Plattform Server-Abrufe blockt) und bekommt Titel,
-// Beschreibung, Preis und Bilder vorausgefüllt.
+// Gespeist wird der Parser vom Import-Helfer (Bookmarklet): der läuft im
+// Browser des Verkäufers auf der Fremdseite, wo dieser eingeloggt ist, und
+// übergibt das ausgelesene Markup an /listings/new#import=…
 //
-// Bewusst Regex-basiert statt DOM-Parser: dieselben Funktionen laufen im
-// Route-Handler (Node) UND im Browser (Paste-Fallback), ohne Abhängigkeiten.
+// Bewusst Regex-basiert statt DOM-Parser: keine Abhängigkeiten, und die
+// Funktionen laufen unverändert im Browser wie in Node (Tests).
 // ═══════════════════════════════════════════════════════════════
 
-// Plattformen, von denen importiert werden darf. Gleichzeitig die
-// SSRF-Whitelist der API-Route: alles andere wird abgelehnt, sonst wäre der
-// Endpunkt ein offener Proxy ins Internet (oder Schlimmeres: interne Hosts).
+// Plattformen, für die der Import gedacht ist (Anzeige auf /import-helfer).
 export const IMPORT_SOURCES = [
-  { key: "tutti",   label: "Tutti",          hosts: ["www.tutti.ch", "tutti.ch"] },
-  { key: "ricardo", label: "Ricardo",        hosts: ["www.ricardo.ch", "ricardo.ch"] },
-  { key: "ebay",    label: "eBay",           hosts: ["www.ebay.ch", "ebay.ch", "www.ebay.com", "ebay.com", "www.ebay.de", "ebay.de"] },
-  { key: "facebook", label: "FB Marketplace", hosts: ["www.facebook.com", "facebook.com", "m.facebook.com"] },
+  { key: "tutti",   label: "Tutti" },
+  { key: "ricardo", label: "Ricardo" },
+  { key: "ebay",    label: "eBay" },
+  { key: "facebook", label: "Facebook Marketplace" },
 ];
 
-// Bild-CDNs der Plattformen — Whitelist für den Bild-Proxy.
+// Bild-CDNs der Plattformen — SSRF-Whitelist für den Bild-Proxy.
+// Ohne diese Liste wäre /api/import-image ein offener Proxy ins Internet
+// (oder Schlimmeres: auf interne Hosts).
 export const IMPORT_IMAGE_HOSTS = [
   "c.tutti.ch",
   "img.ricardostatic.ch", "www.ricardostatic.ch", "ricardostatic.ch",
@@ -29,15 +29,6 @@ export function isAllowedImageHost(host) {
   if (!host) return false;
   if (IMPORT_IMAGE_HOSTS.includes(host)) return true;
   return /^scontent[\w.-]*\.fbcdn\.net$/.test(host);
-}
-
-export function detectSource(url) {
-  try {
-    const host = new URL(url).hostname.toLowerCase();
-    return IMPORT_SOURCES.find((s) => s.hosts.includes(host)) || null;
-  } catch {
-    return null;
-  }
 }
 
 // ─── Hilfen ──────────────────────────────────────────────────
@@ -114,13 +105,18 @@ function cutAtRecommendations(html) {
   return m > 0 ? html.slice(0, m) : html;
 }
 
-// Tutti (Server-HTML): die eigene Galerie liegt als "images"-Array im
-// eingebetteten Seiten-JSON — die einzige Stelle, die NUR die Bilder dieses
-// Inserats enthält. Wenn vorhanden, ist sie die alleinige Quelle.
-function fromTuttiState(html) {
+// Die eigene Galerie liegt bei Tutti als "images"-Array im eingebetteten
+// Seiten-JSON — die einzige Stelle, die NUR die Bilder dieses Inserats
+// enthält (alles andere ist mit Empfehlungs-Thumbnails vermischt).
+// Bewusst NICHT an sourceKey gebunden: der Import-Helfer kennt die Quelle
+// nicht, das Muster ist aber eindeutig genug, um immer zu greifen.
+function fromStateImages(html) {
   const m = html.match(/"images"\s*:\s*\[([^\]]*)\]/);
   if (!m) return [];
-  return m[1].match(/https?:\/\/c\.tutti\.ch\/[^"\\]+/g) || [];
+  const urls = m[1].match(/https?:\/\/[^"'\\\s]+\.(?:jpe?g|png|webp)(?:\?[^"'\\\s]*)?/g) || [];
+  return urls.filter((u) => {
+    try { return isAllowedImageHost(new URL(u).hostname); } catch { return false; }
+  });
 }
 
 function collectImages(fullHtml, sourceKey) {
@@ -132,9 +128,6 @@ function collectImages(fullHtml, sourceKey) {
     try {
       const u = new URL(m[1]);
       if (!isAllowedImageHost(u.hostname)) continue;
-      // Tutti: Thumbnails und Grossbilder teilen die ID — nur /big/ nehmen,
-      // Thumbnail-Varianten (z.B. /thumbs/) desselben Bilds überspringen.
-      if (sourceKey === "tutti" && !/\/big\//.test(u.pathname)) continue;
       // eBay: s-l64/s-l140-Thumbnails auf die Grossvariante heben.
       if (sourceKey === "ebay") u.pathname = u.pathname.replace(/s-l\d+/, "s-l1600");
       urls.add(u.toString());
@@ -171,9 +164,9 @@ export function parseListingHtml(html, sourceKey = null) {
         || (html.match(/CHF\s*([\d'.,’]+)/i) || [])[1]);
 
   const ogImage = metaContent(html, "og:image");
-  const tuttiOwn = sourceKey === "tutti" ? fromTuttiState(html) : [];
-  const candidates = tuttiOwn.length
-    ? tuttiOwn   // exklusiv: alles andere ist bei Tutti durch Fremd-Preloads vergiftet
+  const stateImages = fromStateImages(html);
+  const candidates = stateImages.length
+    ? stateImages   // exklusiv: alles andere ist mit Empfehlungsbildern vermischt
     : [
         ...(ld.images || []),
         ...(ogImage ? [ogImage] : []),
@@ -189,7 +182,16 @@ export function parseListingHtml(html, sourceKey = null) {
       return s;
     })
   )].filter((u) => {
-    try { return isAllowedImageHost(new URL(u).hostname); } catch { return false; }
+    try {
+      const p = new URL(u);
+      if (!isAllowedImageHost(p.hostname)) return false;
+      // Tutti-CDN: nur /big/-Varianten — Thumbnails desselben Bilds liegen
+      // unter anderen Pfaden und wären sonst Duplikate. Hier statt in
+      // collectImages, damit die Regel auch beim Hash-Import (Quelle
+      // unbekannt, Bookmarklet) greift.
+      if (p.hostname === "c.tutti.ch" && !/\/big\//.test(p.pathname)) return false;
+      return true;
+    } catch { return false; }
   }).slice(0, 10);   // Formular-Limit
 
   return {
