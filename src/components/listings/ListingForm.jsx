@@ -16,6 +16,7 @@ import {
 } from "@/lib/constants";
 import { calcFee } from "@/lib/fees";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
+import ImportBox from "@/components/listings/ImportBox";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { checkProfileComplete } from "@/lib/listings";
 import { getCategoryAttributes, saveListingAttributes, getListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
@@ -672,6 +673,16 @@ export default function ListingForm({
           </p>
         </div>
       </div>
+
+      {/* ── IMPORT VON FREMDPLATTFORMEN (nur beim Erstellen) ── */}
+      {!isEdit && (
+        <ImportBox onImport={({ title, description, price, files }) => {
+          if (title) set("title", title);
+          if (description) set("description", description);
+          if (price != null && price > 0) set("price", String(price));
+          if (files?.length) addFiles(files);
+        }} />
+      )}
 
       {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}
       <div style={sectionBase} className="lf-section">
