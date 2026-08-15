@@ -173,8 +173,10 @@ export function Header() {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }
           /* 375px-Rechnung: Logo 150 + Abstand 16 + Icons 188 = 354, Platz war
-             aber nur 311 (2x32 Padding) -> die ganze Seite scrollte horizontal.
-             Weniger Padding + kleineres Logo statt Overflow. */
+             aber nur 311 (2x32 Padding), darum scrollte die ganze Seite
+             horizontal. Weniger Padding + kleineres Logo statt Overflow.
+             Achtung: kein Groesser-Zeichen in diesem Kommentar, der Server
+             escaped es im style-Tag und die Hydration bricht. */
           .hdr-wrap { padding-left: 14px !important; padding-right: 14px !important; }
           .hdr-logo img { width: 118px !important; }
         }
