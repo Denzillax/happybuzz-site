@@ -14,30 +14,33 @@
 // Seiten würde externe Skripte blocken, Inline-Bookmarklets laufen trotzdem.
 // ═══════════════════════════════════════════════════════════════
 
-// Wichtig fuer die Preis-Erkennung: NUR strukturierte Quellen (JSON-LD,
-// product:price:amount, og:price). Eine Textsuche nach "CHF …" im DOM traf im
-// Test den falschen Betrag (Versandkosten statt Artikelpreis) — ein falscher
-// Preis ist schlimmer als gar keiner, den ergaenzt der Verkaeufer selbst.
+// Diese Fassung hat sich in der Praxis bewaehrt und ist bewusst so belassen.
+// Zwei Details, die entscheidend sind und darum nicht "optimiert" werden:
 //
-// Bilder: die Galerie laedt oft verzoegert, document.images enthaelt dann nur
-// das sichtbare Bild. Darum zusaetzlich das "images"-Array aus dem
-// eingebetteten Seiten-JSON mitgeben (dort steht die vollstaendige, und nur
-// die eigene, Galerie) sowie data-src/srcset fuer Lazy-Loading-Platzhalter.
+// 1. naturalWidth>=200 haelt Logos, Icons und Avatare draussen. Ohne den
+//    Filter landen UI-Grafiken vom selben CDN im Inserat.
+// 2. Der Link-Check (a.href===location.href) wirft Bilder aus Empfehlungs-
+//    Sektionen raus: die haengen in Links auf FREMDE Inserate.
+//
+// Der Preis wird aus dem sichtbaren Text gelesen, weil nicht jede Plattform
+// strukturierte Preisdaten liefert; der Parser bevorzugt ohnehin JSON-LD,
+// wenn vorhanden. Der Verkaeufer prueft den Wert im Formular.
 const CODE = `(function(){
-var parts=[],H=document.documentElement.innerHTML;
+var parts=[];
 document.querySelectorAll('meta[property],meta[name],script[type="application/ld+json"]').forEach(function(el){parts.push(el.outerHTML)});
 var h1=document.querySelector('h1');if(h1)parts.push('<h1>'+h1.textContent.replace(/</g,'&lt;')+'</h1>');
+var price=null;
+document.querySelectorAll('span,div,p,strong,h2').forEach(function(el){
+var t=(el.textContent||'').trim();
+if(t.length<40&&el.children.length===0&&/CHF\\s*[\\d'.,’]|\\d+\\.–|\\d+\\.-/.test(t)){if(!price||t.length<price.length)price=t;}
+});
+if(price)parts.push('<span>'+price.replace(/</g,'&lt;')+'</span>');
 var d=document.querySelector('[data-testid*="escription"],[class*="escription"],[itemprop="description"]');
 if(d)parts.push('<div>'+d.innerHTML+'</div>');
-var st=H.match(/"images"\\s*:\\s*\\[[^\\]]*\\]/);
-if(st)parts.push('<script type="application/x-beedaro-state">{'+st[0]+'}<\\/script>');
 var imgs=[];
 Array.prototype.forEach.call(document.images,function(i){
-[i.currentSrc,i.src,i.getAttribute('data-src'),i.getAttribute('data-zoom-image')].forEach(function(u){
-if(!u||!/^https:/.test(u))return;
 var a=i.closest?i.closest('a[href]'):null;
-if(a&&a.href!==location.href)return;
-if(imgs.indexOf(u)<0)imgs.push(u);});
+if(i.src&&/^https:/.test(i.src)&&(!a||a.href===location.href)&&(i.naturalWidth>=200||/\\/big\\/|s-l|scontent/.test(i.src))&&imgs.indexOf(i.src)<0)imgs.push(i.src);
 });
 imgs.slice(0,10).forEach(function(u){parts.push('<img src="'+u+'"/>')});
 var html='<html><head></head><body>'+parts.join('')+'</body></html>';

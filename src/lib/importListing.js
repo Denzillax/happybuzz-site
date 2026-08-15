@@ -95,28 +95,11 @@ function fromJsonLd(html) {
 
 // ─── Bild-URLs aus dem HTML ziehen ───────────────────────────
 // Empfehlungs-Sektionen ("Ähnliche Inserate") zeigen Bilder FREMDER Artikel vom
-// selben CDN. Ohne den Schnitt hier importiert man fremde Fotos ins eigene
-// Inserat — auf der Tutti-Testseite waren 7 von 9 gesammelten Bildern fremd.
-// Der Schnitt hilft nur beim Paste-Fallback (kopiertes DOM in Leserichtung);
-// im Server-HTML stehen die fremden Thumbnails als <link rel="preload"> im
-// <head>, also VOR der Überschrift — dort greift stattdessen fromTuttiState.
+// selben CDN. Beim Import-Helfer greift zusätzlich schon im Bookmarklet ein
+// Filter (nur Bilder, die nicht in einem Link auf ein anderes Inserat liegen).
 function cutAtRecommendations(html) {
   const m = html.search(/(?:&Auml;|Ä|&#196;|&#xC4;)hnliche\s+(?:Inserate|Artikel|Angebote)|Das k(?:ö|&ouml;)nnte dich auch|similar\s+(?:items|listings)|Weitere\s+Inserate/i);
   return m > 0 ? html.slice(0, m) : html;
-}
-
-// Die eigene Galerie liegt bei Tutti als "images"-Array im eingebetteten
-// Seiten-JSON — die einzige Stelle, die NUR die Bilder dieses Inserats
-// enthält (alles andere ist mit Empfehlungs-Thumbnails vermischt).
-// Bewusst NICHT an sourceKey gebunden: der Import-Helfer kennt die Quelle
-// nicht, das Muster ist aber eindeutig genug, um immer zu greifen.
-function fromStateImages(html) {
-  const m = html.match(/"images"\s*:\s*\[([^\]]*)\]/);
-  if (!m) return [];
-  const urls = m[1].match(/https?:\/\/[^"'\\\s]+\.(?:jpe?g|png|webp)(?:\?[^"'\\\s]*)?/g) || [];
-  return urls.filter((u) => {
-    try { return isAllowedImageHost(new URL(u).hostname); } catch { return false; }
-  });
 }
 
 function collectImages(fullHtml, sourceKey) {
@@ -164,14 +147,11 @@ export function parseListingHtml(html, sourceKey = null) {
         || (html.match(/CHF\s*([\d'.,’]+)/i) || [])[1]);
 
   const ogImage = metaContent(html, "og:image");
-  const stateImages = fromStateImages(html);
-  const candidates = stateImages.length
-    ? stateImages   // exklusiv: alles andere ist mit Empfehlungsbildern vermischt
-    : [
-        ...(ld.images || []),
-        ...(ogImage ? [ogImage] : []),
-        ...collectImages(html, sourceKey),
-      ];
+  const candidates = [
+    ...(ld.images || []),
+    ...(ogImage ? [ogImage] : []),
+    ...collectImages(html, sourceKey),
+  ];
   const images = [...new Set(
     candidates.map((u) => {
       // Normalisierung zentral, damit auch JSON-LD/og-Bilder erfasst sind:

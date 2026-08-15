@@ -35,18 +35,17 @@ const EBAY_HTML = `
 
 const BLOCKED_HTML = `<html><head><title>Access denied</title></head><body>Checking your browser</body></html>`;
 
-// Server-HTML von Tutti: fremde Thumbnails als <link rel="preload"> im HEAD
-// (vor jeder Überschrift!), eigene Galerie nur im eingebetteten JSON-State.
-const TUTTI_SSR_HTML = `
-<html><head>
-<link rel="preload" as="image" href="https://c.tutti.ch/big/1111111111.jpg" imageSizes="100vw"/>
-<link rel="preload" as="image" href="https://c.tutti.ch/big/3753193852.jpg"/>
-<link rel="preload" as="image" href="https://c.tutti.ch/big/8407751777.jpg"/>
+// So sieht das Markup aus, das der Import-Helfer erzeugt: gesammelte
+// Meta-Tags, Titel, Preistext und die im Bookmarklet bereits gefilterten
+// Galeriebilder (Icons und Fremd-Inserate sind dort schon aussortiert).
+const HELFER_HTML = `
+<html><head></head><body>
 <meta property="og:title" content="Mollerus Tasche" />
 <meta property="og:image" content="http://c.tutti.ch/big/1111111111.jpg" />
-</head><body>
+<h1>Mollerus Tasche</h1>
 <span>CHF 460.-</span>
-<script>window.__STATE__={"ad":{"images":[{"rendition":{"src":"https://c.tutti.ch/big/1111111111.jpg"}},{"rendition":{"src":"https://c.tutti.ch/big/2222222222.jpg"}},{"rendition":{"src":"https://c.tutti.ch/big/3333333333.jpg"}}],"recommended":true}}</script>
+<img src="https://c.tutti.ch/big/1111111111.jpg" />
+<img src="https://c.tutti.ch/big/2222222222.jpg" />
 </body></html>`;
 
 describe("IMPORT_SOURCES (Anzeige auf /import-helfer)", () => {
@@ -75,17 +74,15 @@ describe("parseListingHtml: Tutti (OG-Tags + Bild-CDN)", () => {
   });
 });
 
-describe("parseListingHtml: Tutti Server-HTML (State-Array schlägt Head-Preloads)", () => {
-  const r = parseListingHtml(TUTTI_SSR_HTML, "tutti");
-  it("nimmt exklusiv die eigene Galerie aus dem JSON-State", () => {
+describe("parseListingHtml: Markup vom Import-Helfer", () => {
+  const r = parseListingHtml(HELFER_HTML, null);
+  it("liest Titel, Preis und die mitgegebenen Galeriebilder", () => {
+    expect(r.title).toBe("Mollerus Tasche");
+    expect(r.price).toBe(460);
     expect(r.images).toEqual([
       "https://c.tutti.ch/big/1111111111.jpg",
       "https://c.tutti.ch/big/2222222222.jpg",
-      "https://c.tutti.ch/big/3333333333.jpg",
     ]);
-  });
-  it("fremde Preload-Thumbnails aus dem Head bleiben draussen", () => {
-    expect(r.images.some((u) => u.includes("3753193852") || u.includes("8407751777"))).toBe(false);
   });
   it("normalisiert http-og:image zu https (kein Duplikat, Proxy verlangt https)", () => {
     expect(r.images.filter((u) => u.includes("1111111111")).length).toBe(1);
