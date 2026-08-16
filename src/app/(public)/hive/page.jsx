@@ -10,6 +10,7 @@ import {
   BEE_LEVELS, ACHIEVEMENTS, calculateLevel, levelProgress, xpToNext,
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
   getCommunityStats, getXPHistory, touchStreak,
+  ensureWeeklyChallenges, claimChallenge,
   NEKTAR_CATALOG, redeemNektar,
   convertBlueten, BLUETEN_PER_POLLEN,
 } from "@/lib/gamification";
@@ -123,6 +124,10 @@ export default function HivePage() {
       // Tages-Streak ticken (zählt den Besuch)
       await touchStreak(user.id);
 
+      // Wochen-Rotation: der erste Besucher der Woche legt die
+      // Wochen-Challenges aus den Vorlagen an (idempotent).
+      await ensureWeeklyChallenges();
+
       const [{ data: p }, ach, chs, lb, comm, hist] = await Promise.all([
         supabase.from("profiles").select("display_name, xp_total, nektar, blueten, bee_level, current_streak, longest_streak, bee_impact_total").eq("id", user.id).maybeSingle(),
         getUserAchievements(user.id),
@@ -133,7 +138,19 @@ export default function HivePage() {
       ]);
       setProfile(p);
       setAchievements(ach);
-      setChallenges(chs);
+      // Fertige Challenges automatisch einloesen; bei Erfolg sofort das
+      // "+X Pollen gutgeschrieben"-Haekchen zeigen und den Pollen-Stand mitziehen.
+      let bonus = 0;
+      const fresh = [];
+      for (const c of chs) {
+        if (c.done && !c.claimed) {
+          const res = await claimChallenge(c.id);
+          if (res.ok) { bonus += res.amount || 0; fresh.push({ ...c, claimed: true }); continue; }
+        }
+        fresh.push(c);
+      }
+      setChallenges(fresh);
+      if (bonus > 0 && p) setProfile({ ...p, xp_total: (p.xp_total || 0) + bonus });
       setLeaderboard(lb);
       setCommunity(comm);
       setHistory(hist);
@@ -321,7 +338,7 @@ export default function HivePage() {
                         {c.title}
                       </span>
                       <span style={{ fontSize: 12, fontWeight: 800, color: c.done ? "#5B8C5A" : colors.teal, display: "inline-flex", alignItems: "center", gap: 3 }}>
-                        <Zap size={12} /> {c.xp_reward} Pollen
+                        <Zap size={12} /> {c.claimed ? `+${c.xp_reward} Pollen gutgeschrieben` : `${c.xp_reward} Pollen`}
                       </span>
                     </div>
                     <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}</p>
