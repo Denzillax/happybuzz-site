@@ -576,7 +576,7 @@ export default function BetaTestPage() {
               <strong style={{ background: "#F4C03F", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
             </p>
             <p style={{ margin: 0, fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 12, letterSpacing: ".04em", color: "rgba(20,17,13,0.55)" }}>
-              PS: Und verchauf din Scheiss. Irgendwer sucht genau das.
+              PS: Verchauf din Scheiss. ;)
             </p>
           </div>
         </div>
