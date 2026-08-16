@@ -250,7 +250,9 @@ export function Header() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
               {/* Favorites */}
               <div ref={favRef} style={{ position: 'relative' }}>
-                <button onClick={() => { if (!user) { router.push('/login'); return; } setFavOpen(!favOpen); setDropdownOpen(false); }} className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favOpen ? '#D44' : '#666', transition: 'all 0.15s' }}>
+                <button onClick={() => { if (!user) { router.push('/login'); return; } setFavOpen(!favOpen); setDropdownOpen(false); }} className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favOpen ? '#14110D' : '#666', transition: 'all 0.15s' }}>
+                  {/* Aktiv: Honey-Fuellung mit Ink-Kontur (Katalog); die fruehere
+                      rote Kontur passte nicht zum gelben Herz. */}
                   <Heart size={20} fill={favOpen ? '#F4C03F' : 'none'} />
                 </button>
                 {favOpen && (
