@@ -8,7 +8,11 @@ import { K, MONO, HEAD, BODY, card, btnPrimary } from "@/lib/katalog";
 // Betriebsmodus-Gate um den öffentlichen Bereich.
 //   live    → alle rein (Normalfall, ein Query beim Laden)
 //   beta    → nur Konten mit profiles.beta_access (Staff ist per Seed frei)
-//   wartung → nur Staff (beta_access deckt Staff mit ab)
+//   wartung → NUR Owner + Staff. Beta-Tester bleiben hier draussen,
+//             sonst waere "Wartung" nur ein zweites Beta.
+//
+// Reinkommen als Admin: /login ist in jedem Modus erreichbar; nach der
+// Anmeldung erkennt das Gate Owner/Staff und laesst durch.
 //
 // Ehrliche Einordnung: das ist ein UI-Gate für die geschlossene Beta, kein
 // Daten-Lockdown. Schreibzugriffe schützt weiterhin RLS; wer die API kennt,
@@ -30,6 +34,18 @@ export default function SiteGate({ children }) {
 
         const { data: { session } } = await supabase.auth.getSession();
         if (!session?.user) { if (alive) setState({ loading: false, allowed: false, mode, message: s?.message, loggedIn: false }); return; }
+
+        if (mode === "wartung") {
+          // Nur Owner + Staff (gleiche Gate-Logik wie der Admin-Bereich)
+          const OWNER = "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0";
+          let staff = session.user.id === OWNER;
+          if (!staff) {
+            const { data: sr } = await supabase.from("staff_roles").select("role").eq("user_id", session.user.id).maybeSingle();
+            staff = !!sr?.role;
+          }
+          if (alive) setState({ loading: false, allowed: staff, mode, message: s?.message, loggedIn: true });
+          return;
+        }
 
         const { data: p } = await supabase.from("profiles").select("beta_access").eq("id", session.user.id).maybeSingle();
         if (alive) setState({ loading: false, allowed: !!p?.beta_access, mode, message: s?.message, loggedIn: true });
@@ -67,6 +83,12 @@ export default function SiteGate({ children }) {
         {!wartung && !state.loggedIn && (
           <a href="/login" style={{ ...btnPrimary, display: "inline-block", width: "auto", padding: "12px 28px", textDecoration: "none", fontSize: 14 }}>
             Anmelden
+          </a>
+        )}
+        {wartung && !state.loggedIn && (
+          // Dezent: der Weg rein fuer Owner/Staff, ohne Besucher zum Login einzuladen
+          <a href="/login" style={{ fontFamily: BODY, fontSize: 12, color: "rgba(20,17,13,0.5)", textDecoration: "underline" }}>
+            Team-Anmeldung
           </a>
         )}
         {state.loggedIn && (
