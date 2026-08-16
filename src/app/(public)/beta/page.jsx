@@ -569,6 +569,12 @@ export default function BetaTestPage() {
               meldet sich persönlich.{" "}
               <a href="/bewerben" style={{ color: "#0B5E5C", fontWeight: 700, textDecoration: "none" }}>Mitarbeiter werden</a>
             </p>
+            <p style={{ margin: 0, paddingTop: 12, borderTop: "1px solid rgba(20,17,13,0.12)" }}>
+              Hier entsteht gerade etwas, das es in der Schweiz so noch nicht
+              gibt. Kein Konzern, kein Investorengeld, nur eine Idee und Leute
+              wie du. Jedes Inserat, jede Meldung, jeder Kollege zählt.{" "}
+              <strong style={{ background: "#F4C03F", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
+            </p>
           </div>
         </div>
 
