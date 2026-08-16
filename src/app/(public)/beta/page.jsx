@@ -26,8 +26,8 @@ const TESTS = [
   {
     id: "auth", title: "Registrierung & Login", icon: Monitor,
     items: [
-      { id: "auth_register", label: "Neues Konto erstellen" },
-      { id: "auth_email_confirm", label: "Bestätigungsmail erhalten & Konto aktiviert" },
+      { id: "auth_register", label: "Neues Konto erstellen (Vorname + Nachname getrennt, beide Pflicht, landen im Profil wie in den Einstellungen)" },
+      { id: "auth_email_confirm", label: "Bestätigungsmail erhalten & Konto aktiviert (Absender noreply@beedaro.ch, BEEDARO-Design, sobald SMTP eingerichtet)" },
       { id: "auth_login", label: "Login mit E-Mail + Passwort" },
       { id: "auth_social", label: "Login mit Google / Apple (falls aktiviert)" },
       { id: "auth_pw_reset", label: "Passwort vergessen → Reset-Mail erhalten" },
@@ -348,7 +348,7 @@ const TESTS = [
       { id: "set_verify_address", label: "Adresse verifizieren" },
       { id: "set_verify_id", label: "ID hochladen funktioniert" },
       { id: "set_verify_xp", label: "Vollständige Verifizierung → Pollen + 'Vollständig'-Achievement" },
-      { id: "set_iban", label: "IBAN eingeben + speichern" },
+      { id: "set_iban", label: "IBAN eingeben + speichern: formatiert live in 4er-Blöcke, kappt hart bei 21 Zeichen (langer Müll wird abgeschnitten), nur CH/LI mit gültiger Prüfsumme speicherbar; gleiche Regeln im Admin-Firma-Tab" },
       { id: "set_address_auto", label: "Strassen-Autocomplete (geo.admin.ch)" },
       { id: "set_address_save", label: "Hauptadresse speichern" },
       { id: "set_extra_addr", label: "Lieferadresse anlegen + bearbeiten + löschen" },
