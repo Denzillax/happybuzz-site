@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
 import GamificationProvider from '@/components/shared/GamificationProvider'
@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten. Ab 3% Gebühr, ein Teil fliesst in Bienen- und Naturprojekte.',
   icons: {
     icon: '/favicon.svg',
+  },
+  // "Zum Home-Bildschirm" auf iOS: eigener Fenstermodus + App-Titel
+  appleWebApp: {
+    capable: true,
+    title: 'BEEDARO',
+    statusBarStyle: 'default',
   },
   openGraph: {
     type: 'website',
@@ -27,6 +33,10 @@ export const metadata: Metadata = {
     description: 'Der Schweizer Marktplatz für nachhaltiges Kaufen, Verkaufen und Mieten.',
     images: ['/images/bee-impact.jpg'],
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#F4C03F',
 }
 
 // Organisations- und Website-Daten fuer Google und KI-Assistenten:
