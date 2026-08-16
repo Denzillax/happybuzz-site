@@ -251,7 +251,7 @@ export function Header() {
               {/* Favorites */}
               <div ref={favRef} style={{ position: 'relative' }}>
                 <button onClick={() => { if (!user) { router.push('/login'); return; } setFavOpen(!favOpen); setDropdownOpen(false); }} className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favOpen ? '#D44' : '#666', transition: 'all 0.15s' }}>
-                  <Heart size={20} fill={favOpen ? '#D44' : 'none'} />
+                  <Heart size={20} fill={favOpen ? '#F4C03F' : 'none'} />
                 </button>
                 {favOpen && (
                   <div style={{ ...dropdownStyle, width: 200, padding: '6px 0' }}>

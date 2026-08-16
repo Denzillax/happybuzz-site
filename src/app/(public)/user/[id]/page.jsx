@@ -183,7 +183,7 @@ export default function PublicProfilePage() {
                 fontSize: 13, fontWeight: 700, color: K.ink,
                 flexShrink: 0,
               }}>
-                <Heart size={16} fill={isSellerFav ? K.ink : "none"} color={isSellerFav ? K.ink : colors.muted} />
+                <Heart size={16} fill={isSellerFav ? K.honey : "none"} color={isSellerFav ? K.honey : colors.muted} />
                 {isSellerFav ? "Gemerkt" : "Verkäufer merken"}
               </button>
             )}

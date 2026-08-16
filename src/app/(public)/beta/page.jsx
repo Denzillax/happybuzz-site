@@ -208,6 +208,7 @@ const TESTS = [
     id: "favorites", title: "Favoriten", icon: Monitor,
     items: [
       { id: "fav_items", label: "Tab Artikel: gespeicherte Inserate, entfernen, öffnen" },
+      { id: "fav_heart_farbe", label: "Favoriten-Herz ist überall HONEY-gelb (Karte, Inserat-Detail, Header, Verkäufer merken); nirgends mehr rot" },
       { id: "fav_sellers", label: "Tab Verkäufer: gemerkte Verkäufer" },
       { id: "fav_searches", label: "Tab Suchen: gespeicherte Suche wieder ausführen" },
     ],
@@ -346,6 +347,8 @@ const TESTS = [
       { id: "set_address_save", label: "Hauptadresse speichern" },
       { id: "set_extra_addr", label: "Lieferadresse anlegen + bearbeiten + löschen" },
       { id: "set_notifications", label: "Benachrichtigungs-Einstellungen speichern" },
+      { id: "set_noti_wirkung", label: "E-Mail-Häkchen wirken: bei AN landet die Mail in der Warteschlange (Admin → E-Mails), bei AUS nicht; Glocke kommt unabhängig davon immer" },
+      { id: "set_noti_hinweis", label: "Hinweisbox im Benachrichtigungen-Tab erklärt: Glocke immer, E-Mail ab Go-Live, Push mit der App" },
     ],
   },
   {

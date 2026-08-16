@@ -1113,8 +1113,8 @@ export async function finalizeAuction(listingId) {
   // 5. Gewinner + Verkäufer benachrichtigen (Parität zur Cron-Finalisierung)
   try {
     const priceTxt = `CHF ${Number(finalPrice).toFixed(2)}`;
-    await createNotification(topBid.bidder_id, "purchase", "Auktion gewonnen", `"${listing.title}" für ${priceTxt}. Jetzt bezahlen.`, `/order/${purchase.id}`);
-    await createNotification(listing.user_id, "purchase", "Auktion verkauft", `"${listing.title}" für ${priceTxt} verkauft.`, `/order/${purchase.id}`);
+    await createNotification(topBid.bidder_id, "purchase", "Auktion gewonnen", `"${listing.title}" für ${priceTxt}. Jetzt bezahlen.`, `/order/${purchase.id}`, "buy_won");
+    await createNotification(listing.user_id, "purchase", "Auktion verkauft", `"${listing.title}" für ${priceTxt} verkauft.`, `/order/${purchase.id}`, "sell_sold");
   } catch (e) { console.error("Auktions-Benachrichtigung:", e); }
 
   return {
@@ -1248,7 +1248,7 @@ export async function confirmPayment(purchaseId, userId) {
   await addPurchaseEvent(purchaseId, "payment_confirmed", "Verkäufer hat den Zahlungseingang bestätigt.", null, userId);
   try {
     const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
-    if (p) await createNotification(p.buyer_id, "purchase", "Zahlung bestätigt", `Deine Zahlung für "${p.listing?.title}" wurde bestätigt.`, `/order/${purchaseId}`);
+    if (p) await createNotification(p.buyer_id, "purchase", "Zahlung bestätigt", `Deine Zahlung für "${p.listing?.title}" wurde bestätigt.`, `/order/${purchaseId}`, "buy_payment");
   } catch (e) { console.error("Notification:", e); }
 }
 
@@ -1526,7 +1526,7 @@ export async function submitServiceInvoice(purchaseId, sellerId, hours, hourlyRa
 
   try {
     const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
-    if (p) await createNotification(p.buyer_id, "purchase", "Rechnung erhalten", `${p.listing?.title}: ${notes}`, `/order/${purchaseId}`);
+    if (p) await createNotification(p.buyer_id, "purchase", "Rechnung erhalten", `${p.listing?.title}: ${notes}`, `/order/${purchaseId}`, "buy_payment");
   } catch (e) { console.error("Invoice notification:", e); }
 
   return { total, notes };

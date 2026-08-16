@@ -1125,6 +1125,14 @@ export default function SettingsPage() {
     const Mail = () => <CreditCard size={14} />;
     return (
       <>
+        {/* Ehrlichkeit vor Schoenfaerberei: In-App laeuft immer, E-Mail wird
+            bereits nach diesen Haekchen in die Warteschlange gelegt, der
+            Versand selbst startet mit dem Go-Live. Push braucht die App. */}
+        <div style={{ padding: "10px 14px", background: K.sand, border: `1px solid ${K.ink}`, marginBottom: 16, fontSize: 12.5, color: C.dark, lineHeight: 1.6 }}>
+          Wichtige Meldungen zu deinen Käufen und Verkäufen erscheinen immer in der Glocke.
+          Deine Auswahl hier steuert E-Mail und Push: E-Mails starten mit dem offiziellen Start
+          von BEEDARO, Push folgt mit der App.
+        </div>
         {/* Column headers */}
         <div style={{
           display: "grid", gridTemplateColumns: "1fr 50px 50px",

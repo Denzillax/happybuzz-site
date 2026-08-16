@@ -356,7 +356,7 @@ export default function ListingDetail() {
       }
       if (!convId) return;
       await sendMessage(convId, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v });
-      try { await createNotification(l.user_id, "offer", "Neuer Preisvorschlag", `CHF ${v.toLocaleString("de-CH")} für "${l.title}"`, `/chat/${convId}`); } catch {}
+      try { await createNotification(l.user_id, "offer", "Neuer Preisvorschlag", `CHF ${v.toLocaleString("de-CH")} für "${l.title}"`, `/chat/${convId}`, "msg_offer"); } catch {}
       setShowOfferModal(false);
       router.push(`/chat/${convId}`);
     } catch (err) { console.error(err); toast.error("Preisvorschlag konnte nicht gesendet werden."); }
