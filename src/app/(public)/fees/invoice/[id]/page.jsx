@@ -7,7 +7,8 @@ import { Printer } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
-import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { feeQrPayload } from "@/lib/swissQR";
+import SwissQRImage from "@/components/shared/SwissQRImage";
 import { getCompanySettings, formatIban } from "@/lib/company";
 import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
@@ -64,7 +65,6 @@ export default function FeeInvoicePage() {
 
   // QR für Zahlung an die Firma
   const qrPayload = feeQrPayload(invoice, seller, company);
-  const qrUrl = qrImageUrl(qrPayload);
 
   const sellerAddr = [fullName(seller), seller?.street, `${seller?.postal_code || ""} ${seller?.city || ""}`.trim()].filter(Boolean);
 
@@ -170,7 +170,7 @@ export default function FeeInvoicePage() {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             {qrUrl ? (
               <>
-                <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 0 }} />
+                <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #eee" }} />
                 <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
               </>
             ) : (

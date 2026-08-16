@@ -7,7 +7,8 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors } from "@/lib/theme";
 import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate, DEFAULT_FEE_PERCENT } from "@/lib/fees";
-import { orderQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { orderQrPayload } from "@/lib/swissQR";
+import SwissQRImage from "@/components/shared/SwissQRImage";
 import { fmtCHF, fmtDateLong, fullName } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
@@ -70,7 +71,6 @@ export default function InvoicePage() {
   const payerStreet = payer?.street || "";
   const payerPlz = `${payer?.postal_code || ""} ${payer?.city || ""}`.trim();
   const qrPayload = orderQrPayload(order, { deposit: isDeposit });
-  const qrUrl = qrImageUrl(qrPayload);
   const addr = (p) => {
     const isBiz = p?.account_type === "business" && p?.company_name;
     const lines = [isBiz ? p.company_name : fullName(p), p?.street, `${p?.postal_code || ""} ${p?.city || ""}`.trim()].filter(Boolean);
@@ -204,7 +204,7 @@ export default function InvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <img src={qrUrl} alt="QR" style={{ width: 130, height: 130, border: "1px solid #eee", borderRadius: 0 }} />
+            <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #eee" }} />
             <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
           </div>
         </div>

@@ -25,7 +25,8 @@ import RatingSection from "@/components/order/RatingSection";
 import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
 
 import { PURCHASE_STATUS as STATUS_MAP } from "@/lib/orderStatus";
-import { serviceQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { serviceQrPayload } from "@/lib/swissQR";
+import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
 const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
@@ -68,8 +69,6 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
   useEffect(() => { getInvoiceItems(purchaseId).then(setItems); }, [purchaseId]);
 
   const total = parseFloat(totalPrice || 0);
-  // Strukturierter QR aus der zentralen Quelle (Typ-K-Duplikat entfernt)
-  const qrUrl = qrImageUrl(serviceQrPayload(purchaseId, total, sellerProfile), 180);
 
   return (
     <div>
@@ -97,9 +96,9 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      {qrUrl && (
+      {serviceQrPayload(purchaseId, total, sellerProfile) && (
         <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 0, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
-          <img src={qrUrl} alt="QR" style={{ width: 100, height: 100, borderRadius: 0, flexShrink: 0 }} />
+          <SwissQRImage payload={serviceQrPayload(purchaseId, total, sellerProfile)} size={200} style={{ width: 100, flexShrink: 0 }} />
           <div style={{ fontSize: 12, color: colors.muted }}>
             <div style={{ fontWeight: 700, color: colors.dark, marginBottom: 4 }}>QR-Zahlung</div>
             <div>IBAN: {sellerProfile?.iban || ""}</div>

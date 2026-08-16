@@ -9,7 +9,8 @@ import { Logo } from "@/components/shared/Logo";
 import { colors, fonts, radius } from "@/lib/theme";
 import { MIN_INVOICE_CHF } from "@/lib/constants";
 import { getCompanySettings, formatIban } from "@/lib/company";
-import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
+import { feeQrPayload } from "@/lib/swissQR";
+import SwissQRImage from "@/components/shared/SwissQRImage";
 
 const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
@@ -267,10 +268,10 @@ export default function FeesPage() {
                           {/* QR Code */}
                           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%" }}>
                             {(() => {
-                              const qr = qrImageUrl(feeQrPayload(inv, profile, company || {}), 300);
-                              return qr ? (
+                              const payload = feeQrPayload(inv, profile, company || {});
+                              return payload ? (
                                 <>
-                                  <img src={qr} alt="QR" style={{ width: "80%", maxWidth: 220, aspectRatio: "1", border: "1px solid #eee", borderRadius: 0 }} />
+                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #eee" }} />
                                   <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
                                 </>
                               ) : (
