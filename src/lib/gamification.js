@@ -212,9 +212,26 @@ export async function getActiveChallenges() {
   const now = new Date().toISOString();
   const { data } = await supabase.from("challenges")
     .select("*").eq("active", true)
+    .eq("is_template", false)   // Vorlagen rotieren nur, sie erscheinen nie selbst
     .lte("starts_at", now).gte("ends_at", now)
     .order("ends_at", { ascending: true });
   return data || [];
+}
+
+// Wochen-Rotation anstossen (idempotent; der erste Aufrufer der Woche
+// instanziert die Vorlagen). Fehler sind still: ohne Rotation zeigt der
+// Hive schlimmstenfalls die alte Woche.
+export async function ensureWeeklyChallenges() {
+  const { error } = await supabase.rpc("ensure_weekly_challenges");
+  if (error) console.error("ensure_weekly_challenges:", error);
+}
+
+// Challenge einloesen. Serverseitig verifiziert; Rueckgabe
+// {ok, amount} oder {ok:false, reason: 'incomplete'|'already_claimed'|...}.
+export async function claimChallenge(challengeId) {
+  const { data, error } = await supabase.rpc("claim_challenge", { p_challenge_id: challengeId });
+  if (error) { console.error("claim_challenge:", error); return { ok: false, reason: "error" }; }
+  return data || { ok: false, reason: "empty" };
 }
 
 // User-Challenge-Fortschritt laden
@@ -273,6 +290,10 @@ export async function getCommunityStats() {
 // Aktive Challenges mit Live-Fortschritt für einen User
 export async function getChallengesWithProgress(userId) {
   const challenges = await getActiveChallenges();
+  // Bereits eingeloeste markieren (user_challenges schreibt nur die claim-RPC)
+  const { data: claims } = await supabase.from("user_challenges")
+    .select("challenge_id").eq("user_id", userId);
+  const claimedSet = new Set((claims || []).map(r => r.challenge_id));
   const out = [];
   for (const c of challenges) {
     let progress = 0;
@@ -289,7 +310,7 @@ export async function getChallengesWithProgress(userId) {
         .eq("rated_id", userId).eq("rating", 5).gte("created_at", c.starts_at);
       progress = count || 0;
     }
-    out.push({ ...c, progress: Math.min(progress, c.target_value), done: progress >= c.target_value });
+    out.push({ ...c, progress: Math.min(progress, c.target_value), done: progress >= c.target_value, claimed: claimedSet.has(c.id) });
   }
   return out;
 }
