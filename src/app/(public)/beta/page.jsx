@@ -386,7 +386,7 @@ const TESTS = [
     items: [
       { id: "mob_header", label: "Header: Hamburger-Menü öffnet" },
       { id: "mob_menu_links", label: "Mobile Menü: alle Links funktionieren" },
-      { id: "mob_search", label: "Suche auf kleinem Bildschirm nutzbar" },
+      { id: "mob_search", label: "Suche-Tab (Bottom-Nav) zeigt das Suchfeld OBEN auf der Suchseite (Tastatur geht auf); im Hamburger-Menü gibt es KEIN Suchfeld mehr" },
       { id: "mob_home_hero", label: "Homepage Hero: kein leerer Platz, Bilder korrekt" },
       { id: "mob_home_cats", label: "Kategorien-Grid: nicht abgeschnitten, immer ganz sichtbar" },
       { id: "mob_listing_card", label: "Listing-Cards: sauberes Layout" },
