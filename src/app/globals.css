@@ -20,6 +20,11 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Leaflet-Karte darf beim Scrollen nicht ueber den sticky Header ragen:
+   ein eigener Stacking-Context (z-index 0) haelt die internen
+   Leaflet-z-index-Werte (400-700) innerhalb der Karte. */
+.leaflet-container { z-index: 0; isolation: isolate; }
+
 /* Sticky-Header: der no-print-Wrapper um den Header darf keine eigene Box
    bilden (sticky klebt nur innerhalb des Elternteils, und der war exakt
    headerhoch). display:contents loest ihn layouttechnisch auf; die
