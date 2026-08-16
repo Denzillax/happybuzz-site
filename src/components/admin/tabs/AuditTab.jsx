@@ -5,6 +5,7 @@ import { colors, radius } from "@/lib/theme";
 export const AUDIT_META = {
   ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#EB5E55", bg: "#FFEBEB" },
   site_mode_set:        { label: "Betriebsmodus geändert", Icon: ShieldCheck, color: "#c62828", bg: "#FFEBEE" },
+  application_done:     { label: "Bewerbung erledigt",     Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   beta_access_set:      { label: "Beta-Zugang geändert",  Icon: ShieldCheck, color: "#C8860A", bg: "#FBF1D2" },
   challenge_created:    { label: "Challenge angelegt",    Icon: Target,      color: "#0E9493", bg: "#E6F5F5" },
   challenge_toggled:    { label: "Challenge (de)aktiviert", Icon: Target,    color: "#E65100", bg: "#FFF3E0" },

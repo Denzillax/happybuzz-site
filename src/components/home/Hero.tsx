@@ -98,12 +98,14 @@ export function Hero() {
 
           {/* Immer exakt zwei Zeilen: nowrap je Teil, min-Schriftgroesse so
               gewaehlt, dass die laengste Zeile (18 Zeichen) auf 375px passt. */}
-          <h1 style={{
+          {/* key erzwingt Remount pro Slide, damit der Highlight-Wisch
+              bei jedem Wechsel neu abspielt */}
+          <h1 key={current} style={{
             fontFamily: DISPLAY, fontSize: 'clamp(32px, 5.6vw, 72px)', fontWeight: 600,
             lineHeight: 1.08, letterSpacing: '-0.02em', color: INK, margin: '0 0 20px',
           }}>
             <span style={{ whiteSpace: 'nowrap' }}>{s.title}</span><br />
-            <span className={s.beta ? 'hero-hl-sweep' : undefined} style={{ whiteSpace: 'nowrap', background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>{s.highlight}</span>
+            <span className='hero-hl-sweep' style={{ whiteSpace: 'nowrap', background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>{s.highlight}</span>
           </h1>
 
           <p style={{
@@ -126,7 +128,7 @@ export function Hero() {
                 }}>
                   Zur Test-Checkliste <ArrowRight size={16} />
                 </Link>
-                <Link href="/contact" className="bd-btn" style={{
+                <Link href="/bewerben" className="bd-btn" style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
                   background: 'transparent', border: `1.5px solid ${INK}`,
                   color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
@@ -174,7 +176,7 @@ export function Hero() {
         <div style={{ flex: '0 1 440px', position: 'relative', display: 'flex', justifyContent: 'center', ...fade, transform: transitioning ? 'scale(.97)' : 'scale(1)' }}>
           {/* Offset-Karte dahinter (Archiv-Stapel) */}
           <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(4deg)', opacity: .28 }} />
-          <div className={s.beta ? 'hero-beta-float' : undefined} style={{
+          <div className='hero-beta-float' style={{
             position: 'relative', width: '100%', maxWidth: 400, background: PAPER,
             border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(-2deg)',
             padding: 18, boxShadow: '0 24px 48px rgba(20,17,13,0.14)',
@@ -194,7 +196,7 @@ export function Hero() {
                 <div style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(20,17,13,0.5)' }}>EXPONAT № {s.cat}</div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 600, color: INK, lineHeight: 1.1 }}>Geprüft &amp; katalogisiert</div>
               </div>
-              <span className={s.beta ? 'hero-beta-seal' : undefined} style={{ width: 38, height: 38, borderRadius: '50%', background: HONEY, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1.5px solid ${INK}` }} title={s.beta ? 'Beta-Crew' : 'Geprüft von BEEDARO'}>
+              <span className='hero-beta-seal' style={{ width: 38, height: 38, borderRadius: '50%', background: HONEY, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1.5px solid ${INK}` }} title={s.beta ? 'Beta-Crew' : 'Geprüft von BEEDARO'}>
                 <BeeIcon size={19} color={INK} />
               </span>
             </div>

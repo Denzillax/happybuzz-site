@@ -36,6 +36,7 @@ export function useAdminData() {
   const [adminCategories, setAdminCategories] = useState([]);
   const [challenges, setChallenges] = useState([]);
   const [siteMode, setSiteMode] = useState({ mode: "live", message: null });
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [search, setSearch] = useState("");
@@ -189,6 +190,12 @@ export function useAdminData() {
       // Betriebsmodus (live/beta/wartung)
       const { data: siteS } = await supabase.from("site_settings").select("mode, message").eq("id", 1).maybeSingle();
       if (siteS) setSiteMode(siteS);
+
+      // Offene Ein-Klick-Bewerbungen (Beta-Tester-Rollen)
+      const { data: apps } = await supabase.from("applications")
+        .select("*, profil:profiles(display_name, username)")
+        .eq("status", "neu").order("created_at", { ascending: false });
+      setApplications(apps || []);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -676,6 +683,16 @@ export function useAdminData() {
     logAdmin("category_delete", "category", cat.name);
     return true;
   };
+  // ── Bewerbungen (Ein-Klick, /bewerben) ─────────────────────
+  const resolveApplication = async (app) => {
+    const { error } = await supabase.from("applications").update({ status: "erledigt" }).eq("id", app.id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setApplications(prev => prev.filter(a => a.id !== app.id));
+    const name = app.profil?.display_name || app.profil?.username || "Konto";
+    flash(`Bewerbung von ${name} erledigt`);
+    logAdmin("application_done", "user", name, { rolle: app.role });
+  };
+
   // ── Betriebsmodus (SiteGate) ───────────────────────────────
   const saveSiteMode = async (mode, message) => {
     const { error } = await supabase.from("site_settings")
@@ -992,6 +1009,7 @@ export function useAdminData() {
     adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
     challenges, saveChallenge, toggleChallenge, updateChallenge,
     siteMode, saveSiteMode, setBetaAccess,
+    applications, resolveApplication,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,

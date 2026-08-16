@@ -11,8 +11,10 @@ const MODI = [
   { key: "wartung", label: "Wartung", Icon: Wrench, desc: "Nur Staff, alle anderen sehen die Wartungsseite", color: "#c62828", bg: "#FFEBEE" },
 ];
 
+const ROLLE_LABEL = { testkaeufer: "Testkäufer", testverkaeufer: "Testverkäufer", testvermieter: "Test-Vermieter", allrounder: "Allrounder" };
+
 export function OverviewTab({ admin }) {
-  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode } = admin;
+  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, setBetaAccess } = admin;
   const [feeView, setFeeView] = useState("paid");
   const [gateMsg, setGateMsg] = useState(siteMode?.message || "");
 
@@ -51,6 +53,33 @@ export function OverviewTab({ admin }) {
           </div>
         ) : null}
       </div>
+
+      {/* ── Offene Bewerbungen (Ein-Klick von /bewerben) ─────── */}
+      {(applications || []).length > 0 && (
+        <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
+          <p style={{ margin: "0 0 10px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".06em", color: colors.muted }}>
+            Bewerbungen ({applications.length})
+          </p>
+          {applications.map(a => {
+            const name = a.profil?.display_name || a.profil?.username || "Konto";
+            return (
+              <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>{name}</span>
+                <span style={{ fontSize: 12, color: colors.muted }}>möchte als <b>{ROLLE_LABEL[a.role] || a.role}</b> testen</span>
+                <span style={{ fontSize: 11, color: colors.mutedLt, marginLeft: "auto" }}>{new Date(a.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</span>
+                <button onClick={() => setBetaAccess(a.user_id, name, true)}
+                  style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBF1D2", color: "#C8860A", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                  Beta-Zugang erteilen
+                </button>
+                <button onClick={() => resolveApplication(a)}
+                  style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                  Erledigt
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 }}>
         <button onClick={openAnnouncement} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: colors.dark, border: `1px solid ${colors.border}`, borderRadius: 999, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
