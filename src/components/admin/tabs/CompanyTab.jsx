@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { colors, fonts, radius } from "@/lib/theme";
+import { formatIban, normalizeIban, isValidIban } from "@/lib/iban";
 
 const FIELDS = [
   { group: "Firma", items: [["name", "Firmenname"], ["uid", "UID / MwSt-Nr (CHE-…)"]] },
@@ -12,9 +13,9 @@ const FIELDS = [
 export function CompanyTab({ admin }) {
   const { company, saveCompany } = admin;
   const [form, setForm] = useState(company);
-  const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
-  const ibanClean = (form.iban || "").replace(/\s/g, "").toUpperCase();
-  const ibanOk = ibanClean === "" || /^(CH|LI)[0-9A-Z]{19}$/.test(ibanClean);
+  const set = (k, v) => setForm(prev => ({ ...prev, [k]: k === "iban" ? formatIban(v) : v }));
+  const ibanClean = normalizeIban(form.iban);
+  const ibanOk = ibanClean === "" || isValidIban(ibanClean);
   return (
     <div style={{ maxWidth: 640 }}>
       <p style={{ fontSize: 13, color: colors.muted, margin: "0 0 18px" }}>Diese Angaben erscheinen als Empfänger auf den Gebühren-QR-Rechnungen (FEE).</p>
@@ -26,7 +27,7 @@ export function CompanyTab({ admin }) {
               <label key={k} style={{ fontSize: 12, fontWeight: 600, color: colors.dark }}>
                 {label}
                 <input value={form[k] || ""} onChange={e => set(k, e.target.value)} style={{ width: "100%", marginTop: 4, border: `1px solid ${k === "iban" && !ibanOk ? "#EB5E55" : colors.border}`, borderRadius: 0, padding: "9px 11px", fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
-                {k === "iban" && !ibanOk && <span style={{ display: "block", marginTop: 3, fontSize: 11, color: "#EB5E55" }}>IBAN sollte mit CH/LI beginnen (21 Zeichen).</span>}
+                {k === "iban" && !ibanOk && <span style={{ display: "block", marginTop: 3, fontSize: 11, color: "#EB5E55" }}>Ungültige IBAN: CH/LI, 21 Zeichen, Prüfsumme muss stimmen.</span>}
               </label>
             ))}
           </div>

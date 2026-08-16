@@ -20,6 +20,7 @@ const MONO = "'Space Mono', monospace";
 import FeeModel from "@/components/listings/FeeModel";
 import { FEE_TIERS } from "@/lib/constants";
 import { Input, Toggle, Btn, Section, TrustMeter } from "@/components/settings/ui";
+import { formatIban, normalizeIban, isValidIban } from "@/lib/iban";
 
 const TABS = [
   { id: "profile",        label: "Profil",              icon: User },
@@ -709,8 +710,8 @@ export default function SettingsPage() {
         <Input
           label="IBAN"
           placeholder="CH93 0076 2011 6238 5295 7"
-          value={form.iban}
-          onChange={v => updateForm("iban", v)}
+          value={formatIban(form.iban)}
+          onChange={v => updateForm("iban", formatIban(v))}
           suffix={<Lock size={14} />}
         />
       </Section>
@@ -725,10 +726,10 @@ export default function SettingsPage() {
         </div>
       </div>
       <Btn loading={saving} onClick={() => {
-        const clean = (form.iban || "").replace(/\s/g, "");
+        const clean = normalizeIban(form.iban);
         if (!clean) { saveProfile({ iban: "" }); return; }
-        if (!clean.startsWith("CH") || clean.length !== 21) {
-          showToast("Ungültige IBAN. Muss mit CH beginnen und 21 Zeichen lang sein");
+        if (!isValidIban(clean)) {
+          showToast("Ungültige IBAN. Erlaubt ist eine CH/LI-IBAN mit 21 Zeichen und korrekter Prüfsumme");
           return;
         }
         saveProfile({ iban: clean });
