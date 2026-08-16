@@ -102,10 +102,12 @@ Deno.serve(async (req: Request) => {
       let lastErr = "";
       for (const s of subs) {
         try {
+          // urgency high: sonst spart FCM die Zustellung bei doezenden Geraeten
+          // (Batteriesparmodus) auf und die Meldung kommt spaet oder gar nicht
           await webpush.sendNotification(
             { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
             JSON.stringify({ title: p.title, message: p.message, link: p.link }),
-            { vapidDetails, TTL: 86400 },
+            { vapidDetails, TTL: 86400, urgency: "high" },
           );
           delivered++;
         } catch (e: unknown) {
