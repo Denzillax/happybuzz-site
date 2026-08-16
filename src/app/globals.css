@@ -31,7 +31,16 @@ body {
    der Inline-Style gegen die Media-Query und Handys scrollen seitlich. */
 .detail-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; min-width: 0; }
 .detail-grid > * { min-width: 0; }
-@media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; gap: 20px; } }
+/* Mobil: Spalten-Container aufloesen (display:contents) und die Karten neu
+   ordnen: Bilder -> Kaufbox -> Rest. Alle uebrigen Karten brauchen explizit
+   order 3, sonst staenden sie mit Default-order 0 VOR der Galerie. */
+@media (max-width: 900px) {
+  .detail-grid { display: flex; flex-direction: column; gap: 0; }
+  .detail-grid > div { display: contents; }
+  .detail-grid > div > * { order: 3; min-width: 0; }
+  .detail-grid .lg-gallery { order: 1; }
+  .detail-grid .lg-buybox { order: 2; }
+}
 
 /* Mobile Suchzeile auf /search: Desktop sucht im Header, mobil hier */
 .search-mobile-bar { display: none; }

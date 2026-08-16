@@ -423,7 +423,7 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
+            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
               <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
@@ -685,7 +685,7 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div ref={buyBoxRef} style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
+            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
               {/* Exponat-Kopf: Referenznummer + Zustands-Stempel */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
                 <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: ".04em", color: colors.muted }}>{makeArtRef(l.id)}</span>
@@ -1322,7 +1322,7 @@ export default function ListingDetail() {
 
             {/* ── BEE-IMPACT BOX ─────────────────────── */}
             {l.status === "active" && beeImpact > 0 && (
-              <div style={{ background: colors.greenSoft, borderRadius: 0, border: `1px solid ${colors.green}22`, padding: "18px 22px", marginBottom: 14 }}>
+              <div style={{ background: colors.greenSoft, borderRadius: 0, border: `1px solid ${INK}`, padding: "18px 22px", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <BeeIcon size={20} color={colors.green} />
                   <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
@@ -1477,12 +1477,7 @@ export default function ListingDetail() {
         )}
       </div>
 
-      {/* ── Responsive ────────────────────────────────── */}
-      <style>{`
-        @media (max-width: 900px) {
-          .detail-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
+      {/* Responsive-Reihenfolge lebt komplett in globals.css (.detail-grid) */}
 
       {/* ── MOBILE KAUF-LEISTE: fix ueber der Bottom-Nav, nur wenn die echte
              Kaufbox aus dem Bild gescrollt ist. Der Knopf springt zur Box,
@@ -1507,7 +1502,17 @@ export default function ListingDetail() {
       {/* ── LIGHTBOX ────────────────────────────────── */}
       {lightbox && imgs.length > 0 && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.92)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center" }}
-          onClick={() => setLightbox(false)}>
+          onClick={() => { if (swiped.current) { swiped.current = false; return; } setLightbox(false); }}
+          onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current == null) return;
+            const dx = e.changedTouches[0].clientX - touchStartX.current;
+            touchStartX.current = null;
+            if (Math.abs(dx) > 40 && imgs.length > 1) {
+              swiped.current = true;
+              setActiveImg(i => dx < 0 ? (i < imgs.length - 1 ? i + 1 : 0) : (i > 0 ? i - 1 : imgs.length - 1));
+            }
+          }}>
           {/* Close */}
           <button onClick={() => setLightbox(false)} style={{ position: "absolute", top: 20, right: 20, width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10001 }}>
             <X size={24} color="#fff" />
