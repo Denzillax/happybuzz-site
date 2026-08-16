@@ -365,6 +365,7 @@ const TESTS = [
       { id: "pg_hero_2lines", label: "Hero: jede Headline exakt 2 Zeilen (auch mobil), Highlight-Wisch + Effekte auf allen Slides" },
       { id: "pg_hero_beta_dwell", label: "Beta-Willkommens-Slide steht ~12s (andere ~6.5s), CTAs 'So funktioniert die Beta' -> /beta und 'Mitarbeiter werden' -> /bewerben" },
       { id: "pg_beta_intro", label: "/beta: 'Kurz erklärt'-Sektion oben in einfachen Worten (jeder mit Konto ist automatisch Tester, Feedback-Knopf, Checkliste freiwillig, Link Mitarbeiter werden)" },
+      { id: "pg_beta_verstaerkung", label: "Nach dem Testen: 5 Kollegen auf die Plattform geholt, jeder mit ~10 Inseraten in verschiedenen Kategorien (Marktplatz füllen)" },
       { id: "pg_bewerben_hinweis", label: "/bewerben: Hinweisbox erklärt, dass es KEINE Tester-Bewerbung gibt (jedes Konto testet automatisch mit), Link zu /beta" },
       { id: "pg_bewerben_mitarbeiter", label: "/bewerben: Mitarbeiter-Funktionen (Support/Moderation/Finanzen/Manager) je mit Erklärung + sichtbaren Admin-Bereichen; nur EINE Stelle pro Person, nach dem Klick sind die anderen Karten gesperrt" },
       { id: "pg_bewerben_manual", label: "Bewerbung schaltet NIE selbst eine Rolle frei; Owner-Glocke 'Neue Bewerbung'; Admin-Übersicht: 'Rolle vergeben' springt in den Mitarbeiter-Tab, 'Erledigt' und 'Absagen' räumen die Karte" },
@@ -553,6 +554,14 @@ export default function BetaTestPage() {
             <p style={{ margin: 0 }}>
               <strong>Die Liste da unten.</strong> Für Gründliche. Wer mag, hakt
               Punkt für Punkt ab. Pflicht ist sie nicht, Ruhm gibt es trotzdem.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Danach: hol Verstärkung.</strong> Ein Marktplatz mit leeren
+              Regalen ist nur ein Regal. Wenn du durch bist, schnapp dir fünf
+              Kollegen und hol sie auf die Plattform. Jeder stellt zehn Inserate
+              ein, quer durch die Kategorien: dein Keller hat genug Inventar,
+              ihrer auch. So ist der Marktplatz gefüllt, bevor die Türen richtig
+              aufgehen.
             </p>
             <p style={{ margin: 0 }}>
               <strong>Lust auf mehr?</strong> Wir suchen Mitarbeiter für Support,
