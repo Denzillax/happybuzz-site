@@ -4,8 +4,8 @@ import type { MetadataRoute } from 'next'
 // bewusst ohne Service Worker, damit Deploys nie in einem Cache haengen).
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'BEEDARO',
-    short_name: 'BEEDARO',
+    name: 'Beedaro',
+    short_name: 'Beedaro',
     description: 'Der Schweizer Marktplatz für Secondhand: Kaufen, Verkaufen, Mieten. Ab 3% Gebühr, 20% davon für Bienen- und Naturprojekte.',
     start_url: '/',
     display: 'standalone',

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
 import GamificationProvider from '@/components/shared/GamificationProvider'
+import AppSplash from '@/components/shared/AppSplash'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://beedaro.ch'),
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   // "Zum Home-Bildschirm" auf iOS: eigener Fenstermodus + App-Titel
   appleWebApp: {
     capable: true,
-    title: 'BEEDARO',
+    title: 'Beedaro',
     statusBarStyle: 'default',
   },
   openGraph: {
@@ -82,7 +83,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       </head>
-      <body>{children}<BetaFeedback /><GamificationProvider /></body>
+      <body><AppSplash />{children}<BetaFeedback /><GamificationProvider /></body>
     </html>
   )
 }

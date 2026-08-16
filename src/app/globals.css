@@ -20,6 +20,22 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* App-Start-Animation (PWA-Splash): Logo hebt sich, Honig-Balken wischt,
+   Claim blendet ein. Nur im Standalone-Modus sichtbar (AppSplash.jsx). */
+.bd-splash-logo { animation: bd-splash-pop .55s cubic-bezier(.2,.8,.3,1) both; }
+.bd-splash-bar {
+  width: 120px; height: 6px; background: #F4C03F; border: 1px solid #14110D;
+  transform-origin: left center;
+  animation: bd-splash-sweep .6s .35s cubic-bezier(.2,.8,.3,1) both;
+}
+.bd-splash-claim { animation: bd-splash-fade .5s .7s both; }
+@keyframes bd-splash-pop { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bd-splash-sweep { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes bd-splash-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .bd-splash-logo, .bd-splash-bar, .bd-splash-claim { animation: none; }
+}
+
 /* Meine Kaeufe / Meine Verkaeufe: Desktop-Tabelle vs. Mobil-Karten
    (die Tabelle ist ~583px breit und wuerde auf dem Handy seitlich scrollen) */
 .po-cards { display: none; }
