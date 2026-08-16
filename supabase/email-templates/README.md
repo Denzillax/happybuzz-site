@@ -49,3 +49,25 @@ Authentication → URL Configuration:
   `http://localhost:57636/**` (Dev-Preview)
 
 Ohne Schritt 3 zeigen die Links in den Mails auf die falsche Domain.
+
+## 4. Benachrichtigungs-Mails + Push (Versand-Worker)
+
+Auth-Mails (oben) verschickt Supabase selbst. Alles andere (Gebote, Verkäufe,
+Mahnungen, Push) verschickt die Edge Function `notify-worker`
+(supabase/functions/notify-worker), angestossen von pg_cron im Minutentakt
+(Migration `20260816_notify_push_infra.sql`).
+
+Geheimnisse liegen im Supabase Vault (Dashboard → Project Settings → Vault):
+
+| Name                  | Inhalt                                        | Wer legt es an |
+|-----------------------|-----------------------------------------------|----------------|
+| `resend_api_key`      | Resend-API-Key (derselbe wie fürs SMTP)       | manuell        |
+| `vapid_public_key`    | Web-Push-Schlüssel, public                    | eingerichtet   |
+| `vapid_private_key`   | Web-Push-Schlüssel, privat                    | eingerichtet   |
+| `notify_worker_token` | Zufallstoken, mit dem der Cron den Worker ruft | eingerichtet  |
+
+Ohne `resend_api_key` bleiben Mails auf `pending` stehen (der Worker meldet es
+in seiner Antwort); Push funktioniert unabhängig davon. Der öffentliche
+VAPID-Schlüssel steht zusätzlich in `src/lib/push.js` (er ist public). Wird das
+Schlüsselpaar je neu erzeugt, verlieren alle Geräte ihr Abo und müssen Push in
+den Einstellungen neu aktivieren.

@@ -21,6 +21,7 @@ import FeeModel from "@/components/listings/FeeModel";
 import { FEE_TIERS } from "@/lib/constants";
 import { Input, Toggle, Btn, Section, TrustMeter } from "@/components/settings/ui";
 import { formatIban, normalizeIban, isValidIban } from "@/lib/iban";
+import { isPushSupported, getPushStatus, enablePush, disablePush } from "@/lib/push";
 
 const TABS = [
   { id: "profile",        label: "Profil",              icon: User },
@@ -30,6 +31,71 @@ const TABS = [
   { id: "notifications",  label: "Benachrichtigungen",  icon: Bell },
 ];
 
+
+// ═══════════════════════════════════════════════════════════════
+// PUSH AUF DIESEM GERÄT
+// ═══════════════════════════════════════════════════════════════
+// Geraetebezogener Schalter: registriert den Service Worker, holt die
+// Browser-Berechtigung und legt das Abo in push_subscriptions ab. Die
+// Haekchen pro Benachrichtigungstyp bleiben davon unabhaengig (RPC prueft sie).
+
+function PushDeviceBox({ showToast }) {
+  const [status, setStatus] = useState("loading"); // loading|unsupported|denied|on|off
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    getPushStatus().then(setStatus).catch(() => setStatus("unsupported"));
+  }, []);
+
+  const toggle = async () => {
+    setBusy(true);
+    try {
+      if (status === "on") {
+        setStatus(await disablePush());
+        showToast("Push auf diesem Gerät deaktiviert");
+      } else {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error("Nicht angemeldet.");
+        setStatus(await enablePush(session.user.id));
+        showToast("Push aktiviert. Testlauf kommt mit der nächsten Benachrichtigung.");
+      }
+    } catch (e) {
+      showToast(e.message || "Das hat nicht geklappt.");
+      setStatus(await getPushStatus().catch(() => "unsupported"));
+    }
+    setBusy(false);
+  };
+
+  const text = {
+    loading: "Prüfe Gerät…",
+    unsupported: "Dieser Browser unterstützt kein Push. Auf dem iPhone zuerst Beedaro über \"Zum Home-Bildschirm\" installieren und dort öffnen.",
+    denied: "Benachrichtigungen sind im Browser blockiert. Erlaube sie in den Website-Einstellungen deines Browsers, dann klappt es hier.",
+    on: "Aktiv. Dieses Gerät bekommt Push-Meldungen nach den Häkchen unten.",
+    off: "Noch aus. Aktiviere Push, damit dieses Gerät Meldungen bekommt, auch wenn Beedaro geschlossen ist.",
+  }[status];
+
+  return (
+    <div style={{ padding: "14px", background: K.paper, border: `1px solid ${K.ink}`, marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <Bell size={15} color={K.ink} />
+        <span style={{ fontFamily: "'General Sans', sans-serif", fontSize: 14, fontWeight: 600, color: K.ink }}>
+          Push auf diesem Gerät
+        </span>
+        {status === "on" && (
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: K.honey, border: `1px solid ${K.ink}`, color: K.ink }}>AKTIV</span>
+        )}
+      </div>
+      <div style={{ fontSize: 12.5, color: C.muted || "#6b6560", lineHeight: 1.6, marginBottom: (status === "on" || status === "off") ? 10 : 0 }}>
+        {text}
+      </div>
+      {(status === "on" || status === "off") && (
+        <Btn onClick={toggle} disabled={busy} style={{ padding: "8px 16px", fontSize: 13 }}>
+          {busy ? "Einen Moment…" : status === "on" ? "Push deaktivieren" : "Push aktivieren"}
+        </Btn>
+      )}
+    </div>
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════
 // PUBLIC PROFILE MODAL
@@ -1133,14 +1199,12 @@ export default function SettingsPage() {
     const Mail = () => <CreditCard size={14} />;
     return (
       <>
-        {/* Ehrlichkeit vor Schoenfaerberei: In-App laeuft immer, E-Mail wird
-            bereits nach diesen Haekchen in die Warteschlange gelegt, der
-            Versand selbst startet mit dem Go-Live. Push braucht die App. */}
         <div style={{ padding: "10px 14px", background: K.sand, border: `1px solid ${K.ink}`, marginBottom: 16, fontSize: 12.5, color: C.dark, lineHeight: 1.6 }}>
           Wichtige Meldungen zu deinen Käufen und Verkäufen erscheinen immer in der Glocke.
-          Deine Auswahl hier steuert E-Mail und Push: E-Mails starten mit dem offiziellen Start
-          von BEEDARO, Push folgt mit der App.
+          Die Häkchen hier steuern, was zusätzlich per E-Mail und Push rausgeht.
         </div>
+
+        <PushDeviceBox showToast={showToast} />
         {/* Column headers */}
         <div style={{
           display: "grid", gridTemplateColumns: "1fr 50px 50px",

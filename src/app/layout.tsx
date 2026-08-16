@@ -3,6 +3,7 @@ import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
 import GamificationProvider from '@/components/shared/GamificationProvider'
 import AppSplash from '@/components/shared/AppSplash'
+import SwRegister from '@/components/shared/SwRegister'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://beedaro.ch'),
@@ -83,7 +84,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       </head>
-      <body><AppSplash />{children}<BetaFeedback /><GamificationProvider /></body>
+      <body><AppSplash /><SwRegister />{children}<BetaFeedback /><GamificationProvider /></body>
     </html>
   )
 }

@@ -357,8 +357,11 @@ const TESTS = [
       { id: "order_addr_pick", label: "Bestellseite (Kauf ODER gewonnene Auktion, Versandartikel): Käufer kann bei 'Lieferadresse' über 'Ändern' zwischen Hauptadresse und Lieferadressen wählen; Verkäufer sieht die gewählte Adresse im Versandblock" },
       { id: "order_addr_lock", label: "Nach 'versendet' verschwindet der Ändern-Knopf; späteres Bearbeiten/Löschen der Adresse in den Einstellungen ändert die Bestellung NICHT (Schnappschuss)" },
       { id: "set_notifications", label: "Benachrichtigungs-Einstellungen speichern" },
-      { id: "set_noti_wirkung", label: "E-Mail-Häkchen wirken: bei AN landet die Mail in der Warteschlange (Admin → E-Mails), bei AUS nicht; Glocke kommt unabhängig davon immer" },
-      { id: "set_noti_hinweis", label: "Hinweisbox im Benachrichtigungen-Tab erklärt: Glocke immer, E-Mail ab Go-Live, Push mit der App" },
+      { id: "set_noti_wirkung", label: "E-Mail-Häkchen wirken: bei AN kommt die Mail wirklich an (Absender noreply@beedaro.ch, Beedaro-Design mit Logo), bei AUS nicht; Glocke kommt unabhängig davon immer" },
+      { id: "set_noti_worker", label: "Versand-Worker: pending-Mails in Admin → E-Mails wechseln innert ~1 Minute auf 'sent' (auch Mahnungen aus dem Mahnwesen)" },
+      { id: "set_push_enable", label: "Push auf diesem Gerät aktivieren: Knopf in Einstellungen → Benachrichtigungen fragt Browser-Berechtigung, danach Badge AKTIV; Deaktivieren entfernt das Gerät" },
+      { id: "set_push_receive", label: "Push kommt an: Benachrichtigung (z.B. neues Gebot / neue Nachricht) erscheint als System-Push auf dem Gerät, Klick öffnet die richtige Seite; Häkchen AUS = kein Push" },
+      { id: "set_push_ios", label: "iPhone: Push funktioniert NUR in der installierten App (Zum Home-Bildschirm); Einstellungs-Box erklärt das, wenn im Safari-Tab geöffnet" },
     ],
   },
   {

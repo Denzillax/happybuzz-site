@@ -6,11 +6,11 @@ import { supabase } from "@/lib/supabase/supabase";
 
 // Benachrichtigung erstellen.
 // In-App (Glocke) IMMER — transaktionskritische Benachrichtigungen sind per
-// Projektregel nicht abschaltbar. settingsKey steuert nur den E-Mail-Kanal:
-// wenn gesetzt, prueft die RPC queue_notification_email SERVERSEITIG das
-// Haekchen in Einstellungen -> Benachrichtigungen und legt bei Zustimmung
-// einen Eintrag in email_log (status pending) ab. Der tatsaechliche Versand
-// haengt am Go-Live-Worker; Push folgt mit der PWA.
+// Projektregel nicht abschaltbar. settingsKey steuert die Kanaele E-Mail und
+// Push: die RPCs queue_notification_email / queue_notification_push pruefen
+// SERVERSEITIG das jeweilige Haekchen in Einstellungen -> Benachrichtigungen
+// und legen bei Zustimmung einen pending-Eintrag ab (email_log / push_queue).
+// Versand: Edge Function notify-worker im Minutentakt.
 export async function createNotification(userId, type, title, message = null, link = null, settingsKey = null) {
   const { error } = await supabase.from("notifications").insert({ user_id: userId, type, title, message, link, is_read: false });
   if (error) console.error("Notification error:", error);
@@ -20,6 +20,11 @@ export async function createNotification(userId, type, title, message = null, li
       p_recipient: userId, p_subject: title, p_message: message, p_link: link, p_settings_key: settingsKey,
     });
     if (mailErr) console.error("queue_notification_email:", mailErr);
+
+    const { error: pushErr } = await supabase.rpc("queue_notification_push", {
+      p_recipient: userId, p_title: title, p_message: message, p_link: link, p_settings_key: settingsKey,
+    });
+    if (pushErr) console.error("queue_notification_push:", pushErr);
   }
 }
 
