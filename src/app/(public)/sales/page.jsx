@@ -89,9 +89,9 @@ export default function SalesPage() {
           </div>
         )}
 
-        {/* Table */}
+        {/* Tabelle (Desktop) */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
+          <div className="po-table" style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -145,6 +145,35 @@ export default function SalesPage() {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* Karten (Mobil): gleiche Daten, untereinander statt breiter Tabelle */}
+        {!loading && filtered.length > 0 && (
+          <div className="po-cards" style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}` }}>
+            {filtered.map(s => {
+              const st = STATUS_CONFIG[s.status] || STATUS_CONFIG.confirmed;
+              const StIcon = st.icon;
+              const ref = makeBeeRef(s.id);
+              return (
+                <Link key={s.id} href={`/order/${s.id}`} style={{ display: "block", padding: "12px 14px", borderBottom: `1px solid ${colors.borderLt}`, textDecoration: "none", color: colors.dark }}>
+                  <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 0, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {s.listingImage ? <img src={s.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: "0 0 2px", fontSize: 14, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.listingTitle}</p>
+                      <p style={{ margin: "0 0 2px", fontSize: 11, color: colors.muted }}>{s.listing?.listing_type === "rent" ? "Vermietung" : "Verkauf"}: {ref} · {fmtDate(s.created_at)}</p>
+                      <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>an {s.buyerName}</p>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 800 }}>CHF {fmtCHF(s.price)}</p>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: st.color, fontSize: 11, fontWeight: 700 }}><StIcon size={12} /> {st.label}</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
 

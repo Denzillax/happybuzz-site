@@ -20,6 +20,14 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Meine Kaeufe / Meine Verkaeufe: Desktop-Tabelle vs. Mobil-Karten
+   (die Tabelle ist ~583px breit und wuerde auf dem Handy seitlich scrollen) */
+.po-cards { display: none; }
+@media (max-width: 768px) {
+  .po-table { display: none !important; }
+  .po-cards { display: block; }
+}
+
 /* Bee-Rate-Kacheln im Inserat-Formular: der 44px-Einzug der Textzeilen
    frisst auf dem Handy zu viel Breite - mobil alles buendig und kompakter. */
 @media (max-width: 768px) {

@@ -400,8 +400,10 @@ export function Header() {
                 { href: '/sales', icon: ShoppingBag, label: 'Meine Verkäufe' },
                 { href: '/bookings', icon: CalendarDays, label: 'Buchungen' },
                 { href: '/chat', icon: MessageCircle, label: 'Nachrichten' },
+                { href: '/fees', icon: Receipt, label: 'Gebühren & Beiträge' },
                 { href: '/favorites', icon: Heart, label: 'Favoriten' },
                 { href: '/settings', icon: Settings, label: 'Einstellungen' },
+                ...(canAdmin ? [{ href: '/admin', icon: ShieldCheck, label: 'Admin Dashboard' }] : []),
               ].map(link => (
                 <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 0 }}>

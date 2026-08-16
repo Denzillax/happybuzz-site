@@ -393,7 +393,8 @@ const TESTS = [
     items: [
       { id: "mob_header", label: "Header: Hamburger-Menü öffnet; Logo gut lesbar (140px); Header klebt beim Scrollen oben (auch Desktop)" },
       { id: "mob_seller_card", label: "Inserat-Detail Verkäuferkarte: Bewertung bricht nicht mitten in der Klammer um ('1 Bewertung' Singular), 'ALLE ARTIKEL' ragt nicht rechts raus" },
-      { id: "mob_menu_links", label: "Mobile Menü: alle Links funktionieren" },
+      { id: "mob_menu_links", label: "Mobile Menü: alle Links funktionieren, inkl. 'Gebühren & Beiträge' (und Admin Dashboard für Staff)" },
+      { id: "mob_kaeufe_verkaeufe", label: "Meine Käufe / Meine Verkäufe (Handy): Karten-Liste statt seitlich scrollender Tabelle, alles lesbar (Titel, Referenz, Gegenpartei, Preis, Status), Tipp öffnet die Bestellung" },
       { id: "mob_search", label: "Suche-Tab (Bottom-Nav) zeigt das Suchfeld OBEN auf der Suchseite (Tastatur geht auf); im Hamburger-Menü gibt es KEIN Suchfeld mehr" },
       { id: "mob_home_hero", label: "Homepage Hero: kein leerer Platz, Bilder korrekt" },
       { id: "mob_home_cats", label: "Kategorien-Grid: nicht abgeschnitten, immer ganz sichtbar" },
