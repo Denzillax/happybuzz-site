@@ -19,7 +19,7 @@ const slides: Slide[] = [
     kicker: 'GESCHLOSSENE BETA',
     title: 'Willkommen,',
     highlight: 'Beta-Crew.',
-    description: 'Du gehörst zu den Ersten. Teste Kaufen, Verkaufen und Mieten, hak die Checkliste ab und melde alles, was klemmt, über den Feedback-Knopf.',
+    description: 'Du gehörst zu den Ersten. Ein Konto reicht, du bist automatisch Tester: kaufen, verkaufen, mieten und alles melden, was klemmt.',
     image: '/images/hero/boombox.png',
     cat: '0001', cond: 'BETA', specimen: 'Boombox',
     beta: true,
@@ -128,15 +128,16 @@ export function Hero() {
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {s.beta ? (
               <>
-                {/* Beta-Slide: Checkliste erklaert den Testern, was zu tun ist;
-                    Bewerben fuehrt Interessierte zum Kontaktformular. */}
+                {/* Beta-Slide: Tester bewerben sich nicht (jedes Konto testet
+                    automatisch mit); /beta erklaert alles, /bewerben ist nur
+                    noch fuer Mitarbeiter-Stellen. */}
                 <Link href="/beta" className="bd-btn" style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
                   background: HONEY, color: INK, fontWeight: 700, fontSize: 15.5, borderRadius: 0,
                   textDecoration: 'none', fontFamily: BODY, border: `1.5px solid ${INK}`,
                   boxShadow: `3px 3px 0 ${INK}`,
                 }}>
-                  Zur Test-Checkliste <ArrowRight size={16} />
+                  So funktioniert die Beta <ArrowRight size={16} />
                 </Link>
                 <Link href="/bewerben" className="bd-btn" style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
@@ -144,7 +145,7 @@ export function Hero() {
                   color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
                   textDecoration: 'none', fontFamily: BODY,
                 }}>
-                  Als Tester bewerben
+                  Mitarbeiter werden
                 </Link>
               </>
             ) : (
