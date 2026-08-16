@@ -399,7 +399,9 @@ export default function ListingDetail() {
         </div>
 
         {/* ── 2-COLUMN LAYOUT ─────────────────────────── */}
-        <div className="detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 380px", className: "detail-grid", gap: 32, alignItems: "start" }}>
+        {/* Spalten kommen aus globals.css (.detail-grid): mobil einspaltig.
+            Inline gridTemplateColumns wuerde die Media-Query aushebeln. */}
+        <div className="detail-grid">
 
           {/* ════ LEFT COLUMN ════ */}
           <div>

@@ -20,6 +20,13 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Inserat-Detail: 2 Spalten am Desktop, 1 Spalte auf schmalen Screens.
+   Die Spaltenbreiten MUESSEN hier leben (nicht inline), sonst gewinnt
+   der Inline-Style gegen die Media-Query und Handys scrollen seitlich. */
+.detail-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; min-width: 0; }
+.detail-grid > * { min-width: 0; }
+@media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; gap: 20px; } }
+
 /* Mobile Suchzeile auf /search: Desktop sucht im Header, mobil hier */
 .search-mobile-bar { display: none; }
 @media (max-width: 768px) { .search-mobile-bar { display: flex; } }

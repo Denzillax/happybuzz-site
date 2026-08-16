@@ -527,7 +527,9 @@ export default function ListingsPage() {
                 const hasBids = bidCounts[l.id]?.count > 0;
                 const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
                 const boost = myBoosts[l.id]?.[0];
-                const actBtn = { display: "inline-flex", alignItems: "center", gap: 5, padding: "8px 11px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", fontSize: 12.5, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark };
+                // Einheitliche Zellen im 3er-Raster: gleich breit, zentriert,
+                // damit die Aktionsleiste auf dem Handy nicht zerfleddert.
+                const actBtn = { display: "inline-flex", alignItems: "center", justifyContent: "center", width: "100%", boxSizing: "border-box", gap: 5, padding: "9px 4px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark, whiteSpace: "nowrap" };
                 return (
                   <div key={l.id} style={{ padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
                     <div style={{ display: "flex", gap: 12 }}>
@@ -552,8 +554,8 @@ export default function ListingsPage() {
                       {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#C8860A", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
                     </div>
 
-                    {/* Aktionen */}
-                    <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+                    {/* Aktionen: festes 3er-Raster statt Flex-Wrap */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 12 }}>
                       <Link href={`/listings/${l.id}`} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> Bearbeiten</Link>
                       <Link href={`/listings/new?duplicate=${l.id}`} style={{ ...actBtn, color: colors.teal, borderColor: `${colors.teal}40` }}><Copy size={14} /> Ähnliches</Link>
                       <button onClick={() => openStats(l)} style={actBtn}><BarChart3 size={14} /> Statistik</button>
@@ -561,7 +563,7 @@ export default function ListingsPage() {
                         <button onClick={() => renew(l)} style={{ ...actBtn, color: "#fff", background: K.petrol, borderColor: K.petrol }}><RefreshCw size={14} /> Verlängern</button>
                       )}
                       {l.status === "active" && (
-                        <div style={{ position: "relative" }}>
+                        <div style={{ position: "relative", width: "100%" }}>
                           <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#C8860A", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
                           {boostMenuFor === l.id && (
                             <>
@@ -590,7 +592,7 @@ export default function ListingsPage() {
                       {l.status !== "sold" && l.status !== "rented" && (
                         deleteId === l.id ? (
                           <>
-                            <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ ...actBtn, background: "#c62828", color: "#fff", borderColor: "#c62828" }}><CheckCircle size={14} /> Wirklich löschen</button>
+                            <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} style={{ ...actBtn, background: "#c62828", color: "#fff", borderColor: "#c62828", gridColumn: "span 2" }}><CheckCircle size={14} /> Wirklich löschen</button>
                             <button onClick={() => setDeleteId(null)} style={actBtn}>Abbrechen</button>
                           </>
                         ) : (
