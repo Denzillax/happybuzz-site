@@ -37,6 +37,20 @@ body {
 .search-mobile-bar { display: none; }
 @media (max-width: 768px) { .search-mobile-bar { display: flex; } }
 
+/* Inserat-Detail mobil: fixe Kauf-Leiste ueber der Bottom-Nav (56px + Safe-Area);
+   die Leaflet-Karte bleibt dem Desktop vorbehalten. */
+.mobile-cta-bar { display: none; }
+@media (max-width: 768px) {
+  .mobile-cta-bar {
+    position: fixed; left: 0; right: 0;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    z-index: 45; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 10px 14px;
+    background: #FBF8F2; border-top: 1px solid #14110D;
+  }
+  .map-desktop-only { display: none; }
+}
+
 @media (max-width: 767px) {
   .fab-desktop-only { display: none !important; }
   .bottom-nav-mobile { display: block !important; }

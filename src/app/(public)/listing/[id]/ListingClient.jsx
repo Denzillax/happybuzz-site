@@ -114,6 +114,12 @@ export default function ListingDetail() {
   const viewCounted = useRef(false);
   const [sellerRating, setSellerRating] = useState({ avg: 0, count: 0 });
   const [activeImg, setActiveImg] = useState(0);
+  // Mobile Kauf-Leiste: sichtbar, sobald die echte Kaufbox aus dem Bild ist
+  const buyBoxRef = useRef(null);
+  const [buyBoxSichtbar, setBuyBoxSichtbar] = useState(true);
+  // Touch-Wischen in der Galerie (unterdrueckt den Lightbox-Klick nach Swipe)
+  const touchStartX = useRef(null);
+  const swiped = useRef(false);
   const [lightbox, setLightbox] = useState(false);
 
   // Lightbox Keyboard (ESC, Arrows)
@@ -265,6 +271,17 @@ export default function ListingDetail() {
     return () => clearInterval(iv);
   }, [l?.auction_end, l?.status]);
 
+  // Beobachtet die Kaufbox fuer die mobile Kauf-Leiste. MUSS vor den
+  // Early-Returns stehen (Hook-Reihenfolge). Solange die Box noch nicht
+  // gerendert ist, bleibt der Effect wirkungslos und laeuft nach dem Laden neu.
+  useEffect(() => {
+    const el = buyBoxRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setBuyBoxSichtbar(e.isIntersecting), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [loading, l?.id]);
+
   if (loading) return <div style={{ fontFamily: fonts.body, background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
   if (!l) return <div style={{ fontFamily: fonts.body, background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
 
@@ -408,7 +425,17 @@ export default function ListingDetail() {
             {/* ── IMAGE GALLERY ──────────────────────── */}
             <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
               <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
-                onClick={() => imgs.length > 0 && setLightbox(true)}
+                onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
+                onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+                onTouchEnd={(e) => {
+                  if (touchStartX.current == null) return;
+                  const dx = e.changedTouches[0].clientX - touchStartX.current;
+                  touchStartX.current = null;
+                  if (Math.abs(dx) > 40 && imgs.length > 1) {
+                    swiped.current = true;
+                    setActiveImg(i => dx < 0 ? (i < imgs.length - 1 ? i + 1 : 0) : (i > 0 ? i - 1 : imgs.length - 1));
+                  }
+                }}
                 onMouseMove={(e) => {
                   if (imgs.length === 0) return;
                   const rect = e.currentTarget.getBoundingClientRect();
@@ -550,7 +577,8 @@ export default function ListingDetail() {
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
-                <LocationMap city={l.city} canton={l.canton} />
+                {/* Karte nur am Desktop: mobil reichen Ort + Route planen */}
+                <div className="map-desktop-only"><LocationMap city={l.city} canton={l.canton} /></div>
               </div>
             )}
 
@@ -657,7 +685,7 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
+            <div ref={buyBoxRef} style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
               {/* Exponat-Kopf: Referenznummer + Zustands-Stempel */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
                 <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: ".04em", color: colors.muted }}>{makeArtRef(l.id)}</span>
@@ -1455,6 +1483,26 @@ export default function ListingDetail() {
           .detail-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
+
+      {/* ── MOBILE KAUF-LEISTE: fix ueber der Bottom-Nav, nur wenn die echte
+             Kaufbox aus dem Bild gescrollt ist. Der Knopf springt zur Box,
+             dort wohnt die ganze Kauf-/Gebots-Logik (eine Quelle). ── */}
+      {!isOwner && l.status === "active" && !buyBoxSichtbar && (
+        <div className="mobile-cta-bar">
+          <div style={{ minWidth: 0 }}>
+            <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>
+              {l.listing_type === "auction" ? "Aktuelles Gebot" : l.listing_type === "rent" ? "Mietpreis" : "Preis"}
+            </p>
+            <p style={{ margin: 0, fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : `CHF ${fmtPrice(displayPrice)}`}
+            </p>
+          </div>
+          <button onClick={() => buyBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 0, border: `1.5px solid ${INK}`, background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: `3px 3px 0 ${INK}` }}>
+            {l.listing_type === "auction" ? "Jetzt bieten" : l.listing_type === "sell" ? "Jetzt kaufen" : "Anfragen"}
+          </button>
+        </div>
+      )}
 
       {/* ── LIGHTBOX ────────────────────────────────── */}
       {lightbox && imgs.length > 0 && (
