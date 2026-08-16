@@ -363,10 +363,12 @@ const TESTS = [
       { id: "pg_showcase", label: "Schaufenster: Verkäufer mit aktivem Showcase + Inserate-Grid sichtbar (Nektar-Einlösung)" },
       { id: "pg_hero_search", label: "Hero: Suchfeld (Enter -> /search?q=) + 'Gratis inserieren'-CTA -> /listings/new" },
       { id: "pg_hero_2lines", label: "Hero: jede Headline exakt 2 Zeilen (auch mobil), Highlight-Wisch + Effekte auf allen Slides" },
-      { id: "pg_hero_beta_dwell", label: "Beta-Willkommens-Slide steht ~12s (andere ~6.5s), CTAs 'Zur Test-Checkliste' -> /beta und 'Als Tester bewerben' -> /bewerben" },
-      { id: "pg_bewerben_tester", label: "/bewerben: EIN Klick auf 'Beta-Tester (Allrounder)' legt Bewerbung an (alle Tester testen querbeet, keine Rollenwahl), Karte wechselt auf 'Beworben'" },
-      { id: "pg_bewerben_mitarbeiter", label: "/bewerben: Mitarbeiter-Funktionen (Support/Moderation/Finanzen/Manager) je mit Erklärung + sichtbaren Admin-Bereichen wählbar, mehrere möglich" },
-      { id: "pg_bewerben_manual", label: "Bewerbung schaltet NIE selbst eine Rolle frei; Owner-Glocke 'Neue Bewerbung'; Admin-Übersicht: Tester-Bewerbung -> 'Beta-Zugang erteilen', Mitarbeiter-Bewerbung -> 'Rolle vergeben' springt in den Mitarbeiter-Tab" },
+      { id: "pg_hero_beta_dwell", label: "Beta-Willkommens-Slide steht ~12s (andere ~6.5s), CTAs 'So funktioniert die Beta' -> /beta und 'Mitarbeiter werden' -> /bewerben" },
+      { id: "pg_beta_intro", label: "/beta: 'Kurz erklärt'-Sektion oben in einfachen Worten (jeder mit Konto ist automatisch Tester, Feedback-Knopf, Checkliste freiwillig, Link Mitarbeiter werden)" },
+      { id: "pg_bewerben_hinweis", label: "/bewerben: Hinweisbox erklärt, dass es KEINE Tester-Bewerbung gibt (jedes Konto testet automatisch mit), Link zu /beta" },
+      { id: "pg_bewerben_mitarbeiter", label: "/bewerben: Mitarbeiter-Funktionen (Support/Moderation/Finanzen/Manager) je mit Erklärung + sichtbaren Admin-Bereichen; nur EINE Stelle pro Person, nach dem Klick sind die anderen Karten gesperrt" },
+      { id: "pg_bewerben_manual", label: "Bewerbung schaltet NIE selbst eine Rolle frei; Owner-Glocke 'Neue Bewerbung'; Admin-Übersicht: 'Rolle vergeben' springt in den Mitarbeiter-Tab, 'Erledigt' und 'Absagen' räumen die Karte" },
+      { id: "pg_bewerben_absage", label: "Absagen: Bewerber-Glocke 'Leider müssen wir dir mitteilen...', /bewerben zeigt die Karte als 'Abgesagt' (gesperrt), eine ANDERE Stelle wird wieder wählbar" },
       { id: "pg_empty_ctas", label: "Leere Zustände mit CTA (Verkäufe, Suche, Bestellung-404 -> Käufe/Verkäufe)" },
       { id: "pg_help", label: "Hilfe: FAQ-Suche & aufklappbare Antworten" },
       { id: "pg_how", label: "So funktionierts-Seite" },
@@ -527,6 +529,40 @@ export default function BetaTestPage() {
       </div>
 
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "24px 20px 80px" }}>
+        {/* Kurz erklaert: die Beta in menschlichen Worten (Tester = alle Konten) */}
+        <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, boxShadow: "4px 4px 0 rgba(20,17,13,.12)", padding: "20px 22px 18px", marginBottom: 20 }}>
+          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Space Mono', ui-monospace, monospace" }}>
+            Kurz erklärt
+          </p>
+          <div style={{ display: "grid", gap: 12, fontSize: 13.5, lineHeight: 1.65, color: colors.dark }}>
+            <p style={{ margin: 0 }}>
+              <strong>Was hier läuft.</strong> BEEDARO ist noch nicht offen für alle.
+              Du gehörst zu den wenigen, die schon drin sind. Betrachte es als
+              Baustellenbesichtigung, nur dass du den Helm behalten darfst.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Du bist schon Tester.</strong> Kein Formular, kein Casting:
+              wer ein Konto hat, testet mit. Das war die ganze Aufnahmeprüfung.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Was du tun sollst.</strong> Benutz die Seite wie ein ganz
+              normaler Kunde: stöbern, kaufen, verkaufen, bieten, mieten. Läuft
+              alles, gut. Klemmt etwas, drück auf den Feedback-Knopf und sag es
+              uns. Auch Kleinigkeiten. Gerade Kleinigkeiten.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Die Liste da unten.</strong> Für Gründliche. Wer mag, hakt
+              Punkt für Punkt ab. Pflicht ist sie nicht, Ruhm gibt es trotzdem.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Lust auf mehr?</strong> Wir suchen Mitarbeiter für Support,
+              Moderation, Finanzen und Manager. Eine Stelle pro Person, Denis
+              meldet sich persönlich.{" "}
+              <a href="/bewerben" style={{ color: "#0B5E5C", fontWeight: 700, textDecoration: "none" }}>Mitarbeiter werden</a>
+            </p>
+          </div>
+        </div>
+
         {/* Legend */}
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 16, fontSize: 12 }}>
           {[0, 1, 2, 3].map(s => {
