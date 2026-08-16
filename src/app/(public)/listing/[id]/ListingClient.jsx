@@ -875,6 +875,25 @@ export default function ListingDetail() {
                     </div>
                   )}
 
+                  {/* Besitzer sieht seine Auktions-Konditionen als Info
+                      (Sofortkauf oeffentlich, Mindestpreis nur fuer ihn) */}
+                  {isOwner && (l.buy_now_price > 0 || l.min_price > 0) && (
+                    <div style={{ padding: "10px 14px", borderRadius: 0, background: colors.cream, border: `1px solid ${colors.borderLt}`, fontSize: 13, marginBottom: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+                      {l.buy_now_price > 0 && (
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                          <span style={{ color: colors.muted }}>Sofortkauf-Preis</span>
+                          <strong>CHF {fmtPrice(l.buy_now_price)}</strong>
+                        </div>
+                      )}
+                      {l.min_price > 0 && (
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                          <span style={{ color: colors.muted }}>Mindestpreis (nur für dich sichtbar)</span>
+                          <strong>CHF {fmtPrice(l.min_price)}</strong>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Sofortkauf Button */}
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}

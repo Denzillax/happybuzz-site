@@ -346,7 +346,11 @@ export default function ListingsPage() {
                       </td>
                       {/* Preis */}
                       <td style={{ padding: "14px 10px", textAlign: "right", verticalAlign: "middle", fontWeight: 700, fontSize: 15 }}>
-                        {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(l.rent_price || l.price)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : `CHF ${fmtPrice(l.price)}`}
+                        {/* Auktion: Top-Gebot, sonst "ab Startpreis" — price ist bei Auktionen leer */}
+                        {l.listing_type === "free" ? "Gratis"
+                          : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(l.rent_price || l.price)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}`
+                          : l.listing_type === "auction" ? (() => { const bc = bidCounts[l.id] || { topBid: 0 }; return bc.topBid > 0 ? `CHF ${fmtPrice(bc.topBid)}` : `ab CHF ${fmtPrice(l.start_price || 0)}`; })()
+                          : `CHF ${fmtPrice(l.price)}`}
                       </td>
                       {/* Aufrufe */}
                       <td style={{ padding: "14px 10px", textAlign: "center", verticalAlign: "middle" }}>
@@ -540,7 +544,7 @@ export default function ListingsPage() {
                         <Link href={`/listing/${l.id}`} style={{ fontSize: 14.5, fontWeight: 700, color: colors.dark, textDecoration: "none", display: "block", marginBottom: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{l.title}</Link>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <TypeBadge type={l.listing_type} />
-                          <span style={{ fontSize: 14, fontWeight: 800, color: colors.dark }}>{l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(l.rent_price || l.price)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : `CHF ${fmtPrice(l.price)}`}</span>
+                          <span style={{ fontSize: 14, fontWeight: 800, color: colors.dark }}>{l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(l.rent_price || l.price)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : l.listing_type === "auction" ? (bc.topBid > 0 ? `CHF ${fmtPrice(bc.topBid)}` : `ab CHF ${fmtPrice(l.start_price || 0)}`) : `CHF ${fmtPrice(l.price)}`}</span>
                         </div>
                       </div>
                     </div>
