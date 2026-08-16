@@ -132,6 +132,9 @@ export default function OrderDetailPage() {
   const [booking, setBooking] = useState(null);
   const [damageFiles, setDamageFiles] = useState([]);
   const [salePopup, setSalePopup] = useState(null);
+  const [myAddresses, setMyAddresses] = useState([]);
+  const [addrOpen, setAddrOpen] = useState(false);
+  const [addrSaving, setAddrSaving] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -170,6 +173,13 @@ export default function OrderDetailPage() {
     }
     load();
   }, [params.id]);
+
+  // Lieferadressen des Käufers laden (nur er darf die Bestelladresse wählen)
+  useEffect(() => {
+    if (!purchase || !user || user.id !== purchase.buyer_id) return;
+    supabase.from("user_addresses").select("*").eq("user_id", user.id).order("created_at")
+      .then(({ data }) => setMyAddresses(data || []));
+  }, [purchase?.id, user?.id]);
 
   // Verkaufs-Popup für den Verkäufer, einmalig pro Bestellung.
   useEffect(() => {
@@ -240,6 +250,13 @@ export default function OrderDetailPage() {
   const shipSpeedLabel = listing?.ship_speed === "priority" ? "A-Post" : "B-Post";
   const shippingLabel = listing?.free_shipping ? `${shipMethodLabel} ${shipSpeedLabel} (Gratis)` : `${shipMethodLabel} ${shipSpeedLabel}`;
   const counterpart = isBuyer ? p.seller : p.buyer;
+  // Lieferadresse: Schnappschuss an der Bestellung, sonst Profil-Hauptadresse.
+  const deliveryAddr = p.delivery_address
+    || (p.buyer ? { name: fullName(p.buyer), street: p.buyer.street, postal_code: p.buyer.postal_code, city: p.buyer.city } : null);
+  // Aenderbar nur durch den Kaeufer, bei Versandartikeln, bis der Verkaeufer
+  // versendet hat (danach ist die Adresse unterwegs).
+  const addrChangeable = isBuyer && !isService && listing?.shipping_available
+    && ["confirmed", "payment_pending", "payment_marked", "paid"].includes(p.status);
   const counterpartLabel = isRental ? (isBuyer ? "Vermietet von" : "Gemietet von") : (isBuyer ? "Verkauft von" : "Verkauft an");
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   const sortedEvents = [...events];
@@ -406,7 +423,7 @@ export default function OrderDetailPage() {
                       <>
                         <p style={{ fontSize: 13, color: colors.muted, marginBottom: 8 }}>Lieferadresse:</p>
                         <div style={{ padding: 12, background: K.sand, borderRadius: 0, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
-                          <strong>{fullName(p.buyer)}</strong><br />{p.buyer?.street && <>{p.buyer.street}<br /></>}{(p.buyer?.postal_code || p.buyer?.city) && <>{p.buyer.postal_code} {p.buyer.city}</>}
+                          <strong>{deliveryAddr?.name}</strong>{deliveryAddr?.company && <><br />{deliveryAddr.company}</>}<br />{deliveryAddr?.street && <>{deliveryAddr.street}<br /></>}{(deliveryAddr?.postal_code || deliveryAddr?.city) && <>{deliveryAddr.postal_code} {deliveryAddr.city}</>}
                         </div>
                         {!showTracking ? (
                           <button onClick={() => setShowTracking(true)} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Als versendet markieren</button>
@@ -670,9 +687,52 @@ export default function OrderDetailPage() {
                   </div>
                 </SidebarSection>
               )}
-              {p.buyer && (
+              {deliveryAddr && (
                 <SidebarSection icon={MapPin} title="Lieferadresse">
-                  <div style={{ lineHeight: 1.5 }}>{fullName(p.buyer)}<br />{p.buyer?.street && <>{p.buyer.street}<br /></>}{(p.buyer?.postal_code || p.buyer?.city) && <>{p.buyer.postal_code} {p.buyer.city}</>}</div>
+                  <div style={{ lineHeight: 1.5 }}>
+                    {deliveryAddr.label && <span style={{ display: "inline-block", fontSize: 10, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: K.petrol, marginBottom: 2 }}>{deliveryAddr.label}</span>}
+                    {deliveryAddr.label && <br />}
+                    {deliveryAddr.name}<br />
+                    {deliveryAddr.company && <>{deliveryAddr.company}<br /></>}
+                    {deliveryAddr.street && <>{deliveryAddr.street}<br /></>}
+                    {(deliveryAddr.postal_code || deliveryAddr.city) && <>{deliveryAddr.postal_code} {deliveryAddr.city}</>}
+                  </div>
+                  {addrChangeable && !addrOpen && (
+                    <button onClick={() => setAddrOpen(true)} style={{ marginTop: 8, background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 12, fontWeight: 700, color: K.petrol, textDecoration: "underline", fontFamily: fonts.body }}>
+                      Ändern
+                    </button>
+                  )}
+                  {addrChangeable && addrOpen && (
+                    <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+                      {[
+                        { key: "haupt", label: "Hauptadresse", snap: null },
+                        ...myAddresses.map(a => ({
+                          key: a.id,
+                          label: a.label || `${a.street}, ${a.city}`,
+                          snap: {
+                            label: a.label || null,
+                            name: `${a.first_name || ""} ${a.last_name || ""}`.trim() || fullName(p.buyer),
+                            company: a.company || null,
+                            street: a.street, postal_code: a.postal_code, city: a.city,
+                          },
+                        })),
+                      ].map(opt => (
+                        <button key={opt.key} disabled={addrSaving}
+                          onClick={async () => {
+                            setAddrSaving(true);
+                            const { error } = await supabase.from("purchases").update({ delivery_address: opt.snap }).eq("id", p.id);
+                            if (error) { toast.error("Adresse konnte nicht gespeichert werden"); }
+                            else { setPurchase(prev => ({ ...prev, delivery_address: opt.snap })); setAddrOpen(false); toast.success("Lieferadresse aktualisiert"); }
+                            setAddrSaving(false);
+                          }}
+                          style={{ textAlign: "left", padding: "8px 10px", fontSize: 12, lineHeight: 1.4, background: "#fff", border: `1px solid ${K.ink}`, borderRadius: 0, cursor: "pointer", fontFamily: fonts.body }}>
+                          <strong>{opt.label}</strong>
+                          {opt.snap ? <><br />{opt.snap.street}, {opt.snap.postal_code} {opt.snap.city}</> : <><br />{p.buyer?.street}, {p.buyer?.postal_code} {p.buyer?.city}</>}
+                        </button>
+                      ))}
+                      <Link href="/settings?tab=address" style={{ fontSize: 12, color: K.petrol, textDecoration: "underline" }}>Neue Adresse anlegen</Link>
+                    </div>
+                  )}
                 </SidebarSection>
               )}
               {trackingEvent && (

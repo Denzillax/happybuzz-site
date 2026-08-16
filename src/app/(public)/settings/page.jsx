@@ -156,6 +156,13 @@ function PublicProfileModal({ profile, onClose }) {
 export default function SettingsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
+  // Direktsprung per ?tab= (z.B. von der Bestellseite zu den Adressen)
+  useEffect(() => {
+    try {
+      const t = new URLSearchParams(window.location.search).get("tab");
+      if (t && TABS.some(x => x.id === t)) setActiveTab(t);
+    } catch {}
+  }, []);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [addrResults, setAddrResults] = useState([]);
