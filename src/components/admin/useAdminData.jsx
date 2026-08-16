@@ -692,6 +692,18 @@ export function useAdminData() {
     flash(`Bewerbung von ${name} erledigt`);
     logAdmin("application_done", "user", name, { rolle: app.role });
   };
+  // Absage: Zeile bleibt (gleiche Stelle nicht nochmal), aber der
+  // One-Open-Index gibt den Platz fuer eine andere Stelle frei.
+  const rejectApplication = async (app, label) => {
+    const { error } = await supabase.from("applications").update({ status: "abgesagt" }).eq("id", app.id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setApplications(prev => prev.filter(a => a.id !== app.id));
+    const name = app.profil?.display_name || app.profil?.username || "Konto";
+    await createNotification(app.user_id, "application", "Deine Bewerbung",
+      `Leider müssen wir dir mitteilen: mit der Stelle als ${label || app.role} hat es diesmal nicht geklappt. Danke für dein Interesse.`, "/bewerben");
+    flash(`Bewerbung von ${name} abgesagt`);
+    logAdmin("application_rejected", "user", name, { rolle: app.role });
+  };
 
   // ── Betriebsmodus (SiteGate) ───────────────────────────────
   const saveSiteMode = async (mode, message) => {
@@ -1009,7 +1021,7 @@ export function useAdminData() {
     adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
     challenges, saveChallenge, toggleChallenge, updateChallenge,
     siteMode, saveSiteMode, setBetaAccess,
-    applications, resolveApplication,
+    applications, resolveApplication, rejectApplication,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,

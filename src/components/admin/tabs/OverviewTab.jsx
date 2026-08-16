@@ -23,7 +23,7 @@ const ROLLE_LABEL = {
 };
 
 export function OverviewTab({ admin }) {
-  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, setBetaAccess, setTab } = admin;
+  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, rejectApplication, setBetaAccess, setTab } = admin;
   const [feeView, setFeeView] = useState("paid");
   const [gateMsg, setGateMsg] = useState(siteMode?.message || "");
 
@@ -95,6 +95,10 @@ export function OverviewTab({ admin }) {
                 <button onClick={() => resolveApplication(a)}
                   style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
                   Erledigt
+                </button>
+                <button onClick={() => rejectApplication(a, (ROLLE_LABEL[a.role] || a.role).replace("Mitarbeiter: ", ""))}
+                  style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBEAE6", color: "#B0472F", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                  Absagen
                 </button>
               </div>
             );
