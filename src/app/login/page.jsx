@@ -204,6 +204,10 @@ export default function AuthPage() {
       });
       if (err) throw err;
       if (data.user && !data.user.identities?.length) throw { message: "Diese E-Mail ist bereits registriert." };
+      // E-Mail-Bestaetigung ist deaktiviert: signUp liefert direkt eine
+      // Session, also sofort rein statt auf eine Mail zu verweisen, die
+      // nie kommt. Faellt die Bestaetigung wieder an, greift der verify-View.
+      if (data.session) { window.location.href = "/"; return; }
       setView("verify");
     } catch (err) { setError(err.message); }
     finally { setLoading(false); }
