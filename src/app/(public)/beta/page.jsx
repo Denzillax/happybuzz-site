@@ -384,6 +384,7 @@ const TESTS = [
       { id: "pg_privacy", label: "Datenschutz-Seite" },
       { id: "pg_imprint", label: "Impressum-Seite" },
       { id: "pg_footer_links", label: "Alle Footer-Links funktionieren" },
+      { id: "pg_seo_basics", label: "SEO: Inserat teilen zeigt Titel + Bild-Vorschau (WhatsApp/Chat); neu freigegebene Inserate zeigen sofort den richtigen Seitentitel (kein 'nicht gefunden' im Tab)" },
     ],
   },
   {
