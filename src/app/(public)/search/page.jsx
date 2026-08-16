@@ -114,6 +114,8 @@ function SearchPageInner() {
   const [user, setUser] = useState(null);
 
   const [query, setQuery] = useState(searchParams.get("q") || "");
+  // Draft fuer die mobile Suchzeile (Desktop sucht im Header)
+  const [draft, setDraft] = useState(searchParams.get("q") || "");
   const [mainCatId, setMainCatId] = useState(searchParams.get("category") || "");
   const [subCatId, setSubCatId] = useState("");
   const [subSubCatId, setSubSubCatId] = useState("");
@@ -137,7 +139,7 @@ function SearchPageInner() {
   useEffect(() => { getCategories().then(setCategories).catch(console.error); }, []);
   useEffect(() => {
     const q = searchParams.get("q") || "";
-    if (q !== query) setQuery(q);
+    if (q !== query) { setQuery(q); setDraft(q); }
     const cat = searchParams.get("category");
     if (cat && categories.length > 0) {
       const found = categories.find(c => c.id === cat || c.slug === cat);
@@ -207,6 +209,28 @@ function SearchPageInner() {
     <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#FFFFFF" }}>
 
       <div style={{ maxWidth: 1320, margin: "0 auto", padding: "24px 24px 48px" }}>
+
+        {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
+        <div className="search-mobile-bar" style={{ border: `1.5px solid ${INK}`, background: "#fff", marginBottom: 14, overflow: "hidden" }}>
+          <Search size={16} style={{ marginLeft: 12, color: "#999", flexShrink: 0, alignSelf: "center" }} />
+          <input
+            type="text" value={draft} autoFocus={!query}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { setQuery(draft.trim()); setPage(1); e.target.blur(); } }}
+            placeholder="Suche nach Artikel, Verkäufer oder Artikelnummer"
+            style={{ flex: 1, minWidth: 0, padding: "12px 10px", border: "none", outline: "none", fontSize: 15, fontFamily: fonts.body, background: "transparent" }}
+          />
+          {draft && (
+            <button onClick={() => { setDraft(""); setQuery(""); setPage(1); }} aria-label="Suche leeren"
+              style={{ background: "none", border: "none", cursor: "pointer", padding: "0 4px", display: "flex", alignItems: "center" }}>
+              <X size={16} color="#999" />
+            </button>
+          )}
+          <button onClick={() => { setQuery(draft.trim()); setPage(1); }}
+            style={{ padding: "0 18px", background: INK, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 14, color: PAPER, fontFamily: fonts.body, flexShrink: 0 }}>
+            Suchen
+          </button>
+        </div>
 
         {/* ── Letzte Suchen (Chips) ── */}
         {recents.length > 0 && (

@@ -20,6 +20,9 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Mobile Suchzeile auf /search: Desktop sucht im Header, mobil hier */
+.search-mobile-bar { display: none; }
+@media (max-width: 768px) { .search-mobile-bar { display: flex; } }
 
 @media (max-width: 767px) {
   .fab-desktop-only { display: none !important; }

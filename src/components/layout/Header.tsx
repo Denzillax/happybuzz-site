@@ -375,16 +375,9 @@ export function Header() {
               </div>
             </div>
           )}
-          <div style={{ padding: '16px 24px' }}>
-            <div style={{ display: 'flex', borderRadius: 0, border: `1.5px solid ${INK}`, overflow: 'hidden' }}>
-              <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setMobileOpen(false); } }}
-                placeholder="Suchen..." style={{ flex: 1, padding: '12px 14px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit' }} />
-              <button onClick={() => { handleSearch(); setMobileOpen(false); }} style={{ padding: '0 20px', background: INK, border: 'none', cursor: 'pointer' }}>
-                <Search size={18} color={PAPER} />
-              </button>
-            </div>
-          </div>
-          <div style={{ padding: '0 12px' }}>
+          {/* Suchfeld bewusst NICHT hier: mobil sucht man ueber den
+              Suche-Tab der Bottom-Nav, das Feld sitzt oben auf /search */}
+          <div style={{ padding: '8px 12px 0' }}>
             {[
               { href: '/search', icon: ShoppingBag, label: 'Stöbern' },
               { href: '/how-it-works', icon: Star, label: 'So funktionierts' },
