@@ -23,8 +23,8 @@ plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architek
 ## Tech Stack
 - **Framework**: Next.js 14 App Router
 - **DB**: Supabase (Projekt-ID: `ekfsehsmwzougrgqukgf`)
-- **Hosting**: Vercel via GitHub Repo `happybuzz-site`
-- **Domain**: happybuzz.ch (beedaro.ch noch nicht registriert)
+- **Hosting**: Vercel (altes Projekt lief via GitHub Repo `happybuzz-site`, wird durch BEEDARO-Deploy abgelöst)
+- **Domain**: beedaro.ch (registriert seit 16.08.2026; happybuzz.ch wird abgelöst)
 
 ## Supabase Zugang
 - URL: `https://ekfsehsmwzougrgqukgf.supabase.co`
