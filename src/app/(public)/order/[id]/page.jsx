@@ -16,7 +16,7 @@ import {
   uploadDamagePhotos, submitServiceInvoice,
 } from "@/lib/listings";
 import { colors, fonts, radius } from "@/lib/theme";
-import { fmtCHF, fullName } from "@/lib/formatters";
+import { fmtCHF, fullName, shippingMethodLabel } from "@/lib/formatters";
 import { makeBeeRef, makeArtRef, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
@@ -246,7 +246,7 @@ export default function OrderDetailPage() {
   const isFinished = isRental ? p.status === "completed" : (p.status === "delivered" || p.status === "completed");
   const finishedLabel = isRental ? (isSeller ? "Vermietung abgeschlossen" : "Miete abgeschlossen") : (isSeller ? "Verkauf abgeschlossen" : "Kauf abgeschlossen");
   const depositAmount = parseFloat(listing?.deposit_amount || 0);
-  const shipMethodLabel = listing?.shipping_method === "paket" ? "Paket" : listing?.shipping_method === "brief" ? "Brief" : listing?.shipping_method === "sperrgut" ? "Sperrgut" : listing?.shipping_method || "–";
+  const shipMethodLabel = shippingMethodLabel(listing?.shipping_method) || "–";
   const shipSpeedLabel = listing?.ship_speed === "priority" ? "A-Post" : "B-Post";
   const shippingLabel = listing?.free_shipping ? `${shipMethodLabel} ${shipSpeedLabel} (Gratis)` : `${shipMethodLabel} ${shipSpeedLabel}`;
   const counterpart = isBuyer ? p.seller : p.buyer;

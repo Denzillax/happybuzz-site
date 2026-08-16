@@ -18,6 +18,24 @@ export function getDisplayPrice(listing) {
   return { text: formatPrice(listing.price), prefix: "", suffix: "" };
 }
 
+// ─── Lieferart ───────────────────────────────────────────────
+// Schluessel -> deutsches Label. Aeltere Kaeufe enthalten teils schon fertige
+// Labels ("Paket A-Post") — die gehen unveraendert durch.
+const SHIPPING_METHOD_LABELS = {
+  pickup: "Abholung",
+  paket: "Paket",
+  brief: "Brief",
+  sperrgut: "Sperrgut",
+  kurier: "Kurier",
+  spediteur: "Spediteur",
+  einschreiben: "Einschreiben",
+  lieferung_verkaeufer: "Lieferung durch Verkäufer",
+};
+export function shippingMethodLabel(value) {
+  if (!value) return "";
+  return SHIPPING_METHOD_LABELS[value] || value;
+}
+
 // ─── Cover-Bild URL ──────────────────────────────────────────
 // listing_images: url (NICHT image_url), sort_order (NICHT position)
 export function getCoverUrl(listing) {

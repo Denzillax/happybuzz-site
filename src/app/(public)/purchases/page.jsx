@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ShoppingBag, Package, Clock, CreditCard, Truck, CheckCircle, Star, X, AlertTriangle, Loader2 } from "lucide-react";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { colors, fonts, radius } from "@/lib/theme";
-import { fmtCHF } from "@/lib/formatters";
+import { fmtCHF, shippingMethodLabel } from "@/lib/formatters";
 import { makeBeeRef } from "@/lib/fees";
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
@@ -129,7 +129,7 @@ export default function PurchasesPage() {
                         <div style={{ fontSize: 12, color: colors.muted }}>{fmtDate(p.created_at)}</div>
                       </td>
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
-                        {p.shipping_method && <div>{p.shipping_method}</div>}
+                        {p.shipping_method && <div>{shippingMethodLabel(p.shipping_method)}</div>}
                         {parseFloat(p.shipping_cost) > 0 && <div style={{ fontSize: 12, color: colors.muted }}>CHF {fmtCHF(p.shipping_cost)}</div>}
                       </td>
                       <td style={{ padding: "14px 10px", textAlign: "right", verticalAlign: "middle", fontWeight: 700, fontSize: 15 }}>
