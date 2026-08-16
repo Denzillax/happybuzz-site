@@ -84,9 +84,18 @@ function PasswordStrength({ password }) {
   );
 }
 
-function SocialBtn({ icon, label, onClick }) {
+function SocialBtn({ icon, label, onClick, disabled }) {
   const [h, setH] = useState(false);
-  return <button type="button" onClick={onClick} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 0, border:`1px solid ${K.ink}`, background:h?K.sand:"#fff", cursor:"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s" }}>{icon}{label}</button>;
+  // disabled: OAuth-Anbieter sind noch nicht konfiguriert — Buttons bleiben
+  // sichtbar (Nutzer sehen, was kommt), aber ausgegraut und ohne Aktion.
+  return (
+    <button type="button" onClick={disabled ? undefined : onClick} disabled={disabled}
+      title={disabled ? `Anmeldung mit ${label} folgt in Kürze` : undefined}
+      onMouseEnter={()=>!disabled&&setH(true)} onMouseLeave={()=>setH(false)}
+      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 0, border:`1px solid ${disabled?"rgba(20,17,13,0.25)":K.ink}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
+      {icon}{label}
+    </button>
+  );
 }
 
 function Btn({ children, onClick, loading, secondary, type="button" }) {
@@ -250,8 +259,8 @@ export default function AuthPage() {
         <button type="button" onClick={()=>switchView("register")} className="tab">Registrieren</button>
       </div>
       <div style={{ display:"flex", gap:10 }}>
-        <SocialBtn icon={<GoogleIcon/>} label="Google" onClick={()=>handleOAuth("google")}/>
-        <SocialBtn icon={<AppleIcon/>} label="Apple" onClick={()=>handleOAuth("apple")}/>
+        <SocialBtn icon={<GoogleIcon/>} label="Google" disabled onClick={()=>handleOAuth("google")}/>
+        <SocialBtn icon={<AppleIcon/>} label="Apple" disabled onClick={()=>handleOAuth("apple")}/>
       </div>
       {renderDivider()}
       {renderError()}
@@ -270,8 +279,8 @@ export default function AuthPage() {
         <button onClick={()=>switchView("register")} className="tab active">Registrieren</button>
       </div>
       <div style={{ display:"flex", gap:10 }}>
-        <SocialBtn icon={<GoogleIcon/>} label="Google" onClick={()=>handleOAuth("google")}/>
-        <SocialBtn icon={<AppleIcon/>} label="Apple" onClick={()=>handleOAuth("apple")}/>
+        <SocialBtn icon={<GoogleIcon/>} label="Google" disabled onClick={()=>handleOAuth("google")}/>
+        <SocialBtn icon={<AppleIcon/>} label="Apple" disabled onClick={()=>handleOAuth("apple")}/>
       </div>
       {renderDivider()}
       {renderError()}
