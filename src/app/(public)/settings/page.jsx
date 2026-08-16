@@ -1337,7 +1337,7 @@ export default function SettingsPage() {
               const Icon = tab.icon;
               const active = activeTab === tab.id;
               return (
-                <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+                <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={active ? "set-tab set-tab-active" : "set-tab"} style={{
                   width: "100%", padding: "10px 14px", border: "none",
                   background: active ? K.sand : "transparent",
                   display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
@@ -1365,8 +1365,13 @@ export default function SettingsPage() {
         <style>{`
           @media (max-width: 700px) {
             .settings-layout { grid-template-columns: 1fr !important; }
-            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid #e8e5e0; margin-bottom: 8px; }
-            .settings-layout nav button { white-space: nowrap; flex-shrink: 0; border-left: none !important; border-bottom: 2.5px solid transparent !important; border-radius: 0 !important; }
+            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid #e8e5e0; margin-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .settings-layout nav::-webkit-scrollbar { display: none; }
+            /* Sidebar-Buttons sind inline width:100%; als horizontale Tab-Zeile
+               muessen sie auf Inhaltsbreite schrumpfen, sonst ist jeder Knopf
+               bildschirmbreit und die Zeile besteht fast nur aus Leerraum. */
+            .settings-layout nav .set-tab { width: auto !important; white-space: nowrap; flex-shrink: 0; padding: 9px 12px !important; margin-bottom: 0 !important; border-left: none !important; border-bottom: 2.5px solid transparent !important; border-radius: 0 !important; }
+            .settings-layout nav .set-tab-active { border-bottom-color: #F4C03F !important; }
           }
         `}</style>
 
