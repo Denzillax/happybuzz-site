@@ -285,7 +285,15 @@ export function ListingCard(props) {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing.city || "–"}</span>
             </span>
             <span style={{ marginLeft: "auto", flexShrink: 0 }}>
-              <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
+              {statusOverlay ? (
+                // Statt Countdown/Datum: der echte Status ("Verkauft"/"Beendet"),
+                // gleicher Stil wie der abgelaufene Countdown
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
+                  <Clock size={10} /> {statusOverlay}
+                </span>
+              ) : (
+                <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
+              )}
             </span>
           </div>
 
