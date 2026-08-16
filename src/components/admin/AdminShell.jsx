@@ -17,6 +17,7 @@ import { CompanyTab } from "@/components/admin/tabs/CompanyTab";
 import { StaffTab } from "@/components/admin/tabs/StaffTab";
 import { FeedbackTab } from "@/components/admin/tabs/FeedbackTab";
 import { CategoriesTab } from "@/components/admin/tabs/CategoriesTab";
+import { ChallengesTab } from "@/components/admin/tabs/ChallengesTab";
 import { MahnPreviewModal } from "@/components/admin/modals/MahnPreviewModal";
 import { BannerModal } from "@/components/admin/modals/BannerModal";
 import { BroadcastComposer } from "@/components/admin/modals/BroadcastComposer";
@@ -119,6 +120,7 @@ export function AdminShell({ admin }) {
           {tab === "feedback" && <FeedbackTab admin={admin} />}
 
           {tab === "categories" && <CategoriesTab admin={admin} />}
+          {tab === "challenges" && <ChallengesTab admin={admin} />}
 
           {/* ═══ PROTOKOLL ═══ */}
           {tab === "audit" && <AuditTab admin={admin} />}

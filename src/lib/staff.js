@@ -5,7 +5,7 @@ export const ROLE_TABS = {
   support: ["overview", "users", "orders", "reports", "emails", "feedback"],
   finance: ["overview", "invoices", "dunning", "analytics"],
   moderation: ["overview", "listings", "reports", "users"],
-  manager: ["overview", "analytics", "users", "orders", "invoices", "listings", "emails", "dunning", "audit", "reports", "feedback", "categories"],
+  manager: ["overview", "analytics", "users", "orders", "invoices", "listings", "emails", "dunning", "audit", "reports", "feedback", "categories", "challenges"],
 };
 
 export async function getMyRole(userId) {

@@ -1,9 +1,12 @@
 "use client";
-import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Megaphone, Clock, Building2, Users2 } from "lucide-react";
+import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Megaphone, Clock, Building2, Users2, Target } from "lucide-react";
 import { colors, radius } from "@/lib/theme";
 
 export const AUDIT_META = {
   ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#EB5E55", bg: "#FFEBEB" },
+  challenge_created:    { label: "Challenge angelegt",    Icon: Target,      color: "#0E9493", bg: "#E6F5F5" },
+  challenge_toggled:    { label: "Challenge (de)aktiviert", Icon: Target,    color: "#E65100", bg: "#FFF3E0" },
+  challenge_updated:    { label: "Challenge-Vorlage geändert", Icon: Target, color: "#0E9493", bg: "#E6F5F5" },
   unban:                { label: "Konto entsperrt",       Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   report_resolve:       { label: "Meldung erledigt",      Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   report_status:        { label: "Meldungs-Status geändert", Icon: CheckCircle, color: "#E65100", bg: "#FFF3E0" },

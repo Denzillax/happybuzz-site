@@ -3,7 +3,7 @@ import { fmtCHF, fmtDate } from "@/lib/formatters";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2, MessageSquareWarning, FolderTree } from "lucide-react";
+import { LayoutDashboard, ShieldCheck, Shield, Users, Package, Receipt, ReceiptText, ShoppingBag, TrendingUp, CheckCircle, XCircle, Eye, AlertTriangle, Clock, Search, ChevronDown, ChevronUp, Ban, Play, Pause, Flag, MessageCircle, Star, ArrowLeft, Download, Mail, BellRing, LineChart, Megaphone, ScrollText, Building2, Users2, MessageSquareWarning, FolderTree, Target } from "lucide-react";
 import { downloadCSV } from "@/lib/csv";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { bucketDaily, countByType } from "@/lib/adminAnalytics";
@@ -34,6 +34,7 @@ export function useAdminData() {
   const [reviews, setReviews] = useState([]);
   const [feedback, setFeedback] = useState([]);
   const [adminCategories, setAdminCategories] = useState([]);
+  const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [search, setSearch] = useState("");
@@ -180,6 +181,9 @@ export function useAdminData() {
       // Kategorien (ALLE, auch deaktivierte — die Verwaltung braucht den Vollbestand)
       const { data: cats } = await supabase.from("categories").select("*").order("sort_order");
       setAdminCategories(cats || []);
+
+      // Challenges (Vorlagen + Instanzen) mit Teilnehmerzahlen
+      await loadChallenges();
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -667,6 +671,52 @@ export function useAdminData() {
     logAdmin("category_delete", "category", cat.name);
     return true;
   };
+  // ── Challenges (Vorlagen + Instanzen) ──────────────────────
+  const loadChallenges = async () => {
+    const { data } = await supabase.from("challenges")
+      .select("*").order("is_template", { ascending: false }).order("starts_at", { ascending: false });
+    const ids = (data || []).filter(c => !c.is_template).map(c => c.id);
+    let counts = {};
+    if (ids.length) {
+      const { data: uc } = await supabase.from("user_challenges").select("challenge_id").in("challenge_id", ids);
+      (uc || []).forEach(r => { counts[r.challenge_id] = (counts[r.challenge_id] || 0) + 1; });
+    }
+    setChallenges((data || []).map(c => ({ ...c, participants: counts[c.id] || 0 })));
+  };
+
+  const saveChallenge = async (form) => {
+    const row = { ...form, type: form.is_template ? "weekly" : "special", active: true };
+    const { error } = await supabase.from("challenges").insert(row);
+    if (error) { flash(`Fehler: ${error.message}`); return false; }
+    flash(`Challenge "${form.title}" angelegt`);
+    logAdmin("challenge_created", "challenge", form.title);
+    await loadChallenges();
+    return true;
+  };
+
+  const toggleChallenge = async (c) => {
+    const { error } = await supabase.from("challenges").update({ active: !c.active }).eq("id", c.id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    flash(!c.active ? `"${c.title}" aktiviert` : `"${c.title}" deaktiviert`);
+    logAdmin("challenge_toggled", "challenge", c.title, { aktiv: !c.active });
+    await loadChallenges();
+  };
+
+  // Vorlagen bearbeiten; wirkt ab der NAECHSTEN Wochen-Instanz,
+  // laufende Instanzen bleiben unveraendert.
+  const updateChallenge = async (id, form) => {
+    const { error } = await supabase.from("challenges").update({
+      title: form.title, description: form.description,
+      target_action: form.target_action, target_value: parseInt(form.target_value) || 1,
+      xp_reward: parseInt(form.xp_reward) || 0,
+    }).eq("id", id);
+    if (error) { flash(`Fehler: ${error.message}`); return false; }
+    flash(`Vorlage "${form.title}" gespeichert`);
+    logAdmin("challenge_updated", "challenge", form.title);
+    await loadChallenges();
+    return true;
+  };
+
   const toggleCategoryActive = async (cat) => {
     const next = cat.is_active === false; // false → aktivieren, sonst deaktivieren
     const { error } = await supabase.from("categories").update({ is_active: next }).eq("id", cat.id);
@@ -863,6 +913,7 @@ export function useAdminData() {
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
     { key: "feedback", label: "Feedback", Icon: MessageSquareWarning, badge: openFeedback.length },
     { key: "categories", label: "Kategorien", Icon: FolderTree },
+    { key: "challenges", label: "Challenges", Icon: Target },
     { key: "company", label: "Firma", Icon: Building2 },
     { key: "mitarbeiter", label: "Mitarbeiter", Icon: Users2 },
   ];
@@ -914,6 +965,7 @@ export function useAdminData() {
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
     adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
+    challenges, saveChallenge, toggleChallenge, updateChallenge,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,
