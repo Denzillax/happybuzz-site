@@ -25,6 +25,7 @@ import RatingSection from "@/components/order/RatingSection";
 import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
 
 import { PURCHASE_STATUS as STATUS_MAP } from "@/lib/orderStatus";
+import { serviceQrPayload, qrImageUrl } from "@/lib/swissQR";
 
 // Katalog-Tokens (wie öffentliche Seiten)
 const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
@@ -67,8 +68,8 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
   useEffect(() => { getInvoiceItems(purchaseId).then(setItems); }, [purchaseId]);
 
   const total = parseFloat(totalPrice || 0);
-  const sellerIban = (sellerProfile?.iban || "").replace(/\s/g, "");
-  const qrUrl = sellerIban ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&ecc=M&data=${encodeURIComponent(["SPC","0200","1",sellerIban,"K",fullName(sellerProfile),sellerProfile?.street||"",`${sellerProfile?.postal_code||""} ${sellerProfile?.city||""}`.trim(),"","","CH","","","","","","","",total.toFixed(2),"CHF","K","","","","","","CH","NON","",`Service ${(purchaseId||"").substring(0,8).toUpperCase()}`,"EPD"].join("\r\n"))}` : null;
+  // Strukturierter QR aus der zentralen Quelle (Typ-K-Duplikat entfernt)
+  const qrUrl = qrImageUrl(serviceQrPayload(purchaseId, total, sellerProfile), 180);
 
   return (
     <div>

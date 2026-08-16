@@ -8,6 +8,8 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors, fonts, radius } from "@/lib/theme";
 import { MIN_INVOICE_CHF } from "@/lib/constants";
+import { getCompanySettings, formatIban } from "@/lib/company";
+import { feeQrPayload, qrImageUrl } from "@/lib/swissQR";
 
 const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
@@ -20,6 +22,8 @@ export default function FeesPage() {
   const [tab, setTab] = useState("open");
   const [openInvoice, setOpenInvoice] = useState(null);
   const [toast, setToast] = useState("");
+  const [profile, setProfile] = useState(null);
+  const [company, setCompany] = useState(null);
 
   const flash = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2000); };
   const copy = (t) => { navigator.clipboard.writeText(t); flash("Kopiert"); };
@@ -32,6 +36,15 @@ export default function FeesPage() {
 
       const { data: fees } = await supabase.from("fee_ledger").select("*").eq("seller_id", u.id).order("created_at", { ascending: false });
       setLedger(fees || []);
+
+      // Fuer den QR: Firmendaten (Empfaenger, live aus dem Admin) + eigenes
+      // Profil (Zahler mit Adresse). Nie hartkodieren.
+      const [{ data: prof }, comp] = await Promise.all([
+        supabase.from("profiles").select("*").eq("id", u.id).maybeSingle(),
+        getCompanySettings(),
+      ]);
+      setProfile(prof || null);
+      setCompany(comp);
 
       // Auto-Monatsrechnung für vergangene Monate
       const now = new Date();
@@ -66,7 +79,11 @@ export default function FeesPage() {
   };
 
   const sc = { open: { icon: Clock, color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
-  const beedaroIban = "CH12 3456 7890 1234 5678 9";
+  // Zahlungsdaten IMMER live aus den Firmendaten (Admin -> Firma), nie hartkodiert
+  const beedaroIban = company?.iban ? formatIban(company.iban) : "Wird hinterlegt";
+  const companyAddress = company
+    ? `${company.name}\n${company.street}\n${company.postal_code} ${company.city}`
+    : "";
 
   // Tabelle rendern (shared zwischen Tabs)
   const FeeTable = ({ fees, showStatus }) => (
@@ -234,7 +251,7 @@ export default function FeesPage() {
                           <div style={{ background: colors.cream, borderRadius: 0, border: `1px solid ${colors.borderLt}`, overflow: "hidden" }}>
                             {[
                               { label: "Begünstigter / IBAN", value: beedaroIban, copyVal: beedaroIban },
-                              { label: "Einzahlung für", value: "BEEDARO\nGemeindehausstrasse 11B\n6010 Kriens", copyVal: "BEEDARO, Gemeindehausstrasse 11B, 6010 Kriens" },
+                              { label: "Einzahlung für", value: companyAddress, copyVal: companyAddress.replace(/\n/g, ", ") },
                               { label: "Betrag in CHF", value: `CHF ${fmtCHF(inv.total_fees)}`, copyVal: parseFloat(inv.total_fees).toFixed(2) },
                               { label: "Zahlungszweck", value: inv.invoice_ref, copyVal: inv.invoice_ref },
                             ].map((r, i) => (
@@ -249,8 +266,17 @@ export default function FeesPage() {
                           </div>
                           {/* QR Code */}
                           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&ecc=M&data=${encodeURIComponent(["SPC","0200","1","CH1234567890123456789","K","BEEDARO","Gemeindehausstrasse 11B","6010 Kriens","","","CH","","","","","","","",parseFloat(inv.total_fees).toFixed(2),"CHF","K","","","","","","CH","NON","",`Gebuehren ${inv.invoice_ref}`,"EPD"].join("\r\n"))}`} alt="QR" style={{ width: "80%", maxWidth: 220, aspectRatio: "1", border: "1px solid #eee", borderRadius: 0 }} />
-                            <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
+                            {(() => {
+                              const qr = qrImageUrl(feeQrPayload(inv, profile, company || {}), 300);
+                              return qr ? (
+                                <>
+                                  <img src={qr} alt="QR" style={{ width: "80%", maxWidth: 220, aspectRatio: "1", border: "1px solid #eee", borderRadius: 0 }} />
+                                  <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
+                                </>
+                              ) : (
+                                <p style={{ margin: 0, fontSize: 11, color: colors.muted, fontFamily: fonts.body, textAlign: "center" }}>QR folgt, sobald die Zahlungsdaten hinterlegt sind.</p>
+                              );
+                            })()}
                           </div>
                         </div>
 

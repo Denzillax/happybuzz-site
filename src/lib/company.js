@@ -1,8 +1,10 @@
 import { supabase } from "@/lib/supabase/supabase";
 
+// Bewusst OHNE IBAN: fehlt die echte Konfiguration (Admin -> Firma), soll
+// feeQrPayload KEINEN Zahlteil erzeugen statt einen mit Platzhalter-IBAN.
 export const DEFAULT_COMPANY = {
   name: "BEEDARO", street: "Gemeindehausstrasse 11B", postal_code: "6010", city: "Kriens",
-  country: "CH", iban: "CH1234567890123456789", uid: "", contact_email: "", contact_phone: "",
+  country: "CH", iban: "", uid: "", contact_email: "", contact_phone: "",
 };
 
 // Liest den Firmen-Singleton (id=1); Fallback auf Defaults, damit Rechnungen nie ohne Creditor sind.
