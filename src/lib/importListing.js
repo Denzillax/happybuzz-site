@@ -59,6 +59,28 @@ function stripTags(s) {
     .trim();
 }
 
+// HTML-Fragment auf das Beedaro-Beschreibungs-Subset eindampfen (b, i, ul/li,
+// h3, p, br — ohne Attribute). Regex-basiert, laeuft in Browser UND Node;
+// die finale DOM-Sanitisierung (sanitizeDescription) macht ohnehin der Client,
+// bevor der Text ins Formular oder in die DB gelangt.
+export function toRichSubset(fragment) {
+  let s = String(fragment || "");
+  s = s.replace(/<(script|style|noscript)[^>]*>[\s\S]*?<\/\1>/gi, " ");
+  const MAP = { strong: "b", b: "b", em: "i", i: "i", ul: "ul", ol: "ul", li: "li", h1: "h3", h2: "h3", h3: "h3", h4: "h3", p: "p", div: "p", br: "br" };
+  s = s.replace(/<\/?\s*([a-z0-9]+)[^>]*>/gi, (m, tag) => {
+    const t = MAP[tag.toLowerCase()];
+    if (!t) return " ";
+    if (t === "br") return "<br>";
+    return m.trimStart().startsWith("</") ? `</${t}>` : `<${t}>`;
+  });
+  return s.replace(/[ \t]+/g, " ").replace(/\s*(<br>)\s*/g, "$1").trim();
+}
+
+// Hat das Subset ueberhaupt Formatierung, die sich zu behalten lohnt?
+function hasRichContent(subset) {
+  return /<(b|i|ul|li|h3)>/i.test(String(subset || ""));
+}
+
 // "CHF 460.-", "460.00", "Fr. 1'250" → 460 / 1250
 export function parsePrice(raw) {
   if (raw == null) return null;
@@ -83,7 +105,11 @@ function fromJsonLd(html) {
       const node = item?.["@graph"] ? item["@graph"].find((n) => n["@type"] === "Product") : item;
       if (!node || node["@type"] !== "Product") continue;
       if (node.name && !out.title) out.title = decodeEntities(String(node.name));
-      if (node.description && !out.description) out.description = stripTags(node.description);
+      if (node.description && !out.description) {
+        out.description = stripTags(node.description);
+        const subset = toRichSubset(node.description);
+        if (hasRichContent(subset)) out.descriptionHtml = subset;
+      }
       const imgs = Array.isArray(node.image) ? node.image : node.image ? [node.image] : [];
       if (imgs.length && !out.images) out.images = imgs.map(String);
       const offer = Array.isArray(node.offers) ? node.offers[0] : node.offers;
@@ -132,13 +158,20 @@ export function parseListingHtml(html, sourceKey = null) {
     || stripTags((html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i) || [])[1] || "");
 
   let description = ld.description || metaContent(html, "og:description") || "";
+  let descriptionHtml = ld.descriptionHtml || "";
   // og:description ist oft gekürzt ("…") — dann lieber der längste Textblock
-  // aus dem Markup, falls einer deutlich mehr hergibt.
+  // aus dem Markup, falls einer deutlich mehr hergibt. Vom Gewinner-Block wird
+  // zusätzlich das Roh-HTML behalten (Fett/Listen der Quelle).
   if (/…$|\.\.\.$/.test(description) || description.length < 80) {
     const blocks = (html.match(/<(?:p|div|span)[^>]*>([\s\S]{80,4000}?)<\/(?:p|div|span)>/gi) || [])
-      .map((b) => stripTags(b))
-      .filter((t) => t.length > description.length && !/{|}|function|window\.|cookie/i.test(t));
-    if (blocks.length) description = blocks.sort((a, b) => b.length - a.length)[0];
+      .map((raw) => ({ raw, text: stripTags(raw) }))
+      .filter((b) => b.text.length > description.length && !/{|}|function|window\.|cookie/i.test(b.text));
+    if (blocks.length) {
+      const winner = blocks.sort((a, b) => b.text.length - a.text.length)[0];
+      description = winner.text;
+      const subset = toRichSubset(winner.raw);
+      descriptionHtml = hasRichContent(subset) ? subset : "";
+    }
   }
 
   const price = ld.price != null
@@ -177,6 +210,8 @@ export function parseListingHtml(html, sourceKey = null) {
   return {
     title: (title || "").slice(0, 120).trim(),
     description: (description || "").slice(0, 4000).trim(),
+    // Formatierte Variante (Beedaro-Subset) — leer, wenn die Quelle nichts hergibt
+    descriptionHtml: (descriptionHtml || "").slice(0, 8000).trim(),
     price,
     images,
   };

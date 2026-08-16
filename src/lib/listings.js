@@ -2,6 +2,14 @@ import { supabase } from "@/lib/supabase/supabase";
 import { createNotification } from "@/lib/notifications";
 import { DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER } from "@/lib/constants";
 import { calcFee, calcBeeImpact } from "@/lib/fees";
+import { sanitizeDescription, isFormattedDescription } from "@/lib/richtext";
+
+// Beschreibung vor dem Speichern filtern: Editor-Inhalt (Mini-HTML) durch die
+// Allowlist, Alt-Bestand/reiner Text unveraendert lassen.
+const cleanDescription = (d) => {
+  const s = String(d || "");
+  return isFormattedDescription(s) ? sanitizeDescription(s) : s;
+};
 
 // ─── Slug ────────────────────────────────────────────────────
 function slugify(text) {
@@ -74,7 +82,7 @@ export async function createListing(userId, formData) {
     user_id: userId,
     title: formData.title,
     slug: slugify(formData.title || "inserat") + "-" + Date.now().toString(36),
-    description: formData.description || "",
+    description: cleanDescription(formData.description),
     category_id: formData.category_id || null,
     listing_type: formData.listing_type || "sell",
     status: "draft",
@@ -141,7 +149,7 @@ export async function updateListing(listingId, formData) {
   const row = {
     title: formData.title,
     slug: slugify(formData.title || "inserat") + "-" + Date.now().toString(36),
-    description: formData.description || "",
+    description: cleanDescription(formData.description),
     category_id: formData.category_id || null,
     listing_type: formData.listing_type || "sell",
     condition: formData.condition || "good",

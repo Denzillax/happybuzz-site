@@ -18,6 +18,8 @@ import { calcFee } from "@/lib/fees";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
 import ImportBox from "@/components/listings/ImportBox";
 import BeeIcon from "@/components/shared/BeeIcon";
+import RichTextEditor from "@/components/shared/RichTextEditor";
+import { descriptionPlainText } from "@/lib/richtext";
 import { checkProfileComplete } from "@/lib/listings";
 import { getCategoryAttributes, saveListingAttributes, getListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
 
@@ -460,7 +462,9 @@ export default function ListingForm({
     const e = {};
     // Allgemein
     if (!form.title.trim()) e.title = "Titel ist erforderlich";
-    if (!(form.description || "").trim()) e.description = "Beschreibung ist erforderlich";
+    const descText = descriptionPlainText(form.description);
+    if (!descText.trim()) e.description = "Beschreibung ist erforderlich";
+    else if (descText.length > 5000) e.description = "Beschreibung ist zu lang (max. 5000 Zeichen)";
     if (!form.category_id) e.category = "Kategorie ist erforderlich";
     if (!form.condition) e.condition = "Zustand ist erforderlich";
     if (!form.postal_code || !form.city) e.location = "Standort (PLZ/Ort) ist erforderlich";
@@ -694,9 +698,12 @@ export default function ListingForm({
 
       {/* ── IMPORT VON FREMDPLATTFORMEN (nur beim Erstellen) ── */}
       {!isEdit && (
-        <ImportBox onImport={({ title, description, price, files }) => {
+        <ImportBox onImport={({ title, description, descriptionHtml, price, files }) => {
           if (title) set("title", title);
-          if (description) set("description", description);
+          // Formatierte Variante bevorzugen (Fett/Listen der Quelle); der
+          // Editor jagt sie beim Uebernehmen durch sanitizeDescription.
+          if (descriptionHtml) set("description", descriptionHtml);
+          else if (description) set("description", description);
           if (price != null && price > 0) set("price", String(price));
           if (files?.length) addFiles(files);
         }} />
@@ -960,16 +967,15 @@ export default function ListingForm({
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 6 }}>
             <label style={{ ...labelBase, marginBottom: 0 }}>Beschreibung</label>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ ...hintStyle, margin: 0, fontSize: 11 }}>{form.description.length}/5000</span>
+              <span style={{ ...hintStyle, margin: 0, fontSize: 11 }}>{descriptionPlainText(form.description).length}/5000</span>
               <AiButton label="KI-Text" />
             </div>
           </div>
-          <textarea
-            style={{ ...inputBase, minHeight: 110, resize: "vertical", ...errStyle("description") }}
-            placeholder="Beschreibe dein Produkt: Zustand, Besonderheiten, Zubehör..."
+          <RichTextEditor
             value={form.description}
-            onChange={(e) => set("description", e.target.value)}
-            maxLength={5000}
+            onChange={(html) => set("description", html)}
+            placeholder="Beschreibe dein Produkt: Zustand, Besonderheiten, Zubehör..."
+            style={errStyle("description")}
           />
           <Err field="description" />
         </div>

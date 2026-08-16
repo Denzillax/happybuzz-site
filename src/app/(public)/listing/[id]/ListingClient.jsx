@@ -26,6 +26,7 @@ import {
 } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
+import { sanitizeDescription, isFormattedDescription } from "@/lib/richtext";
 import { createNotification } from "@/lib/notifications";
 import { makeArtRef, calcFee } from "@/lib/fees";
 
@@ -523,7 +524,15 @@ export default function ListingDetail() {
             {/* ── BESCHREIBUNG ───────────────────────── */}
             <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
               <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
-              <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
+              {/* Formatierte Beschreibungen (Mini-HTML aus dem Editor) werden
+                  IMMER frisch durch sanitizeDescription gefiltert — nie
+                  ungefilterten DB-Bestand rendern. Alt-Bestand bleibt Plaintext. */}
+              {isFormattedDescription(l.description) ? (
+                <div className="rich-desc" style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeDescription(l.description) }} />
+              ) : (
+                <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
+              )}
             </div>
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import {
-  parseListingHtml, parsePrice, isAllowedImageHost, IMPORT_SOURCES,
+  parseListingHtml, parsePrice, isAllowedImageHost, IMPORT_SOURCES, toRichSubset,
 } from "@/lib/importListing";
 import { bookmarkletHref, decodeImportHash, stashImportHash, takeImportHtml } from "@/lib/importBookmarklet";
 
@@ -216,5 +216,30 @@ describe("isAllowedImageHost (Proxy-Whitelist)", () => {
     expect(isAllowedImageHost("c.tutti.ch.evil.com")).toBe(false);
     expect(isAllowedImageHost("fbcdn.net.evil.com")).toBe(false);
     expect(isAllowedImageHost("")).toBe(false);
+  });
+});
+
+describe("toRichSubset (Formatierung uebernehmen)", () => {
+  it("kanonisiert erlaubte Tags und wirft Attribute weg", () => {
+    const s = toRichSubset('<p class="x"><strong onclick="evil()">Fett</strong> und <em>kursiv</em></p><ol><li>Punkt</li></ol>');
+    expect(s).toBe("<p><b>Fett</b> und <i>kursiv</i></p><ul><li>Punkt</li></ul>");
+  });
+  it("entfernt fremde Tags samt Script-Inhalt", () => {
+    const s = toRichSubset('<div>Text<script>window.x=1</script><a href="https://evil">Link</a></div>');
+    expect(s).toContain("Text");
+    expect(s).toContain("Link");
+    expect(s).not.toContain("script");
+    expect(s).not.toContain("href");
+    expect(s).not.toContain("window.x");
+  });
+  it("parseListingHtml liefert descriptionHtml, wenn die Quelle Formatierung hat", () => {
+    // Alles in EINEM Container: die Block-Heuristik schneidet am ersten
+    // schliessenden p/div/span ab (verschachtelte p wuerden die Liste kappen)
+    const html = `<html><body><div class="desc">${"Sehr lange Beschreibung mit vielen Details zum Zustand und Zubehoer des Artikels, damit der Block gewinnt. ".repeat(2)}<b>Neuwertig</b><ul><li>Ladekabel</li><li>OVP</li></ul></div></body></html>`;
+    const r = parseListingHtml(html, null);
+    expect(r.descriptionHtml).toContain("<b>Neuwertig</b>");
+    expect(r.descriptionHtml).toContain("<li>Ladekabel</li>");
+    expect(r.description).toContain("Neuwertig");
+    expect(r.description).not.toContain("<b>");
   });
 });

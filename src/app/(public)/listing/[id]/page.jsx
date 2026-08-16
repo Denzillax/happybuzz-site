@@ -5,6 +5,16 @@ const TYPE_LABEL = {
   sell: "Kaufen", auction: "Auktion", rent: "Mieten", free: "Gratis", service: "Service",
 };
 
+// Serverseitig (kein DOMParser): Mini-HTML der Beschreibung fuer Meta-Texte
+// auf reinen Text reduzieren. Regex reicht hier — es wird nie als HTML gerendert.
+function stripDescriptionMarkup(d) {
+  return String(d || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // Immer frisch rendern: sonst cacht Next die Metadata-Abfrage. Ein Inserat,
 // das beim ersten Aufruf noch in der Freigabe war, bliebe fuer immer
 // "nicht gefunden" (und Preise/Gebote waeren veraltet).
@@ -32,7 +42,8 @@ export async function generateMetadata({ params }) {
       ? (l.rent_price != null ? `CHF ${Number(l.rent_price).toLocaleString("de-CH")}` : "")
       : (l.price != null ? `CHF ${Number(l.price).toLocaleString("de-CH")}` : "");
   const typeTxt = TYPE_LABEL[l.listing_type] || "";
-  const desc = (l.description || "").replace(/\s+/g, " ").trim().slice(0, 160)
+  // Beschreibung kann Mini-HTML aus dem Editor sein — fuer Meta-Tags Tags/Entities entfernen
+  const desc = stripDescriptionMarkup(l.description).slice(0, 160)
     || `${typeTxt}${priceTxt ? ` · ${priceTxt}` : ""} auf BEEDARO, dem Schweizer Secondhand-Marktplatz.`;
 
   return {
@@ -80,7 +91,7 @@ export default async function ListingPage({ params }) {
         "@context": "https://schema.org",
         "@type": "Product",
         name: l.title,
-        description: (l.description || "").replace(/\s+/g, " ").trim().slice(0, 300),
+        description: stripDescriptionMarkup(l.description).slice(0, 300),
         image: imgs.slice(0, 4),
         itemCondition: SCHEMA_CONDITION[l.condition] || "https://schema.org/UsedCondition",
         offers: {

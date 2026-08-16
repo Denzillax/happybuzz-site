@@ -354,3 +354,25 @@ input:focus, textarea:focus, select:focus {
 @media (min-width: 769px) and (max-width: 1024px) {
   .ftr-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
 }
+
+/* ── Richtext: Beschreibungs-Editor + Anzeige (gemeinsame Formate) ── */
+.rte-area:empty::before {
+  content: attr(data-placeholder);
+  color: #9b968f;
+  pointer-events: none;
+}
+.rte-area h3, .rich-desc h3 {
+  font-family: 'General Sans', 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  color: #14110D;
+}
+.rte-area h3:first-child, .rich-desc h3:first-child { margin-top: 0; }
+.rte-area ul, .rich-desc ul {
+  margin: 8px 0;
+  padding-left: 22px;
+  list-style: disc;
+}
+.rte-area li, .rich-desc li { margin: 3px 0; }
+.rte-area p, .rich-desc p { margin: 0 0 8px; }
