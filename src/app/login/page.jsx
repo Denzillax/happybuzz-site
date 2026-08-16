@@ -132,7 +132,8 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -148,7 +149,7 @@ export default function AuthPage() {
     }
   }, []);
 
-  const clearForm = () => { setEmail(""); setPassword(""); setConfirmPw(""); setName(""); setAgree(false); setError(""); setFieldErrors({}); };
+  const clearForm = () => { setEmail(""); setPassword(""); setConfirmPw(""); setFirstName(""); setLastName(""); setAgree(false); setError(""); setFieldErrors({}); };
   const switchView = (v) => { clearForm(); setView(v); };
 
   // ─── Validation ─────────────────────────────────────────────────────
@@ -161,7 +162,8 @@ export default function AuthPage() {
       else if (view !== "login" && password.length < 8) e.password = "Mind. 8 Zeichen";
     }
     if (view === "register") {
-      if (!name.trim()) e.name = "Name ist erforderlich";
+      if (!firstName.trim()) e.firstName = "Vorname ist erforderlich";
+      if (!lastName.trim()) e.lastName = "Nachname ist erforderlich";
       if (password && confirmPw && password !== confirmPw) e.confirmPw = "Passwörter stimmen nicht überein";
       if (!confirmPw) e.confirmPw = "Bitte bestätigen";
       if (!agree) e.agree = "Bitte akzeptiere die AGB";
@@ -191,7 +193,14 @@ export default function AuthPage() {
     try {
       const { data, error: err } = await supabase.auth.signUp({
         email, password,
-        options: { data: { full_name: name }, emailRedirectTo: `${window.location.origin}/login/callback` },
+        options: {
+          data: {
+            full_name: `${firstName.trim()} ${lastName.trim()}`,
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+          },
+          emailRedirectTo: `${window.location.origin}/login/callback`,
+        },
       });
       if (err) throw err;
       if (data.user && !data.user.identities?.length) throw { message: "Diese E-Mail ist bereits registriert." };
@@ -284,7 +293,10 @@ export default function AuthPage() {
       </div>
       {renderDivider()}
       {renderError()}
-      <Input label="Vollständiger Name" value={name} onChange={e=>setName(e.target.value)} placeholder="Max Muster" icon={<UserIcon/>} error={fieldErrors.name}/>
+      <div style={{ display:"flex", gap:10 }}>
+        <div style={{ flex:1 }}><Input label="Vorname" value={firstName} onChange={e=>setFirstName(e.target.value)} placeholder="Max" icon={<UserIcon/>} error={fieldErrors.firstName}/></div>
+        <div style={{ flex:1 }}><Input label="Nachname" value={lastName} onChange={e=>setLastName(e.target.value)} placeholder="Muster" error={fieldErrors.lastName}/></div>
+      </div>
       <Input label="E-Mail" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="hallo@beispiel.ch" icon={<MailIcon/>} error={fieldErrors.email}/>
       <Input label="Passwort" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mind. 8 Zeichen" icon={<LockIcon/>} error={fieldErrors.password}/>
       <PasswordStrength password={password}/>
