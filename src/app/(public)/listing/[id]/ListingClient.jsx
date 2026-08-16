@@ -410,10 +410,17 @@ export default function ListingDetail() {
                 onMouseMove={(e) => {
                   if (imgs.length === 0) return;
                   const rect = e.currentTarget.getBoundingClientRect();
-                  const x = ((e.clientX - rect.left) / rect.width) * 100;
-                  const y = ((e.clientY - rect.top) / rect.height) * 100;
+                  const px = e.clientX - rect.left;
+                  // Zoom nur ZWISCHEN den Pfeilen (Innenkante: 12px Abstand + 40px
+                  // Breite = 52px). Ueber den Pfeilen bleibt das Bild ruhig, sonst
+                  // zoomt es beim Ansteuern der Navigation unter dem Cursor weg.
+                  const EDGE = imgs.length > 1 ? 52 : 0;
                   const img = e.currentTarget.querySelector(".zoom-img");
-                  if (img) { img.style.transformOrigin = `${x}% ${y}%`; img.style.transform = "scale(2)"; }
+                  if (!img) return;
+                  if (px < EDGE || px > rect.width - EDGE) { img.style.transform = "scale(1)"; return; }
+                  const x = (px / rect.width) * 100;
+                  const y = ((e.clientY - rect.top) / rect.height) * 100;
+                  img.style.transformOrigin = `${x}% ${y}%`; img.style.transform = "scale(2)";
                 }}
                 onMouseLeave={(e) => {
                   const img = e.currentTarget.querySelector(".zoom-img");
