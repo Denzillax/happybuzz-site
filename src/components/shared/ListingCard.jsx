@@ -62,10 +62,22 @@ function Countdown({ endDate, endedLabel = "Beendet" }) {
   );
 }
 
+// Stempeltext fuer nicht mehr verfuegbare Inserate; null = kein Stempel.
+// Bewusst konservativ: pending_review/paused u.ae. werden NICHT gestempelt.
+export function listingInactiveLabel(listing) {
+  if (!listing) return null;
+  if (listing.status === "sold") return "Verkauft";
+  if (listing.status === "expired") return "Beendet";
+  if (listing.listing_type === "auction" && listing.auction_end
+      && new Date(listing.auction_end).getTime() < Date.now()) return "Beendet";
+  return null;
+}
+
 export function ListingCard(props) {
-  // statusOverlay: optionaler Stempeltext ("Verkauft"/"Beendet") — dimmt die
-  // Karte und legt einen Katalog-Stempel aufs Bild (Favoriten: inaktive Inserate)
-  const { listing, userId = null, boost = null, onUnfavorite = null, statusOverlay = null } = props;
+  // statusOverlay: optionaler Stempeltext-Override. Ohne Prop stempelt sich
+  // die Karte selbst (verkauft/beendet), egal wo sie verwendet wird.
+  const { listing, userId = null, boost = null, onUnfavorite = null, statusOverlay: statusOverlayProp = null } = props;
+  const statusOverlay = statusOverlayProp ?? listingInactiveLabel(listing);
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const cover = getCoverUrl(listing);

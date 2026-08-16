@@ -210,6 +210,7 @@ const TESTS = [
       { id: "fav_items", label: "Tab Artikel: gespeicherte Inserate, entfernen, öffnen" },
       { id: "fav_inactive_section", label: "Verkaufte/beendete Favoriten liegen in der eigenen Sektion 'Nicht mehr verfügbar' (einklappbar), Karten ausgegraut mit Stempel Verkauft bzw. Beendet; Herz entfernt sie weiterhin" },
       { id: "fav_deleted_weg", label: "Gelöschte Inserate erscheinen gar nicht mehr in den Favoriten" },
+      { id: "card_stamp_ueberall", label: "Verkauft/Beendet-Stempel erscheint auf JEDER Inserat-Karte automatisch (auch bei Ähnliche Artikel, Profil, Schaufenster), nicht nur in den Favoriten" },
       { id: "fav_heart_farbe", label: "Favoriten-Herz ist überall HONEY-gelb (Karte, Inserat-Detail, Header, Verkäufer merken); nirgends mehr rot" },
       { id: "fav_sellers", label: "Tab Verkäufer: gemerkte Verkäufer" },
       { id: "fav_searches", label: "Tab Suchen: gespeicherte Suche wieder ausführen" },

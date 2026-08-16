@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Heart, MapPin, Trash2, Search, User, ChevronDown } from 'lucide-react'
 import { getUserFavorites } from '@/lib/listings'
-import { ListingCard } from '@/components/shared/ListingCard'
+import { ListingCard, listingInactiveLabel } from '@/components/shared/ListingCard'
 
 // Inline seller favorite functions (avoid import issues)
 async function getFavoriteSellers(userId) {
@@ -35,16 +35,9 @@ async function toggleFavoriteSeller(userId, sellerId) {
   }
 }
 
-// Stempeltext fuer nicht mehr verfuegbare Inserate; null = aktiv.
-// Auktionen gelten als beendet, sobald das Enddatum vorbei ist, auch wenn der
-// Status (noch) active ist.
-function inactiveLabel(l) {
-  if (l.status === 'sold') return 'Verkauft'
-  if (l.status === 'expired') return 'Beendet'
-  if (l.listing_type === 'auction' && l.auction_end && new Date(l.auction_end).getTime() < Date.now()) return 'Beendet'
-  if (l.status !== 'active') return 'Beendet'
-  return null
-}
+// Klassifizierung teilt sich die Karte selbst (listingInactiveLabel):
+// gleiche Logik fuer Gruppierung hier und Stempel auf der Karte.
+const inactiveLabel = listingInactiveLabel
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([])
