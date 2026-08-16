@@ -89,11 +89,13 @@ export function useAdminData() {
       setMyRole(role);
       if (u.id === ADMIN_ID) getStaffRoles().then(setStaffRoles);
 
-      // Stats
-      const { count: userCount } = await supabase.from("profiles").select("*", { count: "exact", head: true });
-      const { count: listingCount } = await supabase.from("listings").select("*", { count: "exact", head: true });
-      const { count: activeCount } = await supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "active");
-      const { count: purchaseCount } = await supabase.from("purchases").select("*", { count: "exact", head: true });
+      // Stats — unabhaengige Zaehler parallel statt nacheinander
+      const [{ count: userCount }, { count: listingCount }, { count: activeCount }, { count: purchaseCount }] = await Promise.all([
+        supabase.from("profiles").select("*", { count: "exact", head: true }),
+        supabase.from("listings").select("*", { count: "exact", head: true }),
+        supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "active"),
+        supabase.from("purchases").select("*", { count: "exact", head: true }),
+      ]);
       const { data: invData } = await supabase.from("fee_invoices").select("total_fees, total_bee_impact, status");
       const sumWhere = (pred, field) => (invData || []).filter(pred).reduce((s, f) => s + parseFloat(f[field] || 0), 0);
       const isPaidInv = (f) => f.status === "paid";
@@ -110,92 +112,75 @@ export function useAdminData() {
       const { count: reportCount } = await supabase.from("reports").select("*", { count: "exact", head: true });
       setStats({ users: userCount, listings: listingCount, active: activeCount, purchases: purchaseCount, feesPaid, feesOpen, impactPaid, impactOpen, feesAccrued, impactAccrued, reports: reportCount || 0 });
 
-      // Fee invoices with seller names
-      const { data: invs } = await supabase.from("fee_invoices").select("*").order("created_at", { ascending: false });
-      const invWithSellers = [];
-      for (const inv of (invs || [])) {
-        const { data: seller } = await supabase.from("profiles").select("display_name").eq("id", inv.seller_id).single();
-        invWithSellers.push({ ...inv, sellerName: seller?.display_name || "—" });
-      }
-      setFeeInvoices(invWithSellers);
-
-      // Users
+      // Profile EINMAL laden und daraus alle Namen ziehen. Vorher lief pro
+      // Rechnung/Inserat/Bestellung eine eigene Einzelabfrage sequenziell —
+      // das war die Hauptursache der langen Admin-Ladezeit.
       const { data: profs } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
       setUsers(profs || []);
+      const nameById = {};
+      for (const p of (profs || [])) nameById[p.id] = p.display_name || "—";
+      const nameOf = (id) => nameById[id] || "—";
 
-      // Listings with seller names (cached)
+      // Fee invoices with seller names
+      const { data: invs } = await supabase.from("fee_invoices").select("*").order("created_at", { ascending: false });
+      setFeeInvoices((invs || []).map(inv => ({ ...inv, sellerName: nameOf(inv.seller_id) })));
+
+      // Listings with seller names
       const { data: lsts } = await supabase.from("listings").select("*").order("created_at", { ascending: false }).limit(100);
-      const cache = {};
-      const lstsWithSellers = [];
-      for (const l of (lsts || [])) {
-        if (!cache[l.user_id]) {
-          const { data: s } = await supabase.from("profiles").select("display_name").eq("id", l.user_id).single();
-          cache[l.user_id] = s?.display_name || "—";
-        }
-        lstsWithSellers.push({ ...l, sellerName: cache[l.user_id] });
-      }
-      setListings(lstsWithSellers);
+      setListings((lsts || []).map(l => ({ ...l, sellerName: nameOf(l.user_id) })));
 
-      // Reports with listing + reporter + owner names
+      // Reports: Inserat-Titel gebuendelt in EINER Abfrage nachladen
       const { data: reps } = await supabase.from("reports").select("*").order("created_at", { ascending: false });
-      const enrichedReps = [];
-      for (const r of (reps || [])) {
-        let listingTitle = "—", ownerName = "—", reporterName = "—", ownerId = null;
-        if (r.listing_id) {
-          const { data: lst } = await supabase.from("listings").select("title, user_id").eq("id", r.listing_id).single();
-          listingTitle = lst?.title || "—";
-          ownerId = lst?.user_id;
-          if (ownerId) {
-            const cached = cache[ownerId];
-            ownerName = cached || (await supabase.from("profiles").select("display_name").eq("id", ownerId).single()).data?.display_name || "—";
-            cache[ownerId] = ownerName;
-          }
-        }
-        if (r.reporter_id) {
-          const cached = cache[r.reporter_id];
-          reporterName = cached || (await supabase.from("profiles").select("display_name").eq("id", r.reporter_id).single()).data?.display_name || "—";
-          cache[r.reporter_id] = reporterName;
-        }
-        enrichedReps.push({ ...r, listingTitle, ownerName, reporterName, ownerId });
+      const repListingIds = [...new Set((reps || []).map(r => r.listing_id).filter(Boolean))];
+      const repListings = {};
+      if (repListingIds.length) {
+        const { data: rl } = await supabase.from("listings").select("id, title, user_id").in("id", repListingIds);
+        for (const l of (rl || [])) repListings[l.id] = l;
       }
-      setReports(enrichedReps);
+      setReports((reps || []).map(r => {
+        const lst = r.listing_id ? repListings[r.listing_id] : null;
+        return {
+          ...r,
+          listingTitle: lst?.title || "—",
+          ownerId: lst?.user_id || null,
+          ownerName: lst?.user_id ? nameOf(lst.user_id) : "—",
+          reporterName: r.reporter_id ? nameOf(r.reporter_id) : "—",
+        };
+      }));
 
-      // Orders (purchases) with buyer/seller names
+      // Orders: Namen aus der Profil-Map, Titel gebuendelt (200er-Pakete)
       const { data: ords } = await supabase.from("purchases").select("*").order("created_at", { ascending: false }).limit(1000);
-      const ordsWithNames = [];
-      for (const o of (ords || [])) {
-        const buyerName = cache[o.buyer_id] || (await supabase.from("profiles").select("display_name").eq("id", o.buyer_id).single()).data?.display_name || "—";
-        const sellerName = cache[o.seller_id] || (await supabase.from("profiles").select("display_name").eq("id", o.seller_id).single()).data?.display_name || "—";
-        cache[o.buyer_id] = buyerName; cache[o.seller_id] = sellerName;
-        const { data: lst } = await supabase.from("listings").select("title").eq("id", o.listing_id).single();
-        ordsWithNames.push({ ...o, buyerName, sellerName, listingTitle: lst?.title || "—" });
+      const ordListingIds = [...new Set((ords || []).map(o => o.listing_id).filter(Boolean))];
+      const titleById = {};
+      for (let i = 0; i < ordListingIds.length; i += 200) {
+        const { data: tl } = await supabase.from("listings").select("id, title").in("id", ordListingIds.slice(i, i + 200));
+        for (const l of (tl || [])) titleById[l.id] = l.title;
       }
-      setOrders(ordsWithNames);
+      setOrders((ords || []).map(o => ({
+        ...o,
+        buyerName: nameOf(o.buyer_id),
+        sellerName: nameOf(o.seller_id),
+        listingTitle: titleById[o.listing_id] || "—",
+      })));
 
-      // E-Mail-Log
-      const { data: mails } = await supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(500);
+      // Restliche unabhaengige Bestaende parallel laden:
+      // E-Mail-Log, Beta-Feedback, Kategorien (Vollbestand fuer Verwaltung),
+      // Betriebsmodus, offene Bewerbungen
+      const [{ data: mails }, { data: fb }, { data: cats }, { data: siteS }, { data: apps }] = await Promise.all([
+        supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(500),
+        supabase.from("beta_feedback").select("*").order("created_at", { ascending: false }).limit(200),
+        supabase.from("categories").select("*").order("sort_order"),
+        supabase.from("site_settings").select("mode, message").eq("id", 1).maybeSingle(),
+        supabase.from("applications").select("*, profil:profiles(display_name, username)").eq("status", "neu").order("created_at", { ascending: false }),
+      ]);
       setEmailLog(mails || []);
-
-      // Beta-Feedback
-      const { data: fb } = await supabase.from("beta_feedback").select("*").order("created_at", { ascending: false }).limit(200);
       setFeedback(fb || []);
-
-      // Kategorien (ALLE, auch deaktivierte — die Verwaltung braucht den Vollbestand)
-      const { data: cats } = await supabase.from("categories").select("*").order("sort_order");
       setAdminCategories(cats || []);
+      if (siteS) setSiteMode(siteS);
+      setApplications(apps || []);
 
       // Challenges (Vorlagen + Instanzen) mit Teilnehmerzahlen
       await loadChallenges();
-
-      // Betriebsmodus (live/beta/wartung)
-      const { data: siteS } = await supabase.from("site_settings").select("mode, message").eq("id", 1).maybeSingle();
-      if (siteS) setSiteMode(siteS);
-
-      // Offene Ein-Klick-Bewerbungen (Beta-Tester-Rollen)
-      const { data: apps } = await supabase.from("applications")
-        .select("*, profil:profiles(display_name, username)")
-        .eq("status", "neu").order("created_at", { ascending: false });
-      setApplications(apps || []);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });

@@ -14,7 +14,7 @@ export function UserProfile({ admin }) {
     users, openProfile, closeProfile, toggleBan, setUsers, flash, logAdmin,
     userNote, saveUserNote, profileAudit,
     userListings, userFees, userInvoices, userTab, setUserTab, openInvoice, setOpenInvoice,
-    orders, reviews, emailLog, statusPill, toggleListingStatus, cancelOrder, deleteReview,
+    orders, reviews, emailLog, statusPill, orderStatusPill, toggleListingStatus, cancelOrder, deleteReview,
     sc, dunningTimeline, mahnButton, confirmAndReactivate, emailCard,
     setBetaAccess,
   } = admin;
@@ -237,7 +237,8 @@ export function UserProfile({ admin }) {
               const total = parseFloat(o.price || 0) + parseFloat(o.shipping_cost || 0);
               const role = o.seller_id === u.id ? "Verkäufer" : "Käufer";
               const other = o.seller_id === u.id ? o.buyerName : o.sellerName;
-              const st = o.status === "confirmed" ? pill("#E8F5E9", "#2E7D32", "Bestätigt") : o.status === "cancelled" ? pill("#FFEBEE", "#c62828", "Storniert") : pill("#f5f5f5", "#666", o.status || "—");
+              // Gleiche Status-Uebersetzung wie der Bestellungen-Tab — nie rohe DB-Werte
+              const st = orderStatusPill(o.status);
               return (
                 <div key={o.id} style={{ display: "grid", gridTemplateColumns: "70px 1fr 90px 80px 70px", alignItems: "center", gap: 6, padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}`, opacity: o.status === "cancelled" ? 0.5 : 1 }}>
                   <span style={{ fontSize: 10, color: colors.muted }}>{ref}</span>
