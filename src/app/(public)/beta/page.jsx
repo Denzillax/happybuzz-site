@@ -405,7 +405,7 @@ const TESTS = [
       { id: "mob_buybox_order", label: "Inserat-Detail mobil: Reihenfolge Bilder -> Titel/Preis/Kaufbox -> Rest (Desktop unverändert 2-spaltig); Bee-Impact-Box hat schwarzen Rahmen" },
       { id: "mob_cta_bar", label: "Kauf-Leiste (Preis + Jetzt kaufen/Jetzt bieten/Anfragen) klebt über der Bottom-Nav, sobald die Kaufbox aus dem Bild ist; nie beim eigenen Inserat; Tipp springt zur Kaufbox" },
       { id: "mob_map_hidden", label: "Standort-Karte mobil ausgeblendet, Ort + 'Route planen' bleiben" },
-      { id: "mob_listing_form", label: "Inserieren-Formular: alle Felder nutzbar" },
+      { id: "mob_listing_form", label: "Inserieren-Formular: alle Felder nutzbar; Bee-Impact-Kacheln kompakt und vollständig lesbar (nichts abgeschnitten, Texte bündig)" },
       { id: "mob_ship_modal", label: "Versand-Modal passt auf den Bildschirm" },
       { id: "mob_settings", label: "Einstellungen: Tabs als Leiste nutzbar" },
       { id: "mob_order", label: "Bestellseite & QR-Rechnung lesbar" },

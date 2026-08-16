@@ -20,6 +20,14 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Bee-Rate-Kacheln im Inserat-Formular: der 44px-Einzug der Textzeilen
+   frisst auf dem Handy zu viel Breite - mobil alles buendig und kompakter. */
+@media (max-width: 768px) {
+  .bee-tier-card { padding: 14px 40px 14px 14px !important; }
+  .bee-tier-indent { padding-left: 0 !important; }
+  .bee-tier-project { margin-left: 0 !important; }
+}
+
 /* Leaflet-Karte darf beim Scrollen nicht ueber den sticky Header ragen:
    ein eigener Stacking-Context (z-index 0) haelt die internen
    Leaflet-z-index-Werte (400-700) innerhalb der Karte. */

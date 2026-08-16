@@ -1735,7 +1735,7 @@ export default function ListingForm({
           ].map(({ tier, pct, impact, project, recommended, perks }) => {
             const active = form.fee_tier === tier;
             return (
-              <div key={tier} onClick={() => selectFee(pct, tier)} style={{
+              <div key={tier} onClick={() => selectFee(pct, tier)} className="bee-tier-card" style={{
                 position: "relative", padding: "18px 50px 18px 22px", marginBottom: 8, borderRadius: 0, cursor: "pointer",
                 border: `2px solid ${active ? colors.green : "transparent"}`,
                 background: active ? `linear-gradient(135deg, ${colors.surface}, ${colors.green}08)` : colors.surface,
@@ -1760,7 +1760,7 @@ export default function ListingForm({
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
                   <div style={{ flex: 1, paddingLeft: 8 }}>
                     {/* Title row with impact dots */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
                       <div style={{ display: "flex", gap: 3 }}>
                         {[1, 2, 3, 4].map((i) => (
                           <div key={i} style={{
@@ -1779,16 +1779,16 @@ export default function ListingForm({
                       )}
                     </div>
                     {/* Subtitle */}
-                    <p style={{ margin: "0 0 4px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
+                    <p className="bee-tier-indent" style={{ margin: "0 0 4px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
                       {BEE_FEE_SUBTITLES[tier]}
                     </p>
                     {/* Perks — was du dafür bekommst */}
-                    <p style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 11.5, fontWeight: 700, color: colors.teal, fontFamily: fonts.body, lineHeight: 1.4 }}>
+                    <p className="bee-tier-indent" style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 11.5, fontWeight: 700, color: colors.teal, fontFamily: fonts.body, lineHeight: 1.4 }}>
                       {perks}
                     </p>
                     {/* Project tag (only when selected) */}
                     {active && (
-                      <div style={{
+                      <div className="bee-tier-project" style={{
                         display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 0,
                         background: `${colors.green}12`, marginLeft: 44, fontSize: 11, fontWeight: 600, color: colors.green,
                       }}>
