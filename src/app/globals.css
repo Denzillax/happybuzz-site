@@ -35,7 +35,9 @@ body {
    ordnen: Bilder -> Kaufbox -> Rest. Alle uebrigen Karten brauchen explizit
    order 3, sonst staenden sie mit Default-order 0 VOR der Galerie. */
 @media (max-width: 900px) {
-  .detail-grid { display: flex; flex-direction: column; gap: 0; }
+  /* align-items: stretch ist hier Pflicht: das geerbte "start" aus der
+     Desktop-Regel liesse jede Karte nur inhaltsbreit werden. */
+  .detail-grid { display: flex; flex-direction: column; gap: 0; align-items: stretch; }
   .detail-grid > div { display: contents; }
   .detail-grid > div > * { order: 3; min-width: 0; }
   .detail-grid .lg-gallery { order: 1; }
