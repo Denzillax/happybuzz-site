@@ -225,6 +225,7 @@ const TESTS = [
       { id: "fee_default_impact", label: "Standard-Bee-Rate ist überall 7% (Impact): Formular vorausgewählt, how-it-works als 'Empfohlen' markiert, Rechnung rechnet mit 7%" },
       { id: "impact_canonical", label: "Bee-Impact zählt app-weit nur bezahlte Gebühren (Startseite/Impact/Hive/Profil identisch, keine Doppelzählung)" },
       { id: "impact_milestone", label: "Startseite zeigt Meilenstein-Fortschritt zum nächsten Projekt (geflossen + unterwegs) plus Artikel/CO2" },
+      { id: "fee_min_invoice", label: "Mindest-Rechnungsbetrag: offener Saldo unter CHF 10 erzeugt KEINE Monatsrechnung (Hinweis 'wird in den Folgemonat übertragen' auf /fees); ab CHF 10 kommt EINE Rechnung inkl. übertragener Vormonate" },
     ],
   },
   {
