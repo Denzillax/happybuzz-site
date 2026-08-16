@@ -352,6 +352,8 @@ const TESTS = [
       { id: "set_address_auto", label: "Strassen-Autocomplete (geo.admin.ch)" },
       { id: "set_address_save", label: "Hauptadresse speichern" },
       { id: "set_extra_addr", label: "Lieferadresse anlegen + bearbeiten + löschen" },
+      { id: "order_addr_pick", label: "Bestellseite (Kauf ODER gewonnene Auktion, Versandartikel): Käufer kann bei 'Lieferadresse' über 'Ändern' zwischen Hauptadresse und Lieferadressen wählen; Verkäufer sieht die gewählte Adresse im Versandblock" },
+      { id: "order_addr_lock", label: "Nach 'versendet' verschwindet der Ändern-Knopf; späteres Bearbeiten/Löschen der Adresse in den Einstellungen ändert die Bestellung NICHT (Schnappschuss)" },
       { id: "set_notifications", label: "Benachrichtigungs-Einstellungen speichern" },
       { id: "set_noti_wirkung", label: "E-Mail-Häkchen wirken: bei AN landet die Mail in der Warteschlange (Admin → E-Mails), bei AUS nicht; Glocke kommt unabhängig davon immer" },
       { id: "set_noti_hinweis", label: "Hinweisbox im Benachrichtigungen-Tab erklärt: Glocke immer, E-Mail ab Go-Live, Push mit der App" },
