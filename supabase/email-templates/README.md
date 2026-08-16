@@ -33,10 +33,14 @@ Ordner in die jeweilige Vorlage kopieren:
 
 | Datei                  | Supabase-Vorlage   | Betreff-Vorschlag                          |
 |------------------------|--------------------|--------------------------------------------|
-| confirm-signup.html    | Confirm signup     | Willkommen bei BEEDARO. Bitte bestätigen.  |
-| reset-password.html    | Reset password     | Neues Passwort für BEEDARO                 |
-| magic-link.html        | Magic Link         | Dein Anmeldelink für BEEDARO               |
+| confirm-signup.html    | Confirm signup     | Willkommen bei Beedaro. Bitte bestätigen.  |
+| reset-password.html    | Reset password     | Neues Passwort für Beedaro                 |
+| magic-link.html        | Magic Link         | Dein Anmeldelink für Beedaro               |
 | email-change.html      | Change email       | Neue E-Mail-Adresse bestätigen             |
+| invite-user.html       | Invite user        | Deine Einladung zu Beedaro                 |
+
+Die Templates nutzen das Logo als Bild: `https://beedaro.ch/logo-email.png`
+(liegt in `public/logo-email.png`, wird mit dem normalen Deploy ausgeliefert).
 
 Authentication → URL Configuration:
 
