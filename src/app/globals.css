@@ -231,6 +231,36 @@ input:focus, textarea:focus, select:focus {
    sollen ihn beim Hovern behalten. */
 .adm-row:hover { background: #FAF8F3; }
 
+/* ── Hero: Beta-Slide-Effekte ─────────────────────────────────
+   Keyframes gehören hierher, nicht in inline <style>-Tags (Hydration).
+   Effekte bewusst sparsam: Highlight-Wisch beim Einblenden, schwebende
+   Exponat-Karte, pulsierendes Bienen-Siegel. */
+@keyframes bd-hl-sweep {
+  from { background-size: 0% 100%; }
+  to   { background-size: 100% 100%; }
+}
+.hero-hl-sweep {
+  background-image: linear-gradient(#F4C03F, #F4C03F);
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  background-color: transparent !important;
+  animation: bd-hl-sweep .9s cubic-bezier(.2,.7,.3,1) .15s forwards;
+}
+@keyframes bd-float {
+  0%, 100% { transform: rotate(-2deg) translateY(0); }
+  50%      { transform: rotate(-2deg) translateY(-8px); }
+}
+.hero-beta-float { animation: bd-float 5s ease-in-out infinite; }
+@keyframes bd-seal-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244,192,63,.55); }
+  60%      { box-shadow: 0 0 0 12px rgba(244,192,63,0); }
+}
+.hero-beta-seal { animation: bd-seal-pulse 2.2s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-hl-sweep { animation: none; background-size: 100% 100%; }
+  .hero-beta-float, .hero-beta-seal { animation: none; }
+}
+
 /* Print */
 @media print {
   .no-print { display: none !important; }

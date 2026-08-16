@@ -4,8 +4,20 @@ import Link from 'next/link'
 import { ArrowRight, Plus } from 'lucide-react'
 import BeeIcon from '@/components/shared/BeeIcon'
 
-// ─── Katalog-Slides: jede Slide = eine Katalog-Sektion (Verkaufen / Mieten / Zweites Leben) ──
+// ─── Katalog-Slides: jede Slide = eine Katalog-Sektion ──
+// Headline-Regel: title + highlight sind IMMER genau je eine Zeile (nowrap im
+// Render). Beide Teile deshalb kurz halten — max ~18 Zeichen, sonst bricht
+// die Zwei-Zeilen-Form auf schmalen Screens.
 const slides = [
+  {
+    kicker: 'GESCHLOSSENE BETA',
+    title: 'Willkommen,',
+    highlight: 'Beta-Crew.',
+    description: 'Du gehörst zu den Ersten. Teste Kaufen, Verkaufen und Mieten, hak die Checkliste ab und melde alles, was klemmt, über den Feedback-Knopf.',
+    image: '/images/hero/boombox.png',
+    cat: '0001', cond: 'BETA', specimen: 'Boombox',
+    beta: true,
+  },
   {
     kicker: 'VERKAUFEN',
     title: 'Finde Schätze.',
@@ -16,8 +28,8 @@ const slides = [
   },
   {
     kicker: 'MIETEN',
-    title: 'Miete, was du',
-    highlight: 'temporär brauchst.',
+    title: 'Heute geliehen,',
+    highlight: 'morgen zurück.',
     description: 'Bohrmaschine, Kamera, Velo? Miete von Privat. Günstig und unkompliziert.',
     image: '/images/hero/gameboy.png',
     cat: '0042', cond: 'GUT', specimen: 'Spielkonsole',
@@ -84,12 +96,14 @@ export function Hero() {
             <span>{s.kicker}</span>
           </div>
 
+          {/* Immer exakt zwei Zeilen: nowrap je Teil, min-Schriftgroesse so
+              gewaehlt, dass die laengste Zeile (18 Zeichen) auf 375px passt. */}
           <h1 style={{
-            fontFamily: DISPLAY, fontSize: 'clamp(40px, 5.6vw, 72px)', fontWeight: 600,
+            fontFamily: DISPLAY, fontSize: 'clamp(32px, 5.6vw, 72px)', fontWeight: 600,
             lineHeight: 1.08, letterSpacing: '-0.02em', color: INK, margin: '0 0 20px',
           }}>
-            {s.title}<br />
-            <span style={{ background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>{s.highlight}</span>
+            <span style={{ whiteSpace: 'nowrap' }}>{s.title}</span><br />
+            <span className={s.beta ? 'hero-hl-sweep' : undefined} style={{ whiteSpace: 'nowrap', background: HONEY, color: INK, padding: '0 .08em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>{s.highlight}</span>
           </h1>
 
           <p style={{
@@ -100,21 +114,46 @@ export function Hero() {
           </p>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/listings/new" className="bd-btn" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
-              background: INK, color: PAPER, fontWeight: 700, fontSize: 15.5, borderRadius: 0,
-              textDecoration: 'none', fontFamily: BODY, border: `1.5px solid ${INK}`,
-            }}>
-              <Plus size={18} /> Gratis inserieren
-            </Link>
-            <Link href="/how-it-works" className="bd-btn" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
-              background: 'transparent', border: `1.5px solid ${INK}`,
-              color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
-              textDecoration: 'none', fontFamily: BODY,
-            }}>
-              So funktioniert&apos;s <ArrowRight size={16} />
-            </Link>
+            {s.beta ? (
+              <>
+                {/* Beta-Slide: Checkliste erklaert den Testern, was zu tun ist;
+                    Bewerben fuehrt Interessierte zum Kontaktformular. */}
+                <Link href="/beta" className="bd-btn" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
+                  background: HONEY, color: INK, fontWeight: 700, fontSize: 15.5, borderRadius: 0,
+                  textDecoration: 'none', fontFamily: BODY, border: `1.5px solid ${INK}`,
+                  boxShadow: `3px 3px 0 ${INK}`,
+                }}>
+                  Zur Test-Checkliste <ArrowRight size={16} />
+                </Link>
+                <Link href="/contact" className="bd-btn" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
+                  background: 'transparent', border: `1.5px solid ${INK}`,
+                  color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
+                  textDecoration: 'none', fontFamily: BODY,
+                }}>
+                  Als Tester bewerben
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/listings/new" className="bd-btn" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
+                  background: INK, color: PAPER, fontWeight: 700, fontSize: 15.5, borderRadius: 0,
+                  textDecoration: 'none', fontFamily: BODY, border: `1.5px solid ${INK}`,
+                }}>
+                  <Plus size={18} /> Gratis inserieren
+                </Link>
+                <Link href="/how-it-works" className="bd-btn" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px',
+                  background: 'transparent', border: `1.5px solid ${INK}`,
+                  color: INK, fontWeight: 600, fontSize: 15.5, borderRadius: 0,
+                  textDecoration: 'none', fontFamily: BODY,
+                }}>
+                  So funktioniert&apos;s <ArrowRight size={16} />
+                </Link>
+              </>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 44 }}>
@@ -135,7 +174,7 @@ export function Hero() {
         <div style={{ flex: '0 1 440px', position: 'relative', display: 'flex', justifyContent: 'center', ...fade, transform: transitioning ? 'scale(.97)' : 'scale(1)' }}>
           {/* Offset-Karte dahinter (Archiv-Stapel) */}
           <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(4deg)', opacity: .28 }} />
-          <div style={{
+          <div className={s.beta ? 'hero-beta-float' : undefined} style={{
             position: 'relative', width: '100%', maxWidth: 400, background: PAPER,
             border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(-2deg)',
             padding: 18, boxShadow: '0 24px 48px rgba(20,17,13,0.14)',
@@ -155,7 +194,7 @@ export function Hero() {
                 <div style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(20,17,13,0.5)' }}>EXPONAT № {s.cat}</div>
                 <div style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 600, color: INK, lineHeight: 1.1 }}>Geprüft &amp; katalogisiert</div>
               </div>
-              <span style={{ width: 38, height: 38, borderRadius: '50%', background: HONEY, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1.5px solid ${INK}` }} title="Geprüft von BEEDARO">
+              <span className={s.beta ? 'hero-beta-seal' : undefined} style={{ width: 38, height: 38, borderRadius: '50%', background: HONEY, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1.5px solid ${INK}` }} title={s.beta ? 'Beta-Crew' : 'Geprüft von BEEDARO'}>
                 <BeeIcon size={19} color={INK} />
               </span>
             </div>
