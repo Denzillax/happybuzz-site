@@ -20,6 +20,12 @@ body {
    ═══════════════════════════════════════════ */
 .fab-desktop-only { display: block; }
 .bottom-nav-mobile { display: none; }
+/* Sticky-Header: der no-print-Wrapper um den Header darf keine eigene Box
+   bilden (sticky klebt nur innerhalb des Elternteils, und der war exakt
+   headerhoch). display:contents loest ihn layouttechnisch auf; die
+   Print-Regel (.no-print mit !important) gewinnt beim Drucken trotzdem. */
+.hdr-sticky-fix { display: contents; }
+
 /* Inserat-Detail: 2 Spalten am Desktop, 1 Spalte auf schmalen Screens.
    Die Spaltenbreiten MUESSEN hier leben (nicht inline), sonst gewinnt
    der Inline-Style gegen die Media-Query und Handys scrollen seitlich. */

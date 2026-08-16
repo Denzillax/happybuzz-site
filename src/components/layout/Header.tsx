@@ -178,7 +178,7 @@ export function Header() {
              Achtung: kein Groesser-Zeichen in diesem Kommentar, der Server
              escaped es im style-Tag und die Hydration bricht. */
           .hdr-wrap { padding-left: 14px !important; padding-right: 14px !important; }
-          .hdr-logo img { width: 118px !important; }
+          .hdr-logo img { width: 140px !important; }
         }
       `}</style>
 

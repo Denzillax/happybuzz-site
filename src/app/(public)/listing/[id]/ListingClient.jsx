@@ -507,11 +507,13 @@ export default function ListingDetail() {
             {/* ── VERKÄUFER ──────────────────────────── */}
             <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
+                  eigene Zeile statt die Infos zu quetschen */}
+              <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={colors.yellow} />}
                 </div>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                     <Link href={`/user/${l.user_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>
                       {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
@@ -524,7 +526,7 @@ export default function ListingDetail() {
                   {sellerRating.count > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
                       <div style={{ display: "flex", gap: 2 }}>{[1, 2, 3, 4, 5].map((s) => <Star key={s} size={14} color={s <= Math.round(sellerRating.avg) ? colors.yellow : colors.borderLt} fill={s <= Math.round(sellerRating.avg) ? colors.yellow : "none"} />)}</div>
-                      <span style={{ fontSize: 13, color: colors.muted }}>{sellerRating.avg.toFixed(1)} ({sellerRating.count} Bewertungen)</span>
+                      <span style={{ fontSize: 13, color: colors.muted, whiteSpace: "nowrap" }}>{sellerRating.avg.toFixed(1)} ({sellerRating.count} {sellerRating.count === 1 ? "Bewertung" : "Bewertungen"})</span>
                     </div>
                   )}
                   <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>Dabei seit {l.sellerSince ? new Date(l.sellerSince).toLocaleDateString("de-CH", { month: "long", year: "numeric" }) : "–"}</p>

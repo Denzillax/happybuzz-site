@@ -18,7 +18,9 @@ export default function PublicLayout({
     <SiteGate>
       <div className="no-print"><AnnouncementBar /></div>
       {/* Suspense: Header nutzt useSearchParams — nötig für statisches Prerendering */}
-      <div className="no-print"><Suspense fallback={<div style={{ height: 64 }} />}><Header /></Suspense></div>
+      {/* display:contents (hdr-sticky-fix): der Wrapper darf keine eigene Box
+          bilden, sonst klebt der sticky Header nur innerhalb seiner 65px. */}
+      <div className="no-print hdr-sticky-fix"><Suspense fallback={<div style={{ height: 64 }} />}><Header /></Suspense></div>
       <main className="min-h-screen">{children}</main>
       <div className="no-print"><Footer /></div>
       <div className="no-print fab-desktop-only"><FloatingButton /></div>
