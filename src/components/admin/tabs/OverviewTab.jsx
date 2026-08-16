@@ -11,10 +11,19 @@ const MODI = [
   { key: "wartung", label: "Wartung", Icon: Wrench, desc: "Nur Staff, alle anderen sehen die Wartungsseite", color: "#c62828", bg: "#FFEBEE" },
 ];
 
-const ROLLE_LABEL = { testkaeufer: "Testkäufer", testverkaeufer: "Testverkäufer", testvermieter: "Test-Vermieter", allrounder: "Allrounder" };
+// Alte Tester-Keys bleiben lesbar (Alt-Datensätze), neu sind beta_tester
+// (alle Allrounder) + die vier Mitarbeiter-Funktionen.
+const ROLLE_LABEL = {
+  testkaeufer: "Testkäufer", testverkaeufer: "Testverkäufer", testvermieter: "Test-Vermieter", allrounder: "Allrounder",
+  beta_tester: "Beta-Tester (Allrounder)",
+  mitarbeiter_support: "Mitarbeiter: Support",
+  mitarbeiter_moderation: "Mitarbeiter: Moderation",
+  mitarbeiter_finance: "Mitarbeiter: Finanzen",
+  mitarbeiter_manager: "Mitarbeiter: Manager",
+};
 
 export function OverviewTab({ admin }) {
-  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, setBetaAccess } = admin;
+  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, setBetaAccess, setTab } = admin;
   const [feeView, setFeeView] = useState("paid");
   const [gateMsg, setGateMsg] = useState(siteMode?.message || "");
 
@@ -62,15 +71,27 @@ export function OverviewTab({ admin }) {
           </p>
           {applications.map(a => {
             const name = a.profil?.display_name || a.profil?.username || "Konto";
+            const mitarbeiter = (a.role || "").startsWith("mitarbeiter_");
             return (
               <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>{name}</span>
-                <span style={{ fontSize: 12, color: colors.muted }}>möchte als <b>{ROLLE_LABEL[a.role] || a.role}</b> testen</span>
+                <span style={{ fontSize: 12, color: colors.muted }}>
+                  {mitarbeiter ? <>bewirbt sich als <b>{ROLLE_LABEL[a.role] || a.role}</b></> : <>möchte als <b>{ROLLE_LABEL[a.role] || a.role}</b> testen</>}
+                </span>
                 <span style={{ fontSize: 11, color: colors.mutedLt, marginLeft: "auto" }}>{new Date(a.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</span>
-                <button onClick={() => setBetaAccess(a.user_id, name, true)}
-                  style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBF1D2", color: "#C8860A", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
-                  Beta-Zugang erteilen
-                </button>
+                {mitarbeiter ? (
+                  // Bewusst KEIN Auto-Grant: der Sprung fuehrt in den
+                  // Mitarbeiter-Tab, wo die Rolle manuell vergeben wird.
+                  <button onClick={() => setTab("mitarbeiter")}
+                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                    Rolle vergeben
+                  </button>
+                ) : (
+                  <button onClick={() => setBetaAccess(a.user_id, name, true)}
+                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBF1D2", color: "#C8860A", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                    Beta-Zugang erteilen
+                  </button>
+                )}
                 <button onClick={() => resolveApplication(a)}
                   style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
                   Erledigt
