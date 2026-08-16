@@ -433,6 +433,15 @@ export default function BetaTestPage() {
   const [results, setResults] = useState({});
   const [notes, setNotes] = useState({});
   const [openSections, setOpenSections] = useState({ mobile: true });
+  // "Kurz erklaert"-Box: offen als Standard, Zustand bleibt via localStorage
+  const [introOpen, setIntroOpen] = useState(true);
+  useEffect(() => {
+    try { const v = localStorage.getItem("beta_intro_open"); if (v !== null) setIntroOpen(v === "1"); } catch {}
+  }, []);
+  const toggleIntro = () => setIntroOpen(o => {
+    try { localStorage.setItem("beta_intro_open", o ? "0" : "1"); } catch {}
+    return !o;
+  });
   const [submitted, setSubmitted] = useState(false);
   const [testerName, setTesterName] = useState("");
   const [userId, setUserId] = useState(null);
@@ -531,10 +540,14 @@ export default function BetaTestPage() {
 
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "24px 20px 80px" }}>
         {/* Kurz erklaert: die Beta in menschlichen Worten (Tester = alle Konten) */}
-        <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, boxShadow: "4px 4px 0 rgba(20,17,13,.12)", padding: "20px 22px 18px", marginBottom: 20 }}>
-          <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Space Mono', ui-monospace, monospace" }}>
-            Kurz erklärt
-          </p>
+        <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, boxShadow: "4px 4px 0 rgba(20,17,13,.12)", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+          <div onClick={toggleIntro} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: introOpen ? 12 : 0 }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Space Mono', ui-monospace, monospace" }}>
+              Kurz erklärt
+            </p>
+            <ChevronDown size={16} color={colors.muted} style={{ transform: introOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+          </div>
+          {introOpen && (
           <div style={{ display: "grid", gap: 12, fontSize: 13.5, lineHeight: 1.65, color: colors.dark }}>
             <p style={{ margin: 0 }}>
               <strong>Was hier läuft.</strong> BEEDARO ist noch nicht offen für alle.
@@ -548,8 +561,15 @@ export default function BetaTestPage() {
             <p style={{ margin: 0 }}>
               <strong>Was du tun sollst.</strong> Benutz die Seite wie ein ganz
               normaler Kunde: stöbern, kaufen, verkaufen, bieten, mieten. Läuft
-              alles, gut. Klemmt etwas, drück auf den Feedback-Knopf und sag es
-              uns. Auch Kleinigkeiten. Gerade Kleinigkeiten.
+              alles, gut. Klemmt etwas, sag es uns. Auch Kleinigkeiten. Gerade
+              Kleinigkeiten.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>So meldest du was.</strong> Unten rechts schwebt auf jeder
+              Seite ein Knopf mit Sprechblase. Ein Tipp darauf, und du kannst die
+              Punkte der Seite abhaken oder frei schreiben: Bug, Idee oder Frage.
+              Alles landet ungefiltert bei Denis. Kein Ticket-System, keine
+              Warteschleife.
             </p>
             <p style={{ margin: 0 }}>
               <strong>Die Liste da unten.</strong> Für Gründliche. Wer mag, hakt
@@ -579,6 +599,7 @@ export default function BetaTestPage() {
               PS: Verchauf din Scheiss. ;)
             </p>
           </div>
+          )}
         </div>
 
         {/* Legend */}
