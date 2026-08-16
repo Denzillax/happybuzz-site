@@ -94,6 +94,14 @@ export function isFeeFree(price) {
   return (parseFloat(price) || 0) < FEE_FREE_BELOW;
 }
 
+// Mindest-Rechnungsbetrag: eine FEE-Monatsrechnung wird erst gestellt, wenn
+// der offene Saldo (inkl. Uebertraege aus Vormonaten) diesen Betrag erreicht.
+// Darunter rollt der Saldo in den Folgemonat. Schuetzt vor Mini-Rechnungen,
+// deren Einzug (Aufwand, spaeter TWINT/Stripe-Fixkosten) mehr kostet als
+// sie einbringen.
+// ACHTUNG: Muss mit v_min in der RPC create_monthly_fee_invoice uebereinstimmen.
+export const MIN_INVOICE_CHF = 10;
+
 // Gebuehren-Ranking: die Bee-Rate wirkt wie ein Frischevorsprung. Ein Inserat
 // wird sortiert, als waere es um so viele Tage neuer erstellt worden.
 // Bewusst keine harte Rangfolge, sonst waere der Fair-Tarif wertlos.

@@ -7,6 +7,7 @@ import { Receipt, Clock, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Copy,
 import BeeIcon from "@/components/shared/BeeIcon";
 import { Logo } from "@/components/shared/Logo";
 import { colors, fonts, radius } from "@/lib/theme";
+import { MIN_INVOICE_CHF } from "@/lib/constants";
 
 const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
@@ -181,7 +182,9 @@ export default function FeesPage() {
                   </div>
                 </div>
                 <p style={{ margin: 0, padding: "8px 14px 12px", fontSize: 11, color: colors.muted }}>
-                  Sammelrechnung wird am 1. des nächsten Monats automatisch erstellt.
+                  {totalPending < MIN_INVOICE_CHF
+                    ? `Saldo unter CHF ${MIN_INVOICE_CHF}: wird noch nicht in Rechnung gestellt, sondern in den Folgemonat übertragen.`
+                    : "Sammelrechnung wird am 1. des nächsten Monats automatisch erstellt."}
                 </p>
               </>
             )}
