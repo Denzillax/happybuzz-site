@@ -289,7 +289,11 @@ export default function ListingDetail() {
   const imgs = l.images || [];
   const isOwner = user && user.id === l.user_id;
   const fmtPrice = (p) => (parseFloat(p) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2 });
-  const displayPrice = (l.listing_type === "auction" && bids.length > 0) ? bids[0].amount : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
+  // Auktion ohne Gebote zeigt den STARTPREIS — nie l.price (dort kann ein
+  // verwaister Wert liegen, z.B. der importierte Festpreis der Quelle).
+  const displayPrice = l.listing_type === "auction"
+    ? (bids.length > 0 ? bids[0].amount : (l.start_price ?? 0))
+    : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
   const beeImpact = calcFee(displayPrice, l.fee_percentage || DEFAULT_FEE_PERCENT) * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
@@ -730,7 +734,7 @@ export default function ListingDetail() {
               {/* Price */}
               <div style={{ marginBottom: 16 }}>
                 <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontWeight: 600 }}>
-                  {l.listing_type === "auction" ? "Aktuelles Gebot" : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
+                  {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: 32, fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
                   {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : `CHF ${fmtPrice(displayPrice)}`}
@@ -1509,7 +1513,7 @@ export default function ListingDetail() {
         <div className="mobile-cta-bar">
           <div style={{ minWidth: 0 }}>
             <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>
-              {l.listing_type === "auction" ? "Aktuelles Gebot" : l.listing_type === "rent" ? "Mietpreis" : "Preis"}
+              {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : "Preis"}
             </p>
             <p style={{ margin: 0, fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Std" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Wo" : "Mt"}` : `CHF ${fmtPrice(displayPrice)}`}

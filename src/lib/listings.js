@@ -122,6 +122,10 @@ export async function createListing(userId, formData) {
     row.min_price = formData.min_price ? parseFloat(formData.min_price) : null;
     row.auction_duration = formData.auction_duration || null;
     row.auction_end = formData.auction_end || null;
+    // price gehoert Auktionen erst nach dem Zuschlag (Gebot/Finalisierung).
+    // Ohne dieses Nullen bleibt z.B. der importierte Festpreis der Quelle
+    // haengen und die Detailseite zeigt ihn als "Aktuelles Gebot".
+    row.price = null;
   }
   if (formData.listing_type === "rent") {
     row.rent_price = formData.rent_price ? parseFloat(formData.rent_price) : null;
@@ -129,6 +133,7 @@ export async function createListing(userId, formData) {
     row.deposit_amount = formData.deposit_amount ? parseFloat(formData.deposit_amount) : null;
     row.min_rent_days = formData.min_rent_days ? parseInt(formData.min_rent_days) : null;
     row.max_rent_days = formData.max_rent_days ? parseInt(formData.max_rent_days) : null;
+    row.price = null;
   }
   if (formData.listing_type === "service") {
     row.rent_price = formData.rent_price ? parseFloat(formData.rent_price) : null;
@@ -136,6 +141,11 @@ export async function createListing(userId, formData) {
     row.shipping_available = false;
     row.pickup_only = true;
     row.condition = null;
+    row.price = null;
+  }
+  if (formData.listing_type === "free") {
+    row.price = null;
+    row.is_negotiable = false;
   }
 
   const { data, error } = await supabase.from("listings").insert(row).select().single();
@@ -181,13 +191,16 @@ export async function updateListing(listingId, formData) {
     row.min_price = formData.min_price ? parseFloat(formData.min_price) : null;
     row.auction_duration = formData.auction_duration || null;
     row.auction_end = formData.auction_end || null;
+    row.price = null; // gehoert Auktionen erst nach Gebot/Zuschlag (siehe createListing)
   } else { row.start_price = null; row.buy_now_price = null; row.min_price = null; row.auction_duration = null; row.auction_end = null; }
+  if (formData.listing_type === "free") { row.price = null; row.is_negotiable = false; }
   if (formData.listing_type === "rent") {
     row.rent_price = formData.rent_price ? parseFloat(formData.rent_price) : null;
     row.rent_period = formData.rent_period || "day";
     row.deposit_amount = formData.deposit_amount ? parseFloat(formData.deposit_amount) : null;
     row.min_rent_days = formData.min_rent_days ? parseInt(formData.min_rent_days) : null;
     row.max_rent_days = formData.max_rent_days ? parseInt(formData.max_rent_days) : null;
+    row.price = null;
   } else if (formData.listing_type === "service") {
     // Spiegel von createListing: Services speichern den Preis in rent_price/
     // rent_period. Ohne diesen Zweig nullte der else-Fall beide Felder beim
@@ -198,6 +211,7 @@ export async function updateListing(listingId, formData) {
     row.pickup_only = true;
     row.condition = null;
     row.deposit_amount = null; row.min_rent_days = null; row.max_rent_days = null;
+    row.price = null;
   } else { row.rent_price = null; row.rent_period = null; row.deposit_amount = null; row.min_rent_days = null; row.max_rent_days = null; }
 
   const { data, error } = await supabase.from("listings").update(row).eq("id", listingId).select().single();

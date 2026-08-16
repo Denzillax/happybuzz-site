@@ -83,6 +83,7 @@ const TESTS = [
       { id: "lc_owner_leiste", label: "Eigenes Inserat öffnen: honiggelbe Leiste 'Das ist dein Inserat' mit Bearbeiten + Meine Inserate; bei fremden Inseraten nicht sichtbar" },
       { id: "lc_richtext", label: "Beschreibung formatieren: Fett/Kursiv/Aufzählung/Zwischentitel über die Knopfleiste, Anzeige auf der Detailseite formatiert; eingefügter Text aus Word/Websites wird bereinigt (nur erlaubte Formate bleiben)" },
       { id: "lc_richtext_import", label: "Ricardo/Tutti-Import übernimmt Fett und Listen aus der Quelle in den Editor" },
+      { id: "lc_preis_pro_typ", label: "Preis pro Inserat-Typ korrekt: Auktion ohne Gebote zeigt 'Startpreis' (nie einen fremden Restwert, auch nicht nach Import), mit Geboten 'Aktuelles Gebot'; Festpreis/Miete/Service/Gratis je richtig; Typwechsel beim Bearbeiten hinterlässt keine alten Preisfelder" },
       { id: "lc_service_block", label: "Service-Inserat blockiert, solange früherer Auftrag nicht in Rechnung gestellt" },
       { id: "lc_ship_toggle", label: "Versand-Schalter ein/aus" },
       { id: "lc_ship_modal", label: "Versand bearbeiten → Modal öffnet" },
