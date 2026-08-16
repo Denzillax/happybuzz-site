@@ -8,7 +8,13 @@ import BeeIcon from '@/components/shared/BeeIcon'
 // Headline-Regel: title + highlight sind IMMER genau je eine Zeile (nowrap im
 // Render). Beide Teile deshalb kurz halten — max ~18 Zeichen, sonst bricht
 // die Zwei-Zeilen-Form auf schmalen Screens.
-const slides = [
+type Slide = {
+  kicker: string; title: string; highlight: string; description: string;
+  image: string; cat: string; cond: string; specimen: string;
+  beta?: boolean;    // Beta-Slide: eigene CTAs
+  dwell?: number;    // Standzeit in ms (Standard 6500)
+}
+const slides: Slide[] = [
   {
     kicker: 'GESCHLOSSENE BETA',
     title: 'Willkommen,',
@@ -17,6 +23,7 @@ const slides = [
     image: '/images/hero/boombox.png',
     cat: '0001', cond: 'BETA', specimen: 'Boombox',
     beta: true,
+    dwell: 12000,   // Willkommens-Slide steht laenger, damit Tester in Ruhe lesen
   },
   {
     kicker: 'VERKAUFEN',
@@ -64,12 +71,15 @@ export function Hero() {
   }, [transitioning, current])
 
   useEffect(() => {
-    const t = setInterval(() => {
+    // Standzeit pro Slide (Beta-Slide laenger): setTimeout-Kette statt festem
+    // Interval; haengt an current, damit jede Slide ihre eigene dwell nutzt.
+    const dwell = slides[current].dwell ?? 6500
+    const t = setTimeout(() => {
       setTransitioning(true)
       setTimeout(() => { setCurrent(c => (c + 1) % slides.length); setTransitioning(false) }, 350)
-    }, 6500)
-    return () => clearInterval(t)
-  }, [])
+    }, dwell)
+    return () => clearTimeout(t)
+  }, [current])
 
   const s = slides[current]
   const fade = { transition: 'opacity .35s ease, transform .35s ease', opacity: transitioning ? 0 : 1 }
