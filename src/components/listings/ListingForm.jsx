@@ -294,8 +294,18 @@ export default function ListingForm({
   }, []);
 
   // ── Helpers ────────────────────────────────────────────────
-  const set = (key, val) => setForm((p) => ({ ...p, [key]: val }));
-  const toggle = (key) => setForm((p) => ({ ...p, [key]: !p[key] }));
+  // Fehler-Schluessel weichen teils vom Formularfeld ab (Gruppenfehler)
+  const ERROR_KEY = {
+    category_id: "category", postal_code: "location", city: "location",
+    pay_twint: "payment", pay_bank: "payment", pay_cash: "payment",
+    shipping_available: "delivery", pickup_only: "delivery",
+  };
+  const clearErr = (key) => {
+    const ek = ERROR_KEY[key] || key;
+    setErrors((prev) => { if (!prev[ek]) return prev; const n = { ...prev }; delete n[ek]; return n; });
+  };
+  const set = (key, val) => { setForm((p) => ({ ...p, [key]: val })); clearErr(key); };
+  const toggle = (key) => { setForm((p) => ({ ...p, [key]: !p[key] })); clearErr(key); };
 
   const parentCats = categories.filter((c) => !c.parent_id);
   const [selectedMainCat, setSelectedMainCat] = useState("");
@@ -611,12 +621,20 @@ export default function ListingForm({
     </label>
   );
 
-  const Err = ({ field }) =>
-    errors[field] ? (
-      <div style={{ color: colors.red, fontSize: 12, marginTop: 4, fontFamily: fonts.body }}>
-        {errors[field]}
-      </div>
-    ) : null;
+  // Der data-field-Anker existiert IMMER (auch ohne Fehler): validate() scrollt
+  // sofort nach setErrors, die Meldung selbst rendert erst im naechsten Frame.
+  const Err = ({ field }) => (
+    <div data-field={field}>
+      {errors[field] ? (
+        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FFF3F3", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
+          {errors[field]}
+        </div>
+      ) : null}
+    </div>
+  );
+
+  // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
+  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6" } : {});
 
   const AiButton = ({ onClick, label }) => (
     <button
@@ -916,7 +934,7 @@ export default function ListingForm({
           </div>
         </div>
         <input
-          style={inputBase}
+          style={{ ...inputBase, ...errStyle("title") }}
           placeholder="z.B. iPhone 14 Pro 256GB Space Black"
           value={form.title}
           onChange={(e) => set("title", e.target.value)}
@@ -928,11 +946,12 @@ export default function ListingForm({
         {!isFree && (
           <div style={{ marginTop: 18, opacity: form.listing_type === "service" ? 0.4 : 1, pointerEvents: form.listing_type === "service" ? "none" : "auto" }}>
             <label style={labelBase}>Zustand {form.listing_type === "service" && <span style={{ fontSize: 11, fontWeight: 400, color: colors.muted }}> (nicht relevant bei Service)</span>}</label>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6", padding: 8 } : {}) }}>
               {CONDITIONS.map((c) => (
                 <Chip key={c.value} active={form.condition === c.value} onClick={() => set("condition", c.value)}>{c.label}</Chip>
               ))}
             </div>
+            <Err field="condition" />
             {(() => { const sel = CONDITIONS.find((c) => c.value === form.condition); return sel?.desc ? <p style={{ ...hintStyle, marginTop: 8 }}>{sel.desc}</p> : null; })()}
           </div>
         )}
@@ -946,12 +965,13 @@ export default function ListingForm({
             </div>
           </div>
           <textarea
-            style={{ ...inputBase, minHeight: 110, resize: "vertical" }}
+            style={{ ...inputBase, minHeight: 110, resize: "vertical", ...errStyle("description") }}
             placeholder="Beschreibe dein Produkt: Zustand, Besonderheiten, Zubehör..."
             value={form.description}
             onChange={(e) => set("description", e.target.value)}
             maxLength={5000}
           />
+          <Err field="description" />
         </div>
 
         {/* Kategorie (hierarchisch + Autocomplete) */}
@@ -970,8 +990,8 @@ export default function ListingForm({
                 <div onClick={() => setCatModalOpen(true)} style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 0, cursor: "pointer",
-                  border: `1.5px solid ${form.category_id ? colors.yellow : colors.border}`,
-                  background: form.category_id ? `${colors.yellow}08` : "#fff",
+                  border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.yellow : colors.border}`,
+                  background: errors.category ? "#FFF6F6" : form.category_id ? `${colors.yellow}08` : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
@@ -979,6 +999,7 @@ export default function ListingForm({
                   </span>
                   <ChevronRight size={16} color={colors.muted} />
                 </div>
+                <Err field="category" />
                 {form.category_id && (
                   <button onClick={() => { set("category_id", ""); setSelectedMainCat(""); setSelectedSubCat(""); setSelectedSubSubCat(""); }}
                     style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: colors.muted, padding: "4px 0", fontFamily: fonts.body }}>
@@ -1232,7 +1253,7 @@ export default function ListingForm({
           <div>
             <label style={labelBase}>Preis (CHF) *</label>
             <input
-              style={inputBase}
+              style={{ ...inputBase, ...errStyle("price") }}
               type="number" min="0" step="0.01"
               placeholder="0.00"
               value={form.price}
@@ -1252,7 +1273,7 @@ export default function ListingForm({
           <div>
             <label style={labelBase}>Startpreis (CHF) *</label>
             <input
-              style={inputBase}
+              style={{ ...inputBase, ...errStyle("start_price") }}
               type="number" min="0" step="0.01"
               placeholder="1.00"
               value={form.start_price}
@@ -1264,12 +1285,13 @@ export default function ListingForm({
               <div style={{ flex: 1 }}>
                 <label style={labelBase}>Sofortkauf (optional)</label>
                 <input
-                  style={inputBase}
+                  style={{ ...inputBase, ...errStyle("buy_now_price") }}
                   type="number" min="0" step="0.01"
                   placeholder="z.B. 500"
                   value={form.buy_now_price}
                   onChange={(e) => set("buy_now_price", e.target.value)}
                 />
+                <Err field="buy_now_price" />
               </div>
               <div style={{ flex: 1 }}>
                 <label style={labelBase}>Mindestpreis (optional)</label>
@@ -1293,6 +1315,7 @@ export default function ListingForm({
                   <option key={d} value={d}>{d} Tage</option>
                 ))}
               </SelectWrap>
+              <Err field="auction_duration" />
             </div>
 
             {/* Auktionen sind der einzige Typ, bei dem der Preisvorteil wirklich
@@ -1319,7 +1342,7 @@ export default function ListingForm({
             <label style={labelBase}>Mietpreis (CHF) *</label>
             <div style={{ display: "flex", gap: 8 }}>
               <input
-                style={{ ...inputBase, flex: 1 }}
+                style={{ ...inputBase, flex: 1, ...errStyle("rent_price") }}
                 type="number" min="0" step="0.01"
                 placeholder="0.00"
                 value={form.rent_price}
@@ -1340,10 +1363,11 @@ export default function ListingForm({
               <div style={{ flex: 1 }}>
                 <label style={labelBase}>Min. Tage</label>
                 <input
-                  style={inputBase} type="number" min="1" placeholder="1"
+                  style={{ ...inputBase, ...errStyle("min_rent_days") }} type="number" min="1" placeholder="1"
                   value={form.min_rent_days}
                   onChange={(e) => set("min_rent_days", e.target.value)}
                 />
+                <Err field="min_rent_days" />
               </div>
               <div style={{ flex: 1 }}>
                 <label style={labelBase}>Max. Tage</label>
@@ -1374,7 +1398,7 @@ export default function ListingForm({
             <label style={labelBase}>Preis (CHF) *</label>
             <div style={{ display: "flex", gap: 8 }}>
               <input
-                style={{ ...inputBase, flex: 1 }}
+                style={{ ...inputBase, flex: 1, ...errStyle("rent_price") }}
                 type="number" min="0" step="0.01"
                 placeholder="0.00"
                 value={form.rent_price}
@@ -1710,10 +1734,12 @@ export default function ListingForm({
             </div>
           </div>
         )}
+        <Err field="location" />
 
         {!form.shipping_available && !form.pickup_only && (
           <p style={{ ...hintStyle, color: "#c62828", marginTop: 8 }}>Mindestens eine Übergabeart muss aktiv sein.</p>
         )}
+        <Err field="delivery" />
       </div>
       )}
 

@@ -180,6 +180,16 @@ export async function updateListing(listingId, formData) {
     row.deposit_amount = formData.deposit_amount ? parseFloat(formData.deposit_amount) : null;
     row.min_rent_days = formData.min_rent_days ? parseInt(formData.min_rent_days) : null;
     row.max_rent_days = formData.max_rent_days ? parseInt(formData.max_rent_days) : null;
+  } else if (formData.listing_type === "service") {
+    // Spiegel von createListing: Services speichern den Preis in rent_price/
+    // rent_period. Ohne diesen Zweig nullte der else-Fall beide Felder beim
+    // Bearbeiten — der Preis eines Service-Inserats verschwand beim Speichern.
+    row.rent_price = formData.rent_price ? parseFloat(formData.rent_price) : null;
+    row.rent_period = formData.rent_period || "hour";
+    row.shipping_available = false;
+    row.pickup_only = true;
+    row.condition = null;
+    row.deposit_amount = null; row.min_rent_days = null; row.max_rent_days = null;
   } else { row.rent_price = null; row.rent_period = null; row.deposit_amount = null; row.min_rent_days = null; row.max_rent_days = null; }
 
   const { data, error } = await supabase.from("listings").update(row).eq("id", listingId).select().single();

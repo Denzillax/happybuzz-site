@@ -415,6 +415,20 @@ export default function ListingDetail() {
           ))}
         </div>
 
+        {/* ── EIGENTÜMER-LEISTE ───────────────────────── */}
+        {isOwner && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: `1px solid ${INK}` }}>
+            <BeeIcon size={16} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: INK, marginRight: "auto" }}>Das ist dein Inserat</span>
+            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: `1.5px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
+              Bearbeiten
+            </Link>
+            <Link href="/listings" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: `1px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+              Meine Inserate
+            </Link>
+          </div>
+        )}
+
         {/* ── 2-COLUMN LAYOUT ─────────────────────────── */}
         {/* Spalten kommen aus globals.css (.detail-grid): mobil einspaltig.
             Inline gridTemplateColumns wuerde die Media-Query aushebeln. */}
