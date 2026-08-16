@@ -531,6 +531,8 @@ export async function getUserFavorites(userId) {
   if (error) throw error;
   return (data || []).map(fav => {
     if (!fav.listing) return null;
+    // Geloeschte Inserate fuehren ins Leere — gar nicht erst anzeigen
+    if (fav.listing.status === "deleted") return null;
     const sorted = (fav.listing.listing_images || []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
     return { ...fav.listing, cover_image: sorted[0]?.url || null, sellerName: fav.listing.seller?.display_name || "Benutzer" };
   }).filter(Boolean);

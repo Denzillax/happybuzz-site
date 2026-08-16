@@ -63,7 +63,9 @@ function Countdown({ endDate, endedLabel = "Beendet" }) {
 }
 
 export function ListingCard(props) {
-  const { listing, userId = null, boost = null, onUnfavorite = null } = props;
+  // statusOverlay: optionaler Stempeltext ("Verkauft"/"Beendet") — dimmt die
+  // Karte und legt einen Katalog-Stempel aufs Bild (Favoriten: inaktive Inserate)
+  const { listing, userId = null, boost = null, onUnfavorite = null, statusOverlay = null } = props;
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const cover = getCoverUrl(listing);
@@ -110,14 +112,22 @@ export function ListingCard(props) {
             ? `0 0 0 3px ${HONEY}33, 0 12px 26px rgba(20,17,13,.13)`
             : hover ? "0 12px 26px rgba(20,17,13,.13)" : "none",
           display: "flex", flexDirection: "column", height: "100%",
+          opacity: statusOverlay ? 0.8 : 1,
         }}
       >
         {/* Image — Katalog-Tafel mit Trennlinie */}
         <div style={{ position: "relative", aspectRatio: "4/3", background: SAND, overflow: "hidden", borderBottom: `1px solid ${INK}` }}>
           {cover
-            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.04)" : "scale(1)", transition: "transform .3s ease" }} loading="lazy" />
+            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.04)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={40} color="#ccc" /></div>
           }
+          {statusOverlay && (
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(251,248,242,.35)", zIndex: 2 }}>
+              <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: INK, background: PAPER, border: `2px solid ${INK}`, padding: "6px 14px", transform: "rotate(-8deg)", boxShadow: "3px 3px 0 rgba(20,17,13,.15)" }}>
+                {statusOverlay}
+              </span>
+            </div>
+          )}
 
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>

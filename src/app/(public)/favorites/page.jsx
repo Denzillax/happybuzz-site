@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase/supabase'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Heart, MapPin, Trash2, Search, User } from 'lucide-react'
+import { Heart, MapPin, Trash2, Search, User, ChevronDown } from 'lucide-react'
 import { getUserFavorites } from '@/lib/listings'
 import { ListingCard } from '@/components/shared/ListingCard'
 
@@ -35,6 +35,17 @@ async function toggleFavoriteSeller(userId, sellerId) {
   }
 }
 
+// Stempeltext fuer nicht mehr verfuegbare Inserate; null = aktiv.
+// Auktionen gelten als beendet, sobald das Enddatum vorbei ist, auch wenn der
+// Status (noch) active ist.
+function inactiveLabel(l) {
+  if (l.status === 'sold') return 'Verkauft'
+  if (l.status === 'expired') return 'Beendet'
+  if (l.listing_type === 'auction' && l.auction_end && new Date(l.auction_end).getTime() < Date.now()) return 'Beendet'
+  if (l.status !== 'active') return 'Beendet'
+  return null
+}
+
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([])
   const [sellers, setSellers] = useState([])
@@ -42,6 +53,7 @@ export default function FavoritesPage() {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
+  const [showInactive, setShowInactive] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
@@ -84,6 +96,10 @@ export default function FavoritesPage() {
   const q = search.toLowerCase().trim()
   const filteredFavorites = q ? favorites.filter(f => f.title?.toLowerCase().includes(q) || f.city?.toLowerCase().includes(q)) : favorites
   const filteredSellers = q ? sellers.filter(s => s.seller?.display_name?.toLowerCase().includes(q) || s.seller?.city?.toLowerCase().includes(q)) : sellers
+
+  // Aktive zuerst, erledigte (verkauft/beendet) in die eigene Sektion darunter
+  const activeFavs = filteredFavorites.filter(f => !inactiveLabel(f))
+  const inactiveFavs = filteredFavorites.filter(f => inactiveLabel(f))
 
   if (loading) {
     return (
@@ -139,11 +155,34 @@ export default function FavoritesPage() {
       {tab === 'listings' && (
         <>
           {filteredFavorites.length > 0 ? (
-            <div className="listing-grid">
-              {filteredFavorites.map(listing => (
-                <ListingCard key={listing.id} listing={listing} userId={user?.id} onUnfavorite={(id) => setFavorites(prev => prev.filter(f => f.id !== id))} />
-              ))}
-            </div>
+            <>
+              {activeFavs.length > 0 && (
+                <div className="listing-grid">
+                  {activeFavs.map(listing => (
+                    <ListingCard key={listing.id} listing={listing} userId={user?.id} onUnfavorite={(id) => setFavorites(prev => prev.filter(f => f.id !== id))} />
+                  ))}
+                </div>
+              )}
+              {inactiveFavs.length > 0 && (
+                <div className={activeFavs.length > 0 ? 'mt-10' : ''}>
+                  <button
+                    onClick={() => setShowInactive(v => !v)}
+                    className="w-full flex items-center gap-2 border-t-2 border-[#14110D] pt-3 pb-1 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.15em] text-[#14110D] cursor-pointer bg-transparent"
+                  >
+                    Nicht mehr verfügbar ({inactiveFavs.length})
+                    <ChevronDown size={14} className={`transition-transform ${showInactive ? 'rotate-180' : ''}`} />
+                  </button>
+                  <p className="text-text/40 text-xs mb-4">Verkauft oder beendet. Mit dem Herz kannst du sie aus den Favoriten entfernen.</p>
+                  {showInactive && (
+                    <div className="listing-grid">
+                      {inactiveFavs.map(listing => (
+                        <ListingCard key={listing.id} listing={listing} userId={user?.id} statusOverlay={inactiveLabel(listing)} onUnfavorite={(id) => setFavorites(prev => prev.filter(f => f.id !== id))} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-20">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#14110D] bg-honey/20 mb-6">
