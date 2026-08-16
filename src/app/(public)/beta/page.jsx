@@ -232,6 +232,8 @@ const TESTS = [
     items: [
       { id: "adm_access", label: "Nur das Admin-Konto sieht /admin (andere werden auf die Startseite umgeleitet)" },
       { id: "adm_shell", label: "Navigations-Sidebar (Übersicht/Benutzer/Inserate/Gebühren/Meldungen): Tab-Wechsel funktioniert, mobil als Top-Leiste" },
+      { id: "adm_sitemode", label: "Betriebsmodus (Übersicht): Live/Beta/Wartung umschalten mit Bestätigung; Beta sperrt Besucher ohne Freigabe aus (Sperrseite mit Anmelden), Wartung sperrt alle ausser Staff; Protokoll-Eintrag" },
+      { id: "adm_beta_access", label: "Benutzer-Profil: 'Beta-Zugang erteilen/entziehen' wirkt sofort auf das Gate; Badge 'Beta-Zugang' im Profilkopf; /login bleibt immer erreichbar" },
       { id: "adm_overview", label: "Übersicht: Stat-Karten + 'Zu prüfen'-Karten (Geflaggt/Gesperrt/Offene Meldungen) springen gefiltert in den passenden Tab" },
       { id: "adm_users_filter", label: "Benutzer: Filter Alle/Geflaggt/Gesperrt mit Live-Zähler; Suche; Zeile aufklappbar (Inserate/Bestellungen/Rechnungen/Bewertungen)" },
       { id: "adm_users_mod", label: "Benutzer: Sperren/Entsperren direkt in der Zeile sichtbar (ohne Aufklappen); Verstoss- und GESPERRT-Badge; markierte Zeilen für geflaggt/gesperrt" },

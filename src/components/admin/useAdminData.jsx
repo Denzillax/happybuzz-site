@@ -35,6 +35,7 @@ export function useAdminData() {
   const [feedback, setFeedback] = useState([]);
   const [adminCategories, setAdminCategories] = useState([]);
   const [challenges, setChallenges] = useState([]);
+  const [siteMode, setSiteMode] = useState({ mode: "live", message: null });
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
   const [search, setSearch] = useState("");
@@ -184,6 +185,10 @@ export function useAdminData() {
 
       // Challenges (Vorlagen + Instanzen) mit Teilnehmerzahlen
       await loadChallenges();
+
+      // Betriebsmodus (live/beta/wartung)
+      const { data: siteS } = await supabase.from("site_settings").select("mode, message").eq("id", 1).maybeSingle();
+      if (siteS) setSiteMode(siteS);
 
       // Reviews (from ratings table - used by order flow)
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
@@ -671,6 +676,26 @@ export function useAdminData() {
     logAdmin("category_delete", "category", cat.name);
     return true;
   };
+  // ── Betriebsmodus (SiteGate) ───────────────────────────────
+  const saveSiteMode = async (mode, message) => {
+    const { error } = await supabase.from("site_settings")
+      .update({ mode, message: message || null, updated_at: new Date().toISOString() }).eq("id", 1);
+    if (error) { flash(`Fehler: ${error.message}`); return false; }
+    setSiteMode({ mode, message: message || null });
+    flash(mode === "live" ? "Seite ist LIVE für alle" : mode === "beta" ? "Geschlossene Beta aktiv" : "Wartungsmodus aktiv");
+    logAdmin("site_mode_set", "site", mode, { message: message || null });
+    return true;
+  };
+
+  // Beta-Freigabe pro Konto (SiteGate-Modus 'beta')
+  const setBetaAccess = async (userId, name, next) => {
+    const { error } = await supabase.from("profiles").update({ beta_access: next }).eq("id", userId);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, beta_access: next } : u));
+    flash(next ? `${name}: Beta-Zugang erteilt` : `${name}: Beta-Zugang entzogen`);
+    logAdmin("beta_access_set", "user", name, { zugang: next });
+  };
+
   // ── Challenges (Vorlagen + Instanzen) ──────────────────────
   const loadChallenges = async () => {
     const { data } = await supabase.from("challenges")
@@ -966,6 +991,7 @@ export function useAdminData() {
     feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
     adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
     challenges, saveChallenge, toggleChallenge, updateChallenge,
+    siteMode, saveSiteMode, setBetaAccess,
     gmv, avgOrder, nonCancelledOrders, topSellers,
     openUser, toggleUser, userTab, setUserTab, userListings, userFees, userInvoices, userMod, setUserMod,
     openProfile, openUserProfile, closeProfile, userNote, saveUserNote, profileAudit,

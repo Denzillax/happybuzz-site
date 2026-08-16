@@ -1,16 +1,57 @@
 "use client";
 import { useState } from "react";
-import { Receipt, CheckCircle, Megaphone } from "lucide-react";
+import { Receipt, CheckCircle, Megaphone, Globe, Lock, Wrench } from "lucide-react";
 import { fmtCHF } from "@/lib/formatters";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
 
+const MODI = [
+  { key: "live",    label: "Live",    Icon: Globe,  desc: "Seite für alle offen",                        color: "#2E7D32", bg: "#E8F5E9" },
+  { key: "beta",    label: "Beta",    Icon: Lock,   desc: "Nur freigegebene Test-Konten (Benutzer-Tab)", color: "#C8860A", bg: "#FBF1D2" },
+  { key: "wartung", label: "Wartung", Icon: Wrench, desc: "Nur Staff, alle anderen sehen die Wartungsseite", color: "#c62828", bg: "#FFEBEE" },
+];
+
 export function OverviewTab({ admin }) {
-  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION } = admin;
+  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode } = admin;
   const [feeView, setFeeView] = useState("paid");
+  const [gateMsg, setGateMsg] = useState(siteMode?.message || "");
 
   return (
     <div>
+      {/* ── Betriebsmodus (SiteGate) ─────────────────────────── */}
+      <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
+        <p style={{ margin: "0 0 10px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".06em", color: colors.muted }}>Betriebsmodus</p>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "stretch" }}>
+          {MODI.map(m => {
+            const aktiv = (siteMode?.mode || "live") === m.key;
+            return (
+              <button key={m.key}
+                onClick={() => { if (!aktiv && confirm(`Modus auf "${m.label}" umstellen?`)) saveSiteMode(m.key, gateMsg.trim()); }}
+                style={{
+                  flex: "1 1 180px", textAlign: "left", padding: "11px 13px", cursor: aktiv ? "default" : "pointer",
+                  border: aktiv ? `2px solid ${m.color}` : `1px solid ${colors.border}`, borderRadius: 0,
+                  background: aktiv ? m.bg : "#fff", fontFamily: fonts.body,
+                }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 800, color: m.color }}>
+                  <m.Icon size={14} /> {m.label}{aktiv ? " · aktiv" : ""}
+                </span>
+                <span style={{ display: "block", fontSize: 11.5, color: colors.muted, marginTop: 3 }}>{m.desc}</span>
+              </button>
+            );
+          })}
+        </div>
+        {(siteMode?.mode || "live") !== "live" || gateMsg ? (
+          <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+            <input value={gateMsg} onChange={e => setGateMsg(e.target.value)} placeholder="Eigener Text auf der Sperrseite (optional)"
+              style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 0, padding: "8px 10px", fontSize: 12.5, fontFamily: fonts.body }} />
+            <button onClick={() => saveSiteMode(siteMode?.mode || "live", gateMsg.trim())}
+              style={{ padding: "8px 14px", borderRadius: 0, border: "none", background: colors.dark, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+              Text speichern
+            </button>
+          </div>
+        ) : null}
+      </div>
+
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 }}>
         <button onClick={openAnnouncement} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#fff", color: colors.dark, border: `1px solid ${colors.border}`, borderRadius: 999, padding: "9px 16px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
           <Megaphone size={15} /> Banner

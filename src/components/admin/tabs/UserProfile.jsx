@@ -16,6 +16,7 @@ export function UserProfile({ admin }) {
     userListings, userFees, userInvoices, userTab, setUserTab, openInvoice, setOpenInvoice,
     orders, reviews, emailLog, statusPill, toggleListingStatus, cancelOrder, deleteReview,
     sc, dunningTimeline, mahnButton, confirmAndReactivate, emailCard,
+    setBetaAccess,
   } = admin;
   const u = users.find(x => x.id === openProfile);
   const [note, setNote] = useState(userNote);
@@ -57,10 +58,16 @@ export function UserProfile({ admin }) {
           <div style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head }}>{u.display_name || "—"} <span style={{ fontSize: 13, fontWeight: 400, color: colors.muted }}>@{u.username || "—"}</span></div>
           <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
             {u.is_banned ? pill("#EB5E55", "#fff", "Gesperrt") : pill("#E8F5E9", "#2E7D32", "Aktiv")}
+            {u.beta_access ? pill("#FBF1D2", "#C8860A", "Beta-Zugang") : null}
             {u.id_verified ? pill("#E6F5F5", "#0A7170", "ID verifiziert") : u.id_document_url ? pill("#FFF8E1", "#E65100", "ID ausstehend") : null}
             {pill(colors.cream, colors.dark, u.account_type === "business" ? "Unternehmen" : "Privat")}
           </div>
         </div>
+        {/* Beta-Freigabe: steuert den Zutritt im SiteGate-Modus 'beta' */}
+        <button onClick={() => setBetaAccess(u.id, u.display_name || u.username || "Konto", !u.beta_access)}
+          style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.beta_access ? "#E5C868" : "#C8860A55"}`, color: "#C8860A" }}>
+          {u.beta_access ? "Beta-Zugang entziehen" : "Beta-Zugang erteilen"}
+        </button>
         <button onClick={() => toggleBan(u)} style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.is_banned ? "#aed8b0" : "#e6a6a6"}`, color: u.is_banned ? "#2E7D32" : "#c0392b" }}>{u.is_banned ? "Entsperren" : "Konto sperren"}</button>
       </div>
 
