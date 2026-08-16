@@ -1,0 +1,26 @@
+# BEEDARO
+
+> BEEDARO ist der Schweizer Marktplatz fuer Secondhand: Kaufen, Verkaufen,
+> Auktionen, Mieten und Dienstleistungen von privat zu privat. Verkaeufer
+> waehlen ihre Gebuehr selbst (Bee-Rate, ab 3%); 20% jeder Gebuehr fliessen
+> als Bee-Impact in Schweizer Bienen- und Naturschutzprojekte.
+
+Besonderheiten:
+- Fuenf Inseratstypen auf einer Plattform: Festpreis, Auktion, Miete, Gratis, Service
+- Waehlbare Gebuehr (Bee-Rate): 3%, 5%, 7% oder 10% - der Verkaeufer entscheidet
+- Bee-Impact: 20% jeder Gebuehr gehen an Bienen- und Naturprojekte in der Schweiz
+- Verkaeufe unter CHF 20 sind komplett gebuehrenfrei (Bagatellgrenze)
+- Schweizer QR-Rechnungen, TWINT und Bank als Zahlwege
+- Import-Helfer: Inserate aus Ricardo/Tutti/eBay mit einem Klick uebernehmen
+
+## Wichtige Seiten
+
+- [Startseite](https://beedaro.ch/): Marktplatz-Uebersicht mit neuen und beliebten Inseraten
+- [Suche](https://beedaro.ch/search): Alle Inserate mit Filtern nach Kategorie, Preis, Zustand
+- [So funktioniert es](https://beedaro.ch/how-it-works): Ablauf fuer Kaeufer und Verkaeufer
+- [Gebuehren](https://beedaro.ch/fees): Das Bee-Rate-Modell im Detail
+- [Bee-Impact](https://beedaro.ch/impact): Wohin die Naturschutz-Beitraege fliessen
+- [Hilfe](https://beedaro.ch/help): Haeufige Fragen und Antworten
+- [Ueber BEEDARO](https://beedaro.ch/about): Wer hinter der Plattform steht
+
+BEEDARO ist eine Marke von MOQRO (Einzelfirma, Schweiz). Kontakt: support@beedaro.ch

@@ -29,6 +29,36 @@ export const metadata: Metadata = {
   },
 }
 
+// Organisations- und Website-Daten fuer Google und KI-Assistenten:
+// WebSite mit SearchAction macht die interne Suche maschinenlesbar.
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://beedaro.ch/#org',
+      name: 'BEEDARO',
+      url: 'https://beedaro.ch',
+      logo: 'https://beedaro.ch/logo.svg',
+      description: 'Schweizer Marktplatz für Secondhand: Kaufen, Verkaufen, Auktionen, Mieten und Services. Ab 3% Gebühr, 20% davon fliessen in Bienen- und Naturprojekte (Bee-Impact).',
+      areaServed: 'CH',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://beedaro.ch/#website',
+      name: 'BEEDARO',
+      url: 'https://beedaro.ch',
+      publisher: { '@id': 'https://beedaro.ch/#org' },
+      inLanguage: 'de-CH',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: 'https://beedaro.ch/search?q={search_term_string}' },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -40,6 +70,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
       </head>
       <body>{children}<BetaFeedback /><GamificationProvider /></body>
     </html>

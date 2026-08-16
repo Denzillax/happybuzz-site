@@ -58,8 +58,11 @@ export default function SiteGate({ children }) {
     return () => { alive = false; };
   }, []);
 
-  if (state.loading) return null;
-  if (state.allowed) return children;
+  // SEO-kritisch: Waehrend der Pruefung wird der Inhalt GEZEIGT (nicht null).
+  // So steht der volle Inhalt im Server-HTML und Google/KI-Crawler sehen
+  // echte Seiten. Gesperrte Besucher sehen den Inhalt nur fuer den Bruchteil
+  // einer Sekunde, dann legt sich die Sperrseite darueber.
+  if (state.loading || state.allowed) return children;
 
   const wartung = state.mode === "wartung";
   return (
