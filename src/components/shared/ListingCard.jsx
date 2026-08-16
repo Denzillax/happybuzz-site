@@ -74,8 +74,9 @@ export function listingInactiveLabel(listing) {
 }
 
 export function ListingCard(props) {
-  // statusOverlay: optionaler Stempeltext-Override. Ohne Prop stempelt sich
-  // die Karte selbst (verkauft/beendet), egal wo sie verwendet wird.
+  // statusOverlay: optionaler Status-Override. Ohne Prop erkennt die Karte
+  // selbst, ob das Inserat verkauft/beendet ist: dann ausgegraut (Karte
+  // gedimmt, Bild entsaettigt) und der Status ersetzt unten den Countdown.
   const { listing, userId = null, boost = null, onUnfavorite = null, statusOverlay: statusOverlayProp = null } = props;
   const statusOverlay = statusOverlayProp ?? listingInactiveLabel(listing);
   const [hover, setHover] = useState(false);
@@ -133,13 +134,6 @@ export function ListingCard(props) {
             ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.04)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={40} color="#ccc" /></div>
           }
-          {statusOverlay && (
-            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(251,248,242,.35)", zIndex: 2 }}>
-              <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: INK, background: PAPER, border: `2px solid ${INK}`, padding: "6px 14px", transform: "rotate(-8deg)", boxShadow: "3px 3px 0 rgba(20,17,13,.15)" }}>
-                {statusOverlay}
-              </span>
-            </div>
-          )}
 
           {/* Top-left: colored badges */}
           <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4 }}>
