@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lokale Werkzeuge (Claude Code, Codex, MCP-Konfig, Scratch)
+.claude/
+.codex/
+.mcp.json
+/extracted/
