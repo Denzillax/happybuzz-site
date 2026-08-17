@@ -31,6 +31,7 @@ const PAGE_TESTS = {
     { id: "lc_zustand", label: "Zustand wählen" },
     { id: "lc_description", label: "Beschreibung eingeben" },
     { id: "lc_category", label: "Kategorie wählen (Autocomplete + Dropdown)" },
+    { id: "lc_category_tierbedarf", label: "Neue Kategorie 'Tierbedarf & Haustiere' wählbar (10 Unterkategorien)" },
     { id: "lc_festpreis", label: "Festpreis: Preis eingeben" },
     { id: "lc_auktion", label: "Auktion: Startpreis + Dauer" },
     { id: "lc_mieten", label: "Vermieten: Mietpreis + Zeitraum" },

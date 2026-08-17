@@ -5,6 +5,7 @@ export const REP_LOG = [
   {
     datum: "17. August 2026",
     punkte: [
+      "Neue Kategorie 'Tierbedarf & Haustiere' mit 10 Unterkategorien (Hunde bis Aquaristik), dazu Dienstleistungen neu mit Tierbetreuung und Garten & Aussenbereich",
       "Auktionen haben jetzt ein echtes Enddatum mit Countdown (vorher stand dort ein Strich und die Auktion wäre nie zu Ende gegangen)",
       "Gebotsmaske repariert: erstes Gebot ab Startpreis möglich, neue Zeile 'Nächstes Gebot', Limit erhöhen/senken korrekt vorbelegt",
       "Gebotsverlauf: der Höchstbietende steht jetzt immer zuoberst",

@@ -69,6 +69,7 @@ const TESTS = [
       { id: "lc_description", label: "Beschreibung eingeben" },
       { id: "lc_category_auto", label: "Kategorie-Autocomplete findet Kategorie" },
       { id: "lc_category_dropdown", label: "Kategorie-Dropdown (Haupt/Unter/Sub)" },
+      { id: "lc_category_tierbedarf", label: "Neue Kategorie 'Tierbedarf & Haustiere' mit 10 Unterkategorien wählbar (auch im Kategorien-Menü und im Suchfilter sichtbar); Dienstleistungen haben neu Tierbetreuung und Garten & Aussenbereich" },
       { id: "lc_type_festpreis", label: "Festpreis: Preis eingeben" },
       { id: "lc_type_auktion", label: "Auktion: Startpreis + Dauer wählen" },
       { id: "lc_auktion_vergleich", label: "Auktion: Hinweisbox mit Gebührenvergleich (Ricardo 8-12% Basissatz) erscheint nur beim Typ Auktion, nicht bei Festpreis/Miete/Service/Gratis" },
