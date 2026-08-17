@@ -104,7 +104,7 @@ export function Hero() {
   return (
     <section className="hero-section" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{
       position: 'relative', width: '100%', minHeight: 560, overflow: 'hidden',
-      background: SAND, color: INK,
+      background: PAPER, color: INK,
       backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: '22px 22px',
     }}>
       <div className="hero-content" style={{
@@ -205,7 +205,7 @@ export function Hero() {
           {/* Offset-Karte dahinter (Archiv-Stapel) */}
           <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(4deg)', opacity: .28 }} />
           <div className='hero-beta-float' style={{
-            position: 'relative', width: '100%', maxWidth: 400, background: PAPER,
+            position: 'relative', width: '100%', maxWidth: 400, background: '#fff',
             border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(-2deg)',
             padding: 18, boxShadow: '0 24px 48px rgba(20,17,13,0.14)',
           }}>

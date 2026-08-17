@@ -67,9 +67,13 @@ export function CommunityImpact() {
     <section style={{
       width: "100%",
       background: PAPER,
-      padding: "56px 20px",
+      // oben 0: der Abstand kommt vom Challenge-Band darueber (40px), so ist
+      // die Luecke Hero->Challenge->Impact ueberall gleich
+      padding: "0 20px 56px",
     }}>
-      <div className="impact-layout" style={{ maxWidth: 1080, margin: "0 auto" }}>
+      {/* Ganze Impact-Box mit Katalog-Outline, gleiche Bauart wie die Karten unten */}
+      <div style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
+      <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
           position: "relative", borderRadius: 0, overflow: "hidden",
@@ -155,6 +159,7 @@ export function CommunityImpact() {
             Mehr über Bee-Impact <ArrowRight size={16} />
           </Link>
         </div>
+      </div>
       </div>
     </section>
   );

@@ -55,8 +55,10 @@ export function ChallengeBanner() {
       : { href: "/listings/new", label: "Jetzt inserieren" };
 
   return (
-    <section style={{ maxWidth: 1200, margin: "0 auto", padding: "18px 20px 0" }}>
-      <div style={{ background: PAPER, border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
+    // Durchgehendes Creme-Band: gleiche Flaeche wie Hero und Bee-Impact,
+    // symmetrischer Abstand (40px) ober- und unterhalb der Box
+    <section style={{ background: PAPER, padding: "40px 20px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
         <div style={{ width: 46, height: 46, flexShrink: 0, background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Target size={22} color={INK} />
         </div>
