@@ -261,6 +261,8 @@ const TESTS = [
       { id: "adm_csv", label: "CSV-Export für Bestellungen/Rechnungen/Benutzer exportiert die gefilterte Ansicht; Umlaute korrekt" },
       { id: "adm_emaillog", label: "E-Mails-Tab listet email_log, Suche + aufklappbarer Context funktionieren" },
       { id: "adm_ladezeit", label: "Admin lädt in wenigen Sekunden (gebündelte Abfragen), während des Ladens Beedaro-Logo mit Honig-Ladebalken" },
+      { id: "adm_tabellen_sort", label: "Admin-Tabellen (Inserate/Bestellungen/Rechnungen/Challenges): Spaltenköpfe sortieren per Klick (Pfeil zeigt Richtung), Preis pro Inserat-Typ korrekt (ab Startpreis, /Std, Gratis, — statt 0.00), Auge/Detail in fester Flucht" },
+      { id: "adm_tabellen_mobil", label: "Admin-Tabellen auf dem Handy als Karten ohne Seitwärts-Scrollen; Bestellungen/Rechnungen klappen ihre Details auch als Karte auf (inkl. Mahn-Knöpfe)" },
       { id: "adm_status_deutsch", label: "Benutzer-Detail: Bestell-Status überall deutsch übersetzt (kein payment_marked/shipped roh)" },
       { id: "adm_mini_analytics", label: "Übersicht zeigt GMV, Ø Bestellwert und Top-5-Verkäufer (nicht-storniert)" },
       { id: "adm_dunning_tab", label: "Mahnungen-Tab listet überfällige FEE-Rechnungen mit Eskalations-Timeline + Fälligkeit; Nav-Badge stimmt" },

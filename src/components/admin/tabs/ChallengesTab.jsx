@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, Power, Repeat } from "lucide-react";
 import { colors, radius } from "@/lib/theme";
-import { th, td, pill, bcFieldLabel, bcInput } from "@/components/admin/adminStyles";
+import { th, td, pill, bcFieldLabel, bcInput, useSort, SortTh } from "@/components/admin/adminStyles";
 
 const ACTIONS = [
   { value: "listing_created", label: "Inserate erstellen" },
@@ -31,6 +31,17 @@ export function ChallengesTab({ admin }) {
     filter === "vorlagen" ? c.is_template
     : filter === "vergangene" ? (!c.is_template && new Date(c.ends_at) < now)
     : (!c.is_template && new Date(c.ends_at) >= now));
+
+  const sort = useSort(rows, (c, key) => {
+    if (key === "title") return c.title || "";
+    if (key === "action") return aLabel(c.target_action);
+    if (key === "target") return parseInt(c.target_value) || 0;
+    if (key === "xp") return parseInt(c.xp_reward) || 0;
+    if (key === "period") return c.is_template ? "" : (c.starts_at || "");
+    if (key === "participants") return c.is_template ? -1 : (parseInt(c.participants) || 0);
+    if (key === "status") return c.active ? 1 : 0;
+    return null;
+  });
 
   const submit = async () => {
     if (!f.title.trim()) return alert("Titel fehlt");
@@ -90,15 +101,20 @@ export function ChallengesTab({ admin }) {
         {rows.length === 0 ? (
           <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13 }}>Nichts gefunden.</div>
         ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <>
+        <table className="po-table" style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead><tr style={{ borderBottom: `1px solid ${colors.border}`, background: colors.cream }}>
-            <th style={th}>Titel</th><th style={th}>Aktion</th>
-            <th style={{ ...th, textAlign: "right" }}>Ziel</th><th style={{ ...th, textAlign: "right" }}>Pollen</th>
-            <th style={th}>Zeitraum</th><th style={{ ...th, textAlign: "right" }}>Teilnehmer</th>
-            <th style={{ ...th, textAlign: "center" }}>Status</th><th style={{ ...th, textAlign: "center" }}>Aktionen</th>
+            <SortTh label="Titel" k="title" sort={sort} />
+            <SortTh label="Aktion" k="action" sort={sort} />
+            <SortTh label="Ziel" k="target" sort={sort} align="right" />
+            <SortTh label="Pollen" k="xp" sort={sort} align="right" />
+            <SortTh label="Zeitraum" k="period" sort={sort} />
+            <SortTh label="Teilnehmer" k="participants" sort={sort} align="right" />
+            <SortTh label="Status" k="status" sort={sort} align="center" />
+            <th style={{ ...th, textAlign: "center" }}>Aktionen</th>
           </tr></thead>
           <tbody>
-            {rows.map(c => (
+            {sort.sorted.map(c => (
               <tr key={c.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
                 <td style={{ ...td, fontWeight: 600 }}>{c.title}
                   {c.description && <span style={{ display: "block", fontSize: 11, color: colors.muted, fontWeight: 400 }}>{c.description}</span>}
@@ -129,6 +145,37 @@ export function ChallengesTab({ admin }) {
             ))}
           </tbody>
         </table>
+
+        {/* Mobil: Karten */}
+        <div className="po-cards">
+          {sort.sorted.map(c => (
+            <div key={c.id} style={{ padding: "12px 14px", borderBottom: `1px solid ${colors.borderLt}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }}>
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ margin: 0, fontSize: 13.5, fontWeight: 700 }}>{c.title}</p>
+                  {c.description && <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{c.description}</p>}
+                </div>
+                {c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#f5f5f5", "#666", "Aus")}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6, flexWrap: "wrap", fontSize: 12, color: colors.muted }}>
+                <span>{aLabel(c.target_action)}</span>
+                <span>Ziel {c.target_value}</span>
+                <span style={{ fontWeight: 700, color: colors.dark }}>{c.xp_reward} Pollen</span>
+                <span>{c.is_template ? "wöchentlich" : `${fmtD(c.starts_at)} bis ${fmtD(c.ends_at)}`}</span>
+                {!c.is_template && <span>{c.participants} Teilnehmer</span>}
+              </div>
+              <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+                {c.is_template && (
+                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
+                )}
+                <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                  <Power size={10} /> {c.active ? "Aus" : "An"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        </>
         )}
       </div>
     </div>
