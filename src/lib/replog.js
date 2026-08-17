@@ -23,6 +23,7 @@ export const REP_LOG = [
   {
     datum: "17. August 2026",
     punkte: [
+      { typ: "fix", bereich: "Inserieren", text: "Versandkosten gingen verloren, wenn man die Vorauswahl (Gewicht/Lieferzeit) einfach übernahm statt anzuklicken. Der Post-Tarif wird jetzt automatisch übernommen, betroffene Inserate wurden repariert", melder: "Melani" },
       { typ: "fix", bereich: "Texte", text: "Footer-Slogan gestrafft: 'Secondhand mit Haltung' statt 'Secondhand, aber mit Haltung'", melder: "Oli" },
       { typ: "fix", bereich: "Texte", text: "Unsere Geschichte umformuliert: 'Gebrauchte Dinge verdienen mehr als ein zweites Leben. Sie verdienen einen besseren Marktplatz.' (vorher stand dort 'Notlösung')", melder: "Oli" },
       { typ: "fix", bereich: "Glocke", text: "Benachrichtigungen: Ankündigungen zeigen jetzt den ganzen Text (vorher auf eine Zeile abgeschnitten) und ein hinterlegter Link ist als 'Öffnen' sichtbar" },

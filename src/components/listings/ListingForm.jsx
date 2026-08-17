@@ -460,6 +460,17 @@ export default function ListingForm({
     }
   }, [form.shipping_available, form.pickup_only]);
 
+  // Versandkosten-Luecke: Gewicht/Lieferzeit sind im Modal VORSELEKTIERT, der
+  // Preis wurde aber nur beim Klick auf einen Chip gesetzt. Wer die Vorauswahl
+  // einfach uebernahm, speicherte shipping_cost = leer (Melanis Schwimmwesten-Bug).
+  // Solange kein eigener Betrag drinsteht, zieht der Tarif automatisch nach.
+  useEffect(() => {
+    if (!form._shipStep || !POST_TARIFE[form._shipStep] || form.free_shipping) return;
+    if (form.shipping_cost && Number(form.shipping_cost) > 0) return;
+    const t = POST_TARIFE[form._shipStep]?.[form.ship_speed || "economy"]?.[form.ship_weight];
+    if (t) set("shipping_cost", t.toFixed(2));
+  }, [form._shipStep, form.ship_weight, form.ship_speed, form.free_shipping]);
+
   // ── Validate ───────────────────────────────────────────────
   const validate = () => {
     const e = {};
@@ -551,8 +562,18 @@ export default function ListingForm({
         sortOrder: i.sortOrder,
       }));
 
+      // Letzte Sicherung gegen leere Versandkosten: Versand aktiv, nicht gratis,
+      // aber kein Betrag gesetzt (Modal nie geoeffnet, Vorauswahl uebernommen)
+      // -> Post-Tarif aus der aktuellen Auswahl ableiten
+      let shippingCost = form.shipping_cost;
+      if (form.shipping_available && !form.free_shipping && (!shippingCost || Number(shippingCost) <= 0)) {
+        const t = POST_TARIFE[form.shipping_method]?.[form.ship_speed || "economy"]?.[form.ship_weight];
+        if (t) shippingCost = t.toFixed(2);
+      }
+
       await onSave({
         ...form,
+        shipping_cost: shippingCost,
         listing_type: effectiveType,
         price: isFree ? 0 : form.price,
         publish,
