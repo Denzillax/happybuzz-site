@@ -725,7 +725,7 @@ export default function BetaTestPage() {
                         <span style={{ minWidth: 0 }}>
                           {p.text}
                           {p.melder && (
-                            <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, color: "#0B5E5C", whiteSpace: "nowrap" }}> · gemeldet von {p.melder}</span>
+                            <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, color: "#0B5E5C" }}> · gemeldet von {p.melder}</span>
                           )}
                         </span>
                       </div>
