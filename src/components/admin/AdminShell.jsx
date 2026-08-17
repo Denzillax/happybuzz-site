@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { Search, ArrowLeft, Download } from "lucide-react";
-import BeeIcon from "@/components/shared/BeeIcon";
 import { colors, fonts } from "@/lib/theme";
 import { ReportsTab } from "@/components/admin/tabs/ReportsTab";
 import { ListingsTab } from "@/components/admin/tabs/ListingsTab";
@@ -30,14 +29,12 @@ export function AdminShell({ admin }) {
 
       {/* ═══ SIDEBAR ═══ */}
       <aside className="admin-sidebar" style={{ background: "#1a1a1a", color: "#fff", display: "flex", flexDirection: "column" }}>
-        <div className="admin-brand" style={{ display: "flex", alignItems: "center", gap: 11, padding: "20px 20px 18px" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 0, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <BeeIcon size={18} color="#1a1a1a" />
-          </div>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1 }}>BEEDARO</div>
-            <div style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginTop: 3 }}>Admin</div>
-          </div>
+        <div className="admin-brand" style={{ padding: "20px 20px 18px" }}>
+          {/* Original-Wortmarke, weiss invertiert fuer die dunkle Sidebar */}
+          <a href="/" style={{ display: "inline-block" }}>
+            <img src="/logo.svg" alt="Beedaro" style={{ width: 124, height: "auto", filter: "brightness(0) invert(1)", display: "block" }} />
+          </a>
+          <div style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginTop: 5 }}>Admin</div>
         </div>
 
         <nav className="admin-nav" style={{ display: "flex", flexDirection: "column", gap: 2, padding: "4px 10px" }}>

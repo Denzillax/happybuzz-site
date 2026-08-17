@@ -58,8 +58,26 @@ export function ChallengeBanner() {
     // Durchgehendes Creme-Band: gleiche Flaeche wie Hero und Bee-Impact,
     // symmetrischer Abstand (40px) ober- und unterhalb der Box
     <section style={{ background: PAPER, padding: "40px 20px" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
-        <div style={{ width: 46, height: 46, flexShrink: 0, background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <style>{`
+        /* Aufmerksamkeit ohne Kitsch: der Honig-Schatten atmet, das Ziel-Icon
+           wippt kurz alle paar Sekunden */
+        @keyframes chalShadow {
+          0%, 100% { box-shadow: 4px 4px 0 ${HONEY}; }
+          50% { box-shadow: 8px 8px 0 ${HONEY}; }
+        }
+        @keyframes chalWiggle {
+          0%, 88%, 100% { transform: rotate(0deg); }
+          91% { transform: rotate(-9deg); }
+          94% { transform: rotate(8deg); }
+          97% { transform: rotate(-5deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .chal-box, .chal-icon { animation: none !important; }
+        }
+      `}</style>
+      {/* Gleiche Breite wie die Bee-Impact-Box (1080) */}
+      <div className="chal-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap", animation: "chalShadow 2.6s ease-in-out infinite" }}>
+        <div className="chal-icon" style={{ width: 46, height: 46, flexShrink: 0, background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center", animation: "chalWiggle 4s ease-in-out infinite" }}>
           <Target size={22} color={INK} />
         </div>
         <div style={{ flex: 1, minWidth: 220 }}>
