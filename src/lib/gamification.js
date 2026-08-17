@@ -207,15 +207,31 @@ export async function getNektarHistory(userId, limit = 20) {
   return data || [];
 }
 
-// Aktive Challenges laden
+// Aktive Challenges laden (inkl. Kategorie-Name fuer Kategorie-Challenges)
 export async function getActiveChallenges() {
   const now = new Date().toISOString();
   const { data } = await supabase.from("challenges")
-    .select("*").eq("active", true)
+    .select("*, category:categories(id, name)").eq("active", true)
     .eq("is_template", false)   // Vorlagen rotieren nur, sie erscheinen nie selbst
     .lte("starts_at", now).gte("ends_at", now)
     .order("ends_at", { ascending: true });
   return data || [];
+}
+
+// Kategorie + alle Unterkategorien als Id-Liste (Spiegel der SQL-Funktion
+// category_tree_ids; die Einloese-Pruefung laeuft ohnehin serverseitig).
+async function categoryTreeIds(categoryId) {
+  const { data } = await supabase.from("categories").select("id, parent_id");
+  const all = data || [];
+  const ids = [categoryId];
+  let added = true;
+  while (added) {
+    added = false;
+    for (const c of all) {
+      if (c.parent_id && ids.includes(c.parent_id) && !ids.includes(c.id)) { ids.push(c.id); added = true; }
+    }
+  }
+  return ids;
 }
 
 // Wochen-Rotation anstossen (idempotent; der erste Aufrufer der Woche
@@ -298,8 +314,10 @@ export async function getChallengesWithProgress(userId) {
   for (const c of challenges) {
     let progress = 0;
     if (c.target_action === "listing_created") {
-      const { count } = await supabase.from("listings").select("id", { count: "exact", head: true })
+      let q = supabase.from("listings").select("id", { count: "exact", head: true })
         .eq("user_id", userId).neq("status", "deleted").gte("created_at", c.starts_at);
+      if (c.category_id) q = q.in("category_id", await categoryTreeIds(c.category_id));
+      const { count } = await q;
       progress = count || 0;
     } else if (c.target_action === "sale_completed") {
       const { count } = await supabase.from("purchases").select("id", { count: "exact", head: true })
@@ -309,8 +327,33 @@ export async function getChallengesWithProgress(userId) {
       const { count } = await supabase.from("ratings").select("id", { count: "exact", head: true })
         .eq("rated_id", userId).eq("rating", 5).gte("created_at", c.starts_at);
       progress = count || 0;
+    } else if (c.target_action === "buy_completed") {
+      const { count } = await supabase.from("purchases").select("id", { count: "exact", head: true })
+        .eq("buyer_id", userId).eq("status", "completed").gte("created_at", c.starts_at);
+      progress = count || 0;
+    } else if (c.target_action === "rating_given") {
+      const { count } = await supabase.from("ratings").select("id", { count: "exact", head: true })
+        .eq("rater_id", userId).gte("created_at", c.starts_at);
+      progress = count || 0;
+    } else if (c.target_action === "distinct_categories") {
+      const { data: rows } = await supabase.from("listings").select("category_id")
+        .eq("user_id", userId).neq("status", "deleted").gte("created_at", c.starts_at)
+        .not("category_id", "is", null);
+      progress = new Set((rows || []).map(r => r.category_id)).size;
     }
     out.push({ ...c, progress: Math.min(progress, c.target_value), done: progress >= c.target_value, claimed: claimedSet.has(c.id) });
   }
   return out;
+}
+
+// Aktive Startseiten-Challenge (featured) — null, wenn keine laeuft
+export async function getFeaturedChallenge() {
+  const now = new Date().toISOString();
+  const { data } = await supabase.from("challenges")
+    .select("*, category:categories(id, name)")
+    .eq("active", true).eq("is_template", false).eq("featured", true)
+    .lte("starts_at", now).gte("ends_at", now)
+    .order("ends_at", { ascending: true })
+    .limit(1).maybeSingle();
+  return data || null;
 }

@@ -1,4 +1,5 @@
 import { Hero } from '@/components/home/Hero'
+import { ChallengeBanner } from '@/components/home/ChallengeBanner'
 import { CommunityImpact } from '@/components/home/CommunityImpact'
 import { Categories } from '@/components/home/Categories'
 import { NewListings } from '@/components/home/NewListings'
@@ -13,6 +14,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ChallengeBanner />
       <CommunityImpact />
       <FeaturedSellers />
       <Categories />

@@ -341,7 +341,7 @@ export default function HivePage() {
                         <Zap size={12} /> {c.claimed ? `+${c.xp_reward} Pollen gutgeschrieben` : `${c.xp_reward} Pollen`}
                       </span>
                     </div>
-                    <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}</p>
+                    <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}{c.category?.name ? ` · Kategorie: ${c.category.name}` : ""}</p>
                     <div style={{ height: 8, borderRadius: 0, background: colors.borderLt, overflow: "hidden" }}>
                       <div style={{ height: "100%", borderRadius: 0, background: c.done ? "#5B8C5A" : colors.teal, width: `${pct}%`, transition: "width .5s" }} />
                     </div>

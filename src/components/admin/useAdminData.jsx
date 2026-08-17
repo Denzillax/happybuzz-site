@@ -748,6 +748,7 @@ export function useAdminData() {
       title: form.title, description: form.description,
       target_action: form.target_action, target_value: parseInt(form.target_value) || 1,
       xp_reward: parseInt(form.xp_reward) || 0,
+      category_id: form.category_id || null, featured: !!form.featured,
     }).eq("id", id);
     if (error) { flash(`Fehler: ${error.message}`); return false; }
     flash(`Vorlage "${form.title}" gespeichert`);
