@@ -32,7 +32,7 @@ export function Footer() {
           <div>
             <Logo width={170} white />
             <p style={{ fontSize: 14, color: '#888', lineHeight: 1.6, marginTop: 16, maxWidth: 280 }}>
-              Secondhand, aber mit Haltung. Der Schweizer Marktplatz für Dinge mit Geschichte.
+              Secondhand mit Haltung. Der Schweizer Marktplatz für Dinge mit Geschichte.
             </p>
             <p style={{ fontSize: 13, color: '#555', marginTop: 16, lineHeight: 1.5 }}>
               Gemeindehausstrasse 11B<br />
