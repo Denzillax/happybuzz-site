@@ -116,7 +116,12 @@ function SearchPageInner() {
   const [query, setQuery] = useState(searchParams.get("q") || "");
   // Draft fuer die mobile Suchzeile (Desktop sucht im Header)
   const [draft, setDraft] = useState(searchParams.get("q") || "");
-  const [mainCatId, setMainCatId] = useState(searchParams.get("category") || "");
+  // category-Param kann UUID ODER Slug sein; Slugs werden erst nach dem Laden
+  // der Kategorien aufgeloest (Effect unten), sonst 400er gegen die UUID-Spalte
+  const [mainCatId, setMainCatId] = useState(() => {
+    const cat = searchParams.get("category") || "";
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cat) ? cat : "";
+  });
   const [subCatId, setSubCatId] = useState("");
   const [subSubCatId, setSubSubCatId] = useState("");
   const [type, setType] = useState("");

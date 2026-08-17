@@ -28,6 +28,7 @@ const TESTS = [
     id: "auth", title: "Registrierung & Login", icon: Monitor,
     items: [
       { id: "auth_register", label: "Neues Konto erstellen (Vorname + Nachname getrennt, beide Pflicht, landen im Profil wie in den Einstellungen)" },
+      { id: "auth_agb_links", label: "AGB- und Datenschutz-Links bei der Registrierung öffnen /terms und /privacy in neuem Tab" },
       { id: "auth_email_confirm", label: "Bestätigungsmail erhalten & Konto aktiviert (Absender noreply@beedaro.ch, BEEDARO-Design, sobald SMTP eingerichtet)" },
       { id: "auth_login", label: "Login mit E-Mail + Passwort" },
       { id: "auth_social", label: "Login mit Google / Apple (falls aktiviert)" },
@@ -425,6 +426,7 @@ const TESTS = [
       { id: "mob_search", label: "Suche-Tab (Bottom-Nav) zeigt das Suchfeld OBEN auf der Suchseite (Tastatur geht auf); im Hamburger-Menü gibt es KEIN Suchfeld mehr" },
       { id: "mob_home_hero", label: "Homepage Hero: kein leerer Platz, Bilder korrekt" },
       { id: "mob_home_cats", label: "Kategorien-Grid: nicht abgeschnitten, immer ganz sichtbar" },
+      { id: "mob_hero_swipe", label: "Hero: Wischen nach links/rechts wechselt die Slide (vertikales Scrollen funktioniert weiter)" },
       { id: "mob_listing_card", label: "Listing-Cards: sauberes Layout" },
       { id: "mob_listing_detail", label: "Inserat-Detail: Bilder, Chat, Buttons sichtbar; einspaltig, KEIN seitliches Scrollen oder abgeschnittener Header (auf echtem Handy testen)" },
       { id: "mob_my_listings_actions", label: "Meine Inserate (Handy): Aktions-Knöpfe (Bearbeiten/Ähnliches/Statistik/...) als sauberes 3er-Raster, alle gleich breit, nichts zerfleddert" },
@@ -478,6 +480,13 @@ export default function BetaTestPage() {
   // "Kurz erklaert"-Box: offen als Standard, Zustand bleibt via localStorage
   const [introOpen, setIntroOpen] = useState(true);
   const [repOpen, setRepOpen] = useState(false);
+  // Top-Melder-Ranking (aggregierte Meldungszahlen via SECURITY-DEFINER-RPC,
+  // beta_feedback selbst ist per RLS nur fuer eigene Zeilen lesbar)
+  const [melderRanking, setMelderRanking] = useState(null);
+  useEffect(() => {
+    if (!repOpen || melderRanking !== null) return;
+    supabase.rpc("beta_melder_ranking").then(({ data }) => setMelderRanking(data || []));
+  }, [repOpen, melderRanking]);
   useEffect(() => {
     try { const v = localStorage.getItem("beta_intro_open"); if (v !== null) setIntroOpen(v === "1"); } catch {}
   }, []);
@@ -654,20 +663,68 @@ export default function BetaTestPage() {
             <ChevronDown size={16} color={colors.muted} style={{ transform: repOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
           </div>
           {repOpen && (
-            <div style={{ fontSize: 13.5, lineHeight: 1.65, color: colors.dark }}>
+            <div style={{ fontSize: 13.5, lineHeight: 1.55, color: colors.dark }}>
               <p style={{ margin: "0 0 14px", color: colors.muted, fontSize: 12.5 }}>
                 Eure Meldungen wirken. Das hier wurde seit Beta-Start gefixt oder neu gebaut, neuste zuerst.
               </p>
-              {REP_LOG.map(tag => (
-                <div key={tag.datum} style={{ marginBottom: 14 }}>
-                  <p style={{ margin: "0 0 6px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark }}>
-                    {tag.datum}
+
+              {/* Top-Melder: live aus den Feedback-Meldungen, wer meldet, steigt */}
+              {melderRanking && melderRanking.length > 0 && (
+                <div style={{ border: `1px solid ${colors.dark}`, padding: "12px 14px", marginBottom: 18, background: "#FBF8F2" }}>
+                  <p style={{ margin: "0 0 8px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#0B5E5C" }}>
+                    Top-Melder · wer meldet, steigt
                   </p>
-                  <ul style={{ margin: 0, paddingLeft: 18 }}>
+                  {melderRanking.slice(0, 5).map((r, i) => (
+                    <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(melderRanking.length, 5) - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                      <span style={{
+                        flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700,
+                        background: i === 0 ? colors.yellow : i === 1 ? "#ECE3D2" : "transparent",
+                        border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
+                        color: colors.dark,
+                      }}>{i + 1}</span>
+                      <span style={{ fontSize: 13.5, fontWeight: i === 0 ? 700 : 600, color: colors.dark, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.melder}</span>
+                      <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11.5, color: colors.muted, flexShrink: 0 }}>
+                        {r.meldungen} {Number(r.meldungen) === 1 ? "Meldung" : "Meldungen"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {REP_LOG.map(tag => (
+                <div key={tag.datum} style={{ marginBottom: 18 }}>
+                  <p style={{ margin: "0 0 8px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: `1px solid ${colors.dark}`, paddingBottom: 5 }}>
+                    {tag.datum} <span style={{ color: colors.muted, fontWeight: 400 }}>· {tag.punkte.length} Einträge</span>
+                  </p>
+                  <div>
                     {tag.punkte.map((p, i) => (
-                      <li key={i} style={{ marginBottom: 4 }}>{p}</li>
+                      <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                        <span style={{
+                          flexShrink: 0, marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
+                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 6px",
+                          background: p.typ === "neu" ? "#0E9493" : colors.yellow,
+                          color: p.typ === "neu" ? "#fff" : colors.dark,
+                        }}>
+                          {p.typ === "neu" ? "NEU" : "FIX"}
+                        </span>
+                        <span style={{
+                          flexShrink: 0, marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
+                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 6px",
+                          border: "1px solid rgba(20,17,13,.35)", color: colors.muted, textTransform: "uppercase",
+                          whiteSpace: "nowrap",
+                        }}>
+                          {p.bereich}
+                        </span>
+                        <span style={{ minWidth: 0 }}>
+                          {p.text}
+                          {p.melder && (
+                            <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, color: "#0B5E5C", whiteSpace: "nowrap" }}> · gemeldet von {p.melder}</span>
+                          )}
+                        </span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ))}
             </div>

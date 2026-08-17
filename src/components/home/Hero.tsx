@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Plus } from 'lucide-react'
 import BeeIcon from '@/components/shared/BeeIcon'
@@ -70,6 +70,23 @@ export function Hero() {
     setTimeout(() => { setCurrent(i); setTransitioning(false) }, 350)
   }, [transitioning, current])
 
+  // Touch-Swipe (mobil): horizontal wischen wechselt die Slide, vertikales
+  // Scrollen bleibt unberuehrt (nur ausloesen, wenn dx klar dominiert).
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+  }
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current
+    touchStart.current = null
+    if (!start) return
+    const dx = e.changedTouches[0].clientX - start.x
+    const dy = e.changedTouches[0].clientY - start.y
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return
+    const next = dx < 0 ? (current + 1) % slides.length : (current - 1 + slides.length) % slides.length
+    goTo(next)
+  }
+
   useEffect(() => {
     // Standzeit pro Slide (Beta-Slide laenger): setTimeout-Kette statt festem
     // Interval; haengt an current, damit jede Slide ihre eigene dwell nutzt.
@@ -85,7 +102,7 @@ export function Hero() {
   const fade = { transition: 'opacity .35s ease, transform .35s ease', opacity: transitioning ? 0 : 1 }
 
   return (
-    <section className="hero-section" style={{
+    <section className="hero-section" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} style={{
       position: 'relative', width: '100%', minHeight: 560, overflow: 'hidden',
       background: SAND, color: INK,
       backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: '22px 22px',

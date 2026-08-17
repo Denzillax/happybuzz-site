@@ -309,7 +309,7 @@ export default function AuthPage() {
         <div onClick={()=>setAgree(!agree)} style={{ width:18, height:18, borderRadius: 0, border:`1.5px solid ${fieldErrors.agree?C.red:agree?C.yellow:C.border}`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", background:agree?C.yellow:"transparent", flexShrink:0, marginTop:1 }}>
           {agree && <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke={C.dark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
         </div>
-        <span style={{ fontSize:13, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a className="link">AGB</a> und <a className="link">Datenschutzerklärung</a></span>
+        <span style={{ fontSize:13, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a href="/terms" target="_blank" rel="noopener" className="link">AGB</a> und <a href="/privacy" target="_blank" rel="noopener" className="link">Datenschutzerklärung</a></span>
       </div>
       <Btn onClick={handleRegister} loading={loading}>Account erstellen</Btn>
       <p style={{ textAlign:"center", fontSize:13, color:C.muted, marginTop:18, fontWeight:500 }}>Bereits registriert? <a onClick={()=>switchView("login")} className="link">Jetzt anmelden</a></p>
