@@ -4,6 +4,7 @@ import { CheckCircle, Circle, AlertTriangle, Send, Smartphone, Monitor, ChevronD
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
+import { REP_LOG } from "@/lib/replog";
 
 const TESTS = [
   {
@@ -475,6 +476,7 @@ export default function BetaTestPage() {
   const [openSections, setOpenSections] = useState({ mobile: true });
   // "Kurz erklaert"-Box: offen als Standard, Zustand bleibt via localStorage
   const [introOpen, setIntroOpen] = useState(true);
+  const [repOpen, setRepOpen] = useState(false);
   useEffect(() => {
     try { const v = localStorage.getItem("beta_intro_open"); if (v !== null) setIntroOpen(v === "1"); } catch {}
   }, []);
@@ -639,6 +641,35 @@ export default function BetaTestPage() {
               PS: Verchauf din Scheiss. ;)
             </p>
           </div>
+          )}
+        </div>
+
+        {/* ── REPARATUR-LOG: was seit Beta-Start gefixt wurde ── */}
+        <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, boxShadow: "4px 4px 0 rgba(20,17,13,.12)", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+          <div onClick={() => setRepOpen(v => !v)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: repOpen ? 12 : 0 }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Space Mono', ui-monospace, monospace" }}>
+              Reparatur-Log · {REP_LOG.reduce((s, t) => s + t.punkte.length, 0)} Einträge
+            </p>
+            <ChevronDown size={16} color={colors.muted} style={{ transform: repOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+          </div>
+          {repOpen && (
+            <div style={{ fontSize: 13.5, lineHeight: 1.65, color: colors.dark }}>
+              <p style={{ margin: "0 0 14px", color: colors.muted, fontSize: 12.5 }}>
+                Eure Meldungen wirken. Das hier wurde seit Beta-Start gefixt oder neu gebaut, neuste zuerst.
+              </p>
+              {REP_LOG.map(tag => (
+                <div key={tag.datum} style={{ marginBottom: 14 }}>
+                  <p style={{ margin: "0 0 6px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark }}>
+                    {tag.datum}
+                  </p>
+                  <ul style={{ margin: 0, paddingLeft: 18 }}>
+                    {tag.punkte.map((p, i) => (
+                      <li key={i} style={{ marginBottom: 4 }}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 

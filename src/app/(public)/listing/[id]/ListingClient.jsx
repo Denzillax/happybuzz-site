@@ -724,8 +724,10 @@ export default function ListingDetail() {
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
             <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
-              {/* Exponat-Kopf: Referenznummer + Zustands-Stempel */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
+              {/* Exponat-Kopf: Referenznummer + Zustands-Stempel.
+                  flexWrap: "Gebrauchsspuren" bricht mobil als ganzer Stempel
+                  in die naechste Zeile statt abgeschnitten zu werden. */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "6px 10px", flexWrap: "wrap", marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
                 <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: ".04em", color: colors.muted }}>{makeArtRef(l.id)}</span>
                 {l.condition && (
                   <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: PAPER, background: PETROL, borderRadius: 0, padding: "3px 9px", whiteSpace: "nowrap" }}>{condLabel}</span>
