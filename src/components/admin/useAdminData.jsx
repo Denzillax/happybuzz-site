@@ -182,20 +182,23 @@ export function useAdminData() {
       // Challenges (Vorlagen + Instanzen) mit Teilnehmerzahlen
       await loadChallenges();
 
-      // Reviews (from ratings table - used by order flow)
+      // Reviews (ratings-Tabelle, Order-Flow): Namen aus der Profil-Map.
+      // Achtung: hier stand frueher ein Verweis auf ein entferntes cache-Objekt;
+      // der crashte, sobald die erste Bewertung existierte, und der Admin-Loader
+      // drehte endlos.
       const { data: revs } = await supabase.from("ratings").select("*").order("created_at", { ascending: false });
-      const revsWithNames = [];
-      for (const r of (revs || [])) {
-        const reviewerName = cache[r.rater_id] || (await supabase.from("profiles").select("display_name").eq("id", r.rater_id).single()).data?.display_name || "—";
-        const revieweeName = cache[r.rated_id] || (await supabase.from("profiles").select("display_name").eq("id", r.rated_id).single()).data?.display_name || "—";
-        cache[r.rater_id] = reviewerName; cache[r.rated_id] = revieweeName;
-        revsWithNames.push({ ...r, reviewerName, revieweeName, reviewer_id: r.rater_id, reviewed_id: r.rated_id });
-      }
-      setReviews(revsWithNames);
-
-      setLoading(false);
+      setReviews((revs || []).map(r => ({
+        ...r,
+        reviewerName: nameOf(r.rater_id),
+        revieweeName: nameOf(r.rated_id),
+        reviewer_id: r.rater_id,
+        reviewed_id: r.rated_id,
+      })));
     }
-    load();
+    // Loader endet auch bei einem Fehler, sonst laedt das Dashboard unendlich
+    load()
+      .catch(err => console.error("Admin load error:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
