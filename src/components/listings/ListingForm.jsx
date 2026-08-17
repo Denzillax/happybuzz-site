@@ -180,6 +180,7 @@ export default function ListingForm({
     buy_now_price: "",
     min_price: "",
     auction_duration: "7",
+    bid_step: "1",
 
     // Vermieten
     rent_price: "",
@@ -244,6 +245,8 @@ export default function ListingForm({
       buy_now_price: initialData.buy_now_price?.toString() || "",
       min_price: initialData.min_price?.toString() || "",
       auction_duration: initialData.auction_duration?.toString() || "7",
+      bid_step: initialData.bid_step?.toString() || "1",
+      auction_end: initialData.auction_end || "",
 
       rent_price: initialData.rent_price?.toString() || "",
       rent_period: initialData.rent_period || "day",
@@ -1311,17 +1314,31 @@ export default function ListingForm({
               </div>
             </div>
 
-            <div style={{ marginTop: 14 }}>
-              <label style={labelBase}>Dauer</label>
-              <SelectWrap
-                value={form.auction_duration}
-                onChange={(e) => set("auction_duration", e.target.value)}
-              >
-                {[3, 5, 7, 10, 14].map((d) => (
-                  <option key={d} value={d}>{d} Tage</option>
-                ))}
-              </SelectWrap>
-              <Err field="auction_duration" />
+            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+              <div style={{ flex: 1 }}>
+                <label style={labelBase}>Dauer</label>
+                <SelectWrap
+                  value={form.auction_duration}
+                  onChange={(e) => set("auction_duration", e.target.value)}
+                >
+                  {[3, 5, 7, 10, 14].map((d) => (
+                    <option key={d} value={d}>{d} Tage</option>
+                  ))}
+                </SelectWrap>
+                <Err field="auction_duration" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={labelBase}>Gebotsschritt</label>
+                {/* Nur diese drei Stufen — der DB-CHECK erzwingt dieselbe Liste */}
+                <SelectWrap
+                  value={form.bid_step}
+                  onChange={(e) => set("bid_step", e.target.value)}
+                >
+                  <option value="0.1">CHF 0.10</option>
+                  <option value="1">CHF 1.00</option>
+                  <option value="5">CHF 5.00</option>
+                </SelectWrap>
+              </div>
             </div>
 
             {/* Auktionen sind der einzige Typ, bei dem der Preisvorteil wirklich

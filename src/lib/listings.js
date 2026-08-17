@@ -121,7 +121,14 @@ export async function createListing(userId, formData) {
     row.buy_now_price = formData.buy_now_price ? parseFloat(formData.buy_now_price) : null;
     row.min_price = formData.min_price ? parseFloat(formData.min_price) : null;
     row.auction_duration = formData.auction_duration || null;
-    row.auction_end = formData.auction_end || null;
+    // Enddatum aus der Dauer berechnen — ohne dieses Feld ging die Auktion
+    // nie zu Ende (kein Countdown, kein Zuschlag, keine Timer-Verlaengerung)
+    row.auction_end = formData.auction_end
+      || (formData.auction_duration
+        ? new Date(Date.now() + parseInt(formData.auction_duration) * 86400000).toISOString()
+        : null);
+    // Gebotsschritt (0.10 / 1.00 / 5.00) — der DB-CHECK laesst nur diese Werte zu
+    row.bid_step = formData.bid_step ? parseFloat(formData.bid_step) : 1;
     // price gehoert Auktionen erst nach dem Zuschlag (Gebot/Finalisierung).
     // Ohne dieses Nullen bleibt z.B. der importierte Festpreis der Quelle
     // haengen und die Detailseite zeigt ihn als "Aktuelles Gebot".
@@ -190,9 +197,13 @@ export async function updateListing(listingId, formData) {
     row.buy_now_price = formData.buy_now_price ? parseFloat(formData.buy_now_price) : null;
     row.min_price = formData.min_price ? parseFloat(formData.min_price) : null;
     row.auction_duration = formData.auction_duration || null;
-    row.auction_end = formData.auction_end || null;
+    // Ein LAUFENDES Ende beim Bearbeiten nie anfassen: die Spalte wird nur
+    // gesetzt, wenn das Formular explizit ein Ende mitgibt — sonst wuerde
+    // jede Bearbeitung die Uhr loeschen/zuruedrehen.
+    if (formData.auction_end) row.auction_end = formData.auction_end;
+    row.bid_step = formData.bid_step ? parseFloat(formData.bid_step) : 1;
     row.price = null; // gehoert Auktionen erst nach Gebot/Zuschlag (siehe createListing)
-  } else { row.start_price = null; row.buy_now_price = null; row.min_price = null; row.auction_duration = null; row.auction_end = null; }
+  } else { row.start_price = null; row.buy_now_price = null; row.min_price = null; row.auction_duration = null; row.auction_end = null; row.bid_step = null; }
   if (formData.listing_type === "free") { row.price = null; row.is_negotiable = false; }
   if (formData.listing_type === "rent") {
     row.rent_price = formData.rent_price ? parseFloat(formData.rent_price) : null;
@@ -1571,11 +1582,15 @@ export async function submitServiceInvoice(purchaseId, sellerId, hours, hourlyRa
 // ═════════════════════════════════════════════════════════════
 
 export async function getBidHistory(listingId) {
+  // Zweites Sortierkriterium amount: Auto-Gegengebot und ausloesendes Gebot
+  // entstehen in DERSELBEN Transaktion mit identischem Zeitstempel — nur nach
+  // Zeit sortiert stand der Fuehrende sonst zufaellig unterhalb.
   const { data, error } = await supabase
     .from("bid_history")
     .select("id, listing_id, bidder_id, amount, bid_type, created_at, bidder:profiles(id, display_name)")
     .eq("listing_id", listingId)
     .order("created_at", { ascending: false })
+    .order("amount", { ascending: false })
     .limit(50);
   if (error) { console.error("getBidHistory error:", error); return []; }
   return data || [];

@@ -294,6 +294,16 @@ export default function ListingDetail() {
   const displayPrice = l.listing_type === "auction"
     ? (bids.length > 0 ? bids[0].amount : (l.start_price ?? 0))
     : (l.listing_type === "rent" || l.listing_type === "service") ? (l.rent_price || l.price) : l.price;
+
+  // ── Gebotsregeln: exakter Spiegel der Serverfunktionen ──
+  // bid_increment()-Staffel und effective_bid_increment() (bid_step gewinnt).
+  // Die Maske MUSS denselben Regeln folgen wie proxy_bid, sonst blockiert sie
+  // gueltige Gebote oder belegt ungueltige vor.
+  const bidTier = (p) => (p < 10 ? 0.5 : p < 50 ? 1 : p < 100 ? 2 : p < 500 ? 5 : p < 1000 ? 10 : 20);
+  const effInc = l.bid_step != null ? Number(l.bid_step) : bidTier(Number(bids[0]?.amount ?? l.start_price ?? 1));
+  // Erstes Gebot: der Server akzeptiert den Startpreis selbst.
+  // Danach: sichtbares Gebot + Schritt.
+  const nextBid = bids.length > 0 ? Number(bids[0].amount) + effInc : Number(l.start_price || 1);
   const beeImpact = calcFee(displayPrice, l.fee_percentage || DEFAULT_FEE_PERCENT) * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
@@ -899,8 +909,10 @@ export default function ListingDetail() {
                   {!isOwner && (
                     <button onClick={() => {
                       if (!user) { router.push("/login"); return; }
-                      const minBid = (bids[0]?.amount || l.start_price || 0) + 1;
-                      setBidAmount(myBid ? String(myBid.max_amount) : String(Math.ceil(minBid)));
+                      // Vorbelegung nach Serverregeln: Limit erhoehen = eigenes
+                      // Limit + Schritt (Server verlangt MEHR als das Limit);
+                      // sonst das naechste gueltige Gebot.
+                      setBidAmount(myBid ? (Number(myBid.max_amount) + effInc).toFixed(2) : nextBid.toFixed(2));
                       setBidModal("bid");
                     }} style={{ width: "100%", padding: "14px", borderRadius: 0, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <Gavel size={18} /> GEBOT ABGEBEN
@@ -991,10 +1003,14 @@ export default function ListingDetail() {
                         <div style={{ padding: "16px 20px" }}>
                           {bidModal === "bid" ? (
                             <>
-                              {/* Current Bid */}
+                              {/* Current Bid + naechstes gueltiges Gebot */}
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14 }}>
+                                <span style={{ color: colors.muted }}>{bids.length > 0 ? "Aktuelles Gebot" : "Startpreis"}</span>
+                                <span style={{ fontWeight: 700 }}>CHF {fmtPrice(bids[0]?.amount || l.start_price || 0)}</span>
+                              </div>
                               <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 12 }}>
-                                <span style={{ color: colors.muted }}>Aktuelles Gebot</span>
-                                <span style={{ fontWeight: 700 }}>CHF {fmtPrice(bids[0]?.amount || l.start_price || l.price)}</span>
+                                <span style={{ color: colors.muted }}>Nächstes Gebot</span>
+                                <span style={{ fontWeight: 700, color: colors.teal }}>CHF {fmtPrice(nextBid)}</span>
                               </div>
 
                               {/* Your Max Bid */}
@@ -1002,8 +1018,8 @@ export default function ListingDetail() {
                                 <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 6 }}>Dein Gebot</label>
                                 <p style={{ fontSize: 11, color: colors.muted, margin: "0 0 8px" }}>
                                   {myBid
-                                    ? `Aktuelles Preislimit: CHF ${myBid.max_amount?.toFixed(2)}. Du kannst es erhöhen oder senken (min. CHF ${(myBid.amount + 1).toFixed(2)}).`
-                                    : "Gib dein Preislimit ein. Das System bietet automatisch das Minimum für dich."
+                                    ? `Aktuelles Preislimit: CHF ${Number(myBid.max_amount).toFixed(2)}. Erhöhen jederzeit, senken bis auf dein aktuelles Gebot von CHF ${Number(myBid.amount).toFixed(2)}.`
+                                    : "Gib dein Preislimit ein. Das System bietet automatisch nur so viel wie nötig."
                                   }
                                 </p>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1015,8 +1031,9 @@ export default function ListingDetail() {
                                     }
                                     setBidAmount(val);
                                   }}
-                                    min={myBid ? myBid.amount + 1 : (bids[0]?.amount || l.start_price || 0) + 1}
+                                    min={myBid ? Number(myBid.amount) : (bids.length > 0 ? nextBid : Number(l.start_price || 0))}
                                     max={l.buy_now_price > 0 ? l.buy_now_price - 1 : undefined}
+                                    step={effInc}
                                     style={{ flex: 1, padding: "12px 14px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
                                     onFocus={e => e.target.style.borderColor = colors.yellow}
                                     onBlur={e => e.target.style.borderColor = colors.border} />
