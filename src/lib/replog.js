@@ -17,6 +17,7 @@ export const REP_LOG = [
       "Eigenes Inserat zeigt eine Leiste mit Bearbeiten-Knopf (mobil unten)",
       "Preise überall korrekt pro Inserat-Typ (Auktionen zeigten teils einen falschen Festpreis oder CHF 0.00)",
       "Zustand 'Gebrauchsspuren' wurde auf dem Handy abgeschnitten, behoben",
+      "Infoleiste Zustand/Kategorie/Standort steht auf dem Handy jetzt untereinander statt in drei gequetschten Spalten",
       "Admin: Beta-Zugang erteilen und Konto sperren wirkten nicht (stille Blockade), behoben",
       "Neu: Challenges mit Kategorie-Bedingung, drei neue Challenge-Arten und Challenge-Banner auf der Startseite",
       "Favoriten: Verkaufte und beendete Inserate liegen ausgegraut in einer eigenen Sektion, gelöschte verschwinden ganz",

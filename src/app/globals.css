@@ -102,6 +102,11 @@ body {
   /* Zustands-Stempel: mobil IMMER unter der ART-Nr, einheitlich fuer alle
      Zustaende (statt kurze daneben, lange umgebrochen) */
   .cond-head { flex-direction: column; align-items: flex-start !important; }
+  /* Attribut-Leiste (Zustand/Kategorie/Standort): mobil gestapelt statt
+     drei gequetschte Spalten, Trennlinien unten statt rechts */
+  .attr-strip { flex-direction: column; }
+  .attr-strip .attr-cell { border-right: none !important; border-bottom: 1px solid rgba(20, 17, 13, 0.12); }
+  .attr-strip .attr-cell:last-child { border-bottom: none; }
 }
 
 @media (max-width: 767px) {

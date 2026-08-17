@@ -515,21 +515,21 @@ export default function ListingDetail() {
             </div>
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
-            <div style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden" }}>
+            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden" }}>
               {l.condition && (
-                <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
+                <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
                   <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Zustand</p>
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{condLabel}</p>
                 </div>
               )}
               {l.categoryName && (
-                <div style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
+                <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
                   <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Kategorie</p>
                   <Link href={`/search?category=${l.categoryPath?.[l.categoryPath.length - 1]?.slug || ""}`} className="bd-link" style={{ display: "inline-block", margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.categoryName}</Link>
                 </div>
               )}
               {l.city && (
-                <div style={{ flex: 1, padding: "14px 18px" }}>
+                <div className="attr-cell" style={{ flex: 1, padding: "14px 18px" }}>
                   <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Standort</p>
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.city}</p>
                 </div>
