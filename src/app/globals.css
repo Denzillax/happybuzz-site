@@ -97,6 +97,8 @@ body {
     background: #FBF8F2; border-top: 1px solid #14110D;
   }
   .map-desktop-only { display: none; }
+  /* Besitzer-Leiste: mobil unten (mobile-cta-bar), oben ausblenden */
+  .owner-bar-desktop { display: none !important; }
 }
 
 @media (max-width: 767px) {

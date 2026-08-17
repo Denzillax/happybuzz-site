@@ -420,9 +420,10 @@ export default function ListingDetail() {
           ))}
         </div>
 
-        {/* ── EIGENTÜMER-LEISTE ───────────────────────── */}
+        {/* ── EIGENTÜMER-LEISTE (Desktop oben; mobil klebt sie unten
+               ueber der Bottom-Nav, siehe .mobile-cta-bar weiter unten) ── */}
         {isOwner && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: `1px solid ${INK}` }}>
+          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: `1px solid ${INK}` }}>
             <BeeIcon size={16} />
             <span style={{ fontSize: 13, fontWeight: 700, color: INK, marginRight: "auto" }}>Das ist dein Inserat</span>
             <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: `1.5px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
@@ -875,29 +876,21 @@ export default function ListingDetail() {
                     </div>
                   )}
 
-                  {/* Besitzer sieht seine Auktions-Konditionen als Info
-                      (Sofortkauf oeffentlich, Mindestpreis nur fuer ihn) */}
-                  {isOwner && (l.buy_now_price > 0 || l.min_price > 0) && (
-                    <div style={{ padding: "10px 14px", borderRadius: 0, background: colors.cream, border: `1px solid ${colors.borderLt}`, fontSize: 13, marginBottom: 8, display: "flex", flexDirection: "column", gap: 4 }}>
-                      {l.buy_now_price > 0 && (
-                        <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
-                          <span style={{ color: colors.muted }}>Sofortkauf-Preis</span>
-                          <strong>CHF {fmtPrice(l.buy_now_price)}</strong>
-                        </div>
-                      )}
-                      {l.min_price > 0 && (
-                        <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
-                          <span style={{ color: colors.muted }}>Mindestpreis (nur für dich sichtbar)</span>
-                          <strong>CHF {fmtPrice(l.min_price)}</strong>
-                        </div>
-                      )}
+                  {/* Mindestpreis: sieht NUR der Besitzer (Kaeufern bleibt er
+                      wie bei Ricardo verborgen) */}
+                  {isOwner && l.min_price > 0 && (
+                    <div style={{ padding: "10px 14px", borderRadius: 0, background: colors.cream, border: `1px solid ${colors.borderLt}`, fontSize: 13, marginBottom: 8, display: "flex", justifyContent: "space-between", gap: 10 }}>
+                      <span style={{ color: colors.muted }}>Mindestpreis (nur für dich sichtbar)</span>
+                      <strong>CHF {fmtPrice(l.min_price)}</strong>
                     </div>
                   )}
 
-                  {/* Sofortkauf Button */}
-                  {l.buy_now_price > 0 && !isOwner && (
-                    <button onClick={() => { if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
-                      style={{ width: "100%", padding: "14px", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                  {/* Sofortkauf Button — Besitzer sieht ihn wie alle,
+                      nur ausgegraut (gleiches Muster wie der Bieten-Knopf) */}
+                  {l.buy_now_price > 0 && (
+                    <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
+                      disabled={isOwner}
+                      style={{ width: "100%", padding: "14px", borderRadius: 0, border: "none", background: isOwner ? colors.warm : colors.teal, color: isOwner ? colors.mutedLt : "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> SOFORT KAUFEN · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -1528,6 +1521,24 @@ export default function ListingDetail() {
       {/* ── MOBILE KAUF-LEISTE: fix ueber der Bottom-Nav, nur wenn die echte
              Kaufbox aus dem Bild gescrollt ist. Der Knopf springt zur Box,
              dort wohnt die ganze Kauf-/Gebots-Logik (eine Quelle). ── */}
+      {/* Besitzer: fixe Leiste unten (nur mobil, .mobile-cta-bar ist
+          Desktop-hidden) — ersetzt dort die gelbe Leiste oben */}
+      {isOwner && (
+        <div className="mobile-cta-bar">
+          <span style={{ fontSize: 13, fontWeight: 700, color: INK, display: "inline-flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+            <BeeIcon size={15} /> Dein Inserat
+          </span>
+          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: `1.5px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: `2px 2px 0 ${INK}` }}>
+              Bearbeiten
+            </Link>
+            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: `1px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+              Meine Inserate
+            </Link>
+          </div>
+        </div>
+      )}
+
       {!isOwner && l.status === "active" && !buyBoxSichtbar && (
         <div className="mobile-cta-bar">
           <div style={{ minWidth: 0 }}>
