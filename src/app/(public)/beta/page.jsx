@@ -427,6 +427,8 @@ const TESTS = [
       { id: "mob_home_hero", label: "Homepage Hero: kein leerer Platz, Bilder korrekt" },
       { id: "mob_home_cats", label: "Kategorien-Grid: nicht abgeschnitten, immer ganz sichtbar" },
       { id: "mob_hero_swipe", label: "Hero: Wischen nach links/rechts wechselt die Slide (vertikales Scrollen funktioniert weiter)" },
+      { id: "mob_glocke", label: "Glocke im Handy-Header: öffnet Benachrichtigungen über die volle Breite, Ankündigungen mit ganzem Text und Öffnen-Link" },
+      { id: "mob_plus_gross", label: "Gelber Inserieren-Knopf in der unteren Leiste: gross, gut zu treffen, führt zu Inserat erstellen" },
       { id: "mob_listing_card", label: "Listing-Cards: sauberes Layout" },
       { id: "mob_listing_detail", label: "Inserat-Detail: Bilder, Chat, Buttons sichtbar; einspaltig, KEIN seitliches Scrollen oder abgeschnittener Header (auf echtem Handy testen)" },
       { id: "mob_my_listings_actions", label: "Meine Inserate (Handy): Aktions-Knöpfe (Bearbeiten/Ähnliches/Statistik/...) als sauberes 3er-Raster, alle gleich breit, nichts zerfleddert" },

@@ -60,15 +60,15 @@ export function BottomNav() {
 
           if (tab.isCenter) {
             return (
-              <button key={tab.href} onClick={() => router.push(tab.href)} style={{
-                width: 48, height: 48, borderRadius: '50%',
-                background: YELLOW, border: 'none', cursor: 'pointer',
+              <button key={tab.href} onClick={() => router.push(tab.href)} aria-label="Inserieren" style={{
+                width: 60, height: 60, borderRadius: '50%',
+                background: YELLOW, border: '3px solid #fff', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 16px rgba(244,192,63,0.4)',
-                transform: 'translateY(-6px)',
+                boxShadow: '0 4px 16px rgba(244,192,63,0.45)',
+                transform: 'translateY(-12px)',
                 transition: 'transform 0.15s, box-shadow 0.15s',
               }}>
-                <Plus size={24} color={DARK} strokeWidth={2.5} />
+                <Plus size={30} color={DARK} strokeWidth={2.5} />
               </button>
             )
           }

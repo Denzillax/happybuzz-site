@@ -39,6 +39,9 @@ const TIME_AGO = (date) => {
 export default function NotificationBell() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  // Mobil (unter 768px) haengt die Glocke nicht am rechten Rand: Dropdown dann
+  // fixed ueber die volle Breite unter der Glocke statt rechtsbuendig absolut
+  const [mobileTop, setMobileTop] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unread, setUnread] = useState(0);
   const [userId, setUserId] = useState(null);
@@ -121,7 +124,14 @@ export default function NotificationBell() {
     <div ref={ref} style={{ position: "relative" }}>
       {/* Bell Button */}
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          if (!open && typeof window !== "undefined" && window.innerWidth < 768 && ref.current) {
+            setMobileTop(ref.current.getBoundingClientRect().bottom + 8);
+          } else {
+            setMobileTop(null);
+          }
+          setOpen(!open);
+        }}
         style={{
           background: "none", border: "none", cursor: "pointer",
           position: "relative", padding: 6, display: "flex",
@@ -147,8 +157,10 @@ export default function NotificationBell() {
       {/* Dropdown */}
       {open && (
         <div style={{
-          position: "absolute", top: "calc(100% + 8px)", right: 0,
-          width: 380, maxWidth: "calc(100vw - 24px)", maxHeight: 480, background: "#fff",
+          ...(mobileTop != null
+            ? { position: "fixed", top: mobileTop, left: 12, right: 12, width: "auto" }
+            : { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 380 }),
+          maxWidth: "calc(100vw - 24px)", maxHeight: 480, background: "#fff",
           borderRadius: 0, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
           border: `1px solid ${colors.border}`,
           overflow: "hidden", zIndex: 1000,

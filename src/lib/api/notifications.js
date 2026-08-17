@@ -98,8 +98,11 @@ export async function saveNotificationPreferences(userId, settings) {
 // ── Realtime Subscription ──
 
 export function subscribeToNotifications(userId, onNew) {
+  // Kanalname pro Aufruf eindeutig: die Glocke ist zweimal gemountet
+  // (Desktop- und Mobile-Header), ein zweites subscribe() auf denselben
+  // Kanal wirft sonst "cannot add postgres_changes callbacks"
   const channel = supabase
-    .channel(`notifications:${userId}`)
+    .channel(`notifications:${userId}:${Math.random().toString(36).slice(2, 10)}`)
     .on(
       "postgres_changes",
       {
