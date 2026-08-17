@@ -24,7 +24,7 @@ export const REP_LOG = [
     datum: "17. August 2026",
     punkte: [
       { typ: "fix", bereich: "Texte", text: "Footer-Slogan gestrafft: 'Secondhand mit Haltung' statt 'Secondhand, aber mit Haltung'", melder: "Oli" },
-      { typ: "fix", bereich: "Texte", text: "Unsere Geschichte: Secondhand ist keine 'Notlösung' mehr, sondern 'nicht zweite Wahl, sondern bewusste Entscheidung'", melder: "Oli" },
+      { typ: "fix", bereich: "Texte", text: "Unsere Geschichte umformuliert: 'Gebrauchte Dinge verdienen mehr als ein zweites Leben. Sie verdienen einen besseren Marktplatz.' (vorher stand dort 'Notlösung')", melder: "Oli" },
       { typ: "fix", bereich: "Glocke", text: "Benachrichtigungen: Ankündigungen zeigen jetzt den ganzen Text (vorher auf eine Zeile abgeschnitten) und ein hinterlegter Link ist als 'Öffnen' sichtbar" },
       { typ: "neu", bereich: "Mobile", text: "Die Benachrichtigungs-Glocke ist jetzt auch auf dem Handy im Header (vorher nur am Desktop)" },
       { typ: "fix", bereich: "Mobile", text: "Der gelbe Inserieren-Knopf in der unteren Leiste ist grösser und besser zu treffen" },

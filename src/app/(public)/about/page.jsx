@@ -69,7 +69,7 @@ export default function AboutPage() {
             <Eyebrow>Unsere Geschichte</Eyebrow>
             <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Nicht neu. Nur interessanter.</h2>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 12 }}>
-              BEEDARO entstand aus einer einfachen Idee: ein Schweizer Marktplatz, der Secondhand nicht als zweite Wahl behandelt, sondern als bewusste Entscheidung. Fair, für Verkäufer, Käufer und die Umwelt.
+              BEEDARO entstand aus einer einfachen Idee: Gebrauchte Dinge verdienen mehr als ein zweites Leben. Sie verdienen einen besseren Marktplatz. Fair für Verkäufer, Käufer und die Umwelt.
             </p>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75 }}>
               Anders als andere Plattformen kombiniert BEEDARO Festpreis, Auktion, Miete, Service und Verschenken in einem. Mit der selbst gewählten Bee-Rate bestimmst du, wie viel du beiträgst. 20% davon gehen direkt in Schweizer Naturschutzprojekte.
