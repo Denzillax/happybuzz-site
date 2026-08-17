@@ -198,9 +198,9 @@ export function ListingCard(props) {
         {/* Info — flex-grow for equal height */}
         <div style={{ padding: "11px 14px 14px", flex: 1, display: "flex", flexDirection: "column" }}>
           {/* Katalog-Kopf: Referenznummer + Zustands-Stempel.
-              flexWrap: lange Zustaende ("Gebrauchsspuren") brechen als ganzer
-              Stempel in die naechste Zeile statt abgeschnitten zu werden. */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px 8px", marginBottom: 7, flexWrap: "wrap" }}>
+              Mobil (.cond-head in globals.css) steht der Stempel IMMER unter
+              der ART-Nr — einheitlich fuer alle Zustaende, nichts abgeschnitten. */}
+          <div className="cond-head" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px 8px", marginBottom: 7, flexWrap: "wrap" }}>
             <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".04em", color: colors.muted, whiteSpace: "nowrap" }}>
               {makeArtRef(listing.id)}
             </span>

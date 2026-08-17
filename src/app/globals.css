@@ -99,6 +99,9 @@ body {
   .map-desktop-only { display: none; }
   /* Besitzer-Leiste: mobil unten (mobile-cta-bar), oben ausblenden */
   .owner-bar-desktop { display: none !important; }
+  /* Zustands-Stempel: mobil IMMER unter der ART-Nr, einheitlich fuer alle
+     Zustaende (statt kurze daneben, lange umgebrochen) */
+  .cond-head { flex-direction: column; align-items: flex-start !important; }
 }
 
 @media (max-width: 767px) {
