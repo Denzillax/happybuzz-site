@@ -13,10 +13,17 @@ export default function RichTextEditor({ value, onChange, placeholder = "", styl
   const ref = useRef(null);
   const lastHtml = useRef(null);
 
-  // Fremde Wertaenderungen (Init, Import, KI-Text) uebernehmen — eigene
-  // Eingaben nicht zurueckschreiben, sonst springt der Cursor an den Anfang.
+  // Fremde Wertaenderungen (Init, Import, KI-Text) uebernehmen — aber NIE
+  // waehrend des Tippens: der Roundtrip innerHTML -> sanitize normalisiert
+  // z.B. das &nbsp;, das der Browser fuer ein Leerzeichen am Textende setzt.
+  // Der Vergleich schluege fehl, der Editor wuerde zurueckgesetzt und der
+  // Cursor spraenge an den Anfang (Space-Bug).
   useEffect(() => {
     if (!ref.current) return;
+    if (document.activeElement === ref.current) {
+      lastHtml.current = ref.current.innerHTML;
+      return;
+    }
     const incoming = isFormattedDescription(value) ? sanitizeDescription(value) : plainToHtml(value || "");
     if (incoming !== lastHtml.current) {
       ref.current.innerHTML = incoming;
