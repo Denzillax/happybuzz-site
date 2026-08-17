@@ -4,7 +4,7 @@ import { CheckCircle, Circle, AlertTriangle, Send, Smartphone, Monitor, ChevronD
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
-import { REP_LOG } from "@/lib/replog";
+import { REP_LOG, melderRanking } from "@/lib/replog";
 
 const TESTS = [
   {
@@ -480,13 +480,10 @@ export default function BetaTestPage() {
   // "Kurz erklaert"-Box: offen als Standard, Zustand bleibt via localStorage
   const [introOpen, setIntroOpen] = useState(true);
   const [repOpen, setRepOpen] = useState(false);
-  // Top-Melder-Ranking (aggregierte Meldungszahlen via SECURITY-DEFINER-RPC,
-  // beta_feedback selbst ist per RLS nur fuer eigene Zeilen lesbar)
-  const [melderRanking, setMelderRanking] = useState(null);
-  useEffect(() => {
-    if (!repOpen || melderRanking !== null) return;
-    supabase.rpc("beta_melder_ranking").then(({ data }) => setMelderRanking(data || []));
-  }, [repOpen, melderRanking]);
+  // Top-Melder: gezaehlt werden die melder-Eintraege im REP_LOG selbst, also
+  // nur Meldungen, die zu einem Fix/Feature gefuehrt haben (Checklisten-Klicks
+  // und Meldungen ohne Substanz zaehlen nicht; muendliche Meldungen schon).
+  const topMelder = melderRanking();
   useEffect(() => {
     try { const v = localStorage.getItem("beta_intro_open"); if (v !== null) setIntroOpen(v === "1"); } catch {}
   }, []);
@@ -668,14 +665,18 @@ export default function BetaTestPage() {
                 Eure Meldungen wirken. Das hier wurde seit Beta-Start gefixt oder neu gebaut, neuste zuerst.
               </p>
 
-              {/* Top-Melder: live aus den Feedback-Meldungen, wer meldet, steigt */}
-              {melderRanking && melderRanking.length > 0 && (
+              {/* Top-Melder: zaehlt Log-Eintraege mit melder (= Meldungen, die
+                  zu einem Fix/Feature gefuehrt haben), egal ueber welchen Kanal */}
+              {topMelder.length > 0 && (
                 <div style={{ border: `1px solid ${colors.dark}`, padding: "12px 14px", marginBottom: 18, background: "#FBF8F2" }}>
-                  <p style={{ margin: "0 0 8px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#0B5E5C" }}>
+                  <p style={{ margin: "0 0 2px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#0B5E5C" }}>
                     Top-Melder · wer meldet, steigt
                   </p>
-                  {melderRanking.slice(0, 5).map((r, i) => (
-                    <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(melderRanking.length, 5) - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                  <p style={{ margin: "0 0 8px", fontSize: 11.5, color: colors.muted }}>
+                    Zählt Meldungen, die zu einem Fix oder Feature geführt haben.
+                  </p>
+                  {topMelder.slice(0, 5).map((r, i) => (
+                    <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(topMelder.length, 5) - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700,
@@ -697,22 +698,25 @@ export default function BetaTestPage() {
                   <p style={{ margin: "0 0 8px", fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: `1px solid ${colors.dark}`, paddingBottom: 5 }}>
                     {tag.datum} <span style={{ color: colors.muted, fontWeight: 400 }}>· {tag.punkte.length} Einträge</span>
                   </p>
+                  {/* Festes Raster: Typ- und Bereichs-Spalte stehen ueber alle
+                      Zeilen exakt untereinander, der Text beginnt auf einer Linie */}
                   <div>
                     {tag.punkte.map((p, i) => (
-                      <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                      <div key={i} style={{ display: "grid", gridTemplateColumns: "40px 92px 1fr", alignItems: "start", columnGap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
                         <span style={{
-                          flexShrink: 0, marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
-                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 6px",
+                          marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
+                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 0",
+                          textAlign: "center",
                           background: p.typ === "neu" ? "#0E9493" : colors.yellow,
                           color: p.typ === "neu" ? "#fff" : colors.dark,
                         }}>
                           {p.typ === "neu" ? "NEU" : "FIX"}
                         </span>
                         <span style={{
-                          flexShrink: 0, marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
-                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 6px",
+                          marginTop: 2, fontFamily: "'Space Mono', ui-monospace, monospace",
+                          fontSize: 9.5, fontWeight: 700, letterSpacing: ".04em", padding: "2px 3px",
                           border: "1px solid rgba(20,17,13,.35)", color: colors.muted, textTransform: "uppercase",
-                          whiteSpace: "nowrap",
+                          textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         }}>
                           {p.bereich}
                         </span>
