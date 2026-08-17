@@ -148,7 +148,7 @@ export default function NotificationBell() {
       {open && (
         <div style={{
           position: "absolute", top: "calc(100% + 8px)", right: 0,
-          width: 380, maxHeight: 480, background: "#fff",
+          width: 380, maxWidth: "calc(100vw - 24px)", maxHeight: 480, background: "#fff",
           borderRadius: 0, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
           border: `1px solid ${colors.border}`,
           overflow: "hidden", zIndex: 1000,
@@ -231,10 +231,17 @@ export default function NotificationBell() {
                       <div style={{
                         fontSize: 12, color: colors.muted,
                         marginTop: 2, lineHeight: 1.4,
-                        overflow: "hidden", textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
+                        // Ankuendigungen (Rundruf) immer ganz zeigen, sonst 2 Zeilen
+                        ...(n.type === "announcement"
+                          ? { whiteSpace: "pre-line", overflowWrap: "break-word" }
+                          : { overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }),
                       }}>
                         {n.message}
+                      </div>
+                    )}
+                    {n.link && (
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#0E9493", marginTop: 4, fontFamily: fonts.body }}>
+                        Öffnen →
                       </div>
                     )}
                     <div style={{

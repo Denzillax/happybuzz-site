@@ -23,6 +23,7 @@ export const REP_LOG = [
   {
     datum: "17. August 2026",
     punkte: [
+      { typ: "fix", bereich: "Glocke", text: "Benachrichtigungen: Ankündigungen zeigen jetzt den ganzen Text (vorher auf eine Zeile abgeschnitten) und ein hinterlegter Link ist als 'Öffnen' sichtbar" },
       { typ: "fix", bereich: "Login", text: "AGB- und Datenschutz-Links bei der Registrierung führten ins Leere, jetzt öffnen sie die richtigen Seiten", melder: "Christian" },
       { typ: "neu", bereich: "Startseite", text: "Hero-Slides lassen sich auf dem Handy per Wischen wechseln" },
       { typ: "neu", bereich: "Kategorien", text: "Neue Kategorie 'Tierbedarf & Haustiere' mit 10 Unterkategorien (Hunde bis Aquaristik), dazu Dienstleistungen neu mit Tierbetreuung und Garten & Aussenbereich", melder: "Melani" },
