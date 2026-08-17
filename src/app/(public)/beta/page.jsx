@@ -266,6 +266,7 @@ const TESTS = [
       { id: "adm_chal_kategorie", label: "Challenge mit Kategorie: bei 'Inserate erstellen' Kategorie wählbar, Zählung nur in dieser Kategorie inkl. Unterkategorien (Hive-Fortschritt UND Einlösen), Kategorie steht auf der Challenge-Karte" },
       { id: "adm_chal_neue_arten", label: "Neue Challenge-Arten funktionieren: Käufe tätigen, Bewertungen abgeben, Inserate in verschiedenen Kategorien" },
       { id: "adm_chal_featured", label: "Häkchen 'Auf Startseite zeigen': Challenge erscheint als Banner unter dem Hero (Titel, Pollen, Countdown, Fortschritt wenn eingeloggt, CTA); ohne featured Challenge keine Sektion" },
+      { id: "adm_chal_loeschen", label: "Challenge löschen: roter Löschen-Knopf mit Rückfrage; Teilnahmen werden mitgelöscht, bereits gutgeschriebene Pollen bleiben; Vorlagen löschen lässt vergangene Wochen-Instanzen bestehen" },
       { id: "adm_status_deutsch", label: "Benutzer-Detail: Bestell-Status überall deutsch übersetzt (kein payment_marked/shipped roh)" },
       { id: "adm_mini_analytics", label: "Übersicht zeigt GMV, Ø Bestellwert und Top-5-Verkäufer (nicht-storniert)" },
       { id: "adm_dunning_tab", label: "Mahnungen-Tab listet überfällige FEE-Rechnungen mit Eskalations-Timeline + Fälligkeit; Nav-Badge stimmt" },

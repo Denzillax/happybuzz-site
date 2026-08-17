@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Plus, Power, Repeat } from "lucide-react";
+import { Plus, Power, Repeat, Trash2 } from "lucide-react";
 import { colors, radius } from "@/lib/theme";
 import { th, td, pill, bcFieldLabel, bcInput, useSort, SortTh } from "@/components/admin/adminStyles";
 
@@ -16,7 +16,7 @@ const aLabel = (v) => ACTIONS.find(a => a.value === v)?.label || v;
 const fmtD = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" });
 
 export function ChallengesTab({ admin }) {
-  const { challenges, saveChallenge, toggleChallenge, updateChallenge, modPill, adminCategories } = admin;
+  const { challenges, saveChallenge, toggleChallenge, updateChallenge, deleteChallenge, modPill, adminCategories } = admin;
   const [filter, setFilter] = useState("aktiv");
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);   // Vorlage im Formular bearbeiten
@@ -172,6 +172,11 @@ export function ChallengesTab({ admin }) {
                       style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                       <Power size={10} /> {c.active ? "Aus" : "An"}
                     </button>
+                    <button onClick={() => { if (confirm(`"${c.title}" wirklich löschen?${c.participants > 0 ? ` ${c.participants} Teilnahme(n) werden mitgelöscht (gutgeschriebene Pollen bleiben).` : ""}`)) deleteChallenge(c); }}
+                      title="Löschen"
+                      style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      <Trash2 size={10} /> Löschen
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -203,6 +208,10 @@ export function ChallengesTab({ admin }) {
                 )}
                 <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                   <Power size={10} /> {c.active ? "Aus" : "An"}
+                </button>
+                <button onClick={() => { if (confirm(`"${c.title}" wirklich löschen?${c.participants > 0 ? ` ${c.participants} Teilnahme(n) werden mitgelöscht (gutgeschriebene Pollen bleiben).` : ""}`)) deleteChallenge(c); }}
+                  style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                  <Trash2 size={10} /> Löschen
                 </button>
               </div>
             </div>

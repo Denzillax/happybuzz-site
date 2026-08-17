@@ -741,6 +741,22 @@ export function useAdminData() {
     await loadChallenges();
   };
 
+  // Challenge loeschen. Eingeloeste Teilnahmen (user_challenges) verschwinden
+  // per ON DELETE CASCADE mit — bereits gutgeschriebene Pollen bleiben, die
+  // liegen im xp_log. Vorlagen: Wochen-Instanzen zuerst abhaengen
+  // (template_id nullen), sie bleiben als eigenstaendige Challenges bestehen.
+  const deleteChallenge = async (c) => {
+    if (c.is_template) {
+      const { error: e1 } = await supabase.from("challenges").update({ template_id: null }).eq("template_id", c.id);
+      if (e1) { flash(`Fehler: ${e1.message}`); return; }
+    }
+    const { error } = await supabase.from("challenges").delete().eq("id", c.id);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    flash(`"${c.title}" gelöscht`);
+    logAdmin("challenge_deleted", "challenge", c.title);
+    await loadChallenges();
+  };
+
   // Vorlagen bearbeiten; wirkt ab der NAECHSTEN Wochen-Instanz,
   // laufende Instanzen bleiben unveraendert.
   const updateChallenge = async (id, form) => {
@@ -1005,7 +1021,7 @@ export function useAdminData() {
     overdueInvoices, overdueSum, openReports, flaggedUsers, bannedUsers, openFeeInvoices, analytics,
     feedback, openFeedback, setFeedbackStatus, saveFeedbackNote,
     adminCategories, createCategory, renameCategory, toggleCategoryActive, moveCategory, setCategoryIcon, deleteCategory,
-    challenges, saveChallenge, toggleChallenge, updateChallenge,
+    challenges, saveChallenge, toggleChallenge, updateChallenge, deleteChallenge,
     siteMode, saveSiteMode, setBetaAccess,
     applications, resolveApplication, rejectApplication,
     gmv, avgOrder, nonCancelledOrders, topSellers,
