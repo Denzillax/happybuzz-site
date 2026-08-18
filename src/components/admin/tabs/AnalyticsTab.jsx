@@ -3,11 +3,13 @@ import { fmtCHF } from "@/lib/formatters";
 import { colors, fonts } from "@/lib/theme";
 import { TrendChart } from "@/components/admin/TrendChart";
 import { chartCard, chartHead, chartLabel, chartBig, chartSub, sumSeries, axisLabels } from "@/components/admin/adminStyles";
+import { LiveOnline } from "@/components/admin/LiveOnline";
 
 export function AnalyticsTab({ admin }) {
   const { analyticsRange, setAnalyticsRange, analytics, analyticsLoading } = admin;
   return (
     <div>
+      <LiveOnline />
       <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginBottom: 16 }}>
         <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3 }}>
           {[7, 30, 90].map(d => (

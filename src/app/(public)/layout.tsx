@@ -8,6 +8,7 @@ import { FloatingButton } from '@/components/layout/FloatingButton'
 import { BannedGate } from '@/components/layout/BannedGate'
 import SiteGate from '@/components/shared/SiteGate'
 import FlyingBee from '@/components/shared/FlyingBee'
+import PresenceTracker from '@/components/shared/PresenceTracker'
 
 export default function PublicLayout({
   children,
@@ -32,6 +33,8 @@ export default function PublicLayout({
       <BannedGate />
       {/* Easter Egg: fliegt selten durchs Bild; Alt+B oder "bee" tippen ruft sie */}
       <div className="no-print"><FlyingBee /></div>
+      {/* Live-Praesenz fuers Admin-Dashboard (Analytik -> Gerade online) */}
+      <PresenceTracker />
     </SiteGate>
   )
 }
