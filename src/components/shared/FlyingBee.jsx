@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Easter Egg: Biene fliegt selten quer durchs Bild. Klick stoppt sie fuer
-// einen trockenen Spruch, danach fliegt sie beschleunigt davon.
+// Easter Egg: Biene erscheint selten, fliegt dem Cursor hinterher und weicht
+// sanft aus, wenn man ihr zu nahe kommt. Fangen (Klick) bleibt machbar: dann
+// haelt sie an, sagt einen trockenen Spruch (immer oberhalb) und fliegt davon.
 // Geheime Abkuerzung: Alt+B oder "bee" tippen (ausserhalb von Eingabefeldern).
 
 const SPRUECHE = [
@@ -17,15 +18,25 @@ const SPRUECHE = [
   "Preise schneiden, Blumen retten. Was machst du so?",
 ];
 
-const MAX_FLUEGE = 4; // pro Sitzung; die Tastenkombi zaehlt nicht mit
+const MAX_FLUEGE = 4;        // pro Sitzung; die Tastenkombi zaehlt nicht mit
+const FLUGZEIT_MS = 22000;   // danach fliegt sie von selbst davon
+const AUSWEICH_RADIUS = 150; // ab dieser Cursor-Naehe weicht sie aus
+const TEMPO_FOLGEN = 240;    // px/s Richtung Cursor
+const TEMPO_FLUCHT = 205;    // px/s beim Ausweichen: langsamer als eine Maus, fangbar
 
 export default function FlyingBee() {
   const beeRef = useRef(null);
   const animRef = useRef(null);
+  const loopRef = useRef(null);
   const timerRef = useRef(null);
   const bubbleTimerRef = useRef(null);
   const stateRef = useRef("idle"); // idle | flying | talking | exiting
-  const dirRef = useRef(1);
+  const posRef = useRef({ x: 0, y: 0 }); // Bienen-Mittelpunkt
+  const velRef = useRef({ x: 0, y: 0 });
+  const mausRef = useRef(null);
+  const wanderRef = useRef({ x: 0, y: 0, bis: 0 });
+  const faceRef = useRef(1); // scaleX: 1 = Kopf links (Original), -1 = gespiegelt
+  const sizeRef = useRef(92);
   const [visible, setVisible] = useState(false);
   const [size, setSize] = useState(92);
   const [bubble, setBubble] = useState(null);
@@ -33,10 +44,16 @@ export default function FlyingBee() {
   const reducedMotion = () =>
     typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Desktop-Zoom (body { zoom: 1.1/1.15/1.25 }): Pointer-Koordinaten kommen
+  // ungezoomt, Element-Positionen im Body sind gezoomt. Alles auf den
+  // Body-Massstab umrechnen, sonst jagt die Biene einen versetzten Punkt.
+  const zoomFaktor = () => parseFloat(getComputedStyle(document.body).zoom) || 1;
+
   const landen = () => {
     stateRef.current = "idle";
     setVisible(false);
     setBubble(null);
+    cancelAnimationFrame(loopRef.current);
   };
 
   const fliegen = (erzwungen = false) => {
@@ -47,34 +64,85 @@ export default function FlyingBee() {
       if (n >= MAX_FLUEGE) return;
       sessionStorage.setItem("bee_fluege", String(n + 1));
     }
+    const z = zoomFaktor();
+    const vw = window.innerWidth / z;
+    const vh = window.innerHeight / z;
+    const s = vw < 640 ? 62 : 92;
+    sizeRef.current = s;
+    setSize(s);
     stateRef.current = "flying";
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    setSize(vw < 640 ? 62 : 92);
     setVisible(true);
 
-    const ltr = Math.random() < 0.5;
-    dirRef.current = ltr ? 1 : -1;
-    const x0 = ltr ? -160 : vw + 160;
-    const x1 = ltr ? vw + 160 : -160;
-    const baseY = vh * (0.15 + Math.random() * 0.45);
-    const amp = 30 + Math.random() * 60;
-    const freq = 2 + Math.random() * 1.5;
-    const phase = Math.random() * Math.PI * 2;
+    const vonLinks = Math.random() < 0.5;
+    posRef.current = { x: vonLinks ? -120 : vw + 120, y: vh * (0.2 + Math.random() * 0.4) };
+    velRef.current = { x: vonLinks ? 200 : -200, y: 0 };
+    wanderRef.current = { x: vw / 2, y: vh / 2, bis: 0 };
 
-    const steps = 10;
-    const frames = [];
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const x = x0 + (x1 - x0) * t;
-      const y = baseY + Math.sin(phase + t * Math.PI * freq) * amp;
-      // Kopf (Fühler + Augen) zeigt im Artwork nach LINKS, der Stachel nach rechts.
-      // Beim Flug nach rechts wird gespiegelt, damit der Kopf immer voraus fliegt.
-      frames.push({ transform: `translate(${x}px, ${y}px) scaleX(${ltr ? -1 : 1})` });
-    }
-    const anim = bee.animate(frames, { duration: 6500 + Math.random() * 2500, easing: "linear" });
-    animRef.current = anim;
-    anim.onfinish = landen;
+    const t0 = performance.now();
+    let letzt = t0;
+
+    const schritt = (now) => {
+      if (stateRef.current !== "flying") return;
+      const dt = Math.min((now - letzt) / 1000, 0.05);
+      letzt = now;
+      const zf = zoomFaktor();
+      const w = window.innerWidth / zf;
+      const h = window.innerHeight / zf;
+      const pos = posRef.current;
+      const vel = velRef.current;
+
+      // Ziel: der Cursor. Ohne Cursor (Touch) wandert sie zwischen Zufallspunkten.
+      let ziel = mausRef.current;
+      if (!ziel) {
+        const wd = wanderRef.current;
+        if (now > wd.bis || Math.hypot(wd.x - pos.x, wd.y - pos.y) < 60) {
+          wd.x = 70 + Math.random() * (w - 140);
+          wd.y = 110 + Math.random() * Math.max(h - 280, 120);
+          wd.bis = now + 1500 + Math.random() * 1500;
+        }
+        ziel = wd;
+      }
+
+      const dx = ziel.x - pos.x;
+      const dy = ziel.y - pos.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      let rx = dx / dist;
+      let ry = dy / dist;
+      let tempo = TEMPO_FOLGEN;
+      if (mausRef.current && dist < AUSWEICH_RADIUS) {
+        // Sanft ausweichen: weg vom Cursor, aber langsamer als eine Maus
+        rx = -rx;
+        ry = -ry;
+        tempo = TEMPO_FLUCHT;
+      } else if (dist < 40) {
+        tempo = 0; // angekommen, nur schweben
+      }
+
+      // Traeges Einlenken statt hartem Richtungswechsel
+      const k = Math.min(1, dt * 2.6);
+      vel.x += (rx * tempo - vel.x) * k;
+      vel.y += (ry * tempo - vel.y) * k;
+      pos.x += vel.x * dt;
+      pos.y += vel.y * dt + Math.sin(now / 170) * 0.9; // Geflatter
+
+      // Flugraum: oben Platz fuer die Sprechblase lassen
+      pos.x = Math.min(Math.max(pos.x, 40), w - 40);
+      pos.y = Math.min(Math.max(pos.y, 105), h - 110);
+
+      // Blickrichtung mit Hysterese (kein Zappeln beim Schweben)
+      if (vel.x > 45) faceRef.current = -1;
+      else if (vel.x < -45) faceRef.current = 1;
+
+      const halb = sizeRef.current / 2;
+      bee.style.transform = `translate(${pos.x - halb}px, ${pos.y - halb}px) scaleX(${faceRef.current})`;
+
+      if (now - t0 > FLUGZEIT_MS) {
+        abflug();
+        return;
+      }
+      loopRef.current = requestAnimationFrame(schritt);
+    };
+    loopRef.current = requestAnimationFrame(schritt);
   };
 
   const abflug = () => {
@@ -82,15 +150,16 @@ export default function FlyingBee() {
     if (!bee) return landen();
     stateRef.current = "exiting";
     setBubble(null);
-    const m = new DOMMatrix(getComputedStyle(bee).transform);
-    const vw = window.innerWidth;
-    const zielX = dirRef.current > 0 ? vw + 200 : -200;
-    const alt = animRef.current;
-    if (alt) alt.cancel();
+    cancelAnimationFrame(loopRef.current);
+    const pos = posRef.current;
+    const halb = sizeRef.current / 2;
+    const vw = window.innerWidth / zoomFaktor();
+    // In Blickrichtung raus (faceRef -1 = schaut nach rechts)
+    const zielX = faceRef.current === -1 ? vw + 220 : -220;
     const anim = bee.animate(
       [
-        { transform: `translate(${m.e}px, ${m.f}px) scaleX(${dirRef.current > 0 ? -1 : 1})` },
-        { transform: `translate(${zielX}px, ${m.f - 140}px) scaleX(${dirRef.current > 0 ? -1 : 1})` },
+        { transform: `translate(${pos.x - halb}px, ${pos.y - halb}px) scaleX(${faceRef.current})` },
+        { transform: `translate(${zielX}px, ${pos.y - halb - 160}px) scaleX(${faceRef.current})` },
       ],
       { duration: 750, easing: "cubic-bezier(.5,0,1,.5)" }
     );
@@ -99,18 +168,27 @@ export default function FlyingBee() {
   };
 
   const angeklickt = () => {
-    const bee = beeRef.current;
-    if (!bee || stateRef.current !== "flying") return;
+    if (stateRef.current !== "flying") return;
     stateRef.current = "talking";
-    if (animRef.current) animRef.current.pause();
-    const r = bee.getBoundingClientRect();
-    const x = Math.min(Math.max(r.left + r.width / 2, 130), window.innerWidth - 130);
-    setBubble({ x, y: Math.max(r.top, 70), text: SPRUECHE[Math.floor(Math.random() * SPRUECHE.length)] });
+    cancelAnimationFrame(loopRef.current);
+    const pos = posRef.current;
+    const halb = sizeRef.current / 2;
+    const x = Math.min(Math.max(pos.x, 130), window.innerWidth / zoomFaktor() - 130);
+    // Immer OBERHALB der Biene (Flugraum garantiert den Platz dafuer)
+    setBubble({ x, y: pos.y - halb - 10, text: SPRUECHE[Math.floor(Math.random() * SPRUECHE.length)] });
     bubbleTimerRef.current = setTimeout(abflug, 3000);
   };
 
   useEffect(() => {
     if (reducedMotion()) return;
+
+    // Cursor-Position fuer Folgen und Ausweichen
+    const onPointer = (e) => {
+      const z = zoomFaktor();
+      mausRef.current = { x: e.clientX / z, y: e.clientY / z };
+    };
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("pointerdown", onPointer, { passive: true });
 
     // Zufalls-Fluege: erster nach 1-3 Minuten, danach alle 5-12 Minuten
     let aktiv = true;
@@ -139,7 +217,10 @@ export default function FlyingBee() {
       aktiv = false;
       clearTimeout(timerRef.current);
       clearTimeout(bubbleTimerRef.current);
+      cancelAnimationFrame(loopRef.current);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("pointerdown", onPointer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -164,7 +245,7 @@ export default function FlyingBee() {
         <div
           aria-hidden="true"
           style={{
-            position: "fixed", left: bubble.x, top: bubble.y - 12,
+            position: "fixed", left: bubble.x, top: bubble.y,
             transform: "translate(-50%, -100%)", zIndex: 9001,
             background: "#fff", border: "1.5px solid #191615",
             boxShadow: "2px 2px 0 #191615", padding: "9px 13px",
