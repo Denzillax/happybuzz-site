@@ -1002,6 +1002,7 @@ export function useAdminData() {
     { key: "listings", label: "Inserate", Icon: Package, badge: pendingListings.length },
     { key: "emails", label: "E-Mails", Icon: Mail },
     { key: "dunning", label: "Mahnungen", Icon: BellRing, badge: overdueInvoices.length },
+    { key: "kommunikation", label: "Kommunikation", Icon: Megaphone },
     { key: "audit", label: "Protokoll", Icon: ScrollText },
     { key: "reports", label: "Meldungen", Icon: Flag, badge: openReports.length },
     { key: "feedback", label: "Feedback", Icon: MessageSquareWarning, badge: openFeedback.length },

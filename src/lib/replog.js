@@ -31,6 +31,7 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Bestellung", text: "Die QR-Rechnung ist jetzt bei jedem Kauf für beide Seiten sichtbar, auch für den Verkäufer" },
       { typ: "fix", bereich: "Design", text: "Kategorien-Menü: aktive Einträge jetzt hellbeige mit gelbem Akzent statt dunkelbeige mit grünem" },
       { typ: "fix", bereich: "App", text: "Installierte App blieb auf einer alten Version hängen, neue Versionen übernehmen jetzt sofort (App einmal komplett schliessen und neu öffnen)", melder: "AHA" },
+      { typ: "neu", bereich: "Admin", text: "Neuer Tab Kommunikation: Banner, Rundruf und Versand-Historie an einem Ort" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },
