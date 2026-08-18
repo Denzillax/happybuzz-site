@@ -395,6 +395,7 @@ const TESTS = [
       { id: "adm_ticker", label: "Grosse Laufschrift (Kommunikation): eigener Text/Farbe/Platzierung, Live-Vorschau läuft; erscheint gross auf der Startseite unter dem Hero oder auf allen Seiten unter dem Header; Header-Banner grösser ohne Megafon" },
       { id: "chat_oeffentliche_fragen", label: "Nachrichten-Tab zeigt auch öffentliche Inserat-Fragen (Chip 'Öffentlich', Inserat-Bild); Fragen-Bereich unterm Inserat mit Namen an JEDER Nachricht ('Du · Name'), Senden-Knopf, Chat-Nachrichten lösen Mail/Push aus" },
       { id: "badge_404", label: "Falsche URL aufrufen (z.B. beedaro.ch/gibtsnicht): 404-Seite mit Bienen-Badge 'Diese Seite wurde weggeschnitten'; auf 'So funktioniert's' klebt der Badge als Stempel auf der Bee-Rate-Box (nur Desktop)" },
+      { id: "easter_egg_biene", label: "Geduldsprobe: Ein paar Minuten auf der Seite bleiben. Irgendwann fliegt etwas durchs Bild. Anklicken, bevor es weg ist" },
       { id: "mieten_periodenpreis", label: "Mieten: Wochen-/Monatspreis wird pro Periode gerechnet (11 Tage à 50/Woche = 2 Wochen = CHF 100), Vorschau-Box zeigt 'X Tage = Y Wochen'" },
       { id: "kauf_adresse_pflicht", label: "Sofortkauf und Gebot ohne Lieferadresse blockiert mit Hinweis aufs Profil (auch im Auktions-Modal)" },
       { id: "ord_rechnung_beide", label: "QR-Rechnung auf der Bestellseite für Käufer UND Verkäufer sichtbar (Verkäufer: eigene Rechnung-Box rechts)" },

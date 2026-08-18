@@ -410,9 +410,9 @@ input:focus, textarea:focus, select:focus {
 /* Badge-Stempel auf der Bee-Rate-Box (So funktioniert's) */
 .fee-stamp {
   position: absolute;
-  top: 16px;
-  right: 20px;
-  width: 104px;
+  top: 14px;
+  right: 22px;
+  width: 156px;
   height: auto;
   transform: rotate(7deg);
 }

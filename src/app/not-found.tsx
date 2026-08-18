@@ -8,7 +8,7 @@ export default function NotFound() {
           Fehler 404 · Seite entfernt
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" style={{ width: 190, maxWidth: "60vw", height: "auto", margin: "0 auto 20px", display: "block" }} />
+        <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" style={{ width: 280, maxWidth: "72vw", height: "auto", margin: "0 auto 24px", display: "block" }} />
         <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 8px", fontFamily: "'General Sans', sans-serif", letterSpacing: ".03em" }}>DIESE SEITE WURDE WEGGESCHNITTEN</h1>
         <p style={{ fontSize: 14, color: "#8a8078", margin: "0 0 28px", lineHeight: 1.6 }}>
           Den Blumen geht es gut. Der Link leider nicht: er existiert nicht oder wurde verschoben.
