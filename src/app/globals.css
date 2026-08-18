@@ -158,6 +158,16 @@ body {
 .search-results-grid > a {
   min-width: 0;
 }
+/* Karten in Wrapper-Divs (z.B. Endet bald mit Countdown-Chip) sollen die
+   gleiche Hoehe fuellen wie direkte Karten: Wrapper als Spalte, Karte waechst */
+.listing-grid > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.listing-grid > div > a {
+  flex: 1;
+}
 @media (max-width: 1024px) {
   .listing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 }
@@ -184,6 +194,10 @@ body {
     max-width: 230px;
     min-width: 0;
     scroll-snap-align: start;
+    /* height:100% der Karte wuerde das Flex-Stretching aushebeln ->
+       auto erzwingen, dann streckt die Reihe alle Karten gleich hoch */
+    height: auto !important;
+    align-self: stretch;
   }
 }
 

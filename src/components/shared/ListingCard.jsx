@@ -271,12 +271,13 @@ export function ListingCard(props) {
           {/* Spacer to push location to bottom */}
           <div style={{ flex: 1 }} />
 
-          {/* Location + Restlaufzeit */}
+          {/* Location + Restlaufzeit. flexWrap: auf schmalen Karten rutscht die
+              Zeitangabe in die naechste Zeile, statt den Ort wegzuquetschen */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 8, marginTop: 8,
-            fontSize: 12, fontFamily: fonts.body, color: colors.muted,
+            display: "flex", alignItems: "center", gap: "2px 8px", marginTop: 8,
+            fontSize: 12, fontFamily: fonts.body, color: colors.muted, flexWrap: "wrap",
           }}>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, minWidth: 0 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, minWidth: 0, flex: "1 1 auto" }}>
               <MapPin size={11} style={{ flexShrink: 0 }} />
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing.city || "–"}</span>
             </span>
@@ -293,10 +294,19 @@ export function ListingCard(props) {
             </span>
           </div>
 
-          {/* Seller */}
+          {/* Seller: klickbar, fuehrt zum Verkaeuferprofil (stoppt den Karten-Link) */}
           {listing.seller && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 5 }}>
-              <span style={{ fontSize: 11, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <div
+              onClick={(e) => {
+                if (!listing.user_id) return;
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = `/user/${listing.user_id}`;
+              }}
+              title="Verkäuferprofil ansehen"
+              style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, cursor: listing.user_id ? "pointer" : "default" }}
+            >
+              <span style={{ fontSize: 12.5, fontWeight: 600, color: INK, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textDecoration: "underline", textDecorationColor: `${INK}44`, textUnderlineOffset: 2 }}>
                 {listing.seller.account_type === "business" && listing.seller.company_name
                   ? listing.seller.company_name
                   : listing.seller.display_name}
@@ -304,8 +314,8 @@ export function ListingCard(props) {
               <AccountBadge accountType={listing.seller.account_type} />
               <VerifiedSellerBadge profile={listing.seller} size="sm" label={false} />
               {listing.seller.avg_rating > 0 && (
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: "auto", fontSize: 11, color: colors.muted }}>
-                  <Star size={10} fill={colors.yellow} color={colors.yellow} />
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: "auto", fontSize: 12, color: colors.muted }}>
+                  <Star size={11} fill={colors.yellow} color={colors.yellow} />
                   {parseFloat(listing.seller.avg_rating).toFixed(1)}
                 </span>
               )}
