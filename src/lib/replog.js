@@ -54,6 +54,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Inserieren", text: "Die Inserieren-Seite sah anders aus als der Rest der Website, jetzt im Katalog-Stil: eckige Karten mit Ink-Rahmen, Mono-Labels, gelbe Knöpfe mit Schatten", melder: "Denis" },
       { typ: "neu", bereich: "Nachrichten", text: "Gespräche lassen sich entfernen: Desktop per Papierkorb, Handy per Wisch nach links. Nur bei dir ausgeblendet, die Gegenseite behält den Verlauf; unten in der Liste per 'Ausgeblendete Gespräche' wiederherstellbar, neue Nachricht holt sie automatisch zurück" },
       { typ: "neu", bereich: "Nachrichten", text: "Gespräche zu verkauften oder nicht mehr aktiven Inseraten sind ausgegraut mit Chip (Verkauft / Nicht mehr aktiv), bleiben aber lesbar" },
+      { typ: "neu", bereich: "Nachrichten", text: "Vier Filter-Pills (Alle, Aktiv, Ungelesen, Archiv mit Zähler); entfernte Gespräche liegen im Archiv-Pill statt im Aufklapper. Dazu eine Suchlupe, die Titel, Namen und alle Nachrichtentexte durchsucht und die Fundstelle in der Vorschau zeigt" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },
