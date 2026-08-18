@@ -1025,6 +1025,28 @@ export async function sendMessage(conversationId, senderId, content, opts = {}) 
     .single();
   if (error) throw error;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
+  // Gegenpartei benachrichtigen (msg_new bzw. msg_offer); System-Meldungen
+  // nicht. Zentral hier, damit ALLE Sendewege (Chat-Thread, Bild, Vorschlag)
+  // abgedeckt sind. Fire-and-forget.
+  if (opts.messageType !== "system") {
+    try {
+      const { data: conv } = await supabase
+        .from("conversations")
+        .select("buyer_id, seller_id, listing:listings(title)")
+        .eq("id", conversationId)
+        .maybeSingle();
+      if (conv) {
+        const recipient = senderId === conv.buyer_id ? conv.seller_id : conv.buyer_id;
+        if (recipient && recipient !== senderId) {
+          const isOffer = opts.messageType === "offer";
+          createNotification(recipient, isOffer ? "offer" : "message",
+            isOffer ? "Neuer Preisvorschlag" : "Neue Nachricht",
+            `${conv.listing?.title ? `"${conv.listing.title}": ` : ""}${(content || "Bild gesendet").slice(0, 140)}`,
+            `/chat/${conversationId}`, isOffer ? "msg_offer" : "msg_new").catch(() => {});
+        }
+      }
+    } catch {}
+  }
   return data;
 }
 

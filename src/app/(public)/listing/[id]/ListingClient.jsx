@@ -396,8 +396,8 @@ export default function ListingDetail() {
         convId = nc?.id;
       }
       if (!convId) return;
+      // Benachrichtigung kommt zentral aus sendMessage (msg_offer)
       await sendMessage(convId, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v });
-      try { await createNotification(l.user_id, "offer", "Neuer Preisvorschlag", `CHF ${v.toLocaleString("de-CH")} für "${l.title}"`, `/chat/${convId}`, "msg_offer"); } catch {}
       setShowOfferModal(false);
       router.push(`/chat/${convId}`);
     } catch (err) { console.error(err); toast.error("Preisvorschlag konnte nicht gesendet werden."); }
@@ -664,7 +664,7 @@ export default function ListingDetail() {
                   allMsgs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
                   return allMsgs.length > 0 ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       {allMsgs.map((msg) => {
                         const isMe = msg.sender_id === user?.id;
                         const isSeller = msg.sender_id === l.user_id;
@@ -672,19 +672,16 @@ export default function ListingDetail() {
                           <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" }}>
                             <div style={{
                               maxWidth: "75%", padding: "8px 12px", borderRadius: 0,
-                              background: isMe ? colors.yellow : colors.surface,
-                              border: isMe ? "none" : `1px solid ${colors.borderLt}`,
-                              borderBottomRightRadius: isMe ? 4 : 14,
-                              borderBottomLeftRadius: isMe ? 14 : 4,
+                              background: isMe ? colors.yellow : "#fff",
+                              border: `1px solid ${isMe ? INK : "rgba(20,17,13,.25)"}`,
                             }}>
-                              {!isMe && (
-                                <p style={{ margin: "0 0 2px", fontSize: 11, fontWeight: 700, color: isSeller ? colors.blue : colors.dark }}>
-                                  {msg.sender?.display_name || "Benutzer"}
-                                  {isSeller && <span style={{ fontSize: 9, padding: "1px 4px", borderRadius: 0, background: colors.blue, color: "#fff", fontWeight: 600, marginLeft: 4 }}>Verkäufer</span>}
-                                </p>
-                              )}
+                              {/* Name IMMER zeigen, oeffentliche Fragen sieht jeder */}
+                              <p style={{ margin: "0 0 2px", fontSize: 11, fontWeight: 700, color: isSeller ? "#0B5E5C" : colors.dark }}>
+                                {isMe ? `Du · ${msg.sender?.display_name || ""}`.replace(/ · $/, "") : (msg.sender?.display_name || "Benutzer")}
+                                {isSeller && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 0, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5, border: `1px solid ${INK}` }}>Verkäufer</span>}
+                              </p>
                               <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45, color: colors.dark }}>{msg.content}</p>
-                              <p style={{ margin: "3px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.35)" : colors.mutedLt, textAlign: "right" }}>
+                              <p style={{ margin: "3px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
                                 {new Date(msg.created_at).toLocaleString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
                               </p>
                             </div>
@@ -708,10 +705,10 @@ export default function ListingDetail() {
                   <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
                     placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
-                    style={{ flex: 1, padding: "10px 14px", borderRadius: 0, border: `1.5px solid ${colors.borderLt}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
+                    style={{ flex: 1, padding: "10px 14px", borderRadius: 0, border: `1.5px solid ${INK}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
                   <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
-                    style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .15s" }}>
-                    <MessageCircle size={16} color={msgText.trim() ? colors.dark : colors.mutedLt} />
+                    style={{ padding: "10px 20px", borderRadius: 0, border: `1.5px solid ${INK}`, background: msgText.trim() ? colors.yellow : "#eee", color: INK, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: msgText.trim() ? "pointer" : "default", flexShrink: 0, transition: "all .15s", boxShadow: msgText.trim() ? `2px 2px 0 ${INK}` : "none" }}>
+                    {sendingMsg ? "..." : "Senden"}
                   </button>
                 </div>
               )}

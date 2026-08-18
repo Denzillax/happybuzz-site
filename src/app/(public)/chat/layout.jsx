@@ -44,11 +44,13 @@ export default function ChatLayout({ children }) {
     return () => window.removeEventListener("beedaro:messages-read", onRead);
   }, [userId]);
 
+  // Auch oeffentliche Fragen zu Inseraten erscheinen hier (frueher wurden sie
+  // ausgefiltert und waren nur auf der Inserat-Seite zu finden)
   let convs = conversations
-    .filter((c) => !c.is_public)
+    .slice()
     .sort((a, b) => +new Date(b.last_message_at) - +new Date(a.last_message_at));
   if (filter === "unread") convs = convs.filter((c) => c.hasUnread);
-  const totalUnread = conversations.filter((c) => !c.is_public && c.hasUnread).length;
+  const totalUnread = conversations.filter((c) => c.hasUnread).length;
 
   const fmtTime = (d) => {
     if (!d) return "";
@@ -120,6 +122,11 @@ export default function ChatLayout({ children }) {
                       <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#E6F5F5" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
                         {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
                       </span>
+                      {c.is_public && (
+                        <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#FDF3D9", color: "#8a6d1a" }}>
+                          Öffentlich
+                        </span>
+                      )}
                     </div>
                     <p style={{ margin: 0, fontSize: 11, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.otherUser?.display_name || "Benutzer"}</p>
                     <p style={{ margin: "2px 0 0", fontSize: 12.5, color: c.hasUnread ? colors.dark : colors.muted, fontWeight: c.hasUnread ? 600 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.lastMessagePreview || "Bild gesendet"}</p>
