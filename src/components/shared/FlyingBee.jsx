@@ -68,8 +68,9 @@ export default function FlyingBee() {
       const t = i / steps;
       const x = x0 + (x1 - x0) * t;
       const y = baseY + Math.sin(phase + t * Math.PI * freq) * amp;
-      // Artwork schaut nach rechts, beim Flug nach links also spiegeln
-      frames.push({ transform: `translate(${x}px, ${y}px) scaleX(${ltr ? 1 : -1})` });
+      // Kopf (Fühler + Augen) zeigt im Artwork nach LINKS, der Stachel nach rechts.
+      // Beim Flug nach rechts wird gespiegelt, damit der Kopf immer voraus fliegt.
+      frames.push({ transform: `translate(${x}px, ${y}px) scaleX(${ltr ? -1 : 1})` });
     }
     const anim = bee.animate(frames, { duration: 6500 + Math.random() * 2500, easing: "linear" });
     animRef.current = anim;
@@ -88,8 +89,8 @@ export default function FlyingBee() {
     if (alt) alt.cancel();
     const anim = bee.animate(
       [
-        { transform: `translate(${m.e}px, ${m.f}px) scaleX(${dirRef.current > 0 ? 1 : -1})` },
-        { transform: `translate(${zielX}px, ${m.f - 140}px) scaleX(${dirRef.current > 0 ? 1 : -1})` },
+        { transform: `translate(${m.e}px, ${m.f}px) scaleX(${dirRef.current > 0 ? -1 : 1})` },
+        { transform: `translate(${zielX}px, ${m.f - 140}px) scaleX(${dirRef.current > 0 ? -1 : 1})` },
       ],
       { duration: 750, easing: "cubic-bezier(.5,0,1,.5)" }
     );
