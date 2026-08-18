@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { ListingCard } from '@/components/shared/ListingCard'
@@ -46,7 +46,7 @@ export function NewListings() {
     <section style={{ padding: '32px 24px 16px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Neu eingestellt" href="/search?sort=newest" />
 
-      <div className="listing-grid">
+      <div className="listing-grid home-swipe">
         {listings.map(listing => (
           <ListingCard key={listing.id} listing={listing} userId={userId} />
         ))}

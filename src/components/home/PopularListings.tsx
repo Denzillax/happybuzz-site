@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { ListingCard } from '@/components/shared/ListingCard'
@@ -46,7 +46,7 @@ export function PopularListings() {
     <section style={{ padding: '16px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Gerade beliebt" subtitle="Die meistgemerkten Artikel der Community" href="/search?sort=relevanz" />
 
-      <div className="listing-grid">
+      <div className="listing-grid home-swipe">
         {listings.map(listing => (
           <ListingCard key={listing.id} listing={listing} userId={userId} />
         ))}

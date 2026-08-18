@@ -165,6 +165,36 @@ body {
   .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
 }
 
+/* Startseiten-Reihen auf Mobile: wischbar statt gestapelt (mehr Platz,
+   kuerzere Seite). Suche behaelt das normale 2-Spalten-Grid. */
+@media (max-width: 767px) {
+  .home-swipe {
+    display: flex !important;
+    overflow-x: auto;
+    gap: 12px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+  .home-swipe::-webkit-scrollbar { display: none; }
+  .home-swipe > a,
+  .home-swipe > div {
+    flex: 0 0 46vw;
+    max-width: 230px;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
+
+/* Sicherung: die Seite selbst darf NIE horizontal scrollen (einzelne
+   Ausreisser-Elemente werden geclippt statt die ganze Seite zu verschieben).
+   clip statt hidden, damit position:sticky weiter funktioniert. */
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
 /* ═══════════════════════════════════════════
    INPUT FOCUS — Theme Consistency
    ═══════════════════════════════════════════ */

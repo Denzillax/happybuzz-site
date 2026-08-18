@@ -59,6 +59,7 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Admin", text: "Besuchsverlauf in der Analytik: Seitenaufrufe werden protokolliert (wer, wo, wann; Gäste anonym) und nach 90 Tagen automatisch gelöscht; bei vielen Nutzern zeigt die Live-Ansicht eine Bereichs-Zusammenfassung statt endloser Namenslisten" },
       { typ: "neu", bereich: "Startseite", text: "Sechs Neuerungen: Zahlen-Leiste unterm Hero (Exponate, Mitglieder, Bee-Impact), fünf Format-Kacheln als Direkteinstieg (Festpreis bis Service), Auktions-Sektion 'Endet bald' mit tickendem Countdown, Neu-Chip auf Tierbedarf, Gründungsmitglied-Hinweis, klickbare Warum-wir-Karten" },
       { typ: "fix", bereich: "Startseite", text: "Entladen und neu sortiert: Inserate kommen jetzt viel früher (Endet bald und Neu eingestellt direkt nach den Kategorien), Challenge und Bee-Impact liegen als Zwischenstopps zwischen den Reihen; Kategorien als eine kuratierte Zeile (mobil wischbar); So funktioniert's und Warum wir sind eine Sektion", melder: "Denis" },
+      { typ: "fix", bereich: "Startseite", text: "Mobile: Inserat-Reihen sind jetzt wischbar (grössere Karten, kürzere Seite), Kategorien-Zeile zeigt am Handy alle Kategorien, und die Seite kann nicht mehr seitlich verrutschen (Überlauf-Sicherung)", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

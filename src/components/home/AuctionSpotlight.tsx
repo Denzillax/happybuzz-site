@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { ListingCard } from '@/components/shared/ListingCard'
@@ -68,7 +68,7 @@ export function AuctionSpotlight() {
     <section style={{ padding: '32px 24px 16px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Endet bald" href="/search?type=auction" linkLabel="Alle Auktionen" />
 
-      <div className="listing-grid">
+      <div className="listing-grid home-swipe">
         {listings.map(listing => {
           const dringend = new Date(listing.auction_end).getTime() - now < 3600_000
           return (
