@@ -64,7 +64,7 @@ export function CommunityImpact() {
   ];
 
   return (
-    <section style={{
+    <section className="home-band" style={{
       width: "100%",
       background: PAPER,
       // oben 0: der Abstand kommt vom Challenge-Band darueber (40px), so ist
@@ -72,7 +72,7 @@ export function CommunityImpact() {
       padding: "0 20px 56px",
     }}>
       {/* Ganze Impact-Box mit Katalog-Outline, gleiche Bauart wie die Karten unten */}
-      <div style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
+      <div className="home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
       <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{

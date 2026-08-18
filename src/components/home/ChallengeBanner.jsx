@@ -57,7 +57,7 @@ export function ChallengeBanner() {
   return (
     // Durchgehendes Creme-Band: gleiche Flaeche wie Hero und Bee-Impact,
     // symmetrischer Abstand (40px) ober- und unterhalb der Box
-    <section style={{ background: PAPER, padding: "40px 20px" }}>
+    <section className="home-band" style={{ background: PAPER, padding: "40px 20px" }}>
       <style>{`
         /* Aufmerksamkeit ohne Kitsch: der Honig-Schatten atmet, das Ziel-Icon
            wippt kurz alle paar Sekunden */
@@ -76,7 +76,7 @@ export function ChallengeBanner() {
         }
       `}</style>
       {/* Gleiche Breite wie die Bee-Impact-Box (1080) */}
-      <div className="chal-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap", animation: "chalShadow 2.6s ease-in-out infinite" }}>
+      <div className="chal-box home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap", animation: "chalShadow 2.6s ease-in-out infinite" }}>
         <div className="chal-icon" style={{ width: 46, height: 46, flexShrink: 0, background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center", animation: "chalWiggle 4s ease-in-out infinite" }}>
           <Target size={22} color={INK} />
         </div>

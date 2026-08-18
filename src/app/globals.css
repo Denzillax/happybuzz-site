@@ -180,6 +180,19 @@ input:focus, textarea:focus, select:focus {
 .cat-grid { grid-template-columns: repeat(5, 1fr); }
 .steps-grid { grid-template-columns: repeat(3, 1fr); }
 
+/* ── Grosse Bildschirme: ganze Seite sanft hochzoomen (Laptop +10%,
+   ab 1600px +15%, ab 1800px z.B. 27-Zoll +25%). Unter 1280px unveraendert. ── */
+@media (min-width: 1280px) { body { zoom: 1.1; } }
+@media (min-width: 1600px) { body { zoom: 1.15; } }
+@media (min-width: 1800px) { body { zoom: 1.25; } }
+
+/* ── Startseiten-Baender (Challenge + Bee-Impact): auf Desktop buendig zum
+   Hero-Inhalt (maxWidth 1280 minus 2x32 Padding = 1216) ── */
+@media (min-width: 769px) {
+  .home-band { padding-left: 32px !important; padding-right: 32px !important; }
+  .home-band-box { max-width: 1216px !important; }
+}
+
 /* ═══════════════════════════════════════════
    MOBILE RESPONSIVE — Homepage + Search
    ═══════════════════════════════════════════ */
