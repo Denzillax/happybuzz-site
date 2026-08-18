@@ -63,12 +63,10 @@ export default function SiteGate({ children }) {
   // echte Seiten. Gesperrte Besucher sehen den Inhalt nur fuer den Bruchteil
   // einer Sekunde, dann legt sich die Sperrseite darueber.
   if (state.loading || state.allowed) return children;
-
-  // Rechtsseiten muessen IMMER erreichbar sein (Impressumspflicht), auch
-  // waehrend Beta-Gate oder Wartung
-  if (typeof window !== "undefined" && ["/imprint", "/terms", "/privacy"].includes(window.location.pathname)) {
-    return children;
-  }
+  // Rechtsseiten (Impressum/AGB/Datenschutz) liegen in der Route-Gruppe
+  // (legal) mit eigenem Minimal-Layout OHNE dieses Gate und ohne Marktplatz-
+  // Navigation: immer erreichbar (Impressumspflicht), aber keine Tuer in den
+  // gesperrten Rest der Seite.
 
   const wartung = state.mode === "wartung";
   return (
