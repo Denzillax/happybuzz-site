@@ -71,8 +71,9 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
 
           {/* Mitte */}
           <div style={{ flex: 1, minWidth: 0, opacity: grau ? 0.6 : 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1 }}>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
+            {/* flexWrap: Chips brechen bei Platzmangel um, statt den Titel wegzudruecken */}
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1, flexWrap: "wrap" }}>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 60, flex: "1 1 auto", maxWidth: "100%" }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
               <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#E6F5F5" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
                 {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
               </span>
@@ -89,21 +90,23 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
             </div>
             <p style={{ margin: 0, fontSize: 11, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.otherUser?.display_name || "Benutzer"}</p>
             <p style={{ margin: "2px 0 0", fontSize: 12.5, color: c.hasUnread ? colors.dark : colors.muted, fontWeight: c.hasUnread ? 600 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{preview || c.lastMessagePreview || "Bild gesendet"}</p>
-          </div>
-
-          {/* Rechts: Zeit + Unread + Archivieren/Wiederherstellen */}
-          <div style={{ textAlign: "right", flexShrink: 0, alignSelf: "flex-start", paddingTop: 2, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
-            <span style={{ fontSize: 10, color: c.hasUnread ? colors.teal : colors.muted, fontWeight: c.hasUnread ? 700 : 400 }}>{timeLabel}</span>
-            {c.hasUnread && !hiddenView && <span style={{ display: "block", width: 9, height: 9, borderRadius: "50%", background: colors.teal }} />}
-            {hiddenView ? (
+            {/* Wiederherstellen unter der Vorschau, damit rechts nichts ueberlappt */}
+            {hiddenView && (
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(); }}
                 title="Wiederherstellen"
-                style={{ display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${colors.dark}`, background: "#fff", padding: "3px 8px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: `1px solid ${colors.dark}`, background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
               >
                 <RotateCcw size={11} /> Wiederherstellen
               </button>
-            ) : (
+            )}
+          </div>
+
+          {/* Rechts: Zeit + Unread + Archivieren */}
+          <div style={{ textAlign: "right", flexShrink: 0, alignSelf: "flex-start", paddingTop: 2, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+            <span style={{ fontSize: 10, color: c.hasUnread ? colors.teal : colors.muted, fontWeight: c.hasUnread ? 700 : 400, whiteSpace: "nowrap" }}>{timeLabel}</span>
+            {c.hasUnread && !hiddenView && <span style={{ display: "block", width: 9, height: 9, borderRadius: "50%", background: colors.teal }} />}
+            {!hiddenView && (
               <button
                 className="chat-del"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onHide(); }}
