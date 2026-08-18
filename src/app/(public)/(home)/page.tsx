@@ -1,4 +1,5 @@
 import { Hero } from '@/components/home/Hero'
+import { Ticker } from '@/components/layout/Ticker'
 import { ChallengeBanner } from '@/components/home/ChallengeBanner'
 import { CommunityImpact } from '@/components/home/CommunityImpact'
 import { Categories } from '@/components/home/Categories'
@@ -14,6 +15,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      {/* Grosse Laufschrift, wenn Platzierung "Startseite" gewaehlt ist */}
+      <Ticker placement="home" />
       <ChallengeBanner />
       <CommunityImpact />
       <FeaturedSellers />

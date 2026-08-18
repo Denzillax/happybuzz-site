@@ -524,6 +524,18 @@ export function useAdminData() {
     setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery(""); setBcEmail(false); setBcPush(false); setBcMode("wichtig");
   };
 
+  // Grosse Laufschrift (Ticker): eigenes Element, Tab Kommunikation
+  const [ticker, setTicker] = useState({ enabled: false, message: "", bg_color: "#191615", text_color: "#F4C03F", placement: "home" });
+  const saveTicker = async () => {
+    const { error } = await supabase.from("site_ticker").update({
+      enabled: ticker.enabled, message: ticker.message.trim(), bg_color: ticker.bg_color,
+      text_color: ticker.text_color, placement: ticker.placement, updated_at: new Date().toISOString(),
+    }).eq("id", 1);
+    if (error) { flash("Fehler beim Speichern"); return; }
+    flash(ticker.enabled ? "Laufschrift gespeichert + aktiv" : "Laufschrift gespeichert (aus)");
+    logAdmin("ticker", "ticker", ticker.enabled ? "an" : "aus", { message: ticker.message.trim(), placement: ticker.placement });
+  };
+
   const openAnnouncement = async () => {
     const row = await getAnnouncement();
     if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
@@ -1074,6 +1086,7 @@ export function useAdminData() {
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
     bcEmail, setBcEmail, bcPush, setBcPush, bcMode, setBcMode, bcEffectiveTargets,
     annOpen, setAnnOpen, ann, setAnn, openAnnouncement, saveAnnouncement,
+    ticker, setTicker, saveTicker,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, setReportStatus, pauseReportedListing, statusPill, modPill, emailCard,

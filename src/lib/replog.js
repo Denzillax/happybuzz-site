@@ -34,6 +34,8 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Admin", text: "Neuer Tab Kommunikation: Banner, Rundruf und Versand-Historie an einem Ort" },
       { typ: "fix", bereich: "Rechnung", text: "Rechnung schreibt jetzt alles aus: Versandart (z.B. 'Versand: Paket B-Post'), bei Mieten die Mietdauer und die Kaution als eigene Position, Beträge auf Bestellseite, Rechnung und QR-Zahlteil überall gleich" },
       { typ: "fix", bereich: "Inserieren", text: "Bei 'nur Abholung' verlangte das System eine Zahlungsart, die man nirgends wählen konnte. Jetzt gibt es die Schalter (Barzahlung, TWINT, Überweisung) direkt bei der Abholung, Barzahlung ist vorausgewählt" },
+      { typ: "neu", bereich: "Startseite", text: "Grosse Laufschrift als neues Kampagnen-Element (Admin → Kommunikation): eigener Text, Farbe und Platzierung (Startseite oder alle Seiten)" },
+      { typ: "fix", bereich: "Design", text: "Banner über dem Header: grössere Schrift, ohne Megafon-Icon; Banner-Einstellungen im Admin aufgeräumt mit Live-Vorschau zuoberst" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

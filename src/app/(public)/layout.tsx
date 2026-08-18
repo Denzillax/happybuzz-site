@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Header } from '@/components/layout/Header'
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar'
+import { Ticker } from '@/components/layout/Ticker'
 import { Footer } from '@/components/layout/Footer'
 import { BottomNav } from '@/components/layout/BottomNav'
 import { FloatingButton } from '@/components/layout/FloatingButton'
@@ -21,6 +22,8 @@ export default function PublicLayout({
       {/* display:contents (hdr-sticky-fix): der Wrapper darf keine eigene Box
           bilden, sonst klebt der sticky Header nur innerhalb seiner 65px. */}
       <div className="no-print hdr-sticky-fix"><Suspense fallback={<div style={{ height: 64 }} />}><Header /></Suspense></div>
+      {/* Grosse Laufschrift, wenn Platzierung "alle Seiten" gewaehlt ist */}
+      <Ticker placement="global" />
       <main className="min-h-screen">{children}</main>
       <div className="no-print"><Footer /></div>
       <div className="no-print fab-desktop-only"><FloatingButton /></div>

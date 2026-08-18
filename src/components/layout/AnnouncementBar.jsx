@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { X, Megaphone } from "lucide-react";
+import { X } from "lucide-react";
 import { getAnnouncement } from "@/lib/announcement";
 
 export function AnnouncementBar() {
@@ -28,17 +28,13 @@ export function AnnouncementBar() {
   const barClass = a.effect === "slide" ? "ann-slide" : "";
 
   return (
-    <div className={barClass} style={{ background: a.bg_color, color: a.text_color, fontSize: 13, fontWeight: 600, position: "relative", fontFamily: "'Manrope', sans-serif", lineHeight: 1.4, overflow: "hidden" }}>
+    <div className={barClass} style={{ background: a.bg_color, color: a.text_color, fontSize: 15, fontWeight: 700, position: "relative", fontFamily: "'Manrope', sans-serif", lineHeight: 1.4, overflow: "hidden" }}>
       {isMarquee ? (
-        <div style={{ padding: "9px 0" }}>
-          <span className="ann-marquee-track">
-            <Megaphone size={15} style={{ opacity: 0.9, flexShrink: 0 }} />
-            {a.message}
-          </span>
+        <div style={{ padding: "11px 0" }}>
+          <span className="ann-marquee-track">{a.message}</span>
         </div>
       ) : (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "9px 36px" }}>
-          <Megaphone size={15} style={{ marginRight: 6, opacity: 0.9, flexShrink: 0 }} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "11px 36px" }}>
           <span className={a.effect === "pulse" ? "ann-pulse" : ""} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.message}</span>
         </div>
       )}

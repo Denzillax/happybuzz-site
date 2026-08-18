@@ -244,6 +244,13 @@ input:focus, textarea:focus, select:focus {
 .ann-slide { animation: annSlideDown .5s ease-out; }
 .ann-pulse { display: inline-block; animation: annPulse 1.5s ease-in-out infinite; }
 .ann-marquee-track { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; will-change: transform; animation: annMarquee 18s linear infinite; }
+/* ── Grosse Laufschrift (Ticker): zwei identische Haelften, Track wandert um
+   die halbe Breite => nahtlose Endlosschleife ── */
+@keyframes tickerLoop { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-track { will-change: transform; animation: tickerLoop 30s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+}
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,

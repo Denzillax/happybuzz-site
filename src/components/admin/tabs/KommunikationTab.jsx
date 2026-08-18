@@ -1,45 +1,94 @@
 "use client";
 // Tab Kommunikation: alles, was an Nutzer rausgeht, an einem Ort.
-// Links der Banner-Editor (Balken ueber dem Header), rechts der Rundruf
-// (Glocke/Mail/Push), darunter die Versand-Historie aus dem Audit-Log.
+// Banner-Editor und Laufschrift (je mit grosser Live-Vorschau zuoberst),
+// daneben der Rundruf, darunter die Versand-Historie aus dem Audit-Log.
 import { useState, useEffect } from "react";
-import { Megaphone, Send, History } from "lucide-react";
+import { Megaphone, Send, History, Tv } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
-import { ANNOUNCEMENT_PRESETS, getAnnouncement } from "@/lib/announcement";
+import { ANNOUNCEMENT_PRESETS, getAnnouncement, getTicker } from "@/lib/announcement";
 import { bcInput } from "@/components/admin/adminStyles";
 import { BroadcastForm } from "@/components/admin/modals/BroadcastComposer";
 
+const MONO = "'Space Mono', ui-monospace, monospace";
+
 const Card = ({ icon: Icon, title, children }) => (
-  <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+  <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, padding: 20, display: "flex", flexDirection: "column", gap: 14 }}>
     <div style={{ display: "flex", alignItems: "center", gap: 8, borderBottom: `2px solid ${colors.dark}`, paddingBottom: 10 }}>
       <Icon size={16} color={colors.dark} />
-      <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: colors.dark }}>{title}</span>
+      <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: colors.dark }}>{title}</span>
     </div>
     {children}
   </div>
 );
 
+// Beschriftete Zeile: Label links in Mono, Inhalt rechts — gleiche Optik ueberall
+const Row = ({ label, children }) => (
+  <div style={{ display: "grid", gridTemplateColumns: "92px 1fr", alignItems: "center", gap: 12 }}>
+    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>{label}</span>
+    <div style={{ minWidth: 0 }}>{children}</div>
+  </div>
+);
+
+const Toggle = ({ on, onChange }) => (
+  <button onClick={onChange} style={{ width: 44, height: 24, borderRadius: 0, border: "none", cursor: "pointer", background: on ? colors.yellow : "#ccc", position: "relative", transition: "background .2s", flexShrink: 0 }}>
+    <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: on ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} />
+  </button>
+);
+
+const Segment = ({ options, value, onChange }) => (
+  <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3 }}>
+    {options.map(([k, l]) => (
+      <button key={k} onClick={() => onChange(k)} style={{ fontSize: 11, fontWeight: value === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: value === k ? colors.dark : "transparent", color: value === k ? "#fff" : colors.muted }}>{l}</button>
+    ))}
+  </div>
+);
+
+// Farb-Swatches als Kreise + Hex-Felder
+const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
+  <div>
+    <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+      {ANNOUNCEMENT_PRESETS.map(p => (
+        <button key={p.name} onClick={() => onPick(p)} title={p.name} style={{
+          width: 26, height: 26, borderRadius: "50%", background: p.bg, cursor: "pointer",
+          border: bg === p.bg ? `3px solid ${colors.yellow}` : `2px solid ${colors.dark}`,
+        }} />
+      ))}
+      <label style={{ fontSize: 10, color: colors.muted, display: "flex", alignItems: "center", gap: 4, fontFamily: MONO }}>BG
+        <input value={bg} onChange={e => onBg(e.target.value)} style={{ width: 78, ...bcInput, padding: "4px 7px", fontSize: 11 }} />
+      </label>
+      <label style={{ fontSize: 10, color: colors.muted, display: "flex", alignItems: "center", gap: 4, fontFamily: MONO }}>TEXT
+        <input value={text} onChange={e => onText(e.target.value)} style={{ width: 78, ...bcInput, padding: "4px 7px", fontSize: 11 }} />
+      </label>
+    </div>
+  </div>
+);
+
 export function KommunikationTab({ admin }) {
-  const { ann, setAnn, saveAnnouncement } = admin;
+  const { ann, setAnn, saveAnnouncement, ticker, setTicker, saveTicker } = admin;
   const [history, setHistory] = useState(null);
 
-  // Aktuellen Banner-Zustand laden (sonst zeigt das Formular die Defaults)
+  // Aktuelle Zustaende laden (sonst zeigen die Formulare nur Defaults)
   useEffect(() => {
     getAnnouncement().then(row => {
       if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
     });
-  }, [setAnn]);
+    getTicker().then(row => {
+      if (row) setTicker({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#191615", text_color: row.text_color || "#F4C03F", placement: row.placement || "home" });
+    });
+  }, [setAnn, setTicker]);
 
-  // Versand-Historie: Rundrufe + Banner-Aenderungen aus dem Audit-Log
+  // Versand-Historie: Rundrufe + Banner-/Ticker-Aenderungen aus dem Audit-Log
   useEffect(() => {
     supabase.from("admin_audit_log")
       .select("action, target_label, detail, created_at")
-      .in("action", ["broadcast", "announcement_bar"])
+      .in("action", ["broadcast", "announcement_bar", "ticker"])
       .order("created_at", { ascending: false })
       .limit(50)
       .then(({ data }) => setHistory(data || []));
   }, []);
+
+  const tickerText = (ticker.message || "Vorschau-Text") + " · ";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -47,38 +96,62 @@ export function KommunikationTab({ admin }) {
 
         {/* ── Banner ── */}
         <Card icon={Megaphone} title="Banner über dem Header">
-          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: colors.dark }}>
-            <input type="checkbox" checked={ann.enabled} onChange={e => setAnn({ ...ann, enabled: e.target.checked })} style={{ accentColor: colors.teal, width: 15, height: 15 }} /> Balken aktiv
-          </label>
-          <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput }} />
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Farbe</div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {ANNOUNCEMENT_PRESETS.map(p => (
-                <button key={p.name} onClick={() => setAnn({ ...ann, bg_color: p.bg, text_color: p.text })} style={{ background: p.bg, color: p.text, border: `2px solid ${ann.bg_color === p.bg ? colors.dark : "transparent"}`, borderRadius: 999, padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>{p.name}</button>
-              ))}
-            </div>
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <label style={{ fontSize: 11, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>BG <input value={ann.bg_color} onChange={e => setAnn({ ...ann, bg_color: e.target.value })} style={{ width: 90, ...bcInput, padding: "5px 8px" }} /></label>
-              <label style={{ fontSize: 11, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>Text <input value={ann.text_color} onChange={e => setAnn({ ...ann, text_color: e.target.value })} style={{ width: 90, ...bcInput, padding: "5px 8px" }} /></label>
-            </div>
+          {/* Live-Vorschau zuoberst: so sieht der Balken wirklich aus */}
+          <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 15, fontWeight: 700, padding: "11px 14px", textAlign: "center", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", opacity: ann.enabled ? 1 : 0.45 }}>
+            {ann.message || "Vorschau-Text"}
           </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Animation</div>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {[["none", "Keine"], ["marquee", "Laufschrift"], ["slide", "Einfliegen"], ["pulse", "Pulsieren"]].map(([k, lbl]) => (
-                <button key={k} onClick={() => setAnn({ ...ann, effect: k })} style={{ background: ann.effect === k ? colors.dark : "#fff", color: ann.effect === k ? "#fff" : colors.dark, border: `1px solid ${colors.border}`, borderRadius: 999, padding: "5px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>{lbl}</button>
-              ))}
+          <Row label="Status">
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Toggle on={ann.enabled} onChange={() => setAnn({ ...ann, enabled: !ann.enabled })} />
+              <span style={{ fontSize: 12.5, fontWeight: 600, color: ann.enabled ? "#0A7170" : colors.muted }}>{ann.enabled ? "Aktiv, für alle sichtbar" : "Aus"}</span>
             </div>
-          </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Vorschau</div>
-            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 13, fontWeight: 600, padding: "9px 14px", borderRadius: 0, textAlign: "center" }}>
-              <Megaphone size={14} style={{ verticalAlign: "-2px", marginRight: 6 }} />{ann.message || "Vorschau-Text"}
-            </div>
-          </div>
+          </Row>
+          <Row label="Text">
+            <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={bcInput} />
+          </Row>
+          <Row label="Farbe">
+            <ColorPick bg={ann.bg_color} text={ann.text_color}
+              onPick={p => setAnn({ ...ann, bg_color: p.bg, text_color: p.text })}
+              onBg={v => setAnn({ ...ann, bg_color: v })} onText={v => setAnn({ ...ann, text_color: v })} />
+          </Row>
+          <Row label="Animation">
+            <Segment value={ann.effect} onChange={k => setAnn({ ...ann, effect: k })}
+              options={[["none", "Keine"], ["marquee", "Laufschrift"], ["slide", "Einfliegen"], ["pulse", "Pulsieren"]]} />
+          </Row>
           <button onClick={saveAnnouncement} style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "11px 0", cursor: "pointer", fontFamily: fonts.body }}>
             {ann.enabled ? "Speichern + aktiv schalten" : "Speichern (Balken aus)"}
+          </button>
+        </Card>
+
+        {/* ── Grosse Laufschrift ── */}
+        <Card icon={Tv} title="Grosse Laufschrift">
+          {/* Live-Vorschau: laeuft wirklich */}
+          <div style={{ background: ticker.bg_color, color: ticker.text_color, overflow: "hidden", borderTop: `1.5px solid ${colors.dark}`, borderBottom: `1.5px solid ${colors.dark}`, opacity: ticker.enabled ? 1 : 0.45 }}>
+            <div className="ticker-track" style={{ display: "inline-flex", whiteSpace: "nowrap", fontFamily: "'General Sans', 'Manrope', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", fontSize: 20, lineHeight: 1, padding: "10px 0" }}>
+              <span>{tickerText.repeat(6)}</span>
+              <span aria-hidden="true">{tickerText.repeat(6)}</span>
+            </div>
+          </div>
+          <Row label="Status">
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Toggle on={ticker.enabled} onChange={() => setTicker({ ...ticker, enabled: !ticker.enabled })} />
+              <span style={{ fontSize: 12.5, fontWeight: 600, color: ticker.enabled ? "#0A7170" : colors.muted }}>{ticker.enabled ? "Aktiv, für alle sichtbar" : "Aus"}</span>
+            </div>
+          </Row>
+          <Row label="Text">
+            <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={bcInput} />
+          </Row>
+          <Row label="Farbe">
+            <ColorPick bg={ticker.bg_color} text={ticker.text_color}
+              onPick={p => setTicker({ ...ticker, bg_color: p.bg, text_color: p.text })}
+              onBg={v => setTicker({ ...ticker, bg_color: v })} onText={v => setTicker({ ...ticker, text_color: v })} />
+          </Row>
+          <Row label="Wo">
+            <Segment value={ticker.placement} onChange={k => setTicker({ ...ticker, placement: k })}
+              options={[["home", "Startseite (unter Hero)"], ["global", "Alle Seiten (unter Header)"]]} />
+          </Row>
+          <button onClick={saveTicker} style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "11px 0", cursor: "pointer", fontFamily: fonts.body }}>
+            {ticker.enabled ? "Speichern + aktiv schalten" : "Speichern (Laufschrift aus)"}
           </button>
         </Card>
 
@@ -98,8 +171,8 @@ export function KommunikationTab({ admin }) {
           <div>
             {history.map((h, i) => {
               const d = h.detail || {};
-              const isBc = h.action === "broadcast";
-              const teile = isBc
+              const art = h.action === "broadcast" ? "RUF" : h.action === "ticker" ? "TICKER" : "BANNER";
+              const teile = h.action === "broadcast"
                 ? [
                     `Glocke ${d.count ?? "?"}`,
                     d.mails != null ? `Mail ${d.mails}` : null,
@@ -107,13 +180,13 @@ export function KommunikationTab({ admin }) {
                     d.mode === "newsletter" ? "Newsletter" : null,
                     d.segment && d.segment !== "all" ? `Zielgruppe: ${d.segment}` : null,
                   ].filter(Boolean).join(" · ")
-                : `Banner ${h.target_label}${d.message ? ` · "${String(d.message).slice(0, 60)}"` : ""}`;
+                : `${h.target_label}${d.message ? ` · "${String(d.message).slice(0, 60)}"` : ""}${d.placement ? ` · ${d.placement === "home" ? "Startseite" : "Alle Seiten"}` : ""}`;
               return (
-                <div key={i} style={{ display: "grid", gridTemplateColumns: "44px 130px 1fr", columnGap: 10, alignItems: "start", padding: "7px 0", borderBottom: i < history.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none", fontSize: 12.5 }}>
-                  <span style={{ fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 0", textAlign: "center", background: isBc ? "#0E9493" : colors.yellow, color: isBc ? "#fff" : colors.dark }}>{isBc ? "RUF" : "BANNER"}</span>
-                  <span style={{ color: colors.muted, fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11 }}>{new Date(h.created_at).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
+                <div key={i} style={{ display: "grid", gridTemplateColumns: "58px 130px 1fr", columnGap: 10, alignItems: "start", padding: "7px 0", borderBottom: i < history.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none", fontSize: 12.5 }}>
+                  <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 0", textAlign: "center", background: art === "RUF" ? "#0E9493" : colors.yellow, color: art === "RUF" ? "#fff" : colors.dark }}>{art}</span>
+                  <span style={{ color: colors.muted, fontFamily: MONO, fontSize: 11 }}>{new Date(h.created_at).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
                   <span style={{ minWidth: 0 }}>
-                    <b>{isBc ? h.target_label : "Balken geändert"}</b>
+                    <b>{h.action === "broadcast" ? h.target_label : h.action === "ticker" ? "Laufschrift geändert" : "Balken geändert"}</b>
                     <span style={{ color: colors.muted }}> · {teile}</span>
                   </span>
                 </div>

@@ -392,6 +392,7 @@ const TESTS = [
       { id: "such_speichern", label: "Suche speichern: Knopf auf der Suchseite (bei Begriff oder Kategorie), gespeicherte Suchen unter Favoriten → Suchen mit Löschen; neue Treffer kommen als Benachrichtigung mit Direktlink" },
       { id: "adm_broadcast_kanaele", label: "Admin-Rundruf: Art wählbar (Wichtige Mitteilung an alle / Newsletter nur an Abonnenten), Kanäle Glocke + optional E-Mail und Push; Newsletter zeigt übersprungene Nutzer an" },
       { id: "adm_kommunikation_tab", label: "Admin-Tab Kommunikation: Banner-Editor, Rundruf-Formular und Versand-Historie an einem Ort; Banner lädt den aktuellen Zustand, Historie zeigt Rundrufe (mit Zahlen) und Banner-Änderungen" },
+      { id: "adm_ticker", label: "Grosse Laufschrift (Kommunikation): eigener Text/Farbe/Platzierung, Live-Vorschau läuft; erscheint gross auf der Startseite unter dem Hero oder auf allen Seiten unter dem Header; Header-Banner grösser ohne Megafon" },
       { id: "mieten_periodenpreis", label: "Mieten: Wochen-/Monatspreis wird pro Periode gerechnet (11 Tage à 50/Woche = 2 Wochen = CHF 100), Vorschau-Box zeigt 'X Tage = Y Wochen'" },
       { id: "kauf_adresse_pflicht", label: "Sofortkauf und Gebot ohne Lieferadresse blockiert mit Hinweis aufs Profil (auch im Auktions-Modal)" },
       { id: "ord_rechnung_beide", label: "QR-Rechnung auf der Bestellseite für Käufer UND Verkäufer sichtbar (Verkäufer: eigene Rechnung-Box rechts)" },
