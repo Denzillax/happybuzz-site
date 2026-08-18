@@ -410,12 +410,16 @@ input:focus, textarea:focus, select:focus {
 /* Badge-Stempel auf der Bee-Rate-Box (So funktioniert's) */
 .fee-stamp {
   position: absolute;
-  top: 14px;
-  right: 22px;
-  width: 156px;
+  top: 12px;
+  right: 26px;
+  width: 215px;
   height: auto;
   transform: rotate(7deg);
 }
 @media (max-width: 1023px) {
   .fee-stamp { display: none; }
+}
+/* Intro-Text bekommt Mindesthoehe, damit der grosse Stempel nicht in die Tarif-Tabelle ragt */
+@media (min-width: 1024px) {
+  .fee-intro { min-height: 118px; }
 }

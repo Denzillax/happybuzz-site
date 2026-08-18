@@ -158,7 +158,7 @@ export default function HowItWorksPage() {
           <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" className="fee-stamp" />
           <Eyebrow>Gebührenmodell</Eyebrow>
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Die Bee-Rate: deine Gebühr, deine Wahl</h2>
-          <p style={{ fontSize: 14, color: MUTED, lineHeight: 1.7, marginBottom: 20, maxWidth: 640 }}>
+          <p className="fee-intro" style={{ fontSize: 14, color: MUTED, lineHeight: 1.7, marginBottom: 20, maxWidth: 640 }}>
             Inserieren ist gratis. Erst bei erfolgreichem Verkauf fällt die selbst gewählte Bee-Rate an.
             Du entscheidest, wie viel du beiträgst. Das bestimmt auch, wie weit oben dein Inserat erscheint.
             Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind komplett gebührenfrei.
