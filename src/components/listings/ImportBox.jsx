@@ -57,7 +57,7 @@ export default function ImportBox({ onImport }) {
 
   if (done) {
     return (
-      <div style={{ background: "#EEF4EC", border: "1px solid #5B8C5A", borderRadius: radius.md, padding: "12px 18px", marginBottom: 20 }}>
+      <div style={{ background: "#EEF4EC", border: "1px solid #5B8C5A", borderRadius: 0, padding: "12px 18px", marginBottom: 20 }}>
         <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#3F6B3E", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 7 }}>
           <CheckCircle2 size={15} />
           Übernommen: {done.fields.join(", ")}{done.imgCount ? `, ${done.imgCount} Bild${done.imgCount > 1 ? "er" : ""}` : ""}. Bitte prüfen und ergänzen.
@@ -68,7 +68,7 @@ export default function ImportBox({ onImport }) {
 
   if (busy) {
     return (
-      <div style={{ background: "#fff", border: `1px solid ${colors.borderLt}`, borderRadius: radius.md, padding: "12px 18px", marginBottom: 20 }}>
+      <div style={{ background: "#fff", border: "1.5px solid #191615", borderRadius: 0, padding: "12px 18px", marginBottom: 20 }}>
         <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.teal, fontFamily: fonts.body }}>
           Inserat wird übernommen…
         </p>
@@ -77,15 +77,15 @@ export default function ImportBox({ onImport }) {
   }
 
   return (
-    <div style={{ background: "#fff", border: `1px solid ${colors.borderLt}`, borderRadius: radius.md, padding: "12px 18px", marginBottom: 20 }}>
+    <div style={{ background: "#fff", border: "1.5px solid #191615", borderRadius: 0, padding: "12px 18px", marginBottom: 20 }}>
       <a href="/import-helfer" target="_blank" rel="noopener"
         style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fonts.body, fontSize: 13.5, fontWeight: 700, color: colors.teal, textDecoration: "none" }}>
         <Download size={16} />
-        Inserat von Ricardo, Tutti, eBay oder FB Marketplace übernehmen
+        Inserat-Import
         <ArrowRight size={14} />
       </a>
       <p style={{ margin: "4px 0 0 24px", fontSize: 11.5, color: colors.muted, fontFamily: fonts.body }}>
-        Einmalig den Import-Helfer einrichten, danach genügt ein Klick auf deinem Inserat.
+        Bestehendes Inserat von Ricardo, Tutti, eBay oder Facebook übernehmen.
       </p>
     </div>
   );
