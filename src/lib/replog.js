@@ -37,6 +37,7 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Startseite", text: "Grosse Laufschrift als neues Kampagnen-Element (Admin → Kommunikation): eigener Text, Farbe und Platzierung (Startseite oder alle Seiten)" },
       { typ: "fix", bereich: "Design", text: "Banner über dem Header: grössere Schrift, ohne Megafon-Icon; Banner-Einstellungen im Admin aufgeräumt mit Live-Vorschau zuoberst" },
       { typ: "fix", bereich: "Desktop", text: "Auf grossen Bildschirmen wirkte alles klein und verloren: die Seite zoomt jetzt gestuft (+10% ab Laptop, +25% ab 27 Zoll), und Challenge- plus Bee-Impact-Box sind bündig zum Hero" },
+      { typ: "fix", bereich: "Admin", text: "Der Status-Wechsler im Feedback-Tab schrieb ins Leere (Sprach-Konflikt mit der Datenbank), behoben; alle erledigten Meldungen sind jetzt abgehakt und mit Fix-Notiz versehen" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

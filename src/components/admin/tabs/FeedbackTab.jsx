@@ -13,14 +13,17 @@ const TYPE_META = {
   idea:     { label: "Idee",     bg: "#E8F5E9", color: "#5B8C5A" },
   frage:    { label: "Frage",    bg: "#E9F2F6", color: "#4A7A8C" },
 };
+// ACHTUNG: die DB-Spalte hat einen CHECK auf ENGLISCHE Werte
+// (new/in_progress/resolved/wontfix). Die frueheren deutschen Schluessel
+// wurden vom CHECK still abgelehnt — das Dropdown war wirkungslos.
 const STATUS_META = {
-  neu:       { label: "Neu",       bg: "#E3F2FD", color: "#1565C0" },
-  in_arbeit: { label: "In Arbeit", bg: "#FFF3E0", color: "#E65100" },
-  erledigt:  { label: "Erledigt",  bg: "#E8F5E9", color: "#2E7D32" },
-  verworfen: { label: "Verworfen", bg: "#f5f5f5", color: "#666" },
+  new:         { label: "Neu",       bg: "#E3F2FD", color: "#1565C0" },
+  in_progress: { label: "In Arbeit", bg: "#FFF3E0", color: "#E65100" },
+  resolved:    { label: "Erledigt",  bg: "#E8F5E9", color: "#2E7D32" },
+  wontfix:     { label: "Verworfen", bg: "#f5f5f5", color: "#666" },
 };
-// Das Widget setzt keinen Status: NULL/unbekannt gilt als "neu".
-const normStatus = (s) => (s && STATUS_META[s] ? s : "neu");
+// NULL/unbekannt (und Alt-Wert 'neu') gilt als "new"
+const normStatus = (s) => (s && STATUS_META[s] ? s : "new");
 const TRUNC = 160;
 
 export function FeedbackTab({ admin }) {
@@ -73,7 +76,7 @@ export function FeedbackTab({ admin }) {
           const draft = noteDraft[f.id] !== undefined ? noteDraft[f.id] : (f.admin_note || "");
           const dirty = draft !== (f.admin_note || "");
           return (
-            <div key={f.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: st === "erledigt" || st === "verworfen" ? "#fafafa" : "transparent", opacity: st === "verworfen" ? 0.65 : 1 }}>
+            <div key={f.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: st === "resolved" || st === "wontfix" ? "#fafafa" : "transparent", opacity: st === "wontfix" ? 0.65 : 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                 {pill(t.bg, t.color, t.label)}
                 <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>{f.title || "(ohne Titel)"}</span>
