@@ -51,9 +51,9 @@ export default function AboutPage() {
       }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
           <Eyebrow>Über uns</Eyebrow>
-          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02 }}>
+          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             Der Katalog der{" "}
-            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>zweiten Leben</span>
+            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>zweiten Leben</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, lineHeight: 1.6 }}>
             Der Schweizer Marktplatz für Dinge mit Geschichte. Kaufen, verkaufen, mieten, buchen, verschenken. Und dabei Gutes tun.

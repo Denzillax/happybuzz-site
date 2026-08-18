@@ -97,9 +97,9 @@ export default function HowItWorksPage() {
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <Eyebrow>№ 00 · Handbuch</Eyebrow>
-          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02 }}>
+          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             So funktioniert{" "}
-            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>BEEDARO</span>
+            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>BEEDARO</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
             Kaufen, verkaufen, mieten, buchen, verschenken. Fünf Wege, ein Katalog.

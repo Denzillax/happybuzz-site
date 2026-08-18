@@ -67,9 +67,9 @@ export default function ImpactPage() {
           <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: MOSS, marginBottom: 10, display: "inline-flex", alignItems: "center", gap: 7 }}>
             <Leaf size={14} color={MOSS} /> Bee-Impact
           </div>
-          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02 }}>
+          <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             Handeln, das{" "}
-            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}>etwas zurückgibt</span>
+            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
             Jede Transaktion auf BEEDARO unterstützt Schweizer Naturschutzprojekte. Nicht als Versprechen, als Fakt.

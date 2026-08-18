@@ -39,9 +39,9 @@ export function HowItWorks() {
           <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: PETROL, marginBottom: 16 }}>
             In 3 Schritten
           </div>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, fontFamily: HEAD, color: INK, lineHeight: 1.05 }}>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 38px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, fontFamily: HEAD, color: INK, lineHeight: 1.05, position: 'relative', zIndex: 0 }}>
             So funktioniert{' '}
-            <span style={{ background: HONEY, color: INK, padding: '0 .1em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone' }}>Beedaro</span>
+            <span style={{ background: HONEY, color: INK, padding: '0 .1em', boxDecorationBreak: 'clone', WebkitBoxDecorationBreak: 'clone', position: 'relative', zIndex: -1 }}>Beedaro</span>
           </h2>
         </div>
 
