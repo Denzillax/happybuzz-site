@@ -73,6 +73,11 @@ export function useAdminData() {
   const [bcSending, setBcSending] = useState(false);
   const [bcUserIds, setBcUserIds] = useState([]);
   const [bcUserQuery, setBcUserQuery] = useState("");
+  // Rundruf-Kanaele: Glocke immer, Mail/Push optional. Modus 'wichtig' geht an
+  // alle Ziele, 'newsletter' nur an Nutzer mit gesetztem gen_newsletter-Haekchen.
+  const [bcEmail, setBcEmail] = useState(false);
+  const [bcPush, setBcPush] = useState(false);
+  const [bcMode, setBcMode] = useState("wichtig");
 
   const flash = (m) => { setToast(m); setTimeout(() => setToast(""), 2500); };
 
@@ -475,20 +480,48 @@ export function useAdminData() {
         bcSegment === "all" ? true :
         bcSegment === "business" ? u.account_type === "business" :
         u.account_type !== "business");
+  // Newsletter-Modus: nur Nutzer, die das Newsletter-Haekchen aktiv gesetzt
+  // haben (Standard ist AUS, darum reicht der explizite true-Check)
+  const newsletterOk = (u, channel) => u.notification_settings?.gen_newsletter?.[channel] === true;
+  const bcEffectiveTargets = bcMode === "newsletter"
+    ? bcTargets.filter(u => newsletterOk(u, "email") || newsletterOk(u, "push"))
+    : bcTargets;
+
   const sendBroadcast = async () => {
-    if (!bcTitle.trim() || !bcMessage.trim() || bcTargets.length === 0 || bcSending) return;
+    if (!bcTitle.trim() || !bcMessage.trim() || bcEffectiveTargets.length === 0 || bcSending) return;
     setBcSending(true);
-    const rows = bcTargets.map(u => ({
-      user_id: u.id, type: "announcement",
-      title: bcTitle.trim(), message: bcMessage.trim(),
-      link: bcLink.trim() || null, is_read: false,
+    const title = bcTitle.trim(), message = bcMessage.trim(), link = bcLink.trim() || null;
+    const rows = bcEffectiveTargets.map(u => ({
+      user_id: u.id, type: "announcement", title, message, link, is_read: false,
     }));
     const { error } = await supabase.from("notifications").insert(rows);
+    if (error) { setBcSending(false); flash("Fehler beim Senden"); return; }
+
+    // Mail/Push ueber die Queue-RPCs (Schluessel 'announcement' ist in den
+    // Einstellungen nicht abschaltbar = wichtige Mitteilung; im Newsletter-
+    // Modus wurde die Zielgruppe oben bereits auf Abonnenten gefiltert)
+    let mails = 0, pushes = 0;
+    for (const u of bcEffectiveTargets) {
+      if (bcEmail && (bcMode !== "newsletter" || newsletterOk(u, "email"))) {
+        const { data } = await supabase.rpc("queue_notification_email", {
+          p_recipient: u.id, p_subject: title, p_message: message, p_link: link, p_settings_key: "announcement",
+        });
+        if (data) mails++;
+      }
+      if (bcPush && (bcMode !== "newsletter" || newsletterOk(u, "push"))) {
+        const { data } = await supabase.rpc("queue_notification_push", {
+          p_recipient: u.id, p_title: title, p_message: message, p_link: link, p_settings_key: "announcement",
+        });
+        if (data) pushes++;
+      }
+    }
     setBcSending(false);
-    if (error) { flash("Fehler beim Senden"); return; }
-    flash(`Ankündigung an ${rows.length} Nutzer gesendet`);
-    logAdmin("broadcast", "broadcast", bcTitle.trim(), { count: rows.length, segment: bcSegment });
-    setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery("");
+    const teile = [`Glocke ${rows.length}`];
+    if (bcEmail) teile.push(`Mail ${mails}`);
+    if (bcPush) teile.push(`Push ${pushes}`);
+    flash(`Gesendet: ${teile.join(", ")}`);
+    logAdmin("broadcast", "broadcast", title, { count: rows.length, segment: bcSegment, mode: bcMode, mails, pushes });
+    setBroadcastOpen(false); setBcTitle(""); setBcMessage(""); setBcLink(""); setBcSegment("all"); setBcUserIds([]); setBcUserQuery(""); setBcEmail(false); setBcPush(false); setBcMode("wichtig");
   };
 
   const openAnnouncement = async () => {
@@ -1037,6 +1070,7 @@ export function useAdminData() {
     mahnModal, setMahnModal, openMahn, confirmMahn, sendReminder, confirmAndReactivate, isOverdue, daysOverdue, nextStage, stageDate, STAGE_LABELS, dunningTimeline, mahnButton,
     nextStageInfo, dunningDue, dunningSoon, dunningPaused, openSentMail, bulkSendDue,
     broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcSending, bcUserIds, setBcUserIds, bcUserQuery, setBcUserQuery, bcTargets, sendBroadcast,
+    bcEmail, setBcEmail, bcPush, setBcPush, bcMode, setBcMode, bcEffectiveTargets,
     annOpen, setAnnOpen, ann, setAnn, openAnnouncement, saveAnnouncement,
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,

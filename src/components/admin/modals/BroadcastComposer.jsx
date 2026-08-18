@@ -4,7 +4,7 @@ import { colors, fonts } from "@/lib/theme";
 import { bcFieldLabel, bcInput } from "@/components/admin/adminStyles";
 
 export function BroadcastComposer({ admin }) {
-  const { broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcUserQuery, setBcUserQuery, users, bcUserIds, setBcUserIds, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcTargets, bcSending, sendBroadcast } = admin;
+  const { broadcastOpen, setBroadcastOpen, bcSegment, setBcSegment, bcUserQuery, setBcUserQuery, users, bcUserIds, setBcUserIds, bcTitle, setBcTitle, bcMessage, setBcMessage, bcLink, setBcLink, bcTargets, bcSending, sendBroadcast, bcEmail, setBcEmail, bcPush, setBcPush, bcMode, setBcMode, bcEffectiveTargets } = admin;
   if (!broadcastOpen) return null;
   return (
     <div onClick={() => setBroadcastOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
@@ -22,7 +22,7 @@ export function BroadcastComposer({ admin }) {
                   <button key={k} onClick={() => setBcSegment(k)} style={{ fontSize: 11, fontWeight: bcSegment === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: bcSegment === k ? colors.dark : "transparent", color: bcSegment === k ? "#fff" : colors.muted }}>{l}</button>
                 ))}
               </div>
-              <span style={{ fontSize: 11, color: "#0A7170", fontWeight: 600 }}>geht an {bcTargets.length} Nutzer</span>
+              <span style={{ fontSize: 11, color: "#0A7170", fontWeight: 600 }}>geht an {bcEffectiveTargets.length} Nutzer{bcMode === "newsletter" && bcEffectiveTargets.length < bcTargets.length ? ` (${bcTargets.length - bcEffectiveTargets.length} ohne Newsletter-Erlaubnis übersprungen)` : ""}</span>
             </div>
             {bcSegment === "selected" && (
               <div style={{ marginTop: 8 }}>
@@ -41,6 +41,30 @@ export function BroadcastComposer({ admin }) {
                 <div style={{ fontSize: 10, color: colors.muted, marginTop: 4 }}>{bcUserIds.length} ausgewählt</div>
               </div>
             )}
+          </div>
+          <div>
+            <div style={bcFieldLabel}>Art</div>
+            <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3, marginBottom: 4 }}>
+              {[["wichtig", "Wichtige Mitteilung"], ["newsletter", "Newsletter/Aktion"]].map(([k, l]) => (
+                <button key={k} onClick={() => setBcMode(k)} style={{ fontSize: 11, fontWeight: bcMode === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: bcMode === k ? colors.dark : "transparent", color: bcMode === k ? "#fff" : colors.muted }}>{l}</button>
+              ))}
+            </div>
+            <div style={{ fontSize: 10.5, color: colors.muted, lineHeight: 1.5 }}>
+              {bcMode === "newsletter"
+                ? "Geht nur an Nutzer, die in den Einstellungen Newsletter/Aktionen erlaubt haben."
+                : "Geht an alle in der Zielgruppe (für Plattform-Infos, nicht für Werbung)."}
+            </div>
+          </div>
+          <div>
+            <div style={bcFieldLabel}>Kanäle (Glocke immer)</div>
+            <div style={{ display: "flex", gap: 14 }}>
+              {[["E-Mail", bcEmail, setBcEmail], ["Push", bcPush, setBcPush]].map(([l, val, set]) => (
+                <label key={l} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5, color: colors.dark, cursor: "pointer" }}>
+                  <input type="checkbox" checked={val} onChange={() => set(!val)} style={{ accentColor: colors.teal, width: 15, height: 15 }} />
+                  {l}
+                </label>
+              ))}
+            </div>
           </div>
           <div>
             <div style={bcFieldLabel}>Titel</div>
@@ -67,7 +91,7 @@ export function BroadcastComposer({ admin }) {
         </div>
         <div style={{ display: "flex", gap: 8, padding: "13px 18px", borderTop: `1px solid ${colors.borderLt}` }}>
           <button onClick={() => setBroadcastOpen(false)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
-          <button onClick={sendBroadcast} disabled={!bcTitle.trim() || !bcMessage.trim() || bcTargets.length === 0 || bcSending} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: (!bcTitle.trim() || !bcMessage.trim() || bcTargets.length === 0 || bcSending) ? "default" : "pointer", fontFamily: fonts.body, opacity: (!bcTitle.trim() || !bcMessage.trim() || bcTargets.length === 0 || bcSending) ? 0.5 : 1 }}>{bcSending ? "Sende…" : `An ${bcTargets.length} senden`}</button>
+          <button onClick={sendBroadcast} disabled={!bcTitle.trim() || !bcMessage.trim() || bcEffectiveTargets.length === 0 || bcSending} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: (!bcTitle.trim() || !bcMessage.trim() || bcEffectiveTargets.length === 0 || bcSending) ? "default" : "pointer", fontFamily: fonts.body, opacity: (!bcTitle.trim() || !bcMessage.trim() || bcEffectiveTargets.length === 0 || bcSending) ? 0.5 : 1 }}>{bcSending ? "Sende…" : `An ${bcEffectiveTargets.length} senden${bcEmail || bcPush ? ` (${["Glocke", bcEmail && "Mail", bcPush && "Push"].filter(Boolean).join("+")})` : ""}`}</button>
         </div>
       </div>
     </div>

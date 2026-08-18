@@ -389,6 +389,8 @@ const TESTS = [
       { id: "set_push_ios", label: "iPhone: Push funktioniert NUR in der installierten App (Zum Home-Bildschirm); Einstellungs-Box erklärt das, wenn im Safari-Tab geöffnet" },
       { id: "set_noti_auction_lead", label: "Auktion endet bald: Vorlauf wählbar (5/10/30 Min vorher), Erinnerung kommt für Auktionen, auf die man geboten oder die man favorisiert hat" },
       { id: "set_noti_alle_features", label: "Benachrichtigungs-Schalter wirken: Bewertung erhalten, neue Nachricht, Inserat-Frage, Inserat läuft ab (24h vorher), Bewertungs-Erinnerung (nach 3 Tagen), Favorit-Preisänderung und Favorit verkauft (beide Opt-in)" },
+      { id: "such_speichern", label: "Suche speichern: Knopf auf der Suchseite (bei Begriff oder Kategorie), gespeicherte Suchen unter Favoriten → Suchen mit Löschen; neue Treffer kommen als Benachrichtigung mit Direktlink" },
+      { id: "adm_broadcast_kanaele", label: "Admin-Rundruf: Art wählbar (Wichtige Mitteilung an alle / Newsletter nur an Abonnenten), Kanäle Glocke + optional E-Mail und Push; Newsletter zeigt übersprungene Nutzer an" },
     ],
   },
   {

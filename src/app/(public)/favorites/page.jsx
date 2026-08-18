@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Heart, MapPin, Trash2, Search, User, ChevronDown } from 'lucide-react'
-import { getUserFavorites } from '@/lib/listings'
+import { getUserFavorites, getSavedSearches, deleteSavedSearch } from '@/lib/listings'
 import { ListingCard, listingInactiveLabel } from '@/components/shared/ListingCard'
 
 // Inline seller favorite functions (avoid import issues)
@@ -42,6 +42,7 @@ const inactiveLabel = listingInactiveLabel
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([])
   const [sellers, setSellers] = useState([])
+  const [searches, setSearches] = useState([])
   const [tab, setTab] = useState('listings')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
@@ -53,6 +54,7 @@ export default function FavoritesPage() {
     if (typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search)
       if (p.get('tab') === 'sellers') setTab('sellers')
+      if (p.get('tab') === 'searches') setTab('searches')
     }
   }, [])
 
@@ -65,12 +67,14 @@ export default function FavoritesPage() {
       }
       setUser(session.user)
       try {
-        const [favs, favSellers] = await Promise.all([
+        const [favs, favSellers, favSearches] = await Promise.all([
           getUserFavorites(session.user.id),
           getFavoriteSellers(session.user.id),
+          getSavedSearches(session.user.id),
         ])
         setFavorites(favs)
         setSellers(favSellers)
+        setSearches(favSearches)
       } catch (err) {
         console.error('Error loading favorites:', err)
       }
@@ -127,6 +131,9 @@ export default function FavoritesPage() {
         </button>
         <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Verkäufer ({sellers.length})
+        </button>
+        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+          Suchen ({searches.length})
         </button>
       </div>
 
@@ -228,6 +235,46 @@ export default function FavoritesPage() {
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Verkäufer gemerkt'}</h2>
               <p className="text-text/50 mb-8 max-w-md mx-auto">
                 {q ? 'Versuch einen anderen Suchbegriff.' : 'Merke dir Verkäufer auf deren Profilseite oder auf Inseraten.'}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Tab: Gespeicherte Suchen */}
+      {tab === 'searches' && (
+        <>
+          {searches.length > 0 ? (
+            <div className="flex flex-col gap-0 border border-[#14110D] bg-white">
+              {searches.map((s, i) => {
+                const label = s.query || s.category?.name || 'Suche'
+                const href = s.query
+                  ? `/search?q=${encodeURIComponent(s.query)}${s.category?.slug ? `&category=${s.category.slug}` : ''}`
+                  : `/search?category=${s.category?.slug || ''}`
+                return (
+                  <div key={s.id} className={`flex items-center gap-3 px-4 py-3 ${i < searches.length - 1 ? 'border-b border-[#14110D]/15' : ''}`}>
+                    <Search size={16} className="text-[#0B5E5C] shrink-0" />
+                    <Link href={href} className="flex-1 min-w-0 no-underline">
+                      <div className="text-sm font-semibold text-[#14110D] truncate">{label}</div>
+                      <div className="text-xs text-text/50">
+                        {s.query && s.category?.name ? `in ${s.category.name}` : s.query ? 'Alle Kategorien' : 'Ganze Kategorie'}
+                        {' · Wir melden dir neue Treffer'}
+                      </div>
+                    </Link>
+                    <button onClick={async () => { try { await deleteSavedSearch(s.id); setSearches(prev => prev.filter(x => x.id !== s.id)) } catch (e) { console.error(e) } }}
+                      className="p-2 text-text/40 hover:text-red-600 bg-transparent border-none cursor-pointer" aria-label="Suche löschen">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <Search size={40} className="mx-auto mb-4 text-text/20" />
+              <h3 className="text-lg font-bold text-[#14110D] mb-2">Keine gespeicherten Suchen</h3>
+              <p className="text-text/50 mb-8 max-w-md mx-auto">
+                Speichere eine Suche auf der Suchseite ("Suche speichern"), dann melden wir dir neue Treffer per Glocke, Mail oder Push.
               </p>
             </div>
           )}

@@ -1509,6 +1509,34 @@ export async function replyToQuestion(conversationId, senderId, content) {
   } catch {}
 }
 
+// ─── Gespeicherte Suchen (Schalter search_new_match) ─────────
+export async function saveSearch(userId, query, categoryId) {
+  const row = {
+    user_id: userId,
+    query: (query || "").trim() || null,
+    category_id: categoryId || null,
+  };
+  if (!row.query && !row.category_id) throw new Error("Leere Suche");
+  const { data, error } = await supabase.from("saved_searches").insert(row).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function getSavedSearches(userId) {
+  const { data, error } = await supabase
+    .from("saved_searches")
+    .select("id, query, category_id, created_at, category:categories(name, slug)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
+}
+
+export async function deleteSavedSearch(id) {
+  const { error } = await supabase.from("saved_searches").delete().eq("id", id);
+  if (error) throw error;
+}
+
 // ─── Booking Management ──────────────────────────────────────
 export async function getMyRentalRequests(userId) {
   const { data, error } = await supabase

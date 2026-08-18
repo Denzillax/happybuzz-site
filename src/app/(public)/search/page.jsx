@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, X, ChevronDown, BadgeCheck } from "lucide-react";
-import { searchListings, getCategories } from "@/lib/listings";
+import { searchListings, getCategories, saveSearch } from "@/lib/listings";
 import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/attributes";
 import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
@@ -137,6 +137,7 @@ function SearchPageInner() {
   const [attrFilters, setAttrFilters] = useState({});
   const [showPrice, setShowPrice] = useState(false);
   const [recents, setRecents] = useState([]);
+  const [searchSaved, setSearchSaved] = useState(false);
   const priceRef = useRef(null);
 
   useEffect(() => { setRecents(getRecentSearches()); }, []);
@@ -416,6 +417,25 @@ function SearchPageInner() {
                 setMinPrice(""); setMaxPrice(""); setCity(""); setDelivery(""); setVerifiedOnly(false); setAttrFilters({}); setPage(1);
               }} style={{ fontSize: 13, fontWeight: 600, color: colors.teal, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}>
                 <X size={13} /> Alle Filter zurücksetzen
+              </button>
+            )}
+            {/* Suche speichern: Begriff und/oder Kategorie merken, der stuendliche
+                Matcher meldet neue Treffer (Schalter search_new_match) */}
+            {user && (query.trim() || mainCatId) && (
+              <button onClick={async () => {
+                if (searchSaved) return;
+                try {
+                  await saveSearch(user.id, query, subSubCatId || subCatId || mainCatId || null);
+                  setSearchSaved(true);
+                  setTimeout(() => setSearchSaved(false), 4000);
+                } catch (e) { console.error("saveSearch:", e); }
+              }} style={{
+                fontSize: 13, fontWeight: 700, color: searchSaved ? "#5B8C5A" : colors.teal,
+                background: "none", border: `1.5px solid ${searchSaved ? "#5B8C5A" : colors.teal}`,
+                padding: "5px 10px", borderRadius: 0, cursor: searchSaved ? "default" : "pointer",
+                fontFamily: fonts.body, whiteSpace: "nowrap",
+              }}>
+                {searchSaved ? "Gespeichert. Wir melden neue Treffer." : "Suche speichern"}
               </button>
             )}
           </div>
