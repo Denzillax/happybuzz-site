@@ -387,6 +387,8 @@ const TESTS = [
       { id: "set_push_enable", label: "Push auf diesem Gerät aktivieren: Knopf in Einstellungen → Benachrichtigungen fragt Browser-Berechtigung, danach Badge AKTIV; Deaktivieren entfernt das Gerät" },
       { id: "set_push_receive", label: "Push kommt an: Benachrichtigung (z.B. neues Gebot / neue Nachricht) erscheint als System-Push auf dem Gerät, Klick öffnet die richtige Seite; Häkchen AUS = kein Push" },
       { id: "set_push_ios", label: "iPhone: Push funktioniert NUR in der installierten App (Zum Home-Bildschirm); Einstellungs-Box erklärt das, wenn im Safari-Tab geöffnet" },
+      { id: "set_noti_auction_lead", label: "Auktion endet bald: Vorlauf wählbar (5/10/30 Min vorher), Erinnerung kommt für Auktionen, auf die man geboten oder die man favorisiert hat" },
+      { id: "set_noti_alle_features", label: "Benachrichtigungs-Schalter wirken: Bewertung erhalten, neue Nachricht, Inserat-Frage, Inserat läuft ab (24h vorher), Bewertungs-Erinnerung (nach 3 Tagen), Favorit-Preisänderung und Favorit verkauft (beide Opt-in)" },
     ],
   },
   {

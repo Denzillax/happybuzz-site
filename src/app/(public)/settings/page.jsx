@@ -265,7 +265,7 @@ export default function SettingsPage() {
     noti: {
       // Kaufen
       buy_outbid:       { email: true,  push: true },
-      buy_auction_end:  { email: true,  push: true },
+      buy_auction_end:  { email: true,  push: true, lead: 30 },
       buy_won:          { email: true,  push: true },
       buy_payment:      { email: true,  push: false },
       // Verkaufen
@@ -1231,6 +1231,23 @@ export default function SettingsPage() {
             { key: "buy_payment",     label: "Zahlungsbestätigung", desc: "Zahlung eingegangen" },
           ]}
         />
+
+        {/* Vorlauf fuer "Auktion endet bald": 5/10/30 Minuten vor Schluss */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "10px 14px", border: `1px solid ${C.border}`, marginTop: -14, marginBottom: 24 }}>
+          <div>
+            <div style={{ fontSize: 13.5, fontWeight: 600, color: C.dark }}>Vorlauf für "Auktion endet bald"</div>
+            <div style={{ fontSize: 12, color: C.muted }}>Wie lange vor Auktionsende du erinnert wirst</div>
+          </div>
+          <select
+            value={form.noti.buy_auction_end?.lead ?? 30}
+            onChange={e => updateForm("noti", { ...form.noti, buy_auction_end: { ...form.noti.buy_auction_end, lead: parseInt(e.target.value) } })}
+            style={{ padding: "8px 10px", border: `1.5px solid ${C.dark}`, borderRadius: 0, fontSize: 13, fontFamily: "inherit", background: "#fff", cursor: "pointer" }}
+          >
+            <option value={5}>5 Min vorher</option>
+            <option value={10}>10 Min vorher</option>
+            <option value={30}>30 Min vorher</option>
+          </select>
+        </div>
 
         <NotiCategory
           title="VERKAUFEN"
