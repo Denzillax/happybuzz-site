@@ -44,6 +44,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Nachrichten", text: "Öffentliche Fragen zu Inseraten erscheinen jetzt auch im Nachrichten-Tab (mit Inserat-Bild und 'Öffentlich'-Chip), vorher waren sie nur auf der Inserat-Seite zu finden", melder: "Denis" },
       { typ: "fix", bereich: "Nachrichten", text: "Fragen-Bereich unterm Inserat neu gestaltet: Absendername steht jetzt an jeder Nachricht (auch an den eigenen), Verkäufer-Chip im Beedaro-Look, richtiger Senden-Knopf statt Icon" },
       { typ: "fix", bereich: "Nachrichten", text: "Chat-Nachrichten und Preisvorschläge aus dem Nachrichten-Tab lösten keine Mail/Push aus, jetzt zentral für alle Sendewege" },
+      { typ: "neu", bereich: "Design", text: "Neuer 'Cutting Prices, Saving Flowers'-Badge: eigene 404-Seite (Diese Seite wurde weggeschnitten) und Stempel auf der Bee-Rate-Box unter So funktioniert's" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

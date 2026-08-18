@@ -154,7 +154,8 @@ export default function HowItWorksPage() {
         </div>
 
         {/* ── Bee-Rate ── */}
-        <div style={{ padding: 30, borderRadius: 0, background: "#fff", border: `1px solid ${INK}`, margin: "40px 0" }}>
+        <div style={{ padding: 30, borderRadius: 0, background: "#fff", border: `1px solid ${INK}`, margin: "40px 0", position: "relative" }}>
+          <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" className="fee-stamp" />
           <Eyebrow>Gebührenmodell</Eyebrow>
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Die Bee-Rate: deine Gebühr, deine Wahl</h2>
           <p style={{ fontSize: 14, color: MUTED, lineHeight: 1.7, marginBottom: 20, maxWidth: 640 }}>

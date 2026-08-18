@@ -406,3 +406,16 @@ input:focus, textarea:focus, select:focus {
 }
 .rte-area li, .rich-desc li { margin: 3px 0; }
 .rte-area p, .rich-desc p { margin: 0 0 8px; }
+
+/* Badge-Stempel auf der Bee-Rate-Box (So funktioniert's) */
+.fee-stamp {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 104px;
+  height: auto;
+  transform: rotate(7deg);
+}
+@media (max-width: 1023px) {
+  .fee-stamp { display: none; }
+}
