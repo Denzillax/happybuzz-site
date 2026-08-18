@@ -64,9 +64,10 @@ export function MegaMenu({ open, onClose }) {
     display: "flex", alignItems: "center", justifyContent: "space-between",
     padding: "10px 16px", fontSize: 13, fontFamily: fonts.body,
     color: active ? INK : colors.muted, fontWeight: active ? 700 : 500,
-    background: active ? SAND : "transparent",
+    // Hellbeige statt Sand, gelber Akzent statt Petrol (Feedback Denis)
+    background: active ? "#F9F4EC" : "transparent",
     cursor: "pointer", transition: "all .1s", textDecoration: "none",
-    borderLeft: active ? `3px solid ${PETROL}` : "3px solid transparent",
+    borderLeft: active ? "3px solid #F4C03F" : "3px solid transparent",
   });
 
   return (

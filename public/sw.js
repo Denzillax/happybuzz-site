@@ -2,6 +2,12 @@
 // Bewusst KEIN fetch-Handler und KEIN Caching, damit Deploys nie in einem
 // alten Cache haengen bleiben (siehe PWA-Entscheid: App ohne Offline-Cache).
 
+// Neue Service-Worker-Version sofort uebernehmen (statt zu warten, bis alle
+// Tabs/die installierte App komplett geschlossen wurden). Gefahrlos, weil wir
+// bewusst nichts cachen: die App laedt Inhalte immer frisch vom Server.
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", (event) => event.waitUntil(clients.claim()));
+
 self.addEventListener("push", (event) => {
   let data = {};
   try {

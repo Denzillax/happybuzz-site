@@ -799,6 +799,15 @@ export default function OrderDetailPage() {
               </div>
             )}
 
+            {/* Rechnung fuer die Gegenseite: auch der Verkaeufer (bzw. Kaeufer
+                ohne Zahlungsbox) sieht die QR-Rechnung, bei jedem Kauf */}
+            {!(isBuyer && p.seller?.iban) && (
+              <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, padding: 20, marginBottom: 16 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 10px", textTransform: "uppercase", letterSpacing: ".5px", color: colors.muted }}>Rechnung</h3>
+                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 16px", borderRadius: 0, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
+              </div>
+            )}
+
             {/* Hilfe-Box */}
             <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, padding: 20 }}>
               <h4 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 6px" }}>{isRental ? (isBuyer ? "Vermieter reagiert nicht?" : "Mieter reagiert nicht?") : (isBuyer ? "Verkäufer reagiert nicht?" : "Käufer reagiert nicht?")}</h4>

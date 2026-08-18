@@ -1147,6 +1147,14 @@ export default function ListingDetail() {
                             <button onClick={async () => {
                               setBidding(true); setBidError("");
                               try {
+                                // Adresse/Name Pflicht VOR Sofortkauf UND Gebot (wer die
+                                // Auktion gewinnt, kauft; Armend konnte ohne Adresse kaufen)
+                                const profCheck = await checkProfileComplete(user.id, "buy");
+                                if (!profCheck.complete) {
+                                  setBidError(`Bitte ergänze zuerst dein Profil unter Einstellungen: ${profCheck.missing.join(", ")}`);
+                                  setBidding(false);
+                                  return;
+                                }
                                 if (bidModal === "buynow") {
                                   // For auctions: update listing price to buy_now_price first
                                   if (l.listing_type === "auction" && l.buy_now_price > 0) {
@@ -1227,13 +1235,17 @@ export default function ListingDetail() {
                       {bookStart && bookEnd && new Date(bookEnd) > new Date(bookStart) && (() => {
                         const days = Math.ceil((new Date(bookEnd) - new Date(bookStart)) / (1000 * 60 * 60 * 24));
                         const rentPrice = parseFloat(l.rent_price || l.price);
-                        const total = days * rentPrice;
+                        // Preis gilt PRO PERIODE: Wochen-/Monatspreis nicht mit Tagen
+                        // multiplizieren (50/Woche fuer 11 Tage = 2 Wochen = 100, nicht 550)
+                        const units = l.rent_period === "week" ? Math.ceil(days / 7) : l.rent_period === "month" ? Math.ceil(days / 30) : days;
+                        const unitLabel = l.rent_period === "week" ? (units === 1 ? "Woche" : "Wochen") : l.rent_period === "month" ? (units === 1 ? "Monat" : "Monate") : (units === 1 ? "Tag" : "Tage");
+                        const total = units * rentPrice;
                         const fee = calcFee(total, l.fee_percentage || DEFAULT_FEE_PERCENT);
                         const impact = fee * BEE_IMPACT_RATE;
                         return (
                           <div style={{ marginBottom: 12, padding: "12px 14px", background: colors.cream, borderRadius: radius.sm, fontSize: 13 }}>
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                              <span>{days} Tage × CHF {fmtPrice(rentPrice)}</span>
+                              <span>{days} Tage = {units} {unitLabel} × CHF {fmtPrice(rentPrice)}</span>
                               <span style={{ fontWeight: 700 }}>CHF {fmtPrice(total)}</span>
                             </div>
                             {parseFloat(l.deposit_amount) > 0 && (
@@ -1266,7 +1278,9 @@ export default function ListingDetail() {
                             setBookingError(`Mindestmietdauer: ${l.min_rent_days} Tage. Bitte einen längeren Zeitraum wählen.`);
                             return;
                           }
-                          const total = days * parseFloat(l.rent_price || l.price);
+                          // Gleiche Einheiten-Logik wie in der Vorschau-Box oben
+                          const units = l.rent_period === "week" ? Math.ceil(days / 7) : l.rent_period === "month" ? Math.ceil(days / 30) : days;
+                          const total = units * parseFloat(l.rent_price || l.price);
                           await createBooking(l.id, user.id, l.user_id, bookStart, bookEnd, total, l.deposit_amount || 0);
                           setBookingSuccess(true);
                           setBookStart(""); setBookEnd("");
