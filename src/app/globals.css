@@ -427,3 +427,9 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 768px) {
   .lf-camera-btn { display: flex !important; }
 }
+/* Chat-Liste: Papierkorb nur beim Drueberfahren (Desktop), auf Mobile ganz weg (Wisch-Geste) */
+.chat-del { opacity: 0; transition: opacity .15s; }
+.chat-rowwrap:hover .chat-del { opacity: 1; }
+@media (max-width: 768px), (hover: none) {
+  .chat-del { display: none; }
+}

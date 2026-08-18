@@ -983,7 +983,7 @@ export async function getMyConversations(userId) {
   // Unread-Status + letzte Nachricht werden in JS abgeleitet.
   const { data, error } = await supabase
     .from("conversations")
-    .select("*, listing:listings(id, title, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url), messages(content, sender_id, is_read, created_at)")
+    .select("*, listing:listings(id, title, status, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url), messages(content, sender_id, is_read, created_at)")
     .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
     .order("last_message_at", { ascending: false });
   if (error) return [];
@@ -994,6 +994,7 @@ export async function getMyConversations(userId) {
     for (const m of msgs) { if (!last || new Date(m.created_at) > new Date(last.created_at)) last = m; }
     const hasUnread = msgs.some((m) => m.sender_id !== userId && !m.is_read);
     const imgs = (c.listing?.listing_images || []).slice().sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    const listingStatus = c.listing?.status || "deleted";
     return {
       ...c,
       listingTitle: c.listing?.title || "Gelöschtes Inserat",
@@ -1001,8 +1002,22 @@ export async function getMyConversations(userId) {
       otherUser: c.buyer_id === userId ? c.seller : c.buyer,
       hasUnread,
       lastMessagePreview: last?.content || "",
+      // Vom Nutzer ausgeblendet? (Wisch/Papierkorb; neue Nachricht blendet wieder ein)
+      hiddenForMe: c.buyer_id === userId ? c.hidden_by_buyer : c.hidden_by_seller,
+      // Inserat nicht mehr aktiv -> Zeile ausgrauen
+      listingStatus,
+      listingInactive: !["active", "draft", "pending_review"].includes(listingStatus),
     };
   });
+}
+
+// Gespraech ausblenden/wiederherstellen: wirkt nur fuer die eigene Seite.
+export async function setConversationHidden(conversationId, userId, hidden) {
+  const { data: conv } = await supabase.from("conversations").select("buyer_id, seller_id").eq("id", conversationId).maybeSingle();
+  if (!conv) return { error: "Gespräch nicht gefunden" };
+  const col = conv.buyer_id === userId ? "hidden_by_buyer" : "hidden_by_seller";
+  const { error } = await supabase.from("conversations").update({ [col]: hidden }).eq("id", conversationId);
+  return { error: error?.message || null };
 }
 
 export async function getMessages(conversationId) {
@@ -1026,7 +1041,7 @@ export async function sendMessage(conversationId, senderId, content, opts = {}) 
     .select()
     .single();
   if (error) throw error;
-  await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
+  await supabase.from("conversations").update({ last_message_at: new Date().toISOString(), hidden_by_buyer: false, hidden_by_seller: false }).eq("id", conversationId);
   // Gegenpartei benachrichtigen (msg_new bzw. msg_offer); System-Meldungen
   // nicht. Zentral hier, damit ALLE Sendewege (Chat-Thread, Bild, Vorschlag)
   // abgedeckt sind. Fire-and-forget.
@@ -1501,7 +1516,7 @@ export async function askPublicQuestion(listingId, buyerId, sellerId, content) {
 
   const { error: msgErr } = await supabase.from("messages").insert({ conversation_id: convId, sender_id: buyerId, content });
   if (msgErr) throw msgErr;
-  await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", convId);
+  await supabase.from("conversations").update({ last_message_at: new Date().toISOString(), hidden_by_buyer: false, hidden_by_seller: false }).eq("id", convId);
   // Verkäufer benachrichtigen (Einstellung: sell_question). Fire-and-forget.
   try {
     const { data: lst } = await supabase.from("listings").select("title").eq("id", listingId).maybeSingle();
@@ -1514,7 +1529,7 @@ export async function askPublicQuestion(listingId, buyerId, sellerId, content) {
 export async function replyToQuestion(conversationId, senderId, content) {
   const { error } = await supabase.from("messages").insert({ conversation_id: conversationId, sender_id: senderId, content });
   if (error) throw error;
-  await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
+  await supabase.from("conversations").update({ last_message_at: new Date().toISOString(), hidden_by_buyer: false, hidden_by_seller: false }).eq("id", conversationId);
   // Gegenpartei benachrichtigen (Einstellung: msg_new). Fire-and-forget.
   try {
     const { data: conv } = await supabase

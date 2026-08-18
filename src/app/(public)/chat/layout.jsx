@@ -2,13 +2,123 @@
 // Zwei-Pane-Chat-Shell: links die Gesprächsliste (Sidebar), rechts der aktive
 // Thread ({children} = /chat oder /chat/[id]). Desktop = beide Spalten,
 // Mobile = eine Spalte (Liste ODER Thread, je nach Route).
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase/supabase";
-import { getMyConversations } from "@/lib/listings";
+import { getMyConversations, setConversationHidden } from "@/lib/listings";
 import Link from "next/link";
-import { MessageCircle, User, Package, ShoppingBag, Tag } from "lucide-react";
+import { toast } from "sonner";
+import { MessageCircle, User, Package, ShoppingBag, Tag, Trash2, RotateCcw, ChevronDown } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
+
+// Eine Gesprächszeile: Desktop mit Papierkorb (Hover), Mobile mit Wisch-Geste.
+// Inaktive Inserate (verkauft/gelöscht/abgelaufen) werden ausgegraut.
+function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView }) {
+  const [dx, setDx] = useState(0);
+  const dragRef = useRef(null);
+
+  const onTouchStart = (e) => {
+    if (hiddenView) return;
+    dragRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, aktiv: true };
+  };
+  const onTouchMove = (e) => {
+    if (!dragRef.current?.aktiv) return;
+    const ddx = e.touches[0].clientX - dragRef.current.x;
+    const ddy = e.touches[0].clientY - dragRef.current.y;
+    if (Math.abs(ddy) > Math.abs(ddx) + 8) { dragRef.current.aktiv = false; setDx(0); return; } // Scrollen gewinnt
+    setDx(Math.max(-96, Math.min(0, ddx)));
+  };
+  const onTouchEnd = () => {
+    const weit = dx < -70;
+    setDx(0);
+    dragRef.current = null;
+    if (weit) onHide();
+  };
+
+  const grau = c.listingInactive;
+
+  return (
+    <div className="chat-rowwrap" style={{ position: "relative", overflow: "hidden" }}>
+      {/* Rotes Feld hinter der Zeile: wird durch den Wisch freigelegt */}
+      {!hiddenView && (
+        <div style={{ position: "absolute", inset: 0, background: "#c62828", display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 20, color: "#fff", fontSize: 12, fontWeight: 800 }}>
+          Löschen
+        </div>
+      )}
+      <Link href={`/chat/${c.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{
+            display: "flex", alignItems: "center", gap: 12, padding: "11px 14px",
+            background: active ? "#E6F5F5" : "#fff",
+            borderLeft: `3px solid ${active ? colors.teal : "transparent"}`,
+            borderBottom: `1px solid ${colors.cream}`,
+            transform: `translateX(${dx}px)`,
+            transition: dragRef.current?.aktiv ? "none" : "transform .18s",
+          }}
+        >
+          {/* Inserat-Thumbnail + Avatar-Overlay */}
+          <div style={{ position: "relative", flexShrink: 0, opacity: grau ? 0.55 : 1 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 0, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {c.listingImage ? <img src={c.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: grau ? "grayscale(1)" : "none" }} /> : <Package size={18} color={colors.mutedLt} />}
+            </div>
+            <div style={{ position: "absolute", bottom: -4, right: -4, width: 22, height: 22, borderRadius: "50%", background: colors.yellowSoft, border: "2px solid #fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {c.otherUser?.avatar_url ? <img src={c.otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={12} color={colors.yellow} />}
+            </div>
+          </div>
+
+          {/* Mitte */}
+          <div style={{ flex: 1, minWidth: 0, opacity: grau ? 0.6 : 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1 }}>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
+              <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#E6F5F5" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
+                {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
+              </span>
+              {c.is_public && (
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#FDF3D9", color: "#8a6d1a" }}>
+                  Öffentlich
+                </span>
+              )}
+              {grau && (
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E8E5E0", color: "#6b655e" }}>
+                  {c.listingStatus === "sold" ? "Verkauft" : "Nicht mehr aktiv"}
+                </span>
+              )}
+            </div>
+            <p style={{ margin: 0, fontSize: 11, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.otherUser?.display_name || "Benutzer"}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 12.5, color: c.hasUnread ? colors.dark : colors.muted, fontWeight: c.hasUnread ? 600 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.lastMessagePreview || "Bild gesendet"}</p>
+          </div>
+
+          {/* Rechts: Zeit + Unread + Löschen/Wiederherstellen */}
+          <div style={{ textAlign: "right", flexShrink: 0, alignSelf: "flex-start", paddingTop: 2, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+            <span style={{ fontSize: 10, color: c.hasUnread ? colors.teal : colors.muted, fontWeight: c.hasUnread ? 700 : 400 }}>{timeLabel}</span>
+            {c.hasUnread && !hiddenView && <span style={{ display: "block", width: 9, height: 9, borderRadius: "50%", background: colors.teal }} />}
+            {hiddenView ? (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(); }}
+                title="Wiederherstellen"
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${colors.dark}`, background: "#fff", padding: "3px 8px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
+              >
+                <RotateCcw size={11} /> Wiederherstellen
+              </button>
+            ) : (
+              <button
+                className="chat-del"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onHide(); }}
+                title="Gespräch entfernen"
+                style={{ border: "none", background: "transparent", cursor: "pointer", padding: 4, color: colors.muted }}
+              >
+                <Trash2 size={15} />
+              </button>
+            )}
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+}
 
 export default function ChatLayout({ children }) {
   const pathname = usePathname();
@@ -19,6 +129,7 @@ export default function ChatLayout({ children }) {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [showHidden, setShowHidden] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -44,13 +155,28 @@ export default function ChatLayout({ children }) {
     return () => window.removeEventListener("beedaro:messages-read", onRead);
   }, [userId]);
 
+  // Ausblenden/Wiederherstellen: sofort lokal, dann in der DB (optimistisch)
+  const handleSetHidden = async (c, hidden) => {
+    setConversations((prev) => prev.map((x) => x.id === c.id ? { ...x, hiddenForMe: hidden } : x));
+    const { error } = await setConversationHidden(c.id, userId, hidden);
+    if (error) {
+      setConversations((prev) => prev.map((x) => x.id === c.id ? { ...x, hiddenForMe: !hidden } : x));
+      toast.error("Konnte nicht gespeichert werden");
+    } else {
+      toast.success(hidden ? "Gespräch entfernt" : "Gespräch wiederhergestellt");
+    }
+  };
+
   // Auch oeffentliche Fragen zu Inseraten erscheinen hier (frueher wurden sie
   // ausgefiltert und waren nur auf der Inserat-Seite zu finden)
-  let convs = conversations
-    .slice()
+  const sichtbar = conversations
+    .filter((c) => !c.hiddenForMe)
     .sort((a, b) => +new Date(b.last_message_at) - +new Date(a.last_message_at));
-  if (filter === "unread") convs = convs.filter((c) => c.hasUnread);
-  const totalUnread = conversations.filter((c) => c.hasUnread).length;
+  const versteckt = conversations
+    .filter((c) => c.hiddenForMe)
+    .sort((a, b) => +new Date(b.last_message_at) - +new Date(a.last_message_at));
+  const convs = filter === "unread" ? sichtbar.filter((c) => c.hasUnread) : sichtbar;
+  const totalUnread = sichtbar.filter((c) => c.hasUnread).length;
 
   const fmtTime = (d) => {
     if (!d) return "";
@@ -94,53 +220,41 @@ export default function ChatLayout({ children }) {
             </div>
           )}
 
-          {!loading && convs.map((c) => {
-            const isBuyer = c.buyer_id === userId;
-            const active = c.id === activeId;
-            return (
-              <Link key={c.id} href={`/chat/${c.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 12, padding: "11px 14px",
-                  background: active ? "#E6F5F5" : "transparent",
-                  borderLeft: `3px solid ${active ? colors.teal : "transparent"}`,
-                  borderBottom: `1px solid ${colors.cream}`,
-                }}>
-                  {/* Inserat-Thumbnail + Avatar-Overlay */}
-                  <div style={{ position: "relative", flexShrink: 0 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 0, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      {c.listingImage ? <img src={c.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={18} color={colors.mutedLt} />}
-                    </div>
-                    <div style={{ position: "absolute", bottom: -4, right: -4, width: 22, height: 22, borderRadius: "50%", background: colors.yellowSoft, border: "2px solid #fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      {c.otherUser?.avatar_url ? <img src={c.otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={12} color={colors.yellow} />}
-                    </div>
-                  </div>
+          {!loading && convs.map((c) => (
+            <ConvRow
+              key={c.id}
+              c={c}
+              isBuyer={c.buyer_id === userId}
+              active={c.id === activeId}
+              timeLabel={fmtTime(c.last_message_at)}
+              onHide={() => handleSetHidden(c, true)}
+            />
+          ))}
 
-                  {/* Mitte */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1 }}>
-                      <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
-                      <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#E6F5F5" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
-                        {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
-                      </span>
-                      {c.is_public && (
-                        <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#FDF3D9", color: "#8a6d1a" }}>
-                          Öffentlich
-                        </span>
-                      )}
-                    </div>
-                    <p style={{ margin: 0, fontSize: 11, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.otherUser?.display_name || "Benutzer"}</p>
-                    <p style={{ margin: "2px 0 0", fontSize: 12.5, color: c.hasUnread ? colors.dark : colors.muted, fontWeight: c.hasUnread ? 600 : 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.lastMessagePreview || "Bild gesendet"}</p>
-                  </div>
-
-                  {/* Zeit + Unread */}
-                  <div style={{ textAlign: "right", flexShrink: 0, alignSelf: "flex-start", paddingTop: 2 }}>
-                    <span style={{ fontSize: 10, color: c.hasUnread ? colors.teal : colors.muted, fontWeight: c.hasUnread ? 700 : 400 }}>{fmtTime(c.last_message_at)}</span>
-                    {c.hasUnread && <span style={{ display: "block", width: 9, height: 9, borderRadius: "50%", background: colors.teal, marginLeft: "auto", marginTop: 6 }} />}
-                  </div>
+          {/* Ausgeblendete Gespräche: aufklappbar, mit Wiederherstellen */}
+          {!loading && versteckt.length > 0 && (
+            <div style={{ borderTop: `1px solid ${colors.borderLt}` }}>
+              <button
+                onClick={() => setShowHidden(!showHidden)}
+                style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 14px", border: "none", background: "transparent", cursor: "pointer", fontSize: 12, fontWeight: 700, color: colors.muted, fontFamily: fonts.body }}
+              >
+                <ChevronDown size={14} style={{ transform: showHidden ? "rotate(180deg)" : "none", transition: "transform .15s" }} />
+                Ausgeblendete Gespräche ({versteckt.length})
+              </button>
+              {showHidden && versteckt.map((c) => (
+                <div key={c.id} style={{ opacity: 0.75 }}>
+                  <ConvRow
+                    c={c}
+                    isBuyer={c.buyer_id === userId}
+                    active={c.id === activeId}
+                    timeLabel={fmtTime(c.last_message_at)}
+                    hiddenView
+                    onRestore={() => handleSetHidden(c, false)}
+                  />
                 </div>
-              </Link>
-            );
-          })}
+              ))}
+            </div>
+          )}
         </div>
       </aside>
 
