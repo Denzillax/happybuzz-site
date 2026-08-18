@@ -39,10 +39,16 @@ export function Categories() {
 
   if (!categories.length) return null
 
-  // Exakt die kuratierten acht, in kuratierter Reihenfolge
-  const shown = KURATIERT
+  // Desktop: exakt die kuratierten acht in einer Zeile.
+  // Mobile: die Zeile ist wischbar, also haengen dort ALLE weiteren
+  // Kategorien hinten dran (per CSS auf Desktop ausgeblendet).
+  const kuratiert = KURATIERT
     .map((slug) => categories.find((c) => c.slug === slug))
     .filter(Boolean)
+  const rest = categories
+    .filter((c) => !KURATIERT.includes(c.slug))
+    .map((c) => ({ ...c, extra: true }))
+  const shown = [...kuratiert, ...rest]
 
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
@@ -55,6 +61,10 @@ export function Categories() {
         @media (max-width: 767px) {
           .cat-circles { justify-content: flex-start; gap: 18px; }
         }
+        /* Nicht-kuratierte Kategorien nur in der wischbaren Mobile-Zeile */
+        @media (min-width: 768px) {
+          .cat-extra { display: none !important; }
+        }
       `}</style>
 
       {/* Header */}
@@ -66,7 +76,7 @@ export function Categories() {
           <Link
             key={cat.id}
             href={`/search?category=${cat.slug}`}
-            className="cat-circle-item"
+            className={`cat-circle-item${cat.extra ? ' cat-extra' : ''}`}
             style={{
               display: 'flex', flexDirection: 'column',
               alignItems: 'center', gap: 8,
