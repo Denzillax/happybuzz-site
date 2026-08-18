@@ -260,6 +260,12 @@ export default function OrderDetailPage() {
   // versendet hat (danach ist die Adresse unterwegs).
   const addrChangeable = isBuyer && !isService && listing?.shipping_available
     && ["confirmed", "payment_pending", "payment_marked", "paid"].includes(p.status);
+  // Abholadresse bei reiner Abholung: am Inserat gewaehlter Schnappschuss,
+  // sonst die Hauptadresse des Verkaeufers.
+  const pickupAddr = (!isService && listing?.pickup_only && !listing?.shipping_available)
+    ? (listing?.pickup_address
+        || (p.seller?.street ? { street: p.seller.street, postal_code: p.seller.postal_code, city: p.seller.city } : null))
+    : null;
   const counterpartLabel = isRental ? (isBuyer ? "Vermietet von" : "Gemietet von") : (isBuyer ? "Verkauft von" : "Verkauft an");
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   const sortedEvents = [...events];
@@ -737,6 +743,17 @@ export default function OrderDetailPage() {
                       <Link href="/settings?tab=address" style={{ fontSize: 12, color: K.petrol, textDecoration: "underline" }}>Neue Adresse anlegen</Link>
                     </div>
                   )}
+                </SidebarSection>
+              )}
+              {pickupAddr && (
+                <SidebarSection icon={MapPin} title="Abholadresse">
+                  <div style={{ lineHeight: 1.5 }}>
+                    {pickupAddr.label && <span style={{ display: "inline-block", fontSize: 10, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: K.petrol, marginBottom: 2 }}>{pickupAddr.label}</span>}
+                    {pickupAddr.label && <br />}
+                    {fullName(p.seller)}<br />
+                    {pickupAddr.street && <>{pickupAddr.street}<br /></>}
+                    {pickupAddr.postal_code} {pickupAddr.city}
+                  </div>
                 </SidebarSection>
               )}
               {trackingEvent && (

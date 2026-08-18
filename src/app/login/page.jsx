@@ -133,6 +133,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [displayName, setDisplayName] = useState(""); // Wunsch-Anzeigename, leer = Vorname
   const [lastName, setLastName] = useState("");
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -198,6 +199,7 @@ export default function AuthPage() {
             full_name: `${firstName.trim()} ${lastName.trim()}`,
             first_name: firstName.trim(),
             last_name: lastName.trim(),
+            display_name: displayName.trim() || firstName.trim(),
           },
           emailRedirectTo: `${window.location.origin}/login/callback`,
         },
@@ -301,6 +303,7 @@ export default function AuthPage() {
         <div style={{ flex:1 }}><Input label="Vorname" value={firstName} onChange={e=>setFirstName(e.target.value)} placeholder="Max" icon={<UserIcon/>} error={fieldErrors.firstName}/></div>
         <div style={{ flex:1 }}><Input label="Nachname" value={lastName} onChange={e=>setLastName(e.target.value)} placeholder="Muster" error={fieldErrors.lastName}/></div>
       </div>
+      <Input label="Anzeigename (optional)" value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder={firstName.trim() ? `Standard: ${firstName.trim()}` : "So erscheinst du auf BEEDARO"} icon={<UserIcon/>}/>
       <Input label="E-Mail" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="hallo@beispiel.ch" icon={<MailIcon/>} error={fieldErrors.email}/>
       <Input label="Passwort" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mind. 8 Zeichen" icon={<LockIcon/>} error={fieldErrors.password}/>
       <PasswordStrength password={password}/>

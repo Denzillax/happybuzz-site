@@ -423,3 +423,7 @@ input:focus, textarea:focus, select:focus {
 @media (min-width: 1024px) {
   .fee-intro { min-height: 118px; }
 }
+/* Fotografieren-Knopf im Inserat-Formular: nur auf Mobile */
+@media (max-width: 768px) {
+  .lf-camera-btn { display: flex !important; }
+}

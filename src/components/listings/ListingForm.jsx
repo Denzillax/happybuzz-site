@@ -147,6 +147,7 @@ export default function ListingForm({
     // Versand
     shipping_available: false,
     pickup_only: true,
+    pickup_address: null, // null = Profil-Hauptadresse, sonst Schnappschuss einer Lieferadresse
     shipping_cost: "",
     shipping_method: "paket",
     shipping_payer: "buyer",
@@ -199,6 +200,7 @@ export default function ListingForm({
   const [attrValues, setAttrValues] = useState({});
   const [beeTexts] = useState(() => getRandomBeeTexts());
   const fileRef = useRef(null);
+  const cameraRef = useRef(null); // Mobile: Kamera direkt oeffnen (capture)
   const [dragOver, setDragOver] = useState(false);
   const [dragIdx, setDragIdx] = useState(null);
 
@@ -222,6 +224,7 @@ export default function ListingForm({
 
       shipping_available: initialData.shipping_available || false,
       pickup_only: initialData.pickup_only ?? true,
+      pickup_address: initialData.pickup_address || null,
       shipping_cost: initialData.shipping_cost?.toString() || "",
       shipping_method: initialData.shipping_method || "",
       shipping_payer: initialData.shipping_payer || "buyer",
@@ -319,14 +322,19 @@ export default function ListingForm({
   const [addrQ, setAddrQ] = useState("");
   const [addrHits, setAddrHits] = useState([]);
   const [profileAddr, setProfileAddr] = useState({ street: "", postal_code: "", city: "" });
+  const [extraAddrs, setExtraAddrs] = useState([]); // Lieferadressen aus den Einstellungen, als Abholort waehlbar
 
-  // Profil-Adresse IMMER laden (für Abholung-Anzeige)
+  // Profil-Adresse IMMER laden (für Abholung-Anzeige), dazu die weiteren Adressen
   useEffect(() => {
     async function loadAddr() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
-      const { data } = await supabase.from("profiles").select("street, postal_code, city").eq("id", session.user.id).maybeSingle();
+      const [{ data }, { data: extras }] = await Promise.all([
+        supabase.from("profiles").select("street, postal_code, city").eq("id", session.user.id).maybeSingle(),
+        supabase.from("user_addresses").select("id, label, street, postal_code, city").eq("user_id", session.user.id).order("created_at"),
+      ]);
       if (data) setProfileAddr({ street: data.street || "", postal_code: data.postal_code || "", city: data.city || "" });
+      setExtraAddrs(extras || []);
     }
     loadAddr();
   }, []);
@@ -953,11 +961,39 @@ export default function ListingForm({
           </div>
         )}
 
+        {/* Mobile: direkt fotografieren statt ueber die Galerie */}
+        {images.length < 10 && (
+          <button
+            type="button"
+            className="lf-camera-btn"
+            onClick={() => cameraRef.current?.click()}
+            style={{
+              width: "100%", marginTop: 10, padding: "12px 16px",
+              border: `1.5px solid ${colors.dark}`, borderRadius: 0,
+              background: colors.yellow, color: colors.dark,
+              fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
+              cursor: "pointer", boxShadow: `2px 2px 0 ${colors.dark}`,
+              display: "none", alignItems: "center", justifyContent: "center", gap: 8,
+            }}
+          >
+            <Camera size={16} /> Fotografieren
+          </button>
+        )}
+
         <input
           ref={fileRef}
           type="file"
           multiple
           accept="image/*"
+          onChange={(e) => addFiles(e.target.files)}
+          style={{ display: "none" }}
+        />
+        {/* capture oeffnet auf Mobile direkt die Rueckkamera */}
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
           onChange={(e) => addFiles(e.target.files)}
           style={{ display: "none" }}
         />
@@ -1786,15 +1822,37 @@ export default function ListingForm({
               </div>
             </div>
             <div style={{ padding: "10px 16px", fontSize: 13, color: colors.muted }}>
-              <div style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: "6px 12px" }}>
-                <span style={{ fontWeight: 600 }}>Abholadresse</span>
-                <span>{profileAddr.street || "Keine Adresse hinterlegt"}{profileAddr.street && <><br />{profileAddr.postal_code} {profileAddr.city}</>}</span>
+              <div style={{ fontWeight: 600, color: colors.dark, marginBottom: 6 }}>Abholadresse</div>
+              {/* Hauptadresse (Standard) + Lieferadressen aus den Einstellungen */}
+              {[
+                { key: "haupt", snap: null, label: "Hauptadresse", street: profileAddr.street, postal_code: profileAddr.postal_code, city: profileAddr.city },
+                ...extraAddrs.map(a => ({ key: a.id, snap: { label: a.label, street: a.street, postal_code: a.postal_code, city: a.city }, label: a.label || "Lieferadresse", street: a.street, postal_code: a.postal_code, city: a.city })),
+              ].map(opt => {
+                const aktiv = opt.snap === null ? !form.pickup_address : form.pickup_address?.street === opt.street && form.pickup_address?.city === opt.city;
+                return (
+                  <div key={opt.key} onClick={() => set("pickup_address", opt.snap)} style={{
+                    display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", marginBottom: 6,
+                    border: `1.5px solid ${aktiv ? colors.yellow : colors.border}`, borderRadius: 0,
+                    background: aktiv ? colors.yellowSoft : "#fff", cursor: "pointer",
+                  }}>
+                    <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: 700, color: colors.dark }}>{opt.label}</span>
+                      {opt.snap === null && <span style={{ fontSize: 11, marginLeft: 6, color: colors.muted }}>Standard</span>}
+                      <div style={{ fontSize: 12 }}>{opt.street ? `${opt.street}, ${opt.postal_code} ${opt.city}` : "Keine Adresse hinterlegt"}</div>
+                    </div>
+                  </div>
+                );
+              })}
+              <div style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: "6px 12px", marginTop: 10 }}>
                 <span style={{ fontWeight: 600 }}>Versandkosten</span>
                 <span>Gratis</span>
                 <span style={{ fontWeight: 600 }}>Zahlung</span>
                 <span>{[form.pay_cash && "Barzahlung", form.pay_twint && "TWINT", form.pay_bank && "Überweisung"].filter(Boolean).join(", ") || "Bitte wählen"} bei Übergabe</span>
               </div>
-              {!profileAddr.street && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.yellow, fontWeight: 700 }}>Einstellungen</a>.</p>}
+              {!profileAddr.street && !form.pickup_address && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.yellow, fontWeight: 700 }}>Einstellungen</a>.</p>}
             </div>
           </div>
         )}

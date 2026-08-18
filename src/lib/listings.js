@@ -94,6 +94,7 @@ export async function createListing(userId, formData) {
 
     shipping_available: formData.shipping_available || false,
     pickup_only: formData.pickup_only ?? true,
+    pickup_address: formData.pickup_address || null,
     shipping_cost: formData.shipping_cost ? parseFloat(formData.shipping_cost) : null,
     shipping_method: formData.shipping_method || null,
     shipping_payer: formData.shipping_payer || "buyer",
@@ -175,6 +176,7 @@ export async function updateListing(listingId, formData) {
     is_negotiable: formData.is_negotiable || false,
     shipping_available: formData.shipping_available || false,
     pickup_only: formData.pickup_only ?? true,
+    pickup_address: formData.pickup_address || null,
     shipping_cost: formData.shipping_cost ? parseFloat(formData.shipping_cost) : null,
     shipping_method: formData.shipping_method || null,
     shipping_payer: formData.shipping_payer || "buyer",
@@ -1248,7 +1250,7 @@ export async function getBids(listingId) {
 
 export async function getPurchaseDetail(purchaseId) {
   const { data, error } = await supabase.from("purchases")
-    .select(`*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, shipping_available, pickup_only, shipping_method, shipping_cost, free_shipping, ship_speed, listing_images(url, sort_order))`)
+    .select(`*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, shipping_available, pickup_only, pickup_address, shipping_method, shipping_cost, free_shipping, ship_speed, listing_images(url, sort_order))`)
     .eq("id", purchaseId)
     .single();
   if (error) throw error;
