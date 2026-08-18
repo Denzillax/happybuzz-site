@@ -22,9 +22,11 @@ export default function HomePage() {
       <FeaturedSellers />
       <Categories />
       <SeasonalRecommendations />
-      <RecentlyViewed />
+      {/* Kaeufer-Logik: frisches Angebot zuerst, dann Social Proof,
+          persoenlicher Wiedereinstieg zuletzt */}
       <NewListings />
       <PopularListings />
+      <RecentlyViewed />
       <HowItWorks />
       <WhyBeedaro />
     </>
