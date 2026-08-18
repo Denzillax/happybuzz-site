@@ -59,14 +59,14 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
   const isPw = type === "password";
   return (
     <div style={{ marginBottom: 18 }}>
-      <label style={{ display:"block", fontSize:10, fontWeight:700, fontFamily:MONO, letterSpacing:".12em", textTransform:"uppercase", color:K.ink, marginBottom:6 }}>{label}</label>
+      <label style={{ display:"block", fontSize:11, fontWeight:700, fontFamily:MONO, letterSpacing:".12em", textTransform:"uppercase", color:K.ink, marginBottom:6 }}>{label}</label>
       <div style={{ position:"relative" }}>
         {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
           style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 0, border:`1.5px solid ${error?C.red:f?K.petrol:K.ink}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?`3px 3px 0 ${K.honey}`:"none", boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
-      {error && <p style={{ color:C.red, fontSize:12, marginTop:3, fontWeight:500 }}>{error}</p>}
+      {error && <p style={{ color:C.red, fontSize:13, marginTop:3, fontWeight:500 }}>{error}</p>}
     </div>
   );
 }
@@ -255,7 +255,7 @@ export default function AuthPage() {
   );
 
   const renderError = () => error && (
-    <div style={{ padding:"10px 14px", borderRadius: 0, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:13, color:C.red, fontWeight:500 }}>{error}</div>
+    <div style={{ padding:"10px 14px", borderRadius: 0, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:14, color:C.red, fontWeight:500 }}>{error}</div>
   );
 
   const renderBack = (target, label) => (
@@ -283,7 +283,7 @@ export default function AuthPage() {
         <a onClick={()=>switchView("forgot")} className="link">Passwort vergessen?</a>
       </div>
       <Btn onClick={handleLogin} loading={loading} type="submit">Anmelden</Btn>
-      <p style={{ textAlign:"center", fontSize:13, color:C.muted, marginTop:18, fontWeight:500 }}>Noch kein Konto? <a onClick={()=>switchView("register")} className="link">Jetzt registrieren</a></p>
+      <p style={{ textAlign:"center", fontSize:14, color:C.muted, marginTop:18, fontWeight:500 }}>Noch kein Konto? <a onClick={()=>switchView("register")} className="link">Jetzt registrieren</a></p>
     </>,
 
     register: () => <>
@@ -309,10 +309,10 @@ export default function AuthPage() {
         <div onClick={()=>setAgree(!agree)} style={{ width:18, height:18, borderRadius: 0, border:`1.5px solid ${fieldErrors.agree?C.red:agree?C.yellow:C.border}`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", background:agree?C.yellow:"transparent", flexShrink:0, marginTop:1 }}>
           {agree && <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke={C.dark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
         </div>
-        <span style={{ fontSize:13, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a href="/terms" target="_blank" rel="noopener" className="link">AGB</a> und <a href="/privacy" target="_blank" rel="noopener" className="link">Datenschutzerklärung</a></span>
+        <span style={{ fontSize:14, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a href="/terms" target="_blank" rel="noopener" className="link">AGB</a> und <a href="/privacy" target="_blank" rel="noopener" className="link">Datenschutzerklärung</a></span>
       </div>
       <Btn onClick={handleRegister} loading={loading}>Account erstellen</Btn>
-      <p style={{ textAlign:"center", fontSize:13, color:C.muted, marginTop:18, fontWeight:500 }}>Bereits registriert? <a onClick={()=>switchView("login")} className="link">Jetzt anmelden</a></p>
+      <p style={{ textAlign:"center", fontSize:14, color:C.muted, marginTop:18, fontWeight:500 }}>Bereits registriert? <a onClick={()=>switchView("login")} className="link">Jetzt anmelden</a></p>
     </>,
 
     forgot: () => <>
@@ -329,7 +329,7 @@ export default function AuthPage() {
       <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben einen Link an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Prüfe dein Postfach.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
-      <p style={{ fontSize:12, color:C.muted, marginTop:16 }}>Keine E-Mail? Prüfe deinen Spam-Ordner.</p>
+      <p style={{ fontSize:13, color:C.muted, marginTop:16 }}>Keine E-Mail? Prüfe deinen Spam-Ordner.</p>
     </div>,
 
     verify: () => <div style={{ textAlign:"center", padding:"16px 0" }}>
