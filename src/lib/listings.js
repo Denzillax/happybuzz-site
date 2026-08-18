@@ -1478,6 +1478,12 @@ export async function askPublicQuestion(listingId, buyerId, sellerId, content) {
   const { error: msgErr } = await supabase.from("messages").insert({ conversation_id: convId, sender_id: buyerId, content });
   if (msgErr) throw msgErr;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", convId);
+  // Verkäufer benachrichtigen (Einstellung: sell_question). Fire-and-forget.
+  try {
+    const { data: lst } = await supabase.from("listings").select("title").eq("id", listingId).maybeSingle();
+    createNotification(sellerId, "message", "Neue Frage zu deinem Inserat",
+      `"${lst?.title || "Inserat"}": ${content.slice(0, 140)}`, `/listing/${listingId}`, "sell_question").catch(() => {});
+  } catch {}
   return convId;
 }
 
@@ -1485,6 +1491,22 @@ export async function replyToQuestion(conversationId, senderId, content) {
   const { error } = await supabase.from("messages").insert({ conversation_id: conversationId, sender_id: senderId, content });
   if (error) throw error;
   await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conversationId);
+  // Gegenpartei benachrichtigen (Einstellung: msg_new). Fire-and-forget.
+  try {
+    const { data: conv } = await supabase
+      .from("conversations")
+      .select("buyer_id, seller_id, listing:listings(title)")
+      .eq("id", conversationId)
+      .maybeSingle();
+    if (conv) {
+      const recipient = senderId === conv.buyer_id ? conv.seller_id : conv.buyer_id;
+      if (recipient && recipient !== senderId) {
+        createNotification(recipient, "message", "Neue Nachricht",
+          `${conv.listing?.title ? `"${conv.listing.title}": ` : ""}${content.slice(0, 140)}`,
+          `/chat/${conversationId}`, "msg_new").catch(() => {});
+      }
+    }
+  } catch {}
 }
 
 // ─── Booking Management ──────────────────────────────────────

@@ -21,6 +21,12 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "18. August 2026",
+    punkte: [
+      { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
+    ],
+  },
+  {
     datum: "17. August 2026",
     punkte: [
       { typ: "fix", bereich: "Startseite", text: "Einheitlicher Look: Hero jetzt im hellen Creme, Challenge-Banner und Bee-Impact mit gleichen Abständen (40px) und weissen Boxen mit Rahmen" },

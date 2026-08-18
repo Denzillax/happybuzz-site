@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Star } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
+import { createNotification } from "@/lib/notifications";
 
 const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
 
@@ -47,6 +48,16 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
       setMyRating({ rating, comment: ratingComment });
       setShowModal(false);
       // XP/Achievements (Bewertender + Bewerteter) werden serverseitig per DB-Trigger vergeben.
+      // Bewerteten benachrichtigen (Glocke immer; Mail/Push je nach Einstellung review_received)
+      try {
+        const { data: rater } = await supabase.from("profiles").select("display_name").eq("id", raterId).maybeSingle();
+        const wer = rater?.display_name || "Jemand";
+        await createNotification(
+          ratedId, "rating", "Neue Bewertung erhalten",
+          `${wer} hat dich mit ${rating} von 5 Sternen bewertet${ratingComment ? `: "${ratingComment.slice(0, 120)}"` : "."}`,
+          `/order/${p.id}`, "review_received"
+        );
+      } catch (e) { console.error("Rating notification:", e); }
     } catch (err) { console.error("Rating exception:", err); }
   };
 

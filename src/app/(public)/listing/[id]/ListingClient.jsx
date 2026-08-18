@@ -338,6 +338,15 @@ export default function ListingDetail() {
         if (msgErr) { console.error("Msg error:", msgErr); toast.error(msgErr.message || "Nachricht konnte nicht gesendet werden."); return; }
 
         await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", newConv.id);
+        // Verkäufer benachrichtigen: öffentliche Frage -> sell_question,
+        // private Nachricht -> msg_new (Antworten laufen ueber replyToQuestion)
+        try {
+          await createNotification(l.user_id, "message",
+            sendPublic ? "Neue Frage zu deinem Inserat" : "Neue Nachricht",
+            `"${l.title}": ${msgText.trim().slice(0, 140)}`,
+            sendPublic ? `/listing/${l.id}` : `/chat/${newConv.id}`,
+            sendPublic ? "sell_question" : "msg_new");
+        } catch {}
       }
 
       setMsgText("");
