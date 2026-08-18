@@ -23,7 +23,13 @@ export function FormatTiles() {
       <style>{`
         .fmt-tile:hover { transform: translateY(-3px); box-shadow: 3px 3px 0 ${INK}; }
         .fmt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-        @media (max-width: 860px) { .fmt-grid { grid-template-columns: repeat(2, 1fr); } .fmt-tile-sell { grid-column: span 2; } }
+        /* Mobile: alle Kacheln gleich gross in einer wischbaren Zeile
+           (gleiches Muster wie Kategorien und Inserat-Reihen) */
+        @media (max-width: 860px) {
+          .fmt-grid { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 4px; scroll-snap-type: x proximity; }
+          .fmt-grid::-webkit-scrollbar { display: none; }
+          .fmt-grid > a { flex: 0 0 58vw; max-width: 240px; scroll-snap-align: start; }
+        }
       `}</style>
       <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: PETROL, marginBottom: 14, textAlign: 'center' }}>
         Fünf Wege, ein Katalog
