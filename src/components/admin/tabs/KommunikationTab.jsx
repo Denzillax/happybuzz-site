@@ -37,9 +37,11 @@ const Toggle = ({ on, onChange }) => (
 );
 
 const Segment = ({ options, value, onChange }) => (
-  <div style={{ display: "inline-flex", background: colors.cream, borderRadius: 999, padding: 3 }}>
+  // flexWrap + maxWidth: bei schmalen Karten brechen die Optionen um,
+  // statt ueber den Kartenrand hinauszulaufen
+  <div style={{ display: "inline-flex", flexWrap: "wrap", maxWidth: "100%", background: colors.cream, borderRadius: 12, padding: 3, gap: 2 }}>
     {options.map(([k, l]) => (
-      <button key={k} onClick={() => onChange(k)} style={{ fontSize: 11, fontWeight: value === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: value === k ? colors.dark : "transparent", color: value === k ? "#fff" : colors.muted }}>{l}</button>
+      <button key={k} onClick={() => onChange(k)} style={{ fontSize: 11, fontWeight: value === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: value === k ? colors.dark : "transparent", color: value === k ? "#fff" : colors.muted, whiteSpace: "nowrap" }}>{l}</button>
     ))}
   </div>
 );
