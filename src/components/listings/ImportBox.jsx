@@ -77,7 +77,8 @@ export default function ImportBox({ onImport }) {
   }
 
   return (
-    <div style={{ background: "#fff", border: "1.5px solid #191615", borderRadius: 0, padding: "12px 18px", marginBottom: 20 }}>
+    // Nur Desktop: der Import-Helfer (Bookmarklet) funktioniert am Handy nicht
+    <div className="import-promo" style={{ background: "#fff", border: "1.5px solid #191615", borderRadius: 0, padding: "12px 18px", marginBottom: 20 }}>
       <a href="/import-helfer" target="_blank" rel="noopener"
         style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fonts.body, fontSize: 13.5, fontWeight: 700, color: colors.teal, textDecoration: "none" }}>
         <Download size={16} />
