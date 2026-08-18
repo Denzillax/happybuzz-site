@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import { createNotification } from "@/lib/notifications";
 
-const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
+const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
 
 const RATING_TAGS = ["Schneller Versand", "Wie beschrieben", "Freundliche Kommunikation", "Faire Preise", "Gut verpackt"];
 

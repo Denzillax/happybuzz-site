@@ -39,6 +39,8 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Desktop", text: "Auf grossen Bildschirmen wirkte alles klein und verloren: die Seite zoomt jetzt gestuft (+10% ab Laptop, +25% ab 27 Zoll), und Challenge- plus Bee-Impact-Box sind bündig zum Hero" },
       { typ: "fix", bereich: "Admin", text: "Der Status-Wechsler im Feedback-Tab schrieb ins Leere (Sprach-Konflikt mit der Datenbank), behoben; alle erledigten Meldungen sind jetzt abgehakt und mit Fix-Notiz versehen" },
       { typ: "fix", bereich: "Login", text: "Schriften auf der Login-Seite vergrössert (Lesetexte 14px, Feldbeschriftungen 11px), dazu wirkt der neue Seiten-Zoom auf grossen Bildschirmen", melder: "Christian" },
+      { typ: "fix", bereich: "Design", text: "Das dunkle Beige ist überall durch das hellere ersetzt (32 Stellen auf der ganzen Seite), der Look ist jetzt durchgehend hell" },
+      { typ: "neu", bereich: "Rechtliches", text: "Handelsregister-Eintrag ergänzt: UID CHE-237.380.784 im Impressum, Footer und auf den Gebühren-Rechnungen; Impressum, AGB und Datenschutz sind auch während Beta-Sperre und Wartung erreichbar" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

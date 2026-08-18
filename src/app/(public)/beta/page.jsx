@@ -693,7 +693,7 @@ export default function BetaTestPage() {
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Space Mono', ui-monospace, monospace", fontSize: 11, fontWeight: 700,
-                        background: i === 0 ? colors.yellow : i === 1 ? "#ECE3D2" : "transparent",
+                        background: i === 0 ? colors.yellow : i === 1 ? "#F9F4EC" : "transparent",
                         border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>

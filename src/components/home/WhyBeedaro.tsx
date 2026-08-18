@@ -26,7 +26,7 @@ const usps = [
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#14110D', tint: '#ECE3D2',
+    accent: '#14110D', tint: '#F9F4EC',
   },
 ]
 

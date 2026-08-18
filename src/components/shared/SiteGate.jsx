@@ -64,6 +64,12 @@ export default function SiteGate({ children }) {
   // einer Sekunde, dann legt sich die Sperrseite darueber.
   if (state.loading || state.allowed) return children;
 
+  // Rechtsseiten muessen IMMER erreichbar sein (Impressumspflicht), auch
+  // waehrend Beta-Gate oder Wartung
+  if (typeof window !== "undefined" && ["/imprint", "/terms", "/privacy"].includes(window.location.pathname)) {
+    return children;
+  }
+
   const wartung = state.mode === "wartung";
   return (
     <div style={{ minHeight: "100vh", background: K.sand, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>

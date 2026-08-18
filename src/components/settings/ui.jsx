@@ -7,7 +7,7 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Space Mono', monospace";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,

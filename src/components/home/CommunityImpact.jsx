@@ -11,7 +11,7 @@ import { nextMilestone } from "@/lib/impact";
 const MOSS = "#5B8C5A";
 const INK = "#14110D";
 const PAPER = "#FBF8F2";
-const SAND = "#ECE3D2";
+const SAND = "#F9F4EC";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
 const MUTED = "rgba(20,17,13,0.55)";

@@ -66,7 +66,8 @@ export default function NektarBadge() {
               <p style={{ margin: 0, fontSize: 11, color: "#757575" }}>{data.xp.toLocaleString("de-CH")} Pollen</p>
             </div>
           </div>
-          <div style={{ height: 8, borderRadius: 0, background: "#ECE3D2", overflow: "hidden", marginBottom: 6 }}>
+          {/* heller Track braucht eine Kontur, sonst verschwindet er auf Weiss */}
+          <div style={{ height: 8, borderRadius: 0, background: "#F9F4EC", border: "1px solid rgba(20,17,13,.2)", overflow: "hidden", marginBottom: 6 }}>
             <div style={{ height: "100%", borderRadius: 0, background: level.color, width: `${next ? progress : 100}%`, transition: "width .4s" }} />
           </div>
           <p style={{ margin: "0 0 12px", fontSize: 11, color: "#757575" }}>

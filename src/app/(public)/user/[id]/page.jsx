@@ -16,7 +16,7 @@ import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRati
 import { supabase } from "@/lib/supabase/supabase";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
+const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C" };
 const MONO = "'Space Mono', monospace";
 const HEAD = "'General Sans','Manrope',sans-serif";
 const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: "#8A8580" };

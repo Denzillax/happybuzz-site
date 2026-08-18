@@ -13,7 +13,7 @@ import { useFavorite } from "@/hooks/useFavorite";
 
 // ── Katalog-Design-Tokens (Hero/CommunityImpact-konsistent) ──
 const INK = "#14110D";
-const SAND = "#ECE3D2";
+const SAND = "#F9F4EC";
 const PAPER = "#FBF8F2";
 const HONEY = "#F4C03F";
 const MONO = "'Space Mono', ui-monospace, monospace";

@@ -17,7 +17,7 @@
 
 export const K = {
   ink: "#14110D",
-  sand: "#ECE3D2",
+  sand: "#F9F4EC",
   paper: "#FBF8F2",
   honey: "#F4C03F",
   petrol: "#0B5E5C",

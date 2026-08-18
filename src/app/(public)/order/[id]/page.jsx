@@ -29,7 +29,7 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#ECE3D2", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Space Mono', monospace";
 const HEAD = "'General Sans','Manrope',sans-serif";
 

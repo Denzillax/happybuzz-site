@@ -2,7 +2,7 @@
 
 // ── Katalog-Design-Tokens ──
 const INK = "#14110D";
-const SAND = "#ECE3D2";
+const SAND = "#F9F4EC";
 const PAPER = "#FBF8F2";
 const PETROL = "#0B5E5C";
 const MUTED = "rgba(20,17,13,0.62)";
@@ -32,6 +32,10 @@ export default function ImprintPage() {
             <div>
               <p style={L}>Betreiber</p>
               <p style={V}>MOQRO by Denis Mihaljevic<br />Einzelfirma<br />BEEDARO ist eine Marke von MOQRO.</p>
+            </div>
+            <div>
+              <p style={L}>Handelsregister</p>
+              <p style={V}>UID: CHE-237.380.784<br />Handelsregister des Kantons Luzern</p>
             </div>
             <div>
               <p style={L}>Adresse</p>

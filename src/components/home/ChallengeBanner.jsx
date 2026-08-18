@@ -11,7 +11,7 @@ import { getFeaturedChallenge, getChallengesWithProgress } from "@/lib/gamificat
 import BeeIcon from "@/components/shared/BeeIcon";
 
 const INK = "#14110D";
-const SAND = "#ECE3D2";
+const SAND = "#F9F4EC";
 const PAPER = "#FBF8F2";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";

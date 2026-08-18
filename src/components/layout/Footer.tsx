@@ -98,7 +98,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="ftr-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontSize: 12, color: '#555', margin: 0 }}>
-            © 2026 BEEDARO, eine Marke von MOQRO. Alle Rechte vorbehalten.
+            © 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784. Alle Rechte vorbehalten.
           </p>
           <div style={{ display: 'flex', gap: 20 }}>
             <Link href="/terms" style={{ fontSize: 12, color: '#555', textDecoration: 'none' }}>AGB</Link>

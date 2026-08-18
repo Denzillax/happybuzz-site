@@ -197,7 +197,7 @@ export function Header() {
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
               border: megaMenuOpen ? `1.5px solid ${INK}` : '1.5px solid #d8d4cd',
-              borderRadius: 0, background: megaMenuOpen ? '#ECE3D2' : '#fff',
+              borderRadius: 0, background: megaMenuOpen ? '#F9F4EC' : '#fff',
               cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
               color: INK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}>

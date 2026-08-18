@@ -32,7 +32,7 @@ import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#14110D";
-const SAND = "#ECE3D2";
+const SAND = "#F9F4EC";
 const PAPER = "#FBF8F2";
 const PETROL = "#0B5E5C";
 const MONO = "'Space Mono', ui-monospace, monospace";
