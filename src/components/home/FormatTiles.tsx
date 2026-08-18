@@ -19,7 +19,7 @@ const FORMATE = [
 
 export function FormatTiles() {
   return (
-    <section style={{ padding: '40px 24px 8px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '40px 24px 56px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .fmt-tile:hover { transform: translateY(-3px); box-shadow: 3px 3px 0 ${INK}; }
         .fmt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }

@@ -29,8 +29,10 @@ export function Categories() {
 
   if (!categories.length) return null
 
-  // Wichtigste Kategorien + Dienstleistungen (Differenzierungs-Kategorie) immer zeigen
-  const shown = categories.slice(0, SHOWN)
+  // Wichtigste Kategorien + Dienstleistungen (Differenzierungs-Kategorie) immer zeigen.
+  // Sport faellt aus der Startseiten-Auswahl (weiter via "Alle Kategorien" erreichbar),
+  // damit die Kreise sauber in zwei gleichmaessige Reihen aufgehen.
+  const shown = categories.filter((c) => c.slug !== 'sport').slice(0, SHOWN)
   const service = categories.find((c) => c.slug === 'dienstleistungen')
   if (service && !shown.some((c) => c.id === service.id)) shown.push(service)
   // Tierbedarf ist neu im Katalog: immer zeigen und markieren

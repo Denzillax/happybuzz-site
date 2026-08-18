@@ -12,7 +12,6 @@ import { FeaturedSellers } from '@/components/home/FeaturedSellers'
 import { RecentlyViewed } from '@/components/home/RecentlyViewed'
 import { SeasonalRecommendations } from '@/components/home/SeasonalRecommendations'
 import { HowItWorks } from '@/components/home/HowItWorks'
-import { WhyBeedaro } from '@/components/home/WhyBeedaro'
 
 export default function HomePage() {
   return (
@@ -36,8 +35,8 @@ export default function HomePage() {
       <NewListings />
       <PopularListings />
       <RecentlyViewed />
+      {/* Enthaelt auch die "Warum wir"-Karten (frueher eigene Sektion WhyBeedaro) */}
       <HowItWorks />
-      <WhyBeedaro />
     </>
   )
 }

@@ -430,9 +430,9 @@ input:focus, textarea:focus, select:focus {
 /* Kampagnen-Stempel auf der Bee-Impact-Box (Startseite): nur Desktop */
 .impact-stamp {
   position: absolute;
-  bottom: 16px;
-  right: 20px;
-  width: 118px;
+  bottom: 18px;
+  right: 24px;
+  width: 175px;
   height: auto;
   transform: rotate(7deg);
 }

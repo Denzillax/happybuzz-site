@@ -1,5 +1,6 @@
 'use client'
 import { Camera, Handshake, Leaf } from 'lucide-react'
+import { UspGrid } from './WhyBeedaro'
 
 const steps = [
   {
@@ -80,6 +81,9 @@ export function HowItWorks() {
             )
           })}
         </div>
+
+        {/* "Warum wir" fliesst direkt hier weiter: eine Sektion statt zwei */}
+        <UspGrid />
       </div>
     </section>
   )
