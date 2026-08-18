@@ -899,7 +899,8 @@ export function useAdminData() {
   const flaggedUsers = users.filter(u => (u.contact_violations || 0) > 0);
   const bannedUsers = users.filter(u => u.is_banned);
   const openReports = reports.filter(r => !r.is_resolved);
-  const openFeedback = feedback.filter(f => !f.status || f.status === "neu");
+  // DB schreibt 'new', aeltere Zeilen teils 'neu': beide zaehlen als offen
+  const openFeedback = feedback.filter(f => !f.status || f.status === "neu" || f.status === "new");
   const openFeeInvoices = feeInvoices.filter(i => i.status !== "paid");
   const overdueInvoices = feeInvoices.filter(isOverdue).sort((a, b) => ((b.reminder_level || 0) - (a.reminder_level || 0)) || (daysOverdue(b) - daysOverdue(a)));
   const overdueSum = overdueInvoices.reduce((s, i) => s + parseFloat(i.total_fees || 0), 0);
