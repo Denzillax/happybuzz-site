@@ -7,7 +7,11 @@ import {
   Package, Gavel, Home, Truck, MapPin, Gift, Wrench,
   Type, Tag, Clock, SlidersHorizontal, Rocket,
 } from "lucide-react";
-import { colors, fonts, radius, shadows } from "@/lib/theme";
+import { colors, fonts, shadows } from "@/lib/theme";
+
+// Katalog-Stil: alles eckig. Das Theme-radius wird hier bewusst ueberall
+// mit 0 ersetzt, damit kein Element im Formular runde Ecken behaelt.
+const radius = { xs: 0, sm: 0, md: 0, lg: 0, xl: 0, full: 0 };
 import {
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
@@ -63,13 +67,16 @@ const POST_TARIFE = {
 const MAX_MARKUP = 5; // Max CHF 5 über Post-Tarif
 const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Upload-Check in listings.js)
 
-// ─── Shared Styles ──────────────────────────────────────────
+// ─── Shared Styles (Katalog-Stil: Ink-Rahmen, eckig, Mono-Labels) ──
+const INK = colors.dark;
+const MONO = "'Space Mono', 'Courier New', monospace";
+
 const inputBase = {
   width: "100%",
   padding: "12px 14px",
-  borderRadius: radius.sm,
-  border: `1.5px solid ${colors.border}`,
-  background: colors.surface,
+  borderRadius: 0,
+  border: `1.5px solid ${INK}`,
+  background: "#fff",
   fontSize: 14,
   fontFamily: fonts.body,
   color: colors.dark,
@@ -80,20 +87,20 @@ const inputBase = {
 
 const labelBase = {
   display: "block",
-  fontSize: 13,
+  fontSize: 11,
   fontWeight: 700,
-  fontFamily: fonts.body,
+  fontFamily: MONO,
   color: colors.dark,
   marginBottom: 6,
-  letterSpacing: ".01em",
+  letterSpacing: ".12em",
+  textTransform: "uppercase",
 };
 
 const sectionBase = {
-  background: colors.surface,
-  borderRadius: radius.xl,
+  background: "#fff",
+  borderRadius: 0,
   padding: "26px 24px",
-  border: `1px solid ${colors.borderLt}`,
-  boxShadow: shadows.card,
+  border: `1.5px solid ${INK}`,
   marginBottom: 18,
 };
 
@@ -110,9 +117,10 @@ const SectionHead = ({ icon: Icon, title, hint, right }) => (
     {Icon && (
       <div style={{
         width: 34, height: 34, borderRadius: 0, flexShrink: 0,
-        background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center",
+        background: colors.yellow, border: `1.5px solid ${INK}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        <Icon size={17} color={colors.teal} />
+        <Icon size={17} color={INK} />
       </div>
     )}
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -612,9 +620,9 @@ export default function ListingForm({
       onClick={onClick}
       style={{
         padding: "8px 16px",
-        borderRadius: radius.sm,
-        border: `1.5px solid ${active ? colors.yellow : colors.border}`,
-        background: active ? colors.yellowSoft : colors.surface,
+        borderRadius: 0,
+        border: `1.5px solid ${active ? INK : "rgba(25,22,21,.3)"}`,
+        background: active ? colors.yellow : "#fff",
         cursor: "pointer",
         fontSize: 13,
         fontFamily: fonts.body,
@@ -622,6 +630,7 @@ export default function ListingForm({
         color: colors.dark,
         transition: "all .15s",
         userSelect: "none",
+        boxShadow: active ? `2px 2px 0 ${INK}` : "none",
       }}
     >
       {children}
@@ -2110,16 +2119,16 @@ export default function ListingForm({
       <div className="lf-actionbar" style={{
         position: "sticky", bottom: 0, zIndex: 30,
         margin: "8px -16px 0", padding: "14px 16px",
-        background: "rgba(249,244,236,.92)", borderTop: `1px solid ${colors.border}`,
+        background: "rgba(249,244,236,.94)", borderTop: `1.5px solid ${INK}`,
       }}>
         <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
             onClick={() => setShowPreview(!showPreview)}
             title="Vorschau"
             style={{
-              padding: "13px 16px", borderRadius: radius.md,
-              border: `1.5px solid ${colors.border}`, background: colors.surface,
-              color: colors.muted, fontSize: 14, fontFamily: fonts.body,
+              padding: "13px 16px", borderRadius: 0,
+              border: `1.5px solid ${INK}`, background: "#fff",
+              color: colors.dark, fontSize: 14, fontFamily: fonts.body,
               cursor: "pointer", transition: "all .15s", display: "flex", alignItems: "center", gap: 6,
             }}
           >
@@ -2130,8 +2139,8 @@ export default function ListingForm({
             onClick={() => handleSubmit(false)}
             disabled={saving}
             style={{
-              padding: "13px 18px", borderRadius: radius.md,
-              border: `1.5px solid ${colors.border}`, background: colors.surface,
+              padding: "13px 18px", borderRadius: 0,
+              border: `1.5px solid ${INK}`, background: "#fff",
               color: colors.dark, fontSize: 14, fontWeight: 700,
               fontFamily: fonts.body, cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
@@ -2145,12 +2154,12 @@ export default function ListingForm({
             disabled={saving}
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
-              borderRadius: radius.md, border: "none",
-              background: colors.teal, color: "#fff",
+              borderRadius: 0, border: `1.5px solid ${INK}`,
+              background: colors.yellow, color: colors.dark,
               fontSize: 14.5, fontWeight: 800, fontFamily: fonts.body,
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
-              boxShadow: saving ? "none" : `0 4px 14px ${colors.teal}33`,
+              boxShadow: saving ? "none" : `3px 3px 0 ${INK}`,
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
             }}
           >

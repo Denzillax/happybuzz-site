@@ -106,7 +106,16 @@ function NewListingPageInner() {
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FBF8F2", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F9F4EC", minHeight: "100vh" }}>
+      {/* Katalog-Kopf */}
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 16px 0" }}>
+        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: "'Space Mono', 'Courier New', monospace", letterSpacing: ".18em", textTransform: "uppercase", color: "#0B5E5C", marginBottom: 6 }}>
+          Neuer Eintrag · Katalog der zweiten Leben
+        </div>
+        <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
+          Inserat erstellen
+        </h1>
+      </div>
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
           <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 0, padding: "16px 20px" }}>
@@ -123,8 +132,9 @@ function NewListingPageInner() {
             onClick={useLastAsTemplate}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
-              borderRadius: 0, border: "1.5px solid #E2E2E2", background: "#fff",
+              borderRadius: 0, border: "1.5px solid #191615", background: "#fff",
               color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
+              boxShadow: "2px 2px 0 #191615",
             }}
           >
             <Copy size={15} color="#0E9493" /> Letztes Inserat als Vorlage verwenden
