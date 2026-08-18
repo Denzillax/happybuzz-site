@@ -1591,7 +1591,18 @@ export default function ListingForm({
                       ].map(opt => (
                         <div key={opt.value} onClick={() => {
                           if (opt.value === "andere") { set("_shipStep", "andere"); }
-                          else { set("shipping_method", opt.value); set("_shipStep", opt.value); }
+                          else {
+                            set("shipping_method", opt.value);
+                            set("_shipStep", opt.value);
+                            // Gewichtsstufen heissen je Versandart anders (Paket: "bis 2kg",
+                            // Brief: "Standard"...). Beim Wechsel waere sonst nichts markiert
+                            // und der alte Preis bliebe stehen: erste Stufe vorwaehlen.
+                            const tarife = POST_TARIFE[opt.value][form.ship_speed || "economy"];
+                            const stufen = Object.keys(tarife);
+                            const w = stufen.includes(form.ship_weight) ? form.ship_weight : stufen[0];
+                            set("ship_weight", w);
+                            if (!form.free_shipping) set("shipping_cost", tarife[w].toFixed(2));
+                          }
                         }} style={{
                           display: "flex", alignItems: "center", justifyContent: "space-between",
                           padding: "16px", borderRadius: 0, border: `1.5px solid ${form.shipping_method === opt.value ? colors.yellow : colors.border}`,

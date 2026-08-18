@@ -47,6 +47,7 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Design", text: "Neuer 'Cutting Prices, Saving Flowers'-Badge in BEEDARO-Farben: eigene 404-Seite (Diese Seite wurde weggeschnitten) und Stempel auf der Bee-Rate-Box unter So funktioniert's" },
       { typ: "neu", bereich: "Design", text: "Easter Egg eingebaut: Gelegentlich fliegt Besuch mit Flügelschlag durchs Bild. Anklicken lohnt sich, sie hat was zu sagen" },
       { typ: "fix", bereich: "Design", text: "Gelbe Text-Marker in Überschriften (Über uns, Impact, So funktioniert's, Startseite) verdeckten bei Zeilenumbruch die Unterlängen der Zeile darüber, Marker liegt jetzt hinter der Schrift", melder: "Denis" },
+      { typ: "fix", bereich: "Inserieren", text: "Versand-Dialog: Beim Wechsel der Versandart (z.B. Paket zu Brief) war keine Gewichtsstufe markiert und der alte Preis blieb stehen, jetzt ist immer die erste Stufe mit richtigem Preis vorgewählt", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },
