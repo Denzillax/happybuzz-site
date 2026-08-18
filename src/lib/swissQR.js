@@ -45,7 +45,10 @@ export function orderQrPayload(order, { deposit = false } = {}) {
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);
   const refundAmount = Math.max(0, depositAmount - damageAmount);
-  const total = deposit ? refundAmount : price + shipping;
+  // Miete: Kaution wird mit der Miete ueberwiesen (Rueckerstattung laeuft
+  // ueber die separate Kautions-Rechnung mit deposit=true)
+  const isRent = order.listing?.listing_type === "rent";
+  const total = deposit ? refundAmount : price + shipping + (isRent ? depositAmount : 0);
   const ref = makeBeeRef(order.id);
   const payee = deposit ? order.buyer : order.seller;
   const payer = deposit ? order.seller : order.buyer;

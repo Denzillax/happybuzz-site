@@ -9,7 +9,7 @@ import { colors } from "@/lib/theme";
 import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import { orderQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
-import { fmtCHF, fmtDateLong, fullName } from "@/lib/formatters";
+import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
 const g = "#888";
@@ -24,7 +24,7 @@ export default function InvoicePage() {
   useEffect(() => {
     async function load() {
       try {
-        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping)").eq("id", params.id).single();
+        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping, shipping_method, ship_speed)").eq("id", params.id).single();
         if (!p) { setLoading(false); return; }
         const { data: buyer } = await supabase.from("profiles").select("*").eq("id", p.buyer_id).maybeSingle();
         const { data: seller } = await supabase.from("profiles").select("*").eq("id", p.seller_id).maybeSingle();
@@ -48,7 +48,20 @@ export default function InvoicePage() {
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);
   const refundAmount = Math.max(0, depositAmount - damageAmount);
-  const total = isDeposit ? refundAmount : price + shipping;
+  // Miete: Kaution steht als eigene Position auf der Rechnung und zaehlt zum
+  // Total (gleiche Rechnung wie QR-Zahlteil in orderQrPayload)
+  const total = isDeposit ? refundAmount : price + shipping + (isRental ? depositAmount : 0);
+  // Versandart ausgeschrieben: "Paket B-Post" statt nur "Versand"
+  const versandArt = (() => {
+    const m = order.listing?.shipping_method;
+    if (!m) return "Versand";
+    if (["paket", "brief", "sperrgut"].includes(m)) {
+      const grund = m === "brief" ? "Brief" : m === "sperrgut" ? "Sperrgut" : "Paket";
+      const post = order.listing?.ship_speed === "priority" ? " A-Post" : " B-Post";
+      return `Versand: ${grund}${post}`;
+    }
+    return `Versand: ${shippingMethodLabel(m)}`;
+  })();
   const feePercent = order.listing?.fee_percentage || DEFAULT_FEE_PERCENT;
   const { fee, beeImpact } = calcFeeFromPrice(price, feePercent);
   const fmt = fmtCHF;
@@ -151,16 +164,30 @@ export default function InvoicePage() {
                 ) : (
                   <tr style={{ borderBottom: "1px solid #eee" }}>
                     <td style={{ ...cp, fontSize: 12 }}>
-                      {order.listing?.title || "Artikel"}
+                      {isRental ? `Miete: ${order.listing?.title || "Artikel"}` : (order.listing?.title || "Artikel")}
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
+                      {isRental && booking && (
+                        <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>
+                          Mietdauer: {new Date(booking.start_date).toLocaleDateString("de-CH")} bis {new Date(booking.end_date).toLocaleDateString("de-CH")}
+                        </span>
+                      )}
                     </td>
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(price)}</td>
                   </tr>
                 )}
                 {shipping > 0 && (
                   <tr style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>Versand</td>
+                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>{versandArt}</td>
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#666" }}>{fmt(shipping)}</td>
+                  </tr>
+                )}
+                {isRental && depositAmount > 0 && (
+                  <tr style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>
+                      Kaution
+                      <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Wird nach der Rückgabe zurückerstattet</span>
+                    </td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#666" }}>{fmt(depositAmount)}</td>
                   </tr>
                 )}
               </>

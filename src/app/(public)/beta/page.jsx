@@ -395,6 +395,8 @@ const TESTS = [
       { id: "mieten_periodenpreis", label: "Mieten: Wochen-/Monatspreis wird pro Periode gerechnet (11 Tage à 50/Woche = 2 Wochen = CHF 100), Vorschau-Box zeigt 'X Tage = Y Wochen'" },
       { id: "kauf_adresse_pflicht", label: "Sofortkauf und Gebot ohne Lieferadresse blockiert mit Hinweis aufs Profil (auch im Auktions-Modal)" },
       { id: "ord_rechnung_beide", label: "QR-Rechnung auf der Bestellseite für Käufer UND Verkäufer sichtbar (Verkäufer: eigene Rechnung-Box rechts)" },
+      { id: "ord_rechnung_detail", label: "Rechnung ausgeschrieben: Versandart konkret (Paket B-Post etc.), bei Miete Mietdauer + Kaution als eigene Position, Total = Miete + Versand + Kaution (identisch mit QR-Betrag)" },
+      { id: "lc_abholung_zahlung", label: "Nur Abholung: Zahlungs-Schalter (Barzahlung/TWINT/Überweisung) erscheinen im Abhol-Block, Barzahlung vorausgewählt, Veröffentlichen ohne Sackgasse" },
     ],
   },
   {

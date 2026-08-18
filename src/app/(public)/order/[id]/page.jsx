@@ -241,7 +241,10 @@ export default function OrderDetailPage() {
   const beeRef = makeBeeRef(p.id);
   const artRef = makeArtRef(p.listing_id);
   const shippingCost = parseFloat(listing?.shipping_cost || 0);
-  const totalPrice = parseFloat(p.price || 0) + shippingCost;
+  // Miete: die Kaution wird mit der Miete bezahlt (und nach Rueckgabe per
+  // Kautions-Rechnung zurueckerstattet), gehoert also in den Zahlbetrag
+  const rentDeposit = isRental ? parseFloat(listing?.deposit_amount || 0) : 0;
+  const totalPrice = parseFloat(p.price || 0) + shippingCost + rentDeposit;
   const pageTitle = isService ? (isSeller ? "Service-Auftrag" : "Service") : isRental ? (isSeller ? "Vermietung" : "Miete") : (isSeller ? "Verkauf" : "Kauf");
   const isFinished = isRental ? p.status === "completed" : (p.status === "delivered" || p.status === "completed");
   const finishedLabel = isRental ? (isSeller ? "Vermietung abgeschlossen" : "Miete abgeschlossen") : (isSeller ? "Verkauf abgeschlossen" : "Kauf abgeschlossen");
@@ -675,7 +678,8 @@ export default function OrderDetailPage() {
               <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 4px" }}>{isService ? "Service-Übersicht" : isRental ? (isSeller ? "Vermietungsübersicht" : "Mietübersicht") : (isSeller ? "Verkaufsübersicht" : "Kaufübersicht")}</h3>
               <SidebarSection icon={Tag} title="Preis">
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span style={{ fontWeight: 400, color: colors.muted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing?.title}</span><span>1 x {fmtCHF(p.price)}</span></div>
-                {shippingCost > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 2 }}><span style={{ fontWeight: 400, color: colors.muted }}>{shippingLabel}</span><span>{fmtCHF(shippingCost)}</span></div>}
+                {shippingCost > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 2 }}><span style={{ fontWeight: 400, color: colors.muted }}>Versand: {shippingLabel}</span><span>{fmtCHF(shippingCost)}</span></div>}
+                {rentDeposit > 0 && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 2 }}><span style={{ fontWeight: 400, color: colors.muted }}>Kaution (nach Rückgabe zurück)</span><span>{fmtCHF(rentDeposit)}</span></div>}
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, fontWeight: 800, marginTop: 6, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Gesamtpreis</span><span>{fmtCHF(totalPrice)}</span></div>
               </SidebarSection>
               {!isService && <SidebarSection icon={Box} title="Lieferart">{shippingLabel}</SidebarSection>}

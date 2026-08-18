@@ -460,6 +460,15 @@ export default function ListingForm({
     }
   }, [form.shipping_available, form.pickup_only]);
 
+  // Nur Abholung: ohne diese Vorgabe verlangte die Validierung eine
+  // Zahlungsart, die man nirgends waehlen konnte (TWINT/Ueberweisung haengen
+  // am Versand-Block). Barzahlung ist bei Abholung der sinnvolle Standard.
+  useEffect(() => {
+    if (form.pickup_only && !form.shipping_available && !form.pay_cash && !form.pay_twint && !form.pay_bank) {
+      set("pay_cash", true);
+    }
+  }, [form.pickup_only, form.shipping_available, form.pay_cash, form.pay_twint, form.pay_bank]);
+
   // Versandkosten-Luecke: Gewicht/Lieferzeit sind im Modal VORSELEKTIERT, der
   // Preis wurde aber nur beim Klick auf einen Chip gesetzt. Wer die Vorauswahl
   // einfach uebernahm, speicherte shipping_cost = leer (Melanis Schwimmwesten-Bug).
@@ -1772,10 +1781,34 @@ export default function ListingForm({
                 <span style={{ fontWeight: 600 }}>Versandkosten</span>
                 <span>Gratis</span>
                 <span style={{ fontWeight: 600 }}>Zahlung</span>
-                <span>Barzahlung bei Übergabe</span>
+                <span>{[form.pay_cash && "Barzahlung", form.pay_twint && "TWINT", form.pay_bank && "Überweisung"].filter(Boolean).join(", ") || "Bitte wählen"} bei Übergabe</span>
               </div>
               {!profileAddr.street && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.yellow, fontWeight: 700 }}>Einstellungen</a>.</p>}
             </div>
+          </div>
+        )}
+
+        {/* Zahlungsarten bei reiner Abholung: hier waehlbar, weil die
+            TWINT/Ueberweisungs-Schalter sonst nur im Versand-Block sitzen */}
+        {form.pickup_only && !form.shipping_available && (
+          <div style={{ marginTop: 4 }}>
+            {[
+              ["pay_cash", "Barzahlung", "Bar bei Übergabe"],
+              ["pay_twint", "TWINT", "TWINT bei Übergabe"],
+              ["pay_bank", "Überweisung", "Banküberweisung / QR-Rechnung"],
+            ].map(([key, label, desc]) => (
+              <div key={key} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+                <div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{label}</span>
+                  <div style={{ fontSize: 11, color: colors.muted }}>{desc}</div>
+                </div>
+                <button onClick={() => set(key, !form[key])} style={{
+                  width: 44, height: 24, borderRadius: 0, border: "none", cursor: "pointer",
+                  background: form[key] ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+                }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+              </div>
+            ))}
+            <Err field="payment" />
           </div>
         )}
         <Err field="location" />
