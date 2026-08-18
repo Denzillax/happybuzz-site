@@ -1,5 +1,8 @@
 import { Hero } from '@/components/home/Hero'
 import { Ticker } from '@/components/layout/Ticker'
+import { StatsBand } from '@/components/home/StatsBand'
+import { FormatTiles } from '@/components/home/FormatTiles'
+import { AuctionSpotlight } from '@/components/home/AuctionSpotlight'
 import { ChallengeBanner } from '@/components/home/ChallengeBanner'
 import { CommunityImpact } from '@/components/home/CommunityImpact'
 import { Categories } from '@/components/home/Categories'
@@ -15,13 +18,19 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      {/* Der Katalog in Zahlen: lebende Kennzahlen direkt unter dem Hero */}
+      <StatsBand />
       {/* Grosse Laufschrift, wenn Platzierung "Startseite" gewaehlt ist */}
       <Ticker placement="home" />
+      {/* Fuenf Formate als Direkteinstieg (Miete/Service/Gratis = USP) */}
+      <FormatTiles />
       <ChallengeBanner />
       <CommunityImpact />
       <FeaturedSellers />
       <Categories />
       <SeasonalRecommendations />
+      {/* Laufende Auktionen mit Countdown, nur wenn welche laufen */}
+      <AuctionSpotlight />
       {/* Kaeufer-Logik: frisches Angebot zuerst, dann Social Proof,
           persoenlicher Wiedereinstieg zuletzt */}
       <NewListings />

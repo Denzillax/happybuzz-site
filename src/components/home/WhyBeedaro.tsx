@@ -96,6 +96,21 @@ export function WhyBeedaro() {
             )
           })}
         </div>
+
+        {/* Beta-Hinweis: Gruendungsmitglied statt generischem CTA */}
+        <div style={{
+          marginTop: 26, border: `1.5px solid ${INK}`, background: '#FBF1D2',
+          padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 12, flexWrap: 'wrap', textAlign: 'center',
+        }}>
+          <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', background: INK, color: '#FBF8F2', padding: '3px 8px' }}>Beta</span>
+          <span style={{ fontFamily: HEAD, fontSize: 14.5, fontWeight: 600, color: INK }}>
+            Wer jetzt dabei ist, ist Gründungsmitglied. Das bleibt.
+          </span>
+          <a href="/beta" style={{ fontFamily: HEAD, fontSize: 13.5, fontWeight: 700, color: PETROL, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+            Mehr zur Beta
+          </a>
+        </div>
       </div>
     </section>
   )

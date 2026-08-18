@@ -33,6 +33,9 @@ export function Categories() {
   const shown = categories.slice(0, SHOWN)
   const service = categories.find((c) => c.slug === 'dienstleistungen')
   if (service && !shown.some((c) => c.id === service.id)) shown.push(service)
+  // Tierbedarf ist neu im Katalog: immer zeigen und markieren
+  const tierbedarf = categories.find((c) => c.slug?.startsWith('tierbedarf'))
+  if (tierbedarf && !shown.some((c) => c.id === tierbedarf.id)) shown.push(tierbedarf)
 
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
@@ -65,14 +68,27 @@ export function Categories() {
               width: 100,
             }}
           >
-            <div className="cat-circle-icon" style={{
-              width: 64, height: 64, borderRadius: '50%',
-              background: colors.greenSoft,
-              color: colors.teal,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.2s ease',
-            }}>
-              <CategoryIcon name={cat.icon || 'Package'} size={26} />
+            <div style={{ position: 'relative' }}>
+              <div className="cat-circle-icon" style={{
+                width: 64, height: 64, borderRadius: '50%',
+                background: colors.greenSoft,
+                color: colors.teal,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'all 0.2s ease',
+              }}>
+                <CategoryIcon name={cat.icon || 'Package'} size={26} />
+              </div>
+              {cat.slug?.startsWith('tierbedarf') && (
+                <span style={{
+                  position: 'absolute', top: -4, right: -10,
+                  fontSize: 8, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase',
+                  fontFamily: "'Space Mono', monospace",
+                  background: colors.yellow, color: colors.dark,
+                  border: `1px solid ${colors.dark}`, padding: '2px 6px',
+                }}>
+                  Neu
+                </span>
+              )}
             </div>
             <span lang="de" className="cat-circle-label" style={{
               fontSize: 11, fontWeight: 600, fontFamily: BODY,

@@ -124,7 +124,11 @@ function SearchPageInner() {
   });
   const [subCatId, setSubCatId] = useState("");
   const [subSubCatId, setSubSubCatId] = useState("");
-  const [type, setType] = useState("");
+  // type-Param: Direkteinstieg von den Format-Kacheln der Startseite
+  const [type, setType] = useState(() => {
+    const t = searchParams.get("type") || "";
+    return ["sell", "auction", "rent", "free", "service"].includes(t) ? t : "";
+  });
   const [condition, setCondition] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
