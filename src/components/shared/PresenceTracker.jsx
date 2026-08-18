@@ -12,6 +12,14 @@ export default function PresenceTracker() {
   const pathname = usePathname();
   const chRef = useRef(null);
   const infoRef = useRef(null);
+  const geloggtRef = useRef("");
+
+  // Besuchs-Log: ein Eintrag pro Seitenaufruf (90 Tage Aufbewahrung, Cron)
+  const loggen = (pfad) => {
+    if (!pfad || geloggtRef.current === pfad) return;
+    geloggtRef.current = pfad;
+    supabase.from("page_visits").insert({ user_id: infoRef.current?.user_id || null, path: pfad }).then(() => {}, () => {});
+  };
 
   useEffect(() => {
     let aktiv = true;
@@ -43,6 +51,7 @@ export default function PresenceTracker() {
           ch.track({ ...infoRef.current, path: window.location.pathname }).catch(() => {});
         }
       });
+      loggen(window.location.pathname);
     })();
     return () => {
       aktiv = false;
@@ -51,12 +60,14 @@ export default function PresenceTracker() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Seitenwechsel: aktuellen Pfad nachmelden
+  // Seitenwechsel: aktuellen Pfad nachmelden + Besuch loggen
   useEffect(() => {
     const ch = chRef.current;
     if (ch && infoRef.current && ch.state === "joined") {
       ch.track({ ...infoRef.current, path: pathname }).catch(() => {});
     }
+    if (infoRef.current) loggen(pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   return null;
