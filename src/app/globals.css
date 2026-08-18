@@ -427,18 +427,6 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 768px) {
   .lf-camera-btn { display: flex !important; }
 }
-/* Kampagnen-Stempel auf der Bee-Impact-Box (Startseite): nur Desktop */
-.impact-stamp {
-  position: absolute;
-  bottom: 18px;
-  right: 24px;
-  width: 175px;
-  height: auto;
-  transform: rotate(7deg);
-}
-@media (max-width: 1023px) {
-  .impact-stamp { display: none; }
-}
 /* Inserat-Import: nur Desktop, der Import-Helfer laeuft am Handy nicht */
 @media (max-width: 768px) {
   .import-promo { display: none; }

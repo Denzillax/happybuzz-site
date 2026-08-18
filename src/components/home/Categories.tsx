@@ -8,8 +8,18 @@ import { SectionHeader } from './SectionHeader'
 
 const BODY = fonts.body
 
-// Auf der Startseite nur die wichtigsten Kategorien zeigen (Rest via "Alle Kategorien")
-const SHOWN = 8
+// Kuratierte Auswahl fuer EINE Zeile: sechs Alltagskategorien plus die zwei
+// Differenzierer (Dienstleistungen, Tierbedarf). Rest via "Alle Kategorien".
+const KURATIERT = [
+  'elektronik-computer',
+  'games-spielkonsolen',
+  'kleidung-accessoires',
+  'haushalt-wohnen',
+  'handwerk-garten',
+  'kind-baby',
+  'dienstleistungen',
+  'tierbedarf-haustiere',
+]
 
 export function Categories() {
   const [categories, setCategories] = useState<any[]>([])
@@ -29,34 +39,29 @@ export function Categories() {
 
   if (!categories.length) return null
 
-  // Wichtigste Kategorien + Dienstleistungen (Differenzierungs-Kategorie) immer zeigen.
-  // Sport faellt aus der Startseiten-Auswahl (weiter via "Alle Kategorien" erreichbar),
-  // damit die Kreise sauber in zwei gleichmaessige Reihen aufgehen.
-  const shown = categories.filter((c) => c.slug !== 'sport').slice(0, SHOWN)
-  const service = categories.find((c) => c.slug === 'dienstleistungen')
-  if (service && !shown.some((c) => c.id === service.id)) shown.push(service)
-  // Tierbedarf ist neu im Katalog: immer zeigen und markieren
-  const tierbedarf = categories.find((c) => c.slug?.startsWith('tierbedarf'))
-  if (tierbedarf && !shown.some((c) => c.id === tierbedarf.id)) shown.push(tierbedarf)
+  // Exakt die kuratierten acht, in kuratierter Reihenfolge
+  const shown = KURATIERT
+    .map((slug) => categories.find((c) => c.slug === slug))
+    .filter(Boolean)
 
   return (
     <section style={{ padding: '40px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .cat-circle-item:hover .cat-circle-icon { background: ${colors.teal}; color: #fff; transform: scale(1.06); }
         .cat-circle-item:hover .cat-circle-label { color: ${colors.teal}; }
+        /* Eine Zeile: Desktop gleichmaessig verteilt, Mobile seitlich wischbar */
+        .cat-circles { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 12px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+        .cat-circles::-webkit-scrollbar { display: none; }
         @media (max-width: 767px) {
-          .cat-circles { gap: 22px 14px !important; }
+          .cat-circles { justify-content: flex-start; gap: 18px; }
         }
       `}</style>
 
       {/* Header */}
       <SectionHeader title="Kategorien" href="/search" linkLabel="Alle Kategorien" />
 
-      {/* Horizontal scrollable circles */}
-      <div className="cat-circles" style={{
-        display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-        gap: 32,
-      }}>
+      {/* Eine Zeile, kuratierte Auswahl */}
+      <div className="cat-circles">
         {shown.map((cat) => (
           <Link
             key={cat.id}

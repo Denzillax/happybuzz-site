@@ -23,18 +23,17 @@ export default function HomePage() {
       <Ticker placement="home" />
       {/* Fuenf Formate als Direkteinstieg (Miete/Service/Gratis = USP) */}
       <FormatTiles />
-      <ChallengeBanner />
-      <CommunityImpact />
-      <FeaturedSellers />
       <Categories />
-      <SeasonalRecommendations />
-      {/* Laufende Auktionen mit Countdown, nur wenn welche laufen */}
+      {/* Inserate so frueh wie moeglich; Challenge und Impact liegen als
+          Zwischenstopps ZWISCHEN den Reihen statt alle vor den Produkten */}
       <AuctionSpotlight />
-      {/* Kaeufer-Logik: frisches Angebot zuerst, dann Social Proof,
-          persoenlicher Wiedereinstieg zuletzt */}
       <NewListings />
+      <ChallengeBanner />
       <PopularListings />
+      <SeasonalRecommendations />
+      <CommunityImpact />
       <RecentlyViewed />
+      <FeaturedSellers />
       {/* Enthaelt auch die "Warum wir"-Karten (frueher eigene Sektion WhyBeedaro) */}
       <HowItWorks />
     </>

@@ -72,9 +72,7 @@ export function CommunityImpact() {
       padding: "0 20px 56px",
     }}>
       {/* Ganze Impact-Box mit Katalog-Outline, gleiche Bauart wie die Karten unten */}
-      <div className="home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)", position: "relative" }}>
-      {/* Kampagnen-Stempel, nur Desktop (Klasse in globals.css) */}
-      <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" className="impact-stamp" />
+      <div className="home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
       <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
