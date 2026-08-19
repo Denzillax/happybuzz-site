@@ -67,9 +67,8 @@ export function CommunityImpact() {
     <section className="home-band" style={{
       width: "100%",
       background: PAPER,
-      // oben 0: der Abstand kommt vom Challenge-Band darueber (40px), so ist
-      // die Luecke Hero->Challenge->Impact ueberall gleich
-      padding: "0 20px 56px",
+      // symmetrisch: die Box sitzt vertikal mittig im beigen Band
+      padding: "48px 20px",
     }}>
       {/* Ganze Impact-Box mit Katalog-Outline, gleiche Bauart wie die Karten unten */}
       <div className="home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
