@@ -74,6 +74,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Startseite", text: "Die grosse Laufschrift läuft jetzt mit konstantem Tempo (vorher hing die Geschwindigkeit von der Textlänge ab) und das Tempo ist im Admin in drei Stufen einstellbar: Langsam, Normal, Schnell", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Rundruf-Mails und -Pushes blieben am 19.8. vormittags kurz hängen (eine Deploy-Einstellung sperrte den Versand-Takt aus), behoben und alles nachträglich zugestellt; Mails kommen neu vom Absender Beedaro Info", melder: "Denis" },
       { typ: "fix", bereich: "Admin", text: "Banner- und Laufschrift-Editor im Katalog-Stil der Seite: Mono-Beschriftungen, eckige Wahl-Knöpfe, Marken-Farbkacheln plus echte Farbwähler-Boxen mit Hex-Anzeige, gelber Speichern-Knopf", melder: "Denis" },
+      { typ: "fix", bereich: "Startseite", text: "Kaputtes ü unter 'Zuletzt angesehen' repariert (Zeichensalat 'kÃ¼rzlich' durch einen Kodierungsfehler in der Datei), ganze Codebasis auf weitere Fälle geprüft: sauber", melder: "Denis" },
       { typ: "fix", bereich: "Admin", text: "Geplante Inserate liessen sich nicht freigeben (die Datenbank lehnte den neuen Status ab), behoben; dazu eigener Geplant-Tab im Admin und die Startzeit steht jetzt auch in der Handy-Ansicht von Meine Inserate", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],

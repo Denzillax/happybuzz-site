@@ -13,7 +13,7 @@ export function RecentlyViewed() {
     supabase.auth.getSession().then(({ data }) => setUserId(data?.session?.user?.id || null));
 
     // IDs + Reihenfolge aus localStorage, aber FRISCHE Daten aus der DB laden
-    // (Snapshot-Preis war veraltet â€” Auktionen zeigten den Startpreis).
+    // (Snapshot-Preis war veraltet, Auktionen zeigten den Startpreis).
     async function load() {
       const ids = getRecentlyViewed().map((r) => r.id).filter(Boolean);
       if (ids.length < 2) return;
@@ -43,7 +43,7 @@ export function RecentlyViewed() {
 
   return (
     <section style={{ padding: "16px 24px 32px", maxWidth: 1280, margin: "0 auto" }}>
-      <SectionHeader title="Zuletzt angesehen" subtitle="Da hast du kÃ¼rzlich reingeschaut" />
+      <SectionHeader title="Zuletzt angesehen" subtitle="Da hast du kürzlich reingeschaut" />
 
       <div className="listing-grid home-swipe">
         {items.map((listing) => (
