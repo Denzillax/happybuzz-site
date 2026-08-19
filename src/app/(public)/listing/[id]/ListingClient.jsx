@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation,
+  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -1021,22 +1021,40 @@ export default function ListingDetail() {
                                     : "Gib dein Preislimit ein. Das System bietet automatisch nur so viel wie nötig."
                                   }
                                 </p>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
-                                  <input type="number" value={bidAmount} onChange={e => {
-                                    let val = e.target.value;
-                                    if (l.buy_now_price > 0 && parseFloat(val) >= l.buy_now_price) {
-                                      val = String(l.buy_now_price - 1);
-                                    }
-                                    setBidAmount(val);
-                                  }}
-                                    min={myBid ? Number(myBid.amount) : (bids.length > 0 ? nextBid : Number(l.start_price || 0))}
-                                    max={l.buy_now_price > 0 ? l.buy_now_price - 1 : undefined}
-                                    step={effInc}
-                                    style={{ flex: 1, padding: "12px 14px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
-                                    onFocus={e => e.target.style.borderColor = colors.yellow}
-                                    onBlur={e => e.target.style.borderColor = colors.border} />
-                                </div>
+                                {/* Plus/Minus-Knoepfe: die nativen Spinner des Zahlenfelds gibt es
+                                    auf dem Handy nicht — eigene Stepper schrittweise um den Gebotsschritt */}
+                                {(() => {
+                                  const untergrenze = myBid ? Number(myBid.amount) : (bids.length > 0 ? nextBid : Number(l.start_price || 0));
+                                  const obergrenze = l.buy_now_price > 0 ? l.buy_now_price - 1 : null;
+                                  const schrittSetzen = (richtung) => {
+                                    const basis = parseFloat(bidAmount);
+                                    let neu = isNaN(basis) ? untergrenze : basis + richtung * effInc;
+                                    neu = Math.max(untergrenze, neu);
+                                    if (obergrenze != null) neu = Math.min(obergrenze, neu);
+                                    setBidAmount(neu.toFixed(2));
+                                  };
+                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: `1.5px solid ${colors.dark}`, background: "#fff", cursor: "pointer", borderRadius: 0, color: colors.dark };
+                                  return (
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                      <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
+                                      <button type="button" aria-label="Gebot verringern" onClick={() => schrittSetzen(-1)} style={stepBtn}><Minus size={18} /></button>
+                                      <input type="number" value={bidAmount} onChange={e => {
+                                        let val = e.target.value;
+                                        if (l.buy_now_price > 0 && parseFloat(val) >= l.buy_now_price) {
+                                          val = String(l.buy_now_price - 1);
+                                        }
+                                        setBidAmount(val);
+                                      }}
+                                        min={untergrenze}
+                                        max={obergrenze ?? undefined}
+                                        step={effInc}
+                                        style={{ flex: 1, minWidth: 0, padding: "12px 14px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
+                                        onFocus={e => e.target.style.borderColor = colors.yellow}
+                                        onBlur={e => e.target.style.borderColor = colors.border} />
+                                      <button type="button" aria-label="Gebot erhöhen" onClick={() => schrittSetzen(1)} style={{ ...stepBtn, background: colors.yellow }}><Plus size={18} /></button>
+                                    </div>
+                                  );
+                                })()}
                                 {l.buy_now_price > 0 && <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Max: CHF {fmtPrice(l.buy_now_price - 1)} (ab Sofortkauf-Preis wird direkt gekauft)</p>}
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
                                   <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 0, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
