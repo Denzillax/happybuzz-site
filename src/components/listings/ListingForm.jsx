@@ -211,6 +211,7 @@ export default function ListingForm({
   const cameraRef = useRef(null); // Mobile: Kamera direkt oeffnen (capture)
   const [aiBusy, setAiBusy] = useState(false);
   const [aiHint, setAiHint] = useState(null); // { price: [min, max] } | { error: "..." }
+  const [aiNotiz, setAiNotiz] = useState(""); // optionaler Verkaeufer-Hinweis fuer die KI (Material, Marke etc.)
   const [dragOver, setDragOver] = useState(false);
   const [dragIdx, setDragIdx] = useState(null);
 
@@ -744,6 +745,7 @@ export default function ListingForm({
         body: JSON.stringify({
           images: dataUrls,
           categories: categories.filter((c) => !c.parent_id).map((c) => c.slug),
+          ...(aiNotiz.trim() ? { hint: aiNotiz.trim().slice(0, 300) } : {}),
           ...(target ? {
             field: target,
             previous: target === "title" ? form.title : (form.description || "").replace(/<[^>]*>/g, " ").trim(),
@@ -1065,6 +1067,20 @@ export default function ListingForm({
             Zustand und Kategorie; Preis kommt nur als Schaetzung darunter */}
         {images.length > 0 && (
           <>
+            {/* Optionaler Hinweis: Dinge, die man auf Fotos nicht sieht
+                (Material, Marke, Funktionszustand) — z.B. MDF statt Metall */}
+            <div style={{ marginTop: 12 }}>
+              <label style={{ display: "block", fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: colors.muted, marginBottom: 6 }}>
+                Hinweis für die KI (optional)
+              </label>
+              <input
+                value={aiNotiz}
+                onChange={(e) => setAiNotiz(e.target.value)}
+                maxLength={300}
+                placeholder="z.B. Aktenschrank aus MDF, Marke Lista, Schublade klemmt"
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", background: "#fff" }}
+              />
+            </div>
             <button
               type="button"
               onClick={() => aiFill()}

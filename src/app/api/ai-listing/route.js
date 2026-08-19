@@ -36,7 +36,7 @@ export async function POST(req) {
   try { body = await req.json(); } catch {
     return Response.json({ error: "bad_request" }, { status: 400 });
   }
-  const { image, images, categories, field, previous } = body || {};
+  const { image, images, categories, field, previous, hint } = body || {};
   // Mehrere Fotos (neu) oder ein einzelnes (alte Clients) — max 5 Stueck
   const bilder = (Array.isArray(images) ? images : [image]).filter(Boolean).slice(0, MAX_IMAGES);
   if (!bilder.length || bilder.some(b => typeof b !== "string" || !b.startsWith("data:image/") || b.length > MAX_IMAGE_CHARS)) {
@@ -46,6 +46,8 @@ export async function POST(req) {
   // Optional: gezielt eine NEUE Variante fuer ein Feld (KI-Titel/KI-Text-Knopf)
   const wantField = field === "title" || field === "description" ? field : null;
   const prevText = typeof previous === "string" ? previous.slice(0, 600) : "";
+  // Optionaler Verkaeufer-Hinweis (Material, Marke, Modell etc.)
+  const hintText = typeof hint === "string" ? hint.trim().slice(0, 300) : "";
 
   const prompt = `Du bist ein kritischer Secondhand-Gutachter für den Schweizer Marktplatz BEEDARO und siehst ${bilder.length > 1 ? `${bilder.length} Fotos desselben Artikels (Cover zuerst, danach Detail-, Mängel- oder Zubehör-Fotos)` : "das Foto eines Artikels"}.
 Beziehe ALLE Fotos in die Beurteilung ein — Mängel sind oft nur auf den Detailfotos sichtbar.
@@ -78,7 +80,13 @@ Sobald ein deutlicher Mangel sichtbar ist (z.B. vergilbtes Plastik, unleserliche
 Benenne jeden sichtbaren Mangel konkret in der description (was und wo).
 
 Die Preisspanne ist eine grobe Secondhand-Schätzung in Schweizer Franken, passend zum Zustand.
-Wenn du den Artikel nicht erkennst, beschreibe was sichtbar ist, statt zu raten.${wantField ? `
+Wenn du den Artikel nicht erkennst, beschreibe was sichtbar ist, statt zu raten.${hintText ? `
+
+Der Verkäufer gibt zusätzlich an: "${hintText}"
+Diese Angaben sind eine verlässliche Quelle und AUSGENOMMEN von der Regel
+"nur was sichtbar ist": übernimm sie in Titel und Beschreibung (Material,
+Marke, Modell, Funktionszustand, Lieferumfang), ausser die Bilder
+widersprechen ihnen offensichtlich. Sichtbare Mängel bleiben trotzdem drin.` : ""}${wantField ? `
 
 Der Nutzer möchte eine NEUE Variante für das Feld "${wantField === "title" ? "title" : "description"}".
 Formuliere sie deutlich anders als die bisherige Version (anderer Satzbau, andere Wortwahl), inhaltlich weiterhin nur was sichtbar ist.${prevText ? `
