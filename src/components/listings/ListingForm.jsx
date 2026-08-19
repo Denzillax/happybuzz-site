@@ -188,7 +188,6 @@ export default function ListingForm({
     // Auktion
     start_price: "",
     buy_now_price: "",
-    min_price: "",
     auction_duration: "7",
     bid_step: "1",
 
@@ -261,7 +260,6 @@ export default function ListingForm({
 
       start_price: initialData.start_price?.toString() || "",
       buy_now_price: initialData.buy_now_price?.toString() || "",
-      min_price: initialData.min_price?.toString() || "",
       auction_duration: initialData.auction_duration?.toString() || "7",
       bid_step: initialData.bid_step?.toString() || "1",
       auction_end: initialData.auction_end || "",
@@ -1484,28 +1482,16 @@ export default function ListingForm({
             />
             <Err field="start_price" />
 
-            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-              <div style={{ flex: 1 }}>
-                <label style={labelBase}>Sofortkauf (optional)</label>
-                <input
-                  style={{ ...inputBase, ...errStyle("buy_now_price") }}
-                  type="number" min="0" step="0.01"
-                  placeholder="z.B. 500"
-                  value={form.buy_now_price}
-                  onChange={(e) => set("buy_now_price", e.target.value)}
-                />
-                <Err field="buy_now_price" />
-              </div>
-              <div style={{ flex: 1 }}>
-                <label style={labelBase}>Mindestpreis (optional)</label>
-                <input
-                  style={inputBase}
-                  type="number" min="0" step="0.01"
-                  placeholder="Nicht darunter"
-                  value={form.min_price}
-                  onChange={(e) => set("min_price", e.target.value)}
-                />
-              </div>
+            <div style={{ marginTop: 14 }}>
+              <label style={labelBase}>Sofortkauf (optional)</label>
+              <input
+                style={{ ...inputBase, ...errStyle("buy_now_price") }}
+                type="number" min="0" step="0.01"
+                placeholder="z.B. 500"
+                value={form.buy_now_price}
+                onChange={(e) => set("buy_now_price", e.target.value)}
+              />
+              <Err field="buy_now_price" />
             </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 14 }}>

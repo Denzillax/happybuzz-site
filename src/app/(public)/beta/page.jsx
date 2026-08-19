@@ -407,6 +407,7 @@ const TESTS = [
       { id: "ins_ki", label: "Foto hochladen und 'Mit KI ausfüllen' drücken: Titel, Beschreibung, Zustand und Kategorie werden aus dem Bild erkannt, darunter eine Preisschätzung; eigene Texte bleiben unangetastet (Felder vorher mal absichtlich füllen und prüfen)" },
       { id: "ins_ki_streng", label: "KI-Ehrlichkeit prüfen: Foto mit sichtbaren Mängeln (Kratzer, Vergilbung) hochladen; die Beschreibung nennt die Mängel konkret, der Zustand fällt entsprechend streng aus und es wird kein Zubehör erwähnt, das nicht im Bild ist" },
       { id: "ins_ki_variante", label: "KI-Titel bzw. KI-Text mehrfach drücken: es kommt jedes Mal eine neue, anders formulierte Variante, auch wenn schon Text dasteht" },
+      { id: "ins_ki_format", label: "KI-Beschreibung ist formatiert: kurze Einleitung, Zwischentitel 'Zustand' und 'Lieferumfang' mit Aufzählung; lässt sich im Editor normal weiterbearbeiten und sieht auch auf der Inserat-Seite so aus" },
       { id: "ins_geplant_tab", label: "Geplante Inserate: eigener 'Geplant'-Tab in Meine Inserate und im Admin-Inserate-Tab, mit sichtbarer Startzeit ('Geht live am ...') und 'Jetzt veröffentlichen'-Knopf, auch am Handy" },
       { id: "mieten_periodenpreis", label: "Mieten: Wochen-/Monatspreis wird pro Periode gerechnet (11 Tage à 50/Woche = 2 Wochen = CHF 100), Vorschau-Box zeigt 'X Tage = Y Wochen'" },
       { id: "kauf_adresse_pflicht", label: "Sofortkauf und Gebot ohne Lieferadresse blockiert mit Hinweis aufs Profil (auch im Auktions-Modal)" },

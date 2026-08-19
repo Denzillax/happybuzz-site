@@ -894,15 +894,6 @@ export default function ListingDetail() {
                     </div>
                   )}
 
-                  {/* Mindestpreis: sieht NUR der Besitzer (Kaeufern bleibt er
-                      wie bei Ricardo verborgen) */}
-                  {isOwner && l.min_price > 0 && (
-                    <div style={{ padding: "10px 14px", borderRadius: 0, background: colors.cream, border: `1px solid ${colors.borderLt}`, fontSize: 13, marginBottom: 8, display: "flex", justifyContent: "space-between", gap: 10 }}>
-                      <span style={{ color: colors.muted }}>Mindestpreis (nur für dich sichtbar)</span>
-                      <strong>CHF {fmtPrice(l.min_price)}</strong>
-                    </div>
-                  )}
-
                   {/* Sofortkauf Button — Besitzer sieht ihn wie alle,
                       nur ausgegraut (gleiches Muster wie der Bieten-Knopf) */}
                   {l.buy_now_price > 0 && (

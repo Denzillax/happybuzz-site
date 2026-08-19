@@ -48,11 +48,18 @@ export async function POST(req) {
 Antworte NUR mit einem JSON-Objekt, ohne Erklärtext und ohne Markdown:
 {
   "title": "prägnanter Titel, max 60 Zeichen, mit Marke und Modell falls erkennbar",
-  "description": "2 bis 4 sachliche Sätze auf Deutsch. Kein Werbedeutsch, keine Emojis.",
+  "description": "strukturiertes Mini-HTML, siehe Formatvorgabe unten",
   "condition": "new | like_new | good | fair | poor",
   "category_slug": "genau einer aus dieser Liste: ${slugs.join(", ")}",
   "price_range_chf": [minimum, maximum]
 }
+Formatvorgabe für "description" (sachliches Deutsch in Schweizer Rechtschreibung, ss statt ß; kein Werbedeutsch, keine Emojis):
+Mini-HTML mit genau dieser Struktur und NUR den Tags p, h3, ul, li, b, br:
+<p>1 bis 2 Sätze, was der Artikel ist.</p>
+<h3>Zustand</h3><p>Sichtbare Mängel und Gebrauchsspuren konkret benennen (was und wo).</p>
+<h3>Lieferumfang</h3><ul><li>je ein sichtbares Teil pro Punkt</li></ul>
+Kein Markdown, keine Attribute in den Tags, keine anderen Tags.
+
 Eiserne Regel: Erwähne NUR, was auf dem Foto tatsächlich zu sehen ist.
 Kein Zubehör, keine Kabel, keine Spiele/Module, keine Originalverpackung und keine
 Funktionsfähigkeit behaupten, wenn das Bild sie nicht eindeutig zeigt. Lieber weglassen als raten.
@@ -85,7 +92,7 @@ Bisherige Version: ${prevText}` : ""}` : ""}`;
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: 700,
+        max_tokens: 900,
         messages: [{
           role: "user",
           content: [
@@ -122,7 +129,7 @@ Bisherige Version: ${prevText}` : ""}` : ""}`;
   const CONDITIONS = ["new", "like_new", "good", "fair", "poor"];
   const out = {
     title: typeof parsed.title === "string" ? parsed.title.slice(0, 60) : "",
-    description: typeof parsed.description === "string" ? parsed.description.slice(0, 1500) : "",
+    description: typeof parsed.description === "string" ? parsed.description.slice(0, 2500) : "",
     condition: CONDITIONS.includes(parsed.condition) ? parsed.condition : "good",
     category_slug: slugs.includes(parsed.category_slug) ? parsed.category_slug : null,
     price_range_chf: Array.isArray(parsed.price_range_chf) && parsed.price_range_chf.length === 2

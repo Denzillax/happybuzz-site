@@ -67,6 +67,8 @@ export const REP_LOG = [
       { typ: "neu", bereich: "Inserieren", text: "KI-Erkennung: 'Mit KI ausfüllen' liest das erste Foto und füllt Titel, Beschreibung, Zustand und Kategorie; dazu eine Preisschätzung als Richtwert. Eigene Texte werden nie überschrieben" },
       { typ: "fix", bereich: "Inserieren", text: "Die KI bewertete den Zustand zu wohlwollend und erfand Beigaben (Module, Verpackung). Jetzt zählt nur, was auf dem Foto sichtbar ist: Mängel wie Vergilbung oder verblasste Schriftzüge werden benannt und drücken den Zustand", melder: "Denis" },
       { typ: "neu", bereich: "Inserieren", text: "KI-Titel und KI-Text erzeugen auf Knopfdruck eine neue, anders formulierte Variante, auch wenn schon ein Text dasteht" },
+      { typ: "fix", bereich: "Inserieren", text: "KI-Beschreibung kommt jetzt sauber formatiert statt als Textblock: kurze Einleitung, Zwischentitel 'Zustand' und 'Lieferumfang' mit Aufzählung, direkt im Beschreibungs-Editor weiterbearbeitbar", melder: "Denis" },
+      { typ: "fix", bereich: "Auktion", text: "Das Feld 'Mindestpreis (optional)' ist entfernt: es hatte keine Funktion (kein Einfluss auf Gebote oder Auktionsende), Sofortkauf hat jetzt die volle Breite", melder: "Denis" },
       { typ: "fix", bereich: "Admin", text: "Geplante Inserate liessen sich nicht freigeben (die Datenbank lehnte den neuen Status ab), behoben; dazu eigener Geplant-Tab im Admin und die Startzeit steht jetzt auch in der Handy-Ansicht von Meine Inserate", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
