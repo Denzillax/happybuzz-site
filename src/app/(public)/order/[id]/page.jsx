@@ -22,6 +22,7 @@ import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
 import OrderTimeline from "@/components/order/OrderTimeline";
 import RatingSection from "@/components/order/RatingSection";
+import { RentalCountdown } from "@/components/order/RentalCountdown";
 import { VerifiedSellerBadge } from "@/components/shared/VerifiedSellerBadge";
 
 import { PURCHASE_STATUS as STATUS_MAP } from "@/lib/orderStatus";
@@ -484,26 +485,7 @@ export default function OrderDetailPage() {
                 {isRental && isBuyer && p.status === "delivered" && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Mietzeit läuft</h3>
-                    {booking && (() => {
-                      const now = new Date();
-                      const end = new Date(booking.end_date);
-                      const start = new Date(booking.start_date);
-                      const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-                      const daysLeft = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
-                      const progress = Math.min(1, Math.max(0, 1 - daysLeft / totalDays));
-                      const overdue = daysLeft < 0;
-                      return (
-                        <div style={{ marginBottom: 14 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}>
-                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} bis {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
-                            <span style={{ fontWeight: 700, color: overdue ? "#c62828" : colors.dark }}>{overdue ? `${Math.abs(daysLeft)} Tage überfällig` : `${daysLeft} Tage übrig`}</span>
-                          </div>
-                          <div style={{ height: 6, borderRadius: 0, background: colors.borderLt, overflow: "hidden" }}>
-                            <div style={{ height: "100%", borderRadius: 0, background: overdue ? "#c62828" : progress > 0.8 ? "#F4A100" : "#5B8C5A", width: `${Math.min(100, progress * 100)}%`, transition: "width .3s" }} />
-                          </div>
-                        </div>
-                      );
-                    })()}
+                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} />}
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Du hast den Artikel erhalten. Wenn du ihn zurückgibst, markiere die Rückgabe.</p>
                     {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)}, wird nach Rückgabe zurückerstattet.</p>}
                     <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
@@ -512,27 +494,8 @@ export default function OrderDetailPage() {
                 {isRental && isSeller && p.status === "delivered" && (
                   <div style={{ textAlign: "center", padding: 10 }}>
                     <Package size={28} color="#94B9C9" style={{ marginBottom: 8 }} />
-                    <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Mietzeit läuft</p>
-                    {booking && (() => {
-                      const now = new Date();
-                      const end = new Date(booking.end_date);
-                      const start = new Date(booking.start_date);
-                      const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-                      const daysLeft = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
-                      const progress = Math.min(1, Math.max(0, 1 - daysLeft / totalDays));
-                      const overdue = daysLeft < 0;
-                      return (
-                        <div style={{ margin: "10px 0", textAlign: "left" }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}>
-                            <span style={{ color: colors.muted }}>{new Date(booking.start_date).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} bis {new Date(booking.end_date).toLocaleDateString("de-CH", { day: "numeric", month: "short", year: "numeric" })}</span>
-                            <span style={{ fontWeight: 700, color: overdue ? "#c62828" : colors.dark }}>{overdue ? `${Math.abs(daysLeft)} Tage überfällig` : `${daysLeft} Tage übrig`}</span>
-                          </div>
-                          <div style={{ height: 6, borderRadius: 0, background: colors.borderLt, overflow: "hidden" }}>
-                            <div style={{ height: "100%", borderRadius: 0, background: overdue ? "#c62828" : progress > 0.8 ? "#F4A100" : "#5B8C5A", width: `${Math.min(100, progress * 100)}%`, transition: "width .3s" }} />
-                          </div>
-                        </div>
-                      );
-                    })()}
+                    <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 10px" }}>Mietzeit läuft</p>
+                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} />}
                     <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Mieter hat den Artikel erhalten.</p>
                   </div>
                 )}

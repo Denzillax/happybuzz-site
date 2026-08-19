@@ -142,6 +142,7 @@ const TESTS = [
       { id: "lv_bidder_anon", label: "Gebotsverlauf maskiert Bieter (z.B. 'Ze****', eigene = 'Du'), kein voller Name" },
       { id: "lv_auction_end", label: "Auktion: Auto-Finalisierung nach Ablauf" },
       { id: "lv_rental_book", label: "Mieten: Zeitraum wählen & buchen" },
+      { id: "lv_rental_countdown", label: "Laufende Miete: Auf der Bestellseite tickt unter 'Mietzeit läuft' ein Live-Countdown (Tage/Std/Min/Sek) mit Fortschrittsbalken; bei überfälliger Rückgabe wird er rot und zählt vorwärts (beide Seiten: Mieter und Vermieter)" },
     ],
   },
   {
