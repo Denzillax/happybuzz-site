@@ -29,6 +29,7 @@ import { recordView } from "@/lib/recentlyViewed";
 import { sanitizeDescription, isFormattedDescription } from "@/lib/richtext";
 import { createNotification } from "@/lib/notifications";
 import { getListingAttributesDetailed, getCategoryAttributes } from "@/lib/api/attributes";
+import { handlingLabel } from "@/lib/formatters";
 import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
@@ -649,6 +650,12 @@ export default function ListingDetail() {
               <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "12px 20px", fontSize: 13 }}>
                 <span style={{ color: colors.muted }}>Lieferung</span>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Truck size={14} color={colors.muted} /> {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}</span>
+                {l.shipping_available && (
+                  <>
+                    <span style={{ color: colors.muted }}>Versandbereit</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Clock size={14} color={colors.muted} /> innert {handlingLabel(l.handling_days)}</span>
+                  </>
+                )}
                 {l.pickup_only && <>
                   <span style={{ color: colors.muted }}>Abholung</span>
                   <span style={{ display: "flex", alignItems: "center", gap: 6 }}><MapPin size={14} color={colors.muted} /> {l.city || "Vor Ort"}</span>
@@ -1199,6 +1206,12 @@ export default function ListingDetail() {
                                 </div>
                                 <span style={{ fontSize: 13, fontWeight: 700 }}>CHF {fmtPrice(l.free_shipping ? 0 : l.shipping_cost || 9)}</span>
                               </div>
+                            )}
+                            {/* Lieferfrist: Erwartung setzen, BEVOR gekauft wird */}
+                            {l.shipping_available && bidShipping === "shipping" && (l.handling_days || 2) > 2 && (
+                              <p style={{ margin: "2px 0 6px", fontSize: 12, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
+                                <Clock size={12} /> Der Verkäufer verschickt innert {handlingLabel(l.handling_days)} nach Zahlungseingang.
+                              </p>
                             )}
                             {l.pickup_only && (
                               <div onClick={() => setBidShipping("pickup")} style={{

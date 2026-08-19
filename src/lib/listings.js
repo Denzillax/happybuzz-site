@@ -119,6 +119,7 @@ export async function createListing(userId, formData) {
     // Neuware: Stueckzahl + vom Kaeufer waehlbare Varianten (sonst 1 / null)
     quantity: Math.max(1, parseInt(formData.quantity, 10) || 1),
     variant_options: formData.variant_options || null,
+    handling_days: [2, 5, 7, 14].includes(parseInt(formData.handling_days, 10)) ? parseInt(formData.handling_days, 10) : 2,
   };
 
   if (formData.listing_type === "auction") {
@@ -200,6 +201,7 @@ export async function updateListing(listingId, formData) {
     fee_tier: formData.fee_tier || DEFAULT_FEE_TIER,
     quantity: Math.max(1, parseInt(formData.quantity, 10) || 1),
     variant_options: formData.variant_options || null,
+    handling_days: [2, 5, 7, 14].includes(parseInt(formData.handling_days, 10)) ? parseInt(formData.handling_days, 10) : 2,
   };
   if (formData.listing_type === "auction") {
     row.start_price = formData.start_price ? parseFloat(formData.start_price) : null;
@@ -1292,7 +1294,7 @@ export async function getBids(listingId) {
 
 export async function getPurchaseDetail(purchaseId) {
   const { data, error } = await supabase.from("purchases")
-    .select(`*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, shipping_available, pickup_only, pickup_address, shipping_method, shipping_cost, free_shipping, ship_speed, listing_images(url, sort_order))`)
+    .select(`*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, shipping_available, pickup_only, pickup_address, shipping_method, shipping_cost, free_shipping, ship_speed, handling_days, listing_images(url, sort_order))`)
     .eq("id", purchaseId)
     .single();
   if (error) throw error;

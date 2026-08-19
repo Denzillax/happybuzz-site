@@ -16,7 +16,7 @@ import {
   uploadDamagePhotos, submitServiceInvoice,
 } from "@/lib/listings";
 import { colors, fonts, radius } from "@/lib/theme";
-import { fmtCHF, fullName, shippingMethodLabel } from "@/lib/formatters";
+import { fmtCHF, fullName, shippingMethodLabel, handlingLabel } from "@/lib/formatters";
 import { makeBeeRef, makeArtRef, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
@@ -360,6 +360,12 @@ export default function OrderDetailPage() {
             <Link href={`/listing/${p.listing_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{listing?.title || "Artikel"}</Link>
             <div style={{ fontSize: 13, color: colors.muted, marginTop: 3 }}>{isService ? (isSeller ? "Service-Auftrag" : "Gebucht") : isRental ? (isSeller ? "Vermietet" : "Gemietet") : (isSeller ? "Verkauft" : "Gekauft")} am: {fmtDate(p.created_at)}</div>
             {!isService && <div style={{ fontSize: 13, color: colors.muted }}>Lieferart: {shippingLabel}</div>}
+            {/* Lieferfrist: nur wenn laenger als Standard und noch nicht verschickt */}
+            {!isService && !isRental && (listing?.handling_days || 2) > 2 && ["confirmed", "payment_pending", "payment_marked", "paid"].includes(p.status) && (
+              <div style={{ fontSize: 13, color: "#0B5E5C", fontWeight: 600 }}>
+                Versand innert {handlingLabel(listing.handling_days)} nach Zahlungseingang angekündigt
+              </div>
+            )}
             {/* Neuware: vom Kaeufer gewaehlte Variante (Schnappschuss am Kauf) */}
             {p.variant_choice && Object.keys(p.variant_choice).length > 0 && (
               <div style={{ fontSize: 13, color: colors.dark, fontWeight: 700 }}>

@@ -26,6 +26,7 @@ import RichTextEditor from "@/components/shared/RichTextEditor";
 import { descriptionPlainText } from "@/lib/richtext";
 import { checkProfileComplete } from "@/lib/listings";
 import { getCategoryAttributes, saveListingAttributes, getListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
+import { HANDLING_OPTIONS } from "@/lib/formatters";
 
 // ─── Photo Slot Labels (Ricardo-style) ──────────────────────
 const PHOTO_SLOTS = [
@@ -162,6 +163,7 @@ export default function ListingForm({
     shipping_payer: "buyer",
     ship_weight: "bis 2kg",
     ship_speed: "economy",
+    handling_days: 2, // Versandbereit innert 1-2 Tagen (Standard)
     free_shipping: false,
     _shipModal: false,
     _shipStep: "",
@@ -245,6 +247,7 @@ export default function ListingForm({
         : "",
       shipping_cost: initialData.shipping_cost?.toString() || "",
       shipping_method: initialData.shipping_method || "",
+      handling_days: initialData.handling_days || 2,
       shipping_payer: initialData.shipping_payer || "buyer",
 
       city: initialData.city || "",
@@ -1790,6 +1793,23 @@ export default function ListingForm({
                 </div>
               </div>
             </div>
+
+            {/* Lieferfrist: wann geht das Paket raus (Neuware/Ferien) */}
+            {form.shipping_available && (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+                <div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>Versandbereit innert</span>
+                  <div style={{ fontSize: 11, color: colors.muted }}>Wann geht das Paket nach Zahlungseingang raus? Käufer sehen die Frist vor dem Kauf.</div>
+                </div>
+                <select
+                  value={form.handling_days}
+                  onChange={(e) => set("handling_days", parseInt(e.target.value, 10))}
+                  style={{ padding: "9px 12px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}
+                >
+                  {HANDLING_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+            )}
 
             {/* TWINT Toggle */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>

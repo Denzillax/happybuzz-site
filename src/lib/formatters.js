@@ -36,6 +36,17 @@ export function shippingMethodLabel(value) {
   return SHIPPING_METHOD_LABELS[value] || value;
 }
 
+// ─── Lieferfrist (listings.handling_days) ────────────────────
+export const HANDLING_OPTIONS = [
+  { value: 2, label: "1–2 Tagen" },
+  { value: 5, label: "3–5 Tagen" },
+  { value: 7, label: "1 Woche" },
+  { value: 14, label: "2 Wochen" },
+];
+export function handlingLabel(days) {
+  return HANDLING_OPTIONS.find((o) => o.value === Number(days))?.label || "1–2 Tagen";
+}
+
 // ─── Cover-Bild URL ──────────────────────────────────────────
 // listing_images: url (NICHT image_url), sort_order (NICHT position)
 export function getCoverUrl(listing) {
