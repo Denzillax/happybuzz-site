@@ -190,8 +190,8 @@ body {
   .home-swipe::-webkit-scrollbar { display: none; }
   .home-swipe > a,
   .home-swipe > div {
-    flex: 0 0 46vw;
-    max-width: 230px;
+    flex: 0 0 68vw;
+    max-width: 320px;
     min-width: 0;
     scroll-snap-align: start;
     /* height:100% der Karte wuerde das Flex-Stretching aushebeln ->
