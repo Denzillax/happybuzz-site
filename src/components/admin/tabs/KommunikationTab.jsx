@@ -14,56 +14,92 @@ import { BroadcastForm } from "@/components/admin/modals/BroadcastComposer";
 import { TickerBar } from "@/components/layout/Ticker";
 
 const MONO = "'Space Mono', ui-monospace, monospace";
+const INK = "#14110D";
 
-// Beschriftete Zeile: Label links in Mono, Inhalt rechts — gleiche Optik ueberall
-const Row = ({ label, children }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "110px 1fr", alignItems: "center", gap: 14 }}>
-    <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>{label}</span>
-    <div style={{ minWidth: 0 }}>{children}</div>
+// Mono-Label ueber dem Feld — gleiche Optik wie im Inserat-Formular (Katalog-Stil)
+const labelMono = { display: "block", fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: colors.muted, marginBottom: 7 };
+
+// Feld-Block: Label oben, Inhalt darunter
+const Field = ({ label, children, grow }) => (
+  <div style={{ minWidth: 0, ...(grow ? { flex: "1 1 260px" } : {}) }}>
+    <span style={labelMono}>{label}</span>
+    {children}
   </div>
 );
 
 const Toggle = ({ on, onChange }) => (
-  <button onClick={onChange} style={{ width: 44, height: 24, borderRadius: 0, border: "none", cursor: "pointer", background: on ? colors.yellow : "#ccc", position: "relative", transition: "background .2s", flexShrink: 0 }}>
-    <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: on ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} />
+  <button onClick={onChange} style={{ width: 46, height: 26, borderRadius: 0, border: `1.5px solid ${INK}`, cursor: "pointer", background: on ? colors.yellow : "#e7e2d8", position: "relative", transition: "background .2s", flexShrink: 0, padding: 0 }}>
+    <div style={{ width: 18, height: 18, background: on ? INK : "#fff", border: `1.5px solid ${INK}`, position: "absolute", top: 2, left: on ? 23 : 2, transition: "left .2s", boxSizing: "border-box" }} />
   </button>
 );
 
+// Eckige Wahl-Knoepfe im Katalog-Stil: aktiv = Ink auf Gelb
 const Segment = ({ options, value, onChange }) => (
-  <div style={{ display: "inline-flex", flexWrap: "wrap", maxWidth: "100%", background: colors.cream, borderRadius: 12, padding: 3, gap: 2 }}>
-    {options.map(([k, l]) => (
-      <button key={k} onClick={() => onChange(k)} style={{ fontSize: 11, fontWeight: value === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: value === k ? colors.dark : "transparent", color: value === k ? "#fff" : colors.muted, whiteSpace: "nowrap" }}>{l}</button>
+  <div style={{ display: "inline-flex", flexWrap: "wrap", maxWidth: "100%", gap: 0, border: `1.5px solid ${INK}` }}>
+    {options.map(([k, l], i) => (
+      <button key={k} onClick={() => onChange(k)} style={{
+        fontSize: 11.5, fontWeight: 700, padding: "8px 14px", border: "none",
+        borderLeft: i > 0 ? `1.5px solid ${INK}` : "none",
+        cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap",
+        background: value === k ? colors.yellow : "#fff",
+        color: value === k ? INK : colors.muted,
+      }}>{l}</button>
     ))}
   </div>
 );
 
-// Farb-Swatches als Kreise + Hex-Felder
+// Farbwahl: Marken-Presets als eckige Kacheln + echte Farbboxen (nativer Picker)
 const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
-  <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-    {ANNOUNCEMENT_PRESETS.map(p => (
-      <button key={p.name} onClick={() => onPick(p)} title={p.name} style={{
-        width: 26, height: 26, borderRadius: "50%", background: p.bg, cursor: "pointer",
-        border: bg === p.bg ? `3px solid ${colors.yellow}` : `2px solid ${colors.dark}`,
-      }} />
+  <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
+    <div style={{ display: "inline-flex", border: `1.5px solid ${INK}` }}>
+      {ANNOUNCEMENT_PRESETS.map((p, i) => (
+        <button key={p.name} onClick={() => onPick(p)} title={p.name} style={{
+          width: 34, height: 34, background: p.bg, cursor: "pointer", position: "relative",
+          border: "none", borderLeft: i > 0 ? `1.5px solid ${INK}` : "none", padding: 0,
+        }}>
+          {bg === p.bg && <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: p.text, fontWeight: 900, fontSize: 15 }}>×</span>}
+        </button>
+      ))}
+    </div>
+    {[["Hintergrund", bg, onBg], ["Schrift", text, onText]].map(([l, val, on]) => (
+      <label key={l} style={{ display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer" }}>
+        <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(val) ? val : "#000000"} onChange={e => on(e.target.value)}
+          style={{ width: 34, height: 34, padding: 0, border: `1.5px solid ${INK}`, borderRadius: 0, cursor: "pointer", background: "none" }} />
+        <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
+          <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>{l}</span>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: colors.dark }}>{String(val || "").toUpperCase()}</span>
+        </span>
+      </label>
     ))}
-    <label style={{ fontSize: 10, color: colors.muted, display: "flex", alignItems: "center", gap: 4, fontFamily: MONO }}>BG
-      <input value={bg} onChange={e => onBg(e.target.value)} style={{ width: 78, ...bcInput, padding: "4px 7px", fontSize: 11 }} />
-    </label>
-    <label style={{ fontSize: 10, color: colors.muted, display: "flex", alignItems: "center", gap: 4, fontFamily: MONO }}>TEXT
-      <input value={text} onChange={e => onText(e.target.value)} style={{ width: 78, ...bcInput, padding: "4px 7px", fontSize: 11 }} />
-    </label>
   </div>
 );
 
 // Weisser Rahmen fuer den jeweils aktiven Bereich
 const Panel = ({ children }) => (
-  <div style={{ background: "#fff", border: `1px solid ${colors.dark}`, padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+  <div style={{ background: "#fff", border: `1.5px solid ${INK}`, padding: "22px 22px 24px", display: "flex", flexDirection: "column", gap: 18 }}>
     {children}
   </div>
 );
 
+// Vorschau mit Mono-Kicker und Status-Stempel, wie die Katalog-Karten der Seite
+const PreviewBlock = ({ on, children }) => (
+  <div>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+      <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: colors.muted }}>Live-Vorschau</span>
+      <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", padding: "3px 9px", border: `1.5px solid ${INK}`, background: on ? colors.yellow : "#fff", color: INK }}>{on ? "Aktiv" : "Aus"}</span>
+    </div>
+    {children}
+  </div>
+);
+
+// Gelber Katalog-Knopf mit harter Schattenkante (wie die Site-Buttons)
 const SaveBtn = ({ onClick, label }) => (
-  <button onClick={onClick} style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "11px 28px", cursor: "pointer", fontFamily: fonts.body, alignSelf: "flex-start" }}>
+  <button onClick={onClick} style={{
+    fontSize: 13.5, fontWeight: 700, color: INK, background: colors.yellow,
+    border: `1.5px solid ${INK}`, borderRadius: 0, padding: "12px 30px",
+    cursor: "pointer", fontFamily: fonts.body, alignSelf: "flex-start",
+    boxShadow: `3px 3px 0 ${INK}`,
+  }}>
     {label}
   </button>
 );
@@ -126,27 +162,31 @@ export function KommunikationTab({ admin }) {
       {/* ── Banner ── */}
       {bereich === "banner" && (
         <Panel>
-          <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 15, fontWeight: 700, padding: "11px 14px", textAlign: "center", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", opacity: ann.enabled ? 1 : 0.45 }}>
-            {ann.message || "Vorschau-Text"}
-          </div>
-          <Row label="Status">
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Toggle on={ann.enabled} onChange={() => setAnn({ ...ann, enabled: !ann.enabled })} />
-              <span style={{ fontSize: 12.5, fontWeight: 600, color: ann.enabled ? "#0A7170" : colors.muted }}>{ann.enabled ? "Aktiv, für alle sichtbar" : "Aus"}</span>
+          <PreviewBlock on={ann.enabled}>
+            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 15, fontWeight: 700, padding: "12px 14px", textAlign: "center", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", border: `1.5px solid ${INK}`, opacity: ann.enabled ? 1 : 0.5 }}>
+              {ann.message || "Vorschau-Text"}
             </div>
-          </Row>
-          <Row label="Text">
-            <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, maxWidth: 560 }} />
-          </Row>
-          <Row label="Farbe">
+          </PreviewBlock>
+          <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-end" }}>
+            <Field label="Status">
+              <div style={{ display: "flex", alignItems: "center", gap: 10, height: 38 }}>
+                <Toggle on={ann.enabled} onChange={() => setAnn({ ...ann, enabled: !ann.enabled })} />
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: ann.enabled ? "#0A7170" : colors.muted }}>{ann.enabled ? "Für alle sichtbar" : "Aus"}</span>
+              </div>
+            </Field>
+            <Field label="Text" grow>
+              <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, borderRadius: 0, border: `1.5px solid ${INK}`, maxWidth: 620 }} />
+            </Field>
+          </div>
+          <Field label="Farbe">
             <ColorPick bg={ann.bg_color} text={ann.text_color}
               onPick={p => setAnn({ ...ann, bg_color: p.bg, text_color: p.text })}
               onBg={v => setAnn({ ...ann, bg_color: v })} onText={v => setAnn({ ...ann, text_color: v })} />
-          </Row>
-          <Row label="Animation">
+          </Field>
+          <Field label="Animation">
             <Segment value={ann.effect} onChange={k => setAnn({ ...ann, effect: k })}
               options={[["none", "Keine"], ["marquee", "Laufschrift"], ["slide", "Einfliegen"], ["pulse", "Pulsieren"]]} />
-          </Row>
+          </Field>
           <SaveBtn onClick={saveAnnouncement} label={ann.enabled ? "Speichern + aktiv schalten" : "Speichern (Balken aus)"} />
         </Panel>
       )}
@@ -154,34 +194,40 @@ export function KommunikationTab({ admin }) {
       {/* ── Grosse Laufschrift ── */}
       {bereich === "ticker" && (
         <Panel>
-          {/* Echte TickerBar: identisch mit der Live-Laufschrift, inkl. Tempo */}
-          <TickerBar
-            message={ticker.message || "Vorschau-Text"}
-            bgColor={ticker.bg_color} textColor={ticker.text_color}
-            speed={ticker.speed} disabled={!ticker.enabled}
-          />
-          <Row label="Status">
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Toggle on={ticker.enabled} onChange={() => setTicker({ ...ticker, enabled: !ticker.enabled })} />
-              <span style={{ fontSize: 12.5, fontWeight: 600, color: ticker.enabled ? "#0A7170" : colors.muted }}>{ticker.enabled ? "Aktiv, für alle sichtbar" : "Aus"}</span>
-            </div>
-          </Row>
-          <Row label="Text">
-            <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, maxWidth: 560 }} />
-          </Row>
-          <Row label="Farbe">
+          <PreviewBlock on={ticker.enabled}>
+            {/* Echte TickerBar: identisch mit der Live-Laufschrift, inkl. Tempo */}
+            <TickerBar
+              message={ticker.message || "Vorschau-Text"}
+              bgColor={ticker.bg_color} textColor={ticker.text_color}
+              speed={ticker.speed} disabled={!ticker.enabled}
+            />
+          </PreviewBlock>
+          <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-end" }}>
+            <Field label="Status">
+              <div style={{ display: "flex", alignItems: "center", gap: 10, height: 38 }}>
+                <Toggle on={ticker.enabled} onChange={() => setTicker({ ...ticker, enabled: !ticker.enabled })} />
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: ticker.enabled ? "#0A7170" : colors.muted }}>{ticker.enabled ? "Für alle sichtbar" : "Aus"}</span>
+              </div>
+            </Field>
+            <Field label="Text" grow>
+              <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, borderRadius: 0, border: `1.5px solid ${INK}`, maxWidth: 620 }} />
+            </Field>
+          </div>
+          <Field label="Farbe">
             <ColorPick bg={ticker.bg_color} text={ticker.text_color}
               onPick={p => setTicker({ ...ticker, bg_color: p.bg, text_color: p.text })}
               onBg={v => setTicker({ ...ticker, bg_color: v })} onText={v => setTicker({ ...ticker, text_color: v })} />
-          </Row>
-          <Row label="Tempo">
-            <Segment value={ticker.speed || "normal"} onChange={k => setTicker({ ...ticker, speed: k })}
-              options={[["slow", "Langsam"], ["normal", "Normal"], ["fast", "Schnell"]]} />
-          </Row>
-          <Row label="Wo">
-            <Segment value={ticker.placement} onChange={k => setTicker({ ...ticker, placement: k })}
-              options={[["home", "Startseite (unter Hero)"], ["global", "Alle Seiten (unter Header)"]]} />
-          </Row>
+          </Field>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            <Field label="Tempo">
+              <Segment value={ticker.speed || "normal"} onChange={k => setTicker({ ...ticker, speed: k })}
+                options={[["slow", "Langsam"], ["normal", "Normal"], ["fast", "Schnell"]]} />
+            </Field>
+            <Field label="Wo">
+              <Segment value={ticker.placement} onChange={k => setTicker({ ...ticker, placement: k })}
+                options={[["home", "Startseite"], ["global", "Alle Seiten"]]} />
+            </Field>
+          </div>
           <SaveBtn onClick={saveTicker} label={ticker.enabled ? "Speichern + aktiv schalten" : "Speichern (Laufschrift aus)"} />
         </Panel>
       )}

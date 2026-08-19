@@ -1,6 +1,9 @@
 // BEEDARO Versand-Worker: verarbeitet email_log (pending) via Resend und
 // push_queue (pending) via Web Push. Wird von pg_cron im Minutentakt mit dem
 // x-worker-token aus dem Vault aufgerufen (siehe Migration notify_push_infra).
+// WICHTIG: verify_jwt MUSS false sein — der Cron ruft ohne JWT auf, die
+// Absicherung ist der x-worker-token (19.08.2026: ein Redeploy mit true
+// blockierte den ganzen Versand).
 // Geheimnisse kommen ausschliesslich aus dem Vault (RPC worker_secret,
 // nur service_role): resend_api_key, vapid_public_key, vapid_private_key,
 // notify_worker_token.
