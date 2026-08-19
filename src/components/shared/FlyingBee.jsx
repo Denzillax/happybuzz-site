@@ -51,6 +51,12 @@ export default function FlyingBee() {
 
   const landen = () => {
     stateRef.current = "idle";
+    // SYNCHRON verstecken, bevor React rendert: nach der Abflug-Animation
+    // wuerde das Element sonst einen Frame lang auf den alten Inline-Transform
+    // (letzte Flugposition) zurueckspringen — das war das kurze Aufpoppen.
+    if (beeRef.current) beeRef.current.style.display = "none";
+    animRef.current?.cancel?.();
+    animRef.current = null;
     setVisible(false);
     setBubble(null);
     cancelAnimationFrame(loopRef.current);
@@ -58,7 +64,8 @@ export default function FlyingBee() {
 
   const fliegen = (erzwungen = false) => {
     const bee = beeRef.current;
-    if (!bee || stateRef.current !== "idle" || reducedMotion()) return;
+    // Nur im aktiven Tab erscheinen (Zaehler bleibt unverbraucht)
+    if (!bee || stateRef.current !== "idle" || reducedMotion() || document.hidden) return;
     if (!erzwungen) {
       const n = parseInt(sessionStorage.getItem("bee_fluege") || "0", 10);
       if (n >= MAX_FLUEGE) return;
@@ -70,13 +77,20 @@ export default function FlyingBee() {
     const s = vw < 640 ? 84 : 92;
     sizeRef.current = s;
     setSize(s);
-    stateRef.current = "flying";
-    setVisible(true);
 
     const vonLinks = Math.random() < 0.5;
     posRef.current = { x: vonLinks ? -120 : vw + 120, y: vh * (0.2 + Math.random() * 0.4) };
     velRef.current = { x: vonLinks ? 200 : -200, y: 0 };
     wanderRef.current = { x: vw / 2, y: vh / 2, bis: 0 };
+    faceRef.current = vonLinks ? -1 : 1;
+
+    // Spawn-Position SYNCHRON setzen, DANN sichtbar schalten: sonst steht die
+    // Biene einen Frame lang am alten Ort, bevor der erste Schritt greift
+    const halb = s / 2;
+    bee.style.transform = `translate(${posRef.current.x - halb}px, ${posRef.current.y - halb}px) scaleX(${faceRef.current})`;
+    bee.style.display = "block";
+    stateRef.current = "flying";
+    setVisible(true);
 
     const t0 = performance.now();
     let letzt = t0;
@@ -161,7 +175,9 @@ export default function FlyingBee() {
         { transform: `translate(${pos.x - halb}px, ${pos.y - halb}px) scaleX(${faceRef.current})` },
         { transform: `translate(${zielX}px, ${pos.y - halb - 160}px) scaleX(${faceRef.current})` },
       ],
-      { duration: 750, easing: "cubic-bezier(.5,0,1,.5)" }
+      // fill forwards: ohne dies spraenge das Element nach der Animation auf
+      // den alten Transform zurueck (Aufpopp-Frame an der letzten Position)
+      { duration: 750, easing: "cubic-bezier(.5,0,1,.5)", fill: "forwards" }
     );
     animRef.current = anim;
     anim.onfinish = landen;
@@ -213,6 +229,17 @@ export default function FlyingBee() {
       }
     };
     window.addEventListener("keydown", onKey);
+
+    // Tab verlassen waehrend Flug/Spruch: still landen, damit beim
+    // Zurueckkommen keine eingefrorene Biene in der Luft haengt
+    const onVis = () => {
+      if (document.hidden && (stateRef.current === "flying" || stateRef.current === "talking")) {
+        clearTimeout(bubbleTimerRef.current);
+        landen();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+
     return () => {
       aktiv = false;
       clearTimeout(timerRef.current);
@@ -221,6 +248,7 @@ export default function FlyingBee() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("visibilitychange", onVis);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
