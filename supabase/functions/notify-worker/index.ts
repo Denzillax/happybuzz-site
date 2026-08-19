@@ -66,7 +66,7 @@ Deno.serve(async (req: Request) => {
         const r = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ from: "Beedaro <noreply@beedaro.ch>", to, subject: m.subject, html: renderEmail(m) }),
+          body: JSON.stringify({ from: "Beedaro Info <noreply@beedaro.ch>", to, subject: m.subject, html: renderEmail(m) }),
         });
         if (!r.ok) throw new Error(`Resend ${r.status}: ${(await r.text()).slice(0, 300)}`);
         await supabase.from("email_log").update({ status: "sent" }).eq("id", m.id);
