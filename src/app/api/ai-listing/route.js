@@ -10,7 +10,9 @@ const MODEL = "anthropic/claude-haiku-4.5";
 const MAX_IMAGE_CHARS = 2_000_000; // ~1.5 MB base64, Bild kommt clientseitig verkleinert
 
 export async function POST(req) {
-  const key = process.env.OPENROUTER_API_KEY;
+  // Beide Namen akzeptieren: OPENROUTER_API_KEY (Standard) und Openroute_Key
+  // (so heisst die Variable in Vercel)
+  const key = process.env.OPENROUTER_API_KEY || process.env.Openroute_Key;
   if (!key) {
     return Response.json({ error: "not_configured" }, { status: 503 });
   }
