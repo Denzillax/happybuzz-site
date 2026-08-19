@@ -76,17 +76,49 @@ export async function getListingAttributes(listingId) {
 }
 
 /**
- * Save attribute values for a listing (upsert)
+ * Attributwerte mit Anzeigenamen fuer die Inserat-Seite (dedupliziert per Key)
  */
-export async function saveListingAttributes(listingId, attributeValues) {
+export async function getListingAttributesDetailed(listingId) {
+  if (!listingId) return [];
+  const { data, error } = await supabase
+    .from("listing_attributes")
+    .select("value, category_attributes(name, attribute_key, unit, sort_order)")
+    .eq("listing_id", listingId);
+  if (error) { console.error("getListingAttributesDetailed error:", error); return []; }
+  const gesehen = new Set();
+  return (data || [])
+    .filter(r => r.category_attributes?.name && r.value?.toString().trim())
+    .filter(r => (gesehen.has(r.category_attributes.attribute_key) ? false : (gesehen.add(r.category_attributes.attribute_key), true)))
+    .sort((a, b) => (a.category_attributes.sort_order ?? 0) - (b.category_attributes.sort_order ?? 0))
+    .map(r => ({ name: r.category_attributes.name, value: r.value, unit: r.category_attributes.unit || null }));
+}
+
+/**
+ * Save attribute values for a listing (upsert).
+ * categoryId begrenzt die Zuordnung auf die Kategorie-Ahnenkette des Inserats:
+ * ohne den Filter wurden Werte per attribute_key ueber ALLE Kategorien
+ * zugeordnet (Farbe = Kleidung + Handy + Haushalt...) und erzeugten Duplikate.
+ */
+export async function saveListingAttributes(listingId, attributeValues, categoryId = null) {
   if (!listingId || !attributeValues || Object.keys(attributeValues).length === 0) return;
 
-  // Get attribute IDs by key
   const keys = Object.keys(attributeValues);
-  const { data: attrs } = await supabase
-    .from("category_attributes")
-    .select("id, attribute_key")
-    .in("attribute_key", keys);
+  let attrs;
+  if (categoryId) {
+    const katAttrs = await getCategoryAttributes(categoryId);
+    const gesehen = new Set();
+    attrs = katAttrs.filter(a => {
+      if (!keys.includes(a.attribute_key) || gesehen.has(a.attribute_key)) return false;
+      gesehen.add(a.attribute_key);
+      return true;
+    });
+  } else {
+    const { data } = await supabase
+      .from("category_attributes")
+      .select("id, attribute_key")
+      .in("attribute_key", keys);
+    attrs = data;
+  }
 
   if (!attrs || attrs.length === 0) return;
 

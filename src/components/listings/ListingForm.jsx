@@ -206,6 +206,9 @@ export default function ListingForm({
   const [errors, setErrors] = useState({});
   const [categoryAttrs, setCategoryAttrs] = useState([]);
   const [attrValues, setAttrValues] = useState({});
+  // Neuware (sell + condition new): Stueckzahl + vom Kaeufer waehlbare Varianten
+  const [quantity, setQuantity] = useState(String(initialData?.quantity ?? 1));
+  const [variantOpts, setVariantOpts] = useState(initialData?.variant_options || {});
   const [beeTexts] = useState(() => getRandomBeeTexts());
   const fileRef = useRef(null);
   const cameraRef = useRef(null); // Mobile: Kamera direkt oeffnen (capture)
@@ -614,6 +617,11 @@ export default function ListingForm({
         publishAtIso = t.toISOString();
       }
 
+      // Neuware: Stueckzahl + Varianten nur bei sell + Zustand neu, sonst Standard
+      const istNeuware = effectiveType === "sell" && form.condition === "new";
+      const bereinigteVarianten = istNeuware
+        ? Object.fromEntries(Object.entries(variantOpts).filter(([, werte]) => Array.isArray(werte) && werte.length > 0))
+        : {};
       await onSave({
         ...form,
         publish_at: publishAtIso,
@@ -624,6 +632,8 @@ export default function ListingForm({
         existingImages,
         newFiles,
         attributeValues: attrValues,
+        quantity: istNeuware ? Math.max(1, parseInt(quantity, 10) || 1) : 1,
+        variant_options: Object.keys(bereinigteVarianten).length > 0 ? bereinigteVarianten : null,
       });
     } catch (err) {
       console.error("Save error:", err);
@@ -1459,6 +1469,45 @@ export default function ListingForm({
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ── NEUWARE: Varianten & Stückzahl (nur sell + Zustand neu) ── */}
+      {form.listing_type === "sell" && form.condition === "new" && (
+        <div style={sectionBase} className="lf-section">
+          <SectionHead icon={Package} title="Neuware: Varianten & Stückzahl" hint="Käufer wählen beim Kauf aus deinen markierten Werten. Jeder Kauf zieht 1 Stück ab, das Inserat bleibt aktiv bis alles weg ist." />
+          <div style={{ marginBottom: 16, maxWidth: 200 }}>
+            <label style={{ ...labelBase, fontSize: 12, marginBottom: 4 }}>Stückzahl</label>
+            <input
+              type="number" min="1" step="1"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              style={inputBase}
+            />
+          </div>
+          {categoryAttrs.filter(a => a.attribute_type === "select" && Array.isArray(a.options) && a.options.length > 0).map(attr => {
+            const gewaehlt = variantOpts[attr.attribute_key] || [];
+            const toggle = (wert) => setVariantOpts(prev => {
+              const alt = prev[attr.attribute_key] || [];
+              const neu = alt.includes(wert) ? alt.filter(w => w !== wert) : [...alt, wert];
+              return { ...prev, [attr.attribute_key]: neu };
+            });
+            return (
+              <div key={attr.id} style={{ marginBottom: 14 }}>
+                <label style={{ ...labelBase, fontSize: 12, marginBottom: 6 }}>
+                  {attr.name}: vom Käufer wählbar {gewaehlt.length > 0 && <span style={{ color: colors.teal }}>({gewaehlt.length} markiert)</span>}
+                </label>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {attr.options.map(opt => (
+                    <Chip key={opt} active={gewaehlt.includes(opt)} onClick={() => toggle(opt)}>{opt}</Chip>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          {categoryAttrs.filter(a => a.attribute_type === "select").length === 0 && (
+            <p style={{ ...hintStyle, margin: 0 }}>Diese Kategorie hat keine wählbaren Eigenschaften. Die Stückzahl funktioniert trotzdem.</p>
+          )}
         </div>
       )}
 

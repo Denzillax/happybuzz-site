@@ -116,6 +116,9 @@ export async function createListing(userId, formData) {
 
     fee_percentage: formData.fee_percentage ? parseFloat(formData.fee_percentage) : 7,
     fee_tier: formData.fee_tier || DEFAULT_FEE_TIER,
+    // Neuware: Stueckzahl + vom Kaeufer waehlbare Varianten (sonst 1 / null)
+    quantity: Math.max(1, parseInt(formData.quantity, 10) || 1),
+    variant_options: formData.variant_options || null,
   };
 
   if (formData.listing_type === "auction") {
@@ -195,6 +198,8 @@ export async function updateListing(listingId, formData) {
     pay_cash: formData.pay_cash || false,
     fee_percentage: formData.fee_percentage ? parseFloat(formData.fee_percentage) : 7,
     fee_tier: formData.fee_tier || DEFAULT_FEE_TIER,
+    quantity: Math.max(1, parseInt(formData.quantity, 10) || 1),
+    variant_options: formData.variant_options || null,
   };
   if (formData.listing_type === "auction") {
     row.start_price = formData.start_price ? parseFloat(formData.start_price) : null;
@@ -639,10 +644,12 @@ export async function getListingStats(listingId) {
 // ═════════════════════════════════════════════════════════════
 
 // Sofortkauf via RPC (atomar: purchase + listing → sold)
-export async function createPurchase(buyerId, listingId) {
+export async function createPurchase(buyerId, listingId, variantChoice = null) {
   const { data, error } = await supabase.rpc("create_purchase", {
     p_listing_id: listingId,
     p_buyer_id: buyerId,
+    // Neuware: Schnappschuss der Kaeuferwahl (z.B. { "Groesse": "L" })
+    ...(variantChoice && Object.keys(variantChoice).length > 0 ? { p_variant: variantChoice } : {}),
   });
   if (error) throw new Error(error.message);
   return data; // purchase ID

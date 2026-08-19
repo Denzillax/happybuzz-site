@@ -360,6 +360,12 @@ export default function OrderDetailPage() {
             <Link href={`/listing/${p.listing_id}`} style={{ fontSize: 16, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>{listing?.title || "Artikel"}</Link>
             <div style={{ fontSize: 13, color: colors.muted, marginTop: 3 }}>{isService ? (isSeller ? "Service-Auftrag" : "Gebucht") : isRental ? (isSeller ? "Vermietet" : "Gemietet") : (isSeller ? "Verkauft" : "Gekauft")} am: {fmtDate(p.created_at)}</div>
             {!isService && <div style={{ fontSize: 13, color: colors.muted }}>Lieferart: {shippingLabel}</div>}
+            {/* Neuware: vom Kaeufer gewaehlte Variante (Schnappschuss am Kauf) */}
+            {p.variant_choice && Object.keys(p.variant_choice).length > 0 && (
+              <div style={{ fontSize: 13, color: colors.dark, fontWeight: 700 }}>
+                {Object.entries(p.variant_choice).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+              </div>
+            )}
             <div style={{ fontSize: 13, color: colors.muted }}>{isService && p.notes ? p.notes : `Gesamtpreis: ${fmtCHF(totalPrice)}`}</div>
           </div>
         </div>

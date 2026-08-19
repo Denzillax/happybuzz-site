@@ -28,6 +28,7 @@ import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { sanitizeDescription, isFormattedDescription } from "@/lib/richtext";
 import { createNotification } from "@/lib/notifications";
+import { getListingAttributesDetailed, getCategoryAttributes } from "@/lib/api/attributes";
 import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
@@ -168,6 +169,10 @@ export default function ListingDetail() {
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerAmount, setOfferAmount] = useState("");
   const [offerSending, setOfferSending] = useState(false);
+  // Eigenschaften (Groesse, Farbe...) + Neuware-Varianten
+  const [eigenschaften, setEigenschaften] = useState([]);
+  const [variantDefs, setVariantDefs] = useState([]); // [{key, name, options}]
+  const [variantWahl, setVariantWahl] = useState({}); // {key: wert}
   const [viewerCount, setViewerCount] = useState(1);
   const [reportReason, setReportReason] = useState("");
   const [reportText, setReportText] = useState("");
@@ -180,6 +185,21 @@ export default function ListingDetail() {
         recordView(data);
         if (data.user_id) getUserAvgRating(data.user_id).then(setSellerRating).catch(() => {});
         if (data.category_id) getSimilarListings(params.id, data.category_id).then(setSimilar).catch(() => {});
+        // Eigenschaften (Groesse, Farbe...) fuer den Anzeige-Block
+        getListingAttributesDetailed(params.id).then(setEigenschaften).catch(() => {});
+        // Neuware-Varianten: Anzeigenamen + Original-Reihenfolge der Werte holen
+        if (data.variant_options && data.category_id) {
+          getCategoryAttributes(data.category_id).then(attrs => {
+            const defs = Object.entries(data.variant_options)
+              .filter(([, werte]) => Array.isArray(werte) && werte.length > 0)
+              .map(([key, werte]) => {
+                const attr = attrs.find(a => a.attribute_key === key);
+                const optionen = attr?.options ? attr.options.filter(o => werte.includes(o)) : werte;
+                return { key, name: attr?.name || key, options: optionen };
+              });
+            setVariantDefs(defs);
+          }).catch(() => {});
+        }
         if (data.listing_type === "auction") {
           getBids(params.id).then(setBids).catch(() => {});
           getBidHistory(params.id).then(setBidHistory).catch(() => {});
@@ -416,6 +436,20 @@ export default function ListingDetail() {
     finally { setOfferSending(false); }
   };
 
+  // Neuware-Varianten: alle Pflicht-Wahlen getroffen? Schnappschuss mit
+  // Anzeigenamen als Schluessel (landet in purchases.variant_choice)
+  const variantenKomplett = variantDefs.every(d => variantWahl[d.key]);
+  const variantenSchnappschuss = () => variantDefs.length > 0
+    ? Object.fromEntries(variantDefs.map(d => [d.name, variantWahl[d.key]]))
+    : null;
+  const fehlendeVarianten = () => variantDefs.filter(d => !variantWahl[d.key]).map(d => d.name).join(", ");
+  // Nach dem Kauf: Stueckzahl lokal runterzaehlen, sold erst beim letzten Stueck
+  const nachKaufLokal = (prev) => ({
+    ...prev,
+    quantity: Math.max(0, (prev.quantity ?? 1) - 1),
+    status: (prev.quantity ?? 1) <= 1 ? "sold" : prev.status,
+  });
+
   const handleBuy = async () => {
     if (!user) { router.push("/login"); return; }
     if (buyState === "idle") {
@@ -426,11 +460,16 @@ export default function ListingDetail() {
       setBuyState("confirm"); return;
     }
     if (buyState === "confirm") {
+      if (l.listing_type === "sell" && variantDefs.length > 0 && !variantenKomplett) {
+        setBuyError(`Bitte zuerst wählen: ${fehlendeVarianten()}`);
+        setBuyState("error");
+        return;
+      }
       setBuyState("buying");
       try {
-        const purchaseId = await createPurchase(user.id, l.id);
+        const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss());
         setBuyState("success");
-        setListing((prev) => ({ ...prev, status: "sold" }));
+        setListing(nachKaufLokal);
         if (purchaseId) router.push(`/order/${purchaseId}`);
       } catch (err) { setBuyError(err.message); setBuyState("error"); }
     }
@@ -555,6 +594,12 @@ export default function ListingDetail() {
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.city}</p>
                 </div>
               )}
+              {l.listing_type === "sell" && (l.quantity ?? 1) > 1 && l.status === "active" && (
+                <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderLeft: `1px solid ${colors.borderLt}` }}>
+                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Verfügbar</p>
+                  <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>Noch {l.quantity} Stück</p>
+                </div>
+              )}
             </div>
 
             {/* ── BESCHREIBUNG ───────────────────────── */}
@@ -570,6 +615,21 @@ export default function ListingDetail() {
                 <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
               )}
             </div>
+
+            {/* ── EIGENSCHAFTEN (Kategorie-Attribute: Groesse, Farbe...) ── */}
+            {eigenschaften.length > 0 && (
+              <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+                <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
+                  {eigenschaften.map((e) => (
+                    <div key={e.name}>
+                      <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{e.name}</p>
+                      <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{e.value}{e.unit ? ` ${e.unit}` : ""}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
             <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
@@ -1082,8 +1142,30 @@ export default function ListingDetail() {
                               {/* Sofortkauf / Festpreis */}
                               <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 16 }}>
                                 <span style={{ color: colors.muted }}>{l.listing_type === "auction" ? "Sofortkauf-Preis" : "Preis"}</span>
-                                <span style={{ fontWeight: 700 }}>CHF {fmtPrice(l.listing_type === "auction" ? l.buy_now_price : l.price)}</span>
+                                <span style={{ fontWeight: 700 }}>
+                                  CHF {fmtPrice(l.listing_type === "auction" ? l.buy_now_price : l.price)}
+                                  {l.listing_type === "sell" && (l.quantity ?? 1) > 1 && <span style={{ fontWeight: 600, fontSize: 12, color: colors.muted }}> · noch {l.quantity} Stück</span>}
+                                </span>
                               </div>
+
+                              {/* Neuware-Varianten: Pflicht-Wahl vor dem Kauf */}
+                              {l.listing_type === "sell" && variantDefs.length > 0 && (
+                                <div style={{ marginBottom: 16 }}>
+                                  {variantDefs.map((d) => (
+                                    <div key={d.key} style={{ marginBottom: 10 }}>
+                                      <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: colors.dark, marginBottom: 4 }}>{d.name} wählen *</label>
+                                      <select
+                                        value={variantWahl[d.key] || ""}
+                                        onChange={(e) => setVariantWahl(prev => ({ ...prev, [d.key]: e.target.value }))}
+                                        style={{ width: "100%", padding: "11px 12px", borderRadius: 0, border: `1.5px solid ${variantWahl[d.key] ? colors.border : colors.yellow}`, fontSize: 14, fontFamily: fonts.body, background: "#fff", cursor: "pointer" }}
+                                      >
+                                        <option value="">Bitte wählen…</option>
+                                        {d.options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                                      </select>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </>
                           )}
 
@@ -1175,11 +1257,16 @@ export default function ListingDetail() {
                                   return;
                                 }
                                 if (bidModal === "buynow") {
+                                  if (l.listing_type === "sell" && variantDefs.length > 0 && !variantenKomplett) {
+                                    setBidError(`Bitte zuerst wählen: ${fehlendeVarianten()}`);
+                                    setBidding(false);
+                                    return;
+                                  }
                                   // For auctions: update listing price to buy_now_price first
                                   if (l.listing_type === "auction" && l.buy_now_price > 0) {
                                     await supabase.from("listings").update({ price: l.buy_now_price }).eq("id", l.id);
                                   }
-                                  const purchaseId = await createPurchase(user.id, l.id);
+                                  const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss());
                                   // Ensure purchase price matches buy_now_price (not auction bid)
                                   if (l.listing_type === "auction" && l.buy_now_price > 0 && purchaseId) {
                                     await supabase.from("purchases").update({ price: l.buy_now_price }).eq("id", purchaseId);

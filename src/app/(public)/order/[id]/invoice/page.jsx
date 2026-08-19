@@ -166,6 +166,11 @@ export default function InvoicePage() {
                     <td style={{ ...cp, fontSize: 12 }}>
                       {isRental ? `Miete: ${order.listing?.title || "Artikel"}` : (order.listing?.title || "Artikel")}
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
+                      {order.variant_choice && Object.keys(order.variant_choice).length > 0 && (
+                        <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>
+                          {Object.entries(order.variant_choice).map(([k, v]) => `${k}: ${v}`).join(" · ")}
+                        </span>
+                      )}
                       {isRental && booking && (
                         <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>
                           Mietdauer: {new Date(booking.start_date).toLocaleDateString("de-CH")} bis {new Date(booking.end_date).toLocaleDateString("de-CH")}

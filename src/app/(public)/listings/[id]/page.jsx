@@ -1,7 +1,7 @@
 "use client"
 import { supabase } from "@/lib/supabase/supabase";
 import { useRouter, useParams } from "next/navigation";
-import { getListing, updateListing, uploadListingImages, deleteListingImage, updateListingStatus, getCategories } from "@/lib/listings";
+import { getListing, updateListing, uploadListingImages, deleteListingImage, updateListingStatus, submitForReview, getCategories } from "@/lib/listings";
 import { saveListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
 import { useState, useEffect } from "react";
 import ListingForm from "@/components/listings/ListingForm";
@@ -40,12 +40,23 @@ export default function EditListingPage() {
       const startIdx = formData.existingImages?.length || 0;
       await uploadListingImages(listingId, formData.newFiles.map((f, i) => ({ ...f, sortOrder: startIdx + i })));
     }
-    if (formData.publish) await updateListingStatus(listingId, "active");
+    // Veroeffentlichen beim Bearbeiten: NIE freigegebene Inserate (Entwurf /
+    // in Pruefung) gehen (zurueck) in die Freigabe-Queue statt direkt live —
+    // vorher umging der Owner so die eigene Freigabe, normale Nutzer bekamen
+    // eine rohe Trigger-Exception. Bereits freigegebene (aktiv/pausiert)
+    // schalten wie bisher auf aktiv.
+    if (formData.publish) {
+      if (listing?.status === "draft" || listing?.status === "pending_review") {
+        await submitForReview(listingId);
+      } else if (listing?.status !== "active" && listing?.status !== "scheduled") {
+        await updateListingStatus(listingId, "active");
+      }
+    }
     // Save category-specific attributes
     if (formData.attributeValues) {
       await clearListingAttributes(listingId);
       if (Object.keys(formData.attributeValues).length > 0) {
-        await saveListingAttributes(listingId, formData.attributeValues);
+        await saveListingAttributes(listingId, formData.attributeValues, formData.category_id);
       }
     }
     router.push("/listings");

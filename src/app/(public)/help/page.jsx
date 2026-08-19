@@ -71,6 +71,7 @@ const CATEGORIES = [
     color: "#8B6DB0",
     faqs: [
       { q: "Wie vermiete ich einen Artikel?", a: "Beim Inserieren wählst du «Miete» als Inserattyp. Setze den Mietpreis pro Stunde, Tag, Woche oder Monat und optional eine Kaution." },
+      { q: "Kann ich Neuware mit Grössen und Farben verkaufen?", a: "Ja. Wähle beim Inserieren Festpreis und Zustand «Neu»: dann kannst du eine Stückzahl setzen und markieren, welche Werte (z.B. Grössen S/M/L) der Käufer beim Kauf wählen kann. Jeder Kauf zieht ein Stück ab, das Inserat bleibt aktiv, bis alles verkauft ist." },
       { q: "Wie buche ich einen Mietartikel?", a: "Wähle deinen gewünschten Zeitraum und klicke auf «Buchen». Du erhältst die Kontaktdaten des Vermieters." },
       { q: "Wie biete ich eine Dienstleistung an?", a: "Wähle «Service» als Inserattyp und lege deinen Preis pro Stunde, Tag, Woche oder Monat fest. Kunden fragen einen Termin an, abgerechnet wird nach Abschluss über eine Service-Rechnung." },
       { q: "Wie verschenke ich etwas?", a: "Beim Inserieren wählst du «Gratis». Der Artikel wird kostenlos angeboten. Nur Abholung, keine Gebühren." },

@@ -90,7 +90,7 @@ function NewListingPageInner() {
       await uploadListingImages(listing.id, formData.newFiles);
     }
     if (formData.attributeValues && Object.keys(formData.attributeValues).length > 0) {
-      await saveListingAttributes(listing.id, formData.attributeValues);
+      await saveListingAttributes(listing.id, formData.attributeValues, formData.category_id);
     }
     if (formData.publish) {
       await submitForReview(listing.id);
