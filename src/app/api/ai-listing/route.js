@@ -8,6 +8,7 @@
 
 const MODEL = "anthropic/claude-haiku-4.5";
 const MAX_IMAGE_CHARS = 2_000_000; // ~1.5 MB base64, Bild kommt clientseitig verkleinert
+const MAX_IMAGES = 5; // Cover + bis zu 4 weitere Fotos (Details, Maengel, Zubehoer)
 
 export async function POST(req) {
   // Beide Namen akzeptieren: OPENROUTER_API_KEY (Standard) und Openroute_Key
@@ -35,8 +36,10 @@ export async function POST(req) {
   try { body = await req.json(); } catch {
     return Response.json({ error: "bad_request" }, { status: 400 });
   }
-  const { image, categories, field, previous } = body || {};
-  if (!image || typeof image !== "string" || !image.startsWith("data:image/") || image.length > MAX_IMAGE_CHARS) {
+  const { image, images, categories, field, previous } = body || {};
+  // Mehrere Fotos (neu) oder ein einzelnes (alte Clients) — max 5 Stueck
+  const bilder = (Array.isArray(images) ? images : [image]).filter(Boolean).slice(0, MAX_IMAGES);
+  if (!bilder.length || bilder.some(b => typeof b !== "string" || !b.startsWith("data:image/") || b.length > MAX_IMAGE_CHARS)) {
     return Response.json({ error: "bad_image" }, { status: 400 });
   }
   const slugs = Array.isArray(categories) ? categories.filter(s => typeof s === "string").slice(0, 40) : [];
@@ -44,7 +47,8 @@ export async function POST(req) {
   const wantField = field === "title" || field === "description" ? field : null;
   const prevText = typeof previous === "string" ? previous.slice(0, 600) : "";
 
-  const prompt = `Du bist ein kritischer Secondhand-Gutachter für den Schweizer Marktplatz BEEDARO und siehst das Foto eines Artikels.
+  const prompt = `Du bist ein kritischer Secondhand-Gutachter für den Schweizer Marktplatz BEEDARO und siehst ${bilder.length > 1 ? `${bilder.length} Fotos desselben Artikels (Cover zuerst, danach Detail-, Mängel- oder Zubehör-Fotos)` : "das Foto eines Artikels"}.
+Beziehe ALLE Fotos in die Beurteilung ein — Mängel sind oft nur auf den Detailfotos sichtbar.
 Antworte NUR mit einem JSON-Objekt, ohne Erklärtext und ohne Markdown:
 {
   "title": "prägnanter Titel, max 60 Zeichen, mit Marke und Modell falls erkennbar",
@@ -60,10 +64,10 @@ Mini-HTML mit genau dieser Struktur und NUR den Tags p, h3, ul, li, b, br:
 <h3>Lieferumfang</h3><ul><li>je ein sichtbares Teil pro Punkt</li></ul>
 Kein Markdown, keine Attribute in den Tags, keine anderen Tags.
 
-Eiserne Regel: Erwähne NUR, was auf dem Foto tatsächlich zu sehen ist.
+Eiserne Regel: Erwähne NUR, was auf den Fotos tatsächlich zu sehen ist.
 Kein Zubehör, keine Kabel, keine Spiele/Module, keine Originalverpackung und keine
-Funktionsfähigkeit behaupten, wenn das Bild sie nicht eindeutig zeigt. Lieber weglassen als raten.
-Zähle den Lieferumfang exakt so, wie er im Bild liegt (z.B. wie viele Controller sichtbar sind).
+Funktionsfähigkeit behaupten, wenn die Bilder sie nicht eindeutig zeigen. Lieber weglassen als raten.
+Zähle den Lieferumfang exakt so, wie er auf den Fotos liegt (z.B. wie viele Controller sichtbar sind); dasselbe Teil auf mehreren Fotos nur einmal zählen.
 
 Zustand streng nach sichtbaren Mängeln bewerten, nicht wohlwollend:
 - new: originalverpackt/unbenutzt, like_new: praktisch makellos.
@@ -96,7 +100,7 @@ Bisherige Version: ${prevText}` : ""}` : ""}`;
         messages: [{
           role: "user",
           content: [
-            { type: "image_url", image_url: { url: image } },
+            ...bilder.map(b => ({ type: "image_url", image_url: { url: b } })),
             { type: "text", text: prompt },
           ],
         }],
@@ -128,7 +132,12 @@ Bisherige Version: ${prevText}` : ""}` : ""}`;
 
   const CONDITIONS = ["new", "like_new", "good", "fair", "poor"];
   const out = {
-    title: typeof parsed.title === "string" ? parsed.title.slice(0, 60) : "",
+    // Bei Ueberlaenge am letzten ganzen Wort kuerzen statt mitten im Wort
+    title: typeof parsed.title === "string"
+      ? (parsed.title.length > 60
+          ? parsed.title.slice(0, 60).replace(/\s+\S*$/, "")
+          : parsed.title)
+      : "",
     description: typeof parsed.description === "string" ? parsed.description.slice(0, 2500) : "",
     condition: CONDITIONS.includes(parsed.condition) ? parsed.condition : "good",
     category_slug: slugs.includes(parsed.category_slug) ? parsed.category_slug : null,

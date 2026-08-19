@@ -708,7 +708,7 @@ export default function ListingForm({
   // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
   const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6" } : {});
 
-  // KI-Erkennung: erstes Foto verkleinern, /api/ai-listing fragen, Felder fuellen.
+  // KI-Erkennung: Fotos (max 5) verkleinern, /api/ai-listing fragen, Felder fuellen.
   // Ohne target: Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen),
   // Zustand/Kategorie gesetzt, Preis als Hinweis. Mit target ("title"/"description"):
   // gezielt eine NEUE Variante fuer genau dieses Feld, ueberschreibt es.
@@ -717,27 +717,32 @@ export default function ListingForm({
     setAiBusy(true);
     setAiHint(null);
     try {
-      const bild = await new Promise((resolve, reject) => {
+      // Alle Fotos (max 5) verkleinert mitschicken — Maengel sind oft nur
+      // auf den Detailfotos zu sehen. Cover in 1000px, weitere in 800px.
+      const verkleinern = (src, maxSeite) => new Promise((resolve, reject) => {
         const im = new window.Image();
         im.crossOrigin = "anonymous";
-        im.onload = () => resolve(im);
+        im.onload = () => {
+          const f = Math.min(1, maxSeite / Math.max(im.width, im.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(im.width * f));
+          canvas.height = Math.max(1, Math.round(im.height * f));
+          canvas.getContext("2d").drawImage(im, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/jpeg", 0.8));
+        };
         im.onerror = reject;
-        im.src = images[0].preview;
+        im.src = src;
       });
-      const maxSeite = 1000;
-      const f = Math.min(1, maxSeite / Math.max(bild.width, bild.height));
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.max(1, Math.round(bild.width * f));
-      canvas.height = Math.max(1, Math.round(bild.height * f));
-      canvas.getContext("2d").drawImage(bild, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+      const dataUrls = await Promise.all(
+        images.slice(0, 5).map((img, i) => verkleinern(img.preview, i === 0 ? 1000 : 800))
+      );
 
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch("/api/ai-listing", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token || ""}` },
         body: JSON.stringify({
-          image: dataUrl,
+          images: dataUrls,
           categories: categories.filter((c) => !c.parent_id).map((c) => c.slug),
           ...(target ? {
             field: target,
@@ -775,7 +780,7 @@ export default function ListingForm({
     <button
       onClick={() => aiFill(target)}
       disabled={aiBusy || images.length === 0}
-      title={images.length === 0 ? "Zuerst ein Foto hochladen" : target ? "KI erzeugt aus dem ersten Foto eine neue Variante für dieses Feld" : "KI liest das erste Foto und füllt die Felder"}
+      title={images.length === 0 ? "Zuerst ein Foto hochladen" : target ? "KI erzeugt aus deinen Fotos eine neue Variante für dieses Feld" : "KI liest deine Fotos und füllt die Felder"}
       style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "6px 12px", borderRadius: 0,
@@ -1056,7 +1061,7 @@ export default function ListingForm({
           </div>
         )}
 
-        {/* KI-Erkennung: liest das erste Foto und fuellt Titel, Beschreibung,
+        {/* KI-Erkennung: liest die Fotos (max 5) und fuellt Titel, Beschreibung,
             Zustand und Kategorie; Preis kommt nur als Schaetzung darunter */}
         {images.length > 0 && (
           <>
