@@ -233,8 +233,10 @@ input:focus, textarea:focus, select:focus {
 /* ── Startseiten-Baender (Challenge + Bee-Impact): auf Desktop buendig zum
    Hero-Inhalt (maxWidth 1280 minus 2x32 Padding = 1216) ── */
 @media (min-width: 769px) {
-  .home-band { padding-left: 32px !important; padding-right: 32px !important; }
-  .home-band-box { max-width: 1216px !important; }
+  /* Bündig zu den Inserat-Sektionen (max 1280, padding 24 -> Inhalt 1232):
+     Challenge- und Impact-Box haben exakt deren Breite und Kanten */
+  .home-band { padding-left: 24px !important; padding-right: 24px !important; }
+  .home-band-box { max-width: 1232px !important; }
 }
 
 /* ═══════════════════════════════════════════

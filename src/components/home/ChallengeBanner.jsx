@@ -72,13 +72,13 @@ export function ChallengeBanner() {
           95% { transform: rotate(-10deg); }
         }
         .chal-bee {
-          width: 116px; height: 116px; flex-shrink: 0;
-          margin: -26px 2px -26px -4px;
+          width: 160px; height: auto; flex-shrink: 0;
+          margin: -30px 2px -26px -8px;
           transform: rotate(-6deg);
           animation: chalWiggle 4.5s ease-in-out infinite;
         }
         @media (max-width: 640px) {
-          .chal-bee { width: 84px; height: 84px; margin: -14px 0 -8px -2px; }
+          .chal-bee { width: 116px; margin: -16px 0 -8px -4px; }
         }
         @media (prefers-reduced-motion: reduce) {
           .chal-box, .chal-bee { animation: none !important; }
