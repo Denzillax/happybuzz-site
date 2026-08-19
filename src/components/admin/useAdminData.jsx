@@ -525,15 +525,16 @@ export function useAdminData() {
   };
 
   // Grosse Laufschrift (Ticker): eigenes Element, Tab Kommunikation
-  const [ticker, setTicker] = useState({ enabled: false, message: "", bg_color: "#191615", text_color: "#F4C03F", placement: "home" });
+  const [ticker, setTicker] = useState({ enabled: false, message: "", bg_color: "#191615", text_color: "#F4C03F", placement: "home", speed: "normal" });
   const saveTicker = async () => {
     const { error } = await supabase.from("site_ticker").update({
       enabled: ticker.enabled, message: ticker.message.trim(), bg_color: ticker.bg_color,
-      text_color: ticker.text_color, placement: ticker.placement, updated_at: new Date().toISOString(),
+      text_color: ticker.text_color, placement: ticker.placement, speed: ticker.speed || "normal",
+      updated_at: new Date().toISOString(),
     }).eq("id", 1);
     if (error) { flash("Fehler beim Speichern"); return; }
     flash(ticker.enabled ? "Laufschrift gespeichert + aktiv" : "Laufschrift gespeichert (aus)");
-    logAdmin("ticker", "ticker", ticker.enabled ? "an" : "aus", { message: ticker.message.trim(), placement: ticker.placement });
+    logAdmin("ticker", "ticker", ticker.enabled ? "an" : "aus", { message: ticker.message.trim(), placement: ticker.placement, speed: ticker.speed || "normal" });
   };
 
   const openAnnouncement = async () => {

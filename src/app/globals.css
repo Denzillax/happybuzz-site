@@ -306,7 +306,7 @@ input:focus, textarea:focus, select:focus {
 /* ── Grosse Laufschrift (Ticker): zwei identische Haelften, Track wandert um
    die halbe Breite => nahtlose Endlosschleife ── */
 @keyframes tickerLoop { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.ticker-track { will-change: transform; animation: tickerLoop 30s linear infinite; }
+.ticker-track { will-change: transform; animation: tickerLoop var(--ticker-dur, 30s) linear infinite; }
 @media (prefers-reduced-motion: reduce) {
   .ticker-track { animation: none; }
 }
