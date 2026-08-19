@@ -2,7 +2,7 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { getUserListings, deleteListing, getListingAnalytics, renewListing } from "@/lib/listings";
+import { getUserListings, deleteListing, getListingAnalytics, renewListing, publishScheduledNow } from "@/lib/listings";
 import { redeemNektar, NEKTAR_CATALOG } from "@/lib/gamification";
 import Link from "next/link";
 import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket, RefreshCw } from "lucide-react";
@@ -18,6 +18,7 @@ const STATUS_CONFIG = {
   expired:  { label: "Abgelaufen", color: "#E65100", icon: Clock },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
   pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
+  scheduled: { label: "Geplant", color: "#0B5E5C", icon: Clock },
   paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
   rented:   { label: "Vermietet", color: colors.blue, icon: CheckCircle },
@@ -129,7 +130,7 @@ export default function ListingsPage() {
   if (typeFilter !== "all") filtered = filtered.filter(l => l.listing_type === typeFilter);
 
   // Sort — status priority first (active/paused on top, sold/archived bottom)
-  const statusPriority = { pending_review: 0, active: 1, paused: 2, draft: 3, rented: 4, sold: 5, expired: 6, archived: 7, inactive: 8 };
+  const statusPriority = { pending_review: 0, scheduled: 1, active: 2, paused: 3, draft: 4, rented: 5, sold: 6, expired: 7, archived: 8, inactive: 9 };
   filtered = [...filtered].sort((a, b) => {
     const sp = (statusPriority[a.status] ?? 9) - (statusPriority[b.status] ?? 9);
     if (sp !== 0) return sp;
@@ -153,6 +154,7 @@ export default function ListingsPage() {
     sold: listings.filter(l => l.status === "sold").length,
     paused: listings.filter(l => l.status === "paused").length,
     draft: listings.filter(l => l.status === "draft").length,
+    scheduled: listings.filter(l => l.status === "scheduled").length,
   };
 
   const FILTERS = [
@@ -162,6 +164,7 @@ export default function ListingsPage() {
     { key: "sold", label: `Verkauft (${counts.sold})` },
     ...(counts.paused > 0 ? [{ key: "paused", label: `Pausiert (${counts.paused})` }] : []),
     ...(counts.draft > 0 ? [{ key: "draft", label: `Entwürfe (${counts.draft})` }] : []),
+    ...(counts.scheduled > 0 ? [{ key: "scheduled", label: `Geplant (${counts.scheduled})` }] : []),
   ];
 
   // Batch actions
@@ -337,6 +340,17 @@ export default function ListingsPage() {
                             <Link href={`/listing/${l.id}`} style={{ fontSize: 14, fontWeight: 700, color: colors.blue, textDecoration: "none", display: "block", marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 220 }}>{l.title}</Link>
                             <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
                             {l.status === "draft" && l.review_reason && <div style={{ fontSize: 11, color: "#c62828", marginTop: 3, maxWidth: 220, whiteSpace: "normal", lineHeight: 1.3 }}>Abgelehnt: {l.review_reason}</div>}
+                            {l.status === "scheduled" && l.publish_at && (
+                              <div style={{ fontSize: 11, color: "#0B5E5C", marginTop: 3, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                                <span>Geht live am {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr</span>
+                                <button
+                                  onClick={async () => { try { await publishScheduledNow(l); setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: "active", publish_at: null } : x)); } catch (e) { console.error(e); } }}
+                                  style={{ border: `1px solid ${K.ink}`, background: "#fff", padding: "2px 8px", fontSize: 10, fontWeight: 700, cursor: "pointer", color: K.ink }}
+                                >
+                                  Jetzt veröffentlichen
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td>

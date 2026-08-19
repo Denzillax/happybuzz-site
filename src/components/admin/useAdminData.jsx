@@ -570,9 +570,11 @@ export function useAdminData() {
   // Freigabe-Queue: Inserat freigeben (→active) bzw. ablehnen (→draft + Grund + Benachrichtigung).
   const approveListing = async (listingId) => {
     const _l = listings.find(x => x.id === listingId);
-    await reviewListing(listingId, "approve");
-    setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: "active" } : l));
-    flash("Inserat freigegeben");
+    // RPC entscheidet: publish_at in der Zukunft -> 'scheduled', sonst 'active'
+    const res = await reviewListing(listingId, "approve");
+    const neuerStatus = res?.status || "active";
+    setListings(prev => prev.map(l => l.id === listingId ? { ...l, status: neuerStatus } : l));
+    flash(neuerStatus === "scheduled" ? "Freigegeben, geht zur geplanten Zeit live" : "Inserat freigegeben");
     logAdmin("listing_approve", "listing", _l?.title || listingId);
   };
   const rejectListing = async (listingId, reason) => {
@@ -871,7 +873,7 @@ export function useAdminData() {
 
   const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
-    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#f5f5f5", "#666", "Abgelaufen"] };
+    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#f5f5f5", "#666", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#0B5E5C", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#f5f5f5", "#666", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#f5f5f5", "#666", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };

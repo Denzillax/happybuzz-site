@@ -95,6 +95,7 @@ export async function createListing(userId, formData) {
     shipping_available: formData.shipping_available || false,
     pickup_only: formData.pickup_only ?? true,
     pickup_address: formData.pickup_address || null,
+    publish_at: formData.publish_at || null,
     shipping_cost: formData.shipping_cost ? parseFloat(formData.shipping_cost) : null,
     shipping_method: formData.shipping_method || null,
     shipping_payer: formData.shipping_payer || "buyer",
@@ -177,6 +178,7 @@ export async function updateListing(listingId, formData) {
     shipping_available: formData.shipping_available || false,
     pickup_only: formData.pickup_only ?? true,
     pickup_address: formData.pickup_address || null,
+    publish_at: formData.publish_at || null,
     shipping_cost: formData.shipping_cost ? parseFloat(formData.shipping_cost) : null,
     shipping_method: formData.shipping_method || null,
     shipping_payer: formData.shipping_payer || "buyer",
@@ -257,6 +259,24 @@ export async function reviewListing(listingId, decision, reason = null) {
   });
   if (error) throw error;
   return data;
+}
+
+// ─── Geplantes Inserat sofort live schalten ─────────────────
+// Fuer Inserate im Status 'scheduled': gleiche Logik wie der Cron
+// (60 Tage Laufzeit ab jetzt, Auktions-Uhr startet jetzt).
+export async function publishScheduledNow(listing) {
+  const patch = {
+    status: "active",
+    published_at: new Date().toISOString(),
+    expires_at: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+    publish_at: null,
+  };
+  if (listing.listing_type === "auction" && !listing.auction_end) {
+    const tage = parseInt(listing.auction_duration) || 7;
+    patch.auction_end = new Date(Date.now() + tage * 24 * 60 * 60 * 1000).toISOString();
+  }
+  const { error } = await supabase.from("listings").update(patch).eq("id", listing.id);
+  if (error) throw error;
 }
 
 // ─── Laufzeit verlängern ─────────────────────────────────────
@@ -1006,7 +1026,7 @@ export async function getMyConversations(userId) {
       hiddenForMe: c.buyer_id === userId ? c.hidden_by_buyer : c.hidden_by_seller,
       // Inserat nicht mehr aktiv -> Zeile ausgrauen
       listingStatus,
-      listingInactive: !["active", "draft", "pending_review"].includes(listingStatus),
+      listingInactive: !["active", "draft", "pending_review", "scheduled"].includes(listingStatus),
     };
   });
 }

@@ -156,6 +156,7 @@ export default function ListingForm({
     shipping_available: false,
     pickup_only: true,
     pickup_address: null, // null = Profil-Hauptadresse, sonst Schnappschuss einer Lieferadresse
+    publish_at: "", // datetime-local String; leer = sofort veroeffentlichen
     shipping_cost: "",
     shipping_method: "paket",
     shipping_payer: "buyer",
@@ -233,6 +234,10 @@ export default function ListingForm({
       shipping_available: initialData.shipping_available || false,
       pickup_only: initialData.pickup_only ?? true,
       pickup_address: initialData.pickup_address || null,
+      // ISO -> datetime-local (lokale Zeit, Minutengenauigkeit)
+      publish_at: initialData.publish_at
+        ? new Date(new Date(initialData.publish_at).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+        : "",
       shipping_cost: initialData.shipping_cost?.toString() || "",
       shipping_method: initialData.shipping_method || "",
       shipping_payer: initialData.shipping_payer || "buyer",
@@ -596,8 +601,21 @@ export default function ListingForm({
         if (t) shippingCost = t.toFixed(2);
       }
 
+      // Geplanter Zeitpunkt: datetime-local -> ISO; Vergangenheit abfangen
+      let publishAtIso = null;
+      if (form.publish_at) {
+        const t = new Date(form.publish_at);
+        if (publish && t.getTime() <= Date.now()) {
+          setErrors({ submit: "Der geplante Zeitpunkt liegt in der Vergangenheit. Bitte anpassen oder das Feld leeren." });
+          setSaving(false);
+          return;
+        }
+        publishAtIso = t.toISOString();
+      }
+
       await onSave({
         ...form,
+        publish_at: publishAtIso,
         shipping_cost: shippingCost,
         listing_type: effectiveType,
         price: isFree ? 0 : form.price,
@@ -2118,6 +2136,46 @@ export default function ListingForm({
         </div>
       )}
 
+      {/* ── SPÄTER VERÖFFENTLICHEN ──────────────────────────── */}
+      <div className="lf-section" style={{ ...sectionBase, padding: "16px 20px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Clock size={17} color={colors.dark} />
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, fontFamily: fonts.body }}>Später veröffentlichen</div>
+              <div style={{ fontSize: 12, color: colors.muted }}>
+                {form.publish_at
+                  ? `Geht nach der Freigabe am ${new Date(form.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })} um ${new Date(form.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr automatisch live.`
+                  : "Zeitpunkt wählen, das Inserat geht dann automatisch live."}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              if (form.publish_at) { set("publish_at", ""); return; }
+              // Vorschlag: morgen 09:00 (lokal)
+              const t = new Date(); t.setDate(t.getDate() + 1); t.setHours(9, 0, 0, 0);
+              set("publish_at", new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16));
+            }}
+            style={{
+              width: 44, height: 24, borderRadius: 0, border: "none", cursor: "pointer", flexShrink: 0,
+              background: form.publish_at ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+            }}
+          ><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.publish_at ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+        </div>
+        {form.publish_at && (
+          <div style={{ marginTop: 12 }}>
+            <input
+              type="datetime-local"
+              value={form.publish_at}
+              min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
+              onChange={(e) => set("publish_at", e.target.value)}
+              style={{ ...inputBase, maxWidth: 260 }}
+            />
+          </div>
+        )}
+      </div>
+
       {/* ── STICKY ACTION-BAR ───────────────────────────────── */}
       <div className="lf-actionbar" style={{
         position: "sticky", bottom: 0, zIndex: 30,
@@ -2168,7 +2226,7 @@ export default function ListingForm({
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
             }}
           >
-            <Rocket size={16} /> {saving ? "Veröffentlichen…" : "Veröffentlichen"}
+            <Rocket size={16} /> {saving ? "Speichern…" : form.publish_at ? "Planen" : "Veröffentlichen"}
           </button>
 
           {onCancel && (
