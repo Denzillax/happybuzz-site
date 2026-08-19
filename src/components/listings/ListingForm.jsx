@@ -622,6 +622,10 @@ export default function ListingForm({
       const bereinigteVarianten = istNeuware
         ? Object.fromEntries(Object.entries(variantOpts).filter(([, werte]) => Array.isArray(werte) && werte.length > 0))
         : {};
+      // Fuer waehlbare Eigenschaften keinen festen Wert mitspeichern (Widerspruch)
+      const attrOhneVarianten = Object.fromEntries(
+        Object.entries(attrValues).filter(([k]) => !(k in bereinigteVarianten))
+      );
       await onSave({
         ...form,
         publish_at: publishAtIso,
@@ -631,7 +635,7 @@ export default function ListingForm({
         publish,
         existingImages,
         newFiles,
-        attributeValues: attrValues,
+        attributeValues: attrOhneVarianten,
         quantity: istNeuware ? Math.max(1, parseInt(quantity, 10) || 1) : 1,
         variant_options: Object.keys(bereinigteVarianten).length > 0 ? bereinigteVarianten : null,
       });
@@ -1427,18 +1431,69 @@ export default function ListingForm({
         </div>
       </div>
 
-      {/* ── KATEGORIE-ATTRIBUTE (dynamisch) ───────────────────── */}
-      {categoryAttrs.length > 0 && (
+      {/* ── KATEGORIE-ATTRIBUTE (dynamisch) ─────────────────────
+          Neuware (sell + Zustand neu): pro Auswahl-Eigenschaft entscheidet ein
+          Umschalter zwischen festem Wert (Dropdown) und Kaeufer-Wahl (Chips) —
+          beides gleichzeitig ist damit konstruktionsbedingt unmoeglich. */}
+      {categoryAttrs.length > 0 && (() => {
+        const istNeuware = form.listing_type === "sell" && form.condition === "new";
+        const istWaehlbar = (key) => istNeuware && variantOpts[key] !== undefined;
+        const umschalten = (key) => {
+          if (istWaehlbar(key)) {
+            setVariantOpts(prev => { const n = { ...prev }; delete n[key]; return n; });
+          } else {
+            setVariantOpts(prev => ({ ...prev, [key]: [] }));
+            setAttrValues(prev => { const n = { ...prev }; delete n[key]; return n; });
+          }
+        };
+        return (
         <div style={sectionBase} className="lf-section">
-          <SectionHead icon={SlidersHorizontal} title="Eigenschaften" hint="Zusätzliche Angaben helfen Käufern, dein Inserat schneller zu finden." />
+          <SectionHead icon={SlidersHorizontal} title="Eigenschaften" hint={istNeuware
+            ? "Neuware: Pro Eigenschaft fester Wert ODER vom Käufer wählbar. Jeder Kauf zieht 1 Stück ab, das Inserat bleibt aktiv bis alles weg ist."
+            : "Zusätzliche Angaben helfen Käufern, dein Inserat schneller zu finden."} />
+          {istNeuware && (
+            <div style={{ marginBottom: 16, maxWidth: 200 }}>
+              <label style={{ ...labelBase, fontSize: 12, marginBottom: 4 }}>Stückzahl</label>
+              <input type="number" min="1" step="1" value={quantity} onChange={(e) => setQuantity(e.target.value)} style={inputBase} />
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {categoryAttrs.map(attr => (
               <div key={attr.id}>
-                <label style={{ ...labelBase, fontSize: 12, marginBottom: 4 }}>
-                  {attr.name}{attr.unit ? ` (${attr.unit})` : ""}
-                  {attr.is_required && <span style={{ color: colors.red, marginLeft: 2 }}>*</span>}
-                </label>
-                {attr.attribute_type === "select" && attr.options ? (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 4 }}>
+                  <label style={{ ...labelBase, fontSize: 12, marginBottom: 0 }}>
+                    {attr.name}{attr.unit ? ` (${attr.unit})` : ""}
+                    {attr.is_required && <span style={{ color: colors.red, marginLeft: 2 }}>*</span>}
+                  </label>
+                  {istNeuware && attr.attribute_type === "select" && Array.isArray(attr.options) && attr.options.length > 0 && (
+                    <div style={{ display: "inline-flex", border: `1.5px solid ${INK}`, flexShrink: 0 }}>
+                      {[["fest", "Fester Wert"], ["wahl", "Käufer wählt"]].map(([k, lbl], i) => {
+                        const aktiv = (k === "wahl") === istWaehlbar(attr.attribute_key);
+                        return (
+                          <button key={k} type="button" onClick={() => { if (!aktiv) umschalten(attr.attribute_key); }} style={{
+                            fontSize: 10.5, fontWeight: 700, padding: "5px 10px", border: "none",
+                            borderLeft: i > 0 ? `1.5px solid ${INK}` : "none", cursor: "pointer",
+                            fontFamily: fonts.body, background: aktiv ? colors.yellow : "#fff",
+                            color: aktiv ? INK : colors.muted, whiteSpace: "nowrap",
+                          }}>{lbl}</button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                {istWaehlbar(attr.attribute_key) && attr.attribute_type === "select" ? (
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {(Array.isArray(attr.options) ? attr.options : []).map(opt => {
+                      const gewaehlt = (variantOpts[attr.attribute_key] || []).includes(opt);
+                      return (
+                        <Chip key={opt} active={gewaehlt} onClick={() => setVariantOpts(prev => {
+                          const alt = prev[attr.attribute_key] || [];
+                          return { ...prev, [attr.attribute_key]: gewaehlt ? alt.filter(w => w !== opt) : [...alt, opt] };
+                        })}>{opt}</Chip>
+                      );
+                    })}
+                  </div>
+                ) : attr.attribute_type === "select" && attr.options ? (
                   <select
                     value={attrValues[attr.attribute_key] || ""}
                     onChange={e => setAttrValues(prev => ({ ...prev, [attr.attribute_key]: e.target.value }))}
@@ -1470,44 +1525,17 @@ export default function ListingForm({
             ))}
           </div>
         </div>
-      )}
+        );
+      })()}
 
-      {/* ── NEUWARE: Varianten & Stückzahl (nur sell + Zustand neu) ── */}
-      {form.listing_type === "sell" && form.condition === "new" && (
+      {/* ── STÜCKZAHL ohne Kategorie-Attribute (Neuware, Kategorie ohne Eigenschaften) ── */}
+      {categoryAttrs.length === 0 && form.listing_type === "sell" && form.condition === "new" && (
         <div style={sectionBase} className="lf-section">
-          <SectionHead icon={Package} title="Neuware: Varianten & Stückzahl" hint="Käufer wählen beim Kauf aus deinen markierten Werten. Jeder Kauf zieht 1 Stück ab, das Inserat bleibt aktiv bis alles weg ist." />
-          <div style={{ marginBottom: 16, maxWidth: 200 }}>
+          <SectionHead icon={Package} title="Neuware: Stückzahl" hint="Jeder Kauf zieht 1 Stück ab, das Inserat bleibt aktiv bis alles weg ist." />
+          <div style={{ maxWidth: 200 }}>
             <label style={{ ...labelBase, fontSize: 12, marginBottom: 4 }}>Stückzahl</label>
-            <input
-              type="number" min="1" step="1"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              style={inputBase}
-            />
+            <input type="number" min="1" step="1" value={quantity} onChange={(e) => setQuantity(e.target.value)} style={inputBase} />
           </div>
-          {categoryAttrs.filter(a => a.attribute_type === "select" && Array.isArray(a.options) && a.options.length > 0).map(attr => {
-            const gewaehlt = variantOpts[attr.attribute_key] || [];
-            const toggle = (wert) => setVariantOpts(prev => {
-              const alt = prev[attr.attribute_key] || [];
-              const neu = alt.includes(wert) ? alt.filter(w => w !== wert) : [...alt, wert];
-              return { ...prev, [attr.attribute_key]: neu };
-            });
-            return (
-              <div key={attr.id} style={{ marginBottom: 14 }}>
-                <label style={{ ...labelBase, fontSize: 12, marginBottom: 6 }}>
-                  {attr.name}: vom Käufer wählbar {gewaehlt.length > 0 && <span style={{ color: colors.teal }}>({gewaehlt.length} markiert)</span>}
-                </label>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {attr.options.map(opt => (
-                    <Chip key={opt} active={gewaehlt.includes(opt)} onClick={() => toggle(opt)}>{opt}</Chip>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-          {categoryAttrs.filter(a => a.attribute_type === "select").length === 0 && (
-            <p style={{ ...hintStyle, margin: 0 }}>Diese Kategorie hat keine wählbaren Eigenschaften. Die Stückzahl funktioniert trotzdem.</p>
-          )}
         </div>
       )}
 

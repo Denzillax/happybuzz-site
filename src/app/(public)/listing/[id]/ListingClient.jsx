@@ -616,20 +616,32 @@ export default function ListingDetail() {
               )}
             </div>
 
-            {/* ── EIGENSCHAFTEN (Kategorie-Attribute: Groesse, Farbe...) ── */}
-            {eigenschaften.length > 0 && (
-              <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
-                <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
-                  {eigenschaften.map((e) => (
-                    <div key={e.name}>
-                      <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{e.name}</p>
-                      <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{e.value}{e.unit ? ` ${e.unit}` : ""}</p>
-                    </div>
-                  ))}
+            {/* ── EIGENSCHAFTEN (Kategorie-Attribute: Groesse, Farbe...) ──
+                Waehlbare Neuware-Varianten zeigen ihre Auswahl statt eines
+                festen Werts; hat ein Attribut beides (Altbestand), gewinnt die Wahl */}
+            {(eigenschaften.length > 0 || variantDefs.length > 0) && (() => {
+              const variantNamen = new Set(variantDefs.map(d => d.name));
+              const zeilen = [
+                ...variantDefs.map(d => ({ name: d.name, value: `${d.options.join(", ")}`, waehlbar: true })),
+                ...eigenschaften.filter(e => !variantNamen.has(e.name)).map(e => ({ ...e, waehlbar: false })),
+              ];
+              return (
+                <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+                  <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
+                    {zeilen.map((e) => (
+                      <div key={e.name}>
+                        <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{e.name}</p>
+                        <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>
+                          {e.value}{e.unit ? ` ${e.unit}` : ""}
+                          {e.waehlbar && <span style={{ fontWeight: 600, fontSize: 11.5, color: colors.teal }}> (wählbar)</span>}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
             <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
