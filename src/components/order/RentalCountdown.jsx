@@ -22,14 +22,19 @@ function endeDesTages(d) {
 
 const fmtDatum = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "short" });
 
-export function RentalCountdown({ startDate, endDate }) {
+export function RentalCountdown({ startDate, endDate, handoverAt }) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
 
-  const start = new Date(startDate).getTime();
+  // Balken laeuft ab dem Moment, in dem der Mieter den Artikel HAT (Uebergabe),
+  // auch wenn der gebuchte Zeitraum erst spaeter beginnt: er sitzt sonst
+  // sichtbar auf 0%, obwohl die Miete faktisch laeuft.
+  const gebuchterStart = new Date(startDate).getTime();
+  const uebergabe = handoverAt ? new Date(handoverAt).getTime() : null;
+  const start = uebergabe ? Math.min(uebergabe, gebuchterStart) : gebuchterStart;
   const ende = endeDesTages(endDate).getTime();
   const overdue = now > ende;
   const diff = Math.abs(ende - now);
@@ -77,7 +82,8 @@ export function RentalCountdown({ startDate, endDate }) {
         <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, transition: "width .5s linear" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#7a756d" }}>
-        <span>{fmtDatum(startDate)}</span>
+        {/* Links steht der tatsaechliche Beginn des Balkens (Uebergabe oder Mietstart) */}
+        <span>{fmtDatum(start)}</span>
         <span style={{ fontFamily: fonts.body, fontWeight: 700, color: overdue ? ROT : INK, fontSize: 11.5 }}>
           {overdue ? `${tage} ${tage === 1 ? "Tag" : "Tage"} drüber` : `${tage} ${tage === 1 ? "Tag" : "Tage"} übrig`}
         </span>

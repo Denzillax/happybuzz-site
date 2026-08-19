@@ -183,12 +183,18 @@ export default function OrderDetailPage() {
   }, [purchase?.id, user?.id]);
 
   // Verkaufs-Popup für den Verkäufer, einmalig pro Bestellung.
+  // Bei Mieten erst bei "completed": "delivered" heisst dort nur, dass der
+  // Mieter den Artikel erhalten hat, die Vermietung laeuft noch (Bug: der
+  // Abgeschlossen-Dialog sprang mitten in der Mietzeit auf).
   useEffect(() => {
     if (!purchase || !user) return;
-    const finished = purchase.status === "completed" || purchase.status === "delivered";
+    const mietet = purchase.listing?.listing_type === "rent";
+    const finished = purchase.status === "completed" || (!mietet && purchase.status === "delivered");
     if (!finished || purchase.seller_id !== user.id) return;
     const key = `beedaro_sale_popup_${purchase.id}`;
-    try { if (localStorage.getItem(key)) return; } catch {}
+    // Sperre SOFORT setzen, nicht erst nach dem Laden: sonst zeigt ein
+    // doppelt laufender Effekt (StrictMode/schnelle Reloads) den Dialog zweimal
+    try { if (localStorage.getItem(key)) return; localStorage.setItem(key, "1"); } catch {}
     (async () => {
       try {
         const [{ data: xp }, { data: nk }, { data: prof }] = await Promise.all([
@@ -199,7 +205,6 @@ export default function OrderDetailPage() {
         const pollen = (xp || []).reduce((s, r) => s + (r.amount || 0), 0);
         const nektar = (nk || []).reduce((s, r) => s + (r.amount || 0), 0);
         setSalePopup({ pollen, nektar, balance: prof?.nektar || 0 });
-        try { localStorage.setItem(key, "1"); } catch {}
       } catch {}
     })();
   }, [purchase, user]);
@@ -272,6 +277,9 @@ export default function OrderDetailPage() {
   const sortedEvents = [...events];
   const visibleEvents = showFullTimeline ? sortedEvents : sortedEvents.slice(0, 2);
   const trackingEvent = events.find(e => e.tracking_number);
+  // Uebergabe-Zeitpunkt fuer den Miet-Countdown: aus der Timeline (die
+  // Status-Spalten wie buyer_confirmed_at werden im Flow nicht gestempelt)
+  const handoverAt = events.find(e => e.event_type === "delivered" || e.event_type === "picked_up")?.created_at || p.buyer_confirmed_at;
 
   function getEventDisplay(ev) {
     switch (ev.event_type) {
@@ -485,7 +493,7 @@ export default function OrderDetailPage() {
                 {isRental && isBuyer && p.status === "delivered" && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Mietzeit läuft</h3>
-                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} />}
+                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} handoverAt={handoverAt} />}
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Du hast den Artikel erhalten. Wenn du ihn zurückgibst, markiere die Rückgabe.</p>
                     {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)}, wird nach Rückgabe zurückerstattet.</p>}
                     <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 0, border: `1.5px solid ${K.ink}`, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
@@ -495,7 +503,7 @@ export default function OrderDetailPage() {
                   <div style={{ textAlign: "center", padding: 10 }}>
                     <Package size={28} color="#94B9C9" style={{ marginBottom: 8 }} />
                     <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 10px" }}>Mietzeit läuft</p>
-                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} />}
+                    {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} handoverAt={handoverAt} />}
                     <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Mieter hat den Artikel erhalten.</p>
                   </div>
                 )}
