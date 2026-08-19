@@ -5,7 +5,7 @@
 // Einloese-Link. Ohne featured Challenge rendert die Sektion nichts.
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Target, Zap, Clock } from "lucide-react";
+import { Zap, Clock } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getFeaturedChallenge, getChallengesWithProgress } from "@/lib/gamification";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -59,27 +59,35 @@ export function ChallengeBanner() {
     // symmetrischer Abstand (40px) ober- und unterhalb der Box
     <section className="home-band" style={{ background: PAPER, padding: "40px 20px" }}>
       <style>{`
-        /* Aufmerksamkeit ohne Kitsch: der Honig-Schatten atmet, das Ziel-Icon
-           wippt kurz alle paar Sekunden */
+        /* Aufmerksamkeit ohne Kitsch: der Honig-Schatten atmet, die
+           Bee-Loud-Marke wippt kurz alle paar Sekunden */
         @keyframes chalShadow {
           0%, 100% { box-shadow: 4px 4px 0 ${HONEY}; }
           50% { box-shadow: 8px 8px 0 ${HONEY}; }
         }
         @keyframes chalWiggle {
-          0%, 88%, 100% { transform: rotate(0deg); }
-          91% { transform: rotate(-9deg); }
-          94% { transform: rotate(8deg); }
-          97% { transform: rotate(-5deg); }
+          0%, 86%, 100% { transform: rotate(-6deg); }
+          89% { transform: rotate(-14deg) scale(1.04); }
+          92% { transform: rotate(2deg) scale(1.04); }
+          95% { transform: rotate(-10deg); }
+        }
+        .chal-bee {
+          width: 116px; height: 116px; flex-shrink: 0;
+          margin: -26px 2px -26px -4px;
+          transform: rotate(-6deg);
+          animation: chalWiggle 4.5s ease-in-out infinite;
+        }
+        @media (max-width: 640px) {
+          .chal-bee { width: 84px; height: 84px; margin: -14px 0 -8px -2px; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .chal-box, .chal-icon { animation: none !important; }
+          .chal-box, .chal-bee { animation: none !important; }
         }
       `}</style>
       {/* Gleiche Breite wie die Bee-Impact-Box (1080) */}
       <div className="chal-box home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1px solid ${INK}`, boxShadow: `4px 4px 0 ${HONEY}`, padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap", animation: "chalShadow 2.6s ease-in-out infinite" }}>
-        <div className="chal-icon" style={{ width: 46, height: 46, flexShrink: 0, background: HONEY, border: `1px solid ${INK}`, display: "flex", alignItems: "center", justifyContent: "center", animation: "chalWiggle 4s ease-in-out infinite" }}>
-          <Target size={22} color={INK} />
-        </div>
+        {/* Bee-Loud-Marke: ragt oben/unten leicht aus der Box (Sticker-Effekt) */}
+        <img src="/bee-loud.svg" alt="" aria-hidden="true" className="chal-bee" />
         <div style={{ flex: 1, minWidth: 220 }}>
           <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: PETROL }}>
             Challenge der Woche

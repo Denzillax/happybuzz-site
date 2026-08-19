@@ -61,6 +61,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Startseite", text: "Entladen und neu sortiert: Inserate kommen jetzt viel früher (Endet bald und Neu eingestellt direkt nach den Kategorien), Challenge und Bee-Impact liegen als Zwischenstopps zwischen den Reihen; Kategorien als eine kuratierte Zeile (mobil wischbar); So funktioniert's und Warum wir sind eine Sektion", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Mobile: Inserat-Reihen sind jetzt wischbar (grössere Karten, kürzere Seite), Kategorien-Zeile zeigt am Handy alle Kategorien, und die Seite kann nicht mehr seitlich verrutschen (Überlauf-Sicherung)", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Fehlermeldung beim Laden der Startseite behoben (Hydration-Konflikt durch ein Sonderzeichen im Stil der Format-Kacheln)", melder: "Denis" },
+      { typ: "neu", bereich: "Startseite", text: "Challenge der Woche auffälliger: Bee-Loud-Marke (Biene mit Megafon) klebt als wippender Sticker auf dem Band" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },
