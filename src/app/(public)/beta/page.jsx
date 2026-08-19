@@ -143,6 +143,8 @@ const TESTS = [
       { id: "lv_auction_end", label: "Auktion: Auto-Finalisierung nach Ablauf" },
       { id: "lv_rental_book", label: "Mieten: Zeitraum wählen & buchen" },
       { id: "lv_rental_countdown", label: "Laufende Miete: Auf der Bestellseite tickt unter 'Mietzeit läuft' ein Live-Countdown (Tage/Std/Min/Sek) mit Fortschrittsbalken; bei überfälliger Rückgabe wird er rot und zählt vorwärts (beide Seiten: Mieter und Vermieter)" },
+      { id: "lv_rental_ende_noti", label: "Miet-Abschluss durchspielen: jeder Schritt (Rückgabe markiert / bestätigt, ggf. Schaden gemeldet / akzeptiert, Kaution zurückerstattet) löst beim Gegenüber Glocke + Mail/Push aus, mit Betrag im Text" },
+      { id: "lv_rental_kaution_beleg", label: "Kautionsabrechnung als Mieter: nach der Rückgabe erscheint die Aufstellung (Kaution, ggf. Schadenabzug, Rückerstattung) und die Kautions-Rechnung (QR) lässt sich öffnen, auch nach Abschluss über die Links unten" },
     ],
   },
   {

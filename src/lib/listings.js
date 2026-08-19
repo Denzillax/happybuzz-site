@@ -1404,7 +1404,7 @@ export async function markAsReturned(purchaseId, userId) {
   await addPurchaseEvent(purchaseId, "return_marked", "Rückgabe markiert.", null, userId);
   try {
     const { data: p } = await supabase.from("purchases").select("seller_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
-    if (p) await createNotification(p.seller_id, "rental", "Rückgabe markiert", `Mieter hat "${p.listing?.title}" als zurückgegeben markiert. Bitte prüfen.`, `/order/${purchaseId}`);
+    if (p) await createNotification(p.seller_id, "rental", "Rückgabe markiert", `Mieter hat "${p.listing?.title}" als zurückgegeben markiert. Bitte prüfen.`, `/order/${purchaseId}`, "sell_sold");
   } catch (e) { console.error("Notification:", e); }
 }
 
@@ -1413,10 +1413,15 @@ export async function confirmReturn(purchaseId, userId, depositAmount) {
   await updatePurchaseStatus(purchaseId, "returned");
   await addPurchaseEvent(purchaseId, "return_confirmed", `Rückgabe bestätigt. Kaution CHF ${parseFloat(depositAmount || 0).toFixed(2)} wird zurückerstattet.`, null, userId);
   // Listing reaktivieren nach Rückgabe
-  const { data: purchase } = await supabase.from("purchases").select("listing_id").eq("id", purchaseId).maybeSingle();
+  const { data: purchase } = await supabase.from("purchases").select("listing_id, buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
   if (purchase?.listing_id) {
     await supabase.from("listings").update({ status: "active" }).eq("id", purchase.listing_id);
   }
+  try {
+    const kaution = parseFloat(depositAmount || 0);
+    const kautionTxt = kaution > 0 ? ` Kaution CHF ${kaution.toFixed(2)} wird dir zurückerstattet.` : "";
+    if (purchase) await createNotification(purchase.buyer_id, "rental", "Rückgabe bestätigt", `Der Vermieter hat die Rückgabe von "${purchase.listing?.title}" bestätigt.${kautionTxt}`, `/order/${purchaseId}`, "buy_payment");
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Vermieter: "Schaden melden" (Teil-Kaution)
@@ -1426,7 +1431,7 @@ export async function reportDamage(purchaseId, userId, damageAmount, description
   await addPurchaseEvent(purchaseId, "damage_reported", `Schaden gemeldet: CHF ${parseFloat(damageAmount).toFixed(2)}. ${description}`, null, userId);
   try {
     const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
-    if (p) await createNotification(p.buyer_id, "rental", "Schaden gemeldet", `Vermieter hat bei "${p.listing?.title}" einen Schaden von CHF ${parseFloat(damageAmount).toFixed(2)} gemeldet.`, `/order/${purchaseId}`);
+    if (p) await createNotification(p.buyer_id, "rental", "Schaden gemeldet", `Vermieter hat bei "${p.listing?.title}" einen Schaden von CHF ${parseFloat(damageAmount).toFixed(2)} gemeldet.`, `/order/${purchaseId}`, "buy_payment");
   } catch (e) { console.error("Notification:", e); }
 }
 
@@ -1449,12 +1454,22 @@ export async function uploadDamagePhotos(purchaseId, files) {
 export async function acceptDamage(purchaseId, userId) {
   await updatePurchaseStatus(purchaseId, "returned");
   await addPurchaseEvent(purchaseId, "damage_accepted", "Schadensmeldung akzeptiert.", null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("seller_id, damage_amount, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    if (p) await createNotification(p.seller_id, "rental", "Schaden akzeptiert", `Mieter hat die Schadensmeldung zu "${p.listing?.title}" akzeptiert. Du kannst die Kaution abzüglich CHF ${parseFloat(p.damage_amount || 0).toFixed(2)} zurückerstatten.`, `/order/${purchaseId}`, "sell_sold");
+  } catch (e) { console.error("Notification:", e); }
 }
 
 // Vermieter: Kaution zurückerstattet markieren → abgeschlossen
 export async function confirmDepositReturned(purchaseId, userId, refundAmount) {
   await updatePurchaseStatus(purchaseId, "completed");
   await addPurchaseEvent(purchaseId, "deposit_returned", `Kaution CHF ${parseFloat(refundAmount).toFixed(2)} zurückerstattet.`, null, userId);
+  try {
+    const { data: p } = await supabase.from("purchases").select("buyer_id, listing:listings(title)").eq("id", purchaseId).maybeSingle();
+    const betrag = parseFloat(refundAmount || 0);
+    const betragTxt = betrag > 0 ? `Kaution CHF ${betrag.toFixed(2)} zurückerstattet. ` : "";
+    if (p) await createNotification(p.buyer_id, "rental", "Miete abgeschlossen", `${betragTxt}"${p.listing?.title}" ist abgeschlossen. Jetzt bewerten.`, `/order/${purchaseId}`, "buy_payment");
+  } catch (e) { console.error("Notification:", e); }
 }
 
 export async function createBooking(listingId, renterId, ownerId, startDate, endDate, totalPrice, depositAmount) {

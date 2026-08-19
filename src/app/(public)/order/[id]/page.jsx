@@ -614,7 +614,24 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {isRental && isBuyer && p.status === "returned" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><CreditCard size={28} color="#5B8C5A" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Rückgabe bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Vermieter erstattet die Kaution zurück.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}>
+                    <CreditCard size={28} color="#5B8C5A" style={{ marginBottom: 8 }} />
+                    <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Rückgabe bestätigt</p>
+                    <p style={{ fontSize: 13, color: colors.muted, margin: "0 0 12px" }}>Der Vermieter erstattet die Kaution zurück.</p>
+                    {depositAmount > 0 && (
+                      <>
+                        {/* Gleiche Abrechnung wie beim Vermieter: Transparenz bei Schadenabzug */}
+                        <div style={{ padding: 12, background: K.sand, borderRadius: 0, border: `1px solid ${K.ink}22`, marginBottom: 12, fontSize: 13, textAlign: "left" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}><span>Kaution</span><span>CHF {fmtCHF(depositAmount)}</span></div>
+                          {parseFloat(p.damage_amount || 0) > 0 && (
+                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, color: "#c62828" }}><span>Schaden</span><span>- CHF {fmtCHF(p.damage_amount)}</span></div>
+                          )}
+                          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
+                        </div>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 0, border: `1.5px solid #5B8C5A`, background: "#E8F5E9", color: "#5B8C5A", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
             )}
@@ -643,6 +660,7 @@ export default function OrderDetailPage() {
             {isFinished && (
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
                 <Link href={`/order/${p.id}/invoice`} style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>{isRental ? (isBuyer ? "Mietbestätigung ansehen" : "Vermietungsbestätigung ansehen") : (isBuyer ? "Kaufbestätigung ansehen" : "Verkaufsbestätigung ansehen")}</Link>
+                {isRental && depositAmount > 0 && <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>Kautions-Rechnung ansehen</a>}
                 {isBuyer && <Link href="/listings/new" style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "none", textTransform: "uppercase", letterSpacing: ".03em" }}>Artikel weiterverkaufen</Link>}
               </div>
             )}
