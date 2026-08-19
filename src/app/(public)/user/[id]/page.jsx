@@ -97,6 +97,19 @@ export default function PublicProfilePage() {
 
         <div style={{ ...monoLabel, color: K.ink, marginBottom: 12 }}>Verkäuferprofil · Katalog der zweiten Leben</div>
 
+        {/* ── SHOP-BANNER (nur Unternehmenskonten mit Banner) ── */}
+        {profile.account_type === "business" && profile.shop_banner_url && (
+          <div style={{ border: `1px solid ${K.ink}`, overflow: "hidden", marginBottom: 24, boxShadow: "6px 6px 0 rgba(20,17,13,.1)" }}>
+            <img
+              src={profile.shop_banner_url}
+              alt={`${profile.company_name || profile.display_name} Banner`}
+              className="shop-banner-img"
+              style={{ display: "block", width: "100%", aspectRatio: "4 / 1", objectFit: "cover" }}
+            />
+            <style>{`@media (max-width: 640px) { .shop-banner-img { aspect-ratio: 5 / 2 !important; } }`}</style>
+          </div>
+        )}
+
         {/* ── PROFIL HEADER ─────────────────────────────── */}
         <div style={{
           background: "#fff", borderRadius: 0,

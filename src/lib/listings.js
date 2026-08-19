@@ -777,7 +777,7 @@ export async function getMyBeeProfile(userId) {
 export async function getPublicProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, bee_impact_total, blueten, bee_level, xp_total, is_verified, id_verified, founder_number")
+    .select("id, display_name, username, avatar_url, bio, city, canton, created_at, account_type, company_name, shop_banner_url, bee_impact_total, blueten, bee_level, xp_total, is_verified, id_verified, founder_number")
     .eq("id", userId)
     .single();
   if (error) throw error;

@@ -142,6 +142,7 @@ const TESTS = [
       { id: "ins_eigenschaften", label: "Eigenschaften (Grösse, Farbe, Material...) beim Inserieren ausfüllen; sie erscheinen als eigener Block auf der Inserat-Seite unter der Beschreibung" },
       { id: "ins_neuware", label: "Neuware mit Varianten: Festpreis + Zustand Neu, Stückzahl z.B. 3 und Grössen markieren; Käufer muss beim Kauf die Grösse wählen, nach dem Kauf zeigt das Inserat 'Noch 2 Stück', die Wahl steht auf Bestellung und Rechnung; erst beim letzten Stück gilt es als verkauft" },
       { id: "ins_lieferfrist", label: "Lieferfrist: Beim Inserieren 'Versandbereit innert 2 Wochen' wählen; die Frist steht auf der Inserat-Seite (Lieferung-Box), im Kauf-Dialog vor dem Bestätigen und nach dem Kauf auf der Bestellseite" },
+      { id: "acc_shop_banner", label: "Shop-Banner (Unternehmen): In den Einstellungen auf Konto-Typ Unternehmen wechseln, Banner hochladen; es erscheint über dem öffentlichen Profil (4:1 beschnitten), Ersetzen und Entfernen funktionieren" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_bid_ratelimit", label: "Gebots-Spam-Schutz: sehr viele Gebote in kurzer Zeit (20/Minute) werden serverseitig blockiert mit Hinweis 'Zu viele Gebote in kurzer Zeit'" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },

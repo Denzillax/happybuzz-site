@@ -295,6 +295,7 @@ export default function SettingsPage() {
   });
 
   const fileInputRef = useRef(null);
+  const bannerInputRef = useRef(null); // Shop-Banner (Unternehmen)
 
   // ── Toast helper ──
   const showToast = useCallback((msg) => {
@@ -402,6 +403,48 @@ export default function SettingsPage() {
   };
 
   // ── Avatar upload ──
+  // Shop-Banner (nur Unternehmen): clientseitig auf max 2000px verkleinern,
+  // Pfad avatars/{uid}.banner.jpg passt in die bestehende Storage-Policy
+  // (avatars/{uid}.%), keine neue Policy noetig.
+  const handleBannerUpload = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) { showToast("Bild ist zu gross (max. 4 MB)"); return; }
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    showToast("Banner wird hochgeladen…");
+    try {
+      const bild = await new Promise((resolve, reject) => {
+        const im = new window.Image();
+        im.onload = () => resolve(im);
+        im.onerror = reject;
+        im.src = URL.createObjectURL(file);
+      });
+      const f = Math.min(1, 2000 / bild.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(bild.width * f);
+      canvas.height = Math.round(bild.height * f);
+      canvas.getContext("2d").drawImage(bild, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.85));
+      const path = `avatars/${session.user.id}.banner.jpg`;
+      const { error: upErr } = await supabase.storage.from("avatars").upload(path, blob, { upsert: true, contentType: "image/jpeg" });
+      if (upErr) throw upErr;
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+      // Cache-Buster: gleicher Pfad, sonst zeigt der Browser das alte Banner
+      await saveProfile({ shop_banner_url: `${publicUrl}?v=${Date.now()}` });
+    } catch (err) {
+      console.error(err);
+      showToast("Upload fehlgeschlagen ✗");
+    }
+  };
+  const handleBannerRemove = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    await supabase.storage.from("avatars").remove([`avatars/${session.user.id}.banner.jpg`]).catch(() => {});
+    await saveProfile({ shop_banner_url: null });
+  };
+
   const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -576,6 +619,30 @@ export default function SettingsPage() {
                 maxLength={20}
                 placeholder="CHE-123.456.789"
               />
+
+              {/* Shop-Banner: nur Unternehmen, erscheint oben auf dem oeffentlichen Profil */}
+              <div style={{ marginBottom: 18 }}>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: C.muted, marginBottom: 6, textTransform: "uppercase", letterSpacing: ".5px" }}>
+                  Shop-Banner (empfohlen 1600×400)
+                </label>
+                {profile?.shop_banner_url ? (
+                  <div>
+                    <div style={{ border: `1.5px solid ${K.ink}`, overflow: "hidden", marginBottom: 8 }}>
+                      <img src={profile.shop_banner_url} alt="Shop-Banner" style={{ display: "block", width: "100%", aspectRatio: "4 / 1", objectFit: "cover" }} />
+                    </div>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button onClick={() => bannerInputRef.current?.click()} style={{ padding: "8px 16px", border: `1px solid ${K.ink}`, background: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Ersetzen</button>
+                      <button onClick={handleBannerRemove} style={{ padding: "8px 16px", border: `1px solid ${C.border}`, background: "#fff", color: C.muted, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Entfernen</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => bannerInputRef.current?.click()} style={{ width: "100%", padding: "22px 14px", border: `1.5px dashed ${C.border}`, background: "#fff", color: C.muted, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+                    Banner hochladen (JPG/PNG, max. 4 MB)
+                  </button>
+                )}
+                <input ref={bannerInputRef} type="file" accept="image/*" onChange={handleBannerUpload} style={{ display: "none" }} />
+                <div style={{ fontSize: 11, color: C.muted, marginTop: 6 }}>Wird oben auf deinem öffentlichen Profil angezeigt (Format 4:1 beschnitten).</div>
+              </div>
             </>
           )}
 
