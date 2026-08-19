@@ -6,12 +6,14 @@
 // Das Top-Melder-Ranking auf /beta zaehlt DIESE melder-Eintraege (nicht die
 // beta_feedback-Tabelle): so zaehlen nur Meldungen, die zu einem Fix/Feature
 // gefuehrt haben, und auch Meldungen ausserhalb der Plattform (WhatsApp etc.).
-// Ranking: Anzahl Log-Eintraege pro Melder, absteigend (Gleichstand: alphabetisch)
+// Ranking: Anzahl Log-Eintraege pro Melder, absteigend (Gleichstand: alphabetisch).
+// Der Owner (Denis) bleibt als melder in den Eintraegen dokumentiert, zaehlt
+// aber im Tester-Ranking nicht mit — die Rangliste gehoert den Testern.
 export function melderRanking() {
   const zaehl = {};
   for (const tag of REP_LOG) {
     for (const p of tag.punkte) {
-      if (p.melder) zaehl[p.melder] = (zaehl[p.melder] || 0) + 1;
+      if (p.melder && p.melder !== "Denis") zaehl[p.melder] = (zaehl[p.melder] || 0) + 1;
     }
   }
   return Object.entries(zaehl)

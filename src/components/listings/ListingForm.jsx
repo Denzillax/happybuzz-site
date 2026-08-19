@@ -832,26 +832,9 @@ export default function ListingForm({
   // RENDER
   // ═══════════════════════════════════════════════════════════
   return (
-    <div className="listing-form" style={{ maxWidth: 680, margin: "0 auto", padding: isEdit ? "36px 16px 32px" : "20px 16px 32px" }}>
+    <div className="listing-form" style={{ maxWidth: 680, margin: "0 auto", padding: "20px 16px 32px" }}>
 
-      {/* ── HEADER: nur beim Bearbeiten. Beim Erstellen liefert die Seite
-          selbst den Katalog-Kopf (Inserat erstellen), doppelt braucht es nicht. */}
-      {isEdit && (
-        <div style={{ marginBottom: 24 }}>
-          <h1 style={{
-            fontFamily: fonts.head, fontSize: 30, color: colors.dark,
-            margin: 0, letterSpacing: ".02em", lineHeight: 1.1,
-          }}>
-            Inserat bearbeiten
-          </h1>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-            <span style={{ width: 28, height: 3, borderRadius: 0, background: colors.teal }} />
-            <p style={{ margin: 0, fontSize: 14, color: colors.muted, fontFamily: fonts.body }}>
-              Passe dein Inserat an.
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Kopf liefert IMMER die Seite (Katalog-Kopf bei Erstellen UND Bearbeiten) */}
 
       {/* ── IMPORT VON FREMDPLATTFORMEN (nur beim Erstellen) ── */}
       {!isEdit && (
