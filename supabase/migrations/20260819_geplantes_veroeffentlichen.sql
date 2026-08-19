@@ -26,8 +26,10 @@ begin
     raise exception 'not authorized';
   end if;
   if p_decision = 'approve' then
+    -- Cast noetig: CASE mit String-Literalen ergibt text, status ist Enum
+    -- (ohne Cast scheiterte jede Freigabe mit 42804 — gefixt 19.08.2026)
     update public.listings
-      set status = case when publish_at is not null and publish_at > now() then 'scheduled' else 'active' end,
+      set status = (case when publish_at is not null and publish_at > now() then 'scheduled' else 'active' end)::public.listing_status,
           published_at = case when publish_at is not null and publish_at > now() then null else now() end,
           reviewed_at = now(), review_reason = null,
           auction_end = case

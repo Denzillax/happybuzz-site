@@ -711,9 +711,10 @@ export default function ListingForm({
   const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6" } : {});
 
   // KI-Erkennung: erstes Foto verkleinern, /api/ai-listing fragen, Felder fuellen.
-  // Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen); Zustand und
-  // Kategorie werden gesetzt (1-Klick-Korrektur). Preis nur als Hinweis.
-  const aiFill = async () => {
+  // Ohne target: Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen),
+  // Zustand/Kategorie gesetzt, Preis als Hinweis. Mit target ("title"/"description"):
+  // gezielt eine NEUE Variante fuer genau dieses Feld, ueberschreibt es.
+  const aiFill = async (target) => {
     if (!images.length || aiBusy) return;
     setAiBusy(true);
     setAiHint(null);
@@ -740,20 +741,30 @@ export default function ListingForm({
         body: JSON.stringify({
           image: dataUrl,
           categories: categories.filter((c) => !c.parent_id).map((c) => c.slug),
+          ...(target ? {
+            field: target,
+            previous: target === "title" ? form.title : (form.description || "").replace(/<[^>]*>/g, " ").trim(),
+          } : {}),
         }),
       });
       if (res.status === 503) { setAiHint({ error: "Die KI ist noch nicht eingerichtet (OpenRouter-Key fehlt)." }); return; }
       if (!res.ok) { setAiHint({ error: "KI-Erkennung fehlgeschlagen. Bitte später erneut versuchen." }); return; }
       const ki = await res.json();
 
-      if (ki.title && !form.title.trim()) set("title", ki.title);
-      if (ki.description && !(form.description || "").replace(/<[^>]*>/g, "").trim()) set("description", ki.description);
-      if (ki.condition) set("condition", ki.condition);
-      if (ki.category_slug) {
-        const cat = categories.find((c) => c.slug === ki.category_slug);
-        if (cat) { setSelectedMainCat(cat.id); set("category_id", cat.id); }
+      if (target === "title") {
+        if (ki.title) set("title", ki.title);
+      } else if (target === "description") {
+        if (ki.description) set("description", ki.description);
+      } else {
+        if (ki.title && !form.title.trim()) set("title", ki.title);
+        if (ki.description && !(form.description || "").replace(/<[^>]*>/g, "").trim()) set("description", ki.description);
+        if (ki.condition) set("condition", ki.condition);
+        if (ki.category_slug) {
+          const cat = categories.find((c) => c.slug === ki.category_slug);
+          if (cat) { setSelectedMainCat(cat.id); set("category_id", cat.id); }
+        }
+        if (ki.price_range_chf) setAiHint({ price: ki.price_range_chf });
       }
-      if (ki.price_range_chf) setAiHint({ price: ki.price_range_chf });
     } catch (e) {
       console.error("KI-Erkennung:", e);
       setAiHint({ error: "KI-Erkennung fehlgeschlagen." });
@@ -762,11 +773,11 @@ export default function ListingForm({
     }
   };
 
-  const AiButton = ({ label }) => (
+  const AiButton = ({ label, target }) => (
     <button
-      onClick={aiFill}
+      onClick={() => aiFill(target)}
       disabled={aiBusy || images.length === 0}
-      title={images.length === 0 ? "Zuerst ein Foto hochladen" : "KI liest das erste Foto und füllt die Felder"}
+      title={images.length === 0 ? "Zuerst ein Foto hochladen" : target ? "KI erzeugt aus dem ersten Foto eine neue Variante für dieses Feld" : "KI liest das erste Foto und füllt die Felder"}
       style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "6px 12px", borderRadius: 0,
@@ -1053,7 +1064,7 @@ export default function ListingForm({
           <>
             <button
               type="button"
-              onClick={aiFill}
+              onClick={() => aiFill()}
               disabled={aiBusy}
               style={{
                 width: "100%", marginTop: 10, padding: "12px 16px",
@@ -1123,7 +1134,7 @@ export default function ListingForm({
           <label style={{ ...labelBase, marginBottom: 0 }}>Titel *</label>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ ...hintStyle, margin: 0, fontSize: 11 }}>{form.title.length}/60</span>
-            <AiButton label="KI-Titel" />
+            <AiButton label="KI-Titel" target="title" />
           </div>
         </div>
         <input
@@ -1154,7 +1165,7 @@ export default function ListingForm({
             <label style={{ ...labelBase, marginBottom: 0 }}>Beschreibung</label>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ ...hintStyle, margin: 0, fontSize: 11 }}>{descriptionPlainText(form.description).length}/5000</span>
-              <AiButton label="KI-Text" />
+              <AiButton label="KI-Text" target="description" />
             </div>
           </div>
           <RichTextEditor

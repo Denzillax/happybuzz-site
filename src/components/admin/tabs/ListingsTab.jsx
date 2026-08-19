@@ -48,6 +48,7 @@ export function ListingsTab({ admin }) {
         {[
           { k: "all", l: `Alle (${visibleListings.length})` },
           { k: "pending", l: `Wartet auf Freigabe (${pendingListings.length})` },
+          { k: "scheduled", l: `Geplant (${visibleListings.filter(l => l.status === "scheduled").length})` },
           { k: "active", l: "Aktiv" },
           { k: "paused", l: "Pausiert" },
         ].map(f => (
@@ -112,6 +113,11 @@ export function ListingsTab({ admin }) {
                 <div style={{ minWidth: 0 }}>
                   <Link href={`/listing/${l.id}`} style={{ fontSize: 13.5, fontWeight: 700, color: colors.dark, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.title}</Link>
                   <span style={{ fontFamily: "monospace", fontSize: 10, color: colors.muted }}>{makeArtRef(l.id)} · {fmtDate(l.created_at)}</span>
+                  {l.publish_at && ["pending_review", "scheduled"].includes(l.status) && (
+                    <span style={{ display: "block", fontSize: 10, color: "#0B5E5C", fontWeight: 700 }}>
+                      Geplant für {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
+                    </span>
+                  )}
                 </div>
                 {statusPill(l.status)}
               </div>

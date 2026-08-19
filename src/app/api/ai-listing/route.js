@@ -35,24 +35,43 @@ export async function POST(req) {
   try { body = await req.json(); } catch {
     return Response.json({ error: "bad_request" }, { status: 400 });
   }
-  const { image, categories } = body || {};
+  const { image, categories, field, previous } = body || {};
   if (!image || typeof image !== "string" || !image.startsWith("data:image/") || image.length > MAX_IMAGE_CHARS) {
     return Response.json({ error: "bad_image" }, { status: 400 });
   }
   const slugs = Array.isArray(categories) ? categories.filter(s => typeof s === "string").slice(0, 40) : [];
+  // Optional: gezielt eine NEUE Variante fuer ein Feld (KI-Titel/KI-Text-Knopf)
+  const wantField = field === "title" || field === "description" ? field : null;
+  const prevText = typeof previous === "string" ? previous.slice(0, 600) : "";
 
-  const prompt = `Du siehst das Foto eines Secondhand-Artikels für den Schweizer Marktplatz BEEDARO.
+  const prompt = `Du bist ein kritischer Secondhand-Gutachter für den Schweizer Marktplatz BEEDARO und siehst das Foto eines Artikels.
 Antworte NUR mit einem JSON-Objekt, ohne Erklärtext und ohne Markdown:
 {
   "title": "prägnanter Titel, max 60 Zeichen, mit Marke und Modell falls erkennbar",
-  "description": "2 bis 3 sachliche Sätze auf Deutsch über den Artikel. Kein Werbedeutsch, keine Emojis, keine erfundenen Details.",
+  "description": "2 bis 4 sachliche Sätze auf Deutsch. Kein Werbedeutsch, keine Emojis.",
   "condition": "new | like_new | good | fair | poor",
   "category_slug": "genau einer aus dieser Liste: ${slugs.join(", ")}",
   "price_range_chf": [minimum, maximum]
 }
-Den Zustand aus sichtbaren Gebrauchsspuren schätzen, im Zweifel "good".
-Die Preisspanne ist eine grobe Secondhand-Schätzung in Schweizer Franken.
-Wenn du den Artikel nicht erkennst, beschreibe was sichtbar ist, statt zu raten.`;
+Eiserne Regel: Erwähne NUR, was auf dem Foto tatsächlich zu sehen ist.
+Kein Zubehör, keine Kabel, keine Spiele/Module, keine Originalverpackung und keine
+Funktionsfähigkeit behaupten, wenn das Bild sie nicht eindeutig zeigt. Lieber weglassen als raten.
+Zähle den Lieferumfang exakt so, wie er im Bild liegt (z.B. wie viele Controller sichtbar sind).
+
+Zustand streng nach sichtbaren Mängeln bewerten, nicht wohlwollend:
+- new: originalverpackt/unbenutzt, like_new: praktisch makellos.
+- good: nur leichte, normale Gebrauchsspuren.
+- fair: deutliche Spuren wie Vergilbung, abgeriebene oder verschmierte Aufdrucke/Schriftzüge, Kratzer, Flecken, verblasste Stellen.
+- poor: beschädigt oder stark abgenutzt.
+Sobald ein deutlicher Mangel sichtbar ist (z.B. vergilbtes Plastik, unleserlicher Schriftzug), höchstens "fair".
+Benenne jeden sichtbaren Mangel konkret in der description (was und wo).
+
+Die Preisspanne ist eine grobe Secondhand-Schätzung in Schweizer Franken, passend zum Zustand.
+Wenn du den Artikel nicht erkennst, beschreibe was sichtbar ist, statt zu raten.${wantField ? `
+
+Der Nutzer möchte eine NEUE Variante für das Feld "${wantField === "title" ? "title" : "description"}".
+Formuliere sie deutlich anders als die bisherige Version (anderer Satzbau, andere Wortwahl), inhaltlich weiterhin nur was sichtbar ist.${prevText ? `
+Bisherige Version: ${prevText}` : ""}` : ""}`;
 
   let res;
   try {
@@ -66,7 +85,7 @@ Wenn du den Artikel nicht erkennst, beschreibe was sichtbar ist, statt zu raten.
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: 500,
+        max_tokens: 700,
         messages: [{
           role: "user",
           content: [

@@ -572,6 +572,18 @@ export default function ListingsPage() {
                       {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#C8860A", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
                     </div>
 
+                    {l.status === "scheduled" && l.publish_at && (
+                      <div style={{ fontSize: 12, color: "#0B5E5C", fontWeight: 700, marginTop: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                        <span>Geht live am {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr</span>
+                        <button
+                          onClick={async () => { try { await publishScheduledNow(l); setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: "active", publish_at: null } : x)); } catch (e) { console.error(e); } }}
+                          style={{ border: `1px solid ${K.ink}`, background: "#fff", padding: "3px 9px", fontSize: 11, fontWeight: 700, cursor: "pointer", color: K.ink, fontFamily: fonts.body }}
+                        >
+                          Jetzt veröffentlichen
+                        </button>
+                      </div>
+                    )}
+
                     {/* Aktionen: festes 3er-Raster statt Flex-Wrap */}
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 12 }}>
                       <Link href={`/listings/${l.id}`} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> Bearbeiten</Link>
