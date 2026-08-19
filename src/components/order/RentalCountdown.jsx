@@ -44,6 +44,9 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   const sek = Math.floor((diff % 60000) / 1000);
   const progress = Math.min(1, Math.max(0, (now - start) / Math.max(1, ende - start)));
   const farbe = overdue ? ROT : progress > 0.8 ? HONIG : MOSS;
+  // Gebuchte Mietdauer (Rueckgabetag zaehlt nicht als Miettag) — gleiche Zahl
+  // wie in Buchungen und Rechnung; die Restzeit steht schon auf der Tafel
+  const mietTage = Math.max(1, Math.round((new Date(endDate) - new Date(startDate)) / 86400000));
 
   const kaestchen = [
     [tage, "Tage"],
@@ -85,7 +88,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
         {/* Links steht der tatsaechliche Beginn des Balkens (Uebergabe oder Mietstart) */}
         <span>{fmtDatum(start)}</span>
         <span style={{ fontFamily: fonts.body, fontWeight: 700, color: overdue ? ROT : INK, fontSize: 11.5 }}>
-          {overdue ? `${tage} ${tage === 1 ? "Tag" : "Tage"} drüber` : `${tage} ${tage === 1 ? "Tag" : "Tage"} übrig`}
+          {overdue ? `${tage} ${tage === 1 ? "Tag" : "Tage"} drüber` : `Mietdauer: ${mietTage} ${mietTage === 1 ? "Tag" : "Tage"}`}
         </span>
         <span>{fmtDatum(endDate)}</span>
       </div>
