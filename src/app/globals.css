@@ -244,11 +244,11 @@ input:focus, textarea:focus, select:focus {
    ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
   .hero-section { min-height: auto !important; }
-  /* Text zuerst (Headline ist der Hero), die Exponat-Karte folgt als kompakter,
-     schraeger Sticker mit Luft drumherum statt als seitenfuellender Kasten */
+  /* Karte oben (wie Desktop rechts), aber als kompakter, schraeger Sticker
+     mit Luft drumherum statt als seitenfuellender Kasten */
   .hero-content {
-    flex-direction: column !important;
-    padding: 28px 20px 24px !important;
+    flex-direction: column-reverse !important;
+    padding: 22px 20px 24px !important;
     min-height: auto !important;
     gap: 8px !important;
   }
@@ -257,7 +257,7 @@ input:focus, textarea:focus, select:focus {
     flex-shrink: 1 !important;
     flex-grow: 0 !important;
   }
-  .hero-card-wrap { width: 78%; max-width: 290px; margin: 18px auto 6px; }
+  .hero-card-wrap { width: 78%; max-width: 290px; margin: 8px auto 16px; }
   .hero-card { padding: 12px !important; transform: rotate(-3deg) !important; }
   .hero-card-img { height: 170px !important; }
   .hero-card-img img { max-height: 150px !important; }
