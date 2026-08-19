@@ -210,6 +210,8 @@ export default function ListingForm({
   const [beeTexts] = useState(() => getRandomBeeTexts());
   const fileRef = useRef(null);
   const cameraRef = useRef(null); // Mobile: Kamera direkt oeffnen (capture)
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiHint, setAiHint] = useState(null); // { price: [min, max] } | { error: "..." }
   const [dragOver, setDragOver] = useState(false);
   const [dragIdx, setDragIdx] = useState(null);
 
@@ -708,22 +710,76 @@ export default function ListingForm({
   // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
   const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6" } : {});
 
-  const AiButton = ({ onClick, label }) => (
+  // KI-Erkennung: erstes Foto verkleinern, /api/ai-listing fragen, Felder fuellen.
+  // Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen); Zustand und
+  // Kategorie werden gesetzt (1-Klick-Korrektur). Preis nur als Hinweis.
+  const aiFill = async () => {
+    if (!images.length || aiBusy) return;
+    setAiBusy(true);
+    setAiHint(null);
+    try {
+      const bild = await new Promise((resolve, reject) => {
+        const im = new window.Image();
+        im.crossOrigin = "anonymous";
+        im.onload = () => resolve(im);
+        im.onerror = reject;
+        im.src = images[0].preview;
+      });
+      const maxSeite = 1000;
+      const f = Math.min(1, maxSeite / Math.max(bild.width, bild.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(bild.width * f));
+      canvas.height = Math.max(1, Math.round(bild.height * f));
+      canvas.getContext("2d").drawImage(bild, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch("/api/ai-listing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token || ""}` },
+        body: JSON.stringify({
+          image: dataUrl,
+          categories: categories.filter((c) => !c.parent_id).map((c) => c.slug),
+        }),
+      });
+      if (res.status === 503) { setAiHint({ error: "Die KI ist noch nicht eingerichtet (OpenRouter-Key fehlt)." }); return; }
+      if (!res.ok) { setAiHint({ error: "KI-Erkennung fehlgeschlagen. Bitte später erneut versuchen." }); return; }
+      const ki = await res.json();
+
+      if (ki.title && !form.title.trim()) set("title", ki.title);
+      if (ki.description && !(form.description || "").replace(/<[^>]*>/g, "").trim()) set("description", ki.description);
+      if (ki.condition) set("condition", ki.condition);
+      if (ki.category_slug) {
+        const cat = categories.find((c) => c.slug === ki.category_slug);
+        if (cat) { setSelectedMainCat(cat.id); set("category_id", cat.id); }
+      }
+      if (ki.price_range_chf) setAiHint({ price: ki.price_range_chf });
+    } catch (e) {
+      console.error("KI-Erkennung:", e);
+      setAiHint({ error: "KI-Erkennung fehlgeschlagen." });
+    } finally {
+      setAiBusy(false);
+    }
+  };
+
+  const AiButton = ({ label }) => (
     <button
-      onClick={onClick}
-      disabled
-      title="Kommt bald: KI Generierung via OpenRouter"
+      onClick={aiFill}
+      disabled={aiBusy || images.length === 0}
+      title={images.length === 0 ? "Zuerst ein Foto hochladen" : "KI liest das erste Foto und füllt die Felder"}
       style={{
         display: "inline-flex", alignItems: "center", gap: 6,
-        padding: "6px 12px", borderRadius: radius.sm,
-        border: `1px dashed ${colors.border}`,
-        background: colors.cream, color: colors.muted,
-        fontSize: 12, fontFamily: fonts.body,
-        cursor: "not-allowed", opacity: 0.7,
+        padding: "6px 12px", borderRadius: 0,
+        border: `1px solid ${images.length === 0 ? colors.border : colors.dark}`,
+        background: images.length === 0 ? colors.cream : colors.yellow,
+        color: images.length === 0 ? colors.muted : colors.dark,
+        fontSize: 12, fontWeight: 700, fontFamily: fonts.body,
+        cursor: aiBusy || images.length === 0 ? "not-allowed" : "pointer",
+        opacity: aiBusy ? 0.6 : 1,
       }}
     >
       <Sparkles size={13} />
-      {label}
+      {aiBusy ? "KI liest…" : label}
     </button>
   );
 
@@ -989,6 +1045,37 @@ export default function ListingForm({
             </div>
             <div style={{ ...hintStyle, marginTop: 4 }}>JPG, PNG, WebP</div>
           </div>
+        )}
+
+        {/* KI-Erkennung: liest das erste Foto und fuellt Titel, Beschreibung,
+            Zustand und Kategorie; Preis kommt nur als Schaetzung darunter */}
+        {images.length > 0 && (
+          <>
+            <button
+              type="button"
+              onClick={aiFill}
+              disabled={aiBusy}
+              style={{
+                width: "100%", marginTop: 10, padding: "12px 16px",
+                border: `1.5px solid ${colors.dark}`, borderRadius: 0,
+                background: colors.yellow, color: colors.dark,
+                fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
+                cursor: aiBusy ? "wait" : "pointer", boxShadow: `2px 2px 0 ${colors.dark}`,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                opacity: aiBusy ? 0.7 : 1,
+              }}
+            >
+              <Sparkles size={16} /> {aiBusy ? "KI liest das Foto…" : "Mit KI ausfüllen"}
+            </button>
+            {aiHint?.error && (
+              <p style={{ ...hintStyle, marginTop: 6, color: "#c62828" }}>{aiHint.error}</p>
+            )}
+            {aiHint?.price && (
+              <p style={{ ...hintStyle, marginTop: 6 }}>
+                KI-Preisschätzung: <b style={{ color: colors.dark }}>CHF {aiHint.price[0]}–{aiHint.price[1]}</b> (Richtwert, den Preis bestimmst du)
+              </p>
+            )}
+          </>
         )}
 
         {/* Mobile: direkt fotografieren statt ueber die Galerie */}
