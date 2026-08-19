@@ -497,3 +497,19 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 768px), (hover: none) {
   .chat-del { display: none; }
 }
+
+/* Buchungen: Desktop eine Zeile, Handy als Karte mit Umbruechen
+   (Kopf voll breit, Preis+Status als Zeile darunter, Knoepfe volle Breite) */
+.bk-row { display: flex; gap: 16px; padding: 18px 20px; align-items: center; }
+.bk-head { display: flex; gap: 14px; align-items: center; flex: 1; min-width: 0; }
+.bk-side { text-align: right; flex-shrink: 0; }
+.bk-actions { display: flex; flex-direction: column; gap: 6px; margin-left: 8px; flex-shrink: 0; }
+@media (max-width: 639px) {
+  .bk-row { flex-wrap: wrap; gap: 10px 12px; padding: 14px; }
+  .bk-head { flex: 1 1 100%; }
+  .bk-side { flex: 1 1 100%; display: flex; align-items: baseline; gap: 10px; text-align: left; flex-wrap: wrap; }
+  .bk-side p { margin: 0 !important; }
+  .bk-status { margin-top: 0 !important; margin-left: auto; }
+  .bk-actions { flex: 1 1 100%; flex-direction: row; margin-left: 0; }
+  .bk-actions button, .bk-actions a { flex: 1 1 0; }
+}

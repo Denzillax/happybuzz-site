@@ -69,45 +69,54 @@ export default function BookingsPage() {
     const st = STATUS_CONFIG[b.status] || STATUS_CONFIG.pending;
     const StIcon = st.icon;
     const cover = b.listing?.listing_images?.[0]?.url;
+    const hatAktionen = (isOwner && b.status === "pending") || b.purchase_id;
     return (
-      <div key={b.id} style={{
-        display: "flex", gap: 16, padding: "18px 20px", alignItems: "center",
-        borderBottom: `1px solid ${colors.borderLt}`,
-      }}>
-        <div style={{ width: 64, height: 64, borderRadius: 0, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
-        </div>
-        <div style={{ flex: 1 }}>
-          <Link href={`/listing/${b.listing_id}`} style={{ fontSize: 14, fontWeight: 700, color: K.petrol, textDecoration: "none" }}>{b.listing?.title || "Inserat"}</Link>
-          <div style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>
-            {b.listing?.listing_type === "service"
-              ? `Wunschtermin: ${fmtDate(b.start_date)}${b.start_date?.includes("T") ? ", " + new Date(b.start_date).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) + " Uhr" : ""}`
-              : `${fmtDate(b.start_date)} – ${fmtDate(b.end_date)}`}
+      <div key={b.id} className="bk-row" style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
+        {/* Kopf: Bild + Infos (auf dem Handy die volle Breite) */}
+        <div className="bk-head">
+          <div style={{ width: 64, height: 64, borderRadius: 0, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
           </div>
-          {isOwner && b.renter && (
-            <div style={{ fontSize: 12, color: colors.muted, marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
-              <User size={12} /> {b.renter.display_name}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <Link href={`/listing/${b.listing_id}`} style={{ fontSize: 14, fontWeight: 700, color: K.petrol, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.listing?.title || "Inserat"}</Link>
+            <div style={{ fontSize: 12, color: colors.muted, marginTop: 2 }}>
+              {b.listing?.listing_type === "service"
+                ? `Wunschtermin: ${fmtDate(b.start_date)}${b.start_date?.includes("T") ? ", " + new Date(b.start_date).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) + " Uhr" : ""}`
+                : `${fmtDate(b.start_date)} – ${fmtDate(b.end_date)}`}
             </div>
-          )}
+            {isOwner && b.renter && (
+              <div style={{ fontSize: 12, color: colors.muted, marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
+                <User size={12} /> {b.renter.display_name}
+              </div>
+            )}
+          </div>
         </div>
-        <div style={{ textAlign: "right" }}>
+
+        {/* Preis + Status (Desktop rechts, Handy als eigene Zeile) */}
+        <div className="bk-side">
           <p style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>CHF {fmtPrice(b.total_price)}</p>
-          {b.days > 0 && <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{b.days} Tage</p>}
-          {b.bee_impact > 0 && <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.green, fontWeight: 600 }}>Impact CHF {fmtPrice(b.bee_impact)}</p>}
-          <div style={{ display: "flex", alignItems: "center", gap: 4, color: st.color, fontSize: 12, fontWeight: 600, marginTop: 4, justifyContent: "flex-end" }}>
+          {b.days > 0 && <p className="bk-side-sub" style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{b.days} Tage</p>}
+          {b.bee_impact > 0 && <p className="bk-side-sub" style={{ margin: "2px 0 0", fontSize: 11, color: colors.green, fontWeight: 600 }}>Impact CHF {fmtPrice(b.bee_impact)}</p>}
+          <div className="bk-status" style={{ display: "flex", alignItems: "center", gap: 4, color: st.color, fontSize: 12, fontWeight: 600, marginTop: 4, justifyContent: "flex-end" }}>
             <StIcon size={14} /> {st.label}
           </div>
         </div>
-        {isOwner && b.status === "pending" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginLeft: 8 }}>
-            <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "7px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>Bestätigen</button>
-            <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "7px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Absagen</button>
+
+        {/* Aktionen (Desktop schmale Spalte, Handy volle Breite nebeneinander) */}
+        {hatAktionen && (
+          <div className="bk-actions">
+            {isOwner && b.status === "pending" && (
+              <>
+                <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "9px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
+                <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "9px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Absagen</button>
+              </>
+            )}
+            {b.purchase_id && (
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}`, textAlign: "center" }}>
+                Zur Bestellung
+              </Link>
+            )}
           </div>
-        )}
-        {b.purchase_id && (
-          <Link href={`/order/${b.purchase_id}`} style={{ marginLeft: 8, padding: "7px 14px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}` }}>
-            Zur Bestellung
-          </Link>
         )}
       </div>
     );
