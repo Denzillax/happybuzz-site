@@ -244,18 +244,28 @@ input:focus, textarea:focus, select:focus {
    ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
   .hero-section { min-height: auto !important; }
+  /* Text zuerst (Headline ist der Hero), die Exponat-Karte folgt als kompakter,
+     schraeger Sticker mit Luft drumherum statt als seitenfuellender Kasten */
   .hero-content {
-    flex-direction: column-reverse !important;
-    padding: 24px 20px 20px !important;
+    flex-direction: column !important;
+    padding: 28px 20px 24px !important;
     min-height: auto !important;
-    gap: 16px !important;
+    gap: 8px !important;
   }
   .hero-content > div {
     flex-basis: auto !important;
     flex-shrink: 1 !important;
     flex-grow: 0 !important;
   }
-  .hero-content > div img { max-height: 280px !important; }
+  .hero-card-wrap { width: 78%; max-width: 290px; margin: 18px auto 6px; }
+  .hero-card { padding: 12px !important; transform: rotate(-3deg) !important; }
+  .hero-card-img { height: 170px !important; }
+  .hero-card-img img { max-height: 150px !important; }
+  @keyframes bd-float-mobil {
+    0%, 100% { transform: rotate(-3deg) translateY(0); }
+    50%      { transform: rotate(-3deg) translateY(-6px); }
+  }
+  .hero-beta-float { animation-name: bd-float-mobil; }
 
   /* Homepage: NewListings + PopularListings — 1 Spalte */
   .home-listings-grid {

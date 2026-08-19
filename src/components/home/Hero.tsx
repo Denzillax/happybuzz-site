@@ -201,10 +201,10 @@ export function Hero() {
         </div>
 
         {/* ── Exponat-Karte (Specimen) ── */}
-        <div style={{ flex: '0 1 440px', position: 'relative', display: 'flex', justifyContent: 'center', ...fade, transform: transitioning ? 'scale(.97)' : 'scale(1)' }}>
+        <div className='hero-card-wrap' style={{ flex: '0 1 440px', position: 'relative', display: 'flex', justifyContent: 'center', ...fade, transform: transitioning ? 'scale(.97)' : 'scale(1)' }}>
           {/* Offset-Karte dahinter (Archiv-Stapel) */}
           <div aria-hidden style={{ position: 'absolute', inset: '18px 28px', border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(4deg)', opacity: .28 }} />
-          <div className='hero-beta-float' style={{
+          <div className='hero-beta-float hero-card' style={{
             position: 'relative', width: '100%', maxWidth: 400, background: '#fff',
             border: `1.5px solid ${INK}`, borderRadius: 0, transform: 'rotate(-2deg)',
             padding: 18, boxShadow: '0 24px 48px rgba(20,17,13,0.14)',
@@ -215,7 +215,7 @@ export function Hero() {
               <span style={{ background: PETROL, color: PAPER, padding: '3px 8px', borderRadius: 0, fontWeight: 700, fontSize: 10.5 }}>{s.cond}</span>
             </div>
             {/* Exponat */}
-            <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: SAND, borderRadius: 0 }}>
+            <div className='hero-card-img' style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: SAND, borderRadius: 0 }}>
               <img src={s.image} alt="" style={{ maxWidth: '86%', maxHeight: 260, objectFit: 'contain' }} />
             </div>
             {/* Fuss: Echtheit + Wachssiegel */}
