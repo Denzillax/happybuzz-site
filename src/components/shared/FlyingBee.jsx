@@ -67,7 +67,7 @@ export default function FlyingBee() {
     const z = zoomFaktor();
     const vw = window.innerWidth / z;
     const vh = window.innerHeight / z;
-    const s = vw < 640 ? 62 : 92;
+    const s = vw < 640 ? 84 : 92;
     sizeRef.current = s;
     setSize(s);
     stateRef.current = "flying";

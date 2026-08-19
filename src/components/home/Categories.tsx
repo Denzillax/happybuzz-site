@@ -55,11 +55,13 @@ export function Categories() {
       <style>{`
         .cat-circle-item:hover .cat-circle-icon { background: ${colors.teal}; color: #fff; transform: scale(1.06); }
         .cat-circle-item:hover .cat-circle-label { color: ${colors.teal}; }
-        /* Eine Zeile: Desktop gleichmaessig verteilt, Mobile seitlich wischbar */
-        .cat-circles { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 12px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
-        .cat-circles::-webkit-scrollbar { display: none; }
+        /* Eine Zeile: Desktop gleichmaessig verteilt (ohne Scroll-Container,
+           damit der Neu-Chip nicht beschnitten wird), Mobile seitlich wischbar.
+           padding oben/rechts gibt dem Chip Luft. */
+        .cat-circles { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 12px; padding: 10px 6px 4px 0; }
         @media (max-width: 767px) {
-          .cat-circles { justify-content: flex-start; gap: 18px; }
+          .cat-circles { justify-content: flex-start; gap: 18px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-right: 16px; }
+          .cat-circles::-webkit-scrollbar { display: none; }
         }
         /* Nicht-kuratierte Kategorien nur in der wischbaren Mobile-Zeile */
         @media (min-width: 768px) {
