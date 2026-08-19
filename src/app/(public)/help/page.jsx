@@ -43,7 +43,8 @@ const CATEGORIES = [
     faqs: [
       { q: "Wie kaufe ich einen Artikel?", a: "Finde einen Artikel über die Suche oder Kategorien. Bei Festpreis-Inseraten klickst du auf «Sofort kaufen». Bei Auktionen gibst du ein Gebot ab." },
       { q: "Wie bezahle ich?", a: "Nach dem Kauf erhältst du eine QR-Rechnung mit den Zahlungsinformationen des Verkäufers. Du überweist den Betrag per Banküberweisung oder TWINT." },
-      { q: "Kann ich einen Preisvorschlag machen?", a: "Wenn der Verkäufer «Preis verhandelbar» aktiviert hat, kannst du einen Preisvorschlag zwischen 70% und 99% des Preises senden." },
+      { q: "Kann ich einen Preisvorschlag machen?", a: "Wenn der Verkäufer «Preis verhandelbar» aktiviert hat, kannst du einen Preisvorschlag zwischen 70% und 99% des Preises senden. Dieselbe Grenze gilt auch für Gegenvorschläge, maximal 3 Runden." },
+      { q: "Kann ich jemanden blockieren?", a: "Ja. Öffne den Chat mit der Person und tippe oben auf das Sperr-Symbol. Blockierte können dir nicht mehr schreiben, keine Preisvorschläge machen, nicht auf deine Auktionen bieten und nichts von dir kaufen. Entsperren kannst du jederzeit unter Einstellungen → Blockierte Nutzer." },
       { q: "Was ist der Käuferschutz?", a: "BEEDARO bietet einen Bewertungs-System. Prüfe immer das Trust Level und die Bewertungen des Verkäufers bevor du kaufst." },
       { q: "Wie funktioniert die Abholung?", a: "Bei Abholung vereinbarst du mit dem Verkäufer einen Termin. Die Adresse wird dir nach dem Kauf angezeigt. Bezahlung erfolgt bar bei Übergabe." },
     ],

@@ -136,6 +136,8 @@ const TESTS = [
       { id: "lv_live", label: "Live-Zähler: 'X schauen gerade' bei >2 aktiven Betrachtern (Realtime)" },
       { id: "lv_sofortkauf", label: "Sofortkauf → Bestätigung → Bestellseite" },
       { id: "lv_offer", label: "Preis vorschlagen (verhandelbar): Vorschlag → Chat; Annehmen/Ablehnen/Gegenvorschlag, max 3 Runden" },
+      { id: "lv_offer_band", label: "Vorschlags-Grenzen: Beträge unter 70% oder über 99% des Preises werden abgelehnt (klare Meldung mit erlaubtem Bereich), gilt auch für Gegenvorschläge" },
+      { id: "acc_block", label: "Nutzer blockieren: Im Chat Sperr-Symbol drücken; der Gesperrte kann nicht mehr schreiben, keine Vorschläge machen, nicht bieten und nichts kaufen (neutrale Fehlermeldung); Entsperren unter Einstellungen → Blockierte Nutzer" },
       { id: "lv_auction_bid", label: "Auktion: Gebot abgeben" },
       { id: "lv_bid_ratelimit", label: "Gebots-Spam-Schutz: sehr viele Gebote in kurzer Zeit (20/Minute) werden serverseitig blockiert mit Hinweis 'Zu viele Gebote in kurzer Zeit'" },
       { id: "lv_auction_board", label: "Auktion: Gebote-Leaderboard & Countdown" },

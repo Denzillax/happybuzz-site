@@ -380,10 +380,18 @@ export default function ListingDetail() {
   };
 
   // Preisvorschlag senden (privater Chat + Offer-Nachricht + Notification).
+  // Band 70-99% des Preises: hier fuer die schnelle Rueckmeldung, serverseitig
+  // erzwingt es der messages-Trigger (Annehmen erzeugt eine echte Bestellung).
   const sendPriceOffer = async () => {
     if (!user) { router.push("/login"); return; }
     const v = parseFloat(String(offerAmount).replace(",", "."));
     if (!v || v <= 0 || offerSending) return;
+    const min = Math.round(l.price * 70) / 100;
+    const max = Math.round(l.price * 99) / 100;
+    if (v < min || v > max) {
+      toast.error(`Dein Vorschlag muss zwischen CHF ${fmtPrice(min)} und CHF ${fmtPrice(max)} liegen.`);
+      return;
+    }
     setOfferSending(true);
     try {
       const { data: existing } = await supabase.from("conversations")
@@ -400,7 +408,11 @@ export default function ListingDetail() {
       await sendMessage(convId, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v });
       setShowOfferModal(false);
       router.push(`/chat/${convId}`);
-    } catch (err) { console.error(err); toast.error("Preisvorschlag konnte nicht gesendet werden."); }
+    } catch (err) {
+      console.error(err);
+      const m = err?.message || "";
+      toast.error(m.includes("Preisvorschlag") || m.includes("blockiert") ? m : "Preisvorschlag konnte nicht gesendet werden.");
+    }
     finally { setOfferSending(false); }
   };
 
@@ -791,7 +803,8 @@ export default function ListingDetail() {
                     <div onClick={() => setShowOfferModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
                       <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: radius.lg, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
                         <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>Preis vorschlagen</h3>
-                        <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>Aktueller Preis: CHF {fmtPrice(l.price)}. Der Verkäufer kann annehmen, ablehnen oder kontern.</p>
+                        <p style={{ margin: "0 0 6px", fontSize: 13, color: colors.muted }}>Aktueller Preis: CHF {fmtPrice(l.price)}. Der Verkäufer kann annehmen, ablehnen oder kontern.</p>
+                        <p style={{ margin: "0 0 16px", fontSize: 12, fontWeight: 700, color: colors.teal }}>Erlaubt: CHF {fmtPrice(Math.round(l.price * 70) / 100)} bis {fmtPrice(Math.round(l.price * 99) / 100)} (70–99% des Preises)</p>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
                           <span style={{ fontSize: 14, color: colors.muted, fontWeight: 700 }}>CHF</span>
                           <input type="number" min="1" step="1" autoFocus value={offerAmount} onChange={(e) => setOfferAmount(e.target.value)}

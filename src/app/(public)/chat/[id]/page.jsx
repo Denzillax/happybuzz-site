@@ -1,12 +1,13 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus, ShieldCheck } from "lucide-react";
+import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus, ShieldCheck, Ban } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
-import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice } from "@/lib/listings";
+import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice, setConversationHidden } from "@/lib/listings";
+import { blockUser, unblockUser, isBlockedByMe } from "@/lib/blocks";
 import { maskContactInfo } from "@/lib/contactFilter";
 
 const QUICK_REPLIES = [
@@ -29,6 +30,8 @@ function dayLabel(d) {
 
 export default function ChatConversation() {
   const params = useParams();
+  const router = useRouter();
+  const [blockiert, setBlockiert] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
   const [user, setUser] = useState(null);
@@ -135,13 +138,47 @@ export default function ChatConversation() {
     catch (e) { console.error(e); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setSending(false); }
   };
   const counterOffer = async () => {
-    const raw = (window.prompt("Dein Gegenvorschlag (CHF):") || "").replace(",", ".");
+    // Band 70-99% des Inseratpreises, wie beim Erst-Vorschlag; serverseitig
+    // erzwingt es zusaetzlich der messages-Trigger
+    const preis = Number(conv?.listing?.price || 0);
+    const band = conv?.listing?.listing_type === "sell" && preis > 0
+      ? { min: Math.round(preis * 70) / 100, max: Math.round(preis * 99) / 100 }
+      : null;
+    const hinweis = band ? ` — erlaubt: ${band.min.toFixed(2)} bis ${band.max.toFixed(2)}` : "";
+    const raw = (window.prompt(`Dein Gegenvorschlag (CHF)${hinweis}:`) || "").replace(",", ".");
     const v = parseFloat(raw);
     if (!v || v <= 0 || sending) return;
+    if (band && (v < band.min || v > band.max)) {
+      toast.error(`Der Vorschlag muss zwischen CHF ${band.min.toFixed(2)} und CHF ${band.max.toFixed(2)} liegen.`);
+      return;
+    }
     setSending(true);
     try { appendMsg(await sendMessage(params.id, user.id, `Preisvorschlag: CHF ${v.toLocaleString("de-CH")}`, { messageType: "offer", offerAmount: v })); }
-    catch (e) { console.error(e); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setSending(false); }
+    catch (e) { console.error(e); toast.error(e?.message?.includes("Preisvorschlag") || e?.message?.includes("blockiert") ? e.message : "Aktion fehlgeschlagen. Bitte erneut versuchen."); } finally { setSending(false); }
   };
+
+  // ── Blockieren: Kontakt + Kaufen/Bieten (serverseitig durchgesetzt) ──
+  const doBlock = async () => {
+    const other = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
+    if (!other?.id) return;
+    if (!window.confirm(`${other.display_name || "Diesen Nutzer"} blockieren? Er kann dir dann nicht mehr schreiben, nichts von dir kaufen und nicht auf deine Auktionen bieten. Entsperren geht jederzeit in den Einstellungen.`)) return;
+    try {
+      await blockUser(other.id);
+      await setConversationHidden(conv.id, user.id, true).catch(() => {});
+      toast.success(`${other.display_name || "Nutzer"} blockiert.`);
+      router.push("/chat");
+    } catch (e) { console.error(e); toast.error("Blockieren fehlgeschlagen."); }
+  };
+  const doUnblock = async () => {
+    const other = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
+    if (!other?.id) return;
+    try { await unblockUser(other.id); setBlockiert(false); toast.success("Sperre aufgehoben."); }
+    catch (e) { console.error(e); toast.error("Entsperren fehlgeschlagen."); }
+  };
+  useEffect(() => {
+    const other = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
+    if (other?.id) isBlockedByMe(other.id).then(setBlockiert).catch(() => {});
+  }, [conv, user?.id]);
 
   if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
@@ -184,6 +221,20 @@ export default function ChatConversation() {
             {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
           </div>
         </Link>
+
+        {/* Blockieren/Entsperren: Sperre wirkt serverseitig auf Chat, Kauf und Gebote */}
+        <button
+          onClick={blockiert ? doUnblock : doBlock}
+          title={blockiert ? "Sperre aufheben" : "Nutzer blockieren"}
+          aria-label={blockiert ? "Sperre aufheben" : "Nutzer blockieren"}
+          style={{
+            flexShrink: 0, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+            border: `1px solid ${blockiert ? colors.red : colors.border}`, background: blockiert ? colors.redSoft : "#fff",
+            color: blockiert ? colors.red : colors.muted, cursor: "pointer", borderRadius: 0,
+          }}
+        >
+          <Ban size={15} />
+        </button>
       </div>
 
       {!dealActive && (myViolations >= 2 ? (

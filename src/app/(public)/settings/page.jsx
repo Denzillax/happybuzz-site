@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   User, Shield, CreditCard, MapPin, Landmark, Bell,
   Check, Camera, Eye, Lock, AlertTriangle, Pencil,
-  Star, X, Loader2, ChevronRight, ExternalLink, BadgeCheck,
+  Star, X, Loader2, ChevronRight, ExternalLink, BadgeCheck, Ban,
 } from "lucide-react";
 import { BeeLevelCard } from "@/components/shared/BeeLevel";
 
@@ -22,6 +22,7 @@ import { FEE_TIERS } from "@/lib/constants";
 import { Input, Toggle, Btn, Section, TrustMeter } from "@/components/settings/ui";
 import { formatIban, normalizeIban, isValidIban } from "@/lib/iban";
 import { isPushSupported, getPushStatus, enablePush, disablePush } from "@/lib/push";
+import { getMyBlocks, unblockUser } from "@/lib/blocks";
 
 const TABS = [
   { id: "profile",        label: "Profil",              icon: User },
@@ -29,6 +30,7 @@ const TABS = [
   { id: "payment",        label: "Zahlung",             icon: CreditCard },
   { id: "address",        label: "Adresse",             icon: MapPin },
   { id: "notifications",  label: "Benachrichtigungen",  icon: Bell },
+  { id: "blocked",        label: "Blockierte Nutzer",   icon: Ban },
 ];
 
 
@@ -241,6 +243,7 @@ export default function SettingsPage() {
   const [emailSending, setEmailSending] = useState(false);
   const [toast, setToast] = useState(null);
   const [showPublicProfile, setShowPublicProfile] = useState(false);
+  const [blocks, setBlocks] = useState(null); // Blockierte Nutzer (null = laedt)
 
   // ── Profile state ──
   const [profile, setProfile] = useState(null);
@@ -298,6 +301,13 @@ export default function SettingsPage() {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
   }, []);
+
+  // Blockierte Nutzer laden, sobald der Tab geoeffnet wird
+  useEffect(() => {
+    if (activeTab === "blocked" && blocks === null) {
+      getMyBlocks().then(setBlocks).catch(() => setBlocks([]));
+    }
+  }, [activeTab, blocks]);
 
   // ── Load profile ──
   useEffect(() => {
@@ -1317,12 +1327,48 @@ export default function SettingsPage() {
     );
   };
 
+  // ── Blockierte Nutzer: Liste + Entsperren (Sperre wirkt serverseitig
+  //    auf Chat, Preisvorschlaege, Gebote und Kaeufe) ──
+  const BlockedTab = () => (
+    <Section title="BLOCKIERTE NUTZER" description="Blockierte können dir nicht schreiben, keine Preisvorschläge machen, nicht auf deine Auktionen bieten und nichts von dir kaufen. Blockieren kannst du jemanden direkt im Chat.">
+      {blocks === null ? (
+        <div style={{ color: C.muted, fontSize: 13, padding: "8px 0" }}>Wird geladen…</div>
+      ) : blocks.length === 0 ? (
+        <div style={{ color: C.muted, fontSize: 13, padding: "8px 0" }}>Du hast niemanden blockiert.</div>
+      ) : (
+        <div>
+          {blocks.map((b) => (
+            <div key={b.blocked_id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: `1px solid ${C.borderLt}` }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: K.sand, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                {b.blocked?.avatar_url ? <img src={b.blocked.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={16} color={C.muted} />}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 700 }}>{b.blocked?.display_name || "Nutzer"}</div>
+                <div style={{ fontSize: 11, color: C.muted }}>blockiert am {new Date(b.created_at).toLocaleDateString("de-CH")}</div>
+              </div>
+              <button
+                onClick={async () => {
+                  try { await unblockUser(b.blocked_id); setBlocks(prev => (prev || []).filter(x => x.blocked_id !== b.blocked_id)); showToast("Sperre aufgehoben"); }
+                  catch (e) { console.error(e); showToast("Entsperren fehlgeschlagen"); }
+                }}
+                style={{ padding: "7px 14px", border: `1px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", borderRadius: 0, fontFamily: "'Manrope', sans-serif" }}
+              >
+                Entsperren
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </Section>
+  );
+
   const tabContent = {
     profile: ProfileTab(),
     verify: VerifyTab(),
     payment: PaymentTab(),
     address: AddressTab(),
     notifications: NotificationsTab(),
+    blocked: BlockedTab(),
   };
 
   // ═══════════════════════════════════════════════════════════════
