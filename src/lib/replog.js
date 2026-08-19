@@ -62,6 +62,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Startseite", text: "Mobile: Inserat-Reihen sind jetzt wischbar (grössere Karten, kürzere Seite), Kategorien-Zeile zeigt am Handy alle Kategorien, und die Seite kann nicht mehr seitlich verrutschen (Überlauf-Sicherung)", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Fehlermeldung beim Laden der Startseite behoben (Hydration-Konflikt durch ein Sonderzeichen im Stil der Format-Kacheln)", melder: "Denis" },
       { typ: "neu", bereich: "Startseite", text: "Challenge der Woche auffälliger: Bee-Loud-Marke (Biene mit Megafon) klebt als wippender Sticker auf dem Band" },
+      { typ: "fix", bereich: "Inserieren", text: "Mobile: Die Leiste mit Vorschau/Entwurf/Veröffentlichen wurde von der unteren Navigation verdeckt und brach in zwei Zeilen um, jetzt sitzt sie kompakt in einer Zeile direkt über der Navigation", melder: "Denis" },
       { typ: "fix", bereich: "Mails & Push", text: "Bewertungen, neue Nachrichten und Fragen zum Inserat lösten weder Mail noch Push aus (nur die Glocke), jetzt greifen die Schalter in den Einstellungen", melder: "Denis" },
     ],
   },

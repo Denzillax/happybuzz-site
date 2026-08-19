@@ -2124,10 +2124,11 @@ export default function ListingForm({
         margin: "8px -16px 0", padding: "14px 16px",
         background: "rgba(249,244,236,.94)", borderTop: `1.5px solid ${INK}`,
       }}>
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="lf-act-row" style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
             onClick={() => setShowPreview(!showPreview)}
             title="Vorschau"
+            className="lf-act-preview"
             style={{
               padding: "13px 16px", borderRadius: 0,
               border: `1.5px solid ${INK}`, background: "#fff",
@@ -2135,12 +2136,13 @@ export default function ListingForm({
               cursor: "pointer", transition: "all .15s", display: "flex", alignItems: "center", gap: 6,
             }}
           >
-            {showPreview ? <X size={16} /> : <Eye size={16} />} Vorschau
+            {showPreview ? <X size={16} /> : <Eye size={16} />} <span className="lf-act-label">Vorschau</span>
           </button>
 
           <button
             onClick={() => handleSubmit(false)}
             disabled={saving}
+            className="lf-act-draft"
             style={{
               padding: "13px 18px", borderRadius: 0,
               border: `1.5px solid ${INK}`, background: "#fff",
@@ -2172,6 +2174,7 @@ export default function ListingForm({
           {onCancel && (
             <button
               onClick={onCancel}
+              className="lf-act-cancel"
               style={{
                 padding: "13px 14px", borderRadius: radius.md,
                 border: "none", background: "transparent",

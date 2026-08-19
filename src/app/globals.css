@@ -473,6 +473,20 @@ input:focus, textarea:focus, select:focus {
 @media (max-width: 768px) {
   .lf-camera-btn { display: flex !important; }
 }
+/* Aktionsleiste im Inserat-Formular: auf Mobile ueber der Bottom-Nav (56px
+   + Safe-Area) statt dahinter, eine kompakte Zeile: Vorschau nur als Icon,
+   Abbrechen faellt weg (Zurueck-Navigation reicht), Veroeffentlichen dominiert */
+@media (max-width: 768px) {
+  .lf-actionbar {
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 10px 12px !important;
+  }
+  .lf-act-row { flex-wrap: nowrap !important; gap: 8px !important; }
+  .lf-act-label { display: none; }
+  .lf-act-cancel { display: none !important; }
+  .lf-act-preview { padding: 12px !important; }
+  .lf-act-draft { padding: 12px 14px !important; }
+}
 /* Inserat-Import: nur Desktop, der Import-Helfer laeuft am Handy nicht */
 @media (max-width: 768px) {
   .import-promo { display: none; }
