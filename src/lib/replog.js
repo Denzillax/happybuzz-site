@@ -23,6 +23,12 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "21. August 2026",
+    punkte: [
+      { typ: "fix", bereich: "Kaufen", text: "Sofortkauf war seit dem Varianten-Update blockiert (Datenbank-Funktionskonflikt: alte und neue Kauf-Funktion existierten parallel, die Datenbank konnte sich nicht entscheiden). Alte Versionen entfernt, alle Kauf-Wege wieder verifiziert", melder: "Denis" },
+    ],
+  },
+  {
     datum: "18. August 2026",
     punkte: [
       { typ: "neu", bereich: "Mails & Push", text: "Alle Benachrichtigungs-Schalter haben jetzt ein echtes Feature: Auktion endet bald (Vorlauf 5/10/30 Min wählbar), Inserat läuft ab, Bewertungs-Erinnerung, monatlicher Verkaufsbericht, Favorit-Preisänderung und Favorit verkauft" },
