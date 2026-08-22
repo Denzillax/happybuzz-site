@@ -508,6 +508,11 @@ input:focus, textarea:focus, select:focus {
   .chat-del { display: none; }
 }
 
+/* Beta-Feedback-Knopf: auf dem Handy 14px vom Rand statt am Viewport kleben */
+@media (max-width: 768px) {
+  .beta-fab { right: 14px !important; }
+}
+
 /* Buchungen: Desktop eine Zeile, Handy als Karte mit Umbruechen
    (Kopf voll breit, Preis+Status als Zeile darunter, Knoepfe volle Breite) */
 .bk-row { display: flex; gap: 16px; padding: 18px 20px; align-items: center; }

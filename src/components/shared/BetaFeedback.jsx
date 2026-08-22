@@ -274,7 +274,7 @@ export default function BetaFeedback() {
   // Floating Button
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} title="Beta Feedback" style={{
+      <button onClick={() => setOpen(true)} title="Beta Feedback" className="beta-fab" style={{
         position: "fixed", bottom: 96, right: 32, zIndex: 9990,
         width: 48, height: 48, borderRadius: "50%",
         background: colors.teal, border: "none", cursor: "pointer",
@@ -324,8 +324,8 @@ export default function BetaFeedback() {
 
   return (
     <div style={{
-      position: "fixed", bottom: 96, right: 20, zIndex: 9990,
-      width: 380, maxHeight: "75vh", borderRadius: 0, overflow: "hidden",
+      position: "fixed", bottom: 96, right: 14, zIndex: 9990,
+      width: "min(380px, calc(100vw - 28px))", maxHeight: "75vh", borderRadius: 0, overflow: "hidden",
       background: "#fff", border: `1px solid ${colors.border}`,
       boxShadow: "0 8px 32px rgba(0,0,0,.18)", fontFamily: fonts.body,
       display: "flex", flexDirection: "column",

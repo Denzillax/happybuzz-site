@@ -84,9 +84,10 @@ export default function PublicProfilePage() {
   const neuCount = ratings.filter(r => r.rating === 3).length;
   const negCount = ratings.filter(r => r.rating <= 2).length;
 
+  // Einzeilig ohne Klammern: "INSERATE (10)" brach mobil in zwei Zeilen um
   const TABS = [
-    { key: "listings", label: `Inserate (${listings.length})`, icon: Package },
-    { key: "ratings", label: `Bewertungen (${ratings.length})`, icon: Star },
+    { key: "listings", label: `Inserate ${listings.length}`, icon: Package },
+    { key: "ratings", label: `Bewertungen ${ratings.length}`, icon: Star },
   ];
 
   const fmtDate = (d) => new Date(d).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" });
@@ -136,10 +137,14 @@ export default function PublicProfilePage() {
                 <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>
                   {profile.account_type === "business" && profile.company_name ? profile.company_name : (profile.display_name || profile.username)}
                 </h1>
+                {/* Hierarchie: Gruendungsmitglied ist das Statussymbol, der
+                    Level-Badge (Sammler etc.) tritt eine Stufe zurueck */}
                 <AccountBadge accountType={profile.account_type} size="lg" />
                 <VerifiedSellerBadge profile={profile} size="lg" />
                 <FounderBadge profile={profile} size="lg" />
-                <BeeLevelBadge xp={profile.xp_total} size="md" />
+                <span style={{ opacity: 0.75, transform: "scale(0.9)", transformOrigin: "left center", display: "inline-flex" }}>
+                  <BeeLevelBadge xp={profile.xp_total} size="sm" />
+                </span>
               </div>
 
               {profile.account_type === "business" && profile.company_uid && (
@@ -172,7 +177,7 @@ export default function PublicProfilePage() {
                 <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: avgRating.avg >= 4 ? colors.green : K.ink }}>
                   {avgRating.count > 0 ? avgRating.avg.toFixed(1) : "–"}
                 </p>
-                <p style={{ margin: 0, ...monoLabel }}>{avgRating.count} Bewert.</p>
+                <p style={{ margin: 0, ...monoLabel }}>{avgRating.count === 1 ? "1 Bewertung" : `${avgRating.count} Bewertungen`}</p>
               </div>
               <div style={{ textAlign: "center" }}>
                 <p style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: colors.green }}>
@@ -202,22 +207,18 @@ export default function PublicProfilePage() {
             )}
           </div>
 
-          {/* Verkäufer-Statistiken (server-berechnet) */}
-          {sellerStats && (sellerStats.completed_sales > 0 || sellerStats.sales_rate != null || sellerStats.avg_response_minutes != null) && (() => {
-            const fmtResp = (m) => m == null ? "–" : m < 60 ? `${m} Min` : m < 1440 ? `${Math.round(m / 60)} Std` : `${Math.round(m / 1440)} Tg`;
-            const tiles = [
-              { v: sellerStats.completed_sales, l: "Verkäufe" },
-              { v: sellerStats.sales_rate != null ? `${sellerStats.sales_rate}%` : "–", l: "Verkaufsrate" },
-              { v: sellerStats.avg_response_minutes != null ? fmtResp(sellerStats.avg_response_minutes) : "–", l: "Ø Antwortzeit" },
-            ];
+          {/* Verkäufer-Statistiken: EINE kompakte Zeile statt Kachel-Dashboard.
+              Die Verkaufsrate ist bewusst raus: fuer Kaeufer wertlos und
+              unfair gegenueber Verkaeufern mit vielen aktiven Inseraten. */}
+          {sellerStats && (sellerStats.completed_sales > 0 || sellerStats.avg_response_minutes != null) && (() => {
+            const fmtResp = (m) => m == null ? null : m < 60 ? `${m} Min` : m < 1440 ? `${Math.round(m / 60)} Std` : `${Math.round(m / 1440)} Tg`;
+            const teile = [];
+            if (sellerStats.completed_sales > 0) teile.push(`${sellerStats.completed_sales} ${sellerStats.completed_sales === 1 ? "Verkauf" : "Verkäufe"}`);
+            const resp = fmtResp(sellerStats.avg_response_minutes);
+            if (resp) teile.push(`Ø ${resp} Antwortzeit`);
             return (
-              <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
-                {tiles.map((t) => (
-                  <div key={t.l} style={{ flex: 1, minWidth: 100, padding: "12px 14px", borderRadius: 0, background: K.paper, border: `1px solid ${K.ink}`, textAlign: "center" }}>
-                    <p style={{ margin: 0, fontSize: 18, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>{t.v}</p>
-                    <p style={{ margin: "3px 0 0", ...monoLabel }}>{t.l}</p>
-                  </div>
-                ))}
+              <div style={{ marginTop: 16, fontSize: 13.5, fontWeight: 600, color: K.ink }}>
+                {teile.join(" · ")}
               </div>
             );
           })()}
@@ -250,11 +251,13 @@ export default function PublicProfilePage() {
             </div>
           )}
 
-          {/* Rating Summary Bar */}
+          {/* Rating Summary Bar: mobil Kurzform (X% positiv), die Detail-
+              Verteilung nur am Desktop — sie lief rechts aus dem Bild und
+              steht ohnehin im Bewertungen-Tab */}
           {avgRating.count > 0 && (
             <div style={{
-              display: "flex", gap: 16, marginTop: 20, paddingTop: 16,
-              borderTop: `1px solid ${colors.borderLt}`, alignItems: "center",
+              display: "flex", gap: "8px 16px", marginTop: 20, paddingTop: 16,
+              borderTop: `1px solid ${colors.borderLt}`, alignItems: "center", flexWrap: "wrap",
             }}>
               <div style={{ display: "flex", gap: 3 }}>
                 {[1, 2, 3, 4, 5].map(s => (
@@ -265,12 +268,22 @@ export default function PublicProfilePage() {
                 ))}
               </div>
               <span style={{ fontSize: 14, fontWeight: 700 }}>{avgRating.avg.toFixed(1)}</span>
-              <span style={{ fontSize: 12, color: colors.muted }}>({avgRating.count} Bewertungen)</span>
-              <div style={{ display: "flex", gap: 10, marginLeft: "auto", fontSize: 12 }}>
+              <span style={{ fontSize: 12, color: colors.muted }}>
+                {avgRating.count === 1 ? "1 Bewertung" : `${avgRating.count} Bewertungen`}
+                <span className="rating-pct" style={{ color: colors.green, fontWeight: 700 }}> · {Math.round((posCount / avgRating.count) * 100)}% positiv</span>
+              </span>
+              <div className="rating-detail" style={{ display: "flex", gap: 10, marginLeft: "auto", fontSize: 12 }}>
                 <span style={{ color: colors.green, fontWeight: 600 }}>Positiv {posCount}</span>
                 <span style={{ color: colors.muted, fontWeight: 600 }}>Neutral {neuCount}</span>
                 <span style={{ color: colors.red, fontWeight: 600 }}>Negativ {negCount}</span>
               </div>
+              <style>{`
+                .rating-pct { display: none; }
+                @media (max-width: 640px) {
+                  .rating-detail { display: none !important; }
+                  .rating-pct { display: inline; }
+                }
+              `}</style>
             </div>
           )}
         </div>
@@ -285,13 +298,13 @@ export default function PublicProfilePage() {
             const Icon = t.icon;
             return (
               <button key={t.key} onClick={() => setTab(t.key)} style={{
-                padding: "12px 24px", background: "none", border: "none",
+                padding: "12px 18px", background: "none", border: "none",
                 borderBottom: active ? `3px solid ${K.honey}` : "3px solid transparent",
                 marginBottom: -2, cursor: "pointer",
                 fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
                 color: active ? K.ink : colors.muted,
                 display: "flex", alignItems: "center", gap: 6,
-                transition: "all .15s",
+                whiteSpace: "nowrap", transition: "all .15s",
               }}>
                 <Icon size={15} /> {t.label}
               </button>

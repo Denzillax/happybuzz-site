@@ -26,6 +26,7 @@ export const REP_LOG = [
     datum: "21. August 2026",
     punkte: [
       { typ: "fix", bereich: "Kaufen", text: "Sofortkauf war seit dem Varianten-Update blockiert (Datenbank-Funktionskonflikt: alte und neue Kauf-Funktion existierten parallel, die Datenbank konnte sich nicht entscheiden). Alte Versionen entfernt, alle Kauf-Wege wieder verifiziert", melder: "Denis" },
+      { typ: "fix", bereich: "Profil", text: "Verkäuferprofil aufgeräumt: Die Bewertungsverteilung (Positiv/Neutral/Negativ) lief mobil rechts aus dem Bild, dort steht jetzt kompakt 'X Bewertungen · Y% positiv'; die widersprüchliche Verkaufsrate (1 Verkauf, 0%) ist raus und die Statistik-Kacheln sind eine schlanke Zeile ('1 Verkauf · Ø 1 Min Antwortzeit'); Tabs einzeilig, 'Bewert.' ausgeschrieben, Level-Badge dezenter neben dem Gründungsmitglied, Beta-Knopf mit Randabstand", melder: "Denis" },
     ],
   },
   {
