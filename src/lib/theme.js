@@ -57,15 +57,13 @@ export const fonts = {
   body: "'Manrope', system-ui, sans-serif",
 };
 
-// Katalog-Look (Referenz: Login-Seite): Karten und Flaechen sind ECKIG.
-// Die Stufen bleiben als Namen erhalten, zeigen aber alle auf 0 — so wird
-// jede theme-basierte Rundung app-weit auf einmal eckig. full bleibt fuer
-// Kreise (Avatare, Punkte) erhalten.
+// Klar-Look (Ricardo-inspiriert): weiche Rundungen statt eckigem Katalog.
+// full bleibt fuer Kreise (Avatare, Punkte) erhalten.
 export const radius = {
-  sm: 0,
-  md: 0,
-  lg: 0,
-  xl: 0,
+  sm: 8,
+  md: 10,
+  lg: 12,
+  xl: 14,
   full: 9999,
 };
 

@@ -7,9 +7,9 @@
 import { useEffect, useState } from "react";
 import { fonts } from "@/lib/theme";
 
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 const INK = "#14110D";
-const SAND = "#F9F4EC";
+const SAND = "#F4F4F2";
 const MOSS = "#5B8C5A";
 const HONIG = "#F4A100";
 const ROT = "#c62828";
@@ -56,7 +56,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   ];
 
   return (
-    <div style={{ background: SAND, border: `1.5px solid ${INK}`, padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
+    <div style={{ background: SAND, border: "1px solid #E4E0D8", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
       <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: overdue ? ROT : "#7a756d", marginBottom: 10 }}>
         {overdue ? "Überfällig seit" : "Rückgabe in"}
       </div>
@@ -67,7 +67,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
           <div key={label} style={{ flex: "0 0 auto", textAlign: "center" }}>
             <div style={{
               minWidth: 52, padding: "8px 6px", background: "#fff",
-              border: `1.5px solid ${INK}`, boxSizing: "border-box",
+              border: "1px solid #E4E0D8", boxSizing: "border-box",
               fontFamily: MONO, fontSize: 24, fontWeight: 700, lineHeight: 1,
               color: overdue ? ROT : INK, fontVariantNumeric: "tabular-nums",
             }}>
@@ -81,7 +81,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
       </div>
 
       {/* Fortschritt mit Start/Ende */}
-      <div style={{ height: 10, border: `1.5px solid ${INK}`, background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
+      <div style={{ height: 10, border: "1px solid #E4E0D8", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
         <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, transition: "width .5s linear" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#7a756d" }}>

@@ -46,11 +46,11 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
         cursor: klickbar ? "pointer" : "default",
         background: gruen ? "#EEF4EC" : zustand === "abgesagt" ? "#F3EFE8" : "#fff",
         opacity: zustand === "gesperrt" ? 0.55 : 1,
-        border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 0,
-        boxShadow: zustand === "frei" ? "4px 4px 0 rgba(20,17,13,.12)" : "none",
+        border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 10,
+        boxShadow: zustand === "frei" ? "0 2px 8px rgba(25,22,21,.15)" : "none",
         fontFamily: BODY, transition: "all .15s",
       }}>
-      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, background: gruen || zustand === "abgesagt" ? "#fff" : K.sand, border: `1px solid ${K.ink}`, marginBottom: 12 }}>
+      <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, background: gruen || zustand === "abgesagt" ? "#fff" : K.sand, border: "1px solid #E4E0D8", marginBottom: 12 }}>
         {gruen ? <Check size={19} color={K.moss} /> : zustand === "abgesagt" ? <X size={19} color="#A0522D" /> : <r.Icon size={19} color={K.ink} />}
       </span>
       <span style={{ display: "block", fontFamily: HEAD, fontSize: 17, fontWeight: 700, color: K.ink, marginBottom: 4 }}>
@@ -118,8 +118,8 @@ export default function BewerbenPage() {
         </p>
 
         {/* ── Hinweis: Tester bewerben sich nicht, die sind es schon ── */}
-        <div style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "16px 18px", background: "#FDF6E3", border: `1px solid ${K.ink}`, marginBottom: 30 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, background: K.honey, border: `1px solid ${K.ink}`, flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "16px 18px", background: "#FDF6E3", border: "1px solid #E4E0D8", marginBottom: 30 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, background: K.honey, border: "1px solid #E4E0D8", flexShrink: 0 }}>
             <Sparkles size={17} color={K.ink} />
           </span>
           <div style={{ fontFamily: BODY, fontSize: 13.5, color: K.ink, lineHeight: 1.6 }}>

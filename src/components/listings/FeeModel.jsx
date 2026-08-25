@@ -1,7 +1,7 @@
 "use client";
 
 import { colors, fonts, radius } from "@/lib/theme";
-import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG, FEE_FREE_BELOW, isFeeFree } from "@/lib/constants";
+import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG, FEE_FREE_BELOW, FEE_CAP, isFeeFree } from "@/lib/constants";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 export default function FeeModel({ price, selected, onSelect, defaultTier }) {
@@ -60,7 +60,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                     <span style={{
                       fontSize: 9, fontWeight: 800, fontFamily: fonts.body,
                       background: colors.green, color: "#fff",
-                      padding: "2px 6px", borderRadius: 0,
+                      padding: "2px 6px", borderRadius: 10,
                       textTransform: "uppercase", letterSpacing: ".04em",
                     }}>
                       Dein Standard
@@ -92,14 +92,16 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
           </div>
           <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
             Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind gebührenfrei. Du bekommst den vollen Betrag,
-            dafür fliesst hier kein Bee-Impact.
+            dafür fliesst hier kein Bee-Impact. Und nach oben gilt: nie mehr als CHF {FEE_CAP}.00 Gebühr pro Verkauf.
           </p>
         </div>
       )}
 
       {/* Summary */}
       {numPrice > 0 && !isFeeFree(numPrice) && (() => {
-        const totalFee = numPrice * activeTier.pct / 100;
+        const rawFee = numPrice * activeTier.pct / 100;
+        const capped = rawFee > FEE_CAP;
+        const totalFee = Math.min(rawFee, FEE_CAP);
         const beeFee = totalFee * BEE_IMPACT_RATE;
         const platFee = totalFee * (1 - BEE_IMPACT_RATE);
         const payout = numPrice - totalFee;
@@ -116,6 +118,11 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
               </span>
             </div>
 
+            {capped && (
+              <p style={{ margin: "0 0 8px", fontSize: 12, fontFamily: fonts.body, fontWeight: 700, color: colors.green }}>
+                Gebühren-Deckel aktiv: maximal CHF {FEE_CAP}.00 statt CHF {rawFee.toFixed(2)}.
+              </p>
+            )}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted }}>
                 Plattform ({(activeTier.pct * (1 - BEE_IMPACT_RATE)).toFixed(1)}%)

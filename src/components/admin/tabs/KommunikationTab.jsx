@@ -13,7 +13,7 @@ import { bcInput } from "@/components/admin/adminStyles";
 import { BroadcastForm } from "@/components/admin/modals/BroadcastComposer";
 import { TickerBar } from "@/components/layout/Ticker";
 
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 const INK = "#14110D";
 
 // Mono-Label ueber dem Feld — gleiche Optik wie im Inserat-Formular (Katalog-Stil)
@@ -28,18 +28,18 @@ const Field = ({ label, children, grow }) => (
 );
 
 const Toggle = ({ on, onChange }) => (
-  <button onClick={onChange} style={{ width: 46, height: 26, borderRadius: 0, border: `1.5px solid ${INK}`, cursor: "pointer", background: on ? colors.yellow : "#e7e2d8", position: "relative", transition: "background .2s", flexShrink: 0, padding: 0 }}>
-    <div style={{ width: 18, height: 18, background: on ? INK : "#fff", border: `1.5px solid ${INK}`, position: "absolute", top: 2, left: on ? 23 : 2, transition: "left .2s", boxSizing: "border-box" }} />
+  <button onClick={onChange} style={{ width: 46, height: 26, borderRadius: 10, border: "1px solid #E4E0D8", cursor: "pointer", background: on ? colors.yellow : "#e7e2d8", position: "relative", transition: "background .2s", flexShrink: 0, padding: 0 }}>
+    <div style={{ width: 18, height: 18, background: on ? INK : "#fff", border: "1px solid #E4E0D8", position: "absolute", top: 2, left: on ? 23 : 2, transition: "left .2s", boxSizing: "border-box" }} />
   </button>
 );
 
 // Eckige Wahl-Knoepfe im Katalog-Stil: aktiv = Ink auf Gelb
 const Segment = ({ options, value, onChange }) => (
-  <div style={{ display: "inline-flex", flexWrap: "wrap", maxWidth: "100%", gap: 0, border: `1.5px solid ${INK}` }}>
+  <div style={{ display: "inline-flex", flexWrap: "wrap", maxWidth: "100%", gap: 0, border: "1px solid #E4E0D8" }}>
     {options.map(([k, l], i) => (
       <button key={k} onClick={() => onChange(k)} style={{
         fontSize: 11.5, fontWeight: 700, padding: "8px 14px", border: "none",
-        borderLeft: i > 0 ? `1.5px solid ${INK}` : "none",
+        borderLeft: i > 0 ? "1px solid #E4E0D8" : "none",
         cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap",
         background: value === k ? colors.yellow : "#fff",
         color: value === k ? INK : colors.muted,
@@ -51,11 +51,11 @@ const Segment = ({ options, value, onChange }) => (
 // Farbwahl: Marken-Presets als eckige Kacheln + echte Farbboxen (nativer Picker)
 const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
   <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
-    <div style={{ display: "inline-flex", border: `1.5px solid ${INK}` }}>
+    <div style={{ display: "inline-flex", border: "1px solid #E4E0D8" }}>
       {ANNOUNCEMENT_PRESETS.map((p, i) => (
         <button key={p.name} onClick={() => onPick(p)} title={p.name} style={{
           width: 34, height: 34, background: p.bg, cursor: "pointer", position: "relative",
-          border: "none", borderLeft: i > 0 ? `1.5px solid ${INK}` : "none", padding: 0,
+          border: "none", borderLeft: i > 0 ? "1px solid #E4E0D8" : "none", padding: 0,
         }}>
           {bg === p.bg && <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: p.text, fontWeight: 900, fontSize: 15 }}>×</span>}
         </button>
@@ -64,7 +64,7 @@ const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
     {[["Hintergrund", bg, onBg], ["Schrift", text, onText]].map(([l, val, on]) => (
       <label key={l} style={{ display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer" }}>
         <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(val) ? val : "#000000"} onChange={e => on(e.target.value)}
-          style={{ width: 34, height: 34, padding: 0, border: `1.5px solid ${INK}`, borderRadius: 0, cursor: "pointer", background: "none" }} />
+          style={{ width: 34, height: 34, padding: 0, border: "1px solid #E4E0D8", borderRadius: 10, cursor: "pointer", background: "none" }} />
         <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
           <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>{l}</span>
           <span style={{ fontFamily: MONO, fontSize: 11, color: colors.dark }}>{String(val || "").toUpperCase()}</span>
@@ -76,7 +76,7 @@ const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
 
 // Weisser Rahmen fuer den jeweils aktiven Bereich
 const Panel = ({ children }) => (
-  <div style={{ background: "#fff", border: `1.5px solid ${INK}`, padding: "22px 22px 24px", display: "flex", flexDirection: "column", gap: 18 }}>
+  <div style={{ background: "#fff", border: "1px solid #E4E0D8", padding: "22px 22px 24px", display: "flex", flexDirection: "column", gap: 18 }}>
     {children}
   </div>
 );
@@ -86,7 +86,7 @@ const PreviewBlock = ({ on, children }) => (
   <div>
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
       <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: colors.muted }}>Live-Vorschau</span>
-      <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", padding: "3px 9px", border: `1.5px solid ${INK}`, background: on ? colors.yellow : "#fff", color: INK }}>{on ? "Aktiv" : "Aus"}</span>
+      <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", padding: "3px 9px", border: "1px solid #E4E0D8", background: on ? colors.yellow : "#fff", color: INK }}>{on ? "Aktiv" : "Aus"}</span>
     </div>
     {children}
   </div>
@@ -96,9 +96,9 @@ const PreviewBlock = ({ on, children }) => (
 const SaveBtn = ({ onClick, label }) => (
   <button onClick={onClick} style={{
     fontSize: 13.5, fontWeight: 700, color: INK, background: colors.yellow,
-    border: `1.5px solid ${INK}`, borderRadius: 0, padding: "12px 30px",
+    border: "1px solid #E4E0D8", borderRadius: 10, padding: "12px 30px",
     cursor: "pointer", fontFamily: fonts.body, alignSelf: "flex-start",
-    boxShadow: `3px 3px 0 ${INK}`,
+    boxShadow: "0 2px 8px rgba(25,22,21,.15)",
   }}>
     {label}
   </button>
@@ -150,7 +150,7 @@ export function KommunikationTab({ admin }) {
             display: "inline-flex", alignItems: "center", gap: 6,
             fontSize: 12.5, fontWeight: bereich === k ? 700 : 500, fontFamily: fonts.body,
             padding: "8px 16px", borderRadius: 999, cursor: "pointer",
-            border: `1.5px solid ${colors.dark}`,
+            border: "1px solid #E4E0D8",
             background: bereich === k ? colors.dark : "#fff",
             color: bereich === k ? "#fff" : colors.dark,
           }}>
@@ -163,7 +163,7 @@ export function KommunikationTab({ admin }) {
       {bereich === "banner" && (
         <Panel>
           <PreviewBlock on={ann.enabled}>
-            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 15, fontWeight: 700, padding: "12px 14px", textAlign: "center", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", border: `1.5px solid ${INK}`, opacity: ann.enabled ? 1 : 0.5 }}>
+            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 15, fontWeight: 700, padding: "12px 14px", textAlign: "center", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", border: "1px solid #E4E0D8", opacity: ann.enabled ? 1 : 0.5 }}>
               {ann.message || "Vorschau-Text"}
             </div>
           </PreviewBlock>
@@ -175,7 +175,7 @@ export function KommunikationTab({ admin }) {
               </div>
             </Field>
             <Field label="Text" grow>
-              <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, borderRadius: 0, border: `1.5px solid ${INK}`, maxWidth: 620 }} />
+              <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, borderRadius: 10, border: "1px solid #E4E0D8", maxWidth: 620 }} />
             </Field>
           </div>
           <Field label="Farbe">
@@ -210,7 +210,7 @@ export function KommunikationTab({ admin }) {
               </div>
             </Field>
             <Field label="Text" grow>
-              <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, borderRadius: 0, border: `1.5px solid ${INK}`, maxWidth: 620 }} />
+              <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, borderRadius: 10, border: "1px solid #E4E0D8", maxWidth: 620 }} />
             </Field>
           </div>
           <Field label="Farbe">

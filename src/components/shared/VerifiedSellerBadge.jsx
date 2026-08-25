@@ -36,7 +36,7 @@ export function VerifiedSellerBadge({ profile, verified, size = "sm", label = tr
       title="Identität von BEEDARO geprüft (Ausweis + E-Mail)"
       style={{
         display: "inline-flex", alignItems: "center", gap: s.gap,
-        padding: s.pad, borderRadius: 0,
+        padding: s.pad, borderRadius: 10,
         background: MOSS_SOFT, color: MOSS,
         border: `1px solid ${MOSS}`,
         fontFamily: fonts.body, fontSize: s.font, fontWeight: 700,

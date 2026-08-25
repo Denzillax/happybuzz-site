@@ -9,7 +9,7 @@ export function BannerModal({ admin }) {
   if (!annOpen) return null;
   return (
     <div onClick={() => setAnnOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div onClick={e => e.stopPropagation()} style={{ width: 460, maxWidth: "100%", background: "#fff", borderRadius: 0, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 460, maxWidth: "100%", background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
         <div style={{ background: "#1a1a1a", padding: "14px 18px", display: "flex", alignItems: "center", gap: 9 }}>
           <Megaphone size={17} color={colors.yellow} />
           <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>Ankündigungsbalken</span>
@@ -41,7 +41,7 @@ export function BannerModal({ admin }) {
           </div>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: colors.muted, marginBottom: 6 }}>Vorschau</div>
-            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 13, fontWeight: 600, padding: "9px 14px", borderRadius: 0, textAlign: "center" }}>
+            <div style={{ background: ann.bg_color, color: ann.text_color, fontSize: 13, fontWeight: 600, padding: "9px 14px", borderRadius: 10, textAlign: "center" }}>
               <Megaphone size={14} style={{ verticalAlign: "-2px", marginRight: 6 }} />{ann.message || "Vorschau-Text"}
             </div>
           </div>

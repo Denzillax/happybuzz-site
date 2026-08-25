@@ -7,7 +7,7 @@ import { Logo } from '@/components/shared/Logo'
 // aber keine Navigation in den gesperrten Rest der Seite.
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F9F4EC' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F4F4F2' }}>
       <header style={{ background: '#fff', borderBottom: '1px solid #e8e5e0', padding: '14px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Logo width={140} />

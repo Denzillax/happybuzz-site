@@ -85,7 +85,7 @@ export function ChallengesTab({ admin }) {
         {[["aktiv", "Aktuelle"], ["vorlagen", "Vorlagen (wöchentlich)"], ["vergangene", "Vergangene"]].map(([k, l]) => (
           <button key={k} onClick={() => setFilter(k)} style={modPill(filter === k)}>{l}</button>
         ))}
-        <button onClick={() => setShowForm(s => !s)} style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+        <button onClick={() => setShowForm(s => !s)} style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
           <Plus size={13} /> Neue Challenge
         </button>
       </div>
@@ -122,7 +122,7 @@ export function ChallengesTab({ admin }) {
             <div><p style={bcFieldLabel}>Bis</p><input style={bcInput} type="date" value={f.ends_at} onChange={e => set("ends_at", e.target.value)} /></div>
           </>)}
           <div style={{ gridColumn: "1 / -1" }}>
-            <button onClick={submit} style={{ padding: "9px 18px", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
+            <button onClick={submit} style={{ padding: "9px 18px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
               {editId ? "Vorlage speichern" : "Anlegen"}
             </button>
           </div>
@@ -164,17 +164,17 @@ export function ChallengesTab({ admin }) {
                   <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                     {c.is_template && (
                       <button onClick={() => startEdit(c)} title="Vorlage bearbeiten (gilt ab nächster Woche)"
-                        style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+                        style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
                         Bearbeiten
                       </button>
                     )}
                     <button onClick={() => toggleChallenge(c)} title={c.active ? "Deaktivieren" : "Aktivieren"}
-                      style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                       <Power size={10} /> {c.active ? "Aus" : "An"}
                     </button>
                     <button onClick={() => { if (confirm(`"${c.title}" wirklich löschen?${c.participants > 0 ? ` ${c.participants} Teilnahme(n) werden mitgelöscht (gutgeschriebene Pollen bleiben).` : ""}`)) deleteChallenge(c); }}
                       title="Löschen"
-                      style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                       <Trash2 size={10} /> Löschen
                     </button>
                   </div>
@@ -204,13 +204,13 @@ export function ChallengesTab({ admin }) {
               </div>
               <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
                 {c.is_template && (
-                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
+                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
                 )}
-                <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                   <Power size={10} /> {c.active ? "Aus" : "An"}
                 </button>
                 <button onClick={() => { if (confirm(`"${c.title}" wirklich löschen?${c.participants > 0 ? ` ${c.participants} Teilnahme(n) werden mitgelöscht (gutgeschriebene Pollen bleiben).` : ""}`)) deleteChallenge(c); }}
-                  style={{ padding: "4px 10px", borderRadius: 0, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                  style={{ padding: "4px 10px", borderRadius: 10, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                   <Trash2 size={10} /> Löschen
                 </button>
               </div>

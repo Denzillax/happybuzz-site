@@ -10,32 +10,23 @@ import { nextMilestone } from "@/lib/impact";
 
 const MOSS = "#5B8C5A";
 const INK = "#14110D";
-const PAPER = "#FBF8F2";
-const SAND = "#F9F4EC";
+const PAPER = "#FFFFFF";
+const SAND = "#F4F4F2";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
 const MUTED = "rgba(20,17,13,0.55)";
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 
 const chf = (n) => Math.round(Number(n || 0)).toLocaleString("de-CH");
 
-const PHOTOS = [
-  { src: "/images/bee-impact.jpg", alt: "Biene auf einer Blume mit Vintage-Polaroid-Kamera" },
-  { src: "/images/bee-impact_GB.jpg", alt: "Biene auf einer Blume mit einem Nintendo Game Boy" },
-  { src: "/images/bee-impact_Vinyl.jpg", alt: "Biene auf einer Blume mit einer Vinyl-Schallplatte" },
-];
+// Ein einzelnes, dezentes Foto statt Karussell (Klar-Look)
+const PHOTO = { src: "/images/bee-impact.jpg", alt: "Biene auf einer Blume mit Vintage-Polaroid-Kamera" };
 
 export function CommunityImpact() {
   const [stats, setStats] = useState({ impact: 0, unterwegs: 0, articles: 0 });
   const [userImpact, setUserImpact] = useState(0);
   const [firstName, setFirstName] = useState("");
-  const [slide, setSlide] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setSlide((s) => (s + 1) % PHOTOS.length), 4500);
-    return () => clearInterval(t);
-  }, []);
 
   useEffect(() => {
     getCommunityImpactStats().then(setStats).catch(() => {});
@@ -64,57 +55,36 @@ export function CommunityImpact() {
   ];
 
   return (
-    <section className="home-band" style={{
-      width: "100%",
-      background: PAPER,
-      // symmetrisch: die Box sitzt vertikal mittig im beigen Band
-      padding: "48px 20px",
-    }}>
-      {/* Ganze Impact-Box mit Katalog-Outline, gleiche Bauart wie die Karten unten */}
-      <div className="home-band-box" style={{ maxWidth: 1080, margin: "0 auto", background: "#fff", border: `1.5px solid ${INK}`, padding: "clamp(18px, 3vw, 28px)" }}>
+    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 24px 28px" }}>
+      {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
+      <div style={{ background: "#EEF3EC", borderRadius: 14, padding: "clamp(22px, 3.5vw, 36px)" }}>
       <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
-          position: "relative", borderRadius: 0, overflow: "hidden",
-          background: SAND, border: `1.5px solid ${INK}`,
+          position: "relative", borderRadius: 12, overflow: "hidden",
+          background: "#fff",
           aspectRatio: "3 / 2",
         }}>
-          {PHOTOS.map((p, i) => (
-            <Image key={p.src} src={p.src} alt={p.alt} fill priority={i === 0}
-              sizes="(max-width: 768px) 100vw, 540px"
-              style={{ objectFit: "cover", opacity: i === slide ? 1 : 0, transition: "opacity .8s ease-in-out" }} />
-          ))}
-          {/* Punkte */}
-          <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 7, zIndex: 2 }}>
-            {PHOTOS.map((p, i) => (
-              <button key={p.src} onClick={() => setSlide(i)} aria-label={`Bild ${i + 1}`}
-                style={{
-                  width: i === slide ? 22 : 8, height: 8, padding: 0, borderRadius: 0, border: "none", cursor: "pointer",
-                  background: i === slide ? "#fff" : "rgba(255,255,255,.55)", boxShadow: "0 1px 3px rgba(0,0,0,.25)",
-                  transition: "width .3s, background .3s",
-                }} />
-            ))}
-          </div>
+          <Image src={PHOTO.src} alt={PHOTO.alt} fill
+            sizes="(max-width: 768px) 320px, 300px"
+            style={{ objectFit: "cover" }} />
         </div>
 
         {/* ── Inhalt ── */}
         <div className="impact-content">
           <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
             <Leaf size={14} color={MOSS} />
-            <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL }}>Bee-Impact</span>
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: MOSS }}>Bee-Impact</span>
           </div>
-          <h2 style={{ margin: "0 0 20px", fontSize: "clamp(28px, 4.2vw, 40px)", fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.05 }}>
+          <h2 style={{ margin: "0 0 16px", fontSize: "clamp(20px, 2.4vw, 26px)", fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.15 }}>
             Gemeinsam bewirken
           </h2>
 
-          <div style={{ display: "flex", border: `1.5px solid ${INK}`, borderRadius: 0, overflow: "hidden", background: "#fff" }}>
-            {cards.map((c, i) => (
-              <div key={c.label} style={{
-                flex: 1, padding: "16px 10px 14px", borderLeft: i ? `1px solid ${INK}1a` : "none",
-                display: "flex", flexDirection: "column", gap: 7, minWidth: 0,
-              }}>
-                <span style={{ fontFamily: MONO, fontSize: "clamp(9px, 2vw, 10.5px)", letterSpacing: ".1em", textTransform: "uppercase", color: MUTED, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.label}</span>
-                <span style={{ fontFamily: HEAD, fontWeight: 700, color: INK, lineHeight: 1, fontSize: "clamp(19px, 4.4vw, 28px)", letterSpacing: "-0.01em" }}>{c.value}</span>
+          <div style={{ display: "flex", gap: "clamp(14px, 3vw, 34px)", flexWrap: "wrap" }}>
+            {cards.map((c) => (
+              <div key={c.label} style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
+                <span style={{ fontFamily: HEAD, fontWeight: 700, color: INK, lineHeight: 1, fontSize: "clamp(20px, 3.6vw, 27px)", letterSpacing: "-0.01em", fontVariantNumeric: "tabular-nums" }}>{c.value}</span>
+                <span style={{ fontSize: 12, color: MUTED, whiteSpace: "nowrap" }}>{c.label}</span>
               </div>
             ))}
           </div>
@@ -126,12 +96,12 @@ export function CommunityImpact() {
             const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
             const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
             return (
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${INK}1f` }}>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid rgba(25,22,21,.1)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
                   <span style={{ fontFamily: HEAD, fontSize: 13.5, fontWeight: 700, color: INK }}>Nächstes Ziel: {ms.name}</span>
-                  <span style={{ fontFamily: MONO, fontSize: 11.5, color: MUTED }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
+                  <span style={{ fontSize: 11.5, color: MUTED, fontVariantNumeric: "tabular-nums" }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
                 </div>
-                <div style={{ height: 12, borderRadius: 999, background: SAND, marginTop: 10, overflow: "hidden", display: "flex", border: `1px solid ${INK}22` }}>
+                <div style={{ height: 10, borderRadius: 999, background: "#fff", marginTop: 10, overflow: "hidden", display: "flex" }}>
                   <div style={{ width: `${paidPct}%`, background: MOSS }} />
                   <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#F7E3A8 5px,#F7E3A8 10px)" }} />
                 </div>
@@ -151,8 +121,8 @@ export function CommunityImpact() {
           )}
 
           <Link href="/impact" className="bd-btn" style={{
-            display: "inline-flex", alignItems: "center", gap: 8, marginTop: 22,
-            padding: "12px 22px", borderRadius: 0, background: INK, color: PAPER,
+            display: "inline-flex", alignItems: "center", gap: 8, marginTop: 20,
+            padding: "11px 22px", borderRadius: 999, background: HONEY, color: INK,
             fontSize: 14, fontWeight: 700, fontFamily: HEAD, textDecoration: "none",
           }}>
             Mehr über Bee-Impact <ArrowRight size={16} />

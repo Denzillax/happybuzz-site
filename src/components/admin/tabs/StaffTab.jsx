@@ -24,7 +24,7 @@ export function StaffTab({ admin }) {
                 <div style={{ fontSize: 13, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.display_name || "—"} <span style={{ fontWeight: 400, color: colors.muted, fontSize: 11 }}>@{u.username || "—"}</span></div>
                 {role && <div style={{ fontSize: 11, color: "#0A7170", fontWeight: 600 }}>{ROLE_LABELS[role]}</div>}
               </div>
-              <select value={role} onChange={e => setStaffRole(u.id, e.target.value)} style={{ border: `1px solid ${colors.border}`, borderRadius: 0, padding: "7px 10px", fontSize: 12, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
+              <select value={role} onChange={e => setStaffRole(u.id, e.target.value)} style={{ border: `1px solid ${colors.border}`, borderRadius: 10, padding: "7px 10px", fontSize: 12, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
                 <option value="">Keine Rolle</option>
                 {roleEntries.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
               </select>

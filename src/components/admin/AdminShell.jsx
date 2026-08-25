@@ -43,7 +43,7 @@ export function AdminShell({ admin }) {
             const on = tab === n.key;
             return (
               <button key={n.key} onClick={() => { setTab(n.key); setSearch(""); }} style={{
-                display: "flex", alignItems: "center", gap: 11, padding: "11px 12px", borderRadius: 0, border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 11, padding: "11px 12px", borderRadius: 10, border: "none", cursor: "pointer",
                 fontFamily: fonts.body, fontSize: 13, fontWeight: on ? 700 : 500, textAlign: "left",
                 background: on ? "rgba(255,255,255,.08)" : "transparent",
                 color: on ? "#fff" : "rgba(255,255,255,.6)",

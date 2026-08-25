@@ -8,8 +8,8 @@ import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home 
 import { colors, fonts, radius } from "@/lib/theme";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
-const MONO = "'Space Mono', monospace";
+const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 const STATUS_CONFIG = {
@@ -74,7 +74,7 @@ export default function BookingsPage() {
       <div key={b.id} className="bk-row" style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
         {/* Kopf: Bild + Infos (auf dem Handy die volle Breite) */}
         <div className="bk-head">
-          <div style={{ width: 64, height: 64, borderRadius: 0, border: `1px solid ${K.ink}`, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 64, height: 64, borderRadius: 10, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -107,12 +107,12 @@ export default function BookingsPage() {
           <div className="bk-actions">
             {isOwner && b.status === "pending" && (
               <>
-                <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "9px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
-                <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "9px 14px", borderRadius: 0, border: `1px solid ${K.ink}`, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Absagen</button>
+                <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "9px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
+                <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "9px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Absagen</button>
               </>
             )}
             {b.purchase_id && (
-              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 0, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: `1px solid ${K.ink}`, textAlign: "center" }}>
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8", textAlign: "center" }}>
                 Zur Bestellung
               </Link>
             )}
@@ -125,11 +125,11 @@ export default function BookingsPage() {
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
-        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Termine & Mieten · Katalog der zweiten Leben</div>
+        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Termine & Mieten</div>
         <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${K.ink}`, marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #E4E0D8", marginBottom: 24 }}>
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               padding: "12px 24px", background: "none", border: "none",
@@ -143,7 +143,7 @@ export default function BookingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && (
-          <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden" }}>
             {tab === "incoming" && (
               incoming.length === 0
                 ? <div style={{ textAlign: "center", padding: 60, color: colors.muted }}><CalendarDays size={32} color={colors.mutedLt} style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 600 }}>Keine Anfragen</p></div>

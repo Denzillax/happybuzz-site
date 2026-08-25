@@ -2,18 +2,17 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
-// Einheitlicher Katalog-Sektionskopf: General-Sans-Headline auf einer INK-Haarlinie,
-// optionaler Mono-Eyebrow, Mono-"Alle anzeigen"-Link rechts auf der Grundlinie.
+// Klar-Look Sektionskopf: ruhige einzeilige Ueberschrift, Link rechts
+// auf derselben Zeile. Kein Eyebrow-Geschrei, keine Trennlinie.
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
-const MONO = "'Space Mono', ui-monospace, monospace"
-const INK = '#14110D'
-const PETROL = '#0B5E5C'
+const INK = '#191615'
+const TEAL = '#0E9493'
 
 export function SectionHeader({
   title,
   subtitle,
   href,
-  linkLabel = 'Alle anzeigen',
+  linkLabel = 'Alle ansehen',
   eyebrow,
 }: {
   title: string
@@ -23,28 +22,18 @@ export function SectionHeader({
   eyebrow?: string
 }) {
   return (
-    <div style={{ marginBottom: 18 }}>
-      <div style={{
-        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-        gap: 16, paddingBottom: 12, borderBottom: `1.5px solid ${INK}`,
-      }}>
-        <div style={{ minWidth: 0 }}>
-          {eyebrow && (
-            <div style={{
-              fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '.16em',
-              textTransform: 'uppercase', color: PETROL, marginBottom: 7,
-            }}>{eyebrow}</div>
-          )}
-          <h2 style={{
-            fontFamily: HEAD, fontSize: 'clamp(23px, 3vw, 30px)', fontWeight: 700,
-            letterSpacing: '-0.01em', color: INK, margin: 0, lineHeight: 1.04,
-          }}>{title}</h2>
-        </div>
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
+        <h2 style={{
+          fontFamily: HEAD, fontSize: 20, fontWeight: 700,
+          letterSpacing: '-0.01em', color: INK, margin: 0, lineHeight: 1.2,
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0,
+        }}>{title}</h2>
         {href && (
           <Link href={href} className="bd-section-link" style={{
-            flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: '.08em',
-            textTransform: 'uppercase', color: INK, textDecoration: 'none', whiteSpace: 'nowrap',
+            flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 5,
+            fontSize: 13, fontWeight: 700, color: TEAL,
+            textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
             {linkLabel} <ArrowRight size={14} />
           </Link>
@@ -52,8 +41,8 @@ export function SectionHeader({
       </div>
       {subtitle && (
         <p style={{
-          fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 14,
-          color: 'rgba(20,17,13,0.55)', margin: '11px 0 0',
+          fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 13.5,
+          color: 'rgba(25,22,21,0.55)', margin: '4px 0 0',
         }}>{subtitle}</p>
       )}
     </div>

@@ -24,7 +24,7 @@ export function FloatingButton() {
       aria-label="Inserieren"
       style={{
         position: 'fixed', bottom: 28, right: 28, zIndex: 40,
-        width: hover ? 172 : 56, height: 56, borderRadius: 0,
+        width: hover ? 160 : 50, height: 50, borderRadius: 999,
         background: YELLOW, border: 'none', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: hover ? 8 : 0, padding: 0, whiteSpace: 'nowrap',
@@ -35,7 +35,7 @@ export function FloatingButton() {
       }}
     >
       <Plus
-        size={26} color={DARK} strokeWidth={2.5}
+        size={22} color={DARK} strokeWidth={2.5}
         style={{ flexShrink: 0, transition: 'transform 0.28s ease', transform: hover ? 'rotate(90deg)' : 'none' }}
       />
       <span style={{

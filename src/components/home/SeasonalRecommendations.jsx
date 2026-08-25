@@ -37,41 +37,34 @@ export function SeasonalRecommendations() {
   const Icon = season.icon;
   const hasImage = !!season.image;
 
+  // Ricardo-Prinzip: flaches Panorama-Band, Text auf heller Farbflaeche
+  // LINKS, Foto als saubere Bildhaelfte RECHTS (kein dunkles Overlay,
+  // kein weisser Text auf Foto). Mobil steht das Bild als flacher
+  // Streifen ueber dem Text (per CSS .season-band).
   return (
     <section style={{ padding: "16px 24px 32px", maxWidth: 1280, margin: "0 auto" }}>
-      <div style={{
-        position: "relative", overflow: "hidden",
-        borderRadius: 0, padding: hasImage ? 0 : "22px 24px",
-        minHeight: hasImage ? 190 : undefined,
-        background: hasImage ? `linear-gradient(135deg, ${TEAL}, ${DARK})` : `linear-gradient(135deg, ${TEAL}12, #F4C03F18)`,
-        border: hasImage ? "none" : "1px solid #0E949322",
-      }}>
-        {hasImage && (
-          <>
-            <div style={{
-              position: "absolute", inset: 0,
-              backgroundImage: `url(${season.image})`,
-              backgroundSize: "cover", backgroundPosition: "center",
-            }} />
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(90deg, rgba(15,12,10,.7) 0%, rgba(15,12,10,.35) 42%, rgba(15,12,10,0) 78%)",
-            }} />
-          </>
-        )}
-        <div style={{ position: "relative", padding: hasImage ? "24px 26px" : 0 }}>
+      <style>{`
+        .season-band { display: flex; }
+        .season-img { flex: 0 0 42%; min-height: 180; }
+        @media (max-width: 700px) {
+          .season-band { flex-direction: column-reverse; }
+          .season-img { flex: none; height: 120px; width: 100%; }
+        }
+      `}</style>
+      <div className="season-band" style={{ overflow: "hidden", borderRadius: 14, background: "#E8F4F3" }}>
+        <div style={{ flex: "1 1 auto", padding: "clamp(18px, 3vw, 28px)", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 0, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Icon size={18} color={TEAL} />
             </div>
-            <h2 style={{ fontSize: 22, fontWeight: 800, fontFamily: HEAD, color: hasImage ? "#fff" : DARK, margin: 0 }}>{season.title}</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: DARK, margin: 0, letterSpacing: "-0.01em" }}>{season.title}</h2>
           </div>
-          <p style={{ fontSize: 14, color: hasImage ? "rgba(255,255,255,.9)" : MUTED, margin: "0 0 14px", paddingLeft: 44 }}>{season.subtitle}</p>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingLeft: 44 }}>
+          <p style={{ fontSize: 14, color: "rgba(25,22,21,.6)", margin: "0 0 14px" }}>{season.subtitle}</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {season.items.map((it) => (
               <Link key={it.q} href={`/search?q=${encodeURIComponent(it.q)}`} style={{
-                padding: "8px 16px", borderRadius: 0, background: "#fff",
-                border: "1.5px solid #14110D", fontSize: 13, fontWeight: 600,
+                padding: "8px 16px", borderRadius: 999, background: "#fff",
+                fontSize: 13, fontWeight: 600,
                 color: DARK, textDecoration: "none", fontFamily: "'Manrope', sans-serif",
               }}>
                 {it.label}
@@ -79,6 +72,12 @@ export function SeasonalRecommendations() {
             ))}
           </div>
         </div>
+        {hasImage && (
+          <div className="season-img" style={{
+            backgroundImage: `url(${season.image})`,
+            backgroundSize: "cover", backgroundPosition: "center right",
+          }} />
+        )}
       </div>
     </section>
   );

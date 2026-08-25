@@ -4,12 +4,12 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { supabase } from "@/lib/supabase/supabase";
-import { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree } from "@/lib/constants";
+import { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, FEE_CAP, isFeeFree } from "@/lib/constants";
 
 // ─── Konstanten ──────────────────────────────────────────────
 // Gebührensätze und Bee-Impact-Anteil leben in constants.js (eine Quelle der
 // Wahrheit); hier nur weiterreichen, damit bestehende Importe gültig bleiben.
-export { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree };
+export { BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, FEE_CAP, isFeeFree };
 export const PAYMENT_DAYS = 30;
 
 // ─── Fee-Berechnung ──────────────────────────────────────────
@@ -18,7 +18,8 @@ export const PAYMENT_DAYS = 30;
 // rechnen statt inline (price * pct / 100).
 export function calcFee(price, feePercent = DEFAULT_FEE_PERCENT) {
   if (isFeeFree(price)) return 0;
-  return parseFloat(price || 0) * (feePercent || DEFAULT_FEE_PERCENT) / 100;
+  // Deckel: kein Verkauf kostet mehr als FEE_CAP (CHF 200)
+  return Math.min(parseFloat(price || 0) * (feePercent || DEFAULT_FEE_PERCENT) / 100, FEE_CAP);
 }
 
 export function calcBeeImpact(feeAmount) {

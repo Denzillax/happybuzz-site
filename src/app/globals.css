@@ -24,7 +24,7 @@ body {
    Claim blendet ein. Nur im Standalone-Modus sichtbar (AppSplash.jsx). */
 .bd-splash-logo { animation: bd-splash-pop .55s cubic-bezier(.2,.8,.3,1) both; }
 .bd-splash-bar {
-  width: 120px; height: 6px; background: #F4C03F; border: 1px solid #14110D;
+  width: 120px; height: 6px; background: #F4C03F; border-radius: 3px;
   transform-origin: left center;
   animation: bd-splash-sweep .6s .35s cubic-bezier(.2,.8,.3,1) both;
 }
@@ -94,7 +94,7 @@ body {
     bottom: calc(56px + env(safe-area-inset-bottom, 0px));
     z-index: 45; display: flex; align-items: center; justify-content: space-between;
     gap: 12px; padding: 10px 14px;
-    background: #FBF8F2; border-top: 1px solid #14110D;
+    background: #FFFFFF; border-top: 1px solid #E4E0D8;
   }
   .map-desktop-only { display: none; }
   /* Besitzer-Leiste: mobil unten (mobile-cta-bar), oben ausblenden */
@@ -125,7 +125,9 @@ body {
 }
 
 .search-results-grid {
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1px !important;
+  overflow: hidden;
 }
 
 @media (max-width: 767px) {
@@ -140,23 +142,30 @@ body {
   .search-results-grid,
   .listing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    gap: 1px !important;
   }
 }
 
 /* ═══════════════════════════════════════════
    LISTING GRIDS — Responsive (Homepage + Search)
    ═══════════════════════════════════════════ */
+/* Klar-Look: 1px-Luecken + getoenter Grid-Hintergrund = Hairline-Raster
+   ZWISCHEN den Karten (kein Aussenrahmen). Die Zellen selbst sind weiss
+   und bringen ihr eigenes Innen-Padding mit. */
 .listing-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px;
+  overflow: hidden;
 }
 /* Grid-Items haben min-width:auto → Karten müssen schrumpfen dürfen,
    damit die Spalten wirklich gleich breit bleiben (Inhalt clippt per Ellipsis). */
 .listing-grid > a,
 .search-results-grid > a {
   min-width: 0;
+  background: #FFFFFF;
+  padding: 10px 10px 14px;
+  box-shadow: 1px 1px 0 0 #E8E4DC;
 }
 /* Karten in Wrapper-Divs (z.B. Endet bald mit Countdown-Chip) sollen die
    gleiche Hoehe fuellen wie direkte Karten: Wrapper als Spalte, Karte waechst */
@@ -164,15 +173,21 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  background: #FFFFFF;
+  padding: 10px 10px 14px;
+  box-shadow: 1px 1px 0 0 #E8E4DC;
 }
 .listing-grid > div > a {
   flex: 1;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 @media (max-width: 1024px) {
-  .listing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .listing-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important; }
 }
 @media (max-width: 767px) {
-  .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 1px !important; }
 }
 
 /* Startseiten-Reihen auf Mobile: wischbar statt gestapelt (mehr Platz,
@@ -332,11 +347,12 @@ input:focus, textarea:focus, select:focus {
 .featured-sellers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 1024px) { .featured-sellers-grid { grid-template-columns: repeat(2, 1fr) !important; } }
 @media (max-width: 600px) { .featured-sellers-grid { grid-template-columns: 1fr !important; } }
-.impact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.impact-layout { display: grid; grid-template-columns: 300px 1fr; gap: 36px; align-items: center; }
 .impact-content { text-align: left; }
 @media (max-width: 600px) { .impact-funnel { grid-template-columns: 1fr !important; } }
 @media (max-width: 768px) {
   .impact-layout { grid-template-columns: 1fr !important; gap: 22px !important; max-width: 560px; }
+  .impact-photo { max-width: 300px; width: 100%; margin: 0 auto; }
   .impact-content { text-align: center; }
   .impact-content > div:first-child { justify-content: center; }
 }
@@ -347,7 +363,7 @@ input:focus, textarea:focus, select:focus {
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
-.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Space Mono',monospace; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
+.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
 .tab.active { color:#14110D; }
 .tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
 .link { color:#0B5E5C; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
@@ -510,7 +526,12 @@ input:focus, textarea:focus, select:focus {
 
 /* Beta-Feedback-Knopf: auf dem Handy 14px vom Rand statt am Viewport kleben */
 @media (max-width: 768px) {
-  .beta-fab { right: 14px !important; }
+  .beta-fab {
+    right: 10px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 36px !important; height: 36px !important;
+    opacity: .85;
+  }
 }
 
 /* Buchungen: Desktop eine Zeile, Handy als Karte mit Umbruechen
@@ -527,4 +548,72 @@ input:focus, textarea:focus, select:focus {
   .bk-status { margin-top: 0 !important; margin-left: auto; }
   .bk-actions { flex: 1 1 100%; flex-direction: row; margin-left: 0; }
   .bk-actions button, .bk-actions a { flex: 1 1 0; }
+}
+
+/* ── Klar-Look: Kategorie-Pills + Hero-Band ── */
+.cat-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0 8px;
+}
+.cat-pills::-webkit-scrollbar { display: none; }
+.cat-pill:hover { background: #F4C03F !important; }
+@media (max-width: 640px) {
+  /* Hero-Collage mobil: verkleinert und zentriert unter dem Text.
+     scale() aendert die Layout-Box nicht, darum negative Raender. */
+  .hero-bee-side {
+    transform: scale(.72);
+    transform-origin: top center;
+    margin: -6px auto -44px !important;
+  }
+}
+
+/* Mobiler Header: Nektar-Badge kompakt (nur Biene + Zahl), sonst ist die
+   Zeile breiter als der Viewport und die ganze Seite scrollt seitlich. */
+@media (max-width: 767px) {
+  .nektar-level-name { display: none !important; }
+  .nektar-badge > button { padding: 6px 9px !important; gap: 5px !important; }
+}
+
+/* Beta-Karte: Desktop gross, mobil als schmale Leiste */
+.beta-mini { display: none; }
+@media (max-width: 767px) {
+  .beta-card-full { display: none !important; }
+  .beta-mini { display: flex !important; }
+}
+/* Mobile Suchpille nur auf Handys zeigen */
+@media (min-width: 768px) {
+  .hdr-mobile-search { display: none !important; }
+}
+
+/* Wischbare Pill-Zeile (Meine Inserate u.a.): mobil einzeilig scrollen
+   statt ueber mehrere Zeilen zu wrappen */
+@media (max-width: 767px) {
+  .pill-scroll {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    margin-left: -16px; margin-right: -16px;
+    padding-left: 16px; padding-right: 16px;
+  }
+  .pill-scroll::-webkit-scrollbar { display: none; }
+  .pill-scroll > * { flex-shrink: 0; }
+}
+
+/* Lieferung & Bezahlung: auf schmalen Screens einspaltig stapeln,
+   damit lange Werte (Banküberweisung, Versandart+Preis) nie aus der
+   Karte ragen. Labels werden dabei zu kleinen Zwischentiteln. */
+@media (max-width: 520px) {
+  .lief-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 2px 0 !important; }
+  .lief-grid > *:nth-child(odd) {
+    margin-top: 12px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .lief-grid > *:first-child { margin-top: 0; }
 }

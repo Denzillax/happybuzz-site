@@ -7,8 +7,8 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
-const MONO = "'Space Mono', monospace";
+const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Manrope', sans-serif";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
   letterSpacing: ".12em", textTransform: "uppercase", color: K.ink, marginBottom: 6,
@@ -19,12 +19,12 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
-      padding: "14px 16px", borderRadius: 0,
+      padding: "14px 16px", borderRadius: 10,
       background: verified ? "#EEF4EC" : pending ? "#FBF1D2" : "#fff",
-      border: `1px solid ${K.ink}`,
+      border: "1px solid #E4E0D8",
     }}>
       <div style={{
-        width: 36, height: 36, borderRadius: 0, border: `1px solid ${K.ink}`,
+        width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8",
         display: "flex", alignItems: "center", justifyContent: "center",
         background: accent,
         color: verified ? "#fff" : K.ink,
@@ -38,7 +38,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
       </div>
       <div style={{
         fontSize: 9.5, fontWeight: 700, fontFamily: MONO, textTransform: "uppercase", letterSpacing: ".1em",
-        padding: "4px 9px", borderRadius: 0, whiteSpace: "nowrap",
+        padding: "4px 9px", borderRadius: 10, whiteSpace: "nowrap",
         background: verified ? K.moss : pending ? K.honey : "transparent",
         color: verified ? "#fff" : K.ink,
         border: `1.5px solid ${verified ? K.moss : pending ? K.ink : C.border}`,
@@ -64,14 +64,14 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
           style={{
             width: "100%", padding: "12px 14px",
             paddingRight: suffix ? 44 : 14,
-            borderRadius: 0, border: `1px solid ${K.ink}`,
+            borderRadius: 10, border: "1px solid #E4E0D8",
             background: disabled ? K.sand : "#fff",
             fontSize: 14, fontFamily: "'Manrope', sans-serif",
             color: K.ink, outline: "none", boxSizing: "border-box",
             transition: "border-color .2s, box-shadow .2s",
           }}
-          onFocus={e => { e.target.style.borderColor = K.petrol; e.target.style.boxShadow = `0 0 0 3px ${K.honey}55`; }}
-          onBlur={e => { e.target.style.borderColor = K.ink; e.target.style.boxShadow = "none"; }}
+          onFocus={e => { e.target.style.borderColor = "#0E9493"; e.target.style.boxShadow = "0 0 0 3px rgba(14,148,147,.15)"; }}
+          onBlur={e => { e.target.style.borderColor = "#E4E0D8"; e.target.style.boxShadow = "none"; }}
         />
         {suffix && (
           <div style={{
@@ -95,12 +95,12 @@ export function Toggle({ checked, onChange, label, description }) {
       onClick={() => onChange?.(!checked)}
     >
       <div style={{
-        width: 44, height: 24, borderRadius: 0, flexShrink: 0, marginTop: 2,
-        background: checked ? K.petrol : "#fff", border: `1px solid ${K.ink}`,
+        width: 44, height: 24, borderRadius: 10, flexShrink: 0, marginTop: 2,
+        background: checked ? K.petrol : "#fff", border: "1px solid #E4E0D8",
         transition: "background .25s", position: "relative",
       }}>
         <div style={{
-          width: 16, height: 16, borderRadius: 0, background: "#fff", border: `1px solid ${K.ink}`,
+          width: 16, height: 16, borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8",
           position: "absolute", top: 2, left: checked ? 23 : 2,
           transition: "left .25s",
         }} />
@@ -116,14 +116,14 @@ export function Toggle({ checked, onChange, label, description }) {
 export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
     padding: small ? "10px 20px" : "13px 26px",
-    borderRadius: 0, border: `1px solid ${K.ink}`, cursor: disabled ? "not-allowed" : "pointer",
+    borderRadius: 10, border: "1px solid #E4E0D8", cursor: disabled ? "not-allowed" : "pointer",
     fontFamily: "'Manrope', sans-serif", fontWeight: 800,
     fontSize: small ? 12 : 14, transition: "all .15s",
     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: K.honey, color: K.ink, boxShadow: disabled ? "none" : `3px 3px 0 ${K.ink}` },
+    primary:   { background: K.honey, color: K.ink, boxShadow: disabled ? "none" : "0 2px 8px rgba(25,22,21,.15)" },
     secondary: { background: "transparent", color: K.ink },
     danger:    { background: "#fff", color: C.red, borderColor: C.red },
     ghost:     { background: "transparent", color: C.muted, border: "none" },
@@ -157,8 +157,8 @@ export function TrustMeter({ level }) {
   const labels = ["Starter", "Basis", "Vertraut", "Vollständig"];
   return (
     <div style={{
-      padding: 20, borderRadius: 0, color: "#fff",
-      background: K.ink, border: `1px solid ${K.ink}`,
+      padding: 20, borderRadius: 10, color: "#fff",
+      background: K.ink, border: "1px solid #E4E0D8",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Trust Level</div>
@@ -167,7 +167,7 @@ export function TrustMeter({ level }) {
       <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
         {Array.from({ length: segments }).map((_, i) => (
           <div key={i} style={{
-            flex: 1, height: 8, borderRadius: 0,
+            flex: 1, height: 8, borderRadius: 10,
             background: i < level ? K.honey : "rgba(255,255,255,.15)",
             transition: "all .4s", transitionDelay: `${i * .08}s`,
           }} />

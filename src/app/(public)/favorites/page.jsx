@@ -117,7 +117,7 @@ export default function FavoritesPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       {/* Header */}
       <div className="mb-6">
-        <div className="font-['Space_Mono',monospace] text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkte Exponate · Katalog der zweiten Leben</div>
+        <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkt</div>
         <h1 className="text-2xl md:text-3xl font-bold text-[#14110D] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
           <Heart size={26} className="text-honey" fill="#F4C03F" />
           Meine Favoriten
@@ -126,13 +126,13 @@ export default function FavoritesPage() {
 
       {/* Tabs */}
       <div className="flex gap-0 border-b-2 border-[#14110D] mb-6">
-        <button onClick={() => { setTab('listings'); setSearch('') }} className={`px-5 py-3 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'listings' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('listings'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'listings' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Inserate ({favorites.length})
         </button>
-        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Verkäufer ({sellers.length})
         </button>
-        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Suchen ({searches.length})
         </button>
       </div>
@@ -167,7 +167,7 @@ export default function FavoritesPage() {
                 <div className={activeFavs.length > 0 ? 'mt-10' : ''}>
                   <button
                     onClick={() => setShowInactive(v => !v)}
-                    className="w-full flex items-center gap-2 border-t-2 border-[#14110D] pt-3 pb-1 font-['Space_Mono',monospace] text-[11px] font-bold uppercase tracking-[.15em] text-[#14110D] cursor-pointer bg-transparent"
+                    className="w-full flex items-center gap-2 border-t-2 border-[#14110D] pt-3 pb-1 font-sans text-[11px] font-bold uppercase tracking-[.15em] text-[#14110D] cursor-pointer bg-transparent"
                   >
                     Nicht mehr verfügbar ({inactiveFavs.length})
                     <ChevronDown size={14} className={`transition-transform ${showInactive ? 'rotate-180' : ''}`} />

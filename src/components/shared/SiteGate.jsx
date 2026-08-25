@@ -85,7 +85,7 @@ export default function SiteGate({ children }) {
               ? "Die Seite wird gerade gewartet. Danke für deine Geduld."
               : state.loggedIn
                 ? "Dein Konto wartet auf die Freigabe fürs Testen. Wir melden uns, sobald es losgeht."
-                : "Der Katalog der zweiten Leben öffnet in Kürze. Testerinnen und Tester melden sich hier an.")}
+                : "BEEDARO öffnet in Kürze. Testerinnen und Tester melden sich hier an.")}
         </p>
         {!wartung && !state.loggedIn && (
           <a href="/login" style={{ ...btnPrimary, display: "inline-block", width: "auto", padding: "12px 28px", textDecoration: "none", fontSize: 14 }}>

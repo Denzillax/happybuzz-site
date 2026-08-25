@@ -38,7 +38,7 @@ function showXpToast(row, uid) {
     if (newLevel) {
       toast.custom(() => (
         <div style={{
-          display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", borderRadius: 0,
+          display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", borderRadius: 10,
           background: "#fff", border: `1.5px solid ${newLevel.color}`, boxShadow: "0 10px 34px rgba(0,0,0,.16)", minWidth: 280,
         }}>
           <div style={{ width: 42, height: 42, borderRadius: "50%", background: `${newLevel.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

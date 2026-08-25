@@ -35,7 +35,7 @@ export default function AppSplash() {
   return (
     <div aria-hidden style={{
       position: "fixed", inset: 0, zIndex: 99999,
-      background: "#FBF8F2",
+      background: "#FFFFFF",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18,
       opacity: phase === "weg" ? 0 : 1, transition: "opacity .45s ease",
       pointerEvents: phase === "weg" ? "none" : "auto",
@@ -43,7 +43,7 @@ export default function AppSplash() {
       <div className="bd-splash-logo"><Logo width={190} /></div>
       <div className="bd-splash-bar" aria-hidden />
       <p className="bd-splash-claim" style={{
-        margin: 0, fontFamily: "'Space Mono', ui-monospace, monospace",
+        margin: 0, fontFamily: "'Manrope', sans-serif",
         fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(20,17,13,0.5)",
       }}>
         Kaufen. Verkaufen. Gutes tun.

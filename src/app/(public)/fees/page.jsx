@@ -111,7 +111,7 @@ export default function FeesPage() {
               <td style={{ ...td, textAlign: "center", color: colors.muted }}>{parseFloat(f.fee_percent)}%</td>
               <td style={{ ...td, textAlign: "right", fontWeight: 700 }}>CHF {fmtCHF(f.fee_amount)}</td>
               <td style={{ ...td, textAlign: "right", color: "#5B8C5A" }}>CHF {fmtCHF(f.bee_impact)}</td>
-              {showStatus && <td style={{ ...td, textAlign: "center" }}><span style={{ padding: "2px 8px", borderRadius: 0, fontSize: 10, fontWeight: 700, background: st.bg, color: st.color }}>{st.label}</span></td>}
+              {showStatus && <td style={{ ...td, textAlign: "center" }}><span style={{ padding: "2px 8px", borderRadius: 10, fontSize: 10, fontWeight: 700, background: st.bg, color: st.color }}>{st.label}</span></td>}
             </tr>
           );
         })}
@@ -176,7 +176,7 @@ export default function FeesPage() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 4, marginBottom: 16, background: colors.surface, borderRadius: 0, border: `1px solid ${colors.border}`, overflow: "hidden", width: "fit-content" }}>
+        <div style={{ display: "flex", gap: 4, marginBottom: 16, background: colors.surface, borderRadius: 10, border: `1px solid ${colors.border}`, overflow: "hidden", width: "fit-content" }}>
           {[{ key: "open", label: `Offen (${pendingFees.length})` }, { key: "invoices", label: `Rechnungen (${invoices.length})` }].map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{ padding: "8px 16px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: fonts.body, background: tab === t.key ? colors.yellow : "transparent", color: colors.dark }}>{t.label}</button>
           ))}
@@ -230,7 +230,7 @@ export default function FeesPage() {
                       <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>{monthName}</p>
                       <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{inv.invoice_ref} · {inv.item_count} Verkäufe · Fällig {fmtDate(inv.due_date)}</p>
                     </div>
-                    <span style={{ padding: "3px 10px", borderRadius: 0, fontSize: 10, fontWeight: 700, background: s.bg, color: s.color }}>{s.label}</span>
+                    <span style={{ padding: "3px 10px", borderRadius: 10, fontSize: 10, fontWeight: 700, background: s.bg, color: s.color }}>{s.label}</span>
                     <p style={{ margin: 0, fontSize: 16, fontWeight: 800 }}>CHF {fmtCHF(inv.total_fees)}</p>
                     {isOpen ? <ChevronUp size={14} color={colors.muted} /> : <ChevronDown size={14} color={colors.muted} />}
                   </div>
@@ -249,7 +249,7 @@ export default function FeesPage() {
                       <div style={{ padding: "14px 16px", background: colors.surface, borderTop: `1px solid ${colors.borderLt}` }}>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
                           {/* Beige Box */}
-                          <div style={{ background: colors.cream, borderRadius: 0, border: `1px solid ${colors.borderLt}`, overflow: "hidden" }}>
+                          <div style={{ background: colors.cream, borderRadius: 10, border: `1px solid ${colors.borderLt}`, overflow: "hidden" }}>
                             {[
                               { label: "Begünstigter / IBAN", value: beedaroIban, copyVal: beedaroIban },
                               { label: "Einzahlung für", value: companyAddress, copyVal: companyAddress.replace(/\n/g, ", ") },
@@ -286,11 +286,11 @@ export default function FeesPage() {
                         </p>
 
                         {/* Buttons — volle Breite, gestapelt */}
-                        <Link href={`/fees/invoice/${inv.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "11px 16px", borderRadius: 0, background: colors.yellow, color: colors.dark, fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 8 }}>
+                        <Link href={`/fees/invoice/${inv.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "11px 16px", borderRadius: 10, background: colors.yellow, color: colors.dark, fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 8 }}>
                           <Receipt size={14} /> QR-Rechnung anzeigen
                         </Link>
                         {inv.status === "open" && (
-                          <button onClick={() => handleMarkPaid(inv.id)} style={{ width: "100%", padding: "11px 16px", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ich habe bezahlt</button>
+                          <button onClick={() => handleMarkPaid(inv.id)} style={{ width: "100%", padding: "11px 16px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ich habe bezahlt</button>
                         )}
                         {inv.status === "pending_payment" && <p style={{ margin: 0, fontSize: 12, color: "#1565C0", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Zahlung wird geprüft, danke!</p>}
                         {inv.status === "paid" && <p style={{ margin: 0, fontSize: 12, color: "#2E7D32", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
@@ -307,7 +307,7 @@ export default function FeesPage() {
       </div>
 
       {/* Toast */}
-      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "#fff", padding: "8px 20px", borderRadius: 0, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
+      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "#fff", padding: "8px 20px", borderRadius: 10, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
     </div>
   );
 }

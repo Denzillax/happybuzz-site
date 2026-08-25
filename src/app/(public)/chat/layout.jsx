@@ -61,7 +61,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
         >
           {/* Inserat-Thumbnail + Avatar-Overlay */}
           <div style={{ position: "relative", flexShrink: 0, opacity: grau ? 0.55 : 1 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 0, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 48, height: 48, borderRadius: 10, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
               {c.listingImage ? <img src={c.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: grau ? "grayscale(1)" : "none" }} /> : <Package size={18} color={colors.mutedLt} />}
             </div>
             <div style={{ position: "absolute", bottom: -4, right: -4, width: 22, height: 22, borderRadius: "50%", background: colors.yellowSoft, border: "2px solid #fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -95,7 +95,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(); }}
                 title="Wiederherstellen"
-                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: `1px solid ${colors.dark}`, background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: "1px solid #E4E0D8", background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
               >
                 <RotateCcw size={11} /> Wiederherstellen
               </button>
@@ -229,7 +229,7 @@ export default function ChatLayout({ children }) {
 
   return (
     <div className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#ECEEF1", padding: 16, display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
-      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1360, height: "100%", overflow: "hidden", borderRadius: 0, border: `1px solid ${colors.borderLt}`, boxShadow: "0 6px 24px rgba(0,0,0,.07)" }}>
+      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1360, height: "100%", overflow: "hidden", borderRadius: 10, border: `1px solid ${colors.borderLt}`, boxShadow: "0 6px 24px rgba(0,0,0,.07)" }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
       <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 320, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>
@@ -246,7 +246,7 @@ export default function ChatLayout({ children }) {
           </div>
 
           {searchOpen && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: `1.5px solid ${colors.dark}`, background: "#fff", padding: "7px 10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #E4E0D8", background: "#fff", padding: "7px 10px" }}>
               <Search size={14} color={colors.muted} />
               <input
                 autoFocus

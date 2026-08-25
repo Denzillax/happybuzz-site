@@ -47,22 +47,22 @@ export function TickerBar({ message, bgColor, textColor, speed = "normal", disab
 
   if (!text) return null;
   const haelfte = einheit.repeat(lauf.repeat);
+  // Klar-Look: schlankes Band, normale Gross-/Kleinschreibung, moderates Gewicht
   const schrift = {
-    fontFamily: "'General Sans', 'Manrope', sans-serif",
-    fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em",
-    fontSize: "clamp(20px, 2.6vw, 30px)", lineHeight: 1,
+    fontFamily: "'Manrope', 'General Sans', sans-serif",
+    fontWeight: 700, letterSpacing: ".01em",
+    fontSize: "clamp(13px, 1.4vw, 15px)", lineHeight: 1,
   };
 
   return (
     <div ref={boxRef} className="no-print" style={{
       background: bgColor, color: textColor, overflow: "hidden", position: "relative",
-      borderTop: "1.5px solid #14110D", borderBottom: "1.5px solid #14110D",
       opacity: disabled ? 0.45 : 1,
     }}>
       {/* Unsichtbare Mess-Einheit in identischer Schrift */}
       <span ref={messRef} aria-hidden="true" style={{ ...schrift, position: "absolute", visibility: "hidden", whiteSpace: "pre" }}>{einheit}</span>
       <div className="ticker-track" style={{
-        ...schrift, display: "inline-flex", whiteSpace: "pre", padding: "14px 0",
+        ...schrift, display: "inline-flex", whiteSpace: "pre", padding: "9px 0",
         "--ticker-dur": `${lauf.dur}s`,
       }}>
         <span>{haelfte}</span>

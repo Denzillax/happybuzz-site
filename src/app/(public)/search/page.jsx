@@ -13,9 +13,9 @@ import { getActiveBoosts } from "@/lib/gamification";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#14110D";
-const PAPER = "#FBF8F2";
+const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 
 const SORT_OPTS = [
   { value: "relevanz", label: "Relevanz" },
@@ -45,7 +45,7 @@ function FilterPill({ label, value, options, onChange, active }) {
         onClick={() => setOpen(!open)}
         style={{
           display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 14px", borderRadius: 0,
+          padding: "8px 14px", borderRadius: 10,
           border: active ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
           color: active ? "#0A7170" : INK,
@@ -65,8 +65,8 @@ function FilterPill({ label, value, options, onChange, active }) {
       {open && (
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-          background: "#fff", borderRadius: 0,
-          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: `1px solid ${INK}`,
+          background: "#fff", borderRadius: 10,
+          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: "1px solid #E4E0D8",
           minWidth: 180, maxHeight: 280, overflowY: "auto",
           padding: "6px 0",
         }}>
@@ -221,14 +221,14 @@ function SearchPageInner() {
       <div style={{ maxWidth: 1320, margin: "0 auto", padding: "24px 24px 48px" }}>
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
-        <div className="search-mobile-bar" style={{ border: `1.5px solid ${INK}`, background: "#fff", marginBottom: 14, overflow: "hidden" }}>
+        <div className="search-mobile-bar" style={{ background: "#F2EEE7", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
           <Search size={16} style={{ marginLeft: 12, color: "#999", flexShrink: 0, alignSelf: "center" }} />
           <input
             type="text" value={draft} autoFocus={!query}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { setQuery(draft.trim()); setPage(1); e.target.blur(); } }}
-            placeholder="Suche nach Artikel, Verkäufer oder Artikelnummer"
-            style={{ flex: 1, minWidth: 0, padding: "12px 10px", border: "none", outline: "none", fontSize: 15, fontFamily: fonts.body, background: "transparent" }}
+            placeholder="Was suchst du?"
+            style={{ flex: 1, minWidth: 0, padding: "10px 10px", border: "none", outline: "none", fontSize: 15, fontFamily: fonts.body, background: "transparent" }}
           />
           {draft && (
             <button onClick={() => { setDraft(""); setQuery(""); setPage(1); }} aria-label="Suche leeren"
@@ -237,7 +237,7 @@ function SearchPageInner() {
             </button>
           )}
           <button onClick={() => { setQuery(draft.trim()); setPage(1); }}
-            style={{ padding: "0 18px", background: INK, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 14, color: PAPER, fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "9px 18px", background: "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: INK, fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
@@ -252,7 +252,7 @@ function SearchPageInner() {
                 onClick={() => { setQuery(term); setPage(1); }}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "6px 12px", borderRadius: 0, cursor: "pointer",
+                  padding: "6px 12px", borderRadius: 10, cursor: "pointer",
                   border: `1.5px solid ${colors.border}`, background: "#fff",
                   fontSize: 13, fontFamily: fonts.body, color: colors.dark, whiteSpace: "nowrap",
                 }}
@@ -288,16 +288,13 @@ function SearchPageInner() {
         })()}
 
         {/* ── Page Title ── */}
-        <div style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 8 }}>
-          Katalogsuche
-        </div>
         <h1 style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: "0 0 20px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
           {query ? `Ergebnisse für "${query}"` : mainCatId ? (mainCats.find(c => c.id === mainCatId)?.name || "Suche") : "Alle Inserate"}
         </h1>
 
         {/* ── Filter Pills Row ── */}
         <div style={{
-          background: "#fff", borderRadius: 0, border: `1px solid ${INK}`,
+          background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8",
           padding: "16px 18px", marginBottom: 20,
         }}>
           {/* Row 1: Main filters */}
@@ -332,7 +329,7 @@ function SearchPageInner() {
             <div ref={priceRef} style={{ position: "relative" }}>
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 0,
+                padding: "8px 14px", borderRadius: 10,
                 border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
                 color: (minPrice || maxPrice) ? "#0A7170" : INK,
@@ -347,19 +344,19 @@ function SearchPageInner() {
               {showPrice && (
                 <div style={{
                   position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 0, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
-                  border: `1px solid ${INK}`, padding: 16, width: 220,
+                  background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
+                  border: "1px solid #E4E0D8", padding: 16, width: 220,
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
                   <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                     <input type="number" placeholder="Von" value={minPrice} onChange={e => setMinPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 0, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 10, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                     <input type="number" placeholder="Bis" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 0, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 10, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
                     width: "100%", padding: "8px", background: colors.teal, color: "#fff",
-                    border: "none", borderRadius: 0, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
+                    border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
               )}
@@ -373,7 +370,7 @@ function SearchPageInner() {
               title="Nur Verkäufer mit geprüftem Ausweis + E-Mail"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 0, cursor: "pointer",
+                padding: "8px 14px", borderRadius: 10, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
                 border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#14110D"}`,
                 background: verifiedOnly ? "#EEF4EC" : "#fff",
@@ -436,7 +433,7 @@ function SearchPageInner() {
               }} style={{
                 fontSize: 13, fontWeight: 700, color: searchSaved ? "#5B8C5A" : colors.teal,
                 background: "none", border: `1.5px solid ${searchSaved ? "#5B8C5A" : colors.teal}`,
-                padding: "5px 10px", borderRadius: 0, cursor: searchSaved ? "default" : "pointer",
+                padding: "5px 10px", borderRadius: 10, cursor: searchSaved ? "default" : "pointer",
                 fontFamily: fonts.body, whiteSpace: "nowrap",
               }}>
                 {searchSaved ? "Gespeichert. Wir melden neue Treffer." : "Suche speichern"}
@@ -472,8 +469,8 @@ function SearchPageInner() {
               <div key={i} style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
                 <div style={{ aspectRatio: "4/3", background: colors.warm }} />
                 <div style={{ padding: 14 }}>
-                  <div style={{ height: 14, background: colors.warm, borderRadius: 0, width: "75%", marginBottom: 8 }} />
-                  <div style={{ height: 18, background: colors.warm, borderRadius: 0, width: "40%" }} />
+                  <div style={{ height: 14, background: colors.warm, borderRadius: 10, width: "75%", marginBottom: 8 }} />
+                  <div style={{ height: 18, background: colors.warm, borderRadius: 10, width: "40%" }} />
                 </div>
               </div>
             ))}
@@ -488,7 +485,7 @@ function SearchPageInner() {
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button key={i} onClick={() => setPage(i + 1)}
                     style={{
-                      width: 36, height: 36, borderRadius: 0, fontSize: 14, fontWeight: 600,
+                      width: 36, height: 36, borderRadius: 10, fontSize: 14, fontWeight: 600,
                       fontFamily: fonts.body, border: "none", cursor: "pointer",
                       background: page === i + 1 ? colors.dark : "transparent",
                       color: page === i + 1 ? "#fff" : colors.muted,
@@ -505,8 +502,8 @@ function SearchPageInner() {
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
             <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>Andere Suchbegriffe probieren oder die Filter zurücksetzen.</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 0, background: "#fff", border: `1.5px solid ${INK}`, color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>
         )}

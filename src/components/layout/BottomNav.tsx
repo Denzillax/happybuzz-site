@@ -61,14 +61,14 @@ export function BottomNav() {
           if (tab.isCenter) {
             return (
               <button key={tab.href} onClick={() => router.push(tab.href)} aria-label="Inserieren" style={{
-                width: 60, height: 60, borderRadius: '50%',
+                width: 50, height: 50, borderRadius: '50%',
                 background: YELLOW, border: '3px solid #fff', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 4px 16px rgba(244,192,63,0.45)',
-                transform: 'translateY(-12px)',
+                transform: 'translateY(-8px)',
                 transition: 'transform 0.15s, box-shadow 0.15s',
               }}>
-                <Plus size={30} color={DARK} strokeWidth={2.5} />
+                <Plus size={26} color={DARK} strokeWidth={2.5} />
               </button>
             )
           }

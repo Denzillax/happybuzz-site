@@ -29,13 +29,13 @@ const REASON_LABEL = {
 const reasonLabel = (r) => REASON_LABEL[r] || (r?.startsWith("achievement:") ? "Achievement freigeschaltet" : r);
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F9F4EC", paper: "#FBF8F2", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
-const MONO = "'Space Mono', monospace";
+const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 function Card({ children, style }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${K.ink}`, padding: "20px 22px", ...style }}>
+    <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", padding: "20px 22px", ...style }}>
       {children}
     </div>
   );
@@ -184,7 +184,7 @@ export default function HivePage() {
 
         {/* Header */}
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Dein Bienenstock · Katalog der zweiten Leben</div>
+          <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Dein Bienenstock</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <BeeIcon size={26} color={colors.yellow} />
             <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Dein Hive</h1>
@@ -207,8 +207,8 @@ export default function HivePage() {
             </div>
           </div>
           {/* Progress */}
-          <div style={{ height: 12, borderRadius: 0, background: colors.borderLt, overflow: "hidden" }}>
-            <div style={{ height: "100%", borderRadius: 0, background: level.color, width: `${next ? progress : 100}%`, transition: "width .6s ease-out" }} />
+          <div style={{ height: 12, borderRadius: 10, background: colors.borderLt, overflow: "hidden" }}>
+            <div style={{ height: "100%", borderRadius: 10, background: level.color, width: `${next ? progress : 100}%`, transition: "width .6s ease-out" }} />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontSize: 12 }}>
             {next ? (
@@ -223,7 +223,7 @@ export default function HivePage() {
 
           {/* Blüten-Balance + Umwandlung in Pollen */}
           <div style={{
-            marginTop: 16, padding: "12px 14px", borderRadius: 0,
+            marginTop: 16, padding: "12px 14px", borderRadius: 10,
             background: "#5B8C5A12", border: `1px solid #5B8C5A33`,
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -238,7 +238,7 @@ export default function HivePage() {
             </div>
             {convertiblePollen >= 1 ? (
               <button onClick={convertAll} disabled={converting} style={{
-                width: "100%", marginTop: 10, padding: "9px 0", borderRadius: 0, border: "none",
+                width: "100%", marginTop: 10, padding: "9px 0", borderRadius: 10, border: "none",
                 background: "#5B8C5A", color: "#fff", fontSize: 13, fontWeight: 800, fontFamily: fonts.body,
                 cursor: converting ? "default" : "pointer", opacity: converting ? 0.6 : 1,
               }}>
@@ -252,7 +252,7 @@ export default function HivePage() {
           {/* Nektar-Balance */}
           <div style={{
             display: "flex", alignItems: "center", gap: 10, marginTop: 12, padding: "12px 14px",
-            borderRadius: 0, background: "#E8A82014", border: `1px solid #E8A82033`,
+            borderRadius: 10, background: "#E8A82014", border: `1px solid #E8A82033`,
           }}>
             <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#E8A82022", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Droplets size={18} color="#C8860A" />
@@ -272,7 +272,7 @@ export default function HivePage() {
               const affordable = nektar >= r.cost;
               return (
                 <div key={r.key} style={{
-                  padding: "12px 14px", borderRadius: 0, border: `1px solid ${affordable ? "#E8A82055" : colors.borderLt}`,
+                  padding: "12px 14px", borderRadius: 10, border: `1px solid ${affordable ? "#E8A82055" : colors.borderLt}`,
                   background: affordable ? "#E8A82010" : colors.surface, display: "flex", flexDirection: "column", gap: 4,
                 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
@@ -284,9 +284,9 @@ export default function HivePage() {
                   <span style={{ fontSize: 11.5, color: colors.muted, lineHeight: 1.4, flex: 1 }}>{r.desc}</span>
                   <span style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.mutedLt }}>{r.group}</span>
                   {affordable ? (
-                    <button onClick={() => startRedeem(r)} style={{ marginTop: 6, padding: "8px 0", borderRadius: 0, border: "none", background: colors.yellow, color: colors.dark, fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer" }}>Einlösen</button>
+                    <button onClick={() => startRedeem(r)} style={{ marginTop: 6, padding: "8px 0", borderRadius: 10, border: "none", background: colors.yellow, color: colors.dark, fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer" }}>Einlösen</button>
                   ) : (
-                    <button disabled style={{ marginTop: 6, padding: "8px 0", borderRadius: 0, border: `1px solid ${colors.borderLt}`, background: colors.cream, color: colors.mutedLt, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "default" }}>Noch {(r.cost - nektar).toLocaleString("de-CH")} Nektar nötig</button>
+                    <button disabled style={{ marginTop: 6, padding: "8px 0", borderRadius: 10, border: `1px solid ${colors.borderLt}`, background: colors.cream, color: colors.mutedLt, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "default" }}>Noch {(r.cost - nektar).toLocaleString("de-CH")} Nektar nötig</button>
                   )}
                 </div>
               );
@@ -342,8 +342,8 @@ export default function HivePage() {
                       </span>
                     </div>
                     <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}{c.category?.name ? ` · Kategorie: ${c.category.name}` : ""}</p>
-                    <div style={{ height: 8, borderRadius: 0, background: colors.borderLt, overflow: "hidden" }}>
-                      <div style={{ height: "100%", borderRadius: 0, background: c.done ? "#5B8C5A" : colors.teal, width: `${pct}%`, transition: "width .5s" }} />
+                    <div style={{ height: 8, borderRadius: 10, background: colors.borderLt, overflow: "hidden" }}>
+                      <div style={{ height: "100%", borderRadius: 10, background: c.done ? "#5B8C5A" : colors.teal, width: `${pct}%`, transition: "width .5s" }} />
                     </div>
                     <p style={{ margin: "4px 0 0", fontSize: 11, color: colors.muted, textAlign: "right" }}>{c.progress} / {c.target_value}</p>
                   </div>
@@ -391,7 +391,7 @@ export default function HivePage() {
                 const medal = row.rank === 1 ? "#F4C03E" : row.rank === 2 ? "#B0B0B0" : row.rank === 3 ? "#CD7F32" : null;
                 return (
                   <div key={row.userId} style={{
-                    display: "flex", alignItems: "center", gap: 12, padding: "9px 10px", borderRadius: 0,
+                    display: "flex", alignItems: "center", gap: 12, padding: "9px 10px", borderRadius: 10,
                     background: isMe ? colors.greenSoft : "transparent",
                   }}>
                     <span style={{ width: 24, textAlign: "center", fontSize: 14, fontWeight: 900, color: medal || colors.muted, fontFamily: fonts.head }}>{row.rank}</span>
@@ -429,7 +429,7 @@ export default function HivePage() {
       {/* ── EINLÖSE-MODAL ── */}
       {redeemReward && (
         <div onClick={() => !redeeming && setRedeemReward(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 0, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 10, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
             <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>{redeemReward.name} einlösen</h3>
             <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
               <b style={{ color: "#C8860A" }}>{redeemReward.cost} Nektar</b> ausgeben?{redeemReward.confirm ? ` ${redeemReward.confirm}` : ""}
@@ -441,7 +441,7 @@ export default function HivePage() {
                 <p style={{ fontSize: 13, color: colors.red, marginBottom: 14 }}>Du hast keine aktiven Inserate für diesen Boost.</p>
               ) : (
                 <select value={pickedListing || ""} onChange={(e) => setPickedListing(e.target.value)}
-                  style={{ width: "100%", padding: "11px 12px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, marginBottom: 14, background: "#fff", outline: "none" }}>
+                  style={{ width: "100%", padding: "11px 12px", borderRadius: 10, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, marginBottom: 14, background: "#fff", outline: "none" }}>
                   <option value="">Auf welches Inserat?</option>
                   {pickerListings.map((l) => <option key={l.id} value={l.id}>{l.title}</option>)}
                 </select>
@@ -450,10 +450,10 @@ export default function HivePage() {
             {redeemError && <p style={{ fontSize: 12, color: colors.red, margin: "0 0 12px" }}>{redeemError}</p>}
             <div style={{ display: "flex", gap: 10 }}>
               <button onClick={confirmRedeem} disabled={redeeming || (redeemReward.needsListing && (!pickerListings?.length || !pickedListing))}
-                style={{ flex: 1, padding: 13, borderRadius: 0, border: "none", background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", opacity: (redeeming || (redeemReward.needsListing && (!pickerListings?.length || !pickedListing))) ? 0.5 : 1 }}>
+                style={{ flex: 1, padding: 13, borderRadius: 10, border: "none", background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", opacity: (redeeming || (redeemReward.needsListing && (!pickerListings?.length || !pickedListing))) ? 0.5 : 1 }}>
                 {redeeming ? "Einlösen…" : "Einlösen"}
               </button>
-              <button onClick={() => setRedeemReward(null)} disabled={redeeming} style={{ padding: "13px 18px", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+              <button onClick={() => setRedeemReward(null)} disabled={redeeming} style={{ padding: "13px 18px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
             </div>
           </div>
         </div>

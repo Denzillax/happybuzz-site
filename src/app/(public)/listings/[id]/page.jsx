@@ -63,16 +63,13 @@ export default function EditListingPage() {
   }
 
   if (loading) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>Lade…</div>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>Lade…</div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F9F4EC", minHeight: "100vh" }}>
-      {/* Katalog-Kopf wie beim Erstellen (gleiche Optik, eigener Kicker) */}
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
+      {/* Seitenkopf */}
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 16px 0" }}>
-        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: "'Space Mono', 'Courier New', monospace", letterSpacing: ".18em", textTransform: "uppercase", color: "#0B5E5C", marginBottom: 6 }}>
-          Bestehender Eintrag · Katalog der zweiten Leben
-        </div>
         <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
           Inserat bearbeiten
         </h1>

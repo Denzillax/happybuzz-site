@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
 import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
 import NotificationBell from '@/components/shared/NotificationBell'
@@ -15,7 +15,7 @@ import { getMyRole } from '@/lib/staff'
 const YELLOW = '#F4C03F'
 const DARK = '#191615'
 const INK = '#14110D'
-const PAPER = '#FBF8F2'
+const PAPER = '#FFFFFF'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -24,6 +24,7 @@ export function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [suggestions, setSuggestions] = useState<any[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const suggestTimer = useRef<any>(null)
@@ -159,7 +160,7 @@ export function Header() {
     { href: '/favorites?tab=searches', icon: Search, label: 'Suchen' },
   ]
 
-  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 0, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #e5e5e5', zIndex: 100 }
+  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 10, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #e5e5e5', zIndex: 100 }
   const menuItemStyle = { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', fontSize: 14, fontWeight: 500, color: '#444', textDecoration: 'none', transition: 'all 0.12s', cursor: 'pointer', border: 'none', background: 'none', width: '100%', fontFamily: 'inherit' }
 
   return (
@@ -177,8 +178,11 @@ export function Header() {
              horizontal. Weniger Padding + kleineres Logo statt Overflow.
              Achtung: kein Groesser-Zeichen in diesem Kommentar, der Server
              escaped es im style-Tag und die Hydration bricht. */
-          .hdr-wrap { padding-left: 14px !important; padding-right: 14px !important; }
-          .hdr-logo img { width: 140px !important; }
+          .hdr-wrap { padding-left: 12px !important; padding-right: 12px !important; }
+          .hdr-logo { margin-right: 8px !important; }
+          .hdr-logo img { width: 122px !important; }
+          .hdr-mobile-only { gap: 3px !important; }
+          .hdr-mobile-search { display: flex !important; }
         }
       `}</style>
 
@@ -196,8 +200,8 @@ export function Header() {
             {/* Kategorien Button */}
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
-              border: megaMenuOpen ? `1.5px solid ${INK}` : '1.5px solid #d8d4cd',
-              borderRadius: 0, background: megaMenuOpen ? '#F9F4EC' : '#fff',
+              border: megaMenuOpen ? "1px solid #E4E0D8" : '1.5px solid #d8d4cd',
+              borderRadius: 10, background: megaMenuOpen ? '#F4F4F2' : '#fff',
               cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
               color: INK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}>
@@ -206,10 +210,10 @@ export function Header() {
               <ChevronDown size={13} style={{ transform: megaMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }} />
             </button>
 
-            {/* Search Bar — fills available space */}
+            {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `1.5px solid ${INK}`, borderRadius: 0, overflow: 'hidden' }}>
-                <Search size={17} style={{ marginLeft: 14, color: '#999', flexShrink: 0, alignSelf: 'center' }} />
+              <div style={{ display: 'flex', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, padding: 4 }}>
+                <Search size={17} style={{ marginLeft: 12, color: '#8A8580', flexShrink: 0 }} />
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -218,17 +222,17 @@ export function Header() {
                   onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setShowSuggestions(false) } }}
                   onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  placeholder="Suche nach Artikel, Verkäufer oder Artikelnummer"
-                  style={{ flex: 1, padding: '9px 12px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
+                  placeholder="Was suchst du?"
+                  style={{ flex: 1, padding: '8px 12px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
                 />
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ padding: '0 24px', background: INK, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14, color: PAPER, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ padding: '8px 20px', background: '#F4C03F', border: 'none', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 13.5, color: INK, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   Suchen
                 </button>
               </div>
 
               {/* Autocomplete */}
               {showSuggestions && suggestions.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #e8e5e0', borderRadius: '0 0 8px 8px', boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 2, overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #e8e5e0', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 6, overflow: 'hidden' }}>
                   <div style={{ padding: '6px 14px', fontSize: 11, fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '.04em' }}>Kategorien</div>
                   {suggestions.map(cat => (
                     <button key={cat.id}
@@ -276,7 +280,7 @@ export function Header() {
               <button className="hdr-icon-btn" onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
-                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 0, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                  <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 10, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
                 )}
               </button>
             </div>
@@ -319,7 +323,7 @@ export function Header() {
                             <item.icon size={16} style={{ color: '#888' }} />
                             {item.label}
                             {item.label === 'Nachrichten' && unreadCount > 0 && (
-                              <span style={{ marginLeft: 'auto', background: YELLOW, color: DARK, fontSize: 11, fontWeight: 700, borderRadius: 0, padding: '2px 7px', minWidth: 20, textAlign: 'center' }}>{unreadCount}</span>
+                              <span style={{ marginLeft: 'auto', background: YELLOW, color: DARK, fontSize: 11, fontWeight: 700, borderRadius: 10, padding: '2px 7px', minWidth: 20, textAlign: 'center' }}>{unreadCount}</span>
                             )}
                           </Link>
                     ))}
@@ -352,11 +356,17 @@ export function Header() {
               </button>
             )}
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ width: 40, height: 40, borderRadius: 0, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
+              style={{ width: 40, height: 40, borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
+        {/* Mobile Suchpille: fuehrt zur Suchseite, dort fokussiert die Suchzeile */}
+        {pathname !== '/search' && (
+          <Link href="/search" className="hdr-mobile-search" style={{ display: 'none', alignItems: 'center', gap: 8, background: '#F2EEE7', borderRadius: 999, padding: '9px 14px', margin: '0 0 10px', textDecoration: 'none', color: '#8A8580', fontSize: 14, fontWeight: 500 }}>
+            <Search size={16} /> Was suchst du?
+          </Link>
+        )}
         <MegaMenu open={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} />
       </div>
 
@@ -384,7 +394,7 @@ export function Header() {
               { href: '/how-it-works', icon: Star, label: 'So funktionierts' },
             ].map(link => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 0 }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 10 }}>
                 <link.icon size={18} style={{ color: '#999' }} />
                 {link.label}
               </Link>
@@ -407,7 +417,7 @@ export function Header() {
                 ...(canAdmin ? [{ href: '/admin', icon: ShieldCheck, label: 'Admin Dashboard' }] : []),
               ].map(link => (
                 <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 0 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 10 }}>
                   <link.icon size={18} style={{ color: '#999' }} />
                   {link.label}
                 </Link>
@@ -417,12 +427,12 @@ export function Header() {
           <div style={{ padding: '12px 24px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {user ? (
               <button onClick={() => { handleLogout(); setMobileOpen(false); }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #e8e5e0', color: '#999', fontWeight: 600, fontSize: 14, borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #e8e5e0', color: '#999', fontWeight: 600, fontSize: 14, borderRadius: 10, cursor: 'pointer', fontFamily: 'inherit' }}>
                 <LogOut size={16} /> Abmelden
               </button>
             ) : (
               <Link href="/login" onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #e8e5e0', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 0, textDecoration: 'none' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #e8e5e0', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 10, textDecoration: 'none' }}>
                 <User size={16} /> Anmelden
               </Link>
             )}

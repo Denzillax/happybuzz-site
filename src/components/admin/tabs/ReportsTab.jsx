@@ -39,7 +39,7 @@ export function ReportsTab({ admin }) {
                 {pill(REPORT_STATUS[st].bg, REPORT_STATUS[st].color, REPORT_STATUS[st].label)}
                 <div style={{ flex: 1 }} />
                 <select value={st} onChange={e => setReportStatus(r.id, e.target.value)}
-                  style={{ border: `1px solid ${colors.border}`, borderRadius: 0, padding: "4px 8px", fontSize: 11, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
+                  style={{ border: `1px solid ${colors.border}`, borderRadius: 10, padding: "4px 8px", fontSize: 11, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}>
                   {Object.entries(REPORT_STATUS).map(([k, m]) => <option key={k} value={k}>{m.label}</option>)}
                 </select>
               </div>

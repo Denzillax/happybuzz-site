@@ -114,7 +114,7 @@ export function UserProfile({ admin }) {
       {/* Admin-Notiz */}
       <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "12px 14px", marginBottom: 14 }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginBottom: 6 }}>Admin-Notiz <span style={{ textTransform: "none", fontWeight: 400 }}>· nur für dich sichtbar</span></div>
-        <textarea value={note} onChange={e => setNote(e.target.value)} rows={3} placeholder="Interne Notiz zu diesem Nutzer…" style={{ width: "100%", border: `1px solid ${colors.border}`, borderRadius: 0, padding: "8px 10px", fontSize: 13, fontFamily: fonts.body, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
+        <textarea value={note} onChange={e => setNote(e.target.value)} rows={3} placeholder="Interne Notiz zu diesem Nutzer…" style={{ width: "100%", border: `1px solid ${colors.border}`, borderRadius: 10, padding: "8px 10px", fontSize: 13, fontFamily: fonts.body, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
         <button onClick={() => saveUserNote(u.id, note)} style={{ marginTop: 8, padding: "7px 16px", borderRadius: 999, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
       </div>
 
@@ -126,7 +126,7 @@ export function UserProfile({ admin }) {
           const Icon = meta.Icon;
           return (
             <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
-              <span style={{ width: 28, height: 28, borderRadius: 0, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={14} color={meta.color} /></span>
+              <span style={{ width: 28, height: 28, borderRadius: 10, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={14} color={meta.color} /></span>
               <span style={{ flex: 1, fontSize: 12.5, fontWeight: 600 }}>{meta.label}</span>
               <span style={{ fontSize: 11, color: colors.muted }}>{a.created_at ? fmtDate(a.created_at) : ""}</span>
             </div>
@@ -182,7 +182,7 @@ export function UserProfile({ admin }) {
         {(userTab[u.id] || "inserate") === "rechnungen" && (
           <div style={{ padding: "10px 16px" }}>
             {uFee.length > 0 && (
-              <div style={{ display: "flex", gap: 12, marginBottom: 10, padding: "8px 10px", background: colors.cream, borderRadius: 0, fontSize: 11 }}>
+              <div style={{ display: "flex", gap: 12, marginBottom: 10, padding: "8px 10px", background: colors.cream, borderRadius: 10, fontSize: 11 }}>
                 <span>Gebühren: <strong>CHF {fmtCHF(totalUserFees)}</strong></span>
                 <span style={{ color: "#5B8C5A" }}>Bee-Impact: <strong>CHF {fmtCHF(totalUserImpact)}</strong></span>
                 <span style={{ color: colors.muted }}>{uFee.length} Einträge</span>
@@ -194,7 +194,7 @@ export function UserProfile({ admin }) {
               const isInvOpen = openInvoice === inv.id;
               const invFees = uFee.filter(f => f.fee_invoice_id === inv.id);
               return (
-                <div key={inv.id} style={{ marginBottom: 6, borderRadius: 0, border: `1px solid ${rl >= 2 ? "#FFCDD2" : colors.borderLt}`, overflow: "hidden", background: rl >= 3 ? "#FFF5F5" : "transparent" }}>
+                <div key={inv.id} style={{ marginBottom: 6, borderRadius: 10, border: `1px solid ${rl >= 2 ? "#FFCDD2" : colors.borderLt}`, overflow: "hidden", background: rl >= 3 ? "#FFF5F5" : "transparent" }}>
                   <div onClick={() => setOpenInvoice(isInvOpen ? null : inv.id)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", cursor: "pointer" }}>
                     <span style={{ fontSize: 12, fontWeight: 700, flex: 1 }}>{inv.invoice_ref}</span>
                     {pill(s.bg, s.color, s.label)}

@@ -2,11 +2,11 @@
 
 // ── Katalog-Design-Tokens ──
 const INK = "#14110D";
-const SAND = "#F9F4EC";
-const PAPER = "#FBF8F2";
+const SAND = "#F4F4F2";
+const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
 const MUTED = "rgba(20,17,13,0.62)";
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Manrope', system-ui, sans-serif";
 
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
   return (
     <div style={{ fontFamily: BODY, background: PAPER, minHeight: "100vh", color: INK }}>
       <div style={{
-        background: SAND, padding: "52px 24px 44px", borderBottom: `1px solid ${INK}`,
+        background: SAND, padding: "52px 24px 44px", borderBottom: "1px solid #E4E0D8",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 740, margin: "0 auto" }}>
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 0, border: `1px solid ${INK}`, padding: "30px 30px 22px" }}>
+        <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", padding: "30px 30px 22px" }}>
           <h2 style={S.h2}>1. Verantwortliche Stelle</h2>
           <p style={S.p}>Verantwortlich für die Datenbearbeitung ist: MOQRO by Denis Mihaljevic (Einzelfirma), Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Kontakt: datenschutz@beedaro.ch</p>
           <p style={S.p}>BEEDARO ist eine Marke von MOQRO. Nennungen von BEEDARO in dieser Erklärung beziehen sich auf MOQRO als verantwortliche Stelle.</p>

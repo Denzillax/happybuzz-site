@@ -100,28 +100,25 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>
       Lade…
     </div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F9F4EC", minHeight: "100vh" }}>
-      {/* Katalog-Kopf */}
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
+      {/* Seitenkopf */}
       <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 16px 0" }}>
-        <div style={{ fontSize: 10, fontWeight: 700, fontFamily: "'Space Mono', 'Courier New', monospace", letterSpacing: ".18em", textTransform: "uppercase", color: "#0B5E5C", marginBottom: 6 }}>
-          Neuer Eintrag · Katalog der zweiten Leben
-        </div>
         <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
           Inserat erstellen
         </h1>
       </div>
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
-          <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 0, padding: "16px 20px" }}>
+          <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 10, padding: "16px 20px" }}>
             <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#E65100" }}>Profil unvollständig, bitte ergänzen:</p>
             {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#E65100" }}>• {m}</p>)}
-            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 0, background: "#F4A100", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
+            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 10, background: "#F4A100", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
           </div>
         </div>
       )}
@@ -132,9 +129,9 @@ function NewListingPageInner() {
             onClick={useLastAsTemplate}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
-              borderRadius: 0, border: "1.5px solid #191615", background: "#fff",
+              borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff",
               color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
-              boxShadow: "2px 2px 0 #191615",
+              boxShadow: "0 2px 8px rgba(25,22,21,.15)",
             }}
           >
             <Copy size={15} color="#0E9493" /> Letztes Inserat als Vorlage verwenden
@@ -142,7 +139,7 @@ function NewListingPageInner() {
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 0, background: "#E6F5F5", border: "1px solid #0E949333", fontSize: 13, color: "#0A7170", fontFamily: "'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 10, background: "#E6F5F5", border: "1px solid #0E949333", fontSize: 13, color: "#0A7170", fontFamily: "'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

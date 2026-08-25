@@ -60,7 +60,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "", styl
       style={{
         display: "inline-flex", alignItems: "center", justifyContent: "center",
         width: 32, height: 30, border: `1px solid ${colors.border}`, background: "#fff",
-        cursor: "pointer", borderRadius: 0, color: colors.dark,
+        cursor: "pointer", borderRadius: 10, color: colors.dark,
       }}
     >
       <Icon size={15} />
@@ -88,7 +88,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "", styl
         onInput={emit}
         onPaste={onPaste}
         style={{
-          width: "100%", minHeight: 130, padding: "12px 14px", borderRadius: 0,
+          width: "100%", minHeight: 130, padding: "12px 14px", borderRadius: 10,
           border: `1.5px solid ${colors.border}`, fontSize: 14, lineHeight: 1.6,
           fontFamily: fonts.body, background: "#fff", outline: "none",
           overflowY: "auto", maxHeight: 420, boxSizing: "border-box",

@@ -26,7 +26,7 @@ export function BeeLevelBadge({ xp = 0, size = "sm", showLabel = true }) {
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", gap: s.gap,
-      padding: s.pad, borderRadius: 0,
+      padding: s.pad, borderRadius: 10,
       background: `${level.color}18`,
       color: level.color,
       fontSize: s.font, fontWeight: 700, fontFamily: fonts.body,
@@ -54,14 +54,14 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
 
   return (
     <div style={{
-      background: "#fff", borderRadius: 0,
-      border: `1px solid #14110D`, padding: "22px 24px",
+      background: "#fff", borderRadius: 10,
+      border: "1px solid #E4E0D8", padding: "22px 24px",
     }}>
       {/* Level + XP */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
-            width: 44, height: 44, borderRadius: 0, border: `1px solid #14110D`,
+            width: 44, height: 44, borderRadius: 10, border: "1px solid #E4E0D8",
             background: `${level.color}18`, display: "flex",
             alignItems: "center", justifyContent: "center",
           }}>
@@ -81,11 +81,11 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
 
       {/* Progress Bar */}
       <div style={{
-        height: 8, borderRadius: 0, background: colors.borderLt,
+        height: 8, borderRadius: 10, background: colors.borderLt,
         border: `1px solid #14110D22`, overflow: "hidden", marginBottom: 8,
       }}>
         <div style={{
-          height: "100%", borderRadius: 0,
+          height: "100%", borderRadius: 10,
           background: level.color,
           width: `${next ? progress : 100}%`,
           transition: "width .5s ease-out",
@@ -105,7 +105,7 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
       )}
 
       {nektar != null && (
-        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 0, background: "#FBF1D2", border: "1px solid #14110D", textDecoration: "none" }}>
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 10, background: "#FBF1D2", border: "1px solid #E4E0D8", textDecoration: "none" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#854F0B" }}>
             <Droplets size={15} color="#854F0B" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>

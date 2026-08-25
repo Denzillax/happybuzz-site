@@ -18,7 +18,7 @@ export default function AdminPage() {
           }} />
         ))}
       </div>
-      <p style={{ margin: 0, fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#8a8580" }}>Dashboard wird geladen</p>
+      <p style={{ margin: 0, fontFamily: "'Manrope', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#8a8580" }}>Dashboard wird geladen</p>
       <style>{`
         @keyframes adminHex {
           0%, 100% { transform: translateY(0); opacity: .3 }

@@ -24,16 +24,16 @@ const steps = [
 ]
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
-const MONO = "'Space Mono', ui-monospace, monospace"
+const MONO = "'Manrope', sans-serif"
 const INK = '#14110D'
-const SAND = '#F9F4EC'
-const PAPER = '#FBF8F2'
+const SAND = '#F4F4F2'
+const PAPER = '#FFFFFF'
 const HONEY = '#F4C03F'
 const PETROL = '#0B5E5C'
 
 export function HowItWorks() {
   return (
-    <section style={{ padding: '72px 0', background: PAPER, borderTop: `1px solid ${INK}`, borderBottom: `1px solid ${INK}` }}>
+    <section style={{ padding: '72px 0', background: PAPER, borderTop: "1px solid #E4E0D8", borderBottom: "1px solid #E4E0D8" }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -52,16 +52,16 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <div key={i} style={{
-                background: '#fff', border: `1px solid ${INK}`, borderRadius: 0,
+                background: '#fff', border: "1px solid #E4E0D8", borderRadius: 10,
                 padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16,
               }}>
                 {/* Schrittnummer + Icon-Tafel */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontFamily: MONO, fontSize: 34, fontWeight: 700, color: INK, lineHeight: 1, letterSpacing: '-0.02em' }}>
+                  <span style={{ fontFamily: MONO, fontSize: 'clamp(24px, 3vw, 30px)', fontWeight: 700, color: INK, lineHeight: 1, letterSpacing: '-0.02em' }}>
                     {s.step}
                   </span>
                   <div style={{
-                    width: 48, height: 48, borderRadius: 0, background: SAND, border: `1px solid ${INK}`,
+                    width: 48, height: 48, borderRadius: 10, background: SAND, border: "1px solid #E4E0D8",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: PETROL,
                   }}>
                     <Icon size={23} strokeWidth={1.8} />

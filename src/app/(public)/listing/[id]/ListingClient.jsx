@@ -34,10 +34,10 @@ import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#14110D";
-const SAND = "#F9F4EC";
-const PAPER = "#FBF8F2";
+const SAND = "#F4F4F2";
+const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = "'Manrope', sans-serif";
 
 // ── LocationMap: interaktive Leaflet-Karte mit Gemeindegrenze ──
 // - rote Gemeindegrenze (Polygon via Nominatim polygon_geojson)
@@ -304,8 +304,8 @@ export default function ListingDetail() {
     return () => io.disconnect();
   }, [loading, l?.id]);
 
-  if (loading) return <div style={{ fontFamily: fonts.body, background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
-  if (!l) return <div style={{ fontFamily: fonts.body, background: "#FBF8F2", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (!l) return <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
 
   const imgs = l.images || [];
   const isOwner = user && user.id === l.user_id;
@@ -477,7 +477,7 @@ export default function ListingDetail() {
   };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: "#FBF8F2", minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", color: colors.dark }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 80px" }}>
 
         {/* ── BREADCRUMBS ─────────────────────────────── */}
@@ -494,13 +494,13 @@ export default function ListingDetail() {
         {/* ── EIGENTÜMER-LEISTE (Desktop oben; mobil klebt sie unten
                ueber der Bottom-Nav, siehe .mobile-cta-bar weiter unten) ── */}
         {isOwner && (
-          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: `1px solid ${INK}` }}>
+          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: "1px solid #E4E0D8" }}>
             <BeeIcon size={16} />
             <span style={{ fontSize: 13, fontWeight: 700, color: INK, marginRight: "auto" }}>Das ist dein Inserat</span>
-            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: `1.5px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
+            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: `1px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -514,7 +514,7 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
+            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
               <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
@@ -567,7 +567,7 @@ export default function ListingDetail() {
               {imgs.length > 1 && (
                 <div style={{ display: "flex", gap: 8, padding: "12px 16px", overflowX: "auto" }}>
                   {imgs.map((img, i) => (
-                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 0, overflow: "hidden", border: i === activeImg ? `2px solid ${colors.yellow}` : `2px solid transparent`, cursor: "pointer", flexShrink: 0 }}>
+                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 10, overflow: "hidden", border: i === activeImg ? `2px solid ${colors.yellow}` : `2px solid transparent`, cursor: "pointer", flexShrink: 0 }}>
                       <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                   ))}
@@ -576,35 +576,35 @@ export default function ListingDetail() {
             </div>
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
-            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden" }}>
+            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden" }}>
               {l.condition && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
-                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Zustand</p>
+                  <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Zustand</p>
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{condLabel}</p>
                 </div>
               )}
               {l.categoryName && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
-                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Kategorie</p>
+                  <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Kategorie</p>
                   <Link href={`/search?category=${l.categoryPath?.[l.categoryPath.length - 1]?.slug || ""}`} className="bd-link" style={{ display: "inline-block", margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.categoryName}</Link>
                 </div>
               )}
               {l.city && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px" }}>
-                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Standort</p>
+                  <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Standort</p>
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>{l.city}</p>
                 </div>
               )}
               {l.listing_type === "sell" && (l.quantity ?? 1) > 1 && l.status === "active" && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderLeft: `1px solid ${colors.borderLt}` }}>
-                  <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>Verfügbar</p>
+                  <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Verfügbar</p>
                   <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>Noch {l.quantity} Stück</p>
                 </div>
               )}
             </div>
 
             {/* ── BESCHREIBUNG ───────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
               {/* Formatierte Beschreibungen (Mini-HTML aus dem Editor) werden
                   IMMER frisch durch sanitizeDescription gefiltert — nie
@@ -612,9 +612,40 @@ export default function ListingDetail() {
               {isFormattedDescription(l.description) ? (
                 <div className="rich-desc" style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark }}
                   dangerouslySetInnerHTML={{ __html: sanitizeDescription(l.description) }} />
-              ) : (
-                <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{l.description || "Keine Beschreibung"}</div>
-              )}
+              ) : (() => {
+                // Nachtraege ("Neue Informationen hinzugefuegt am: <Datum>" —
+                // Ricardo-Konvention, kommt v.a. ueber den Import-Helfer mit)
+                // als eigene, datierte Bloecke rendern statt angeklebt im Fliesstext.
+                // Sekunden nur uebernehmen, wenn danach keine Ziffer folgt (sonst
+                // frisst der Timestamp den Anfang einer Telefonnummer).
+                const teile = [];
+                const re = /Neue Informationen hinzugef(?:ü|u)gt am:\s*(\d{2}\.\d{2}\.\d{4})[,\s]*(\d{2}:\d{2}(?::\d{2}(?!\d))?)?/gi;
+                const text = l.description || "";
+                let last = 0, m, aktuellesDatum = null;
+                // Nach dem Zeitstempel haengengebliebene Trennzeichen (":" vor
+                // einer Telefonnummer etc.) am Nachtrags-Anfang abschneiden
+                const putz = (s, istNachtrag) => istNachtrag ? s.replace(/^[:.,\s]+/, "").trim() : s.trim();
+                while ((m = re.exec(text)) !== null) {
+                  teile.push({ datum: aktuellesDatum, text: putz(text.slice(last, m.index), aktuellesDatum !== null) });
+                  aktuellesDatum = m[1] + (m[2] ? `, ${m[2]}` : "");
+                  last = re.lastIndex;
+                }
+                teile.push({ datum: aktuellesDatum, text: putz(text.slice(last), aktuellesDatum !== null) });
+                const haupt = teile.shift();
+                return (
+                  <>
+                    <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
+                    {teile.filter(t => t.text).map((t, i) => (
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 10, background: "#F6F4EF", borderLeft: "3px solid #F4C03F" }}>
+                        <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
+                          Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
+                        </p>
+                        <div style={{ fontSize: 14, lineHeight: 1.65, color: colors.dark, whiteSpace: "pre-wrap" }}>{t.text}</div>
+                      </div>
+                    ))}
+                  </>
+                );
+              })()}
             </div>
 
             {/* ── EIGENSCHAFTEN (Kategorie-Attribute: Groesse, Farbe...) ──
@@ -627,12 +658,12 @@ export default function ListingDetail() {
                 ...eigenschaften.filter(e => !variantNamen.has(e.name)).map(e => ({ ...e, waehlbar: false })),
               ];
               return (
-                <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+                <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
                   <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
                     {zeilen.map((e) => (
                       <div key={e.name}>
-                        <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, color: colors.muted, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{e.name}</p>
+                        <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>{e.name}</p>
                         <p style={{ margin: "2px 0 0", fontSize: 14, fontWeight: 700, color: INK }}>
                           {e.value}{e.unit ? ` ${e.unit}` : ""}
                           {e.waehlbar && <span style={{ fontWeight: 600, fontSize: 11.5, color: colors.teal }}> (wählbar)</span>}
@@ -645,9 +676,9 @@ export default function ListingDetail() {
             })()}
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
-              <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "12px 20px", fontSize: 13 }}>
+              <div className="lief-grid" style={{ display: "grid", gridTemplateColumns: "minmax(84px, 110px) minmax(0, 1fr)", gap: "12px 14px", fontSize: 13 }}>
                 <span style={{ color: colors.muted }}>Lieferung</span>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Truck size={14} color={colors.muted} /> {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}</span>
                 {l.shipping_available && (
@@ -670,7 +701,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── VERKÄUFER ──────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
               {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
                   eigene Zeile statt die Infos zu quetschen */}
@@ -702,7 +733,7 @@ export default function ListingDetail() {
 
             {/* ── STANDORT (KARTE) ──────────────────── */}
             {l.city && (
-              <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
                 <div style={{ padding: "16px 28px 12px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div>
                     <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
@@ -711,7 +742,7 @@ export default function ListingDetail() {
                     </p>
                   </div>
                   <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 0, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 10, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
@@ -721,14 +752,14 @@ export default function ListingDetail() {
             )}
 
             {/* ── NACHRICHTEN (aufklappbar) ─────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
               {/* Header mit Toggle */}
               <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <MessageCircle size={16} color={colors.muted} />
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Fragen zum Inserat</p>
                   {questions.length > 0 && (
-                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 0 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 10 }}>
                       {questions.reduce((sum, q) => sum + (q.messages?.length || 0), 0)}
                     </span>
                   )}
@@ -741,7 +772,7 @@ export default function ListingDetail() {
               <div style={{ padding: "10px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 11, color: colors.muted }}>Öffentlich sichtbar. Andere sehen Frage und Antwort.</span>
                 {user && !isOwner && (
-                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                     <MessageCircle size={14} /> Nachricht an Verkäufer
                   </button>
                 )}
@@ -762,14 +793,14 @@ export default function ListingDetail() {
                         return (
                           <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" }}>
                             <div style={{
-                              maxWidth: "75%", padding: "8px 12px", borderRadius: 0,
+                              maxWidth: "75%", padding: "8px 12px", borderRadius: 10,
                               background: isMe ? colors.yellow : "#fff",
                               border: `1px solid ${isMe ? INK : "rgba(20,17,13,.25)"}`,
                             }}>
                               {/* Name IMMER zeigen, oeffentliche Fragen sieht jeder */}
                               <p style={{ margin: "0 0 2px", fontSize: 11, fontWeight: 700, color: isSeller ? "#0B5E5C" : colors.dark }}>
                                 {isMe ? `Du · ${msg.sender?.display_name || ""}`.replace(/ · $/, "") : (msg.sender?.display_name || "Benutzer")}
-                                {isSeller && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 0, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5, border: `1px solid ${INK}` }}>Verkäufer</span>}
+                                {isSeller && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 10, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5, border: "1px solid #E4E0D8" }}>Verkäufer</span>}
                               </p>
                               <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45, color: colors.dark }}>{msg.content}</p>
                               <p style={{ margin: "3px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
@@ -796,9 +827,9 @@ export default function ListingDetail() {
                   <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
                     placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
-                    style={{ flex: 1, padding: "10px 14px", borderRadius: 0, border: `1.5px solid ${INK}`, fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
+                    style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "1px solid #E4E0D8", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
                   <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
-                    style={{ padding: "10px 20px", borderRadius: 0, border: `1.5px solid ${INK}`, background: msgText.trim() ? colors.yellow : "#eee", color: INK, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: msgText.trim() ? "pointer" : "default", flexShrink: 0, transition: "all .15s", boxShadow: msgText.trim() ? `2px 2px 0 ${INK}` : "none" }}>
+                    style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid #E4E0D8", background: msgText.trim() ? colors.yellow : "#eee", color: INK, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: msgText.trim() ? "pointer" : "default", flexShrink: 0, transition: "all .15s", boxShadow: "none" }}>
                     {sendingMsg ? "..." : "Senden"}
                   </button>
                 </div>
@@ -820,20 +851,15 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "24px 28px", marginBottom: 14 }}>
-              {/* Exponat-Kopf: Referenznummer + Zustands-Stempel.
-                  Mobil (.cond-head in globals.css) steht der Stempel IMMER
-                  unter der ART-Nr — einheitlich fuer alle Zustaende. */}
-              <div className="cond-head" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "6px 10px", flexWrap: "wrap", marginBottom: 12, paddingBottom: 12, borderBottom: `1px solid ${INK}1f` }}>
-                <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: ".04em", color: colors.muted }}>{makeArtRef(l.id)}</span>
-                {l.condition && (
-                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: PAPER, background: PETROL, borderRadius: 0, padding: "3px 9px", whiteSpace: "nowrap" }}>{condLabel}</span>
-                )}
-              </div>
+            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
+              {/* Klar-Look: ruhiger Zustands-Chip statt ART-Nr + Stempel */}
+              {l.condition && (
+                <span style={{ display: "inline-block", fontSize: 11.5, fontWeight: 700, color: INK, background: "#F2EEE7", borderRadius: 999, padding: "4px 11px", marginBottom: 10 }}>{condLabel}</span>
+              )}
               <h1 style={{ fontSize: 23, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.2, letterSpacing: "-0.01em", color: INK }}>{l.title}</h1>
-              <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5 }}>
-                <Clock size={13} /> {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}
-                {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span>{l.view_count} Aufrufe</>}
+              <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
+                <Clock size={13} /> <span style={{ whiteSpace: "nowrap" }}>{new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}</span>
+                {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span><span style={{ whiteSpace: "nowrap" }}>{l.view_count} Aufrufe</span></>}
               </p>
               {viewerCount > 2 && (
                 <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, color: colors.teal, display: "flex", alignItems: "center", gap: 5 }}>
@@ -846,7 +872,7 @@ export default function ListingDetail() {
                 <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontWeight: 600 }}>
                   {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
                 </p>
-                <p style={{ margin: "2px 0 0", fontSize: 32, fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
+                <p style={{ margin: "2px 0 0", fontSize: "clamp(24px, 5.5vw, 30px)", fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
                   {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : `CHF ${fmtPrice(displayPrice)}`}
                 </p>
               </div>
@@ -862,17 +888,17 @@ export default function ListingDetail() {
                   }} disabled={isOwner}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      padding: "15px", borderRadius: 0, border: "none", width: "100%",
+                      padding: "14px 10px", borderRadius: 999, border: "none", width: "100%", whiteSpace: "nowrap",
                       background: isOwner ? colors.warm : colors.yellow,
                       color: isOwner ? colors.mutedLt : colors.dark,
                       fontSize: 15, fontWeight: 800, fontFamily: fonts.body, letterSpacing: ".03em",
                       cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1,
                     }}>
-                    <ShoppingBag size={18} /> KAUFEN · CHF {fmtPrice(l.price)}
+                    <ShoppingBag size={18} /> Kaufen · CHF {fmtPrice(l.price)}
                   </button>
                   {!isOwner && l.is_negotiable && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setOfferAmount(""); setShowOfferModal(true); }}
-                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: 999, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
                       <Tag size={16} /> Preis vorschlagen
                     </button>
                   )}
@@ -931,7 +957,7 @@ export default function ListingDetail() {
               {l.listing_type === "auction" && l.status !== "paused" && (
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 12 }}>
-                    <span><Gavel size={14} /> {bidHistory.length || bids.length} Gebote</span>
+                    <span><Gavel size={14} /> {(bidHistory.length || bids.length) === 1 ? "1 Gebot" : `${bidHistory.length || bids.length} Gebote`}</span>
                     {countdown && (
                       <span style={{
                         fontWeight: 700, fontFamily: fonts.body,
@@ -952,7 +978,7 @@ export default function ListingDetail() {
                   {/* Dein Preislimit */}
                   {myBid && !isOwner && (
                     <div style={{
-                      padding: "10px 14px", borderRadius: 0, marginBottom: 12,
+                      padding: "10px 14px", borderRadius: 10, marginBottom: 12,
                       background: bids[0]?.bidder_id === user?.id ? "#E8F5E9" : "#FFF3E0",
                       border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
                       fontSize: 13,
@@ -991,8 +1017,8 @@ export default function ListingDetail() {
                   {l.buy_now_price > 0 && (
                     <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
                       disabled={isOwner}
-                      style={{ width: "100%", padding: "14px", borderRadius: 0, border: "none", background: isOwner ? colors.warm : colors.teal, color: isOwner ? colors.mutedLt : "#fff", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                      <ShoppingBag size={18} /> SOFORT KAUFEN · CHF {fmtPrice(l.buy_now_price)}
+                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E0DCD4", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      <ShoppingBag size={18} /> Sofort kaufen · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
 
@@ -1005,8 +1031,8 @@ export default function ListingDetail() {
                       // sonst das naechste gueltige Gebot.
                       setBidAmount(myBid ? (Number(myBid.max_amount) + effInc).toFixed(2) : nextBid.toFixed(2));
                       setBidModal("bid");
-                    }} style={{ width: "100%", padding: "14px", borderRadius: 0, border: `2px solid ${colors.yellow}`, background: "transparent", color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                      <Gavel size={18} /> GEBOT ABGEBEN
+                    }} style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "none", background: colors.yellow, color: colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      <Gavel size={18} /> Gebot abgeben
                     </button>
                   )}
                   {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
@@ -1042,7 +1068,7 @@ export default function ListingDetail() {
                               {bidderLabel(b, isTopBidder)}{isMine && " (du)"}
                             </span>
                             {b.bid_type === "auto" && (
-                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 0 }}>automatisch</span>
+                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 10 }}>automatisch</span>
                             )}
                             {isTopBidder && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
                           </div>
@@ -1076,7 +1102,7 @@ export default function ListingDetail() {
               {/* ── KAUFEN / SOFORTKAUF MODAL (für Festpreis + Auktion) ── */}
               {bidModal && (
                     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setBidModal(null)}>
-                      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 0, width: "100%", maxWidth: 440, maxHeight: "85vh", overflow: "auto", fontFamily: fonts.body }}>
+                      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 10, width: "100%", maxWidth: 440, maxHeight: "85vh", overflow: "auto", fontFamily: fonts.body }}>
                         {/* Modal Header */}
                         <div style={{ padding: "18px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                           <div>
@@ -1125,7 +1151,7 @@ export default function ListingDetail() {
                                     if (obergrenze != null) neu = Math.min(obergrenze, neu);
                                     setBidAmount(neu.toFixed(2));
                                   };
-                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: `1.5px solid ${colors.dark}`, background: "#fff", cursor: "pointer", borderRadius: 0, color: colors.dark };
+                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #E4E0D8", background: "#fff", cursor: "pointer", borderRadius: 10, color: colors.dark };
                                   return (
                                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                       <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
@@ -1140,7 +1166,7 @@ export default function ListingDetail() {
                                         min={untergrenze}
                                         max={obergrenze ?? undefined}
                                         step={effInc}
-                                        style={{ flex: 1, minWidth: 0, padding: "12px 14px", borderRadius: 0, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
+                                        style={{ flex: 1, minWidth: 0, padding: "12px 14px", borderRadius: 10, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
                                         onFocus={e => e.target.style.borderColor = colors.yellow}
                                         onBlur={e => e.target.style.borderColor = colors.border} />
                                       <button type="button" aria-label="Gebot erhöhen" onClick={() => schrittSetzen(1)} style={{ ...stepBtn, background: colors.yellow }}><Plus size={18} /></button>
@@ -1149,7 +1175,7 @@ export default function ListingDetail() {
                                 })()}
                                 {l.buy_now_price > 0 && <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Max: CHF {fmtPrice(l.buy_now_price - 1)} (ab Sofortkauf-Preis wird direkt gekauft)</p>}
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
-                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 0, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
+                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 10, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
                                     <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: colors.yellow, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
                                   </div>
@@ -1176,7 +1202,7 @@ export default function ListingDetail() {
                                       <select
                                         value={variantWahl[d.key] || ""}
                                         onChange={(e) => setVariantWahl(prev => ({ ...prev, [d.key]: e.target.value }))}
-                                        style={{ width: "100%", padding: "11px 12px", borderRadius: 0, border: `1.5px solid ${variantWahl[d.key] ? colors.border : colors.yellow}`, fontSize: 14, fontFamily: fonts.body, background: "#fff", cursor: "pointer" }}
+                                        style={{ width: "100%", padding: "11px 12px", borderRadius: 10, border: `1.5px solid ${variantWahl[d.key] ? colors.border : colors.yellow}`, fontSize: 14, fontFamily: fonts.body, background: "#fff", cursor: "pointer" }}
                                       >
                                         <option value="">Bitte wählen…</option>
                                         {d.options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
@@ -1194,7 +1220,7 @@ export default function ListingDetail() {
                             {l.shipping_available && (
                               <div onClick={() => setBidShipping("shipping")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "10px 14px", borderRadius: 0, marginBottom: 6, cursor: "pointer",
+                                padding: "10px 14px", borderRadius: 10, marginBottom: 6, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`,
                                 background: bidShipping === "shipping" ? colors.yellowSoft : "transparent",
                               }}>
@@ -1216,7 +1242,7 @@ export default function ListingDetail() {
                             {l.pickup_only && (
                               <div onClick={() => setBidShipping("pickup")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "10px 14px", borderRadius: 0, cursor: "pointer",
+                                padding: "10px 14px", borderRadius: 10, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`,
                                 background: bidShipping === "pickup" ? colors.yellowSoft : "transparent",
                               }}>
@@ -1246,7 +1272,7 @@ export default function ListingDetail() {
                                   <span>{bidShipping === "pickup" ? "Abholung" : l.shipping_method === "brief" ? "Brief" : "Paket"}</span>
                                   <span>{shipCost === 0 ? "Gratis" : `CHF ${fmtPrice(shipCost)}`}</span>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: `1.5px solid ${colors.dark}` }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: "1px solid #E4E0D8" }}>
                                   <span>{bidModal === "bid" ? "Max. Total" : "Total"}</span>
                                   <span>CHF {fmtPrice(total)}</span>
                                 </div>
@@ -1269,7 +1295,7 @@ export default function ListingDetail() {
 
                           {/* Buttons */}
                           <div style={{ display: "flex", gap: 10 }}>
-                            <button onClick={() => setBidModal(null)} style={{ flex: 1, padding: "14px", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                            <button onClick={() => setBidModal(null)} style={{ flex: 1, padding: "14px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                             <button onClick={async () => {
                               setBidding(true); setBidError("");
                               try {
@@ -1331,7 +1357,7 @@ export default function ListingDetail() {
                               } catch (err) { setBidError(err.message); }
                               finally { setBidding(false); }
                             }} disabled={bidding || (bidModal === "bid" && !bidAmount)}
-                              style={{ flex: 1, padding: "14px", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
+                              style={{ flex: 1, padding: "14px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
                               {bidding ? "Wird verarbeitet..." : bidModal === "bid" ? "Gebot bestätigen" : "Kaufen"}
                             </button>
                           </div>
@@ -1418,8 +1444,8 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); setBookingError("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 0, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
-                        <CalendarDays size={18} /> MIETE ANFRAGEN
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
+                        <CalendarDays size={18} /> Miete anfragen
                       </button>
                       {bookingError && (
                         <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.redSoft, textAlign: "center" }}>
@@ -1474,8 +1500,8 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); toast.error("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 0, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
-                        <CalendarDays size={18} /> SERVICE ANFRAGEN
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
+                        <CalendarDays size={18} /> Service anfragen
                       </button>
                       {bookingSuccess && (
                         <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
@@ -1513,7 +1539,7 @@ export default function ListingDetail() {
               {/* Favorit */}
               <button onClick={handleFav} style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                padding: "13px", borderRadius: 0, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
+                padding: "13px", borderRadius: 10, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
                 background: isFav ? colors.yellowSoft : colors.surface, color: isFav ? colors.dark : colors.muted,
                 fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 10,
                 letterSpacing: ".03em",
@@ -1525,16 +1551,16 @@ export default function ListingDetail() {
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
-              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 0, padding: "16px 18px", marginBottom: 14 }}>
+              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 10, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100" }}>• {m}</p>)}
-                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 0, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 10, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}
 
             {/* ── BEE-IMPACT BOX ─────────────────────── */}
             {l.status === "active" && beeImpact > 0 && (
-              <div style={{ background: colors.greenSoft, borderRadius: 0, border: `1px solid ${INK}`, padding: "18px 22px", marginBottom: 14 }}>
+              <div style={{ background: colors.greenSoft, borderRadius: 10, border: "1px solid #E4E0D8", padding: "18px 22px", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <BeeIcon size={20} color={colors.green} />
                   <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
@@ -1546,7 +1572,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── LIEFERUNG SIDEBAR ──────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Lieferung</p>
               <p style={{ margin: 0, fontWeight: 600 }}>
                 {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}
@@ -1555,7 +1581,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── SELLER MINI-CARD ───────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 0, border: `1px solid ${INK}`, padding: "16px 22px", marginBottom: 14 }}>
+            <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
@@ -1567,7 +1593,7 @@ export default function ListingDetail() {
                 <AccountBadge accountType={l.seller?.account_type} />
                 <VerifiedSellerBadge profile={l.seller} size="sm" label={false} />
                 {sellerRating.count > 0 && (
-                  <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 0, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 10, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
                     {sellerRating.avg.toFixed(1)}
                   </span>
                 )}
@@ -1599,7 +1625,7 @@ export default function ListingDetail() {
                 return (
                   <>
                     <div onClick={() => setShowShare(false)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 0, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
+                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
                       {item(<MessageCircle size={16} color="#25D366" />, "WhatsApp", () => { window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank"); setShowShare(false); })}
                       {item(<Mail size={16} color={colors.muted} />, "E-Mail", () => { window.location.href = `mailto:?subject=${encodeURIComponent(l?.title || "BEEDARO")}&body=${encodeURIComponent(txt)}`; setShowShare(false); })}
                       {item(<Link2 size={16} color={colors.muted} />, shareCopied ? "Link kopiert!" : "Link kopieren", () => { navigator.clipboard.writeText(url); setShareCopied(true); setTimeout(() => setShareCopied(false), 1500); })}
@@ -1623,16 +1649,16 @@ export default function ListingDetail() {
               const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(url)}`;
               return (
                 <div onClick={() => setShowQr(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                  <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 0, padding: "24px 28px", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
+                  <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 10, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
                     <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 800, color: colors.dark }}>QR-Code</h3>
                     <p style={{ margin: "0 0 16px", fontSize: 12, color: colors.muted }}>Scannen führt direkt zu diesem Inserat.</p>
-                    <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 0 }} />
+                    <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 10 }} />
                     <p style={{ margin: "12px 0 0", fontSize: 13, fontWeight: 700, color: colors.dark, wordBreak: "break-word" }}>{l?.title}</p>
                     <div style={{ display: "flex", gap: 8, marginTop: 16 }} className="no-print">
-                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 0, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         <Printer size={15} /> Drucken
                       </button>
-                      <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 0, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         Schliessen
                       </button>
                     </div>
@@ -1644,11 +1670,11 @@ export default function ListingDetail() {
             {/* Report Modal */}
             {showReportModal && (              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
                 onClick={() => setShowReportModal(false)}>
-                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 0, padding: "24px 28px", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
+                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 10, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
                   <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 800 }}>Inserat melden</h3>
                   <p style={{ margin: "0 0 12px", fontSize: 12, color: colors.muted }}>Warum möchtest du dieses Inserat melden?</p>
                   <select value={reportReason} onChange={e => setReportReason(e.target.value)}
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, marginBottom: 10, outline: "none" }}>
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, marginBottom: 10, outline: "none" }}>
                     <option value="">Grund wählen...</option>
                     <option value="counterfeit">Gefälschtes Inserat</option>
                     <option value="inappropriate">Unangemessener Inhalt</option>
@@ -1657,10 +1683,10 @@ export default function ListingDetail() {
                     <option value="other">Sonstiges</option>
                   </select>
                   <textarea value={reportText} onChange={e => setReportText(e.target.value)} placeholder="Details (optional)..."
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 0, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, minHeight: 80, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, minHeight: 80, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
                   <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                     <button onClick={() => setShowReportModal(false)}
-                      style={{ flex: 1, padding: "10px", borderRadius: 0, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                      style={{ flex: 1, padding: "10px", borderRadius: 10, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                     <button onClick={async () => {
                       if (!reportReason) return;
                       const { error: reportError } = await supabase.from("reports").insert({ reporter_id: user.id, listing_id: l.id, reason: reportReason, description: reportText || null, report_type: "listing" });
@@ -1668,7 +1694,7 @@ export default function ListingDetail() {
                       setShowReportModal(false); setReportReason(""); setReportText("");
                       alert("Danke für deine Meldung. Wir prüfen das Inserat.");
                     }} disabled={!reportReason}
-                      style={{ flex: 1, padding: "10px", borderRadius: 0, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
+                      style={{ flex: 1, padding: "10px", borderRadius: 10, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
                   </div>
                 </div>
               </div>
@@ -1679,7 +1705,7 @@ export default function ListingDetail() {
         {/* ── ÄHNLICHE ARTIKEL ─────────────────────────── */}
         {similar.length > 0 && (
           <div style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: `1.5px solid ${INK}`, letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: "1px solid #E4E0D8", letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
               {similar.map((item) => (
                 <ListingCard key={item.id} listing={item} userId={user?.id} />
@@ -1702,10 +1728,10 @@ export default function ListingDetail() {
             <BeeIcon size={15} /> Dein Inserat
           </span>
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: `1.5px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: `2px 2px 0 ${INK}` }}>
+            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: "0 1px 4px rgba(25,22,21,.18)" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: `1px solid ${INK}`, color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -1715,7 +1741,7 @@ export default function ListingDetail() {
       {!isOwner && l.status === "active" && !buyBoxSichtbar && (
         <div className="mobile-cta-bar">
           <div style={{ minWidth: 0 }}>
-            <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>
+            <p style={{ margin: 0, fontSize: 10.5, fontWeight: 700, letterSpacing: ".07em", textTransform: "uppercase", color: colors.muted }}>
               {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : "Preis"}
             </p>
             <p style={{ margin: 0, fontSize: 18, fontWeight: 800, fontFamily: fonts.head, color: INK, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -1723,7 +1749,7 @@ export default function ListingDetail() {
             </p>
           </div>
           <button onClick={() => buyBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
-            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 0, border: `1.5px solid ${INK}`, background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: `3px 3px 0 ${INK}` }}>
+            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 10, border: "1px solid #E4E0D8", background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
             {l.listing_type === "auction" ? "Jetzt bieten" : l.listing_type === "sell" ? "Jetzt kaufen" : "Anfragen"}
           </button>
         </div>
@@ -1753,7 +1779,7 @@ export default function ListingDetail() {
           </div>
           {/* Main Image */}
           <img src={imgs[activeImg]?.url} alt={l.title} onClick={e => e.stopPropagation()}
-            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 0, cursor: "default" }} />
+            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 10, cursor: "default" }} />
           {/* Arrows */}
           {imgs.length > 1 && <>
             <button onClick={(e) => { e.stopPropagation(); setActiveImg(i => i > 0 ? i - 1 : imgs.length - 1); }}
@@ -1767,9 +1793,9 @@ export default function ListingDetail() {
           </>}
           {/* Thumbnails */}
           {imgs.length > 1 && (
-            <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8, padding: "8px 12px", background: "rgba(0,0,0,0.5)", borderRadius: 0 }} onClick={e => e.stopPropagation()}>
+            <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8, padding: "8px 12px", background: "rgba(0,0,0,0.5)", borderRadius: 10 }} onClick={e => e.stopPropagation()}>
               {imgs.map((img, i) => (
-                <div key={i} onClick={() => setActiveImg(i)} style={{ width: 52, height: 52, borderRadius: 0, overflow: "hidden", border: i === activeImg ? "2px solid #F4C03F" : "2px solid transparent", cursor: "pointer", opacity: i === activeImg ? 1 : 0.5, transition: "opacity .15s" }}>
+                <div key={i} onClick={() => setActiveImg(i)} style={{ width: 52, height: 52, borderRadius: 10, overflow: "hidden", border: i === activeImg ? "2px solid #F4C03F" : "2px solid transparent", cursor: "pointer", opacity: i === activeImg ? 1 : 0.5, transition: "opacity .15s" }}>
                   <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               ))}

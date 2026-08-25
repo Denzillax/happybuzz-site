@@ -16,7 +16,7 @@ const SWISS_POST_TARIFE = {
 
 const Toggle = ({ value, onChange }) => (
   <button onClick={onChange} style={{
-    width: 44, height: 24, borderRadius: 0, border: "none", cursor: "pointer",
+    width: 44, height: 24, borderRadius: 10, border: "none", cursor: "pointer",
     background: value ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
   }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: value ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
 );
@@ -90,7 +90,7 @@ export default function ShippingSection({ form, set, Err }) {
                 </div>
               </div>
               <button onClick={() => set("_shipModal", true)} style={{
-                padding: "6px 14px", borderRadius: 0, border: `1.5px solid ${colors.yellow}`, background: "transparent",
+                padding: "6px 14px", borderRadius: 10, border: `1.5px solid ${colors.yellow}`, background: "transparent",
                 color: colors.dark, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body,
               }}>Bearbeiten</button>
             </div>
@@ -162,7 +162,7 @@ function ShipModal({ form, set, tarife }) {
 
   return (
     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => set("_shipModal", false)}>
-      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 0, width: 480, maxHeight: "80vh", overflow: "auto", padding: 24 }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 10, width: 480, maxHeight: "80vh", overflow: "auto", padding: 24 }}>
         <h3 style={{ fontSize: 16, fontWeight: 800, margin: "0 0 16px" }}>Versandoptionen</h3>
 
         <label style={{ ...labelBase, marginBottom: 8 }}>Versandart</label>
@@ -175,7 +175,7 @@ function ShipModal({ form, set, tarife }) {
               const cost = tarife[m.id]?.[m.id === "paket" ? "2kg" : m.id === "brief" ? "100g" : "default"] ?? 9.0;
               set("shipping_cost", form.ship_speed === "priority" ? cost + 3 : cost);
             }} style={{
-              padding: "10px 14px", borderRadius: 0, border: `1.5px solid ${form.shipping_method === m.id ? colors.yellow : colors.border}`,
+              padding: "10px 14px", borderRadius: 10, border: `1.5px solid ${form.shipping_method === m.id ? colors.yellow : colors.border}`,
               background: form.shipping_method === m.id ? `${colors.yellow}15` : "transparent",
               cursor: "pointer", textAlign: "left", fontFamily: fonts.body,
             }}>
@@ -195,7 +195,7 @@ function ShipModal({ form, set, tarife }) {
                   const base = tarife[form.shipping_method]?.[w] ?? 9.0;
                   set("shipping_cost", form.ship_speed === "priority" ? base + 3 : base);
                 }} style={{
-                  padding: "8px 16px", borderRadius: 0, border: `1.5px solid ${form.ship_weight === w ? colors.yellow : colors.border}`,
+                  padding: "8px 16px", borderRadius: 10, border: `1.5px solid ${form.ship_weight === w ? colors.yellow : colors.border}`,
                   background: form.ship_weight === w ? `${colors.yellow}15` : "transparent",
                   fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body,
                 }}>{w}</button>
@@ -212,14 +212,14 @@ function ShipModal({ form, set, tarife }) {
               const base = tarife[form.shipping_method]?.[form.ship_weight || "2kg"] ?? tarife[form.shipping_method]?.default ?? 9.0;
               set("shipping_cost", s === "priority" ? base + 3 : base);
             }} style={{
-              padding: "8px 16px", borderRadius: 0, border: `1.5px solid ${form.ship_speed === s ? colors.yellow : colors.border}`,
+              padding: "8px 16px", borderRadius: 10, border: `1.5px solid ${form.ship_speed === s ? colors.yellow : colors.border}`,
               background: form.ship_speed === s ? `${colors.yellow}15` : "transparent",
               fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body,
             }}>{s === "priority" ? "Priority (1 Tag)" : "Economy (2-3 Tage)"}</button>
           ))}
         </div>
 
-        <div style={{ padding: "12px 16px", background: colors.cream, borderRadius: 0, marginBottom: 16 }}>
+        <div style={{ padding: "12px 16px", background: colors.cream, borderRadius: 10, marginBottom: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, fontWeight: 700 }}>
             <span>Versandkosten</span>
             <span>CHF {calcCost().toFixed(2)}</span>
@@ -230,7 +230,7 @@ function ShipModal({ form, set, tarife }) {
           set("shipping_cost", calcCost());
           set("_shipModal", false);
         }} style={{
-          width: "100%", padding: 14, borderRadius: 0, border: "none",
+          width: "100%", padding: 14, borderRadius: 10, border: "none",
           background: colors.yellow, color: colors.dark, fontSize: 14, fontWeight: 800,
           cursor: "pointer", fontFamily: fonts.body,
         }}>Übernehmen</button>

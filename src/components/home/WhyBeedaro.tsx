@@ -28,12 +28,12 @@ const usps = [
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#14110D', tint: '#F9F4EC', href: '/about',
+    accent: '#14110D', tint: '#F4F4F2', href: '/about',
   },
 ]
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
-const MONO = "'Space Mono', ui-monospace, monospace"
+const MONO = "'Manrope', sans-serif"
 const INK = '#14110D'
 const PETROL = '#0B5E5C'
 
@@ -60,7 +60,7 @@ export function UspGrid() {
               key={i}
               href={usp.href}
               style={{
-                background: '#fff', borderRadius: 0, border: `1px solid ${INK}`,
+                background: '#fff', borderRadius: 10, border: "1px solid #E4E0D8",
                 padding: '28px 22px', transition: 'all 0.18s ease',
                 textDecoration: 'none', color: 'inherit', display: 'block',
               }}
@@ -72,14 +72,14 @@ export function UspGrid() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement
-                el.style.borderColor = INK
+                el.style.borderColor = '#E4E0D8'
                 el.style.transform = 'none'
                 el.style.boxShadow = 'none'
               }}
             >
               {/* Icon-Tafel */}
               <div style={{
-                width: 52, height: 52, borderRadius: 0, background: usp.tint, border: `1px solid ${INK}`,
+                width: 52, height: 52, borderRadius: 10, background: usp.tint, border: "1px solid #E4E0D8",
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: usp.accent, marginBottom: 18,
               }}>
@@ -105,11 +105,11 @@ export function UspGrid() {
 
       {/* Beta-Hinweis: Gruendungsmitglied statt generischem CTA */}
       <div style={{
-        marginTop: 26, border: `1.5px solid ${INK}`, background: '#FBF1D2',
+        marginTop: 26, border: "1px solid #E4E0D8", background: '#FBF1D2',
         padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 12, flexWrap: 'wrap', textAlign: 'center',
       }}>
-        <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', background: INK, color: '#FBF8F2', padding: '3px 8px' }}>Beta</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', background: INK, color: '#FFFFFF', padding: '3px 8px' }}>Beta</span>
         <span style={{ fontFamily: HEAD, fontSize: 14.5, fontWeight: 600, color: INK }}>
           Wer jetzt dabei ist, ist Gründungsmitglied. Das bleibt.
         </span>

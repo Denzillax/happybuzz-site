@@ -94,6 +94,11 @@ export function isFeeFree(price) {
   return (parseFloat(price) || 0) < FEE_FREE_BELOW;
 }
 
+// Gebuehren-Deckel: mehr als CHF 200 kostet kein Verkauf (Ricardo: 290).
+// ACHTUNG: Muss mit least(..., 200) im DB-Trigger create_fee_ledger_entry
+// und den create_purchase-Funktionen uebereinstimmen (Migration 20260825).
+export const FEE_CAP = 200;
+
 // Mindest-Rechnungsbetrag: eine FEE-Monatsrechnung wird erst gestellt, wenn
 // der offene Saldo (inkl. Uebertraege aus Vormonaten) diesen Betrag erreicht.
 // Darunter rollt der Saldo in den Folgemonat. Schuetzt vor Mini-Rechnungen,

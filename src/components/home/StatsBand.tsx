@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { getCommunityImpactStats } from '@/lib/listings'
 
-const MONO = "'Space Mono', ui-monospace, monospace"
+const MONO = "'Manrope', sans-serif"
 const INK = '#14110D'
 
 // Der Katalog in Zahlen: lebende Kennzahlen direkt unter dem Hero.
@@ -30,14 +30,14 @@ export function StatsBand() {
   if (!stats) return null
 
   const teile = [
-    `${stats.exponate.toLocaleString('de-CH')} Exponate`,
+    `${stats.exponate.toLocaleString('de-CH')} Inserate`,
     `${stats.mitglieder.toLocaleString('de-CH')} Mitglieder`,
     `CHF ${stats.impact.toLocaleString('de-CH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bee-Impact`,
   ]
 
   return (
     <div style={{
-      borderTop: `1.5px solid ${INK}`, borderBottom: `1.5px solid ${INK}`,
+      borderTop: "1px solid #E4E0D8", borderBottom: "1px solid #E4E0D8",
       background: '#fff', padding: '11px 16px',
       display: 'flex', justifyContent: 'center', alignItems: 'center',
       gap: 'clamp(14px, 4vw, 44px)', flexWrap: 'wrap',

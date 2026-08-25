@@ -12,7 +12,7 @@ export function AccountBadge({ accountType, size = "sm" }) {
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", gap: s.gap,
-      padding: s.pad, borderRadius: 0,
+      padding: s.pad, borderRadius: 10,
       background: colors.greenSoft, color: colors.tealDark,
       fontFamily: fonts.body, fontSize: s.font, fontWeight: 700,
       lineHeight: 1, whiteSpace: "nowrap",
