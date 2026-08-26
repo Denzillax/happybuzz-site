@@ -12,7 +12,7 @@ const BODY = "'Manrope', system-ui, sans-serif";
 
 export default function ImprintPage() {
   const L = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 6 };
-  const V = { fontSize: 14, color: INK, lineHeight: 1.65, marginBottom: 20 };
+  const V = { fontSize: 14, color: INK, lineHeight: 1.65, marginBottom: 20, overflowWrap: "anywhere" };
   return (
     <div style={{ fontFamily: BODY, background: PAPER, minHeight: "100vh", color: INK }}>
       <div style={{
@@ -27,8 +27,8 @@ export default function ImprintPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", padding: "30px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 40px" }}>
+        <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(18px, 4vw, 30px)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "8px 40px" }}>
             <div>
               <p style={L}>Betreiber</p>
               <p style={V}>MOQRO by Denis Mihaljevic<br />Einzelfirma<br />BEEDARO ist eine Marke von MOQRO.</p>
