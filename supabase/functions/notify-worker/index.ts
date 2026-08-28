@@ -21,17 +21,24 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// Gleiches Erscheinungsbild wie die Auth-Mails: Logo, Kicker, Titel, Knopf.
+// Klar-Look wie die Website: heller Grund, weisse Karte mit Hairline,
+// runde Honey-Buttons. Optional zeigt context.image (+ context.item_title)
+// eine kleine Artikel-Karte ueber dem Text.
 function renderEmail(row: { subject: string; template: string; context: Record<string, unknown> | null }): string {
   const ctx = row.context ?? {};
   const isReminder = row.template?.startsWith("reminder");
   const kicker = isReminder ? "Zahlungserinnerung" : "Benachrichtigung";
   const bodyText = String((isReminder ? ctx.body : ctx.message) ?? "");
   const link = absoluteLink(String(ctx.link ?? "") || (isReminder ? "/fees" : null));
+  const image = typeof ctx.image === "string" && ctx.image.startsWith("http") ? ctx.image : null;
+  const itemTitle = typeof ctx.item_title === "string" ? ctx.item_title : null;
   const button = link
-    ? `<table cellpadding="0" cellspacing="0"><tr><td style="background:#F4C03F;border:1.5px solid #14110D;"><a href="${link}" style="display:inline-block;padding:13px 28px;font-size:14px;font-weight:700;color:#14110D;text-decoration:none;">Auf Beedaro ansehen</a></td></tr></table>`
+    ? `<table cellpadding="0" cellspacing="0"><tr><td style="background:#F4C03F;border-radius:999px;"><a href="${link}" style="display:inline-block;padding:12px 26px;font-size:14px;font-weight:700;color:#191615;text-decoration:none;border-radius:999px;">Auf Beedaro ansehen</a></td></tr></table>`
     : "";
-  return `<table width="100%" cellpadding="0" cellspacing="0" style="background:#ECE3D2;padding:32px 16px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#FBF8F2;border:1px solid #14110D;"><tr><td style="padding:32px 36px 28px;"><img src="${SITE}/logo-email.png" alt="Beedaro" width="150" style="display:block;width:150px;height:auto;margin:0 0 10px;"><p style="margin:0 0 22px;font-family:Consolas,Menlo,monospace;font-size:11px;letter-spacing:2px;color:#0B5E5C;text-transform:uppercase;">${kicker}</p><h1 style="margin:0 0 12px;font-size:21px;font-weight:700;color:#14110D;">${escapeHtml(row.subject)}</h1><p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#3d3a36;white-space:pre-line;">${escapeHtml(bodyText)}</p>${button}<p style="margin:24px 0 0;font-size:12px;line-height:1.6;color:#8a8580;">Welche Mails du bekommst, steuerst du unter Einstellungen &gt; Benachrichtigungen.</p></td></tr><tr><td style="border-top:1px solid #14110D;padding:14px 36px;background:#FBF8F2;"><p style="margin:0;font-family:Consolas,Menlo,monospace;font-size:10px;letter-spacing:1.5px;color:#8a8580;text-transform:uppercase;">Kaufen. Verkaufen. Gutes tun. &nbsp;&middot;&nbsp; beedaro.ch</p></td></tr></table></td></tr></table>`;
+  const itemCard = image
+    ? `<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;"><tr><td style="background:#F4F4F2;border-radius:12px;padding:10px;"><table cellpadding="0" cellspacing="0"><tr><td style="width:72px;"><img src="${image}" alt="" width="64" height="64" style="display:block;width:64px;height:64px;border-radius:8px;object-fit:cover;"></td><td style="vertical-align:middle;padding-left:4px;"><p style="margin:0;font-size:14px;font-weight:700;color:#191615;line-height:1.4;">${escapeHtml(itemTitle ?? "")}</p></td></tr></table></td></tr></table>`
+    : "";
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="background:#F4F4F2;padding:32px 16px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#FFFFFF;border:1px solid #E4E0D8;border-radius:14px;"><tr><td style="padding:32px 36px 28px;"><img src="${SITE}/logo-email.png" alt="Beedaro" width="140" style="display:block;width:140px;height:auto;margin:0 0 14px;"><p style="margin:0 0 18px;font-size:12px;font-weight:700;letter-spacing:.5px;color:#8a8580;text-transform:uppercase;">${kicker}</p><h1 style="margin:0 0 12px;font-size:21px;font-weight:700;color:#191615;">${escapeHtml(row.subject)}</h1>${itemCard}<p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:#3d3a36;white-space:pre-line;">${escapeHtml(bodyText)}</p>${button}<p style="margin:24px 0 0;font-size:12px;line-height:1.6;color:#8a8580;">Welche Mails du bekommst, steuerst du unter Einstellungen &gt; Benachrichtigungen.</p></td></tr><tr><td style="border-top:1px solid #E4E0D8;padding:14px 36px;"><p style="margin:0;font-size:11px;color:#8a8580;">Kaufen. Verkaufen. Gutes tun. &nbsp;&middot;&nbsp; beedaro.ch</p></td></tr></table></td></tr></table>`;
 }
 
 Deno.serve(async (req: Request) => {
