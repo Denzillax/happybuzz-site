@@ -27,7 +27,7 @@ function slugify(text) {
 
 // ─── Profile Completeness Check ──────────────────────────────
 // Returns { complete: boolean, missing: string[], redirect: string }
-export async function checkProfileComplete(userId, action = "sell") {
+export async function checkProfileComplete(userId, action = "sell", opts = {}) {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
   if (!profile) return { complete: false, missing: ["Profil nicht gefunden"], redirect: "/settings" };
 
@@ -36,9 +36,12 @@ export async function checkProfileComplete(userId, action = "sell") {
   // Immer nötig
   if (!profile.display_name) missing.push("Benutzername");
 
-  // Verkaufen oder Vermieten → IBAN nötig
-  if ((action === "sell" || action === "rent_out") && !profile.iban) {
-    missing.push("IBAN (für Zahlungsempfang)");
+  // Verkaufen oder Vermieten → IBAN nötig, ABER nur wenn Banküberweisung
+  // als Zahlart gewählt ist (Beta-Feedback Michael, 30.08.: bei nur
+  // Bar/TWINT gibt es nichts auf ein Konto zu überweisen).
+  const brauchtIban = opts.needsIban !== false;
+  if ((action === "sell" || action === "rent_out") && brauchtIban && !profile.iban) {
+    missing.push("IBAN (für Zahlungsempfang per Banküberweisung)");
   }
 
   // Kaufen oder Mieten → Adresse nötig

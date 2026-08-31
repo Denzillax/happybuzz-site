@@ -250,6 +250,11 @@ export function Header() {
               )}
             </div>
 
+            {/* Inserieren direkt im Header (Beta-Feedback Michael, 30.08.) */}
+            <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: YELLOW, color: DARK, fontWeight: 700, fontSize: 13.5, padding: '9px 16px', borderRadius: 999, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+              <Plus size={16} strokeWidth={2.4} /> Inserieren
+            </Link>
+
             {/* ── Action Icons ── */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
               {/* Favorites */}

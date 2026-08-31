@@ -78,7 +78,7 @@ function NewListingPageInner() {
     if (!user) throw new Error("Nicht eingeloggt");
     if (formData.publish) {
       const action = (formData.listing_type === "rent" || formData.listing_type === "service") ? "rent_out" : "sell";
-      const check = await checkProfileComplete(user.id, action);
+      const check = await checkProfileComplete(user.id, action, { needsIban: !!formData.pay_bank });
       if (!check.complete) {
         setProfileWarning(check.missing);
         throw new Error("Profil unvollständig");

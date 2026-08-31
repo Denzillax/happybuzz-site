@@ -219,6 +219,48 @@ export default function ListingForm({
   const [aiNotiz, setAiNotiz] = useState(""); // optionaler Verkaeufer-Hinweis fuer die KI (Material, Marke etc.)
   const [dragOver, setDragOver] = useState(false);
   const [dragIdx, setDragIdx] = useState(null);
+  const [draftRestored, setDraftRestored] = useState(false);
+
+  // ── Entwurf-Autosave (Beta-Feedback Michael, 30.08.): beim Neuanlegen
+  // sichern wir die Eingaben in localStorage, damit ein Reload (z.B. Umweg
+  // ueber die Profil-Einstellungen) nicht das ganze Inserat loescht.
+  // Fotos koennen nicht mitgesichert werden (Dateiobjekte), alles andere schon.
+  const DRAFT_KEY = "beedaro_inserat_entwurf_v1";
+  useEffect(() => {
+    if (isEdit || initialData) return;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (!d?.form || Date.now() - (d.savedAt || 0) > 24 * 3600 * 1000) return;
+      if (!(d.form.title || d.form.description || d.form.price)) return;
+      setForm((p) => ({ ...p, ...d.form }));
+      if (d.attrValues) setAttrValues(d.attrValues);
+      if (d.quantity) setQuantity(String(d.quantity));
+      if (d.variantOpts) setVariantOpts(d.variantOpts);
+      if (typeof d.isFree === "boolean") setIsFree(d.isFree);
+      setDraftRestored(true);
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    if (isEdit || initialData) return;
+    if (!(form.title || form.description || form.price)) return;
+    const t = setTimeout(() => {
+      try {
+        const { _shipModal, _shipStep, ...rest } = form;
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({
+          form: rest, attrValues, quantity, variantOpts, isFree, savedAt: Date.now(),
+        }));
+      } catch {}
+    }, 800);
+    return () => clearTimeout(t);
+  }, [form, attrValues, quantity, variantOpts, isFree, isEdit, initialData]);
+  const verwerfeDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); } catch {}
+    setDraftRestored(false);
+    window.location.reload();
+  };
 
   // ── Init from existing data ────────────────────────────────
   useEffect(() => {
@@ -415,8 +457,39 @@ export default function ListingForm({
   };
 
   // ── Image handling ─────────────────────────────────────────
-  const addFiles = useCallback((fileList) => {
-    const all = Array.from(fileList);
+  // Zu grosse Fotos automatisch verkleinern statt abzulehnen (Beta-Feedback
+  // Tacocat, 30.08.): Handy-Fotos liegen oft ueber 5 MB. Wir skalieren auf
+  // max. 2000px Kante und JPEG 85% - das bleibt fuer Inserate mehr als scharf.
+  const komprimiere = (file) => new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const maxSeite = 2000;
+      const skala = Math.min(1, maxSeite / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * skala);
+      canvas.height = Math.round(img.height * skala);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => {
+        if (blob && blob.size < file.size) {
+          resolve(new File([blob], file.name.replace(/.[^.]+$/, "") + ".jpg", { type: "image/jpeg" }));
+        } else {
+          resolve(file);
+        }
+      }, "image/jpeg", 0.85);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+
+  const addFiles = useCallback(async (fileList) => {
+    let all = Array.from(fileList);
+    // GIFs nicht anfassen (Animation), alles andere bei Bedarf verkleinern
+    all = await Promise.all(all.map((f) =>
+      f.type.startsWith("image/") && f.type !== "image/gif" && f.size > MAX_IMG_BYTES
+        ? komprimiere(f) : Promise.resolve(f)
+    ));
     const rejected = all.filter((f) => !f.type.startsWith("image/") || f.size > MAX_IMG_BYTES);
     if (rejected.length > 0) {
       setErrors((prev) => ({
@@ -642,6 +715,7 @@ export default function ListingForm({
         quantity: istNeuware ? Math.max(1, parseInt(quantity, 10) || 1) : 1,
         variant_options: Object.keys(bereinigteVarianten).length > 0 ? bereinigteVarianten : null,
       });
+      try { localStorage.removeItem(DRAFT_KEY); } catch {}
     } catch (err) {
       console.error("Save error:", err);
       setErrors({ submit: err.message });
@@ -850,6 +924,14 @@ export default function ListingForm({
           if (price != null && price > 0) set("price", String(price));
           if (files?.length) addFiles(files);
         }} />
+      )}
+
+      {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
+      {draftRestored && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 10, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#0A7170", fontFamily: fonts.body }}>
+          <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
+          <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#0A7170", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
+        </div>
       )}
 
       {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}

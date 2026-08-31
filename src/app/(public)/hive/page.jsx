@@ -221,6 +221,15 @@ export default function HivePage() {
             )}
           </div>
 
+          {/* So haengt alles zusammen - kompakt erklaert
+              (Beta-Feedback Tacocat + Michael, 30.08.: Reihenfolge unklar) */}
+          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F4F4F2", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
+            <b style={{ color: colors.dark }}>So funktioniert dein Hive:</b><br />
+            <b style={{ color: colors.dark }}>Pollen</b> sammelst du durch Aktivität (Inserate, Käufe, Logins, Challenges). Sie bestimmen dein Level.<br />
+            <b style={{ color: colors.dark }}>Blüten</b> entstehen aus dem Bee-Impact deiner Verkäufe und wandeln sich automatisch um: 100 Blüten = 1 Pollen. Ohne Verkäufe hast du also Pollen, aber noch keine Blüten - das ist normal.<br />
+            <b style={{ color: colors.dark }}>Nektar</b> ist deine Belohnungswährung: verdienst du über Challenges und löst ihn unten im Katalog ein.
+          </div>
+
           {/* Blüten-Balance + Umwandlung in Pollen */}
           <div style={{
             marginTop: 16, padding: "12px 14px", borderRadius: 10,

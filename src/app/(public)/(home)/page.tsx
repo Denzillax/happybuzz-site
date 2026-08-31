@@ -17,9 +17,10 @@ import { HowItWorks } from '@/components/home/HowItWorks'
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      {/* Grosse Laufschrift, wenn Platzierung "Startseite" gewaehlt ist */}
+      {/* Laufschrift direkt unter dem Header: laeuft Rand zu Rand und
+          trennt so keine Inhalts-Kacheln (Beta-Feedback Tacocat, 30.08.) */}
       <Ticker placement="home" />
+      <Hero />
       <Categories />
       {/* Fuenf Formate als Direkteinstieg (Miete/Service/Gratis = USP) */}
       <FormatTiles />

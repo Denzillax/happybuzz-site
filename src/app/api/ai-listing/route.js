@@ -69,7 +69,14 @@ Kein Markdown, keine Attribute in den Tags, keine anderen Tags.
 Eiserne Regel: Erwähne NUR, was auf den Fotos tatsächlich zu sehen ist.
 Kein Zubehör, keine Kabel, keine Spiele/Module, keine Originalverpackung und keine
 Funktionsfähigkeit behaupten, wenn die Bilder sie nicht eindeutig zeigen. Lieber weglassen als raten.
+Erfinde insbesondere kein Zubehör, das ein Modell "üblicherweise hat" (Fernbedienung,
+Ladegerät, Anleitung): es zählt nur, was im Bild liegt.
 Zähle den Lieferumfang exakt so, wie er auf den Fotos liegt (z.B. wie viele Controller sichtbar sind); dasselbe Teil auf mehreren Fotos nur einmal zählen.
+Die Strenge gilt in beide Richtungen: Erfinde auch keine Mängel. Sind keine Kratzer,
+Flecken oder Abnutzung erkennbar, ist like_new die richtige Wahl - streng heisst genau
+hinsehen, nicht pauschal abwerten.
+Ist der Artikel auf einem Foto sichtbar in Betrieb (eingeschaltet, dreht, leuchtet),
+erwähne das in der Beschreibung als sichtbaren Funktionsbeleg.
 
 Zustand streng nach sichtbaren Mängeln bewerten, nicht wohlwollend:
 - new: originalverpackt/unbenutzt, like_new: praktisch makellos.

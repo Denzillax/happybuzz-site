@@ -1,5 +1,6 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
+import { getMyRole } from "@/lib/staff";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -22,7 +23,7 @@ import {
   incrementViewCount, logListingView, createPurchase, getUserAvgRating, getSimilarListings,
   getOrCreateConversation, placeBid, getBids, getBidHistory, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
   getListingQuestions, askPublicQuestion, replyToQuestion, sendMessage,
-  checkProfileComplete,
+  checkProfileComplete, reviewListing,
 } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
@@ -304,6 +305,28 @@ export default function ListingDetail() {
     return () => io.disconnect();
   }, [loading, l?.id]);
 
+  // Mitarbeiter duerfen wartende Inserate direkt hier freigeben
+  // (Beta-Feedback Melani, 30.08.)
+  const [istStaff, setIstStaff] = useState(false);
+  const [reviewBusy, setReviewBusy] = useState(false);
+  useEffect(() => {
+    if (!user) { setIstStaff(false); return; }
+    if (user.id === "48fbdb7f-68a2-4d7d-9bbd-5fe31c7a92c0") { setIstStaff(true); return; }
+    let active = true;
+    getMyRole(user.id).then(r => { if (active) setIstStaff(!!r); }).catch(() => {});
+    return () => { active = false; };
+  }, [user?.id]);
+  const gebeFrei = async () => {
+    setReviewBusy(true);
+    try {
+      await reviewListing(l.id, "approve");
+      window.location.reload();
+    } catch (e) {
+      toast.error(e.message || "Freigabe fehlgeschlagen");
+      setReviewBusy(false);
+    }
+  };
+
   if (loading) return <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
   if (!l) return <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p style={{ color: colors.muted }}>Inserat nicht gefunden</p></div>;
 
@@ -490,6 +513,17 @@ export default function ListingDetail() {
             </span>
           ))}
         </div>
+
+        {/* ── FREIGABE-LEISTE fuer Mitarbeiter bei wartenden Inseraten ── */}
+        {istStaff && l.status === "pending_review" && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFF3E0", borderRadius: 12 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#8a5a00", marginRight: "auto" }}>Wartet auf Freigabe</span>
+            <button onClick={gebeFrei} disabled={reviewBusy} style={{ padding: "8px 18px", borderRadius: 999, border: "none", background: colors.yellow, color: INK, fontSize: 13, fontWeight: 800, fontFamily: fonts.body, cursor: reviewBusy ? "default" : "pointer" }}>
+              {reviewBusy ? "Einen Moment…" : "Freigeben"}
+            </button>
+            <Link href="/admin" style={{ fontSize: 12.5, fontWeight: 700, color: "#8a5a00", textDecoration: "underline", textUnderlineOffset: 3 }}>Im Admin prüfen</Link>
+          </div>
+        )}
 
         {/* ── EIGENTÜMER-LEISTE (Desktop oben; mobil klebt sie unten
                ueber der Bottom-Nav, siehe .mobile-cta-bar weiter unten) ── */}
@@ -679,10 +713,13 @@ export default function ListingDetail() {
             <div style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
               <div className="lief-grid" style={{ display: "grid", gridTemplateColumns: "minmax(84px, 110px) minmax(0, 1fr)", gap: "12px 14px", fontSize: 13 }}>
-                <span style={{ color: colors.muted }}>Lieferung</span>
-                <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Truck size={14} color={colors.muted} /> {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}</span>
+                {/* Lieferung nur zeigen, wenn Versand wirklich aktiviert ist:
+                    shipping_method hat einen DB-Default und steht auch bei
+                    Nur-Abholung auf "paket" (Beta-Feedback Michael, 30.08.) */}
                 {l.shipping_available && (
                   <>
+                    <span style={{ color: colors.muted }}>Lieferung</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Truck size={14} color={colors.muted} /> {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}</span>
                     <span style={{ color: colors.muted }}>Versandbereit</span>
                     <span style={{ display: "flex", alignItems: "center", gap: 6 }}><Clock size={14} color={colors.muted} /> innert {handlingLabel(l.handling_days)}</span>
                   </>
