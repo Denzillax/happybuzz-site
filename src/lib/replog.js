@@ -23,6 +23,40 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "31. August 2026",
+    punkte: [
+      { typ: "fix", bereich: "Inserat", text: "Nur-Abholung-Inserate zeigten trotzdem eine Lieferzeile mit Versandart, die Zeile erscheint jetzt nur noch, wenn Versand wirklich aktiviert ist", melder: "Michael" },
+      { typ: "fix", bereich: "Inserieren", text: "Die IBAN wird beim Veröffentlichen nur noch verlangt, wenn Banküberweisung als Zahlart gewählt ist. Bei Bar oder TWINT gibt es nichts zu überweisen", melder: "Michael" },
+      { typ: "neu", bereich: "Inserieren", text: "Angefangene Inserate überleben jetzt einen Neuladen der Seite: die Eingaben werden automatisch als Entwurf gesichert und beim nächsten Besuch wiederhergestellt (Fotos bitte neu anhängen)", melder: "Michael" },
+      { typ: "neu", bereich: "Inserieren", text: "Zu grosse Fotos werden beim Hochladen automatisch verkleinert statt mit einer 5-MB-Meldung abgelehnt. Handy-Fotos einfach direkt hochladen", melder: "Tacocat" },
+      { typ: "fix", bereich: "Startseite", text: "Die Laufschrift läuft jetzt ganz oben direkt unter dem Header von Rand zu Rand, statt mitten auf der Seite die Kacheln zu trennen", melder: "Tacocat" },
+      { typ: "neu", bereich: "Design", text: "Inserieren-Knopf als gelbe Pille direkt im Header neben der Suche, ein Klick zum Formular", melder: "Michael" },
+      { typ: "neu", bereich: "Hive", text: "Neue Erklärbox im Hive: Pollen kommen aus Aktivität und bestimmen dein Level, Blüten entstehen aus dem Bee-Impact deiner Verkäufe (100 Blüten = 1 Pollen), Nektar ist die Belohnungswährung. Pollen ohne Blüten sind also völlig normal", melder: "Tacocat" },
+      { typ: "fix", bereich: "KI", text: "Die KI-Inseraterkennung erfindet kein Zubehör mehr, das ein Modell 'üblicherweise hat' (z.B. Fernbedienung), erfindet umgekehrt auch keine Gebrauchsspuren bei makellosen Artikeln und erwähnt, wenn ein Gerät sichtbar in Betrieb ist", melder: "Melani" },
+      { typ: "neu", bereich: "Admin", text: "Mitarbeiter mit Rolle bekommen jetzt Freigabe-Anfragen und Admin-Alarme per Glocke, Mail und Push, und können wartende Inserate direkt auf der Inserat-Seite freigeben", melder: "Melani" },
+    ],
+  },
+  {
+    datum: "28. August 2026",
+    punkte: [
+      { typ: "neu", bereich: "Mails", text: "Alle Beedaro-Mails im neuen hellen Design: weisse Karte, runder gelber Knopf, und bei Mails zu einem Inserat ist jetzt automatisch Foto und Titel des Artikels als kleine Karte dabei" },
+      { typ: "neu", bereich: "Auktionen", text: "Das Auktionsende meldet sich jetzt per Mail und Push: der Gewinner ('Auktion gewonnen, jetzt bezahlen'), der Verkäufer ('Verkauft für CHF X'), und endet eine Auktion ohne Gebote, erfährt es der Verkäufer ebenfalls. Vorher gab es nur die Glocke auf der Seite" },
+      { typ: "fix", bereich: "Mails", text: "Umlaute in Mails repariert: die Mail-Vorlage deklariert jetzt die Zeichenkodierung, und mehrere Mail-Texte, die aus Vorsicht 'ae/oe/ue' schrieben, verwenden wieder echte Umlaute", melder: "Denis" },
+    ],
+  },
+  {
+    datum: "24. / 25. August 2026",
+    punkte: [
+      { typ: "neu", bereich: "Design", text: "Grosser Neuanstrich: Beedaro ist jetzt hell, flach und aufgeräumt. Weisse Flächen, weiche Ecken, runde gelbe Knöpfe, neue Suchleiste als runde Pille, dichteres Inserat-Raster mit feinen Trennlinien und farbigen Typ-Chips (Festpreis gelb, Auktion blau, Miete violett, Gratis grün, Service orange)" },
+      { typ: "neu", bereich: "Gebühren", text: "Gebühren-Deckel: kein Verkauf kostet mehr als CHF 200, egal wie teuer der Artikel (Ricardo: 290). Unter CHF 20 bleibt es gebührenfrei", melder: "Denis" },
+      { typ: "neu", bereich: "Inserate", text: "Karten zeigen jetzt 'Endet bald' (unter 24h Restzeit) und 'Hot' (viele Aufrufe pro Tag) direkt auf dem Foto" },
+      { typ: "fix", bereich: "Inserat", text: "Nachträglich ergänzte Informationen (z.B. aus Ricardo-Importen) erscheinen als eigener, datierter Block statt angeklebt am Beschreibungstext", melder: "Denis" },
+      { typ: "fix", bereich: "Handy", text: "Responsive-Runde übers ganze Sortiment: kein seitliches Wackeln mehr (der Kopfbereich war 18px zu breit), Preise und Datumszeilen brechen sauber um, Kaufknöpfe bleiben einzeilig, 'Lieferung & Bezahlung' stapelt auf schmalen Bildschirmen", melder: "Denis" },
+      { typ: "fix", bereich: "Login", text: "Login und Registrierung im neuen Design, mit kleinerem Logo auf dem Handy und sauberen Umbrüchen", melder: "Denis" },
+      { typ: "fix", bereich: "Einstellungen", text: "Die Profil-Vorschau in den Einstellungen zeigte drei Nullen (veraltete Kopie ohne echte Daten). Der Knopf führt jetzt direkt aufs echte öffentliche Profil", melder: "Denis" },
+    ],
+  },
+  {
     datum: "21. August 2026",
     punkte: [
       { typ: "fix", bereich: "Kaufen", text: "Sofortkauf war seit dem Varianten-Update blockiert (Datenbank-Funktionskonflikt: alte und neue Kauf-Funktion existierten parallel, die Datenbank konnte sich nicht entscheiden). Alte Versionen entfernt, alle Kauf-Wege wieder verifiziert", melder: "Denis" },
@@ -39,7 +73,7 @@ export const REP_LOG = [
       { typ: "fix", bereich: "Kaufen", text: "Sofortkauf und Gebote sind ohne hinterlegte Lieferadresse nicht mehr möglich (vorher konnte man ohne Adresse kaufen)", melder: "Armend" },
       { typ: "neu", bereich: "Bestellung", text: "Die QR-Rechnung ist jetzt bei jedem Kauf für beide Seiten sichtbar, auch für den Verkäufer" },
       { typ: "fix", bereich: "Design", text: "Kategorien-Menü: aktive Einträge jetzt hellbeige mit gelbem Akzent statt dunkelbeige mit grünem" },
-      { typ: "fix", bereich: "App", text: "Installierte App blieb auf einer alten Version hängen, neue Versionen übernehmen jetzt sofort (App einmal komplett schliessen und neu öffnen)", melder: "AHA" },
+      { typ: "fix", bereich: "App", text: "Installierte App blieb auf einer alten Version hängen, neue Versionen übernehmen jetzt sofort (App einmal komplett schliessen und neu öffnen)", melder: "Armend" },
       { typ: "neu", bereich: "Admin", text: "Neuer Tab Kommunikation: Banner, Rundruf und Versand-Historie an einem Ort" },
       { typ: "fix", bereich: "Rechnung", text: "Rechnung schreibt jetzt alles aus: Versandart (z.B. 'Versand: Paket B-Post'), bei Mieten die Mietdauer und die Kaution als eigene Position, Beträge auf Bestellseite, Rechnung und QR-Zahlteil überall gleich" },
       { typ: "fix", bereich: "Inserieren", text: "Bei 'nur Abholung' verlangte das System eine Zahlungsart, die man nirgends wählen konnte. Jetzt gibt es die Schalter (Barzahlung, TWINT, Überweisung) direkt bei der Abholung, Barzahlung ist vorausgewählt" },
