@@ -15,7 +15,7 @@ import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 const f = "'Manrope', sans-serif";
 const g = "#888";
-const cp = { padding: "8px 0", fontFamily: f };
+const cp = { padding: "8px 10px", fontFamily: f };
 const lbl = { margin: "0 0 4px", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase", letterSpacing: ".1em", fontFamily: f };
 
 export default function FeeInvoicePage() {
@@ -114,18 +114,18 @@ export default function FeeInvoicePage() {
         <div className="inv-tablewrap"><table style={{ width: "100%", borderCollapse: "collapse", fontFamily: f, minWidth: 480 }}>
           <thead>
             <tr style={{ borderBottom: "2px solid #1a1a1a" }}>
-              <th style={{ ...cp, textAlign: "left", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Datum</th>
+              <th style={{ ...cp, paddingLeft: 0, textAlign: "left", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Datum</th>
               <th style={{ ...cp, textAlign: "left", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Artikel</th>
               <th style={{ ...cp, textAlign: "right", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Preis</th>
               <th style={{ ...cp, textAlign: "center", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>%</th>
               <th style={{ ...cp, textAlign: "right", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Gebühr</th>
-              <th style={{ ...cp, textAlign: "right", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Impact</th>
+              <th style={{ ...cp, paddingRight: 0, textAlign: "right", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Impact</th>
             </tr>
           </thead>
           <tbody>
             {fees.map(fee => (
               <tr key={fee.id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={{ ...cp, fontSize: 11 }}>{new Date(fee.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</td>
+                <td style={{ ...cp, paddingLeft: 0, fontSize: 11 }}>{new Date(fee.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</td>
                 <td style={{ ...cp, fontSize: 11, fontWeight: 600 }}>
                   {fee.listing_title}
                   {fee.purchase_id && <span style={{ display: "block", fontSize: 9, color: g, fontWeight: 400 }}>{makeBeeRef(fee.purchase_id)}{fee.listing_id ? ` · ${makeArtRef(fee.listing_id)}` : ""}</span>}
@@ -133,15 +133,15 @@ export default function FeeInvoicePage() {
                 <td style={{ ...cp, fontSize: 11, textAlign: "right" }}>CHF {fmtCHF(fee.sale_price)}</td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "center", color: g }}>{parseFloat(fee.fee_percent)}%</td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "right", fontWeight: 600 }}>CHF {fmtCHF(fee.fee_amount)}</td>
-                <td style={{ ...cp, fontSize: 11, textAlign: "right", color: "#5B8C5A" }}>CHF {fmtCHF(fee.bee_impact)}</td>
+                <td style={{ ...cp, paddingRight: 0, fontSize: 11, textAlign: "right", color: "#5B8C5A" }}>CHF {fmtCHF(fee.bee_impact)}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr style={{ borderTop: "2px solid #1a1a1a" }}>
-              <td colSpan={4} style={{ ...cp, fontSize: 14, fontWeight: 800 }}>Gesamtpreis</td>
+              <td colSpan={4} style={{ ...cp, paddingLeft: 0, fontSize: 14, fontWeight: 800 }}>Gesamtpreis</td>
               <td style={{ ...cp, fontSize: 16, fontWeight: 800, textAlign: "right" }}>CHF {fmtCHF(total)}</td>
-              <td style={{ ...cp, fontSize: 11, textAlign: "right", color: "#5B8C5A", fontWeight: 600 }}>CHF {fmtCHF(beeImpact)}</td>
+              <td style={{ ...cp, paddingRight: 0, fontSize: 11, textAlign: "right", color: "#5B8C5A", fontWeight: 600 }}>CHF {fmtCHF(beeImpact)}</td>
             </tr>
           </tfoot>
         </table></div>
