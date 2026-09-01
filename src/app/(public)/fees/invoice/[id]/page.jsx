@@ -71,12 +71,12 @@ export default function FeeInvoicePage() {
   return (
     <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#1a1a1a" }}>
       <div className="no-print" style={{ display: "flex", justifyContent: "center", padding: 16, background: colors.cream }}>
-        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 0, border: "none", background: colors.yellow, color: "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 999, border: "none", background: colors.yellow, color: "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
 
-      <div className="invoice-body" style={{ maxWidth: 660, margin: "0 auto", padding: "28px 36px 32px" }}>
+      <div className="invoice-body" style={{ maxWidth: 660, margin: "0 auto", padding: "28px clamp(16px, 5vw, 36px) 32px" }}>
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
           <Logo width={130} />
@@ -90,7 +90,7 @@ export default function FeeInvoicePage() {
         </p>
 
         {/* Adressen */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
+        <div className="inv-addr" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
           <div>
             <p style={lbl}>Rechnungssteller</p>
             <p style={{ margin: 0, fontSize: 12, fontWeight: 700, fontFamily: f }}>{co.name}</p>
@@ -111,7 +111,7 @@ export default function FeeInvoicePage() {
         </div>
 
         {/* Positionen */}
-        <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 14, fontFamily: f }}>
+        <div className="inv-tablewrap"><table style={{ width: "100%", borderCollapse: "collapse", fontFamily: f, minWidth: 480 }}>
           <thead>
             <tr style={{ borderBottom: "2px solid #1a1a1a" }}>
               <th style={{ ...cp, textAlign: "left", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Datum</th>
@@ -144,7 +144,7 @@ export default function FeeInvoicePage() {
               <td style={{ ...cp, fontSize: 11, textAlign: "right", color: "#5B8C5A", fontWeight: 600 }}>CHF {fmtCHF(beeImpact)}</td>
             </tr>
           </tfoot>
-        </table>
+        </table></div>
 
         {/* Bee-Impact Info */}
         <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 0, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
@@ -152,7 +152,7 @@ export default function FeeInvoicePage() {
         </p>
 
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #ddd", borderRadius: 0, marginBottom: 16 }}>
+        <div className="inv-pay" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #E4E0D8", borderRadius: 12, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>Zahlungsinformationen</p>
             {[
@@ -168,7 +168,7 @@ export default function FeeInvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            {qrUrl ? (
+            {qrPayload ? (
               <>
                 <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #eee" }} />
                 <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
@@ -196,7 +196,14 @@ export default function FeeInvoicePage() {
         </div>
       </div>
 
-      <style>{`@media print { .no-print{display:none!important} html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact} @page{size:A4;margin:0} .invoice-body{padding:18mm 22mm 15mm!important;max-width:none!important} }`}</style>
+      <style>{`
+        .inv-tablewrap { overflow-x: auto; margin-bottom: 14px; }
+        @media (max-width: 560px) {
+          .inv-addr { grid-template-columns: 1fr !important; gap: 14px !important; }
+          .inv-pay { grid-template-columns: 1fr !important; }
+          .inv-pay > div:last-child { align-items: flex-start !important; }
+        }
+        @media print { .no-print{display:none!important} html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact} @page{size:A4;margin:0} .invoice-body{padding:18mm 22mm 15mm!important;max-width:none!important} }`}</style>
     </div>
   );
 }

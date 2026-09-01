@@ -25,12 +25,12 @@ export const REP_LOG = [
   {
     datum: "31. August 2026",
     punkte: [
-      { typ: "fix", bereich: "Inserat", text: "Nur-Abholung-Inserate zeigten trotzdem eine Lieferzeile mit Versandart, die Zeile erscheint jetzt nur noch, wenn Versand wirklich aktiviert ist", melder: "Michael" },
-      { typ: "fix", bereich: "Inserieren", text: "Die IBAN wird beim Veröffentlichen nur noch verlangt, wenn Banküberweisung als Zahlart gewählt ist. Bei Bar oder TWINT gibt es nichts zu überweisen", melder: "Michael" },
-      { typ: "neu", bereich: "Inserieren", text: "Angefangene Inserate überleben jetzt einen Neuladen der Seite: die Eingaben werden automatisch als Entwurf gesichert und beim nächsten Besuch wiederhergestellt (Fotos bitte neu anhängen)", melder: "Michael" },
+      { typ: "fix", bereich: "Inserat", text: "Nur-Abholung-Inserate zeigten trotzdem eine Lieferzeile mit Versandart, die Zeile erscheint jetzt nur noch, wenn Versand wirklich aktiviert ist", melder: "Tacocat" },
+      { typ: "fix", bereich: "Inserieren", text: "Die IBAN wird beim Veröffentlichen nur noch verlangt, wenn Banküberweisung als Zahlart gewählt ist. Bei Bar oder TWINT gibt es nichts zu überweisen", melder: "Tacocat" },
+      { typ: "neu", bereich: "Inserieren", text: "Angefangene Inserate überleben jetzt einen Neuladen der Seite: die Eingaben werden automatisch als Entwurf gesichert und beim nächsten Besuch wiederhergestellt (Fotos bitte neu anhängen)", melder: "Tacocat" },
       { typ: "neu", bereich: "Inserieren", text: "Zu grosse Fotos werden beim Hochladen automatisch verkleinert statt mit einer 5-MB-Meldung abgelehnt. Handy-Fotos einfach direkt hochladen", melder: "Tacocat" },
       { typ: "fix", bereich: "Startseite", text: "Die Laufschrift läuft jetzt ganz oben direkt unter dem Header von Rand zu Rand, statt mitten auf der Seite die Kacheln zu trennen", melder: "Tacocat" },
-      { typ: "neu", bereich: "Design", text: "Inserieren-Knopf als gelbe Pille direkt im Header neben der Suche, ein Klick zum Formular", melder: "Michael" },
+      { typ: "neu", bereich: "Design", text: "Inserieren-Knopf als gelbe Pille direkt im Header neben der Suche, ein Klick zum Formular", melder: "Tacocat" },
       { typ: "neu", bereich: "Hive", text: "Neue Erklärbox im Hive: Pollen kommen aus Aktivität und bestimmen dein Level, Blüten entstehen aus dem Bee-Impact deiner Verkäufe (100 Blüten = 1 Pollen), Nektar ist die Belohnungswährung. Pollen ohne Blüten sind also völlig normal", melder: "Tacocat" },
       { typ: "fix", bereich: "KI", text: "Die KI-Inseraterkennung erfindet kein Zubehör mehr, das ein Modell 'üblicherweise hat' (z.B. Fernbedienung), erfindet umgekehrt auch keine Gebrauchsspuren bei makellosen Artikeln und erwähnt, wenn ein Gerät sichtbar in Betrieb ist", melder: "Melani" },
       { typ: "neu", bereich: "Admin", text: "Mitarbeiter mit Rolle bekommen jetzt Freigabe-Anfragen und Admin-Alarme per Glocke, Mail und Push, und können wartende Inserate direkt auf der Inserat-Seite freigeben", melder: "Melani" },

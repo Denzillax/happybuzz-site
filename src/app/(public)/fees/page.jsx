@@ -88,7 +88,8 @@ export default function FeesPage() {
 
   // Tabelle rendern (shared zwischen Tabs)
   const FeeTable = ({ fees, showStatus }) => (
-    <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: fonts.body }}>
+    <div style={{ overflowX: "auto" }}>
+    <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: fonts.body, minWidth: 560 }}>
       <thead>
         <tr style={{ borderBottom: `2px solid ${colors.border}` }}>
           <th style={{ ...th, textAlign: "left" }}>Datum</th>
@@ -117,6 +118,7 @@ export default function FeesPage() {
         })}
       </tbody>
     </table>
+    </div>
   );
 
   if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: colors.muted }}>Lade...</div>;
@@ -124,7 +126,7 @@ export default function FeesPage() {
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 900, fontFamily: fonts.head, margin: "0 0 4px" }}>GEBÜHREN & BEITRÄGE</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 4px" }}>Gebühren & Beiträge</h1>
         <p style={{ margin: "0 0 24px", fontSize: 13, color: colors.muted }}>Übersicht deiner Plattformgebühren und Bee-Impact Beiträge</p>
 
         {/* Warn-Banner für überfällige Rechnungen */}
