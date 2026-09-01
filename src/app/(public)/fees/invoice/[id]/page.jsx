@@ -16,6 +16,12 @@ import { makeBeeRef, makeArtRef } from "@/lib/fees";
 const f = "'Manrope', sans-serif";
 const g = "#888";
 const cp = { padding: "8px 10px", fontFamily: f };
+const Betrag = ({ v, dim }) => (
+  <span style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+    <span style={{ color: "#aaa", fontWeight: 400 }}>CHF</span>
+    <span style={{ fontVariantNumeric: "tabular-nums", opacity: dim ? undefined : 1 }}>{v}</span>
+  </span>
+);
 const lbl = { margin: "0 0 4px", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase", letterSpacing: ".1em", fontFamily: f };
 
 export default function FeeInvoicePage() {
@@ -130,18 +136,18 @@ export default function FeeInvoicePage() {
                   {fee.listing_title}
                   {fee.purchase_id && <span style={{ display: "block", fontSize: 9, color: g, fontWeight: 400 }}>{makeBeeRef(fee.purchase_id)}{fee.listing_id ? ` · ${makeArtRef(fee.listing_id)}` : ""}</span>}
                 </td>
-                <td style={{ ...cp, fontSize: 11, textAlign: "right", whiteSpace: "nowrap" }}>CHF {fmtCHF(fee.sale_price)}</td>
+                <td style={{ ...cp, fontSize: 11, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.sale_price)} /></td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "center", color: g, whiteSpace: "nowrap" }}>{parseFloat(fee.fee_percent)}%</td>
-                <td style={{ ...cp, fontSize: 11, textAlign: "right", fontWeight: 600, whiteSpace: "nowrap" }}>CHF {fmtCHF(fee.fee_amount)}</td>
-                <td style={{ ...cp, paddingRight: 0, fontSize: 11, textAlign: "right", color: "#5B8C5A", whiteSpace: "nowrap" }}>CHF {fmtCHF(fee.bee_impact)}</td>
+                <td style={{ ...cp, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.fee_amount)} /></td>
+                <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#5B8C5A", whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.bee_impact)} /></td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr style={{ borderTop: "2px solid #1a1a1a" }}>
               <td colSpan={4} style={{ ...cp, paddingLeft: 0, fontSize: 14, fontWeight: 800 }}>Gesamtpreis</td>
-              <td style={{ ...cp, fontSize: 16, fontWeight: 800, textAlign: "right", whiteSpace: "nowrap" }}>CHF {fmtCHF(total)}</td>
-              <td style={{ ...cp, paddingRight: 0, fontSize: 11, textAlign: "right", color: "#5B8C5A", fontWeight: 600, whiteSpace: "nowrap" }}>CHF {fmtCHF(beeImpact)}</td>
+              <td style={{ ...cp, fontSize: 15, fontWeight: 800, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(total)} /></td>
+              <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#5B8C5A", fontWeight: 600, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(beeImpact)} /></td>
             </tr>
           </tfoot>
         </table></div>
