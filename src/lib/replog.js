@@ -23,6 +23,13 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "10. September 2026",
+    punkte: [
+      { typ: "neu", bereich: "E-Mail", text: "Konto-Mails (Passwort-Reset, E-Mail-Änderung, Anmelde-Link) kommen jetzt im Beedaro-Design mit deutschem Betreff statt als englische Standard-Vorlage", melder: "Denis" },
+      { typ: "fix", bereich: "E-Mail", text: "Zustellung der Bestätigungsmails verbessert: fehlender DMARC-Eintrag als Ursache für verzögerte Mails (v.a. bei Outlook) gefunden", melder: "Tacocat" },
+    ],
+  },
+  {
     datum: "31. August 2026",
     punkte: [
       { typ: "fix", bereich: "Inserat", text: "Nur-Abholung-Inserate zeigten trotzdem eine Lieferzeile mit Versandart, die Zeile erscheint jetzt nur noch, wenn Versand wirklich aktiviert ist", melder: "Tacocat" },

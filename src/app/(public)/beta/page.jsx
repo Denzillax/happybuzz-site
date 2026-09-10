@@ -33,6 +33,7 @@ const TESTS = [
       { id: "auth_login", label: "Login mit E-Mail + Passwort" },
       { id: "auth_social", label: "Login mit Google / Apple (falls aktiviert)" },
       { id: "auth_pw_reset", label: "Passwort vergessen → Reset-Mail erhalten" },
+      { id: "auth_mail_design", label: "Konto-Mails (Passwort-Reset, E-Mail-Änderung) kommen im Beedaro-Design mit deutschem Betreff und Absender noreply@beedaro.ch" },
       { id: "auth_logout", label: "Abmelden beendet die Session" },
       { id: "auth_protected", label: "Geschützte Seite ohne Login → Weiterleitung zu Login" },
     ],
