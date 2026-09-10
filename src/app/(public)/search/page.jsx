@@ -107,6 +107,9 @@ export default function SearchPage() {
 function SearchPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  // KI-Einstieg aus dem Header: /search?ki=1&q=... - der q-Text gehoert dann
+  // dem KI-Feld, NICHT der Stichwortsuche (sonst feuern beide).
+  const kiEntry = searchParams.get("ki") === "1";
   const [zufallLaedt, setZufallLaedt] = useState(false);
   // "Überrasch mich": springt zu einem zufälligen aktiven Inserat
   const zeigeZufall = async () => {
@@ -118,8 +121,8 @@ function SearchPageInner() {
     } finally { setZufallLaedt(false); }
   };
   // KI-Suche (Beta-Feedback Tacocat 08.09.): Alltagsbeschreibung -> Filter
-  const [kiOffen, setKiOffen] = useState(false);
-  const [kiText, setKiText] = useState("");
+  const [kiOffen, setKiOffen] = useState(kiEntry);
+  const [kiText, setKiText] = useState(kiEntry ? (searchParams.get("q") || "") : "");
   const [kiLaedt, setKiLaedt] = useState(false);
   const [kiFehler, setKiFehler] = useState("");
   const [kiHinweis, setKiHinweis] = useState("");
@@ -130,9 +133,9 @@ function SearchPageInner() {
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
 
-  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [query, setQuery] = useState(kiEntry ? "" : (searchParams.get("q") || ""));
   // Draft fuer die mobile Suchzeile (Desktop sucht im Header)
-  const [draft, setDraft] = useState(searchParams.get("q") || "");
+  const [draft, setDraft] = useState(kiEntry ? "" : (searchParams.get("q") || ""));
   // category-Param kann UUID ODER Slug sein; Slugs werden erst nach dem Laden
   // der Kategorien aufgeloest (Effect unten), sonst 400er gegen die UUID-Spalte
   const [mainCatId, setMainCatId] = useState(() => {
@@ -166,7 +169,7 @@ function SearchPageInner() {
   useEffect(() => { getCategories().then(setCategories).catch(console.error); }, []);
   useEffect(() => {
     const q = searchParams.get("q") || "";
-    if (q !== query) { setQuery(q); setDraft(q); }
+    if (q !== query && !kiEntry) { setQuery(q); setDraft(q); }
     const cat = searchParams.get("category");
     if (cat && categories.length > 0) {
       const found = categories.find(c => c.id === cat || c.slug === cat);
@@ -223,6 +226,17 @@ function SearchPageInner() {
       setKiFehler("Die KI-Suche ist gerade nicht erreichbar. Versuch es normal über das Suchfeld.");
     } finally { setKiLaedt(false); }
   }
+
+  // Auto-Start beim Header-Einstieg (?ki=1&q=...): einmalig, erst wenn die
+  // Kategorien geladen sind (die KI bekommt sie als Auswahlliste mit).
+  const kiAutoRef = useRef(false);
+  useEffect(() => {
+    if (kiEntry && kiText.trim() && mainCats.length > 0 && !kiAutoRef.current) {
+      kiAutoRef.current = true;
+      kiSuchen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories]);
   const subSubCats = categories.filter(c => c.parent_id === subCatId);
 
   async function doSearch() {

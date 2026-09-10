@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase/supabase'
 import Link from 'next/link'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { Logo } from '@/components/shared/Logo'
-import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy } from 'lucide-react'
+import { Search, X, Plus, User, LogOut, ChevronDown, Settings, Heart, Tag, ShoppingBag, Star, Receipt, Bell, Menu, Package, UserCheck, MessageCircle, CalendarDays, ShieldCheck, Gavel, AlignJustify, Trophy, Sparkles } from 'lucide-react'
 import NotificationBell from '@/components/shared/NotificationBell'
 import NektarBadge from '@/components/shared/NektarBadge'
 import { MegaMenu } from '@/components/shared/MegaMenu'
@@ -227,6 +227,18 @@ export function Header() {
                   placeholder="Was suchst du?"
                   style={{ flex: 1, padding: '8px 12px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
                 />
+                {/* KI-Suche: reicht den getippten Text an das KI-Panel auf /search weiter */}
+                <button
+                  onClick={() => {
+                    router.push('/search?ki=1' + (searchQuery.trim() ? '&q=' + encodeURIComponent(searchQuery.trim()) : ''))
+                    setShowSuggestions(false)
+                  }}
+                  title="KI-Suche: beschreib einfach, was du suchst"
+                  aria-label="KI-Suche"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 6px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                >
+                  <Sparkles size={16} color="#0B5E5C" />
+                </button>
                 <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ padding: '8px 20px', background: '#F4C03F', border: 'none', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 13.5, color: INK, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   Suchen
                 </button>
