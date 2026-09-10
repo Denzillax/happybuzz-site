@@ -52,8 +52,8 @@ Bestätigungslink (ausser reauthentication):
 Jede Mail (ausser invite) endet mit dem Sicherheitssatz:
 "Falls du das nicht warst, kannst du diese Mail ignorieren." Bei recovery
 zusätzlich: "Dein Passwort bleibt unverändert, bis du den Link nutzt."
-Der Link ist zeitlich begrenzt gültig — Hinweis "Der Link ist 24 Stunden gültig."
-(bzw. beim Code: "Der Code ist 5 Minuten gültig.").
+Zeit-Hinweis bewusst unspezifisch, weil die Ablaufzeit eine Auth-Einstellung ist:
+"Der Link ist nur begrenzte Zeit gültig." (bzw. "Der Code ist nur kurze Zeit gültig.").
 
 Textregeln wie überall: ss statt ß, keine Emojis, keine Em-Dashes, kurze Sätze.
 
