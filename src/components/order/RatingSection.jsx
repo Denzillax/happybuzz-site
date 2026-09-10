@@ -7,7 +7,12 @@ import { createNotification } from "@/lib/notifications";
 
 const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
 
-const RATING_TAGS = ["Schneller Versand", "Wie beschrieben", "Freundliche Kommunikation", "Faire Preise", "Gut verpackt"];
+// Beta-Feedback xmelbel 30.08.: Kaeufer und Verkaeufer bekamen dieselbe
+// Standard-Maske - "Schneller Versand" ergibt fuer einen Kaeufer keinen Sinn.
+// Tags jetzt nach Rolle (und Service) getrennt.
+const TAGS_VERKAEUFER = ["Schneller Versand", "Wie beschrieben", "Freundliche Kommunikation", "Faire Preise", "Gut verpackt"];
+const TAGS_KAEUFER = ["Schnelle Zahlung", "Freundliche Kommunikation", "Zuverlässige Übergabe", "Unkomplizierte Abwicklung", "Gerne wieder"];
+const TAGS_DIENSTLEISTER = ["Pünktlich", "Saubere Arbeit", "Freundliche Kommunikation", "Faire Preise", "Gerne wieder"];
 
 export default function RatingSection({ purchase, user, listing, isService, isBuyer, counterpartName }) {
   const [rating, setRating] = useState(0);
@@ -80,7 +85,9 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
     {showModal && (
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setShowModal(false)}>
         <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 10, border: "1px solid #E4E0D8", padding: "28px 24px", maxWidth: 420, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
-          <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, fontFamily: fonts.body }}>Bewertung</h3>
+          <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, fontFamily: fonts.body }}>
+            {isBuyer ? (isService ? "Dienstleister bewerten" : "Verkäufer bewerten") : (isService ? "Auftraggeber bewerten" : "Käufer bewerten")}
+          </h3>
           <p style={{ margin: "0 0 20px", fontSize: 13, color: colors.muted, fontFamily: fonts.body }}>Wie war deine Erfahrung mit {counterpartName}?</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 16 }}>
             {[1,2,3,4,5].map(s => (
@@ -92,7 +99,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           {rating > 0 && <p style={{ textAlign: "center", fontSize: 13, color: colors.dark, fontWeight: 600, margin: "0 0 14px", fontFamily: fonts.body }}>{["", "Schlecht", "Geht so", "Okay", "Gut", "Ausgezeichnet"][rating]}</p>}
           {/* Tags */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14, justifyContent: "center" }}>
-            {RATING_TAGS.map(t => {
+            {(isBuyer ? (isService ? TAGS_DIENSTLEISTER : TAGS_VERKAEUFER) : TAGS_KAEUFER).map(t => {
               const on = selectedTags.includes(t);
               return (
                 <button key={t} type="button" onClick={() => setSelectedTags(prev => on ? prev.filter(x => x !== t) : [...prev, t])}

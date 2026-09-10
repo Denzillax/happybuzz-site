@@ -50,7 +50,8 @@ export default function ImportHelferPage() {
             <Bookmark size={16} /> Diesen Button in deine Lesezeichenleiste ziehen
           </p>
           <p style={{ fontFamily: BODY, fontSize: 13, color: MUTED, margin: "0 0 16px", lineHeight: 1.6 }}>
-            Lesezeichenleiste nicht sichtbar? In Chrome/Edge mit Ctrl+Shift+B einblenden.
+            Lesezeichenleiste nicht sichtbar? In Chrome/Edge mit Ctrl+Shift+B einblenden,
+            in Safari über das Menü Darstellung: Favoritenleiste einblenden (Cmd+Shift+B).
           </p>
           {/* Der Linktext wird zum Namen des Lesezeichens. Browser erlauben für
               javascript:-Bookmarklets kein eigenes Favicon (Chrome/Edge zeigen
@@ -119,6 +120,17 @@ export default function ImportHelferPage() {
             <p style={{ fontFamily: BODY, fontSize: 12, color: MUTED, margin: 0, lineHeight: 1.55 }}>
               Der Helfer schickt nichts an Dritte. Die Inhalte wandern direkt von deinem Browser in dein
               BEEDARO-Formular; gespeichert wird erst, wenn du veröffentlichst. Nur für Inserate, die dir gehören.
+            </p>
+          </div>
+          {/* Beta-Feedback Michael 30.08.: Wie geht der Import mit Safari? */}
+          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 10, padding: "14px 16px" }}>
+            <p style={{ fontFamily: BODY, fontSize: 12.5, color: INK, fontWeight: 700, margin: "0 0 4px", display: "flex", alignItems: "center", gap: 6 }}>
+              <Bookmark size={14} /> Mit Safari?
+            </p>
+            <p style={{ fontFamily: BODY, fontSize: 12, color: MUTED, margin: 0, lineHeight: 1.55 }}>
+              Funktioniert genauso: Favoritenleiste einblenden (Menü Darstellung, oder Cmd+Shift+B),
+              dann den gelben Button in die Leiste ziehen. Danach wie in Schritt 2 dein Inserat
+              öffnen und in der Favoritenleiste auf den Import-Button klicken.
             </p>
           </div>
           <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 10, padding: "14px 16px" }}>

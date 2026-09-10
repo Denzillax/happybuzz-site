@@ -170,6 +170,7 @@ const TESTS = [
       { id: "bf_rating", label: "Bewertung nach Empfang abgeben" },
       { id: "bf_rating_tags", label: "Bewertungs-Tags wählbar; auf Profil aggregiert (z.B. '3× Schneller Versand')" },
       { id: "bf_sale_popup", label: "Verkauf abgeschlossen → Popup mit Pollen/Nektar + 'Belohnungen einlösen' (einmalig)" },
+      { id: "bf_rating_rollen", label: "Bewertungsmaske nach Rolle getrennt: Käufer bewertet Verkäufer (Versand/Verpackung-Tags), Verkäufer bewertet Käufer (Zahlung/Übergabe-Tags), Service eigene Tags; Titel nennt die Rolle" },
       { id: "bf_return", label: "Rückgabe / Schaden melden" },
       { id: "bf_service_invoice", label: "Service-Rechnung mit Positionen (falls Service)" },
     ],
@@ -342,6 +343,7 @@ const TESTS = [
     items: [
       { id: "hive_menu", label: "'Mein Hive' im Profil-Menü erreichbar" },
       { id: "hive_loads", label: "Hive-Seite lädt: Level + Pollen-Fortschrittsbalken" },
+      { id: "hive_pollen_verlauf", label: "'Dafür gab es Pollen' direkt unter dem Level: jede Gutschrift mit Grund (auch Challenges und Erfolge mit Namen) und Datum" },
       { id: "hive_next", label: "'Noch X Pollen bis [nächstes Level]' stimmt" },
       { id: "hive_streak", label: "Streak wird angezeigt + steigt bei täglichem Besuch" },
       { id: "hive_challenges", label: "Wöchentliche Challenges mit Live-Fortschritt" },

@@ -26,7 +26,17 @@ const REASON_LABEL = {
   daily_streak: "Täglicher Streak",
   blueten_converted: "Blüten umgewandelt",
 };
-const reasonLabel = (r) => REASON_LABEL[r] || (r?.startsWith("achievement:") ? "Achievement freigeschaltet" : r);
+// Beta-Feedback Michael 30.08.: "weiss nicht, wodurch ich Pollen erhalten habe".
+// Erfolge und Challenges mit Namen ausschreiben statt roher Codes.
+const reasonLabel = (r) => {
+  if (REASON_LABEL[r]) return REASON_LABEL[r];
+  if (r?.startsWith("achievement:")) {
+    const key = r.slice("achievement:".length);
+    return `Erfolg: ${ACHIEVEMENTS[key]?.name || key}`;
+  }
+  if (r?.startsWith("challenge:")) return `Challenge: ${r.slice("challenge:".length)}`;
+  return r;
+};
 
 // Katalog-Tokens (wie öffentliche Seiten)
 const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
@@ -134,7 +144,7 @@ export default function HivePage() {
         getChallengesWithProgress(user.id),
         getWeeklyLeaderboard(10),
         getCommunityStats(),
-        getXPHistory(user.id, 8),
+        getXPHistory(user.id, 15),
       ]);
       setProfile(p);
       setAchievements(ach);
@@ -272,6 +282,26 @@ export default function HivePage() {
             </div>
           </div>
         </Card>
+
+        {/* ── POLLEN-VERLAUF ──
+            Direkt unter dem Level, damit jeder sieht, WOFUER es Pollen gab
+            (Beta-Feedback Michael 30.08.: Herkunft der Pollen unklar). */}
+        {history.length > 0 && (
+          <Card style={{ marginBottom: 16 }}>
+            <SectionTitle icon={TrendingUp}>Dafür gab es Pollen</SectionTitle>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {history.map(h => (
+                <div key={h.id} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: "#5B8C5A", minWidth: 54 }}>
+                    <Zap size={12} /> +{h.amount}
+                  </span>
+                  <span style={{ flex: 1, color: colors.dark }}>{reasonLabel(h.reason)}</span>
+                  <span style={{ fontSize: 11, color: colors.muted, whiteSpace: "nowrap" }}>{new Date(h.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         {/* ── NEKTAR-BELOHNUNGEN (Katalog) ── */}
         <Card style={{ marginBottom: 16 }}>
@@ -416,23 +446,6 @@ export default function HivePage() {
           )}
         </Card>
 
-        {/* ── RECENT XP ── */}
-        {history.length > 0 && (
-          <Card>
-            <SectionTitle icon={TrendingUp}>Zuletzt verdient</SectionTitle>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {history.map(h => (
-                <div key={h.id} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: "#5B8C5A", minWidth: 54 }}>
-                    <Zap size={12} /> +{h.amount}
-                  </span>
-                  <span style={{ flex: 1, color: colors.dark }}>{reasonLabel(h.reason)}</span>
-                  <span style={{ fontSize: 11, color: colors.muted }}>{new Date(h.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</span>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
       </div>
 
       {/* ── EINLÖSE-MODAL ── */}

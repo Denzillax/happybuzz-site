@@ -25,6 +25,9 @@ export const REP_LOG = [
   {
     datum: "10. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Hive", text: "Pollen-Verlauf 'Dafür gab es Pollen' steht jetzt direkt unter dem Level: jede Gutschrift mit Grund und Datum, Challenges und Erfolge mit Namen statt Codes", melder: "Michael Kaufmann" },
+      { typ: "fix", bereich: "Bewertung", text: "Bewertungsmaske nach Rolle getrennt: Käufer und Verkäufer sehen jetzt passende Schnellauswahl-Tags (vorher bekam auch der Verkäufer 'Schneller Versand' angeboten)", melder: "xmelbel" },
+      { typ: "neu", bereich: "Import", text: "Safari-Anleitung auf dem Import-Helfer ergänzt: Favoritenleiste einblenden und Button ziehen funktioniert dort genauso", melder: "Michael Kaufmann" },
       { typ: "neu", bereich: "E-Mail", text: "Konto-Mails (Passwort-Reset, E-Mail-Änderung, Anmelde-Link) kommen jetzt im Beedaro-Design mit deutschem Betreff statt als englische Standard-Vorlage", melder: "Denis" },
       { typ: "fix", bereich: "E-Mail", text: "Zustellung der Bestätigungsmails verbessert: fehlender DMARC-Eintrag als Ursache für verzögerte Mails (v.a. bei Outlook) gefunden", melder: "Tacocat" },
     ],
