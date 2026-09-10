@@ -50,6 +50,7 @@ const TESTS = [
       { id: "sr_zufall", label: "'Überrasch mich' auf der Suchseite öffnet ein zufälliges aktives Inserat, jedes Mal ein anderes" },
       { id: "sr_ki", label: "KI-Suche: Alltagsbeschreibung ('günstiges Rennvelo unter 300 Franken') setzt Suchbegriffe, Kategorie und Preisfilter; ohne Login kommt ein Anmelde-Hinweis" },
       { id: "sr_ki_header", label: "Sparkles-Symbol im Header-Suchfeld öffnet die KI-Suche auf der Suchseite und nimmt den getippten Text mit; Enter bleibt normale Suche" },
+      { id: "sr_ki_mobil", label: "Mobil: Sparkles in der Such-Pille (Startseite) öffnet das KI-Panel; Sparkles in der Suchzeile auf /search übernimmt den getippten Text und startet die KI; nichts ragt seitlich raus" },
       { id: "sr_fee_ranking", label: "Gebühren-Ranking: bei 'Relevanz' stehen Inserate mit höherer Bee-Rate weiter oben, aber ein frisches 3%-Inserat schlägt ein altes 10%-Inserat (Bonus: 5%=3, 7%=7, 10%=14 Tage)" },
       { id: "sr_fee_ranking_hinweis", label: "Transparenzhinweis 'Relevanz berücksichtigt Aktualität und Bee-Rate' erscheint nur bei Sortierung Relevanz, nicht bei Neueste/Preis" },
       { id: "sr_cards", label: "Ergebnis-Cards: Bild, Preis, Verkäufer korrekt" },

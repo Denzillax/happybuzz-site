@@ -199,9 +199,11 @@ function SearchPageInner() {
   const mainCats = categories.filter(c => !c.parent_id);
   const subCats = categories.filter(c => c.parent_id === mainCatId);
 
-  // KI-Suche ausführen: Beschreibung -> Suchbegriffe + Filter anwenden
-  async function kiSuchen() {
-    const frage = kiText.trim();
+  // KI-Suche ausführen: Beschreibung -> Suchbegriffe + Filter anwenden.
+  // textOverride: direkter Text (mobile Suchzeile), sonst der kiText-State.
+  // typeof-Check statt ??, weil onClick={kiSuchen} ein Event-Objekt uebergibt.
+  async function kiSuchen(textOverride) {
+    const frage = (typeof textOverride === "string" ? textOverride : kiText).trim();
     if (!frage || kiLaedt) return;
     setKiLaedt(true); setKiFehler(""); setKiHinweis("");
     try {
@@ -295,6 +297,13 @@ function SearchPageInner() {
               <X size={16} color="#999" />
             </button>
           )}
+          {/* KI-Suche auch mobil: oeffnet das Panel und uebernimmt den getippten Text */}
+          <button
+            onClick={() => { setKiOffen(true); setKiFehler(""); setKiText(draft); if (draft.trim()) kiSuchen(draft); }}
+            title="KI-Suche" aria-label="KI-Suche"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "0 6px", display: "flex", alignItems: "center", flexShrink: 0 }}>
+            <Sparkles size={16} color={PETROL} />
+          </button>
           <button onClick={() => { setQuery(draft.trim()); setPage(1); }}
             style={{ padding: "9px 18px", background: "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: INK, fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen

@@ -380,11 +380,17 @@ export function Header() {
             </button>
           </div>
         </div>
-        {/* Mobile Suchpille: fuehrt zur Suchseite, dort fokussiert die Suchzeile */}
+        {/* Mobile Suchpille: fuehrt zur Suchseite; Sparkles rechts oeffnet dort
+            direkt das KI-Panel (getrennte Links, KEIN Link im Link) */}
         {pathname !== '/search' && (
-          <Link href="/search" className="hdr-mobile-search" style={{ display: 'none', alignItems: 'center', gap: 8, background: '#F2EEE7', borderRadius: 999, padding: '9px 14px', margin: '0 0 10px', textDecoration: 'none', color: '#8A8580', fontSize: 14, fontWeight: 500 }}>
-            <Search size={16} /> Was suchst du?
-          </Link>
+          <div className="hdr-mobile-search" style={{ display: 'none', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, margin: '0 0 10px' }}>
+            <Link href="/search" style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 8, padding: '9px 4px 9px 14px', textDecoration: 'none', color: '#8A8580', fontSize: 14, fontWeight: 500 }}>
+              <Search size={16} style={{ flexShrink: 0 }} /> Was suchst du?
+            </Link>
+            <Link href="/search?ki=1" aria-label="KI-Suche" style={{ display: 'flex', alignItems: 'center', padding: '9px 14px 9px 10px', flexShrink: 0 }}>
+              <Sparkles size={16} color="#0B5E5C" />
+            </Link>
+          </div>
         )}
         <MegaMenu open={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} />
       </div>
