@@ -34,22 +34,45 @@ export async function POST(req) {
     ? body.categories.filter(k => k && typeof k.id === "string" && typeof k.name === "string").slice(0, 30)
     : [];
 
+  // Sortiment mitgeben (Beta-Feedback Denis 10.09.: "90er spielen" fand den
+  // Game Boy nicht): die Suche matcht q als EINE Phrase gegen Titel/Text.
+  // Darum sieht die KI die echten Titel und waehlt einen Begriff, der in
+  // einem passenden Titel tatsaechlich vorkommt. Beim Launch mit mehr
+  // Inseraten: Limit beobachten, ggf. auf Kategorie-Vorauswahl umstellen.
+  let titel = [];
+  try {
+    const r = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/listings?select=title&status=eq.active&limit=300`,
+      { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}` }, signal: AbortSignal.timeout(6000) },
+    );
+    if (r.ok) titel = (await r.json()).map(x => String(x.title || "").slice(0, 90)).filter(Boolean);
+  } catch {}
+
   const prompt = `Du übersetzt eine Alltagsbeschreibung in eine Marktplatz-Suche für den Schweizer Secondhand-Marktplatz BEEDARO.
 Beschreibung des Nutzers: "${frage}"
 
 Verfügbare Hauptkategorien (id: name):
 ${kats.map(k => `${k.id}: ${k.name}`).join("\n")}
 
+Titel der aktuell aktiven Inserate (das komplette Sortiment):
+${titel.map(t => `- ${t}`).join("\n") || "(keine)"}
+
 Angebotsarten: sell (Festpreis-Kauf), auction (Auktion), rent (Miete), free (gratis), service (Dienstleistung).
 
 Antworte NUR mit einem JSON-Objekt, ohne Erklärtext und ohne Markdown:
 {
-  "q": "1-3 prägnante deutsche Suchbegriffe für die Volltextsuche (das Kernprodukt, keine Füllwörter, keine Preise)",
+  "q": "EIN Suchbegriff für die Volltextsuche, siehe Regeln",
   "category_id": "passende id aus der Liste oder null",
   "listing_type": "sell | auction | rent | free | service oder null, nur wenn die Beschreibung es klar sagt (z.B. 'mieten' -> rent, 'geschenkt/gratis' -> free)",
   "min_price": Zahl oder null,
-  "max_price": Zahl oder null
+  "max_price": Zahl oder null,
+  "hinweis": "null - AUSSER kein einziger Titel passt zur Beschreibung, dann ein kurzer ehrlicher Satz wie 'Dazu ist gerade nichts inseriert.'"
 }
+Regeln für "q" (wichtigster Teil):
+- Die Suche matcht q als EINE zusammenhängende Zeichenfolge gegen Titel und Beschreibung. "Stuhl Sessel" findet NICHTS, ausser ein Titel enthält genau diese Wortfolge.
+- Passt ein Inserat aus der Titel-Liste zur Beschreibung, MUSS q eine exakte Teilzeichenfolge dieses Titels sein, Buchstabe für Buchstabe inklusive Umlauten und Wortendungen (Titel "4 Micasa MAZZA Esszimmerstühle" -> q "Esszimmerstühle", NICHT "Stuhl"; Titel "Nintendo Game Boy Original" -> q "Game Boy"). Passen mehrere Titel, nimm die Teilzeichenfolge, die in allen vorkommt.
+- Sei beim Zuordnen grosszügig, nicht wörtlich: Esszimmerstühle SIND eine Sitzgelegenheit, ein Game Boy IST etwas zum Spielen aus den 90ern, ein Trampolin IST etwas für draussen. Es zählt, was der Nutzer gebrauchen könnte.
+- Nur wenn wirklich KEIN Titel zur Beschreibung passt: q auf das eine generische Kernwort der Beschreibung setzen (z.B. "Sofa") und den "hinweis" schreiben.
 Preise nur setzen, wenn der Nutzer sie nennt ("unter 300" -> max_price 300, "ab 50" -> min_price 50, "günstig" allein ist KEIN Preis).
 Wenn nichts Passendes: category_id null lassen statt raten.`;
 
@@ -98,5 +121,7 @@ Wenn nichts Passendes: category_id null lassen statt raten.`;
     listing_type: TYPES.includes(parsed.listing_type) ? parsed.listing_type : null,
     min_price: num(parsed.min_price),
     max_price: num(parsed.max_price),
+    hinweis: typeof parsed.hinweis === "string" && parsed.hinweis.trim() && parsed.hinweis.trim().toLowerCase() !== "null"
+      ? parsed.hinweis.trim().slice(0, 160) : null,
   });
 }

@@ -122,6 +122,7 @@ function SearchPageInner() {
   const [kiText, setKiText] = useState("");
   const [kiLaedt, setKiLaedt] = useState(false);
   const [kiFehler, setKiFehler] = useState("");
+  const [kiHinweis, setKiHinweis] = useState("");
   const [results, setResults] = useState([]);
   const [boosts, setBoosts] = useState({});
   const [total, setTotal] = useState(0);
@@ -199,7 +200,7 @@ function SearchPageInner() {
   async function kiSuchen() {
     const frage = kiText.trim();
     if (!frage || kiLaedt) return;
-    setKiLaedt(true); setKiFehler("");
+    setKiLaedt(true); setKiFehler(""); setKiHinweis("");
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.access_token) { setKiFehler("Bitte melde dich an, um die KI-Suche zu nutzen."); return; }
@@ -210,6 +211,7 @@ function SearchPageInner() {
       });
       if (!res.ok) { setKiFehler("Die KI-Suche ist gerade nicht erreichbar. Versuch es normal über das Suchfeld."); return; }
       const r = await res.json();
+      if (r.hinweis) setKiHinweis(r.hinweis);
       // Frischer Suchkontext: alte Filter ersetzen, KI-Vorschläge anwenden
       setDraft(r.q || ""); setQuery(r.q || "");
       setMainCatId(r.category_id || ""); setSubCatId(""); setSubSubCatId("");
@@ -373,8 +375,8 @@ function SearchPageInner() {
                 {kiLaedt ? "Sucht..." : "Finden"}
               </button>
             </div>
-            <p style={{ margin: "8px 0 0", fontSize: 12, color: kiFehler ? "#C62828" : "rgba(25,22,21,.55)", fontFamily: fonts.body }}>
-              {kiFehler || "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern."}
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: kiFehler ? "#C62828" : kiHinweis ? "#8a6d00" : "rgba(25,22,21,.55)", fontFamily: fonts.body, fontWeight: kiHinweis ? 700 : 400 }}>
+              {kiFehler || kiHinweis || "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern."}
             </p>
           </div>
         )}
