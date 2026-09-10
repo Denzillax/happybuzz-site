@@ -301,6 +301,16 @@ export async function renewListing(listingId) {
   return expires;
 }
 
+// ─── Zufalls-Inserat ─────────────────────────────────────────
+// "Überrasch mich" (Beta-Feedback Tacocat 08.09.): Id eines zufälligen
+// aktiven Inserats. Clientseitig gemischt — bei Beta-Grössen ausreichend.
+export async function getRandomListingId(excludeId = null) {
+  const { data } = await supabase.from("listings").select("id").eq("status", "active");
+  const pool = (data || []).filter((l) => l.id !== excludeId);
+  if (!pool.length) return null;
+  return pool[Math.floor(Math.random() * pool.length)].id;
+}
+
 // ─── Soft Delete ─────────────────────────────────────────────
 // Setzt status auf 'deleted' statt echtem Löschen — Daten bleiben erhalten
 export async function deleteListing(listingId) {

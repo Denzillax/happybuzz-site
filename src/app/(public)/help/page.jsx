@@ -57,6 +57,7 @@ const CATEGORIES = [
     color: "#F4C03F",
     faqs: [
       { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Jedes Inserat wird vor Veröffentlichung kurz geprüft." },
+      { q: "Wer prüft mein Inserat und wie schnell ist es online?", a: "Jedes neue Inserat durchläuft vor der Veröffentlichung eine kurze Prüfung durch das BEEDARO-Team (Inhalt, Bilder, Marktplatz-Regeln). In der Beta passiert das von Hand, meist innert weniger Stunden. Für den offiziellen Start ist eine automatische Vorprüfung geplant: Inserate gehen dann sofort online, und nur Auffälliges landet in der manuellen Kontrolle." },
       { q: "Was kostet es, ein Inserat zu erstellen?", a: "Das Erstellen eines Inserats ist kostenlos. Erst bei einem erfolgreichen Verkauf fällt die Bee-Rate Gebühr an (3-10%, je nach gewählter Stufe)." },
       { q: "Was ist die Bee-Rate?", a: "Die Bee-Rate ist deine selbst gewählte Gebühr (Fair 3%, Supporter 5%, Impact 7% oder Bee Hero 10%). Sie wird nur bei erfolgreichem Verkauf vom Erlös abgezogen. 20% davon fliessen als Bee-Impact in Schweizer Naturschutzprojekte." },
       { q: "Wie funktioniert der Versand?", a: "Beim Inserieren wählst du Paket, Brief, Sperrgut oder andere Versandarten. Die Versandkosten basieren auf den aktuellen Post-Tarifen. Du kannst maximal CHF 5 über den Post-Tarif aufschlagen." },

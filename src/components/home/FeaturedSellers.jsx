@@ -33,7 +33,7 @@ export function FeaturedSellers() {
   if (!sellers.length) return null
 
   return (
-    <section style={{ padding: '16px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '24px 24px 48px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Schaufenster" subtitle="Verkäufer, die diese Woche im Rampenlicht stehen" />
 
       <div className="featured-sellers-grid">

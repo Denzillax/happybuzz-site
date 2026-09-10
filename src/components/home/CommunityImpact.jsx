@@ -55,7 +55,7 @@ export function CommunityImpact() {
   ];
 
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 24px 28px" }}>
+    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px 44px" }}>
       {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
       <div style={{ background: "#EEF3EC", borderRadius: 14, padding: "clamp(22px, 3.5vw, 36px)" }}>
       <div className="impact-layout">

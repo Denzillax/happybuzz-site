@@ -1,9 +1,9 @@
 "use client"
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { Search, X, ChevronDown, BadgeCheck } from "lucide-react";
-import { searchListings, getCategories, saveSearch } from "@/lib/listings";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Search, X, ChevronDown, BadgeCheck, Shuffle, Sparkles } from "lucide-react";
+import { searchListings, getCategories, saveSearch, getRandomListingId } from "@/lib/listings";
 import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/attributes";
 import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
@@ -106,6 +106,22 @@ export default function SearchPage() {
 
 function SearchPageInner() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const [zufallLaedt, setZufallLaedt] = useState(false);
+  // "Überrasch mich": springt zu einem zufälligen aktiven Inserat
+  const zeigeZufall = async () => {
+    if (zufallLaedt) return;
+    setZufallLaedt(true);
+    try {
+      const id = await getRandomListingId();
+      if (id) router.push(`/listing/${id}`);
+    } finally { setZufallLaedt(false); }
+  };
+  // KI-Suche (Beta-Feedback Tacocat 08.09.): Alltagsbeschreibung -> Filter
+  const [kiOffen, setKiOffen] = useState(false);
+  const [kiText, setKiText] = useState("");
+  const [kiLaedt, setKiLaedt] = useState(false);
+  const [kiFehler, setKiFehler] = useState("");
   const [results, setResults] = useState([]);
   const [boosts, setBoosts] = useState({});
   const [total, setTotal] = useState(0);
@@ -178,6 +194,33 @@ function SearchPageInner() {
 
   const mainCats = categories.filter(c => !c.parent_id);
   const subCats = categories.filter(c => c.parent_id === mainCatId);
+
+  // KI-Suche ausführen: Beschreibung -> Suchbegriffe + Filter anwenden
+  async function kiSuchen() {
+    const frage = kiText.trim();
+    if (!frage || kiLaedt) return;
+    setKiLaedt(true); setKiFehler("");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) { setKiFehler("Bitte melde dich an, um die KI-Suche zu nutzen."); return; }
+      const res = await fetch("/api/ai-search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ query: frage, categories: mainCats.map(({ id, name }) => ({ id, name })) }),
+      });
+      if (!res.ok) { setKiFehler("Die KI-Suche ist gerade nicht erreichbar. Versuch es normal über das Suchfeld."); return; }
+      const r = await res.json();
+      // Frischer Suchkontext: alte Filter ersetzen, KI-Vorschläge anwenden
+      setDraft(r.q || ""); setQuery(r.q || "");
+      setMainCatId(r.category_id || ""); setSubCatId(""); setSubSubCatId("");
+      setType(r.listing_type || ""); setCondition("");
+      setMinPrice(r.min_price != null ? String(r.min_price) : "");
+      setMaxPrice(r.max_price != null ? String(r.max_price) : "");
+      setPage(1);
+    } catch {
+      setKiFehler("Die KI-Suche ist gerade nicht erreichbar. Versuch es normal über das Suchfeld.");
+    } finally { setKiLaedt(false); }
+  }
   const subSubCats = categories.filter(c => c.parent_id === subCatId);
 
   async function doSearch() {
@@ -287,10 +330,54 @@ function SearchPageInner() {
           );
         })()}
 
-        {/* ── Page Title ── */}
-        <h1 style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: "0 0 20px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
-          {query ? `Ergebnisse für "${query}"` : mainCatId ? (mainCats.find(c => c.id === mainCatId)?.name || "Suche") : "Alle Inserate"}
-        </h1>
+        {/* ── Page Title + Überrasch-mich (Beta-Feedback Tacocat 08.09.) ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", margin: "0 0 20px" }}>
+          <h1 style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.05, flex: "1 1 auto", minWidth: 0 }}>
+            {query ? `Ergebnisse für "${query}"` : mainCatId ? (mainCats.find(c => c.id === mainCatId)?.name || "Suche") : "Alle Inserate"}
+          </h1>
+          <button onClick={zeigeZufall} disabled={zufallLaedt} style={{
+            display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 16px",
+            borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff",
+            fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: INK,
+            cursor: zufallLaedt ? "default" : "pointer", opacity: zufallLaedt ? 0.6 : 1, whiteSpace: "nowrap",
+          }}>
+            <Shuffle size={14} color={PETROL} /> {zufallLaedt ? "Würfelt..." : "Überrasch mich"}
+          </button>
+          <button onClick={() => { setKiOffen(o => !o); setKiFehler(""); }} style={{
+            display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 16px",
+            borderRadius: 999, border: `1px solid ${kiOffen ? PETROL : "#E4E0D8"}`,
+            background: kiOffen ? "#E8F4F3" : "#fff",
+            fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: kiOffen ? PETROL : INK,
+            cursor: "pointer", whiteSpace: "nowrap",
+          }}>
+            <Sparkles size={14} color={PETROL} /> KI-Suche
+          </button>
+        </div>
+
+        {/* ── KI-Suche: Beschreibung statt Stichwort ── */}
+        {kiOffen && (
+          <div style={{ background: "#E8F4F3", border: "1px solid #0E949333", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <input
+                type="text" value={kiText} autoFocus
+                onChange={(e) => setKiText(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") kiSuchen(); }}
+                placeholder='Beschreib es einfach: "günstiges Rennvelo unter 300 Franken" oder "etwas zum Mieten für den Umzug"'
+                style={{ flex: "1 1 260px", minWidth: 0, padding: "11px 14px", borderRadius: 10, border: "1px solid #E4E0D8", outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }}
+              />
+              <button onClick={kiSuchen} disabled={kiLaedt || !kiText.trim()} style={{
+                padding: "11px 20px", borderRadius: 999, border: "none", background: "#F4C03F",
+                color: INK, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body,
+                cursor: kiLaedt || !kiText.trim() ? "default" : "pointer", opacity: kiLaedt || !kiText.trim() ? 0.6 : 1, whiteSpace: "nowrap",
+              }}>
+                {kiLaedt ? "Sucht..." : "Finden"}
+              </button>
+            </div>
+            <p style={{ margin: "8px 0 0", fontSize: 12, color: kiFehler ? "#C62828" : "rgba(25,22,21,.55)", fontFamily: fonts.body }}>
+              {kiFehler || "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern."}
+            </p>
+          </div>
+        )}
 
         {/* ── Filter Pills Row ── */}
         <div style={{

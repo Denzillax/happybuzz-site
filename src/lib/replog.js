@@ -25,6 +25,13 @@ export const REP_LOG = [
   {
     datum: "10. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Hive", text: "Willkommens-Los: das allererste Inserat zieht automatisch 10 bis 100 Pollen, mit Feier-Banner und Glocken-Meldung. Hinweis dazu steht bei der Registrierung", melder: "Tacocat" },
+      { typ: "neu", bereich: "Suche", text: "'Überrasch mich' auf der Suchseite springt zu einem zufälligen Inserat, für alle, die stöbern statt suchen wollen", melder: "Tacocat" },
+      { typ: "neu", bereich: "Suche", text: "KI-Suche: einfach beschreiben, was du suchst ('günstiges Rennvelo unter 300 Franken'), die KI setzt Suchbegriffe, Kategorie und Preisfilter", melder: "Tacocat" },
+      { typ: "neu", bereich: "Startseite", text: "Der gute Zweck steht jetzt zuoberst: eigene Zeile '20% jeder Gebühr fliessen in den Bienenschutz' im Hero, mit Link zur Impact-Seite", melder: "Tacocat" },
+      { typ: "fix", bereich: "Startseite", text: "Startseite luftiger: spürbar mehr Abstand zwischen allen Sektionen", melder: "Tacocat" },
+      { typ: "neu", bereich: "Hilfe", text: "FAQ beantwortet jetzt, wer Inserate prüft und wie schnell sie online gehen", melder: "Tacocat" },
+      { typ: "fix", bereich: "Design", text: "Doppelt verlinktes Logo im Header entfernt, das auf jeder Seite Fehler in der Browser-Konsole verursachte" },
       { typ: "neu", bereich: "Hive", text: "Pollen-Verlauf 'Dafür gab es Pollen' steht jetzt direkt unter dem Level: jede Gutschrift mit Grund und Datum, Challenges und Erfolge mit Namen statt Codes", melder: "Michael Kaufmann" },
       { typ: "fix", bereich: "Bewertung", text: "Bewertungsmaske nach Rolle getrennt: Käufer und Verkäufer sehen jetzt passende Schnellauswahl-Tags (vorher bekam auch der Verkäufer 'Schneller Versand' angeboten)", melder: "xmelbel" },
       { typ: "neu", bereich: "Import", text: "Safari-Anleitung auf dem Import-Helfer ergänzt: Favoritenleiste einblenden und Button ziehen funktioniert dort genauso", melder: "Michael Kaufmann" },

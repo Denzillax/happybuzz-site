@@ -43,7 +43,7 @@ export function PopularListings() {
   if (!listings.length) return null
 
   return (
-    <section style={{ padding: '16px 24px 32px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '24px 24px 48px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Gerade beliebt" subtitle="Die meistgemerkten Artikel der Community" href="/search?sort=relevanz" />
 
       <div className="listing-grid home-swipe">

@@ -25,6 +25,7 @@ const REASON_LABEL = {
   rental_completed: "Vermietung abgeschlossen",
   daily_streak: "Täglicher Streak",
   blueten_converted: "Blüten umgewandelt",
+  welcome_los: "Willkommens-Los (erstes Inserat)",
 };
 // Beta-Feedback Michael 30.08.: "weiss nicht, wodurch ich Pollen erhalten habe".
 // Erfolge und Challenges mit Namen ausschreiben statt roher Codes.

@@ -45,6 +45,15 @@ export default function ListingsPage() {
   const [myNektar, setMyNektar] = useState(0);
   const [boostMenuFor, setBoostMenuFor] = useState(null); // listing id with open boost menu
   const [boosting, setBoosting] = useState(false);
+  // Willkommens-Los: /listings?los=<Betrag> nach dem ersten Inserat
+  // (window.location statt useSearchParams, spart die Suspense-Boundary)
+  const [losBetrag, setLosBetrag] = useState(0);
+  useEffect(() => {
+    try {
+      const v = parseInt(new URLSearchParams(window.location.search).get("los") || "", 10);
+      if (v > 0) { setLosBetrag(v); window.history.replaceState(null, "", "/listings"); }
+    } catch {}
+  }, []);
 
   const doBoost = async (listingId, reward) => {
     if (boosting || myNektar < reward.cost) return;
@@ -211,6 +220,19 @@ export default function ListingsPage() {
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px 80px" }}>
+
+        {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}
+        {losBetrag > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FBF0D2", border: "1px solid #F0E3BC", borderRadius: 14, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 22 }} aria-hidden><Rocket size={22} color={K.ink} /></span>
+            <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>Willkommens-Los gezogen: +{losBetrag} Pollen</p>
+              <p style={{ margin: 0, fontSize: 12.5, color: "rgba(25,22,21,.65)" }}>Dein erstes Inserat ist eingereicht. Die Pollen zahlen auf dein Bee-Level ein.</p>
+            </div>
+            <Link href="/hive" style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "underline", whiteSpace: "nowrap" }}>Zum Hive</Link>
+            <button onClick={() => setLosBetrag(0)} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={K.ink} /></button>
+          </div>
+        )}
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>

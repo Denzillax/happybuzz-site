@@ -94,6 +94,12 @@ function NewListingPageInner() {
     }
     if (formData.publish) {
       await submitForReview(listing.id);
+      // Willkommens-Los: beim allerersten Inserat gibt es serverseitig
+      // einmalig 10-100 Pollen (RPC ist idempotent, Mehrfachaufrufe sind ok).
+      try {
+        const { data: los } = await supabase.rpc("welcome_los");
+        if (los?.ok && los.amount) { router.push(`/listings?los=${los.amount}`); return listing; }
+      } catch {}
     }
     router.push("/listings");
     return listing;

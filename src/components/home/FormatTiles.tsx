@@ -18,7 +18,7 @@ const FORMATE = [
 
 export function FormatTiles() {
   return (
-    <section style={{ padding: '28px 24px 36px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '32px 24px 52px', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .fmt-tile { transition: background .15s ease; }
         .fmt-tile:hover { background: #F4C03F !important; }

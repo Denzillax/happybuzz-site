@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, Plus, MessageSquareHeart } from 'lucide-react'
+import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Klar-Look: schmales Willkommensband + separate Beta-Karte daneben.
 // Gelb ist die CTA-Farbe, der Rest bleibt zurueckhaltend.
@@ -19,11 +19,17 @@ export function Hero() {
         <section style={{ flex: '2 1 460px', minWidth: 0, background: BAND, borderRadius: 14, overflow: 'hidden' }}>
           <div style={{ padding: 'clamp(22px, 4vw, 40px) clamp(18px, 4vw, 44px)', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', height: '100%', boxSizing: 'border-box' }}>
             <div style={{ flex: '1 1 300px', minWidth: 0 }}>
+              {/* Beta-Feedback Tacocat 08.09.: der gute Zweck soll zuoberst stehen,
+                  nicht im Fliesstext untergehen - eigene Zeile ueber dem Titel. */}
+              <Link href="/impact" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '6px 13px', fontSize: 12, fontWeight: 700, letterSpacing: '.02em', color: '#3E6B3D', textDecoration: 'none', marginBottom: 12 }}>
+                <Flower2 size={14} color="#5B8C5A" /> 20% jeder Gebühr fliessen in den Bienenschutz
+                <ArrowRight size={13} strokeWidth={2.4} />
+              </Link>
               <h1 style={{ fontFamily: DISPLAY, fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.12, color: INK, margin: '0 0 10px' }}>
                 Nicht neu. Nur interessanter.
               </h1>
               <p style={{ fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'rgba(25,22,21,0.65)', lineHeight: 1.55, margin: '0 0 18px', maxWidth: 540 }}>
-                Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate, und 20% jeder Gebühr gehen an den Bienenschutz.
+                Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: HONEY, color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>

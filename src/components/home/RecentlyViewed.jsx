@@ -42,7 +42,7 @@ export function RecentlyViewed() {
   if (items.length < 2) return null;
 
   return (
-    <section style={{ padding: "16px 24px 32px", maxWidth: 1280, margin: "0 auto" }}>
+    <section style={{ padding: "24px 24px 48px", maxWidth: 1280, margin: "0 auto" }}>
       <SectionHeader title="Zuletzt angesehen" subtitle="Da hast du kürzlich reingeschaut" />
 
       <div className="listing-grid home-swipe">

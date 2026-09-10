@@ -305,7 +305,9 @@ export default function AuthPage() {
         <span style={{ fontSize:14, color:fieldErrors.agree?C.red:C.muted, lineHeight:1.45 }}>Ich akzeptiere die <a href="/terms" target="_blank" rel="noopener" className="link">AGB</a> und <a href="/privacy" target="_blank" rel="noopener" className="link">Datenschutzerklärung</a></span>
       </div>
       <Btn onClick={handleRegister} loading={loading}>Account erstellen</Btn>
-      <p style={{ textAlign:"center", fontSize:14, color:C.muted, marginTop:18, fontWeight:500 }}>Bereits registriert? <a onClick={()=>switchView("login")} className="link" style={{ whiteSpace:"nowrap" }}>Jetzt anmelden</a></p>
+      {/* Willkommens-Los (Beta-Feedback Tacocat 08.09.): Anreiz direkt bei der Anmeldung */}
+      <p style={{ textAlign:"center", fontSize:12.5, color:C.muted, marginTop:12, lineHeight:1.5 }}>Dein erstes Inserat zieht automatisch ein Willkommens-Los: bis zu 100 Pollen für dein Bee-Level.</p>
+      <p style={{ textAlign:"center", fontSize:14, color:C.muted, marginTop:12, fontWeight:500 }}>Bereits registriert? <a onClick={()=>switchView("login")} className="link" style={{ whiteSpace:"nowrap" }}>Jetzt anmelden</a></p>
     </>,
 
     forgot: () => <>

@@ -190,9 +190,11 @@ export function Header() {
         <div style={{ display: 'flex', alignItems: 'center', height: 64 }}>
 
           {/* ── Logo: klickbar zur Startseite ── */}
-          <Link href="/" className="hdr-logo" aria-label="Zur Startseite" style={{ flexShrink: 0, marginRight: 16, display: 'inline-flex' }}>
+          {/* Logo verlinkt selbst auf "/" (Logo.tsx) - hier NICHT nochmal in
+              einen Link wickeln, sonst <a> in <a> = Hydration-Fehler. */}
+          <span className="hdr-logo" style={{ flexShrink: 0, marginRight: 16, display: 'inline-flex' }}>
             <Logo width={150} />
-          </Link>
+          </span>
 
           {/* ── Desktop: Kategorien + Search + Icons + Avatar ── */}
           <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 12 }}>
