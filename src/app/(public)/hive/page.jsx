@@ -224,10 +224,10 @@ export default function HivePage() {
           {/* So haengt alles zusammen - kompakt erklaert
               (Beta-Feedback Tacocat + Michael, 30.08.: Reihenfolge unklar) */}
           <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F4F4F2", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
-            <b style={{ color: colors.dark }}>So funktioniert dein Hive:</b><br />
-            <b style={{ color: colors.dark }}>Pollen</b> sammelst du durch Aktivität (Inserate, Käufe, Logins, Challenges). Sie bestimmen dein Level.<br />
-            <b style={{ color: colors.dark }}>Blüten</b> entstehen aus dem Bee-Impact deiner Verkäufe und wandeln sich automatisch um: 100 Blüten = 1 Pollen. Ohne Verkäufe hast du also Pollen, aber noch keine Blüten - das ist normal.<br />
-            <b style={{ color: colors.dark }}>Nektar</b> ist deine Belohnungswährung: verdienst du über Challenges und löst ihn unten im Katalog ein.
+            <b style={{ color: colors.dark }}>So funktioniert dein Hive, und was du davon hast:</b><br />
+            <b style={{ color: colors.dark }}>Pollen</b> sammelst du durch Aktivität (Inserate, Käufe, Logins, Challenges). Sie bestimmen dein Level, und ein höheres Level bringt dir sichtbare Vorteile: das Abzeichen auf deinem Profil und ab Hive Builder einen Ranking-Boost für deine Inserate.<br />
+            <b style={{ color: colors.dark }}>Blüten</b> sind dein Bienenschutz-Beitrag aus Verkäufen. Sie zahlen automatisch aufs Level ein (100 Blüten = 1 Pollen). Du musst nichts damit tun, und ohne Verkäufe ist 0 Blüten völlig normal.<br />
+            <b style={{ color: colors.dark }}>Nektar</b> verdienst du über Challenges und gibst ihn unten im Katalog für echte Vorteile aus: Inserat-Boosts, bessere Sichtbarkeit, Badges.
           </div>
 
           {/* Blüten-Balance + Umwandlung in Pollen */}

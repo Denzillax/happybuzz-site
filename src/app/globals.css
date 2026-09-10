@@ -617,3 +617,17 @@ input:focus, textarea:focus, select:focus {
   }
   .lief-grid > *:first-child { margin-top: 0; }
 }
+
+/* Admin Benutzerbereich: Inserat-/Bestellzeilen haben feste Spalten
+   (min ~400px) und ragten mobil ueber die Box. Auf schmalen Screens
+   stapeln sie: Titel volle Breite, Werte als Zeile darunter. */
+@media (max-width: 640px) {
+  .adm-lrow, .adm-orow {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 4px 10px !important;
+  }
+  .adm-lrow > :first-child { flex: 1 1 100%; }
+  .adm-orow > :nth-child(2) { flex: 1 1 100%; order: -1; }
+  .adm-lrow > *, .adm-orow > * { text-align: left !important; }
+}
