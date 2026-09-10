@@ -189,10 +189,10 @@ export function Header() {
       <div className="hdr-wrap" style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 32, paddingRight: 32, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', height: 64 }}>
 
-          {/* ── Logo ── */}
-          <div className="hdr-logo" style={{ flexShrink: 0, marginRight: 16 }}>
+          {/* ── Logo: klickbar zur Startseite ── */}
+          <Link href="/" className="hdr-logo" aria-label="Zur Startseite" style={{ flexShrink: 0, marginRight: 16, display: 'inline-flex' }}>
             <Logo width={150} />
-          </div>
+          </Link>
 
           {/* ── Desktop: Kategorien + Search + Icons + Avatar ── */}
           <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 12 }}>

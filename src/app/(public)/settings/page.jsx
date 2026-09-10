@@ -105,7 +105,10 @@ function PushDeviceBox({ showToast }) {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTabRaw] = useState("profile");
+  // Tab-Wechsel springt an den Seitenanfang, sonst landet man mitten im
+  // neuen Tab (Beta-Feedback Tacocat, 08.09.)
+  const setActiveTab = (t) => { setActiveTabRaw(t); try { window.scrollTo(0, 0); } catch {} };
   // Direktsprung per ?tab= (z.B. von der Bestellseite zu den Adressen)
   useEffect(() => {
     try {
