@@ -631,3 +631,9 @@ input:focus, textarea:focus, select:focus {
   .adm-orow > :nth-child(2) { flex: 1 1 100%; order: -1; }
   .adm-lrow > *, .adm-orow > * { text-align: left !important; }
 }
+
+/* Hover fuer die Klar-Pillen-CTAs (Beta-Feedback Denis 15.09.: Buttons ohne
+   Hover). Klasse auf Hero-, Header- und Banner-Pillen; Inline-Styles bleiben. */
+.cta-pill { transition: filter .15s ease, transform .15s ease, box-shadow .15s ease; }
+.cta-pill:hover { filter: brightness(.94); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(25,22,21,.14); }
+.cta-pill:active { transform: translateY(0); box-shadow: none; }

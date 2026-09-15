@@ -48,10 +48,17 @@ export default function ListingsPage() {
   // Willkommens-Los: /listings?los=<Betrag> nach dem ersten Inserat
   // (window.location statt useSearchParams, spart die Suspense-Boundary)
   const [losBetrag, setLosBetrag] = useState(0);
+  // Ablauf-Mail "mit einem Klick verlaengern" (Beta-Feedback Tacocat 14.09.):
+  // /listings?verlaengern=<id> zeigt oben ein Banner mit direktem Verlaengern-Knopf.
+  const [verlaengernId, setVerlaengernId] = useState(null);
   useEffect(() => {
     try {
-      const v = parseInt(new URLSearchParams(window.location.search).get("los") || "", 10);
-      if (v > 0) { setLosBetrag(v); window.history.replaceState(null, "", "/listings"); }
+      const sp = new URLSearchParams(window.location.search);
+      const v = parseInt(sp.get("los") || "", 10);
+      if (v > 0) setLosBetrag(v);
+      const vid = sp.get("verlaengern");
+      if (vid) setVerlaengernId(vid);
+      if (v > 0 || vid) window.history.replaceState(null, "", "/listings");
     } catch {}
   }, []);
 
@@ -128,6 +135,9 @@ export default function ListingsPage() {
   // Die Suche filtert solche Inserate aus, der Verkäufer sah aber weiter
   // "Aktiv" und konnte sich nicht erklären, warum ihn niemand findet.
   const isExpired = (l) => l.status === "active" && l.expires_at && new Date(l.expires_at) < new Date();
+  // Laeuft in den naechsten 3 Tagen ab: Verlaengern soll VOR dem Ablauf moeglich sein
+  const laeuftBaldAb = (l) => l.status === "active" && l.expires_at && l.listing_type !== "auction"
+    && new Date(l.expires_at) > new Date() && new Date(l.expires_at) - new Date() < 3 * 86400000;
 
   // Filter
   let filtered = listings.filter((l) => {
@@ -233,6 +243,30 @@ export default function ListingsPage() {
             <button onClick={() => setLosBetrag(0)} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={K.ink} /></button>
           </div>
         )}
+
+        {/* Verlaengern-Banner aus der Ablauf-Mail: ein Klick, fertig */}
+        {verlaengernId && (() => {
+          const l = listings.find(x => x.id === verlaengernId);
+          if (!l) return null;
+          const verlaengerbar = l.listing_type !== "auction" && (isExpired(l) || laeuftBaldAb(l) || l.status === "expired");
+          return (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 14, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+              <Clock size={20} color={K.ink} />
+              <div style={{ flex: "1 1 220px", minWidth: 0 }}>
+                <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>{l.title}</p>
+                <p style={{ margin: 0, fontSize: 12.5, color: "rgba(25,22,21,.65)" }}>
+                  {verlaengerbar ? "Laufzeit endet bald. Verlängern gibt 60 Tage neue Laufzeit." : "Dieses Inserat läuft aktuell nicht ab oder ist eine Auktion."}
+                </p>
+              </div>
+              {verlaengerbar && (
+                <button onClick={() => { renew(l); setVerlaengernId(null); }} style={{ padding: "10px 18px", borderRadius: 999, border: "none", background: K.honey, color: K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                  <RefreshCw size={14} /> Jetzt verlängern
+                </button>
+              )}
+              <button onClick={() => setVerlaengernId(null)} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={K.ink} /></button>
+            </div>
+          );
+        })()}
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
@@ -496,7 +530,7 @@ export default function ListingsPage() {
                           {/* Pausieren / Aktivieren — nur bei active oder paused */}
                           {/* Verlängern: nur bei abgelaufener Laufzeit. Auktionen sind
                               ausgenommen, deren Ende ist Teil des Gebotsablaufs. */}
-                          {isExpired(l) && l.listing_type !== "auction" && (
+                          {(isExpired(l) || laeuftBaldAb(l)) && l.listing_type !== "auction" && (
                             <button onClick={() => renew(l)} title="Verlängern (60 Tage neue Laufzeit)" style={{
                               height: 32, padding: "0 10px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5,
                               border: "none", cursor: "pointer", fontFamily: fonts.body, fontSize: 11, fontWeight: 700,

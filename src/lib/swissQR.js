@@ -40,7 +40,8 @@ export function qrImageUrl(payload, size = 200) {
 // Bestell-Rechnung (Kauf): Käufer -> Verkäufer. deposit=true -> Kautionsrückgabe (Verkäufer -> Käufer).
 // `order` muss .buyer, .seller (volle profiles) und .listing (joined) enthalten.
 export function orderQrPayload(order, { deposit = false } = {}) {
-  const price = parseFloat(order.listing?.price || order.price || 0);
+  // Bestellpreis zuerst: listing.price ist bei Auktionen nur der Gebotsstand
+  const price = parseFloat(order.price || order.listing?.price || 0);
   const shipping = parseFloat(order.listing?.shipping_cost || order.shipping_cost || 0);
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);

@@ -659,10 +659,14 @@ export async function getListingStats(listingId) {
 // ═════════════════════════════════════════════════════════════
 
 // Sofortkauf via RPC (atomar: purchase + listing → sold)
-export async function createPurchase(buyerId, listingId, variantChoice = null) {
+// price: nur beim Sofortkauf einer Auktion setzen (buy_now_price). Ohne
+// Preis nimmt die RPC listing.price, das ist bei Auktionen der laufende
+// Gebotsstand: Gebuehr und "Verkauft"-Mail waren dann falsch (Denis, 15.09.).
+export async function createPurchase(buyerId, listingId, variantChoice = null, price = null) {
   const { data, error } = await supabase.rpc("create_purchase", {
     p_listing_id: listingId,
     p_buyer_id: buyerId,
+    ...(price > 0 ? { p_price: price } : {}),
     // Neuware: Schnappschuss der Kaeuferwahl (z.B. { "Groesse": "L" })
     ...(variantChoice && Object.keys(variantChoice).length > 0 ? { p_variant: variantChoice } : {}),
   });

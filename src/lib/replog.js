@@ -23,6 +23,15 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "15. September 2026",
+    punkte: [
+      { typ: "fix", bereich: "Inserat", text: "Die Mail 'Dein Inserat läuft ab' versprach Verlängern mit einem Klick: Der Link führt jetzt direkt zu einem Banner mit Verlängern-Knopf, Verlängern geht neu schon 3 Tage vor Ablauf, und Auktionen bekommen diese Mail nicht mehr (deren Ende ist nicht verlängerbar)", melder: "Tacocat" },
+      { typ: "fix", bereich: "Rechnung", text: "Beim Sofortkauf einer Auktion stand auf Rechnung und QR-Zahlteil der letzte Gebotsstand statt des Sofortkauf-Preises, und die Gebühr wurde falsch berechnet. Jetzt zählt überall der Kaufpreis", melder: "Denis" },
+      { typ: "fix", bereich: "Rechnung", text: "Die Lieferzeile steht jetzt immer auf der Rechnung, auch bei Abholung oder inklusivem Versand", melder: "Denis" },
+      { typ: "fix", bereich: "Design", text: "Buttons auf Startseite, im Header und in Bannern reagieren wieder auf Hover", melder: "Denis" },
+    ],
+  },
+  {
     datum: "10. September 2026",
     punkte: [
       { typ: "neu", bereich: "Hive", text: "Willkommens-Los: das allererste Inserat zieht automatisch 10 bis 100 Pollen, mit Feier-Banner und Glocken-Meldung. Hinweis dazu steht bei der Registrierung", melder: "Tacocat" },

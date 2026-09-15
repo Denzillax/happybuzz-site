@@ -21,7 +21,7 @@ export function Hero() {
             <div style={{ flex: '1 1 300px', minWidth: 0 }}>
               {/* Beta-Feedback Tacocat 08.09.: der gute Zweck soll zuoberst stehen,
                   nicht im Fliesstext untergehen - eigene Zeile ueber dem Titel. */}
-              <Link href="/impact" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '6px 13px', fontSize: 12, fontWeight: 700, letterSpacing: '.02em', color: '#3E6B3D', textDecoration: 'none', marginBottom: 12 }}>
+              <Link href="/impact" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '6px 13px', fontSize: 12, fontWeight: 700, letterSpacing: '.02em', color: '#3E6B3D', textDecoration: 'none', marginBottom: 12 }}>
                 <Flower2 size={14} color="#5B8C5A" /> 20% jeder Gebühr fliessen in den Bienenschutz
                 <ArrowRight size={13} strokeWidth={2.4} />
               </Link>
@@ -32,10 +32,10 @@ export function Hero() {
                 Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <Link href="/listings/new" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: HONEY, color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
+                <Link href="/listings/new" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: HONEY, color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
                   <Plus size={17} strokeWidth={2.4} /> Inserieren
                 </Link>
-                <Link href="/search" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
+                <Link href="/search" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
                   Stöbern <ArrowRight size={16} strokeWidth={2.4} />
                 </Link>
               </div>
@@ -72,7 +72,7 @@ export function Hero() {
           <p style={{ fontSize: 13.5, color: 'rgba(25,22,21,0.68)', lineHeight: 1.55, margin: '0 0 16px' }}>
             Du gehörst zu den Ersten. Teste kaufen, verkaufen und mieten, und melde alles, was klemmt.
           </p>
-          <Link href="/beta" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: INK, color: '#fff', fontWeight: 700, fontSize: 13.5, padding: '10px 18px', borderRadius: 999, textDecoration: 'none', marginTop: 'auto' }}>
+          <Link href="/beta" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: INK, color: '#fff', fontWeight: 700, fontSize: 13.5, padding: '10px 18px', borderRadius: 999, textDecoration: 'none', marginTop: 'auto' }}>
             <MessageSquareHeart size={15} /> So testest du mit
           </Link>
         </section>

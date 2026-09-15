@@ -132,7 +132,7 @@ export function ChallengeBanner() {
           )}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "stretch", flexShrink: 0 }}>
-          <Link href={cta.href} style={{ padding: "11px 22px", background: HONEY, border: "none", borderRadius: 999, color: INK, fontSize: 13.5, fontWeight: 800, textDecoration: "none", textAlign: "center", position: "relative", zIndex: 1 }}>
+          <Link href={cta.href} className="cta-pill" style={{ padding: "11px 22px", background: HONEY, border: "none", borderRadius: 999, color: INK, fontSize: 13.5, fontWeight: 800, textDecoration: "none", textAlign: "center", position: "relative", zIndex: 1 }}>
             {cta.label}
           </Link>
           <Link href="/hive" style={{ fontSize: 11.5, color: PETROL, textDecoration: "underline", textUnderlineOffset: 3, textAlign: "center", display: "inline-flex", alignItems: "center", gap: 5, justifyContent: "center" }}>

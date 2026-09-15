@@ -24,7 +24,7 @@ export default function InvoicePage() {
   useEffect(() => {
     async function load() {
       try {
-        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping, shipping_method, ship_speed)").eq("id", params.id).single();
+        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping, shipping_method, ship_speed, pickup_only)").eq("id", params.id).single();
         if (!p) { setLoading(false); return; }
         const { data: buyer } = await supabase.from("profiles").select("*").eq("id", p.buyer_id).maybeSingle();
         const { data: seller } = await supabase.from("profiles").select("*").eq("id", p.seller_id).maybeSingle();
@@ -43,7 +43,10 @@ export default function InvoicePage() {
   if (!order) return <div style={{ fontFamily: f, padding: 60, textAlign: "center", color: g }}>Bestellung nicht gefunden</div>;
 
   const isRental = order.listing?.listing_type === "rent";
-  const price = parseFloat(order.listing?.price || order.price || 0);
+  // Kaufpreis aus der Bestellung, NICHT aus dem Inserat: bei Auktionen ist
+  // listing.price der laufende Gebotsstand (Beta-Feedback Denis 15.09.:
+  // Sofortkauf-Rechnung zeigte den letzten Gebotspreis statt CHF 50).
+  const price = parseFloat(order.price || order.listing?.price || 0);
   const shipping = parseFloat(order.listing?.shipping_cost || order.shipping_cost || 0);
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);
@@ -180,9 +183,16 @@ export default function InvoicePage() {
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(price)}</td>
                   </tr>
                 )}
-                {shipping > 0 && (
+                {/* Lieferzeile immer zeigen (Beta-Feedback Denis 15.09.: "steht nicht
+                    Lieferung?"): Abholung bzw. Versandart, auch wenn CHF 0.00 */}
+                {!isDeposit && (
                   <tr style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>{versandArt}</td>
+                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>
+                      {order.listing?.pickup_only ? "Lieferung: Abholung" : versandArt}
+                      {!order.listing?.pickup_only && shipping === 0 && (
+                        <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Versand inklusive</span>
+                      )}
+                    </td>
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#666" }}>{fmt(shipping)}</td>
                   </tr>
                 )}

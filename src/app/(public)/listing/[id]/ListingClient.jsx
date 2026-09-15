@@ -491,7 +491,7 @@ export default function ListingDetail() {
       }
       setBuyState("buying");
       try {
-        const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss());
+        const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss(), l.listing_type === "auction" ? l.buy_now_price : null);
         setBuyState("success");
         setListing(nachKaufLokal);
         if (purchaseId) router.push(`/order/${purchaseId}`);
@@ -1350,15 +1350,10 @@ export default function ListingDetail() {
                                     setBidding(false);
                                     return;
                                   }
-                                  // For auctions: update listing price to buy_now_price first
-                                  if (l.listing_type === "auction" && l.buy_now_price > 0) {
-                                    await supabase.from("listings").update({ price: l.buy_now_price }).eq("id", l.id);
-                                  }
-                                  const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss());
-                                  // Ensure purchase price matches buy_now_price (not auction bid)
-                                  if (l.listing_type === "auction" && l.buy_now_price > 0 && purchaseId) {
-                                    await supabase.from("purchases").update({ price: l.buy_now_price }).eq("id", purchaseId);
-                                  }
+                                  // Sofortkauf einer Auktion: Preis direkt an die RPC, damit
+                                  // Kaufpreis, Gebuehr und Verkaufsmail zusammenpassen (das
+                                  // fruehere Nachziehen von listings/purchases scheiterte an RLS)
+                                  const purchaseId = await createPurchase(user.id, l.id, variantenSchnappschuss(), l.listing_type === "auction" ? l.buy_now_price : null);
                                   setBuyState("success");
                                   setBidModal(null);
                                   router.push(`/order/${purchaseId || l.id}`);
