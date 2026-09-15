@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "15. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Inserat", text: "KI-Bildersuche: das Lupen-Symbol auf dem Artikelfoto vergleicht das Foto mit dem Sortiment und zeigt ähnliche Inserate mit Begründung (z.B. 'gleiche Art: Game Boy')", melder: "Denis" },
       { typ: "fix", bereich: "Inserat", text: "Die Mail 'Dein Inserat läuft ab' versprach Verlängern mit einem Klick: Der Link führt jetzt direkt zu einem Banner mit Verlängern-Knopf, Verlängern geht neu schon 3 Tage vor Ablauf, und Auktionen bekommen diese Mail nicht mehr (deren Ende ist nicht verlängerbar)", melder: "Tacocat" },
       { typ: "fix", bereich: "Rechnung", text: "Beim Sofortkauf einer Auktion stand auf Rechnung und QR-Zahlteil der letzte Gebotsstand statt des Sofortkauf-Preises, und die Gebühr wurde falsch berechnet. Jetzt zählt überall der Kaufpreis", melder: "Denis" },
       { typ: "fix", bereich: "Rechnung", text: "Die Lieferzeile steht jetzt immer auf der Rechnung, auch bei Abholung oder inklusivem Versand", melder: "Denis" },

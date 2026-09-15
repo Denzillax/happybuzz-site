@@ -665,3 +665,5 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 .type-tab:hover:not(.is-active) svg { stroke: #191615; }
 .type-free { transition: border-color .15s ease, background .15s ease; }
 .type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F4F4F2 !important; }
+
+.spin { animation: spin 1s linear infinite; }

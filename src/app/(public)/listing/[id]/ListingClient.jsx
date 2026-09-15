@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
+  Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -140,6 +140,26 @@ export default function ListingDetail() {
   const [buyState, setBuyState] = useState("idle"); // idle|confirm|buying|success|error
   const [buyError, setBuyError] = useState("");
   const [similar, setSimilar] = useState([]);
+  // KI-Bildersuche (Denis, 15.09.): Icon auf dem Foto -> /api/ai-similar
+  const [bildSuche, setBildSuche] = useState({ status: "idle", treffer: [], hinweis: null, fehler: "" });
+  async function sucheAehnlichePerBild() {
+    if (bildSuche.status === "laedt") return;
+    setBildSuche({ status: "laedt", treffer: [], hinweis: null, fehler: "" });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) { setBildSuche({ status: "fehler", treffer: [], hinweis: null, fehler: "Bitte melde dich an, um die Bildersuche zu nutzen." }); return; }
+      const res = await fetch("/api/ai-similar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ listingId: params.id }),
+      });
+      if (!res.ok) { setBildSuche({ status: "fehler", treffer: [], hinweis: null, fehler: "Die Bildersuche ist gerade nicht erreichbar." }); return; }
+      const r = await res.json();
+      setBildSuche({ status: "fertig", treffer: r.treffer || [], hinweis: r.hinweis || null, fehler: "" });
+    } catch {
+      setBildSuche({ status: "fehler", treffer: [], hinweis: null, fehler: "Die Bildersuche ist gerade nicht erreichbar." });
+    }
+  }
   const [bids, setBids] = useState([]);
   const [bidHistory, setBidHistory] = useState([]);
   const [showAllBids, setShowAllBids] = useState(false);
@@ -593,6 +613,18 @@ export default function ListingDetail() {
                 }}>
                   <Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
                 </button>
+                {/* KI-Bildersuche: aehnliche Inserate zu diesem Foto */}
+                {imgs.length > 0 && (
+                  <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); sucheAehnlichePerBild(); }}
+                    disabled={bildSuche.status === "laedt"} aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
+                    style={{
+                      position: "absolute", bottom: 14, right: 14, width: 40, height: 40, borderRadius: "50%",
+                      background: "rgba(255,255,255,.85)", border: "none", cursor: bildSuche.status === "laedt" ? "default" : "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(25,22,21,.15)",
+                    }}>
+                    {bildSuche.status === "laedt" ? <Loader2 size={19} color="#0B5E5C" className="spin" /> : <ScanSearch size={20} color="#0B5E5C" />}
+                  </button>
+                )}
                 {imgs.length > 1 && <>
                   <button onClick={(e) => { e.stopPropagation(); setActiveImg((i) => i > 0 ? i - 1 : imgs.length - 1); }} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.8)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><ChevronLeft size={20} /></button>
                   <button onClick={(e) => { e.stopPropagation(); setActiveImg((i) => i < imgs.length - 1 ? i + 1 : 0); }} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.8)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><ChevronRight size={20} /></button>
@@ -608,6 +640,30 @@ export default function ListingDetail() {
                 </div>
               )}
             </div>
+
+            {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
+            {bildSuche.status !== "idle" && (
+              <div style={{ background: "#E8F4F3", border: "1px solid #0E949333", borderRadius: 14, padding: "16px 18px", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
+                  <ScanSearch size={18} color="#0B5E5C" />
+                  <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>
+                  <button onClick={() => setBildSuche({ status: "idle", treffer: [], hinweis: null, fehler: "" })} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={INK} /></button>
+                </div>
+                {bildSuche.status === "laedt" && <p style={{ margin: "8px 0 0", fontSize: 13, color: colors.muted }}>Vergleicht das Foto mit dem Sortiment...</p>}
+                {bildSuche.status === "fehler" && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#C62828", fontWeight: 700 }}>{bildSuche.fehler}</p>}
+                {bildSuche.status === "fertig" && bildSuche.treffer.length === 0 && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#8a6d00", fontWeight: 700 }}>{bildSuche.hinweis}</p>}
+                {bildSuche.status === "fertig" && bildSuche.treffer.length > 0 && (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                    {bildSuche.treffer.map((item) => (
+                      <div key={item.id}>
+                        <ListingCard listing={item} userId={user?.id} />
+                        {item.grund && <span style={{ display: "inline-block", marginTop: 6, fontSize: 11.5, fontWeight: 700, color: "#0B5E5C", background: "#fff", border: "1px solid #0E949333", borderRadius: 999, padding: "3px 9px" }}>{item.grund}</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
             <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden" }}>

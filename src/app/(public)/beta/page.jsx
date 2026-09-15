@@ -128,6 +128,7 @@ const TESTS = [
       { id: "lv_hover_zoom", label: "Hover-Zoom auf Hauptbild" },
       { id: "lv_thumbnails", label: "Thumbnails anklickbar" },
       { id: "lv_favorite", label: "Herz-Button → Favorit speichern/entfernen" },
+      { id: "lv_bildersuche", label: "Bildersuche-Symbol unten rechts auf dem Artikelfoto: Klick zeigt 'Ähnlich per Bild' mit passenden Inseraten und Begründungs-Chip; ohne Login Anmelde-Hinweis; passt nichts, steht das ehrlich da" },
       { id: "lv_share", label: "Teilen: WhatsApp / E-Mail / Link kopieren (bzw. native Share auf Mobile)" },
       { id: "lv_report", label: "Melden → Report-Modal & Absenden" },
       { id: "lv_report_ratelimit", label: "Melde-Spam-Schutz: sehr viele Meldungen in kurzer Zeit (10/Stunde) werden serverseitig blockiert mit Hinweis 'Zu viele Meldungen in kurzer Zeit'" },
