@@ -666,12 +666,18 @@ export default function ListingDetail() {
                 {bildSuche.status === "laedt" && <p style={{ margin: "8px 0 0", fontSize: 13, color: colors.muted }}>Vergleicht das Foto mit dem Sortiment...</p>}
                 {bildSuche.status === "fehler" && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#C62828", fontWeight: 700 }}>{bildSuche.fehler}</p>}
                 {bildSuche.status === "fertig" && bildSuche.treffer.length === 0 && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#8a6d00", fontWeight: 700 }}>{bildSuche.hinweis}</p>}
+                {/* listing-grid: gleiche Karten-Rahmen wie ueberall; der Grund
+                    steht als umbrechende Zeile unter der Karte im Rahmen */}
                 {bildSuche.status === "fertig" && bildSuche.treffer.length > 0 && (
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+                  <div className="listing-grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}>
                     {bildSuche.treffer.map((item) => (
                       <div key={item.id}>
                         <ListingCard listing={item} userId={user?.id} />
-                        {item.grund && <span style={{ display: "inline-block", marginTop: 6, fontSize: 11.5, fontWeight: 700, color: "#0B5E5C", background: "#fff", border: "1px solid #0E949333", borderRadius: 999, padding: "3px 9px" }}>{item.grund}</span>}
+                        {item.grund && (
+                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#0B5E5C", background: "#E8F4F3", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                            {item.grund}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
