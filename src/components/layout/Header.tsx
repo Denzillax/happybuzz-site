@@ -171,11 +171,12 @@ export function Header() {
     <header style={{ position: 'sticky', top: 0, zIndex: 50 }}>
       {/* Zeile 1 (sticky): Marke, Kategorien, Aktionen. Zeile 2 (scrollt mit):
           Suche ueber die volle Breite (Ricardo-Vorbild, Denis 15.09.). */}
-      <div className="hdr-top" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)' }}>
+      {/* position/zIndex: backdrop-filter macht beide Zeilen zu Stapelkontexten, sonst liegen die Dropdowns hinter der Suchzeile */}
+      <div className="hdr-top" style={{ position: 'relative', zIndex: 2, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)' }}>
       <style>{`
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
-        .hdr-searchrow { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
+        .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
         .hdr-menu-btn:hover { background: #F4F4F2 !important; }
         .hdr-mobile-only { display: none !important; }
         .hdr-menu-item:hover { background: #f8f6f3 !important; color: #1a1a1a !important; }
