@@ -180,22 +180,25 @@ export function ListingCard(props) {
       </div>
 
       {/* Text unterm Bild, ohne Kartenrahmen */}
-      <div style={{ padding: "8px 2px 0", flex: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{ padding: "6px 2px 0", flex: 1, display: "flex", flexDirection: "column" }}>
         <p style={{
-          fontSize: 13.5, fontWeight: 600, fontFamily: fonts.body,
-          lineHeight: 1.35, margin: 0, color: INK,
+          fontSize: 14, fontWeight: 600, fontFamily: fonts.body,
+          lineHeight: 1.3, margin: 0, color: INK,
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-          overflow: "hidden", minHeight: "2.7em",
+          overflow: "hidden", minHeight: "2.6em",
         }}>
           {listing.title}
         </p>
 
         {/* Preis: feste Zeilenplaetze, damit alle Karten buendig sind */}
-        <div style={{ marginTop: 4, minHeight: 22, display: "flex", alignItems: "baseline", overflow: "hidden", whiteSpace: "nowrap" }}>
+        <div style={{ marginTop: 2, minHeight: 20, display: "flex", alignItems: "baseline", gap: 5, overflow: "hidden", whiteSpace: "nowrap" }}>
           {isAuction ? (
-            <span style={{ fontSize: 15.5, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
-              CHF {(listing.price || listing.start_price || 0).toFixed(2)}
-            </span>
+            <>
+              <span style={{ fontSize: 15.5, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+                CHF {(listing.price || listing.start_price || 0).toFixed(2)}
+              </span>
+              <span style={{ fontSize: 12, color: colors.muted }}>({bidCount} {bidCount === 1 ? "Gebot" : "Gebote"})</span>
+            </>
           ) : isRent || isService ? (
             <span style={{ fontSize: 15.5, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
               CHF {(listing.rent_price || listing.price || 0).toFixed(2)}
@@ -208,18 +211,14 @@ export function ListingCard(props) {
           )}
         </div>
         {/* Sekundaerzeile: Sofortpreis (Auktion) oder leerer Platzhalter */}
-        <div style={{ minHeight: 17, fontSize: 12, fontWeight: 600, color: colors.muted, fontVariantNumeric: "tabular-nums", overflow: "hidden", whiteSpace: "nowrap" }}>
-          {isAuction && listing.buy_now_price > 0 ? `Sofort CHF ${listing.buy_now_price.toFixed(2)}` : ""}
-        </div>
+        {isAuction && listing.buy_now_price > 0 && (
+          <div style={{ fontSize: 12, lineHeight: 1.3, color: colors.muted, fontVariantNumeric: "tabular-nums", overflow: "hidden", whiteSpace: "nowrap" }}>
+            {listing.buy_now_price.toFixed(2)} Sofort kaufen
+          </div>
+        )}
 
         {/* Meta: Gebote · Zustand · Ort, rechts Countdown/Status */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2, fontSize: 12, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", minHeight: 18 }}>
-          {isAuction && bidCount > 0 && (
-            <>
-              <span style={{ whiteSpace: "nowrap" }}>{bidCount} {bidCount === 1 ? "Gebot" : "Gebote"}</span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
-            </>
-          )}
+        <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1, fontSize: 12, lineHeight: 1.3, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", minHeight: 16 }}>
           {listing.condition && (
             <>
               <span style={{ whiteSpace: "nowrap" }}>{conditionLabel(listing.condition)}</span>
@@ -248,7 +247,7 @@ export function ListingCard(props) {
               window.location.href = `/user/${listing.user_id}`;
             }}
             title="Verkäuferprofil ansehen"
-            style={{ display: "flex", alignItems: "center", gap: 5, marginTop: "auto", paddingTop: 6, cursor: listing.user_id ? "pointer" : "default", minWidth: 0 }}
+            style={{ display: "flex", alignItems: "center", gap: 5, marginTop: "auto", paddingTop: 4, cursor: listing.user_id ? "pointer" : "default", minWidth: 0 }}
           >
             <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {listing.seller.account_type === "business" && listing.seller.company_name
