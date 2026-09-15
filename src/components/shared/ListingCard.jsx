@@ -216,6 +216,8 @@ export function ListingCard(props) {
         {/* Kleingedrucktes: eigener Block mit Luft und Linie, am Kartenboden */}
         <div style={{ marginTop: "auto", paddingTop: 12 }}>
           <div style={{ borderTop: "1px solid #EEEBE5", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
+            {/* Zeile 1: Zustand · Ort (der Ort bekommt den Platz, Denis 15.09.: bei
+                6 pro Zeile war er von der Laufzeit verdraengt) */}
             <div style={{ display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", overflow: "hidden" }}>
               {listing.condition && (
                 <>
@@ -223,8 +225,10 @@ export function ListingCard(props) {
                   <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
                 </>
               )}
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "0 1 auto" }}>{listing.city || "Schweiz"}</span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "1 1 auto" }}>{listing.city || "Schweiz"}</span>
+            </div>
+            {/* Zeile 2: Laufzeit links, bei Auktionen Sofortpreis rechts */}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", marginTop: 1 }}>
               {statusOverlay ? (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
                   <Clock size={10} /> {statusOverlay}
@@ -232,8 +236,14 @@ export function ListingCard(props) {
               ) : (
                 <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
               )}
+              {isAuction && listing.buy_now_price > 0 && (
+                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
+                  {listing.buy_now_price.toFixed(2)} Sofort
+                </span>
+              )}
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 2 }}>
+            {/* Zeile 3: Verkaeufer mit Stern */}
+            <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 1 }}>
               {listing.seller && (
                 <span
                   onClick={(e) => {
@@ -258,11 +268,6 @@ export function ListingCard(props) {
                       {parseFloat(listing.seller.avg_rating).toFixed(1)}
                     </span>
                   )}
-                </span>
-              )}
-              {isAuction && listing.buy_now_price > 0 && (
-                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
-                  {listing.buy_now_price.toFixed(2)} Sofort
                 </span>
               )}
             </div>

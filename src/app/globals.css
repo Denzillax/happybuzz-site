@@ -665,3 +665,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { border-color: #CFC9BE; box-shadow: 0 8px 22px rgba(25,22,21,.12); transform: translateY(-2px); }
+
+/* "Warum wir"-Karten haben ihren eigenen farbigen Hover (Akzentrand + Schatten),
+   das globale Abdunkeln machte sie grau (Denis, 15.09.) */
+.why-grid > a:hover { filter: none; }
