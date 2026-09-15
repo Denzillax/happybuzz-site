@@ -257,7 +257,7 @@ export function ListingCard(props) {
             <AccountBadge accountType={listing.seller.account_type} />
             <VerifiedSellerBadge profile={listing.seller} size="sm" label={false} />
             {listing.seller.avg_rating > 0 && (
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: "auto", fontSize: 12, color: colors.muted }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: 2, fontSize: 12, color: colors.muted }}>
                 <Star size={11} fill={colors.yellow} color={colors.yellow} />
                 {parseFloat(listing.seller.avg_rating).toFixed(1)}
               </span>
