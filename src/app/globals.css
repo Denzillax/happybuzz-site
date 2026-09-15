@@ -158,9 +158,14 @@ body {
 }
 html.raster-gross .listing-grid, html.raster-gross .search-results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.listing-grid > a, .search-results-grid > a { min-width: 0; background: #FFFFFF; padding: 0; box-shadow: none; }
-.listing-grid > div { min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; padding: 0; box-shadow: none; }
-.listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; }
+/* Karte mit abgerundetem Hairline-Rahmen (Denis, 15.09.) */
+.listing-grid > a, .search-results-grid > a, .listing-grid > div {
+  min-width: 0; background: #FFFFFF; padding: 10px; box-shadow: none;
+  border: 1px solid #E4E0D8; border-radius: 14px;
+  transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
+}
+.listing-grid > div { display: flex; flex-direction: column; }
+.listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; border: none; }
 .raster-umschalter { display: inline-flex; gap: 2px; background: #F2EEE7; border-radius: 999px; padding: 3px; flex-shrink: 0; }
 .raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #8A8580; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .raster-umschalter button.on { background: #fff; color: #191615; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
@@ -174,6 +179,7 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
   html.raster-gross .listing-grid, html.raster-gross .search-results-grid,
   html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
   .raster-umschalter { display: none !important; }
+  .listing-grid > a, .search-results-grid > a, .listing-grid > div { padding: 8px; border-radius: 12px; }
 }
 
 /* Startseiten-Reihen auf Mobile: wischbar statt gestapelt (mehr Platz,
@@ -658,5 +664,4 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
-.listing-grid > a > div:first-child, .search-results-grid > a > div:first-child, .listing-grid > div > a > div:first-child { transition: box-shadow .2s ease, transform .2s ease; }
-.listing-grid > a:hover > div:first-child, .search-results-grid > a:hover > div:first-child, .listing-grid > div > a:hover > div:first-child { box-shadow: 0 8px 22px rgba(25,22,21,.16); transform: translateY(-2px); }
+.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { border-color: #CFC9BE; box-shadow: 0 8px 22px rgba(25,22,21,.12); transform: translateY(-2px); }

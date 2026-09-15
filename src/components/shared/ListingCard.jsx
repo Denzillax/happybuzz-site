@@ -135,7 +135,7 @@ export function ListingCard(props) {
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
     >
       {/* Bild: Querformat 4:3 wie fotografiert (Ricardo-Mass), weich gerundet */}
-      <div style={{ position: "relative", aspectRatio: "4/3", background: colors.cream, overflow: "hidden", borderRadius: 12 }}>
+      <div style={{ position: "relative", aspectRatio: "4/3", background: colors.cream, overflow: "hidden", borderRadius: 10 }}>
         {cover
           ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.03)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
           : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#ccc" /></div>
@@ -179,91 +179,95 @@ export function ListingCard(props) {
         </div>
       </div>
 
-      {/* Text unterm Bild, ohne Kartenrahmen */}
-      <div style={{ padding: "6px 2px 0", flex: 1, display: "flex", flexDirection: "column" }}>
+      {/* Textblock "Zwei Bloecke" (Denis, 15.09.): oben Titel + Preis eng
+          beieinander, unten das Kleingedruckte als eigener Block hinter einer
+          feinen Linie, immer am Kartenboden (marginTop auto). */}
+      <div style={{ padding: "8px 2px 0", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <p style={{
-          fontSize: 14, fontWeight: 600, fontFamily: fonts.body,
-          lineHeight: 1.3, margin: 0, color: INK,
+          fontSize: 14.5, fontWeight: 600, fontFamily: fonts.body,
+          lineHeight: 1.35, margin: 0, color: INK,
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-          overflow: "hidden", minHeight: "2.6em",
+          overflow: "hidden", minHeight: "2.7em",
         }}>
           {listing.title}
         </p>
 
-        {/* Preis: feste Zeilenplaetze, damit alle Karten buendig sind */}
-        <div style={{ marginTop: 2, minHeight: 20, display: "flex", alignItems: "baseline", gap: 5, overflow: "hidden", whiteSpace: "nowrap" }}>
+        {/* Preis als Anker, Gebote grau daneben */}
+        <div style={{ marginTop: 4, minHeight: 22, display: "flex", alignItems: "baseline", gap: 6, overflow: "hidden", whiteSpace: "nowrap" }}>
           {isAuction ? (
             <>
-              <span style={{ fontSize: 15.5, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {(listing.price || listing.start_price || 0).toFixed(2)}
               </span>
               <span style={{ fontSize: 12, color: colors.muted }}>({bidCount} {bidCount === 1 ? "Gebot" : "Gebote"})</span>
             </>
           ) : isRent || isService ? (
-            <span style={{ fontSize: 15.5, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
               CHF {(listing.rent_price || listing.price || 0).toFixed(2)}
               <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted }}> / {PERIOD_LABEL[listing.rent_period] || "Tag"}</span>
             </span>
           ) : isFree ? (
-            <span style={{ fontSize: 15.5, fontWeight: 800, color: colors.nature }}>Gratis</span>
+            <span style={{ fontSize: 17, fontWeight: 800, color: colors.nature }}>Gratis</span>
           ) : (
             <PriceDisplay listing={listing} size="md" />
           )}
         </div>
-        {/* Sekundaerzeile: Sofortpreis (Auktion) oder leerer Platzhalter */}
-        {isAuction && listing.buy_now_price > 0 && (
-          <div style={{ fontSize: 12, lineHeight: 1.3, color: colors.muted, fontVariantNumeric: "tabular-nums", overflow: "hidden", whiteSpace: "nowrap" }}>
-            {listing.buy_now_price.toFixed(2)} Sofort kaufen
-          </div>
-        )}
 
-        {/* Meta: Gebote · Zustand · Ort, rechts Countdown/Status */}
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1, fontSize: 12, lineHeight: 1.3, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", minHeight: 16 }}>
-          {listing.condition && (
-            <>
-              <span style={{ whiteSpace: "nowrap" }}>{conditionLabel(listing.condition)}</span>
+        {/* Kleingedrucktes: eigener Block mit Luft und Linie, am Kartenboden */}
+        <div style={{ marginTop: "auto", paddingTop: 12 }}>
+          <div style={{ borderTop: "1px solid #EEEBE5", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", overflow: "hidden" }}>
+              {listing.condition && (
+                <>
+                  <span style={{ whiteSpace: "nowrap" }}>{conditionLabel(listing.condition)}</span>
+                  <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
+                </>
+              )}
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "0 1 auto" }}>{listing.city || "Schweiz"}</span>
               <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
-            </>
-          )}
-          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "0 1 auto" }}>{listing.city || "Schweiz"}</span>
-          {/* Laufzeit/Status in derselben Zeile (Luftig-Layout: keine eigene Countdown-Zeile) */}
-          <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
-          {statusOverlay ? (
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
-              <Clock size={10} /> {statusOverlay}
-            </span>
-          ) : (
-            <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
-          )}
-        </div>
-
-        {/* Verkäufer: dezent, klickbar (stoppt den Karten-Link) */}
-        {listing.seller && (
-          <div
-            onClick={(e) => {
-              if (!listing.user_id) return;
-              e.preventDefault();
-              e.stopPropagation();
-              window.location.href = `/user/${listing.user_id}`;
-            }}
-            title="Verkäuferprofil ansehen"
-            style={{ display: "flex", alignItems: "center", gap: 5, marginTop: "auto", paddingTop: 4, cursor: listing.user_id ? "pointer" : "default", minWidth: 0 }}
-          >
-            <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {listing.seller.account_type === "business" && listing.seller.company_name
-                ? listing.seller.company_name
-                : listing.seller.display_name}
-            </span>
-            <AccountBadge accountType={listing.seller.account_type} />
-            <VerifiedSellerBadge profile={listing.seller} size="sm" label={false} />
-            {listing.seller.avg_rating > 0 && (
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 2, marginLeft: 2, fontSize: 12, color: colors.muted }}>
-                <Star size={11} fill={colors.yellow} color={colors.yellow} />
-                {parseFloat(listing.seller.avg_rating).toFixed(1)}
-              </span>
-            )}
+              {statusOverlay ? (
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
+                  <Clock size={10} /> {statusOverlay}
+                </span>
+              ) : (
+                <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
+              )}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 2 }}>
+              {listing.seller && (
+                <span
+                  onClick={(e) => {
+                    if (!listing.user_id) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = "/user/" + listing.user_id;
+                  }}
+                  title="Verkäuferprofil ansehen"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 4, minWidth: 0, cursor: listing.user_id ? "pointer" : "default" }}
+                >
+                  <span style={{ fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {listing.seller.account_type === "business" && listing.seller.company_name
+                      ? listing.seller.company_name
+                      : listing.seller.display_name}
+                  </span>
+                  <AccountBadge accountType={listing.seller.account_type} />
+                  <VerifiedSellerBadge profile={listing.seller} size="sm" label={false} />
+                  {listing.seller.avg_rating > 0 && (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}>
+                      <Star size={11} fill={colors.yellow} color={colors.yellow} />
+                      {parseFloat(listing.seller.avg_rating).toFixed(1)}
+                    </span>
+                  )}
+                </span>
+              )}
+              {isAuction && listing.buy_now_price > 0 && (
+                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
+                  {listing.buy_now_price.toFixed(2)} Sofort
+                </span>
+              )}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </Link>
   );
