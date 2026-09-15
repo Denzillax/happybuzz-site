@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Package, Star, Clock, Flame } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 import { getCoverUrl, conditionLabel } from "@/lib/formatters";
 import { PriceDisplay } from "./PriceDisplay";
@@ -101,6 +102,7 @@ export function ListingCard(props) {
     if (wasFav && onUnfavorite) onUnfavorite(listing.id);
   };
 
+  const router = useRouter();
   const isAuction = listing.listing_type === "auction";
   const isRent = listing.listing_type === "rent";
   const isFree = listing.listing_type === "free";
@@ -156,17 +158,25 @@ export function ListingCard(props) {
           <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
         </div>
 
-        {/* Unten links: Endet bald (unter 24h Restzeit) und/oder Hot (viele Aufrufe/Tag) */}
-        {(endetBald || istHot) && (
-          <div style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, flexWrap: "wrap" }}>
+        {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
+            KI-Bildersuche), daneben Endet bald / Hot */}
+        <div style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+          {!statusOverlay && (
+            <button type="button" aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/listing/${listing.id}?bild=1`); }}
+              style={{ width: 28, height: 28, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.92)", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 4px rgba(25,22,21,.18)", flexShrink: 0 }}>
+              <ScanSearch size={15} color="#0B5E5C" />
+            </button>
+          )}
+          {(endetBald || istHot) && (<>
             {endetBald && <span style={chip("#C62828", "#fff")}>Endet bald</span>}
             {istHot && (
               <span style={{ ...chip("#E8590C", "#fff"), display: "inline-flex", alignItems: "center", gap: 3 }}>
                 <Flame size={10} fill="#fff" /> Hot
               </span>
             )}
-          </div>
-        )}
+          </>)}
+        </div>
       </div>
 
       {/* Text unterm Bild, ohne Kartenrahmen */}
@@ -216,11 +226,9 @@ export function ListingCard(props) {
               <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
             </>
           )}
-          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "1 1 auto" }}>{listing.city || "Schweiz"}</span>
-        </div>
-
-        {/* Restzeit/Status: eigene Zeile, immer rechtsbuendig */}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 2, minHeight: 16 }}>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "0 1 auto" }}>{listing.city || "Schweiz"}</span>
+          {/* Laufzeit/Status in derselben Zeile (Luftig-Layout: keine eigene Countdown-Zeile) */}
+          <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
           {statusOverlay ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
               <Clock size={10} /> {statusOverlay}

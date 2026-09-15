@@ -142,6 +142,20 @@ export default function ListingDetail() {
   const [similar, setSimilar] = useState([]);
   // KI-Bildersuche (Denis, 15.09.): Icon auf dem Foto -> /api/ai-similar
   const [bildSuche, setBildSuche] = useState({ status: "idle", treffer: [], hinweis: null, fehler: "" });
+  // Von der Karte (Lupe) kommend: /listing/<id>?bild=1 startet die Bildersuche einmalig
+  const bildAutoRef = useRef(false);
+  useEffect(() => {
+    if (!l || bildAutoRef.current) return;
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("bild") === "1") {
+        bildAutoRef.current = true;
+        window.history.replaceState(null, "", window.location.pathname);
+        sucheAehnlichePerBild();
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [l]);
   async function sucheAehnlichePerBild() {
     if (bildSuche.status === "laedt") return;
     setBildSuche({ status: "laedt", treffer: [], hinweis: null, fehler: "" });

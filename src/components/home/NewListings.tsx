@@ -44,7 +44,7 @@ export function NewListings() {
 
   return (
     <section style={{ padding: '44px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
-      <SectionHeader title="Neu eingestellt" href="/search?sort=newest" />
+      <SectionHeader title="Neu eingestellt" href="/search?sort=newest" raster />
 
       <div className="listing-grid home-swipe">
         {listings.map(listing => (

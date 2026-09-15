@@ -83,6 +83,8 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
+        {/* Raster-Umschalter: gespeicherte Stufe vor dem ersten Malen setzen (kein Springen) */}
+        <script dangerouslySetInnerHTML={{ __html: "try{var r=localStorage.getItem('beedaro_raster');if(r==='gross'||r==='kompakt'){document.documentElement.classList.add('raster-'+r)}}catch(e){}" }} />
       </head>
       <body><AppSplash /><SwRegister />{children}<BetaFeedback /><GamificationProvider /></body>
     </html>

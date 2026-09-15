@@ -8,6 +8,7 @@ import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/a
 import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
 import { ListingCard } from "@/components/shared/ListingCard";
+import { RasterUmschalter } from "@/components/shared/RasterUmschalter";
 import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/recentSearches";
 import { getActiveBoosts } from "@/lib/gamification";
 
@@ -377,6 +378,7 @@ function SearchPageInner() {
           }}>
             <Sparkles size={14} color={PETROL} /> KI-Suche
           </button>
+          <RasterUmschalter />
         </div>
 
         {/* ── KI-Suche: Beschreibung statt Stichwort ── */}

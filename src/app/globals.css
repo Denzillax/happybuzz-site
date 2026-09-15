@@ -125,9 +125,7 @@ body {
 }
 
 .search-results-grid {
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 1px !important;
-  overflow: hidden;
+  gap: 14px !important;
 }
 
 @media (max-width: 767px) {
@@ -142,52 +140,40 @@ body {
   .search-results-grid,
   .listing-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 1px !important;
+    gap: 10px !important;
   }
 }
 
 /* ═══════════════════════════════════════════
-   LISTING GRIDS — Responsive (Homepage + Search)
+   LISTING GRIDS — "Luftig mit Abstand" (Denis, 15.09.)
    ═══════════════════════════════════════════ */
-/* Klar-Look: 1px-Luecken + getoenter Grid-Hintergrund = Hairline-Raster
-   ZWISCHEN den Karten (kein Aussenrahmen). Die Zellen selbst sind weiss
-   und bringen ihr eigenes Innen-Padding mit. */
-.listing-grid {
+/* Keine Hairlines mehr: 14px Luft zwischen den Karten, das Bild traegt die
+   Karte. Spaltenzahl kommt vom Raster-Umschalter als Klasse am <html>:
+   raster-gross = 3, Standard/raster-mittel = 4, raster-kompakt = 6 (Desktop).
+   Tablet 3, Mobil 2. */
+.listing-grid, .search-results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1px;
-  overflow: hidden;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
-/* Grid-Items haben min-width:auto → Karten müssen schrumpfen dürfen,
-   damit die Spalten wirklich gleich breit bleiben (Inhalt clippt per Ellipsis). */
-.listing-grid > a,
-.search-results-grid > a {
-  min-width: 0;
-  background: #FFFFFF;
-  padding: 10px 10px 14px;
-  box-shadow: 1px 1px 0 0 #E8E4DC;
-}
-/* Karten in Wrapper-Divs (z.B. Endet bald mit Countdown-Chip) sollen die
-   gleiche Hoehe fuellen wie direkte Karten: Wrapper als Spalte, Karte waechst */
-.listing-grid > div {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  background: #FFFFFF;
-  padding: 10px 10px 14px;
-  box-shadow: 1px 1px 0 0 #E8E4DC;
-}
-.listing-grid > div > a {
-  flex: 1;
-  background: transparent;
-  padding: 0;
-  box-shadow: none;
-}
+html.raster-gross .listing-grid, html.raster-gross .search-results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.listing-grid > a, .search-results-grid > a { min-width: 0; background: #FFFFFF; padding: 0; box-shadow: none; }
+.listing-grid > div { min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; padding: 0; box-shadow: none; }
+.listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; }
+.raster-umschalter { display: inline-flex; gap: 2px; background: #F2EEE7; border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #8A8580; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.raster-umschalter button.on { background: #fff; color: #191615; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 @media (max-width: 1024px) {
-  .listing-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important; }
+  .listing-grid, .search-results-grid,
+  html.raster-gross .listing-grid, html.raster-gross .search-results-grid,
+  html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 }
 @media (max-width: 767px) {
-  .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 1px !important; }
+  .listing-grid, .search-results-grid,
+  html.raster-gross .listing-grid, html.raster-gross .search-results-grid,
+  html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .raster-umschalter { display: none !important; }
 }
 
 /* Startseiten-Reihen auf Mobile: wischbar statt gestapelt (mehr Platz,

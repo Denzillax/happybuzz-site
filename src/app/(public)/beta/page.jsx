@@ -48,6 +48,8 @@ const TESTS = [
       { id: "sr_condition", label: "Zustand-Filter funktioniert" },
       { id: "sr_type", label: "Typ-Filter (Festpreis/Auktion/Miete/Gratis/Service)" },
       { id: "sr_sort", label: "Sortierung: Relevanz, Neueste, Preis, Endet bald, Gebote" },
+      { id: "sr_raster", label: "Raster-Umschalter (3/4/6 pro Zeile) rechts über 'Neu eingestellt', 'Gerade beliebt' und in der Suche: Wahl gilt überall, überlebt Reload ohne Springen; mobil 2 Spalten, kein Umschalter" },
+      { id: "sr_karten_luftig", label: "Karten ohne Hairlines mit Abstand; Titel 2 Zeilen, Preis, EINE Meta-Zeile (Zustand · Ort · bis Datum), Verkäufer; alle Karten einer Reihe gleich hoch; Lupe unten links auf dem Bild startet die Bildersuche auf dem Inserat" },
       { id: "sr_zufall", label: "'Überrasch mich' auf der Suchseite öffnet ein zufälliges aktives Inserat, jedes Mal ein anderes" },
       { id: "sr_ki", label: "KI-Suche: Alltagsbeschreibung ('günstiges Rennvelo unter 300 Franken') setzt Suchbegriffe, Kategorie und Preisfilter; ohne Login kommt ein Anmelde-Hinweis" },
       { id: "sr_ki_header", label: "Sparkles-Symbol im Header-Suchfeld öffnet die KI-Suche auf der Suchseite und nimmt den getippten Text mit; Enter bleibt normale Suche" },
