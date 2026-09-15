@@ -164,9 +164,14 @@ export function Header() {
   const menuItemStyle = { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', fontSize: 14, fontWeight: 500, color: '#444', textDecoration: 'none', transition: 'all 0.12s', cursor: 'pointer', border: 'none', background: 'none', width: '100%', fontFamily: 'inherit' }
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e8e5e0' }}>
+    <header style={{ display: 'contents' }}>
+      {/* Zeile 1 (sticky): Marke, Kategorien, Aktionen. Zeile 2 (scrollt mit):
+          Suche ueber die volle Breite (Ricardo-Vorbild, Denis 15.09.). */}
+      <div className="hdr-top" style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)' }}>
       <style>{`
         .hdr-desktop { display: flex !important; }
+        .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
+        .hdr-searchrow { background: #fff; border-bottom: 1px solid #e8e5e0; }
         .hdr-mobile-only { display: none !important; }
         .hdr-menu-item:hover { background: #f8f6f3 !important; color: #1a1a1a !important; }
         .hdr-icon-btn:hover { background: #f5f3f0 !important; color: #1a1a1a !important; }
@@ -183,11 +188,12 @@ export function Header() {
           .hdr-logo img { width: 122px !important; }
           .hdr-mobile-only { gap: 3px !important; }
           .hdr-mobile-search { display: flex !important; }
+          .hdr-top { border-bottom: 1px solid #e8e5e0; }
         }
       `}</style>
 
       <div className="hdr-wrap" style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 32, paddingRight: 32, position: 'relative' }}>
-        <div style={{ display: 'flex', alignItems: 'center', height: 64 }}>
+        <div style={{ display: 'flex', alignItems: 'center', height: 58 }}>
 
           {/* ── Logo: klickbar zur Startseite ── */}
           {/* Logo verlinkt selbst auf "/" (Logo.tsx) - hier NICHT nochmal in
@@ -202,73 +208,25 @@ export function Header() {
             {/* Kategorien Button */}
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
-              border: megaMenuOpen ? "1px solid #E4E0D8" : '1.5px solid #d8d4cd',
-              borderRadius: 10, background: megaMenuOpen ? '#F4F4F2' : '#fff',
+              border: '1px solid #E4E0D8',
+              borderRadius: 999, background: megaMenuOpen ? '#F4F4F2' : '#fff',
               cursor: 'pointer', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
               color: INK, transition: 'all .15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}>
               <AlignJustify size={15} />
-              Alle Kategorien
+              Kategorien
               <ChevronDown size={13} style={{ transform: megaMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }} />
             </button>
 
-            {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
-            <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, padding: 4 }}>
-                <Search size={17} style={{ marginLeft: 12, color: '#8A8580', flexShrink: 0 }} />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => handleQueryChange(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setShowSuggestions(false) } }}
-                  onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  placeholder="Was suchst du?"
-                  style={{ flex: 1, padding: '8px 12px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
-                />
-                {/* KI-Suche: reicht den getippten Text an das KI-Panel auf /search weiter */}
-                <button
-                  onClick={() => {
-                    router.push('/search?ki=1' + (searchQuery.trim() ? '&q=' + encodeURIComponent(searchQuery.trim()) : ''))
-                    setShowSuggestions(false)
-                  }}
-                  title="KI-Suche: beschreib einfach, was du suchst"
-                  aria-label="KI-Suche"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 6px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
-                >
-                  <Sparkles size={16} color="#0B5E5C" />
-                </button>
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} className="cta-pill" style={{ padding: '8px 20px', background: '#F4C03F', border: 'none', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 13.5, color: INK, fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  Suchen
-                </button>
-              </div>
-
-              {/* Autocomplete */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #e8e5e0', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 6, overflow: 'hidden' }}>
-                  <div style={{ padding: '6px 14px', fontSize: 11, fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '.04em' }}>Kategorien</div>
-                  {suggestions.map(cat => (
-                    <button key={cat.id}
-                      onMouseDown={(e) => { e.preventDefault(); router.push(`/search?category=${cat.slug}`); setShowSuggestions(false); setSearchQuery('') }}
-                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontFamily: 'inherit', color: DARK, textAlign: 'left', transition: 'background .1s' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#FDF8E8'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'none'}
-                    >
-                      <Search size={14} style={{ color: '#999' }} />
-                      <span>{cat.name}</span>
-                      {cat.parent_id && <span style={{ fontSize: 12, color: '#999', marginLeft: 'auto' }}>in Kategorie</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* Freiraum: die Suche lebt in Zeile 2 */}
+            <div style={{ flex: 1 }} />
 
             {/* Inserieren direkt im Header (Beta-Feedback Michael, 30.08.) */}
             <Link href="/listings/new" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: YELLOW, color: DARK, fontWeight: 700, fontSize: 13.5, padding: '9px 16px', borderRadius: 999, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
               <Plus size={16} strokeWidth={2.4} /> Inserieren
             </Link>
 
+            <div className="hdr-sep" />
             {/* ── Action Icons ── */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
               {/* Favorites */}
@@ -304,11 +262,9 @@ export function Header() {
               </button>
             </div>
 
-            {/* ── Nektar/Level-Badge (Desktop) ── */}
-            {user && <div style={{ marginLeft: 10 }}><NektarBadge /></div>}
-
-            {/* ── Avatar — separated to far right ── */}
-            <div ref={dropdownRef} style={{ position: 'relative', marginLeft: 12, flexShrink: 0 }}>
+            <div className="hdr-sep" />
+            {/* ── Avatar (Level-Abzeichen steht im Profilmenue) ── */}
+            <div ref={dropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
               <button
                 onClick={() => { if (!user) { router.push('/login'); return; } setDropdownOpen(!dropdownOpen); setFavOpen(false); }}
                 style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 0, border: 'none', background: 'transparent', cursor: 'pointer' }}
@@ -331,6 +287,7 @@ export function Header() {
                         <p style={{ fontSize: 12, color: '#888', margin: '2px 0 0' }}>{user?.email}</p>
                       </div>
                     </div>
+                    <div style={{ marginTop: 10 }}><NektarBadge /></div>
                   </div>
                   <div style={{ padding: '6px 0' }}>
                     {menuItems.map((item, i) => (
@@ -464,6 +421,65 @@ export function Header() {
           </div>
         </div>
       )}
+      </div>
+
+      {/* ── Zeile 2: Suche ueber die volle Breite (nur Desktop) ── */}
+      <div className="hdr-searchrow hdr-desktop">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 32px 10px', width: '100%', boxSizing: 'border-box' }}>
+            {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
+            <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, padding: 4 }}>
+                <Search size={17} style={{ marginLeft: 12, color: '#8A8580', flexShrink: 0 }} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => handleQueryChange(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setShowSuggestions(false) } }}
+                  onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                  placeholder="Was suchst du? Zum Beispiel: Rennvelo unter 300 Franken"
+                  style={{ flex: 1, padding: '10px 12px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
+                />
+                {/* KI-Suche: reicht den getippten Text an das KI-Panel auf /search weiter */}
+                <button
+                  onClick={() => {
+                    router.push('/search?ki=1' + (searchQuery.trim() ? '&q=' + encodeURIComponent(searchQuery.trim()) : ''))
+                    setShowSuggestions(false)
+                  }}
+                  title="KI-Suche: beschreib einfach, was du suchst"
+                  aria-label="KI-Suche"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 6px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                >
+                  <Sparkles size={16} color="#0B5E5C" />
+                </button>
+                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} className="cta-pill" style={{ padding: '9px 22px', background: INK, border: 'none', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#fff', fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                  Suchen
+                </button>
+              </div>
+
+              {/* Autocomplete */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #e8e5e0', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 6, overflow: 'hidden' }}>
+                  <div style={{ padding: '6px 14px', fontSize: 11, fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '.04em' }}>Kategorien</div>
+                  {suggestions.map(cat => (
+                    <button key={cat.id}
+                      onMouseDown={(e) => { e.preventDefault(); router.push(`/search?category=${cat.slug}`); setShowSuggestions(false); setSearchQuery('') }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontFamily: 'inherit', color: DARK, textAlign: 'left', transition: 'background .1s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#FDF8E8'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                    >
+                      <Search size={14} style={{ color: '#999' }} />
+                      <span>{cat.name}</span>
+                      {cat.parent_id && <span style={{ fontSize: 12, color: '#999', marginLeft: 'auto' }}>in Kategorie</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+        </div>
+      </div>
     </header>
   )
 }
