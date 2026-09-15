@@ -947,6 +947,7 @@ export default function ListingForm({
             return (
               <button
                 key={t.value}
+                className={"type-tab" + (active ? " is-active" : "")}
                 onClick={() => { set("listing_type", t.value); setIsFree(false); }}
                 style={{
                   flex: 1, padding: "12px 8px",
@@ -974,6 +975,7 @@ export default function ListingForm({
         {form.listing_type === "sell" && (
           <div
             onClick={toggleFree}
+            className={"type-free" + (isFree ? " is-active" : "")}
             style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "12px 14px", borderRadius: radius.md,

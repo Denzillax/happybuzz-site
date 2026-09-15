@@ -655,3 +655,13 @@ button[style*="background:rgb(20, 17, 13)"]:not(:disabled):hover, button[style*=
 button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*="background:rgb(14, 148, 147)"]:not(:disabled):hover {
   filter: brightness(1.18);
 }
+
+/* Inserat-Typ-Auswahl (Beta-Feedback Denis 15.09.): die inaktiven Tabs sind
+   transparent, da bewirkt das globale Abdunkeln fast nichts. Eigener Hover:
+   weisse Flaeche + Ink-Schrift, der aktive Tab bleibt wie er ist. */
+.type-tab { filter: none !important; }
+.type-tab:hover:not(.is-active) { background: rgba(255,255,255,.75) !important; }
+.type-tab:hover:not(.is-active) span { color: #191615 !important; }
+.type-tab:hover:not(.is-active) svg { stroke: #191615; }
+.type-free { transition: border-color .15s ease, background .15s ease; }
+.type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F4F4F2 !important; }
