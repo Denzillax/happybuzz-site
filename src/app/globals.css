@@ -638,9 +638,20 @@ input:focus, textarea:focus, select:focus {
 .cta-pill:hover { filter: brightness(.94); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(25,22,21,.14); }
 .cta-pill:active { transform: translateY(0); box-shadow: none; }
 
-/* Inserat-Detail (Beta-Feedback Denis 15.09.): Bieten, Sofort kaufen, Favorit,
-   Teilen usw. hatten keinerlei Hover. Seitenweit fuer alle Knoepfe und Links,
-   ohne jede Inline-Style-Stelle anzufassen. */
-.listing-page button, .listing-page a[href] { transition: filter .15s ease, transform .15s ease; }
-.listing-page button:not(:disabled):hover, .listing-page a[href]:hover { filter: brightness(.93); }
-.listing-page button:not(:disabled):active { transform: translateY(1px); }
+/* Hover ueberall (Beta-Feedback Denis 15.09.): jeder Knopf und Link reagiert.
+   Helle und gelbe Flaechen werden leicht dunkler (Druckpunkt), dunkle Flaechen
+   (Ink, Petrol, Teal) werden heller - dort waere Abdunkeln unsichtbar. Die
+   dunklen Faelle werden ueber den Inline-Style erkannt, weil die Knoepfe ihre
+   Farbe inline tragen; React schreibt "background:#hex" ohne Leerzeichen. */
+button, a[href] { transition: filter .15s ease, transform .15s ease; }
+button:not(:disabled):hover, a[href]:hover { filter: brightness(.93); }
+button:not(:disabled):active { transform: translateY(1px); }
+button[style*="background:#14110D"]:not(:disabled):hover, a[href][style*="background:#14110D"]:hover,
+button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
+button[style*="background:#1a1a1a"]:not(:disabled):hover, a[href][style*="background:#1a1a1a"]:hover,
+button[style*="background:#0B5E5C"]:not(:disabled):hover, a[href][style*="background:#0B5E5C"]:hover,
+button[style*="background:#0E9493"]:not(:disabled):hover, a[href][style*="background:#0E9493"]:hover,
+button[style*="background:rgb(20, 17, 13)"]:not(:disabled):hover, button[style*="background:rgb(25, 22, 21)"]:not(:disabled):hover,
+button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*="background:rgb(14, 148, 147)"]:not(:disabled):hover {
+  filter: brightness(1.18);
+}
