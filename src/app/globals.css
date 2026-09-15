@@ -653,3 +653,10 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 .type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F4F4F2 !important; }
 
 .spin { animation: spin 1s linear infinite; }
+
+/* Inserat-Karten (Denis, 15.09.): das globale Abdunkeln liess die ganze weisse
+   Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
+   heben stattdessen das gerundete Bild mit weichem Schatten an. */
+.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
+.listing-grid > a > div:first-child, .search-results-grid > a > div:first-child, .listing-grid > div > a > div:first-child { transition: box-shadow .2s ease, transform .2s ease; }
+.listing-grid > a:hover > div:first-child, .search-results-grid > a:hover > div:first-child, .listing-grid > div > a:hover > div:first-child { box-shadow: 0 8px 22px rgba(25,22,21,.16); transform: translateY(-2px); }
