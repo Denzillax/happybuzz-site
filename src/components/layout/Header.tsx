@@ -29,6 +29,9 @@ export function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const suggestTimer = useRef<any>(null)
   const [favOpen, setFavOpen] = useState(false)
+  // Textmenues oben rechts (Ricardo-Vorbild, Denis 15.09.): genau eines offen
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const menusRef = useRef<HTMLDivElement>(null)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [canAdmin, setCanAdmin] = useState(false)
@@ -111,6 +114,7 @@ export function Header() {
     const handleClick = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setDropdownOpen(false)
       if (favRef.current && !favRef.current.contains(e.target as Node)) setFavOpen(false)
+      if (menusRef.current && !menusRef.current.contains(e.target as Node)) setOpenMenu(null)
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
@@ -164,14 +168,15 @@ export function Header() {
   const menuItemStyle = { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', fontSize: 14, fontWeight: 500, color: '#444', textDecoration: 'none', transition: 'all 0.12s', cursor: 'pointer', border: 'none', background: 'none', width: '100%', fontFamily: 'inherit' }
 
   return (
-    <header style={{ display: 'contents' }}>
+    <header style={{ position: 'sticky', top: 0, zIndex: 50 }}>
       {/* Zeile 1 (sticky): Marke, Kategorien, Aktionen. Zeile 2 (scrollt mit):
           Suche ueber die volle Breite (Ricardo-Vorbild, Denis 15.09.). */}
-      <div className="hdr-top" style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)' }}>
+      <div className="hdr-top" style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)' }}>
       <style>{`
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
-        .hdr-searchrow { background: #fff; border-bottom: 1px solid #e8e5e0; }
+        .hdr-searchrow { background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
+        .hdr-menu-btn:hover { background: #F4F4F2 !important; }
         .hdr-mobile-only { display: none !important; }
         .hdr-menu-item:hover { background: #f8f6f3 !important; color: #1a1a1a !important; }
         .hdr-icon-btn:hover { background: #f5f3f0 !important; color: #1a1a1a !important; }
@@ -203,9 +208,9 @@ export function Header() {
           </span>
 
           {/* ── Desktop: Kategorien + Search + Icons + Avatar ── */}
-          <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 12 }}>
+          <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 4 }}>
 
-            {/* Kategorien Button */}
+            {/* Kategorien (Mega-Menue) */}
             <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
               border: '1px solid #E4E0D8',
@@ -218,105 +223,103 @@ export function Header() {
               <ChevronDown size={13} style={{ transform: megaMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }} />
             </button>
 
-            {/* Freiraum: die Suche lebt in Zeile 2 */}
             <div style={{ flex: 1 }} />
 
-            {/* Inserieren direkt im Header (Beta-Feedback Michael, 30.08.) */}
-            <Link href="/listings/new" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: YELLOW, color: DARK, fontWeight: 700, fontSize: 13.5, padding: '9px 16px', borderRadius: 999, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-              <Plus size={16} strokeWidth={2.4} /> Inserieren
-            </Link>
-
-            <div className="hdr-sep" />
-            {/* ── Action Icons ── */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-              {/* Favorites */}
-              <div ref={favRef} style={{ position: 'relative' }}>
-                <button onClick={() => { if (!user) { router.push('/login'); return; } setFavOpen(!favOpen); setDropdownOpen(false); }} className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favOpen ? '#14110D' : '#666', transition: 'all 0.15s' }}>
-                  {/* Aktiv: Honey-Fuellung mit Ink-Kontur (Katalog); die fruehere
-                      rote Kontur passte nicht zum gelben Herz. */}
-                  <Heart size={20} fill={favOpen ? '#F4C03F' : 'none'} />
-                </button>
-                {favOpen && (
-                  <div style={{ ...dropdownStyle, width: 200, padding: '6px 0' }}>
-                    {favSubItems.map(item => (
-                      <Link key={item.href} href={item.href} onClick={() => setFavOpen(false)}
-                        className="hdr-menu-item"
-                        style={menuItemStyle}>
-                        <item.icon size={16} style={{ color: '#888' }} />
-                        {item.label}
-                      </Link>
-                    ))}
+            {/* Textmenues nach Rolle: Inserieren / Kaufen / Favoriten, dann
+                Glocke + Chat, dann Profil. Nicht eingeloggt: alles fuehrt zum Login. */}
+            <div ref={menusRef} style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+              {[
+                { key: 'inserieren', label: 'Inserieren', icon: Plus, honey: true, items: [
+                  { href: '/listings/new', icon: Plus, label: 'Neues Inserat' },
+                  { href: '/listings', icon: Tag, label: 'Meine Inserate' },
+                  { href: '/sales', icon: ShoppingBag, label: 'Meine Verkäufe' },
+                  { href: '/fees', icon: Receipt, label: 'Gebühren & Beiträge' },
+                ] },
+                { key: 'kaufen', label: 'Kaufen', icon: ShoppingBag, honey: false, items: [
+                  { href: '/search', icon: Search, label: 'Stöbern' },
+                  { href: '/purchases', icon: Receipt, label: 'Meine Käufe' },
+                  { href: '/bids', icon: Gavel, label: 'Meine Gebote' },
+                  { href: '/bookings', icon: CalendarDays, label: 'Buchungen' },
+                ] },
+                { key: 'favoriten', label: 'Favoriten', icon: Heart, honey: false, items: favSubItems },
+              ].map(menu => {
+                const open = openMenu === menu.key
+                const MenuIcon = menu.icon
+                return (
+                  <div key={menu.key} style={{ position: 'relative' }}>
+                    <button
+                      onClick={() => { if (!user) { router.push('/login'); return; } setOpenMenu(open ? null : menu.key) }}
+                      className={menu.honey ? 'cta-pill' : 'hdr-menu-btn'}
+                      aria-expanded={open}
+                      style={menu.honey
+                        ? { display: 'inline-flex', alignItems: 'center', gap: 6, background: YELLOW, color: DARK, fontWeight: 700, fontSize: 13.5, padding: '9px 14px', borderRadius: 999, border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap', marginRight: 4 }
+                        : { display: 'inline-flex', alignItems: 'center', gap: 6, background: open ? '#F4F4F2' : 'transparent', color: INK, fontWeight: 600, fontSize: 13.5, padding: '8px 10px', borderRadius: 8, border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+                    >
+                      <MenuIcon size={16} strokeWidth={menu.honey ? 2.4 : 2} />
+                      {menu.label}
+                      <ChevronDown size={13} style={{ opacity: .7, transition: 'transform .15s', transform: open ? 'rotate(180deg)' : 'none' }} />
+                    </button>
+                    {open && (
+                      <div style={{ ...dropdownStyle, width: 220, padding: '6px 0' }}>
+                        {menu.items.map(item => (
+                          <Link key={item.href} href={item.href} onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}>
+                            <item.icon size={16} style={{ color: '#888' }} />
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                )
+              })}
 
-              {/* Notifications */}
+              <div className="hdr-sep" />
+
+              {/* Glocke + Chat: bleiben Symbole, die Zaehler brauchen den Platz */}
               {user ? <NotificationBell /> : <button className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s' }} onClick={() => router.push('/login')}><Bell size={20} /></button>}
-
-              {/* Chat */}
               <button className="hdr-icon-btn" onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
                   <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 10, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
                 )}
               </button>
-            </div>
 
-            <div className="hdr-sep" />
-            {/* ── Avatar (Level-Abzeichen steht im Profilmenue) ── */}
-            <div ref={dropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
-              <button
-                onClick={() => { if (!user) { router.push('/login'); return; } setDropdownOpen(!dropdownOpen); setFavOpen(false); }}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: 0, border: 'none', background: 'transparent', cursor: 'pointer' }}
-              >
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: user ? YELLOW : '#EDEDEA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: user ? DARK : '#666', transition: 'box-shadow 0.15s', boxShadow: dropdownOpen ? `0 0 0 2px #fff, 0 0 0 4px ${YELLOW}` : 'none' }}>
-                  {user ? getInitials() : <User size={18} />}
-                </div>
-                {user && <ChevronDown size={14} style={{ color: '#888', transition: 'transform 0.15s', transform: dropdownOpen ? 'rotate(180deg)' : 'none' }} />}
-              </button>
+              <div className="hdr-sep" />
 
-              {dropdownOpen && (
-                <div style={{ ...dropdownStyle, width: 250, padding: '6px 0' }}>
-                  <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0ede8' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <div style={{ width: 42, height: 42, borderRadius: '50%', background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 700, color: DARK, flexShrink: 0 }}>
-                        {getInitials()}
-                      </div>
-                      <div>
+              {/* Profil: Avatar + Vorname, Menue mit Hive (Level), Einstellungen, Admin, Abmelden */}
+              {user ? (
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setOpenMenu(openMenu === 'profil' ? null : 'profil')}
+                    className="hdr-menu-btn"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: openMenu === 'profil' ? '#F4F4F2' : 'transparent', color: INK, fontWeight: 600, fontSize: 13.5, padding: '4px 10px 4px 4px', borderRadius: 999, border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+                  >
+                    <span style={{ width: 32, height: 32, borderRadius: '50%', background: YELLOW, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12.5, fontWeight: 800, color: DARK }}>{getInitials()}</span>
+                    {displayName.split(' ')[0]}
+                    <ChevronDown size={13} style={{ opacity: .7, transition: 'transform .15s', transform: openMenu === 'profil' ? 'rotate(180deg)' : 'none' }} />
+                  </button>
+                  {openMenu === 'profil' && (
+                    <div style={{ ...dropdownStyle, width: 250, padding: '6px 0' }}>
+                      <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0ede8' }}>
                         <p style={{ fontWeight: 700, fontSize: 14, color: DARK, margin: 0 }}>{displayName}</p>
                         <p style={{ fontSize: 12, color: '#888', margin: '2px 0 0' }}>{user?.email}</p>
+                        <div style={{ marginTop: 10 }}><NektarBadge /></div>
+                      </div>
+                      <div style={{ padding: '6px 0' }}>
+                        <Link href="/hive" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Trophy size={16} style={{ color: '#888' }} /> Mein Hive</Link>
+                        <Link href="/settings" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Settings size={16} style={{ color: '#888' }} /> Einstellungen</Link>
+                        {canAdmin && <Link href="/admin" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><ShieldCheck size={16} style={{ color: '#888' }} /> Admin Dashboard</Link>}
+                      </div>
+                      <div style={{ padding: '6px 0', borderTop: '1px solid #f0ede8' }}>
+                        <button onClick={handleLogout} className="hdr-menu-item" style={{ ...menuItemStyle, color: '#999' }}><LogOut size={16} /> Abmelden</button>
                       </div>
                     </div>
-                    <div style={{ marginTop: 10 }}><NektarBadge /></div>
-                  </div>
-                  <div style={{ padding: '6px 0' }}>
-                    {menuItems.map((item, i) => (
-                      item.divider
-                        ? <div key={`div-${i}`} style={{ height: 1, background: '#f0ede8', margin: '6px 0' }} />
-                        : <Link key={item.href} href={item.href} onClick={() => setDropdownOpen(false)}
-                            className="hdr-menu-item"
-                            style={menuItemStyle}>
-                            <item.icon size={16} style={{ color: '#888' }} />
-                            {item.label}
-                            {item.label === 'Nachrichten' && unreadCount > 0 && (
-                              <span style={{ marginLeft: 'auto', background: YELLOW, color: DARK, fontSize: 11, fontWeight: 700, borderRadius: 10, padding: '2px 7px', minWidth: 20, textAlign: 'center' }}>{unreadCount}</span>
-                            )}
-                          </Link>
-                    ))}
-                  </div>
-                  <div style={{ padding: '6px 0', borderTop: '1px solid #f0ede8' }}>
-                    <Link href="/settings" onClick={() => setDropdownOpen(false)}
-                      className="hdr-menu-item"
-                      style={menuItemStyle}>
-                      <Settings size={16} style={{ color: '#888' }} /> Einstellungen
-                    </Link>
-                    <button onClick={handleLogout}
-                      className="hdr-menu-item"
-                      style={{ ...menuItemStyle, color: '#999' }}>
-                      <LogOut size={16} /> Abmelden
-                    </button>
-                  </div>
+                  )}
                 </div>
+              ) : (
+                <Link href="/login" className="hdr-menu-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: INK, fontWeight: 600, fontSize: 13.5, padding: '8px 10px', borderRadius: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                  <User size={16} /> Anmelden
+                </Link>
               )}
             </div>
           </div>
@@ -428,8 +431,8 @@ export function Header() {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 32px 10px', width: '100%', boxSizing: 'border-box' }}>
             {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, padding: 4 }}>
-                <Search size={17} style={{ marginLeft: 12, color: '#8A8580', flexShrink: 0 }} />
+              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `2px solid ${YELLOW}`, borderRadius: 999, overflow: 'hidden', height: 48 }}>
+                <Search size={18} style={{ marginLeft: 18, alignSelf: 'center', color: '#8A8580', flexShrink: 0 }} />
                 <input
                   ref={searchInputRef}
                   type="text"
@@ -439,7 +442,7 @@ export function Header() {
                   onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   placeholder="Was suchst du? Zum Beispiel: Rennvelo unter 300 Franken"
-                  style={{ flex: 1, padding: '10px 12px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
+                  style={{ flex: 1, padding: '0 12px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
                 />
                 {/* KI-Suche: reicht den getippten Text an das KI-Panel auf /search weiter */}
                 <button
@@ -449,12 +452,12 @@ export function Header() {
                   }}
                   title="KI-Suche: beschreib einfach, was du suchst"
                   aria-label="KI-Suche"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 6px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 12px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
                 >
-                  <Sparkles size={16} color="#0B5E5C" />
+                  <Sparkles size={17} color="#0B5E5C" />
                 </button>
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} className="cta-pill" style={{ padding: '9px 22px', background: INK, border: 'none', borderRadius: 999, cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#fff', fontFamily: 'inherit', transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  Suchen
+                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                  <Search size={17} strokeWidth={2.5} /> Suchen
                 </button>
               </div>
 

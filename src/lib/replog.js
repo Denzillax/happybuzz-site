@@ -25,7 +25,7 @@ export const REP_LOG = [
   {
     datum: "15. September 2026",
     punkte: [
-      { typ: "neu", bereich: "Design", text: "Header aufgeräumt und zweizeilig wie bei Ricardo: oben Marke, Kategorien und Aktionen (nur noch ein gelber Knopf), darunter die Suche über die volle Breite. Das Level-Abzeichen steht jetzt im Profilmenü", melder: "Denis" },
+      { typ: "neu", bereich: "Design", text: "Header nach Ricardo-Vorbild: oben Textmenüs nach Rolle (Inserieren, Kaufen, Favoriten, Profil) statt einem langen Profilmenü, darunter das weisse Suchfeld mit gelbem Rand über die volle Breite; beides bleibt beim Scrollen oben", melder: "Denis" },
       { typ: "neu", bereich: "Design", text: "Inserat-Karten neu: luftiges Raster mit Abstand statt Hairlines, gestraffte Karte (Titel, Preis, eine Zeile Zustand/Ort/Laufzeit, Verkäufer) und ein Raster-Umschalter (3 / 4 / 6 pro Zeile), der auf allen Seiten gilt und gemerkt wird", melder: "Denis" },
       { typ: "neu", bereich: "Inserat", text: "Bildersuche-Lupe jetzt auch direkt auf jeder Inserat-Karte unten links: ein Klick öffnet das Inserat und die KI-Bildersuche läuft von selbst an", melder: "Denis" },
       { typ: "neu", bereich: "Inserat", text: "KI-Bildersuche: das Lupen-Symbol auf dem Artikelfoto vergleicht das Foto mit dem Sortiment und zeigt ähnliche Inserate mit Begründung (z.B. 'gleiche Art: Game Boy')", melder: "Denis" },

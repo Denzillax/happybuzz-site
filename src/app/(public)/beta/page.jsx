@@ -48,7 +48,7 @@ const TESTS = [
       { id: "sr_condition", label: "Zustand-Filter funktioniert" },
       { id: "sr_type", label: "Typ-Filter (Festpreis/Auktion/Miete/Gratis/Service)" },
       { id: "sr_sort", label: "Sortierung: Relevanz, Neueste, Preis, Endet bald, Gebote" },
-      { id: "hdr_zweizeilig", label: "Header zweizeilig (Desktop): Zeile 1 mit Logo, Kategorien-Pille, Inserieren, Herz/Glocke/Chat, Avatar bleibt beim Scrollen oben; Zeile 2 mit der Suche über volle Breite scrollt mit; Level-Abzeichen im Profilmenü; mobil unverändert" },
+      { id: "hdr_zweizeilig", label: "Header (Desktop): Zeile 1 mit Logo, Kategorien-Pille und Textmenüs Inserieren (gelb) / Kaufen / Favoriten mit Aufklapp-Pfeil, Glocke, Chat, Profil (Avatar + Vorname: Hive mit Level, Einstellungen, Admin, Abmelden); Zeile 2 weisses Suchfeld mit gelbem Rand und gelbem Suchen-Block; beide Zeilen bleiben beim Scrollen oben; nicht eingeloggt: Menüs führen zum Login, rechts 'Anmelden'; mobil unverändert" },
       { id: "sr_raster", label: "Raster-Umschalter (3/4/6 pro Zeile) rechts über 'Neu eingestellt', 'Gerade beliebt' und in der Suche: Wahl gilt überall, überlebt Reload ohne Springen; mobil 2 Spalten, kein Umschalter" },
       { id: "sr_karten_luftig", label: "Karten ohne Hairlines mit Abstand; Titel 2 Zeilen, Preis, EINE Meta-Zeile (Zustand · Ort · bis Datum), Verkäufer; alle Karten einer Reihe gleich hoch; Lupe unten links auf dem Bild startet die Bildersuche auf dem Inserat" },
       { id: "sr_zufall", label: "'Überrasch mich' auf der Suchseite öffnet ein zufälliges aktives Inserat, jedes Mal ein anderes" },

@@ -28,3 +28,12 @@ Unverändert: Logo, Symbole, Such-Pille unter dem Logo. Zeile 2 wird nicht gezei
 ## Test (live, 1400px + 375px)
 Zeile 1 klebt beim Scrollen, Zeile 2 nicht; nichts bricht um; Suche, KI-Sparkles,
 Kategorien-Menü, Dropdowns funktionieren; mobil unverändert, kein Überlauf.
+
+## Nachtrag 15.09. (Denis, Ricardo-Vorbild, Variante A)
+- Ganzer Header sticky (beide Zeilen).
+- Suchfeld weiss, 2px Honey-Rand, 48px, angesetzter Honey-Suchen-Block mit Lupe rechts, Sparkles davor.
+- Zeile 1 rechts: Textmenues mit Pfeil statt Symbolen: Inserieren (Honey-Pille: Neues
+  Inserat, Meine Inserate, Meine Verkaeufe, Gebuehren), Kaufen (Stoebern, Meine Kaeufe,
+  Meine Gebote, Buchungen), Favoriten (Artikel, Verkaeufer, gespeicherte Suchen),
+  Trennlinie, Glocke, Chat, Trennlinie, Profil (Avatar + Vorname: Hive mit Level,
+  Einstellungen, Admin, Abmelden). Gast: Menues fuehren zum Login, rechts "Anmelden".
