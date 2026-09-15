@@ -230,7 +230,7 @@ export function Header() {
                 Glocke + Chat, dann Profil. Nicht eingeloggt: alles fuehrt zum Login. */}
             <div ref={menusRef} style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
               {[
-                { key: 'inserieren', label: 'Inserieren', icon: Plus, honey: true, items: [
+                { key: 'inserieren', label: 'Inserieren', icon: Plus, honey: false, items: [
                   { href: '/listings/new', icon: Plus, label: 'Neues Inserat' },
                   { href: '/listings', icon: Tag, label: 'Meine Inserate' },
                   { href: '/sales', icon: ShoppingBag, label: 'Meine Verkäufe' },
