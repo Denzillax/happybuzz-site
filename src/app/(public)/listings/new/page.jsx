@@ -88,6 +88,14 @@ function NewListingPageInner() {
     const listing = await createListing(user.id, formData);
     if (formData.newFiles?.length > 0) {
       await uploadListingImages(listing.id, formData.newFiles);
+      // Bild-Merkmale fuer die Bildersuche einmalig rechnen (im Hintergrund,
+      // blockiert das Veroeffentlichen nicht; Fehler sind still)
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.access_token) {
+          fetch("/api/ai-tags", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ listingId: listing.id }) }).catch(() => {});
+        }
+      } catch {}
     }
     if (formData.attributeValues && Object.keys(formData.attributeValues).length > 0) {
       await saveListingAttributes(listing.id, formData.attributeValues, formData.category_id);

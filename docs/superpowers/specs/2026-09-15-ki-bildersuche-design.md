@@ -40,3 +40,14 @@ Kategorie), ersetzt sie nicht.
 2. Klick ohne Login → Anmelde-Hinweis, kein API-Aufruf ans Modell.
 3. Genau ein /api/ai-similar-Aufruf pro Klick; Knopf während des Aufrufs gesperrt.
 4. Bestehende Sektion "Ähnliche Artikel" unverändert.
+
+## Nachtrag 15.09. (Denis): Umstieg auf Bild-Merkmale ("unmittelbar" wie Ricardo)
+- `listings.image_tags text[]` (+ `image_tags_at`, GIN-Index). Merkmale = feste Slots
+  (Art, Oberkategorie, Marke, Farbe, Material, Stil, Epoche, Nutzung + bis 4 weitere),
+  Kleinbuchstaben, Prompt in `src/lib/server/imageTags.js`.
+- Berechnung: einmal pro Inserat nach dem Foto-Upload (`/api/ai-tags`, Owner-Token),
+  Altbestand per Skript nachgepflegt; fehlt einem Ziel-Inserat das Merkmalset, rechnet
+  `/api/ai-similar` es beim ersten Klick nach (RPC `set_image_tags`: Owner/Staff
+  jederzeit, andere nur write-once).
+- Vergleich: RPC `similar_by_tags` (Ueberschneidung, Pflicht-Treffer in Art/Kategorie/
+  Marke, mindestens 2 gemeinsame Merkmale), ~6 ms. Begruendung "Gemeinsam: a, b, c".
