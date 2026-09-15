@@ -500,7 +500,7 @@ export default function ListingDetail() {
   };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", color: colors.dark }}>
+    <div className="listing-page" style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", color: colors.dark }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 80px" }}>
 
         {/* ── BREADCRUMBS ─────────────────────────────── */}
