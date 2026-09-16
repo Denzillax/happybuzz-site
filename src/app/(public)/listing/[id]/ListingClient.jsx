@@ -1388,7 +1388,7 @@ export default function ListingDetail() {
                                   <span>CHF {fmtPrice(total)}</span>
                                 </div>
                                 {bidModal === "bid" && (
-                                  <p style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>Du zahlst nur so viel wie nötig. Dein Maximum wird nur erreicht, wenn jemand mitbietet.</p>
+                                  <p style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>Du zahlst nur so viel wie nötig: {bids.length === 0 ? "Als erster Bieter steht die Auktion auf dem Startpreis, " : ""}dein Maximum greift erst, wenn jemand mitbietet.</p>
                                 )}
                               </div>
                             );
@@ -1433,8 +1433,10 @@ export default function ListingDetail() {
                                   router.push(`/order/${purchaseId || l.id}`);
                                 } else {
                                   const amount = parseFloat(bidAmount);
-                                  const minBid = myBid ? myBid.amount + 1 : (bids[0]?.amount || l.start_price || 0) + 1;
-                                  if (amount < minBid) { setBidError(`Minimum: CHF ${fmtPrice(minBid)}`); setBidding(false); return; }
+                                  // Beta-Feedback Sturzi8 16.09.: die Maske verlangte Startpreis + 1, der
+                                  // Server akzeptiert beim ersten Gebot den Startpreis selbst (nextBid).
+                                  const minBid = myBid ? Number(myBid.amount) + 1 : nextBid;
+                                  if (amount < minBid) { setBidError(`Minimum: CHF ${fmtPrice(minBid)}${bids.length === 0 && !myBid ? " (Startpreis)" : ""}`); setBidding(false); return; }
                                   if (l.buy_now_price > 0 && amount >= l.buy_now_price) { setBidError(`Max: CHF ${fmtPrice(l.buy_now_price - 1)}. Nutze Sofortkauf.`); setBidding(false); return; }
                                   
                                   if (myBid && amount < myBid.max_amount) {

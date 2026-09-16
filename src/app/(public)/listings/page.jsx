@@ -48,6 +48,8 @@ export default function ListingsPage() {
   // Willkommens-Los: /listings?los=<Betrag> nach dem ersten Inserat
   // (window.location statt useSearchParams, spart die Suspense-Boundary)
   const [losBetrag, setLosBetrag] = useState(0);
+  // Mahn-Pause (Stufe 3): solange eine Rechnung offen ist, bleibt Reaktivieren gesperrt
+  const [mahnPause, setMahnPause] = useState(false);
   // Ablauf-Mail "mit einem Klick verlaengern" (Beta-Feedback Tacocat 14.09.):
   // /listings?verlaengern=<id> zeigt oben ein Banner mit direktem Verlaengern-Knopf.
   const [verlaengernId, setVerlaengernId] = useState(null);
@@ -96,6 +98,8 @@ export default function ListingsPage() {
           setMyBoosts(bmap);
         });
         supabase.from("profiles").select("nektar").eq("id", user.id).maybeSingle().then(({ data }) => setMyNektar(data?.nektar || 0));
+        supabase.from("fee_invoices").select("id").eq("seller_id", user.id).eq("listings_paused", true).eq("status", "overdue").limit(1)
+          .then(({ data }) => setMahnPause((data || []).length > 0));
         const auctionIds = items.filter(l => l.listing_type === "auction").map(l => l.id);
         if (auctionIds.length > 0) {
           const { data: historyBids } = await supabase.from("bid_history").select("listing_id").in("listing_id", auctionIds);
@@ -201,10 +205,18 @@ export default function ListingsPage() {
     setBatchAction(action);
     try {
       if (action === "pause") {
-        await supabase.from("listings").update({ status: "paused" }).in("id", ids);
-        setListings(prev => prev.map(l => ids.includes(l.id) ? { ...l, status: "paused" } : l));
+        // Auktionen mit Geboten bleiben aktiv (siehe togglePause)
+        const erlaubt = ids.filter(id => { const l = listings.find(x => x.id === id); return !(l?.listing_type === "auction" && bidCounts[id]?.count > 0); });
+        if (erlaubt.length < ids.length) toast.error("Auktionen mit Geboten wurden übersprungen.");
+        if (erlaubt.length) {
+          const { error } = await supabase.from("listings").update({ status: "paused" }).in("id", erlaubt);
+          if (error) throw error;
+          setListings(prev => prev.map(l => erlaubt.includes(l.id) ? { ...l, status: "paused" } : l));
+        }
       } else if (action === "activate") {
-        await supabase.from("listings").update({ status: "active" }).in("id", ids);
+        if (mahnPause) { toast.error("Deine Inserate sind wegen einer offenen Gebührenrechnung pausiert. Bitte zuerst begleichen."); return; }
+        const { error } = await supabase.from("listings").update({ status: "active" }).in("id", ids);
+        if (error) throw error;
         setListings(prev => prev.map(l => ids.includes(l.id) ? { ...l, status: "active" } : l));
       } else if (action === "delete") {
         for (const id of ids) {
@@ -220,7 +232,16 @@ export default function ListingsPage() {
   // Quick toggle pause/activate
   const togglePause = async (l) => {
     const newStatus = l.status === "paused" ? "active" : "paused";
-    await supabase.from("listings").update({ status: newStatus }).eq("id", l.id);
+    // Beta-Feedback Denis 16.09.: Auktionen mit Geboten nicht pausierbar,
+    // Mahn-Pause nicht selbst aufhebbar (der DB-Trigger sichert beides ab)
+    if (newStatus === "paused" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0) {
+      toast.error("Auktionen mit Geboten können nicht pausiert werden."); return;
+    }
+    if (newStatus === "active" && mahnPause) {
+      toast.error("Deine Inserate sind wegen einer offenen Gebührenrechnung pausiert. Bitte zuerst begleichen."); return;
+    }
+    const { error } = await supabase.from("listings").update({ status: newStatus }).eq("id", l.id);
+    if (error) { toast.error(error.message || "Statuswechsel fehlgeschlagen."); return; }
     setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: newStatus } : x));
   };
 
@@ -267,6 +288,14 @@ export default function ListingsPage() {
             </div>
           );
         })()}
+
+        {mahnPause && (
+          <div style={{ background: "#FFEBEE", border: "1px solid #F5C2C2", borderRadius: 14, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+            <span style={{ fontWeight: 800 }}>Inserate pausiert:</span>
+            <span style={{ flex: "1 1 200px" }}>Eine Gebührenrechnung ist überfällig. Nach der Zahlung schalten wir deine Inserate wieder frei.</span>
+            <Link href="/fees" style={{ fontWeight: 700, color: "#c62828", textDecoration: "underline", whiteSpace: "nowrap" }}>Zur Rechnung</Link>
+          </div>
+        )}
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
@@ -541,7 +570,7 @@ export default function ListingsPage() {
                               <RefreshCw size={13} /> Verlängern
                             </button>
                           )}
-                          {(l.status === "active" || l.status === "paused") && (
+                          {(l.status === "active" || l.status === "paused") && !(l.status === "active" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0) && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
                               width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
                               border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
