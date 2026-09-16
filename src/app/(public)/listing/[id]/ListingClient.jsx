@@ -965,14 +965,11 @@ export default function ListingDetail() {
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
             <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
-              {/* Klar-Look: ruhiger Zustands-Chip statt ART-Nr + Stempel */}
-              {l.condition && (
-                <span style={{ display: "inline-block", fontSize: 11.5, fontWeight: 700, color: INK, background: "#F2EEE7", borderRadius: 999, padding: "4px 11px", marginBottom: 10 }}>{condLabel}</span>
-              )}
               <h1 style={{ fontSize: 23, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.2, letterSpacing: "-0.01em", color: INK }}>{l.title}</h1>
-              <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
-                <Clock size={13} /> <span style={{ whiteSpace: "nowrap" }}>{new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}</span>
-                {l.view_count > 0 && <><span style={{ margin: "0 4px" }}>·</span><span style={{ whiteSpace: "nowrap" }}>{l.view_count} Aufrufe</span></>}
+              {/* Kaufbox aufgeraeumt (Denis, 16.09.): eine ruhige Meta-Zeile statt Chip + Symbolzeile */}
+              <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
+                {l.condition ? `${condLabel} · ` : ""}eingestellt {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}
+                {l.view_count > 0 && ` · ${l.view_count} ${l.view_count === 1 ? "Aufruf" : "Aufrufe"}`}
               </p>
               {viewerCount > 2 && (
                 <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, color: colors.teal, display: "flex", alignItems: "center", gap: 5 }}>
@@ -980,8 +977,9 @@ export default function ListingDetail() {
                 </p>
               )}
 
-              {/* Price */}
-              <div style={{ marginBottom: 16 }}>
+              {/* Price + Auktionsinfo in einer Zeile */}
+              <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+              <div>
                 <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontWeight: 600 }}>
                   {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
                 </p>
@@ -989,16 +987,35 @@ export default function ListingDetail() {
                   {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : `CHF ${fmtPrice(displayPrice)}`}
                 </p>
               </div>
+              {l.listing_type === "auction" && l.status !== "paused" && (
+                <div style={{ textAlign: "right", fontSize: 13, color: colors.muted, lineHeight: 1.5 }}>
+                  <div>{(bidHistory.length || bids.length) === 1 ? "1 Gebot" : `${bidHistory.length || bids.length} Gebote`}</div>
+                  {countdown && (
+                    <div style={{ fontWeight: 700, color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.dark, whiteSpace: "nowrap" }}>
+                      {/^\d/.test(countdown) && /[hms]\b/.test(countdown) ? `endet in ${countdown}` : `endet ${countdown}`}
+                    </div>
+                  )}
+                </div>
+              )}
+              </div>
+
+              {/* Eigentuemer: statt ausgegrauter Kauf-Knoepfe ein Streifen mit Aktionen */}
+              {isOwner && l.status === "active" && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 12px", borderRadius: 10, background: "#F4F4F2", marginBottom: 14, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 12.5, fontWeight: 700, color: colors.muted, flex: "1 1 auto" }}>Dein Inserat</span>
+                  <Link href={`/listings/${l.id}`} style={{ padding: "7px 14px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>Bearbeiten</Link>
+                  <Link href="/listings" style={{ padding: "7px 14px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>Statistik</Link>
+                </div>
+              )}
 
               {/* Buy / Status */}
               {l.listing_type === "sell" && l.status === "active" && (
                 <div>
-                  <button onClick={() => {
-                    if (isOwner) return;
+                  {!isOwner && <button onClick={() => {
                     if (!user) { router.push("/login"); return; }
                     setBidShipping(l.shipping_available ? "shipping" : "pickup");
                     setBidModal("buynow");
-                  }} disabled={isOwner}
+                  }}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                       padding: "14px 10px", borderRadius: 999, border: "none", width: "100%", whiteSpace: "nowrap",
@@ -1008,14 +1025,13 @@ export default function ListingDetail() {
                       cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1,
                     }}>
                     <ShoppingBag size={18} /> Kaufen · CHF {fmtPrice(l.price)}
-                  </button>
+                  </button>}
                   {!isOwner && l.is_negotiable && (
                     <button onClick={() => { if (!user) { router.push("/login"); return; } setOfferAmount(""); setShowOfferModal(true); }}
                       style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px", borderRadius: 999, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 8 }}>
                       <Tag size={16} /> Preis vorschlagen
                     </button>
                   )}
-                  {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginTop: 6, marginBottom: 0 }}>Das ist dein eigenes Inserat</p>}
 
                   {showOfferModal && (
                     <div onClick={() => setShowOfferModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
@@ -1069,24 +1085,7 @@ export default function ListingDetail() {
               {/* ── AUCTION UI (Steuerung nur aktiv, Gebotsverlauf immer) ── */}
               {l.listing_type === "auction" && l.status !== "paused" && (
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 12 }}>
-                    <span><Gavel size={14} /> {(bidHistory.length || bids.length) === 1 ? "1 Gebot" : `${bidHistory.length || bids.length} Gebote`}</span>
-                    {countdown && (
-                      <span style={{
-                        fontWeight: 700, fontFamily: fonts.body,
-                        color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.muted,
-                        fontSize: countdown.includes("s") && !countdown.includes("h") ? 14 : 13,
-                      }}>
-                        <Clock size={14} /> {countdown}
-                      </span>
-                    )}
-                  </div>
-
                   {l.status === "active" && (<>
-                  {/* Timer-Verlängerung Hinweis */}
-                  <p style={{ fontSize: 11, color: colors.muted, marginBottom: 12, lineHeight: 1.4 }}>
-                    Gebot in den letzten 3 Minuten? Auktion verlängert sich automatisch um 3 Minuten.
-                  </p>
 
                   {/* Dein Preislimit */}
                   {myBid && !isOwner && (
@@ -1125,9 +1124,8 @@ export default function ListingDetail() {
                     </div>
                   )}
 
-                  {/* Sofortkauf Button — Besitzer sieht ihn wie alle,
-                      nur ausgegraut (gleiches Muster wie der Bieten-Knopf) */}
-                  {l.buy_now_price > 0 && (
+                  {/* Sofortkauf (Eigentuemer sieht stattdessen den Streifen oben) */}
+                  {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
                       disabled={isOwner}
                       style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E0DCD4", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
@@ -1148,7 +1146,6 @@ export default function ListingDetail() {
                       <Gavel size={18} /> Gebot abgeben
                     </button>
                   )}
-                  {isOwner && <p style={{ fontSize: 11, color: colors.mutedLt, textAlign: "center", marginBottom: 8 }}>Das ist dein eigenes Inserat</p>}
                   </>)}
 
                   {/* Bid History — Collapsible (immer sichtbar, auch nach Ablauf) */}
@@ -1287,6 +1284,7 @@ export default function ListingDetail() {
                                   );
                                 })()}
                                 {l.buy_now_price > 0 && <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Max: CHF {fmtPrice(l.buy_now_price - 1)} (ab Sofortkauf-Preis wird direkt gekauft)</p>}
+                                <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Gebot in den letzten 3 Minuten verlängert die Auktion automatisch um 3 Minuten.</p>
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
                                   <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 10, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
@@ -1644,17 +1642,15 @@ export default function ListingDetail() {
                 </div>
               )}
 
-              {/* Favorit */}
-              <button onClick={handleFav} style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                padding: "13px", borderRadius: 10, border: `1.5px solid ${isFav ? colors.yellow : colors.border}`,
-                background: isFav ? colors.yellowSoft : colors.surface, color: isFav ? colors.dark : colors.muted,
-                fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", width: "100%", marginTop: 10,
-                letterSpacing: ".03em",
-              }}>
-                <Heart size={16} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
-                {isFav ? "IN FAVORITEN" : "ZU FAVORITEN HINZUFÜGEN"}
-              </button>
+              {/* Merken: schlichter Textlink statt grossem Rahmenknopf; nicht beim eigenen Inserat */}
+              {!isOwner && (
+                <div style={{ textAlign: "center", marginTop: 10 }}>
+                  <button onClick={handleFav} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: "6px 10px", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: isFav ? colors.dark : colors.muted }}>
+                    <Heart size={15} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
+                    {isFav ? "Gemerkt" : "Merken"}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}

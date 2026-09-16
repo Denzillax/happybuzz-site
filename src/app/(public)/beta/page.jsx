@@ -131,6 +131,7 @@ const TESTS = [
       { id: "lv_hover_zoom", label: "Hover-Zoom auf Hauptbild" },
       { id: "lv_thumbnails", label: "Thumbnails anklickbar" },
       { id: "lv_favorite", label: "Herz-Button → Favorit speichern/entfernen" },
+      { id: "lv_kaufbox_klar", label: "Kaufbox: Titel, Meta-Zeile (Zustand · eingestellt · Aufrufe), Preis links und bei Auktionen Gebote + 'endet ...' rechts; kein 3-Minuten-Hinweis mehr (steht im Bieten-Dialog); Besucher: Kaufen/Bieten, Sofortkauf, Textlink 'Merken'; Eigentümer: Streifen 'Dein Inserat' mit Bearbeiten und Statistik, keine ausgegrauten Knöpfe" },
       { id: "lv_bildersuche", label: "Bildersuche-Symbol unten rechts auf dem Artikelfoto: Klick zeigt in unter 1 Sekunde 'Ähnlich per Bild' mit passenden Inseraten und Begründung 'Gemeinsam: ...'; ohne Login Anmelde-Hinweis; passt nichts, steht das ehrlich da; neue Inserate bekommen ihre Bild-Merkmale automatisch nach dem Foto-Upload" },
       { id: "lv_share", label: "Teilen: WhatsApp / E-Mail / Link kopieren (bzw. native Share auf Mobile)" },
       { id: "lv_report", label: "Melden → Report-Modal & Absenden" },

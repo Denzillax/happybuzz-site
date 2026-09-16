@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "16. September 2026",
     punkte: [
+      { typ: "fix", bereich: "Inserat", text: "Kaufbox aufgeräumt: Titel, eine Meta-Zeile, Preis mit Auktionsinfo (Gebote, Ende) daneben, dann die Knöpfe. Der 3-Minuten-Hinweis steht nur noch im Bieten-Dialog, Merken ist ein schlichter Link, und beim eigenen Inserat gibt es statt ausgegrauter Knöpfe Bearbeiten und Statistik", melder: "Denis" },
       { typ: "neu", bereich: "Design", text: "Kartenbilder jetzt quadratisch statt 4:3 quer: die meisten Fotos kommen vom Handy senkrecht, im Quadrat verliert jedes Foto nur wenig, egal ob hoch oder quer", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Wisch-Reihen im schmalen Desktop-Fenster: mit der Maus gibt es keine Wischgeste, darum jetzt Pfeil-Knöpfe an den Rändern und Ziehen mit gedrückter Maustaste. Am Handy bleibt alles wie gehabt", melder: "Denis" },
     ],
