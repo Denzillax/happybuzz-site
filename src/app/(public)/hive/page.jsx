@@ -32,6 +32,8 @@ const REASON_LABEL = {
   pfad_einsatz: "Pollenpfad: Einsatz",
   pfad_gewinn: "Pollenpfad: Gewinn",
   pfad_wochenbonus: "Pollenpfad: Wochenbonus (Top 3)",
+  poker_buyin: "Poker: Buy-in",
+  poker_cashout: "Poker: Aufgestanden (Chips)",
   paar_einsatz: "Blütenpaar: Einsatz",
   paar_gewinn: "Blütenpaar: Gewinn",
 };

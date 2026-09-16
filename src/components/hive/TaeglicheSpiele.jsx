@@ -2,7 +2,8 @@
 // Tägliche Spiele im Hive (Denis, 16.09.2026): drei Spiele als Reiter,
 // jedes einmal pro Tag mit Pollen-Einsatz. Der Reiter merkt sich pro Gerät.
 import { useEffect, useState } from "react";
-import { Hexagon, Footprints, Flower2 } from "lucide-react";
+import { Hexagon, Footprints, Flower2, Spade, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { fonts } from "@/lib/theme";
 import WabenSpiel from "./WabenSpiel";
 import Pollenpfad from "./Pollenpfad";
@@ -13,7 +14,22 @@ const SPIELE = [
   { key: "waben", name: "Wabenspiel", Icon: Hexagon, Komp: WabenSpiel },
   { key: "pfad", name: "Pollenpfad", Icon: Footprints, Komp: Pollenpfad },
   { key: "paar", name: "Blütenpaar", Icon: Flower2, Komp: Bluetenpaar },
+  { key: "poker", name: "Poker", Icon: Spade, Komp: PokerTeaser },
 ];
+
+// Poker laeuft auf eigener Seite (Tische, Haende ueber Tage). Hier nur der Einstieg.
+function PokerTeaser() {
+  return (
+    <div>
+      <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.5, color: "#14110D" }}>
+        Texas Hold'em gegen andere Bienen, mit Pollen als Chips. Zeitversetzt: wer am Zug ist, hat 12 Stunden und bekommt eine Meldung. Buy-in 20, 50 oder 100 Pollen, 2 bis 6 Plätze.
+      </p>
+      <Link href="/poker" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 999, background: "#F4C03F", color: "#14110D", fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none" }}>
+        <Spade size={14} /> Zu den Tischen <ArrowRight size={14} />
+      </Link>
+    </div>
+  );
+}
 
 export default function TaeglicheSpiele({ pollen, onPollen }) {
   const [aktiv, setAktiv] = useState("waben");
