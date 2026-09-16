@@ -30,7 +30,12 @@ export default function ChatConversation() {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const msgInputRef = useRef(null);
   const emojiRef = useRef(null);
-  const EMOJIS = ["👍","🙂","😄","😉","🙏","👋","❤️","🔥","✅","❌","🤔","😅","👌","🎉","😍","😢","🤝","📦","🚗","💰","⏰","📍","🐝","🙌"];
+  // Denis 16.09.: mehr Emojis, in Gruppen, Panel scrollt
+  const EMOJI_GRUPPEN = [
+    { name: "Smileys", liste: ["🙂","😄","😁","😂","🤣","😉","😊","😍","🥰","😘","😎","🤩","🥳","😅","😜","🤔","🤨","😐","🙄","😴","😢","😭","😡","🤯","🤗","🤫","🤭","🫣","😇","🥺","🤒","🤠"] },
+    { name: "Gesten", liste: ["👍","👎","👌","🤞","✌️","🤙","👋","🙏","🙌","👏","🤝","💪","☝️","👉","👈","🫶","❤️","🧡","💛","💚","💙","💔","🔥","⭐","✨","💯","✅","❌","❓","❗","⚠️","🚫"] },
+    { name: "Handel", liste: ["📦","🚚","🚗","🚲","🏠","📍","🗓️","⏰","💰","💵","💳","🧾","🏷️","🎁","🔑","📸","📱","💻","🎮","🎧","👕","👟","👜","⌚","📚","🛋️","🌱","🐝","🎉","🍀","☀️","🌧️"] },
+  ];
   const insertEmoji = (e) => {
     const el = msgInputRef.current;
     const start = el?.selectionStart ?? newMsg.length, end = el?.selectionEnd ?? newMsg.length;
@@ -355,9 +360,16 @@ export default function ChatConversation() {
               <Smile size={18} color={emojiOpen ? colors.teal : colors.muted} />
             </button>
             {emojiOpen && (
-              <div style={{ position: "absolute", bottom: 46, left: 0, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, display: "grid", gridTemplateColumns: "repeat(8, 34px)", gap: 2, zIndex: 20 }}>
-                {EMOJIS.map(e => (
-                  <button key={e} type="button" onClick={() => insertEmoji(e)} style={{ width: 34, height: 34, border: "none", background: "transparent", borderRadius: 8, cursor: "pointer", fontSize: 20, lineHeight: 1 }}>{e}</button>
+              <div style={{ position: "absolute", bottom: 46, left: 0, width: 8 * 34 + 16, maxWidth: "calc(100vw - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, zIndex: 20 }}>
+                {EMOJI_GRUPPEN.map(g => (
+                  <div key={g.name} style={{ marginBottom: 6 }}>
+                    <p style={{ margin: "2px 0 2px 4px", fontSize: 10.5, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".04em" }}>{g.name}</p>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 34px)", gap: 2 }}>
+                      {g.liste.map(e => (
+                        <button key={e} type="button" onClick={() => insertEmoji(e)} style={{ width: 34, height: 34, border: "none", background: "transparent", borderRadius: 8, cursor: "pointer", fontSize: 20, lineHeight: 1 }}>{e}</button>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
