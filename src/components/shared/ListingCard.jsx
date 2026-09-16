@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
-import { getCoverUrl, conditionLabel } from "@/lib/formatters";
+import { getCoverUrl } from "@/lib/formatters";
 import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
@@ -224,15 +224,9 @@ export function ListingCard(props) {
         {/* Kleingedrucktes: eigener Block mit Luft und Linie, am Kartenboden */}
         <div style={{ marginTop: "auto", paddingTop: 12 }}>
           <div style={{ borderTop: "1px solid #EEEBE5", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
-            {/* Zeile 1: Zustand · Ort (der Ort bekommt den Platz, Denis 15.09.: bei
-                6 pro Zeile war er von der Laufzeit verdraengt) */}
+            {/* Zeile 1: nur der Ort (Denis 16.09.: der Zustand "Gut" davor ist weg,
+                er steht im Inserat selbst) */}
             <div style={{ display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", overflow: "hidden" }}>
-              {listing.condition && (
-                <>
-                  <span style={{ whiteSpace: "nowrap" }}>{conditionLabel(listing.condition)}</span>
-                  <span style={{ width: 3, height: 3, borderRadius: "50%", background: colors.mutedLt, flexShrink: 0 }} />
-                </>
-              )}
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "1 1 auto" }}>{listing.city || "Schweiz"}</span>
             </div>
             {/* Zeile 2: Laufzeit links, bei Auktionen Sofortpreis rechts */}
