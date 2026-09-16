@@ -228,7 +228,8 @@ export function ListingCard(props) {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "1 1 auto" }}>{listing.city || "Schweiz"}</span>
             </div>
             {/* Zeile 2: Laufzeit links, bei Auktionen Sofortpreis rechts */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", marginTop: 1 }}>
+            {/* Sofortpreis rutscht bei schmalen Karten (6 pro Zeile) in eine eigene Zeile statt abgeschnitten zu werden */}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 1 }}>
               {statusOverlay ? (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
                   <Clock size={10} /> {statusOverlay}
@@ -238,7 +239,7 @@ export function ListingCard(props) {
               )}
               {isAuction && listing.buy_now_price > 0 && (
                 <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
-                  {listing.buy_now_price.toFixed(2)} Sofort
+                  Sofort CHF {listing.buy_now_price.toFixed(2)}
                 </span>
               )}
             </div>
