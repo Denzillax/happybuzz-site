@@ -141,7 +141,12 @@ export default function ListingForm({
   onCancel,
   isEdit = false,
   initialData = null,
+  // Auktion mit Geboten (Denis 16.09.): Kernfelder eingefroren, Beschreibung
+  // nur als Nachtrag, Fotos nur dazu. Die Datenbank prueft das zusaetzlich.
+  gesperrt = false,
 }) {
+  const GESPERRT_FELDER = new Set(["title", "listing_type", "category_id", "condition", "start_price", "buy_now_price", "min_price", "bid_step", "auction_duration", "description"]);
+  const [nachtrag, setNachtrag] = useState("");
   // ── State ──────────────────────────────────────────────────
   const [form, setForm] = useState({
     title: "",
@@ -374,7 +379,7 @@ export default function ListingForm({
     const ek = ERROR_KEY[key] || key;
     setErrors((prev) => { if (!prev[ek]) return prev; const n = { ...prev }; delete n[ek]; return n; });
   };
-  const set = (key, val) => { setForm((p) => ({ ...p, [key]: val })); clearErr(key); };
+  const set = (key, val) => { if (gesperrt && GESPERRT_FELDER.has(key)) return; setForm((p) => ({ ...p, [key]: val })); clearErr(key); };
   const toggle = (key) => { setForm((p) => ({ ...p, [key]: !p[key] })); clearErr(key); };
 
   const parentCats = categories.filter((c) => !c.parent_id);
@@ -512,6 +517,7 @@ export default function ListingForm({
   }, [images.length]);
 
   const removeImage = (idx) => {
+    if (gesperrt) return;
     setImages((prev) => {
       const next = prev.filter((_, i) => i !== idx);
       if (next.length && !next.some((img) => img.isCover)) {
@@ -702,8 +708,12 @@ export default function ListingForm({
       const attrOhneVarianten = Object.fromEntries(
         Object.entries(attrValues).filter(([k]) => !(k in bereinigteVarianten))
       );
+      const nachtragHtml = gesperrt && nachtrag.trim()
+        ? `<p><strong>Nachtrag vom ${new Date().toLocaleDateString("de-CH", { day: "2-digit", month: "2-digit", year: "numeric" })}:</strong> ${nachtrag.trim().replace(/</g, "&lt;").replace(/\n/g, "<br>")}</p>`
+        : "";
       await onSave({
         ...form,
+        description: gesperrt ? (form.description || "") + nachtragHtml : form.description,
         publish_at: publishAtIso,
         shipping_cost: shippingCost,
         listing_type: effectiveType,
@@ -937,9 +947,15 @@ export default function ListingForm({
       {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}
       <div style={sectionBase} className="lf-section">
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
+        {gesperrt && (
+          <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 12, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
+            <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
+          </div>
+        )}
         <div style={{
           display: "flex", gap: 0,
           background: colors.cream, borderRadius: radius.md, padding: 4,
+          opacity: gesperrt ? .5 : 1, pointerEvents: gesperrt ? "none" : "auto",
         }}>
           {TYPE_TABS.map((t) => {
             const active = form.listing_type === t.value && !isFree;
@@ -1084,6 +1100,8 @@ export default function ListingForm({
                 )}
                 <button
                   onClick={() => removeImage(idx)}
+                  disabled={gesperrt}
+                  title={gesperrt ? "Gesperrt: Auktion hat Gebote" : "Foto entfernen"}
                   title="Entfernen"
                   style={{
                     width: 22, height: 22, borderRadius: 10, border: "none",
@@ -1246,6 +1264,8 @@ export default function ListingForm({
           value={form.title}
           onChange={(e) => set("title", e.target.value)}
           maxLength={60}
+          disabled={gesperrt}
+          title={gesperrt ? "Gesperrt: Auktion hat Gebote" : undefined}
         />
         <Err field="title" />
 
@@ -1271,12 +1291,22 @@ export default function ListingForm({
               <AiButton label="KI-Text" target="description" />
             </div>
           </div>
+          {gesperrt ? (
+            <div>
+              <div style={{ ...inputBase, minHeight: 80, background: "#F7F6F3", color: "#5F5A55", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
+              <label style={{ ...labelBase, marginTop: 12 }}>Nachtrag (wird unter den Text gehängt, mit Datum)</label>
+              <textarea value={nachtrag} onChange={(e) => setNachtrag(e.target.value)} rows={3} maxLength={1000}
+                placeholder="z. B. Kabel ist doch dabei, Abholung auch am Wochenende möglich"
+                style={{ ...inputBase, resize: "vertical", fontFamily: fonts.body }} />
+            </div>
+          ) : (
           <RichTextEditor
             value={form.description}
             onChange={(html) => set("description", html)}
             placeholder="Beschreibe dein Produkt: Zustand, Besonderheiten, Zubehör..."
             style={errStyle("description")}
           />
+          )}
           <Err field="description" />
         </div>
 
@@ -1647,6 +1677,7 @@ export default function ListingForm({
               placeholder="1.00"
               value={form.start_price}
               onChange={(e) => set("start_price", e.target.value)}
+              disabled={gesperrt}
             />
             <Err field="start_price" />
 
@@ -1658,6 +1689,7 @@ export default function ListingForm({
                 placeholder="z.B. 500"
                 value={form.buy_now_price}
                 onChange={(e) => set("buy_now_price", e.target.value)}
+              disabled={gesperrt}
               />
               <Err field="buy_now_price" />
             </div>
@@ -1668,6 +1700,7 @@ export default function ListingForm({
                 <SelectWrap
                   value={form.auction_duration}
                   onChange={(e) => set("auction_duration", e.target.value)}
+                  disabled={gesperrt}
                 >
                   {[3, 5, 7, 10, 14].map((d) => (
                     <option key={d} value={d}>{d} Tage</option>
@@ -1681,6 +1714,7 @@ export default function ListingForm({
                 <SelectWrap
                   value={form.bid_step}
                   onChange={(e) => set("bid_step", e.target.value)}
+              disabled={gesperrt}
                 >
                   <option value="0.1">CHF 0.10</option>
                   <option value="1">CHF 1.00</option>

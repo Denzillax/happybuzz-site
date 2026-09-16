@@ -671,7 +671,7 @@ export default function ListingsPage() {
 
                     {/* Aktionen: festes 3er-Raster statt Flex-Wrap */}
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 12 }}>
-                      <Link href={`/listings/${l.id}`} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> Bearbeiten</Link>
+                      <Link href={`/listings/${l.id}`} title={l.listing_type === "auction" && bidCounts[l.id]?.count > 0 ? "Auktion hat Gebote: nur Nachtrag, Fotos dazu, Versand und Zahlung" : "Bearbeiten"} style={{ ...actBtn, color: colors.blue, borderColor: `${colors.blue}40` }}><Pencil size={14} /> {l.listing_type === "auction" && bidCounts[l.id]?.count > 0 ? "Eingeschränkt" : "Bearbeiten"}</Link>
                       <Link href={`/listings/new?duplicate=${l.id}`} style={{ ...actBtn, color: colors.teal, borderColor: `${colors.teal}40` }}><Copy size={14} /> Ähnliches</Link>
                       <button onClick={() => openStats(l)} style={actBtn}><BarChart3 size={14} /> Statistik</button>
                       {isExpired(l) && l.listing_type !== "auction" && (

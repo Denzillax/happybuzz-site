@@ -11,6 +11,7 @@ export default function EditListingPage() {
   const params = useParams();
   const listingId = params.id;
   const [listing, setListing] = useState(null);
+  const [gesperrt, setGesperrt] = useState(false);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,6 +25,11 @@ export default function EditListingPage() {
       if (listingData.user_id !== user.id) { router.push("/listings"); return; }
       setListing(listingData);
       setCategories(cats);
+      // Auktion mit Geboten: Formular in den Sperrmodus (Denis 16.09.)
+      if (listingData?.listing_type === "auction") {
+        const { count } = await supabase.from("bids").select("id", { count: "exact", head: true }).eq("listing_id", listingId);
+        setGesperrt((count || 0) > 0);
+      }
       setLoading(false);
     }
     init();
@@ -75,7 +81,7 @@ export default function EditListingPage() {
           Inserat bearbeiten
         </h1>
       </div>
-      <ListingForm categories={categories} onSave={handleSave} onCancel={() => router.push("/listings")} isEdit={true} initialData={listing} />
+      <ListingForm categories={categories} onSave={handleSave} onCancel={() => router.push("/listings")} isEdit={true} initialData={listing} gesperrt={gesperrt} />
     </div>
   );
 }

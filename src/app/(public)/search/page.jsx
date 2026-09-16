@@ -392,40 +392,18 @@ function SearchPageInner() {
           }}>
             <Shuffle size={14} color={PETROL} /> {zufallLaedt ? "Würfelt..." : "Überrasch mich"}
           </button>
-          <button onClick={() => { setKiOffen(o => !o); setKiFehler(""); }} style={{
-            display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 16px",
-            borderRadius: 999, border: `1px solid ${kiOffen ? PETROL : "#E4E0D8"}`,
-            background: kiOffen ? "#E8F4F3" : "#fff",
-            fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: kiOffen ? PETROL : INK,
-            cursor: "pointer", whiteSpace: "nowrap",
-          }}>
-            <Sparkles size={14} color={PETROL} /> KI-Suche
-          </button>
           <RasterUmschalter />
         </div>
 
-        {/* ── KI-Suche: Beschreibung statt Stichwort ── */}
-        {kiOffen && (
-          <div style={{ background: "#E8F4F3", border: "1px solid #0E949333", borderRadius: 14, padding: "14px 16px", marginBottom: 20 }}>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <input
-                type="text" value={kiText} autoFocus
-                onChange={(e) => setKiText(e.target.value)}
-                className="pille-input" onKeyDown={(e) => { if (e.key === "Enter") kiSuchen(); }}
-                placeholder='Beschreib es einfach: "günstiges Rennvelo unter 300 Franken" oder "etwas zum Mieten für den Umzug"'
-                style={{ flex: "1 1 260px", minWidth: 0, padding: "11px 14px", borderRadius: 10, border: "1px solid #E4E0D8", outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }}
-              />
-              <button onClick={kiSuchen} disabled={kiLaedt || !kiText.trim()} style={{
-                padding: "11px 20px", borderRadius: 999, border: "none", background: "#F4C03F",
-                color: INK, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body,
-                cursor: kiLaedt || !kiText.trim() ? "default" : "pointer", opacity: kiLaedt || !kiText.trim() ? 0.6 : 1, whiteSpace: "nowrap",
-              }}>
-                {kiLaedt ? "Sucht..." : "Finden"}
-              </button>
-            </div>
-            <p style={{ margin: "8px 0 0", fontSize: 12, color: kiFehler ? "#C62828" : kiHinweis ? "#8a6d00" : "rgba(25,22,21,.55)", fontFamily: fonts.body, fontWeight: kiHinweis ? 700 : 400 }}>
-              {kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern.")}
-            </p>
+        {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
+            Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
+        {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#0E949333"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+            <Sparkles size={14} />
+            <span style={{ flex: 1 }}>
+              {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
+            </span>
+            {!kiLaedt && <button onClick={() => { setKiFehler(""); setKiHinweis(""); setKiAuto(""); }} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 2, display: "flex" }}><X size={14} /></button>}
           </div>
         )}
 
