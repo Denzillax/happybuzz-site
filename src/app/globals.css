@@ -435,7 +435,10 @@ input:focus, textarea:focus, select:focus {
 
 /* Print */
 @media print {
-  .no-print { display: none !important; }
+  /* Nur das Dokument drucken: Header, Suchzeile, Fusszeile, Bottom-Nav und
+     alle schwebenden Knoepfe (Chat, Beta-Feedback) bleiben weg (Denis, 16.09.) */
+  .no-print, header, footer, nav, .hdr-top, .hdr-searchrow, .beta-fab, .fab-btn,
+  .ticker-track, [class*="bottom-nav"], [class*="BottomNav"] { display: none !important; }
   body { background: white !important; }
   @page { margin: 15mm 20mm; }
 }

@@ -102,8 +102,10 @@ export default function InvoicePage() {
 
   return (
     <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#1a1a1a" }}>
-      <div className="no-print" style={{ display: "flex", justifyContent: "center", gap: 12, padding: 16, background: isDeposit ? "#E8F5E9" : colors.cream }}>
-        <button onClick={() => window.print()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderRadius: 0, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+      {/* Druckknopf ohne grauen Balken (Denis, 16.09.): rechtsbuendig in der
+          Rechnungsbreite, als Pille im Klar-Look; im Druck ausgeblendet */}
+      <div className="no-print" style={{ maxWidth: 660, margin: "0 auto", padding: "18px 36px 0", display: "flex", justifyContent: "flex-end" }}>
+        <button onClick={() => window.print()} className="cta-pill" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
