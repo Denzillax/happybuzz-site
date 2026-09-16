@@ -158,6 +158,13 @@ export function ListingCard(props) {
           <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
         </div>
 
+        {/* Unten rechts: Sofortkauf-Chip (Denis 16.09.: der Textblock bleibt so bei
+            allen Karten gleich, und der Preis ist nirgends abgeschnitten) */}
+        {isAuction && listing.buy_now_price > 0 && !statusOverlay && (
+          <span style={{ position: "absolute", bottom: 8, right: 8, fontSize: 11, fontWeight: 700, color: INK, background: "rgba(255,255,255,.92)", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", boxShadow: "0 1px 4px rgba(25,22,21,.15)" }}>
+            Sofort CHF {listing.buy_now_price.toFixed(2)}
+          </span>
+        )}
         {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
             KI-Bildersuche), daneben Endet bald / Hot */}
         <div style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
@@ -238,8 +245,7 @@ export function ListingCard(props) {
                 <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
               )}
             </div>
-            {/* Zeile 3: Verkaeufer mit Stern, rechts der Sofortpreis (Denis 16.09.:
-                gleiche Zeilenzahl fuer alle Karten, Sofort rechtsbuendig) */}
+            {/* Zeile 3: Verkaeufer mit Stern */}
             <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 1, whiteSpace: "nowrap" }}>
               {listing.seller && (
                 <span
@@ -265,11 +271,6 @@ export function ListingCard(props) {
                       {parseFloat(listing.seller.avg_rating).toFixed(1)}
                     </span>
                   )}
-                </span>
-              )}
-              {isAuction && listing.buy_now_price > 0 && (
-                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
-                  Sofort CHF {listing.buy_now_price.toFixed(2)}
                 </span>
               )}
             </div>
