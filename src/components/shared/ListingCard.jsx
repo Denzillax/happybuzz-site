@@ -134,8 +134,8 @@ export function ListingCard(props) {
       onMouseLeave={() => setHover(false)}
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
     >
-      {/* Bild: Hochformat 3:4 (Denis, 16.09.): 8 von 14 Titelbildern sind Handy-Hochformat, so bleiben sie ganz sichtbar; Querfotos werden seitlich beschnitten */}
-      <div style={{ position: "relative", aspectRatio: "3/4", background: colors.cream, overflow: "hidden", borderRadius: 10 }}>
+      {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
+      <div style={{ position: "relative", aspectRatio: "1/1", background: colors.cream, overflow: "hidden", borderRadius: 10 }}>
         {cover
           ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.03)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
           : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#ccc" /></div>
