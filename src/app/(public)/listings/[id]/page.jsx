@@ -1,7 +1,7 @@
 "use client"
 import { supabase } from "@/lib/supabase/supabase";
 import { useRouter, useParams } from "next/navigation";
-import { getListing, updateListing, uploadListingImages, deleteListingImage, updateListingStatus, submitForReview, getCategories } from "@/lib/listings";
+import { getListing, updateListing, uploadListingImages, deleteListingImage, reactivateListing, submitForReview, getCategories } from "@/lib/listings";
 import { saveListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
 import { useState, useEffect } from "react";
 import ListingForm from "@/components/listings/ListingForm";
@@ -49,7 +49,8 @@ export default function EditListingPage() {
       if (listing?.status === "draft" || listing?.status === "pending_review") {
         await submitForReview(listingId);
       } else if (listing?.status !== "active" && listing?.status !== "scheduled") {
-        await updateListingStatus(listingId, "active");
+        // Abgelaufen/pausiert: neue Laufzeit, Auktionen mit neuer Uhr ab jetzt
+        await reactivateListing({ ...listing, listing_type: formData.listing_type, auction_duration: formData.auction_duration });
       }
     }
     // Save category-specific attributes

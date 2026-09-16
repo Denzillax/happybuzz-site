@@ -289,6 +289,35 @@ export async function publishScheduledNow(listing) {
   if (error) throw error;
 }
 
+// ─── Abgelaufenes Inserat wieder veroeffentlichen ────────────
+// Beim Bearbeiten + Veroeffentlichen eines abgelaufenen/pausierten Inserats.
+// Vorher wurde nur status='active' gesetzt: bei Auktionen blieb das alte
+// auction_end stehen, und der Auktions-Cron stellte das Inserat Sekunden
+// spaeter wieder auf 'expired' (NES, 16.09.). Jetzt: neue Laufzeit (60 Tage),
+// bei Auktionen neue Uhr ab jetzt (auction_duration Tage). Auktionen mit
+// Geboten lassen sich nicht neu starten, die Gebote gehoeren zum alten Lauf.
+export async function reactivateListing(listing) {
+  const now = Date.now();
+  const patch = {
+    status: "active",
+    published_at: new Date(now).toISOString(),
+    expires_at: new Date(now + 60 * 24 * 60 * 60 * 1000).toISOString(),
+  };
+  if (listing.listing_type === "auction") {
+    const ended = !listing.auction_end || new Date(listing.auction_end).getTime() <= now;
+    if (ended) {
+      const { count } = await supabase.from("bids").select("id", { count: "exact", head: true }).eq("listing_id", listing.id);
+      if (count > 0) throw new Error("Diese Auktion hatte bereits Gebote und kann nicht neu gestartet werden. Erstelle stattdessen über \"Ähnliches\" ein neues Inserat.");
+      const tage = parseInt(listing.auction_duration) || 7;
+      patch.auction_end = new Date(now + tage * 24 * 60 * 60 * 1000).toISOString();
+      patch.price = null;
+    }
+  }
+  const { error } = await supabase.from("listings").update(patch).eq("id", listing.id);
+  if (error) throw error;
+  return patch;
+}
+
 // ─── Laufzeit verlängern ─────────────────────────────────────
 // Setzt expires_at auf 60 Tage ab jetzt und reaktiviert abgelaufene Inserate.
 export async function renewListing(listingId) {

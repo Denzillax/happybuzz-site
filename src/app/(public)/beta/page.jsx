@@ -34,6 +34,7 @@ const TESTS = [
       { id: "auth_social", label: "Login mit Google / Apple (falls aktiviert)" },
       { id: "auth_pw_reset", label: "Passwort vergessen → Reset-Mail erhalten" },
       { id: "sell_pause_regeln", label: "Meine Inserate: Auktion mit Geboten hat keinen Pausieren-Knopf (auch Sammelaktion überspringt sie); bei Mahn-Pause (Stufe 3) rotes Banner mit Link zur Rechnung, Reaktivieren gesperrt bis zur Zahlung" },
+      { id: "sell_auktion_neustart", label: "Abgelaufene Auktion (ohne Gebote) bearbeiten und veröffentlichen: Inserat wird wieder aktiv, Auktionsende liegt neu Auktionsdauer ab jetzt in der Zukunft, bleibt aktiv (kein Rückfall auf 'Abgelaufen'); mit alten Geboten kommt eine Meldung mit Verweis auf 'Ähnliches'" },
       { id: "sell_verlaengern_mail", label: "Ablauf-Mail (nur Festpreis/Miete/Gratis/Service, nie Auktion): Link öffnet Meine Inserate mit Banner 'Jetzt verlängern', ein Klick gibt 60 Tage; Verlängern-Knopf erscheint schon 3 Tage vor Ablauf" },
       { id: "auth_mail_design", label: "Konto-Mails (Passwort-Reset, E-Mail-Änderung) kommen im Beedaro-Design mit deutschem Betreff und Absender noreply@beedaro.ch" },
       { id: "auth_logout", label: "Abmelden beendet die Session" },

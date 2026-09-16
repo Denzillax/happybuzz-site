@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "16. September 2026",
     punkte: [
+      { typ: "fix", bereich: "Auktionen", text: "Eine abgelaufene Auktion liess sich nicht wieder veröffentlichen: Bearbeiten und Veröffentlichen setzte sie auf aktiv, aber das alte Auktionsende blieb stehen und der Auktionsdienst stellte sie Sekunden später wieder auf abgelaufen. Jetzt startet die Uhr neu (gewählte Auktionsdauer ab jetzt) und die Laufzeit gilt wieder 60 Tage. Auktionen, die schon Gebote hatten, lassen sich nicht neu starten; dafür gibt es 'Ähnliches'", melder: "Denis" },
       { typ: "neu", bereich: "Chat", text: "Nachrichten kompakter: engere Blasen, Uhrzeit am Zeilenende, Folge-Nachrichten rücken zusammen. Neu ein Emoji-Knopf mit 24 Emojis, reine Emoji-Nachrichten werden gross gezeigt. Die Standard-Schnellantworten sind weg", melder: "Denis" },
       { typ: "fix", bereich: "Auktionen", text: "Beim ersten Gebot verlangte die Maske Startpreis + 1, obwohl der Startpreis selbst gilt. Jetzt reicht der Startpreis, und der Dialog erklärt, dass die Auktion als erster Bieter auf dem Startpreis steht und dein Maximum erst greift, wenn jemand mitbietet", melder: "Sturzi8" },
       { typ: "fix", bereich: "Inserate", text: "Wegen einer Mahnung pausierte Inserate lassen sich nicht mehr selbst reaktivieren (Hinweis mit Link zur Rechnung), und Auktionen mit Geboten können nicht pausiert werden. Beides ist auch in der Datenbank abgesichert", melder: "Denis" },
