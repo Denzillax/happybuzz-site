@@ -207,6 +207,7 @@ function SearchPageInner() {
     const frage = (typeof textOverride === "string" ? textOverride : kiText).trim();
     if (!frage || kiLaedt) return;
     setKiLaedt(true); setKiFehler(""); setKiHinweis("");
+    if (frage !== kiFallbackRef.current) setKiAuto("");
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.access_token) { setKiFehler("Bitte melde dich an, um die KI-Suche zu nutzen."); return; }
@@ -233,6 +234,21 @@ function SearchPageInner() {
   // Auto-Start beim Header-Einstieg (?ki=1&q=...): einmalig, erst wenn die
   // Kategorien geladen sind (die KI bekommt sie als Auswahlliste mit).
   const kiAutoRef = useRef(false);
+  // Automatischer KI-Einsprung bei 0 Treffern (Denis 16.09.): merkt sich den
+  // Text, fuer den er schon lief, damit die KI nicht in Schleife sucht.
+  const kiFallbackRef = useRef("");
+  const gesuchtRef = useRef(null); // Suchtext, zu dem total/results gehoeren
+  const [kiAuto, setKiAuto] = useState("");
+  useEffect(() => {
+    // Erst wenn die Suche fertig ist UND die Kategorien da sind (die KI
+    // braucht sie); doSearch selbst laeuft oft noch vor dem Kategorie-Laden.
+    const q = query.trim();
+    if (loading || kiLaedt || total !== 0 || !q || gesuchtRef.current !== q || mainCats.length === 0 || kiFallbackRef.current === q) return;
+    kiFallbackRef.current = q;
+    setKiAuto(q); setKiOffen(true); setKiText(q);
+    kiSuchen(q);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, total, query, categories]);
   useEffect(() => {
     if (kiEntry && kiText.trim() && mainCats.length > 0 && !kiAutoRef.current) {
       kiAutoRef.current = true;
@@ -262,6 +278,7 @@ function SearchPageInner() {
       });
       setResults(res.listings);
       setTotal(res.total);
+      gesuchtRef.current = query.trim();
       getActiveBoosts((res.listings || []).map(l => l.id)).then(setBoosts).catch(() => {});
       if (query.trim()) { recordSearch(query); setRecents(getRecentSearches()); }
     } catch (e) { console.error(e); }
@@ -388,7 +405,7 @@ function SearchPageInner() {
               <input
                 type="text" value={kiText} autoFocus
                 onChange={(e) => setKiText(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") kiSuchen(); }}
+                className="pille-input" onKeyDown={(e) => { if (e.key === "Enter") kiSuchen(); }}
                 placeholder='Beschreib es einfach: "günstiges Rennvelo unter 300 Franken" oder "etwas zum Mieten für den Umzug"'
                 style={{ flex: "1 1 260px", minWidth: 0, padding: "11px 14px", borderRadius: 10, border: "1px solid #E4E0D8", outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }}
               />
@@ -401,7 +418,7 @@ function SearchPageInner() {
               </button>
             </div>
             <p style={{ margin: "8px 0 0", fontSize: 12, color: kiFehler ? "#C62828" : kiHinweis ? "#8a6d00" : "rgba(25,22,21,.55)", fontFamily: fonts.body, fontWeight: kiHinweis ? 700 : 400 }}>
-              {kiFehler || kiHinweis || "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern."}
+              {kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : "Die KI setzt Suchbegriffe, Kategorie und Preisfilter für dich. Das Ergebnis kannst du danach normal verfeinern.")}
             </p>
           </div>
         )}

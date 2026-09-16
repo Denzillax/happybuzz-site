@@ -115,13 +115,24 @@ Wenn nichts Passendes: category_id null lassen statt raten.`;
   const TYPES = ["sell", "auction", "rent", "free", "service"];
   const katIds = new Set(kats.map(k => k.id));
   const num = (v) => (typeof v === "number" && isFinite(v) && v >= 0 ? v : null);
+  // Regel serverseitig erzwingen (Denis 16.09., "retro games" kam als q
+  // zurueck und fand nichts): q muss in einem Titel vorkommen, sonst leer.
+  // Dann traegt die Kategorie (z. B. Games) die Suche, was der Absicht naeher
+  // kommt als eine leere Trefferliste.
+  let q = typeof parsed.q === "string" ? parsed.q.trim().slice(0, 80) : "";
+  const category_id = katIds.has(parsed.category_id) ? parsed.category_id : null;
+  let hinweis = typeof parsed.hinweis === "string" && parsed.hinweis.trim() && parsed.hinweis.trim().toLowerCase() !== "null"
+    ? parsed.hinweis.trim().slice(0, 160) : null;
+  if (q && titel.length && !titel.some(t => t.toLowerCase().includes(q.toLowerCase()))) {
+    q = "";
+    if (!category_id && !hinweis) hinweis = "Dazu ist gerade nichts inseriert.";
+  }
   return Response.json({
-    q: typeof parsed.q === "string" ? parsed.q.trim().slice(0, 80) : "",
-    category_id: katIds.has(parsed.category_id) ? parsed.category_id : null,
+    q,
+    category_id,
     listing_type: TYPES.includes(parsed.listing_type) ? parsed.listing_type : null,
     min_price: num(parsed.min_price),
     max_price: num(parsed.max_price),
-    hinweis: typeof parsed.hinweis === "string" && parsed.hinweis.trim() && parsed.hinweis.trim().toLowerCase() !== "null"
-      ? parsed.hinweis.trim().slice(0, 160) : null,
+    hinweis,
   });
 }

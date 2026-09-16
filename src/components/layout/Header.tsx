@@ -436,6 +436,7 @@ export function Header() {
                 <Search size={18} style={{ marginLeft: 18, alignSelf: 'center', color: '#8A8580', flexShrink: 0 }} />
                 <input
                   ref={searchInputRef}
+                  className="pille-input"
                   type="text"
                   value={searchQuery}
                   onChange={e => handleQueryChange(e.target.value)}
