@@ -23,6 +23,12 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "16. September 2026",
+    punkte: [
+      { typ: "fix", bereich: "Startseite", text: "Wisch-Reihen im schmalen Desktop-Fenster: mit der Maus gibt es keine Wischgeste, darum jetzt Pfeil-Knöpfe an den Rändern und Ziehen mit gedrückter Maustaste. Am Handy bleibt alles wie gehabt", melder: "Denis" },
+    ],
+  },
+  {
     datum: "15. September 2026",
     punkte: [
       { typ: "neu", bereich: "Design", text: "Header nach Ricardo-Vorbild: oben Textmenüs nach Rolle (Inserieren, Kaufen, Favoriten, Profil) statt einem langen Profilmenü, darunter das weisse Suchfeld mit gelbem Rand über die volle Breite; beides bleibt beim Scrollen oben", melder: "Denis" },

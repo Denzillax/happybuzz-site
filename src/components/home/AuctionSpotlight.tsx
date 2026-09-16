@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { ListingCard } from '@/components/shared/ListingCard'
+import { SwipeRow } from '@/components/shared/SwipeRow'
 import { SectionHeader } from './SectionHeader'
 
 const MONO = "'Manrope', sans-serif"
@@ -68,7 +69,7 @@ export function AuctionSpotlight() {
     <section style={{ padding: '44px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Endet bald" href="/search?type=auction" linkLabel="Alle Auktionen" />
 
-      <div className="listing-grid home-swipe">
+      <SwipeRow className="listing-grid home-swipe">
         {listings.map(listing => {
           const dringend = new Date(listing.auction_end).getTime() - now < 3600_000
           return (
@@ -87,7 +88,7 @@ export function AuctionSpotlight() {
             </div>
           )
         })}
-      </div>
+      </SwipeRow>
     </section>
   )
 }

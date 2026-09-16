@@ -669,3 +669,19 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 /* "Warum wir"-Karten haben ihren eigenen farbigen Hover (Akzentrand + Schatten),
    das globale Abdunkeln machte sie grau (Denis, 15.09.) */
 .why-grid > a:hover { filter: none; }
+
+/* Wisch-Reihen am Desktop in schmalem Fenster (Denis, 16.09.): Pfeile nur fuer
+   Maus/Trackpad und nur, wenn die Reihe wirklich wischbar ist (< 768px). */
+.swipe-nav { display: none; }
+@media (max-width: 767px) and (hover: hover) and (pointer: fine) {
+  .swipe-nav {
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 96px; width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid #E4E0D8; background: rgba(255,255,255,.95); color: #191615;
+    box-shadow: 0 2px 8px rgba(25,22,21,.18); cursor: pointer; z-index: 2;
+  }
+  .swipe-prev { left: -6px; }
+  .swipe-next { right: -6px; }
+  .home-swipe { cursor: grab; }
+  .home-swipe:active { cursor: grabbing; }
+}

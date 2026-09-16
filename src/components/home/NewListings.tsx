@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { ListingCard } from '@/components/shared/ListingCard'
+import { SwipeRow } from '@/components/shared/SwipeRow'
 import { SectionHeader } from './SectionHeader'
 
 export function NewListings() {
@@ -46,11 +47,11 @@ export function NewListings() {
     <section style={{ padding: '44px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Neu eingestellt" href="/search?sort=newest" raster />
 
-      <div className="listing-grid home-swipe">
+      <SwipeRow className="listing-grid home-swipe">
         {listings.map(listing => (
           <ListingCard key={listing.id} listing={listing} userId={userId} />
         ))}
-      </div>
+      </SwipeRow>
     </section>
   )
 }
