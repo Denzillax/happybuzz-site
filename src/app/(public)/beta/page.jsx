@@ -237,6 +237,7 @@ const TESTS = [
       { id: "ch_context", label: "Thread zeigt Inserat-Kontext (Bild, Titel, Preis, 'Zum Inserat') + Datums-Trenner" },
       { id: "ch_images", label: "Bild im Chat senden (Upload) + Anzeige + Lightbox" },
       { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
+      { id: "ch_emoji_kompakt", label: "Chat: Emoji-Knopf links neben dem Eingabefeld öffnet 24 Emojis, Klick fügt an der Cursorposition ein; reine Emoji-Nachrichten gross ohne Blase; keine Schnellantworten mehr; Blasen kompakt mit Uhrzeit am Zeilenende, Folge-Nachrichten derselben Person enger" },
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
       { id: "ch_contactescalate", label: "Wiederholte Kontaktversuche: nach mehreren Malen rote AGB-Warnung im Chat (Versuche werden pro Konto gezählt)" },
       { id: "ch_ban", label: "Admin (Users-Tab): Konto sperren/entsperren; gesperrtes Konto sieht 'Konto gesperrt'-Overlay + kann nicht mehr chatten" },

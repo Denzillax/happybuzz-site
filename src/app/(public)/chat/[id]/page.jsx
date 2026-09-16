@@ -4,20 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Send, ArrowLeft, User, Package, Loader2, Plus, X, ImagePlus, ShieldCheck, Ban } from "lucide-react";
+import { Send, ArrowLeft, User, Package, Loader2, X, ImagePlus, ShieldCheck, Ban, Smile } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice, setConversationHidden } from "@/lib/listings";
 import { blockUser, unblockUser, isBlockedByMe } from "@/lib/blocks";
 import { maskContactInfo } from "@/lib/contactFilter";
 
-const QUICK_REPLIES = [
-  "Ist noch verfügbar",
-  "Preis ist verhandelbar",
-  "Kann morgen abgeholt werden",
-  "Reserviert für dich bis morgen",
-  "Leider schon verkauft",
-];
-const QR_KEY = "beedaro_quick_replies";
 
 function dayLabel(d) {
   const date = new Date(d); const now = new Date();
@@ -34,6 +26,24 @@ export default function ChatConversation() {
   const [blockiert, setBlockiert] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
+  // Emoji-Panel (Denis, 16.09.): 24 gaengige Emojis, Einfuegen an der Cursorposition
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const msgInputRef = useRef(null);
+  const emojiRef = useRef(null);
+  const EMOJIS = ["👍","🙂","😄","😉","🙏","👋","❤️","🔥","✅","❌","🤔","😅","👌","🎉","😍","😢","🤝","📦","🚗","💰","⏰","📍","🐝","🙌"];
+  const insertEmoji = (e) => {
+    const el = msgInputRef.current;
+    const start = el?.selectionStart ?? newMsg.length, end = el?.selectionEnd ?? newMsg.length;
+    const next = newMsg.slice(0, start) + e + newMsg.slice(end);
+    setNewMsg(next);
+    requestAnimationFrame(() => { if (el) { el.focus(); const pos = start + e.length; el.setSelectionRange(pos, pos); } });
+  };
+  useEffect(() => {
+    if (!emojiOpen) return;
+    const h = (ev) => { if (emojiRef.current && !emojiRef.current.contains(ev.target)) setEmojiOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, [emojiOpen]);
   const [user, setUser] = useState(null);
   const [conv, setConv] = useState(null);
   const [dealActive, setDealActive] = useState(false);
@@ -41,18 +51,13 @@ export default function ChatConversation() {
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [customReplies, setCustomReplies] = useState([]);
   const [lightbox, setLightbox] = useState(null);
   const bottomRef = useRef(null);
   const fileRef = useRef(null);
 
   useEffect(() => {
-    try { const a = JSON.parse(localStorage.getItem(QR_KEY) || "[]"); if (Array.isArray(a)) setCustomReplies(a); } catch {}
   }, []);
 
-  const saveCustom = (arr) => { setCustomReplies(arr); try { localStorage.setItem(QR_KEY, JSON.stringify(arr)); } catch {} };
-  const addCustom = () => { const t = (window.prompt("Eigene Schnell-Antwort:") || "").trim(); if (t) saveCustom([...customReplies, t].slice(0, 10)); };
-  const removeCustom = (t) => saveCustom(customReplies.filter((x) => x !== t));
 
   useEffect(() => {
     async function load() {
@@ -259,6 +264,12 @@ export default function ChatConversation() {
           const isImage = msg.message_type === "image" || (!!msg.image_url && !msg.content);
           const isOffer = msg.message_type === "offer";
           const isSystem = msg.message_type === "system";
+          // Kompakt (Denis, 16.09.): Folge-Nachrichten derselben Person innerhalb
+          // 3 Minuten ruecken zusammen, nur die letzte zeigt die Uhrzeit
+          const next = messages[i + 1];
+          const folgt = next && next.sender_id === msg.sender_id && next.message_type !== "offer" && next.message_type !== "system"
+            && (new Date(next.created_at) - new Date(msg.created_at)) < 180000;
+          const nurEmoji = !!msg.content && /^(?:\p{Extended_Pictographic}|\p{Emoji_Modifier}|\u200d|\ufe0f|\s){1,8}$/u.test(msg.content.trim());
           const dayChip = showDay && (
             <div style={{ textAlign: "center", margin: "12px 0" }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 10 }}>{dayLabel(msg.created_at)}</span>
@@ -300,21 +311,29 @@ export default function ChatConversation() {
           return (
             <div key={msg.id || i}>
               {dayChip}
-              <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 5 }}>
+              <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: folgt ? 2 : 6 }}>
                 <div style={{
-                  maxWidth: "70%", padding: isImage ? 4 : "8px 13px", borderRadius: 10,
-                  background: isImage ? "transparent" : (isMe ? colors.teal : colors.surface),
-                  boxShadow: (isImage || isMe) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
-                  borderBottomRightRadius: isMe ? 5 : 16, borderBottomLeftRadius: isMe ? 16 : 5,
+                  maxWidth: "70%", padding: isImage ? 4 : (nurEmoji ? "2px 6px" : "6px 11px"), borderRadius: 12,
+                  background: isImage || nurEmoji ? "transparent" : (isMe ? colors.teal : colors.surface),
+                  boxShadow: (isImage || isMe || nurEmoji) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
+                  borderBottomRightRadius: isMe && !folgt ? 4 : 12, borderBottomLeftRadius: !isMe && !folgt ? 4 : 12,
                 }}>
                   {isImage ? (
                     <img src={msg.image_url} alt="Bild" onClick={() => setLightbox(msg.image_url)}
                       style={{ maxWidth: 220, maxHeight: 260, borderRadius: 10, cursor: "pointer", display: "block" }} />
                   ) : (
-                    <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: isMe ? "#fff" : colors.dark, whiteSpace: "pre-wrap" }}>{msg.content}</p>
+                    <p style={{ margin: 0, fontSize: nurEmoji ? 30 : 13.5, lineHeight: nurEmoji ? 1.2 : 1.45, color: isMe ? "#fff" : colors.dark, whiteSpace: "pre-wrap" }}>
+                      {msg.content}
+                      {/* Uhrzeit klein am Ende der letzten Zeile statt in eigener Zeile */}
+                      {!folgt && !nurEmoji && (
+                        <span style={{ fontSize: 10, color: isMe ? "rgba(255,255,255,.7)" : colors.mutedLt, marginLeft: 8, whiteSpace: "nowrap", float: "right", position: "relative", top: 5 }}>
+                          {new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      )}
+                    </p>
                   )}
-                  {!isImage && (
-                    <p style={{ margin: "4px 0 0", fontSize: 10, color: isMe ? "rgba(255,255,255,.7)" : colors.mutedLt, textAlign: "right" }}>
+                  {nurEmoji && !folgt && (
+                    <p style={{ margin: 0, fontSize: 10, color: colors.mutedLt, textAlign: isMe ? "right" : "left" }}>
                       {new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
                     </p>
                   )}
@@ -327,44 +346,36 @@ export default function ChatConversation() {
       </div>
 
       {/* Input */}
-      <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "10px 18px", position: "sticky", bottom: 0 }}>
-        {/* Schnell-Antworten — ausgeblendet sobald getippt wird (hält den Chat übersichtlich) */}
-        <div style={{ maxWidth: 800, margin: "0 auto 10px", position: "relative", display: newMsg.trim() ? "none" : "block" }}>
-          <div className="chat-quickreplies" style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
-          {QUICK_REPLIES.map((q) => (
-            <button key={q} onClick={() => sendText(q)} disabled={sending}
-              style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: colors.cream, color: colors.dark, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
-              {q}
-            </button>
-          ))}
-          {customReplies.map((q) => (
-            <span key={q} style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 4, padding: "6px 8px 6px 12px", borderRadius: 10, border: `1.5px solid ${colors.teal}`, background: "#E6F5F5", color: colors.tealDark, fontSize: 12, fontFamily: fonts.body, whiteSpace: "nowrap" }}>
-              <button onClick={() => sendText(q)} disabled={sending} style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", fontSize: 12, fontFamily: fonts.body, padding: 0 }}>{q}</button>
-              <X size={12} style={{ cursor: "pointer", opacity: 0.6 }} onClick={() => removeCustom(q)} />
-            </span>
-          ))}
-          <button onClick={addCustom} title="Eigene Schnell-Antwort"
-            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, padding: "6px 10px", borderRadius: 10, border: `1.5px dashed ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 12, fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap" }}>
-            <Plus size={12} /> Eigene
-          </button>
-          </div>
-          <div style={{ position: "absolute", top: 0, bottom: 2, right: 0, width: 36, background: "linear-gradient(90deg, rgba(255,255,255,0), #fff)", pointerEvents: "none" }} />
-        </div>
-        <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 10, alignItems: "center" }}>
+      <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "8px 14px", position: "sticky", bottom: 0 }}>
+        <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 8, alignItems: "center", position: "relative" }}>
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
+          <div ref={emojiRef} style={{ position: "relative", flexShrink: 0 }}>
+            <button type="button" onClick={() => setEmojiOpen(o => !o)} title="Emoji einfügen" aria-label="Emoji einfügen"
+              style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${emojiOpen ? colors.teal : colors.border}`, background: emojiOpen ? "#E6F5F5" : colors.cream, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Smile size={18} color={emojiOpen ? colors.teal : colors.muted} />
+            </button>
+            {emojiOpen && (
+              <div style={{ position: "absolute", bottom: 46, left: 0, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, display: "grid", gridTemplateColumns: "repeat(8, 34px)", gap: 2, zIndex: 20 }}>
+                {EMOJIS.map(e => (
+                  <button key={e} type="button" onClick={() => insertEmoji(e)} style={{ width: 34, height: 34, border: "none", background: "transparent", borderRadius: 8, cursor: "pointer", fontSize: 20, lineHeight: 1 }}>{e}</button>
+                ))}
+              </div>
+            )}
+          </div>
           <button onClick={() => fileRef.current?.click()} disabled={uploading} title="Bild senden"
-            style={{ width: 44, height: 44, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: colors.cream, cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: colors.cream, cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {uploading ? <Loader2 size={18} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <ImagePlus size={18} color={colors.muted} />}
           </button>
           <input
+            ref={msgInputRef}
             type="text" value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Nachricht schreiben..."
-            style={{ flex: 1, padding: "12px 16px", borderRadius: 10, border: `1.5px solid ${colors.border}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: colors.cream }}
+            style={{ flex: 1, minWidth: 0, padding: "9px 16px", borderRadius: 999, border: `1.5px solid ${colors.border}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: colors.cream }}
           />
           <button onClick={handleSend} disabled={!newMsg.trim() || sending}
-            style={{ width: 44, height: 44, borderRadius: "50%", border: "none", background: newMsg.trim() ? colors.yellow : colors.warm, cursor: newMsg.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .15s", flexShrink: 0 }}>
+            style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: newMsg.trim() ? colors.yellow : colors.warm, cursor: newMsg.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .15s", flexShrink: 0 }}>
             <Send size={18} color={newMsg.trim() ? colors.dark : colors.mutedLt} />
           </button>
         </div>
