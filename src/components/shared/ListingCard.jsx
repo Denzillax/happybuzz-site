@@ -228,8 +228,8 @@ export function ListingCard(props) {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", minWidth: 0, flex: "1 1 auto" }}>{listing.city || "Schweiz"}</span>
             </div>
             {/* Zeile 2: Laufzeit links, bei Auktionen Sofortpreis rechts */}
-            {/* Sofortpreis rutscht bei schmalen Karten (6 pro Zeile) in eine eigene Zeile statt abgeschnitten zu werden */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", marginTop: 1 }}>
+            {/* Zeile 2: Laufzeit */}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", marginTop: 1 }}>
               {statusOverlay ? (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: 700, color: "#c62828", whiteSpace: "nowrap" }}>
                   <Clock size={10} /> {statusOverlay}
@@ -237,14 +237,10 @@ export function ListingCard(props) {
               ) : (
                 <Countdown endDate={endDate} endedLabel={isAuction ? "Beendet" : "Abgelaufen"} />
               )}
-              {isAuction && listing.buy_now_price > 0 && (
-                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
-                  Sofort CHF {listing.buy_now_price.toFixed(2)}
-                </span>
-              )}
             </div>
-            {/* Zeile 3: Verkaeufer mit Stern */}
-            <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 1 }}>
+            {/* Zeile 3: Verkaeufer mit Stern, rechts der Sofortpreis (Denis 16.09.:
+                gleiche Zeilenzahl fuer alle Karten, Sofort rechtsbuendig) */}
+            <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 0, marginTop: 1, whiteSpace: "nowrap" }}>
               {listing.seller && (
                 <span
                   onClick={(e) => {
@@ -269,6 +265,11 @@ export function ListingCard(props) {
                       {parseFloat(listing.seller.avg_rating).toFixed(1)}
                     </span>
                   )}
+                </span>
+              )}
+              {isAuction && listing.buy_now_price > 0 && (
+                <span style={{ marginLeft: "auto", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
+                  Sofort CHF {listing.buy_now_price.toFixed(2)}
                 </span>
               )}
             </div>
