@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "16. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Design", text: "Kartenbilder jetzt im Hochformat 3:4 statt 4:3 quer: die meisten Fotos kommen vom Handy senkrecht und sind so ganz zu sehen", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Wisch-Reihen im schmalen Desktop-Fenster: mit der Maus gibt es keine Wischgeste, darum jetzt Pfeil-Knöpfe an den Rändern und Ziehen mit gedrückter Maustaste. Am Handy bleibt alles wie gehabt", melder: "Denis" },
     ],
   },
