@@ -145,7 +145,9 @@ export default function ListingForm({
   // nur als Nachtrag, Fotos nur dazu. Die Datenbank prueft das zusaetzlich.
   gesperrt = false,
 }) {
-  const GESPERRT_FELDER = new Set(["title", "listing_type", "category_id", "condition", "start_price", "buy_now_price", "min_price", "bid_step", "auction_duration", "description"]);
+  const GESPERRT_FELDER = new Set(["title", "listing_type", "category_id", "condition", "start_price", "buy_now_price", "min_price", "bid_step", "auction_duration", "description", "fee_tier", "fee_percentage"]);
+  // Sichtbar ausgegraut + nicht klickbar (Denis 16.09.: "graue alles aus, was nicht veraenderbar ist")
+  const gesperrtStyle = gesperrt ? { opacity: .45, pointerEvents: "none", filter: "grayscale(.6)" } : {};
   const [nachtrag, setNachtrag] = useState("");
   // ── State ──────────────────────────────────────────────────
   const [form, setForm] = useState({
@@ -949,7 +951,7 @@ export default function ListingForm({
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
           <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 12, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
-            <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
+            <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand, Bee-Rate und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
           </div>
         )}
         <div style={{
@@ -1273,7 +1275,7 @@ export default function ListingForm({
         {!isFree && (
           <div style={{ marginTop: 18, opacity: form.listing_type === "service" ? 0.4 : 1, pointerEvents: form.listing_type === "service" ? "none" : "auto" }}>
             <label style={labelBase}>Zustand {form.listing_type === "service" && <span style={{ fontSize: 11, fontWeight: 400, color: colors.muted }}> (nicht relevant bei Service)</span>}</label>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6", padding: 8 } : {}) }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6", padding: 8 } : {}), ...gesperrtStyle }}>
               {CONDITIONS.map((c) => (
                 <Chip key={c.value} active={form.condition === c.value} onClick={() => set("condition", c.value)}>{c.label}</Chip>
               ))}
@@ -1323,7 +1325,7 @@ export default function ListingForm({
             return (
               <>
                 {/* Trigger Button */}
-                <div onClick={() => setCatModalOpen(true)} style={{
+                <div onClick={() => { if (!gesperrt) setCatModalOpen(true); }} style={{ ...gesperrtStyle,
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 10, cursor: "pointer",
                   border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.yellow : colors.border}`,
@@ -2232,6 +2234,8 @@ export default function ListingForm({
           <p style={{ ...hintStyle, marginTop: 0, marginBottom: 16, fontSize: 11 }}>
             Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20% fliessen in echte Schweizer Naturschutzprojekte. Höherer Impact = bessere Platzierung.
           </p>
+          {gesperrt && <p style={{ ...hintStyle, marginTop: -8, marginBottom: 10, fontSize: 11.5, fontWeight: 700, color: "#8a6d00" }}>Gesperrt: die Bieter haben mit dieser Bee-Rate geboten.</p>}
+          <div style={gesperrtStyle}>
           {[
             { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× Pollen · Standard-Platzierung" },
             { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× Pollen · bessere Platzierung" },
@@ -2310,6 +2314,7 @@ export default function ListingForm({
               </div>
             );
           })}
+          </div>
           {/* Cost breakdown */}
           {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
             const price = parseFloat(form.price);

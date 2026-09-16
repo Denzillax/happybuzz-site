@@ -24,8 +24,10 @@ begin
      or new.buy_now_price is distinct from old.buy_now_price
      or new.min_price is distinct from old.min_price
      or new.bid_step is distinct from old.bid_step
-     or new.auction_duration is distinct from old.auction_duration then
-    raise exception 'Diese Auktion hat Gebote. Titel, Preise, Typ, Kategorie und Zustand sind gesperrt.';
+     or new.auction_duration is distinct from old.auction_duration
+     or new.fee_tier is distinct from old.fee_tier
+     or new.fee_percentage is distinct from old.fee_percentage then
+    raise exception 'Diese Auktion hat Gebote. Titel, Preise, Typ, Kategorie, Zustand und Bee-Rate sind gesperrt.';
   end if;
   -- Beschreibung: nur anhaengen, der bisherige Text muss unveraendert vorne stehen
   if new.description is distinct from old.description

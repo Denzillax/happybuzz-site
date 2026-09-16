@@ -330,6 +330,9 @@ input:focus, textarea:focus, select:focus {
   .ticker-track { animation: none; }
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
+.listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
+  background: #F2EEE7 !important; color: #8A8580 !important; border-color: #E4E0D8 !important; cursor: not-allowed;
+}
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
 .listing-form select:focus { border-color:#0E9493 !important; box-shadow:0 0 0 3px rgba(14,148,147,.13) !important; }
