@@ -18,7 +18,7 @@ const REASON_LABEL = {
 };
 const reasonLabel = (r) => REASON_LABEL[r] || "Aktion";
 // Das Wabenspiel zeigt Einsatz und Gewinn selbst an, darum ohne Toast.
-const ohneToast = (r) => typeof r === "string" && r.startsWith("waben_");
+const ohneToast = (r) => typeof r === "string" && /^(waben|flug|paar)_/.test(r);
 
 function showXpToast(row, uid) {
   // Achievement-Vergabe (reason = "achievement:<key>")

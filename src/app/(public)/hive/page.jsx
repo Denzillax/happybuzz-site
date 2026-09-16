@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift, Flower2, Hexagon } from "lucide-react";
+import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift, Flower2, Gamepad2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
-import WabenSpiel from "@/components/hive/WabenSpiel";
+import TaeglicheSpiele from "@/components/hive/TaeglicheSpiele";
 import {
   BEE_LEVELS, ACHIEVEMENTS, calculateLevel, levelProgress, xpToNext,
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
@@ -29,6 +29,10 @@ const REASON_LABEL = {
   welcome_los: "Willkommens-Los (erstes Inserat)",
   waben_einsatz: "Wabenspiel: Einsatz",
   waben_gewinn: "Wabenspiel: Gewinn",
+  flug_einsatz: "Bienenflug: Einsatz",
+  flug_gewinn: "Bienenflug: Gewinn",
+  paar_einsatz: "Blütenpaar: Einsatz",
+  paar_gewinn: "Blütenpaar: Gewinn",
 };
 // Beta-Feedback Michael 30.08.: "weiss nicht, wodurch ich Pollen erhalten habe".
 // Erfolge und Challenges mit Namen ausschreiben statt roher Codes.
@@ -287,10 +291,11 @@ export default function HivePage() {
           </div>
         </Card>
 
-        {/* ── WABENSPIEL (Denis 16.09.): taeglich ein Spiel mit Einsatz ── */}
+        {/* ── TAEGLICHE SPIELE (Denis 16.09.): Waben, Bienenflug, Bluetenpaar,
+            jedes einmal pro Tag mit Pollen-Einsatz ── */}
         <Card style={{ marginBottom: 16 }}>
-          <SectionTitle icon={Hexagon} right={<span style={{ fontSize: 11, fontWeight: 700, color: colors.muted }}>Einmal pro Tag</span>}>Wabenspiel</SectionTitle>
-          <WabenSpiel pollen={xp} onPollen={(n) => setProfile((p) => ({ ...p, xp_total: n }))} />
+          <SectionTitle icon={Gamepad2} right={<span style={{ fontSize: 11, fontWeight: 700, color: colors.muted }}>Jedes einmal pro Tag</span>}>Tägliche Spiele</SectionTitle>
+          <TaeglicheSpiele pollen={xp} onPollen={(n) => setProfile((p) => ({ ...p, xp_total: n }))} />
         </Card>
 
         {/* ── POLLEN-VERLAUF ──

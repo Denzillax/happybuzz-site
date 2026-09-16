@@ -5,12 +5,12 @@
 // Die Logik liegt komplett in den RPCs (waben_heute/start/aufdecken/
 // mitnehmen); das Raster ist erst nach Spielende sichtbar.
 import { useEffect, useState } from "react";
-import { Droplets, Bug, Hexagon, Loader2, HandCoins } from "lucide-react";
+import { Droplets, Bug, Hexagon, HandCoins } from "lucide-react";
+import EinsatzWahl from "./EinsatzWahl";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 
 const K = { ink: "#14110D", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", wespe: "#3A2F2A" };
-const EINSAETZE = [5, 10, 20];
 const MULTI = [0, 1.2, 1.5, 2, 3, 5, 10, 25];
 const HEX = "polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%)";
 
@@ -84,24 +84,7 @@ export default function WabenSpiel({ pollen, onPollen }) {
     <div>
       <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.5, color: K.ink }}>{kopf}</p>
 
-      {/* Einsatzwahl (nur solange kein Spiel heute laeuft oder lief) */}
-      {spiel === null && (
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
-          {EINSAETZE.map(e => {
-            const aktiv = einsatz === e, moeglich = (pollen || 0) >= e;
-            return (
-              <button key={e} type="button" disabled={!moeglich} onClick={() => setEinsatz(e)}
-                style={{ padding: "7px 14px", borderRadius: 999, border: `1.5px solid ${aktiv ? K.ink : K.hairline}`, background: aktiv ? K.ink : "#fff", color: aktiv ? "#fff" : (moeglich ? K.ink : colors.mutedLt), fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: moeglich ? "pointer" : "not-allowed" }}>
-                {e} Pollen
-              </button>
-            );
-          })}
-          <button type="button" disabled={busy || zuWenig || (pollen || 0) < einsatz} onClick={start}
-            style={{ marginLeft: "auto", padding: "9px 18px", borderRadius: 999, border: "none", background: zuWenig ? K.chip : K.honey, color: zuWenig ? colors.mutedLt : K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: zuWenig ? "not-allowed" : "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>
-            {busy ? <Loader2 size={14} className="spin" /> : <Hexagon size={14} />} Spielen
-          </button>
-        </div>
-      )}
+      {spiel === null && <EinsatzWahl pollen={pollen} einsatz={einsatz} setEinsatz={setEinsatz} onStart={start} busy={busy} icon={Hexagon} />}
 
       {/* Wabenraster 3x3 */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8, maxWidth: 300, opacity: spiel === null && zuWenig ? .45 : 1 }}>
