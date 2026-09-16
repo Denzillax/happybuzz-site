@@ -13,6 +13,8 @@ import { getMyRole } from '@/lib/staff'
 
 
 const YELLOW = '#F4C03F'
+const PETROL = '#0B5E5C'
+const KI_KEY = 'beedaro_ki_suche'
 const DARK = '#191615'
 const INK = '#14110D'
 const PAPER = '#FFFFFF'
@@ -23,6 +25,10 @@ export function Header() {
   const [loading, setLoading] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  // KI-Schalter im Suchfeld (Denis 16.09.): an = Enter/Suchen gehen in die KI-Suche. Pro Geraet gemerkt.
+  const [kiModus, setKiModus] = useState(false)
+  useEffect(() => { try { setKiModus(localStorage.getItem(KI_KEY) === '1') } catch {} }, [])
+  const toggleKi = () => { setKiModus(v => { const n = !v; try { localStorage.setItem(KI_KEY, n ? '1' : '0') } catch {}; return n }) }
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const [suggestions, setSuggestions] = useState<any[]>([])
@@ -128,8 +134,15 @@ export function Header() {
   }
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    const q = searchQuery.trim()
+    if (kiModus) {
+      router.push('/search?ki=1' + (q ? '&q=' + encodeURIComponent(q) : ''))
+      setSearchQuery('')
+      setShowSuggestions(false)
+      return
+    }
+    if (q) {
+      router.push(`/search?q=${encodeURIComponent(q)}`)
       setSearchQuery('')
       setShowSuggestions(false)
     }
@@ -345,11 +358,8 @@ export function Header() {
             direkt das KI-Panel (getrennte Links, KEIN Link im Link) */}
         {pathname !== '/search' && (
           <div className="hdr-mobile-search" style={{ display: 'none', alignItems: 'center', background: '#F2EEE7', borderRadius: 999, margin: '0 0 10px' }}>
-            <Link href="/search" style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 8, padding: '9px 4px 9px 14px', textDecoration: 'none', color: '#8A8580', fontSize: 14, fontWeight: 500 }}>
+            <Link href="/search" style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', color: '#8A8580', fontSize: 14, fontWeight: 500 }}>
               <Search size={16} style={{ flexShrink: 0 }} /> Was suchst du?
-            </Link>
-            <Link href="/search?ki=1" aria-label="KI-Suche" style={{ display: 'flex', alignItems: 'center', padding: '9px 14px 9px 10px', flexShrink: 0 }}>
-              <Sparkles size={16} color="#0B5E5C" />
             </Link>
           </div>
         )}
@@ -432,7 +442,7 @@ export function Header() {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 32px 10px', width: '100%', boxSizing: 'border-box' }}>
             {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `2px solid ${YELLOW}`, borderRadius: 999, overflow: 'hidden', height: 48 }}>
+              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `2px solid ${kiModus ? PETROL : YELLOW}`, borderRadius: 999, overflow: 'hidden', height: 48, transition: 'border-color .15s' }}>
                 <Search size={18} style={{ marginLeft: 18, alignSelf: 'center', color: '#8A8580', flexShrink: 0 }} />
                 <input
                   ref={searchInputRef}
@@ -443,23 +453,21 @@ export function Header() {
                   onKeyDown={e => { if (e.key === 'Enter') { handleSearch(); setShowSuggestions(false) } }}
                   onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  placeholder="Was suchst du? Zum Beispiel: Rennvelo unter 300 Franken"
+                  placeholder={kiModus ? 'Beschreib, was du suchst: Rennvelo unter 300 Franken, etwas zum Spielen aus den 90ern' : 'Was suchst du?'}
                   style={{ flex: 1, padding: '0 12px', border: 'none', outline: 'none', fontSize: 15, fontFamily: 'inherit', color: DARK, background: 'transparent', minWidth: 0 }}
                 />
-                {/* KI-Suche: reicht den getippten Text an das KI-Panel auf /search weiter */}
+                {/* KI-Schalter: an = Enter/Suchen beschreiben statt Wortsuche */}
                 <button
-                  onClick={() => {
-                    router.push('/search?ki=1' + (searchQuery.trim() ? '&q=' + encodeURIComponent(searchQuery.trim()) : ''))
-                    setShowSuggestions(false)
-                  }}
-                  title="KI-Suche: beschreib einfach, was du suchst"
-                  aria-label="KI-Suche"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 12px', display: 'flex', alignItems: 'center', flexShrink: 0 }}
+                  type="button"
+                  onClick={toggleKi}
+                  aria-pressed={kiModus}
+                  title={kiModus ? 'KI-Suche an: Enter sucht nach der Bedeutung' : 'KI-Suche aus: Enter sucht nach Wörtern'}
+                  style={{ alignSelf: 'center', marginRight: 8, display: 'inline-flex', alignItems: 'center', gap: 5, height: 30, padding: '0 11px', borderRadius: 999, border: `1.5px solid ${kiModus ? PETROL : '#D8D3CB'}`, background: kiModus ? PETROL : '#fff', color: kiModus ? '#fff' : '#6B655F', fontSize: 12.5, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer', flexShrink: 0, transition: 'all .15s' }}
                 >
-                  <Sparkles size={17} color="#0B5E5C" />
+                  <Sparkles size={14} /> KI {kiModus ? 'an' : 'aus'}
                 </button>
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <Search size={17} strokeWidth={2.5} /> Suchen
+                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: kiModus ? PETROL : YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: kiModus ? '#fff' : DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0, transition: 'background .15s' }}>
+                  {kiModus ? <Sparkles size={17} strokeWidth={2.5} /> : <Search size={17} strokeWidth={2.5} />} Suchen
                 </button>
               </div>
 

@@ -236,19 +236,22 @@ function SearchPageInner() {
   const kiAutoRef = useRef(false);
   // Automatischer KI-Einsprung bei 0 Treffern (Denis 16.09.): merkt sich den
   // Text, fuer den er schon lief, damit die KI nicht in Schleife sucht.
+  // KI-Schalter (gleicher Speicher wie im Header)
+  const [kiModus, setKiModus] = useState(false);
+  useEffect(() => { try { setKiModus(localStorage.getItem("beedaro_ki_suche") === "1"); } catch {} }, []);
+  const toggleKi = () => setKiModus(v => { const n = !v; try { localStorage.setItem("beedaro_ki_suche", n ? "1" : "0"); } catch {} return n; });
   const kiFallbackRef = useRef("");
   const gesuchtRef = useRef(null); // Suchtext, zu dem total/results gehoeren
   const [kiAuto, setKiAuto] = useState("");
-  useEffect(() => {
-    // Erst wenn die Suche fertig ist UND die Kategorien da sind (die KI
-    // braucht sie); doSearch selbst laeuft oft noch vor dem Kategorie-Laden.
-    const q = query.trim();
-    if (loading || kiLaedt || total !== 0 || !q || gesuchtRef.current !== q || mainCats.length === 0 || kiFallbackRef.current === q) return;
+  // "Mit KI suchen" aus dem Nichts-gefunden-Block: Wortsuche hat versagt,
+  // die KI sucht nach der Bedeutung (Denis 16.09.: lieber Knopf als Automatik).
+  const kiNachfassen = () => {
+    const q = query.trim(); if (!q) return;
     kiFallbackRef.current = q;
     setKiAuto(q); setKiOffen(true); setKiText(q);
     kiSuchen(q);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, total, query, categories]);
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
+  };
   useEffect(() => {
     if (kiEntry && kiText.trim() && mainCats.length > 0 && !kiAutoRef.current) {
       kiAutoRef.current = true;
@@ -285,6 +288,11 @@ function SearchPageInner() {
     setLoading(false);
   }
 
+  // Enter/Suchen in der mobilen Zeile: je nach Schalter Wortsuche oder KI
+  const suchenStarten = () => {
+    if (kiModus) { setKiOffen(true); setKiFehler(""); setKiText(draft); setKiAuto(""); if (draft.trim()) kiSuchen(draft); return; }
+    setQuery(draft.trim()); setPage(1);
+  };
   const totalPages = Math.ceil(total / 24);
   const activeFilterCount = [mainCatId, condition, type, minPrice || maxPrice, city, delivery, verifiedOnly, ...Object.values(attrFilters)].filter(Boolean).length;
 
@@ -305,8 +313,8 @@ function SearchPageInner() {
           <input
             type="text" value={draft} autoFocus={!query}
             onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") { setQuery(draft.trim()); setPage(1); e.target.blur(); } }}
-            placeholder="Was suchst du?"
+            onKeyDown={(e) => { if (e.key === "Enter") { suchenStarten(); e.target.blur(); } }}
+            placeholder={kiModus ? "Beschreib, was du suchst" : "Was suchst du?"}
             style={{ flex: 1, minWidth: 0, padding: "10px 10px", border: "none", outline: "none", fontSize: 15, fontFamily: fonts.body, background: "transparent" }}
           />
           {draft && (
@@ -315,15 +323,13 @@ function SearchPageInner() {
               <X size={16} color="#999" />
             </button>
           )}
-          {/* KI-Suche auch mobil: oeffnet das Panel und uebernimmt den getippten Text */}
-          <button
-            onClick={() => { setKiOffen(true); setKiFehler(""); setKiText(draft); if (draft.trim()) kiSuchen(draft); }}
-            title="KI-Suche" aria-label="KI-Suche"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "0 6px", display: "flex", alignItems: "center", flexShrink: 0 }}>
-            <Sparkles size={16} color={PETROL} />
+          {/* KI-Schalter (wie im Header, gleicher Speicher) */}
+          <button type="button" onClick={toggleKi} aria-pressed={kiModus} title={kiModus ? "KI-Suche an" : "KI-Suche aus"}
+            style={{ display: "inline-flex", alignItems: "center", gap: 4, height: 30, padding: "0 9px", marginRight: 4, borderRadius: 999, border: `1.5px solid ${kiModus ? PETROL : "#D8D3CB"}`, background: kiModus ? PETROL : "#fff", color: kiModus ? "#fff" : "#6B655F", fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", flexShrink: 0 }}>
+            <Sparkles size={13} /> KI
           </button>
-          <button onClick={() => { setQuery(draft.trim()); setPage(1); }}
-            style={{ padding: "9px 18px", background: "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: INK, fontFamily: fonts.body, flexShrink: 0 }}>
+          <button onClick={suchenStarten}
+            style={{ padding: "9px 18px", background: kiModus ? PETROL : "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: kiModus ? "#fff" : INK, fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
@@ -631,8 +637,13 @@ function SearchPageInner() {
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <Search size={32} color="#ccc" style={{ marginBottom: 16 }} />
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
-            <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>Andere Suchbegriffe probieren oder die Filter zurücksetzen.</p>
+            <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>{query.trim() ? "Zu diesem Wortlaut ist nichts inseriert. Die KI kann nach der Bedeutung suchen." : "Andere Suchbegriffe probieren oder die Filter zurücksetzen."}</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              {query.trim() && (
+                <button onClick={kiNachfassen} disabled={kiLaedt} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: PETROL, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: fonts.body }}>
+                  <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
+                </button>
+              )}
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
