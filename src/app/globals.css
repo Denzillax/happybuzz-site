@@ -688,3 +688,8 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
   .home-swipe { cursor: grab; }
   .home-swipe:active { cursor: grabbing; }
 }
+
+/* Sofortkauf-Chip auf der Karte: am Handy kleiner, sonst wirkt er gequetscht */
+@media (max-width: 767px) {
+  .sofort-chip { font-size: 9.5px !important; padding: 2px 6px !important; bottom: 6px !important; right: 6px !important; }
+}
