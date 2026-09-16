@@ -2,10 +2,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift, Flower2 } from "lucide-react";
+import { Flame, Trophy, Target, Lock, Check, Zap, Users, Crown, TrendingUp, Loader2, Droplets, Gift, Flower2, Hexagon } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
+import WabenSpiel from "@/components/hive/WabenSpiel";
 import {
   BEE_LEVELS, ACHIEVEMENTS, calculateLevel, levelProgress, xpToNext,
   getUserAchievements, getChallengesWithProgress, getWeeklyLeaderboard,
@@ -26,6 +27,8 @@ const REASON_LABEL = {
   daily_streak: "Täglicher Streak",
   blueten_converted: "Blüten umgewandelt",
   welcome_los: "Willkommens-Los (erstes Inserat)",
+  waben_einsatz: "Wabenspiel: Einsatz",
+  waben_gewinn: "Wabenspiel: Gewinn",
 };
 // Beta-Feedback Michael 30.08.: "weiss nicht, wodurch ich Pollen erhalten habe".
 // Erfolge und Challenges mit Namen ausschreiben statt roher Codes.
@@ -284,6 +287,12 @@ export default function HivePage() {
           </div>
         </Card>
 
+        {/* ── WABENSPIEL (Denis 16.09.): taeglich ein Spiel mit Einsatz ── */}
+        <Card style={{ marginBottom: 16 }}>
+          <SectionTitle icon={Hexagon} right={<span style={{ fontSize: 11, fontWeight: 700, color: colors.muted }}>Einmal pro Tag</span>}>Wabenspiel</SectionTitle>
+          <WabenSpiel pollen={xp} onPollen={(n) => setProfile((p) => ({ ...p, xp_total: n }))} />
+        </Card>
+
         {/* ── POLLEN-VERLAUF ──
             Direkt unter dem Level, damit jeder sieht, WOFUER es Pollen gab
             (Beta-Feedback Michael 30.08.: Herkunft der Pollen unklar). */}
@@ -293,8 +302,8 @@ export default function HivePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {history.map(h => (
                 <div key={h.id} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: "#5B8C5A", minWidth: 54 }}>
-                    <Zap size={12} /> +{h.amount}
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: h.amount < 0 ? "#c62828" : "#5B8C5A", minWidth: 54 }}>
+                    <Zap size={12} /> {h.amount < 0 ? `−${Math.abs(h.amount)}` : `+${h.amount}`}
                   </span>
                   <span style={{ flex: 1, color: colors.dark }}>{reasonLabel(h.reason)}</span>
                   <span style={{ fontSize: 11, color: colors.muted, whiteSpace: "nowrap" }}>{new Date(h.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</span>

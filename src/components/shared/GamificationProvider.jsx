@@ -17,6 +17,8 @@ const REASON_LABEL = {
   daily_streak: "Täglicher Streak",
 };
 const reasonLabel = (r) => REASON_LABEL[r] || "Aktion";
+// Das Wabenspiel zeigt Einsatz und Gewinn selbst an, darum ohne Toast.
+const ohneToast = (r) => typeof r === "string" && r.startsWith("waben_");
 
 function showXpToast(row, uid) {
   // Achievement-Vergabe (reason = "achievement:<key>")
@@ -102,7 +104,7 @@ export default function GamificationProvider() {
           supabase.from("xp_log").select("id, amount, reason, created_at").eq("user_id", uid).gt("created_at", lastXp).order("created_at", { ascending: true }).limit(10),
           supabase.from("nektar_log").select("id, amount, reason, created_at").eq("user_id", uid).gt("created_at", lastNektar).order("created_at", { ascending: true }).limit(10),
         ]);
-        if (xp && xp.length) { lastXp = xp[xp.length - 1].created_at; xp.forEach((row) => showXpToast(row, uid)); }
+        if (xp && xp.length) { lastXp = xp[xp.length - 1].created_at; xp.forEach((row) => { if (!ohneToast(row.reason)) showXpToast(row, uid); }); }
         if (nk && nk.length) { lastNektar = nk[nk.length - 1].created_at; nk.forEach((row) => showNektarToast(row)); }
       } catch {}
     }

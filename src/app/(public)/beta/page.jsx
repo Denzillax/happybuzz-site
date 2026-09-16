@@ -359,6 +359,7 @@ const TESTS = [
       { id: "hive_menu", label: "'Mein Hive' im Profil-Menü erreichbar" },
       { id: "hive_loads", label: "Hive-Seite lädt: Level + Pollen-Fortschrittsbalken" },
       { id: "hive_pollen_verlauf", label: "'Dafür gab es Pollen' direkt unter dem Level: jede Gutschrift mit Grund (auch Challenges und Erfolge mit Namen) und Datum" },
+      { id: "hive_wabenspiel", label: "Hive: Wabenspiel unter dem Level. Einsatz 5/10/20 wählbar (nur mit genug Pollen), Spielen zieht den Einsatz sofort ab, jede Honigwabe erhöht den Stand, Mitnehmen schreibt gut, Wespe beendet mit Raster-Auflösung, zweites Spiel am selben Tag nicht möglich, Verlauf zeigt Einsatz (minus) und Gewinn (plus)" },
       { id: "hive_welcome_los", label: "Willkommens-Los: das allererste Inserat zieht automatisch 10-100 Pollen (Banner auf 'Meine Inserate' + Glocke), nur einmal pro Konto" },
       { id: "hive_next", label: "'Noch X Pollen bis [nächstes Level]' stimmt" },
       { id: "hive_streak", label: "Streak wird angezeigt + steigt bei täglichem Besuch" },
