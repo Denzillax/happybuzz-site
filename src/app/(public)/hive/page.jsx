@@ -29,8 +29,9 @@ const REASON_LABEL = {
   welcome_los: "Willkommens-Los (erstes Inserat)",
   waben_einsatz: "Wabenspiel: Einsatz",
   waben_gewinn: "Wabenspiel: Gewinn",
-  flug_einsatz: "Bienenflug: Einsatz",
-  flug_gewinn: "Bienenflug: Gewinn",
+  pfad_einsatz: "Pollenpfad: Einsatz",
+  pfad_gewinn: "Pollenpfad: Gewinn",
+  pfad_wochenbonus: "Pollenpfad: Wochenbonus (Top 3)",
   paar_einsatz: "Blütenpaar: Einsatz",
   paar_gewinn: "Blütenpaar: Gewinn",
 };

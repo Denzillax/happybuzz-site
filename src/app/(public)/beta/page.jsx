@@ -359,7 +359,7 @@ const TESTS = [
       { id: "hive_menu", label: "'Mein Hive' im Profil-Menü erreichbar" },
       { id: "hive_loads", label: "Hive-Seite lädt: Level + Pollen-Fortschrittsbalken" },
       { id: "hive_pollen_verlauf", label: "'Dafür gab es Pollen' direkt unter dem Level: jede Gutschrift mit Grund (auch Challenges und Erfolge mit Namen) und Datum" },
-      { id: "hive_bienenflug", label: "Hive, Reiter Bienenflug: Karte 1-12, Höher/Tiefer tippen, Treffer erhöht den Stand, Daneben oder gleiche Karte beendet mit Einsatz weg, Mitnehmen ab 1 Treffer, bei 12 ist Höher gesperrt (bei 1 Tiefer)" },
+      { id: "hive_pollenpfad", label: "Hive, Reiter Pollenpfad: Loslaufen zieht den Einsatz ab, drei Wege pro Schritt, Ergebniszeile (Weiter/Blüte/Regen/Schild/Wespe), Pfad-Anzeige rückt mit, Schild-Hinweis, Mitnehmen ab Feld 1, Ziel zahlt automatisch, Wochenrangliste unten zeigt dich nach dem Lauf" },
       { id: "hive_bluetenpaar", label: "Hive, Reiter Blütenpaar: 12 Karten aufdecken, nicht passendes Paar dreht sich nach kurzer Zeit zurück, gefundenes Paar bleibt grün offen, nach 8 Zügen oder 6 Paaren Abrechnung (0-1 Paare = Einsatz weg)" },
       { id: "hive_wabenspiel", label: "Hive: Wabenspiel unter dem Level. Einsatz 5/10/20 wählbar (nur mit genug Pollen), Spielen zieht den Einsatz sofort ab, jede Honigwabe erhöht den Stand, Mitnehmen schreibt gut, Wespe beendet mit Raster-Auflösung, zweites Spiel am selben Tag nicht möglich, Verlauf zeigt Einsatz (minus) und Gewinn (plus)" },
       { id: "hive_welcome_los", label: "Willkommens-Los: das allererste Inserat zieht automatisch 10-100 Pollen (Banner auf 'Meine Inserate' + Glocke), nur einmal pro Konto" },

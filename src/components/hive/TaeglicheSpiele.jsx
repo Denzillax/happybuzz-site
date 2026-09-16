@@ -2,16 +2,16 @@
 // Tägliche Spiele im Hive (Denis, 16.09.2026): drei Spiele als Reiter,
 // jedes einmal pro Tag mit Pollen-Einsatz. Der Reiter merkt sich pro Gerät.
 import { useEffect, useState } from "react";
-import { Hexagon, Feather, Flower2 } from "lucide-react";
+import { Hexagon, Footprints, Flower2 } from "lucide-react";
 import { fonts } from "@/lib/theme";
 import WabenSpiel from "./WabenSpiel";
-import Bienenflug from "./Bienenflug";
+import Pollenpfad from "./Pollenpfad";
 import Bluetenpaar from "./Bluetenpaar";
 
 const K = { ink: "#14110D", hairline: "#E4E0D8", chip: "#F2EEE7" };
 const SPIELE = [
   { key: "waben", name: "Wabenspiel", Icon: Hexagon, Komp: WabenSpiel },
-  { key: "flug", name: "Bienenflug", Icon: Feather, Komp: Bienenflug },
+  { key: "pfad", name: "Pollenpfad", Icon: Footprints, Komp: Pollenpfad },
   { key: "paar", name: "Blütenpaar", Icon: Flower2, Komp: Bluetenpaar },
 ];
 
