@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 import { getCoverUrl } from "@/lib/formatters";
-import { PriceDisplay } from "./PriceDisplay";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
@@ -217,7 +216,14 @@ export function ListingCard(props) {
           ) : isFree ? (
             <span style={{ fontSize: 17, fontWeight: 800, color: colors.nature }}>Gratis</span>
           ) : (
-            <PriceDisplay listing={listing} size="md" />
+            <>
+              {/* Festpreis gleich gesetzt wie der Auktionspreis (Denis 16.09.: die
+                  Kopfschrift wirkte dicker), daneben grau "(Festpreis)" wie "(n Gebote)" */}
+              <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+                CHF {Number(listing.price || 0).toFixed(2)}
+              </span>
+              <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>
+            </>
           )}
         </div>
 
