@@ -999,14 +999,8 @@ export default function ListingDetail() {
               )}
               </div>
 
-              {/* Eigentuemer: statt ausgegrauter Kauf-Knoepfe ein Streifen mit Aktionen */}
-              {isOwner && l.status === "active" && (
-                <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 12px", borderRadius: 10, background: "#F4F4F2", marginBottom: 14, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 12.5, fontWeight: 700, color: colors.muted, flex: "1 1 auto" }}>Dein Inserat</span>
-                  <Link href={`/listings/${l.id}`} style={{ padding: "7px 14px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>Bearbeiten</Link>
-                  <Link href="/listings" style={{ padding: "7px 14px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>Statistik</Link>
-                </div>
-              )}
+              {/* Eigentuemer: keine Kauf-Knoepfe; die Aktionen (Bearbeiten, Meine
+                  Inserate) stehen in der Eigentuemer-Leiste ueber der Galerie */}
 
               {/* Buy / Status */}
               {l.listing_type === "sell" && l.status === "active" && (
