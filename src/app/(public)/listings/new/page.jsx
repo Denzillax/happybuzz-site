@@ -88,12 +88,19 @@ function NewListingPageInner() {
     const listing = await createListing(user.id, formData);
     if (formData.newFiles?.length > 0) {
       await uploadListingImages(listing.id, formData.newFiles);
-      // Bild-Merkmale fuer die Bildersuche einmalig rechnen (im Hintergrund,
-      // blockiert das Veroeffentlichen nicht; Fehler sind still)
+      // Bild-Merkmale fuer die Bildersuche einmalig rechnen. Kurz abwarten
+      // (max. 12 s) statt fire-and-forget: der Seitenwechsel gleich danach
+      // brach die Anfrage sonst ab (Casio/Adidas am 16.09. ohne Merkmale).
+      // Fehler sind still, die Bildersuche rechnet dann beim ersten Klick nach.
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.access_token) {
-          fetch("/api/ai-tags", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` }, body: JSON.stringify({ listingId: listing.id }) }).catch(() => {});
+          await fetch("/api/ai-tags", {
+            method: "POST", keepalive: true,
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+            body: JSON.stringify({ listingId: listing.id }),
+            signal: AbortSignal.timeout(12000),
+          }).catch(() => {});
         }
       } catch {}
     }
