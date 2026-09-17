@@ -1103,8 +1103,7 @@ export default function ListingForm({
                 <button
                   onClick={() => removeImage(idx)}
                   disabled={gesperrt}
-                  title={gesperrt ? "Gesperrt: Auktion hat Gebote" : "Foto entfernen"}
-                  title="Entfernen"
+                  title={gesperrt ? "Gesperrt: Auktion hat Gebote" : "Entfernen"}
                   style={{
                     width: 22, height: 22, borderRadius: 10, border: "none",
                     background: "rgba(0,0,0,.5)", color: "#fff", cursor: "pointer",
