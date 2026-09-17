@@ -75,3 +75,6 @@ Danach Testinserate und Meldungen löschen. Beta-Checkliste und Rep-Log ergänze
 
 ## Nicht dabei
 Automatisches Ablehnen, Prüfung von Bearbeitungen aktiver Inserate, Prüfung von Chat-Nachrichten, Profil-Prüfung. Alles später auf derselben Route und RPC möglich.
+
+## Anzeige im Admin (Ergänzung 17.09., Abend)
+Die KI-Begründung steht nicht mehr als Text unter dem Titel (sprengte die Zeile), sondern als Chip neben der Artikelnummer: "KI ✓ unauffällig" (grün), "KI · n Hinweise" (grau), "KI · n Blocker" (rot), "KI ausstehend". Hover oder Klick öffnet ein Kärtchen mit Vertrauensstufe, Prüfzeit, Blockern, Hinweisen und Wartegrund.

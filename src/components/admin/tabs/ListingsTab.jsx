@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { Play, Pause, Eye, CheckCircle, XCircle } from "lucide-react";
 import { fmtDate } from "@/lib/formatters";
@@ -8,19 +9,40 @@ import { TypeBadge } from "@/components/shared/Badge";
 import { th, td, useSort, SortTh, listingPriceText, listingPriceValue } from "@/components/admin/adminStyles";
 
 // Status-Aktionsknoepfe (Freigeben/Ablehnen/Pause/Aktiv) — Tabelle + Karten
-// Ergebnis der KI-Vorpruefung (Denis 17.09.): Blocker rot, Hinweise grau,
-// Vertrauensstufe, Grund fuer die Warteschlange.
+// Ergebnis der KI-Vorpruefung (Denis 17.09.): kompakter Chip neben der
+// Artikelnummer, Details erst beim Hover/Klick als Kaertchen (sonst sprengt
+// der Text die Zeile).
 function KiBegruendung({ l }) {
+  const [offen, setOffen] = useState(false);
   const ai = l.review_ai;
-  if (!ai) return <span style={{ display: "block", fontSize: 10, color: "#999", fontStyle: "italic", whiteSpace: "normal" }}>{l.status === "pending_review" ? "KI-Prüfung ausstehend" : ""}</span>;
-  const blocker = Array.isArray(ai.blocker) ? ai.blocker : [];
-  const hinweise = Array.isArray(ai.hinweise) ? ai.hinweise : [];
+  const blocker = Array.isArray(ai?.blocker) ? ai.blocker : [];
+  const hinweise = Array.isArray(ai?.hinweise) ? ai.hinweise : [];
+  const art = !ai ? "ausstehend" : blocker.length ? "blocker" : hinweise.length ? "hinweis" : "ok";
+  const chip = {
+    ausstehend: { text: "KI ausstehend", bg: "#F2EEE7", fg: "#8A8580" },
+    blocker: { text: `KI · ${blocker.length} Blocker`, bg: "#FFEBEE", fg: "#c62828" },
+    hinweis: { text: `KI · ${hinweise.length} ${hinweise.length === 1 ? "Hinweis" : "Hinweise"}`, bg: "#F2EEE7", fg: "#5F5A55" },
+    ok: { text: "KI ✓ unauffällig", bg: "#E8F5E9", fg: "#2E7D32" },
+  }[art];
+  const hatDetails = !!ai;
   return (
-    <span style={{ display: "block", fontSize: 10.5, lineHeight: 1.35, whiteSpace: "normal", marginTop: 3 }}>
-      <span style={{ color: "#666", fontWeight: 700 }}>KI: {ai.vertrauen === "bewaehrt" ? "bewährter Verkäufer" : "neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{blocker.length === 0 && hinweise.length === 0 ? " · unauffällig" : ""}</span>
-      {blocker.map((b, i) => <span key={"b" + i} style={{ display: "block", color: "#c62828", fontWeight: 700 }}>Blocker: {b.grund || b.code}</span>)}
-      {hinweise.map((h, i) => <span key={"h" + i} style={{ display: "block", color: "#777" }}>Hinweis: {h.tipp || h.code}{h.vorschlag ? ` (${h.vorschlag})` : ""}</span>)}
-      {l.review_hold_reason && l.status === "pending_review" && <span style={{ display: "block", color: "#8a6d00", fontWeight: 700 }}>Wartet: {l.review_hold_reason}</span>}
+    <span style={{ position: "relative", display: "inline-block", marginLeft: 6, verticalAlign: "middle" }}
+      onMouseEnter={() => hatDetails && setOffen(true)} onMouseLeave={() => setOffen(false)}>
+      <button type="button" onClick={() => hatDetails && setOffen(o => !o)}
+        style={{ padding: "1px 8px", borderRadius: 999, border: "none", background: chip.bg, color: chip.fg, fontSize: 9.5, fontWeight: 800, fontFamily: "inherit", cursor: hatDetails ? "pointer" : "default", letterSpacing: ".02em", whiteSpace: "nowrap" }}>
+        {chip.text}
+      </button>
+      {offen && hatDetails && (
+        <span style={{ position: "absolute", left: 0, top: "calc(100% + 4px)", zIndex: 50, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
+          <span style={{ display: "block", fontWeight: 800, color: "#666", marginBottom: 4 }}>
+            {ai.vertrauen === "bewaehrt" ? "Bewährter Verkäufer" : "Neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{ai.geprueft_am ? ` · ${new Date(ai.geprueft_am).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}` : ""}
+          </span>
+          {blocker.map((b, i) => <span key={"b" + i} style={{ display: "block", color: "#c62828", fontWeight: 700 }}>Blocker: {b.grund || b.code}</span>)}
+          {hinweise.map((h, i) => <span key={"h" + i} style={{ display: "block", color: "#5F5A55" }}>Hinweis: {h.tipp || h.code}{h.vorschlag ? ` (${h.vorschlag})` : ""}</span>)}
+          {blocker.length === 0 && hinweise.length === 0 && <span style={{ display: "block", color: "#2E7D32" }}>Keine Auffälligkeiten.</span>}
+          {l.review_hold_reason && l.status === "pending_review" && <span style={{ display: "block", color: "#8a6d00", fontWeight: 700, marginTop: 4 }}>Wartet: {l.review_hold_reason}</span>}
+        </span>
+      )}
     </span>
   );
 }
@@ -98,13 +120,12 @@ export function ListingsTab({ admin }) {
               <tr key={l.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
                 <td style={{ ...td, fontWeight: 600, maxWidth: 260, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   <Link href={`/listing/${l.id}`} style={{ color: colors.dark, textDecoration: "none" }}>{l.title}</Link>
-                  <span style={{ display: "block", fontFamily: "monospace", fontSize: 10, color: colors.muted, fontWeight: 500 }}>{makeArtRef(l.id)}{l.status === "pending_review" && l.submitted_at ? ` · seit ${new Date(l.submitted_at).toLocaleDateString("de-CH")}` : ""}</span>
+                  <span style={{ display: "block", fontFamily: "monospace", fontSize: 10, color: colors.muted, fontWeight: 500 }}>{makeArtRef(l.id)}{l.status === "pending_review" && l.submitted_at ? ` · seit ${new Date(l.submitted_at).toLocaleDateString("de-CH")}` : ""}{(l.status === "pending_review" || l.review_source === "auto") && <KiBegruendung l={l} />}</span>
                   {l.publish_at && ["pending_review", "scheduled"].includes(l.status) && (
                     <span style={{ display: "block", fontSize: 10, color: "#0B5E5C", fontWeight: 700 }}>
                       Geplant für {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
                     </span>
                   )}
-                  {(l.status === "pending_review" || l.review_source === "auto") && <KiBegruendung l={l} />}
                 </td>
                 <td style={{ ...td, color: colors.muted }}>{l.sellerName}</td>
                 <td style={td}><TypeBadge type={l.listing_type} /></td>
