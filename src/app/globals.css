@@ -560,11 +560,25 @@ input:focus, textarea:focus, select:focus {
   padding: 4px 0 8px;
 }
 .cat-pills::-webkit-scrollbar { display: none; }
-/* Desktop: alle Pills sichtbar (umbrechen), mobil bleibt die Wischleiste.
-   Sturzi8 17.09.: die letzte Kachel war auf breiten Screens abgeschnitten. */
-@media (min-width: 900px) {
-  .cat-pills { flex-wrap: wrap; overflow: visible; }
+/* Eine Zeile (Denis 17.09.: kein Umbruch). Damit die letzte Kachel nicht
+   "abgeschnitten" wirkt (Sturzi8), blendet der Rand aus und ein Pfeil
+   scrollt weiter, solange rechts noch etwas kommt. */
+.cat-pills-wrap { position: relative; }
+.cat-pills-wrap.has-more::after {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 8px; width: 90px; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0), #fff 70%);
 }
+.cat-pills-wrap.has-less::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 8px; width: 60px; pointer-events: none; z-index: 1;
+  background: linear-gradient(270deg, rgba(255,255,255,0), #fff 70%);
+}
+.cat-scroll-btn {
+  position: absolute; top: 50%; transform: translateY(-60%); z-index: 2; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid #E4E0D8; background: #fff; color: #191615; cursor: pointer; display: none; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(25,22,21,.12);
+}
+.cat-scroll-btn.right { right: 0; } .cat-scroll-btn.left { left: 0; }
+@media (min-width: 900px) { .cat-scroll-btn { display: inline-flex; } }
 .cat-pill:hover { background: #F4C03F !important; }
 @media (max-width: 640px) {
   /* Hero-Collage mobil: verkleinert und zentriert unter dem Text.

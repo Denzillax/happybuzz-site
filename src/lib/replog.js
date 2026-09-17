@@ -25,7 +25,7 @@ export const REP_LOG = [
   {
     datum: "16. September 2026",
     punkte: [
-      { typ: "fix", bereich: "Startseite", text: "Kategorie-Kacheln: auf breiten Bildschirmen war die letzte Kachel abgeschnitten (unsichtbare Wischleiste). Auf Desktop brechen die Kacheln jetzt um, mobil bleibt das Wischen", melder: "Sturzi8" },
+      { typ: "fix", bereich: "Startseite", text: "Kategorie-Kacheln: auf breiten Bildschirmen war die letzte Kachel abgeschnitten (unsichtbare Wischleiste). Die Reihe bleibt einzeilig, der rechte Rand blendet aus und ein Pfeil scrollt weiter, solange noch Kacheln folgen", melder: "Sturzi8" },
       { typ: "neu", bereich: "Biene", text: "Ausschalter für die Biene im Footer ('Biene aus' / 'Biene an', pro Gerät gemerkt). Beim Ausschalten landet sie sofort, ohne über Bildern hängen zu bleiben", melder: "Sturzi8" },
       { typ: "fix", bereich: "Glocke", text: "Die rote Zahl blieb stehen, obwohl in der Liste nichts Ungelesenes war: ältere ungelesene Meldungen ausserhalb der letzten 20 zählten mit, und Nachrichten-Meldungen blieben ungelesen, auch wenn der Chat geöffnet wurde. Beides behoben", melder: "Sturzi8" },
       { typ: "fix", bereich: "Import", text: "Import-Helfer: Umlaute (ä ö ü) kamen als Entity-Code oder gar nicht an, und der Text verlor seine Absätze. Benannte Entities werden jetzt aufgelöst, Zeilenumbrüche werden zu Absätzen", melder: "Sturzi8" },
