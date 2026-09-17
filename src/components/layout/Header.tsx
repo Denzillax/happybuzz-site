@@ -15,6 +15,8 @@ import { getMyRole } from '@/lib/staff'
 const YELLOW = '#F4C03F'
 const PETROL = '#0B5E5C'
 const KI_KEY = 'beedaro_ki_suche'
+// KI-Modus: Verlauf Petrol -> Teal -> Honig (Denis 17.09.: "fancy Verlauf")
+const KI_VERLAUF = 'linear-gradient(90deg, #0B5E5C 0%, #0E9493 60%, #F4C03F 100%)'
 const DARK = '#191615'
 const INK = '#14110D'
 const PAPER = '#FFFFFF'
@@ -442,7 +444,7 @@ export function Header() {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 32px 10px', width: '100%', boxSizing: 'border-box' }}>
             {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `2px solid ${kiModus ? PETROL : YELLOW}`, borderRadius: 999, overflow: 'hidden', height: 48, transition: 'border-color .15s' }}>
+              <div style={{ display: 'flex', alignItems: 'stretch', borderRadius: 999, overflow: 'hidden', height: 48, transition: 'border-color .15s', border: '2px solid transparent', backgroundImage: kiModus ? `linear-gradient(#fff, #fff), ${KI_VERLAUF}` : `linear-gradient(#fff, #fff), linear-gradient(${YELLOW}, ${YELLOW})`, backgroundOrigin: 'border-box', backgroundClip: 'padding-box, border-box' }}>
                 <Search size={18} style={{ marginLeft: 18, alignSelf: 'center', color: '#8A8580', flexShrink: 0 }} />
                 <input
                   ref={searchInputRef}
@@ -462,11 +464,11 @@ export function Header() {
                   onClick={toggleKi}
                   aria-pressed={kiModus}
                   title={kiModus ? 'KI-Suche an: Enter sucht nach der Bedeutung' : 'KI-Suche aus: Enter sucht nach Wörtern'}
-                  style={{ alignSelf: 'center', marginRight: 8, display: 'inline-flex', alignItems: 'center', gap: 5, height: 30, padding: '0 11px', borderRadius: 999, border: `1.5px solid ${kiModus ? PETROL : '#D8D3CB'}`, background: kiModus ? PETROL : '#fff', color: kiModus ? '#fff' : '#6B655F', fontSize: 12.5, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer', flexShrink: 0, transition: 'all .15s' }}
+                  style={{ alignSelf: 'center', marginRight: 8, display: 'inline-flex', alignItems: 'center', gap: 5, height: 30, padding: '0 11px', borderRadius: 999, border: `1.5px solid ${kiModus ? 'transparent' : '#D8D3CB'}`, background: kiModus ? KI_VERLAUF : '#fff', color: kiModus ? '#fff' : '#6B655F', fontSize: 12.5, fontWeight: 800, fontFamily: 'inherit', cursor: 'pointer', flexShrink: 0, transition: 'all .15s' }}
                 >
                   <Sparkles size={14} /> KI {kiModus ? 'an' : 'aus'}
                 </button>
-                <button className="eckig" onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: kiModus ? PETROL : YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: kiModus ? '#fff' : DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0, transition: 'background .15s' }}>
+                <button className="eckig" onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: kiModus ? KI_VERLAUF : YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: kiModus ? '#fff' : DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0, transition: 'background .15s' }}>
                   {kiModus ? <Sparkles size={17} strokeWidth={2.5} /> : <Search size={17} strokeWidth={2.5} />} Suchen
                 </button>
               </div>
