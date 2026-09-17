@@ -46,7 +46,8 @@ const reasonLabel = (r) => {
     return `Erfolg: ${ACHIEVEMENTS[key]?.name || key}`;
   }
   if (r?.startsWith("challenge:")) return `Challenge: ${r.slice("challenge:".length)}`;
-  return r;
+  // Nie einen rohen Datenbank-Code zeigen (Denis 17.09.): "pfad_gewinn" -> "Pfad gewinn"
+  return String(r || "").replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 };
 
 // Katalog-Tokens (wie öffentliche Seiten)

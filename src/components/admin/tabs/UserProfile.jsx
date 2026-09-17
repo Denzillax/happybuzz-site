@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import { pill } from "@/components/admin/adminStyles";
 import { TypeBadge } from "@/components/shared/Badge";
-import { AUDIT_META } from "@/components/admin/tabs/AuditTab";
+import { AUDIT_META, auditLabel } from "@/components/admin/tabs/AuditTab";
 
 export function UserProfile({ admin }) {
   const {
@@ -122,7 +122,7 @@ export function UserProfile({ admin }) {
       <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "12px 14px", marginBottom: 14 }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, marginBottom: 8 }}>Aktions-/Sperrhistorie</div>
         {profileAudit.length === 0 ? <div style={{ fontSize: 12, color: colors.muted }}>Keine Aktionen protokolliert.</div> : profileAudit.map(a => {
-          const meta = AUDIT_META[a.action] || { label: a.action, Icon: Clock, color: colors.muted, bg: colors.cream };
+          const meta = AUDIT_META[a.action] || { label: auditLabel(a.action), Icon: Clock, color: colors.muted, bg: colors.cream };
           const Icon = meta.Icon;
           return (
             <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: `1px solid ${colors.borderLt}` }}>

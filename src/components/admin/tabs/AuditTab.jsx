@@ -35,7 +35,15 @@ export const AUDIT_META = {
   announcement_bar:     { label: "Banner geändert",       Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
   company_update:       { label: "Firmendaten geändert",  Icon: Building2,   color: "#0E9493", bg: "#E6F5F5" },
   staff_role_set:       { label: "Mitarbeiter-Rolle gesetzt", Icon: Users2,  color: "#0E9493", bg: "#E6F5F5" },
+  listing_auto_approve: { label: "Inserat automatisch freigegeben (KI)", Icon: Play, color: "#2E7D32", bg: "#E8F5E9" },
+  listing_auto_hold:    { label: "Inserat zur Prüfung zurückgehalten (KI)", Icon: Pause, color: "#E65100", bg: "#FFF3E0" },
+  auto_review_toggle:   { label: "Automatische Freigabe umgeschaltet", Icon: ShieldCheck, color: "#0E9493", bg: "#E6F5F5" },
+  application_rejected: { label: "Bewerbung abgelehnt",   Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
+  challenge_deleted:    { label: "Challenge gelöscht",    Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
+  ticker:               { label: "Ticker geändert",       Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
 };
+// Unbekannte Codes nie roh anzeigen (Denis 17.09.): "foo_bar_baz" -> "Foo bar baz"
+export const auditLabel = (action) => AUDIT_META[action]?.label || String(action || "").replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 const dayLabel = (ds) => {
   const d = new Date(ds), now = new Date(), DAY = 86400000;
   const t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
@@ -50,11 +58,11 @@ export function AuditTab({ admin }) {
   return (
     <div>
       {(() => {
-        const filtered = auditLog.filter(a => !search || (a.target_label || "").toLowerCase().includes(search.toLowerCase()) || ((AUDIT_META[a.action]?.label) || a.action).toLowerCase().includes(search.toLowerCase()));
+        const filtered = auditLog.filter(a => !search || (a.target_label || "").toLowerCase().includes(search.toLowerCase()) || auditLabel(a.action).toLowerCase().includes(search.toLowerCase()));
         if (auditLoading && filtered.length === 0) return <div style={{ padding: 40, textAlign: "center", color: colors.muted, fontSize: 13 }}>Lade Protokoll…</div>;
         if (filtered.length === 0) return <div style={{ padding: 36, textAlign: "center", color: colors.muted, fontSize: 13, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg }}>Noch keine protokollierten Aktionen.</div>;
         return filtered.map((a, i) => {
-          const meta = AUDIT_META[a.action] || { label: a.action, Icon: Clock, color: colors.muted, bg: colors.cream };
+          const meta = AUDIT_META[a.action] || { label: auditLabel(a.action), Icon: Clock, color: colors.muted, bg: colors.cream };
           const Icon = meta.Icon;
           const day = dayLabel(a.created_at);
           const showHeader = i === 0 || day !== dayLabel(filtered[i - 1].created_at);
