@@ -247,7 +247,7 @@ export default function ListingsPage() {
   };
 
   const colHead = { fontSize: 12, fontWeight: 600, color: colors.muted, padding: "12px 10px", textAlign: "left", borderBottom: `1px solid ${colors.border}` };
-  const selectStyle = { padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 600, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
+  const selectStyle = { padding: "7px 12px", borderRadius: 12, fontSize: 12, fontWeight: 600, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
@@ -255,7 +255,7 @@ export default function ListingsPage() {
 
         {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}
         {losBetrag > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FBF0D2", border: "1px solid #F0E3BC", borderRadius: 14, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FBF0D2", border: "1px solid #F0E3BC", borderRadius: 12, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
             <span style={{ fontSize: 22 }} aria-hidden><Rocket size={22} color={K.ink} /></span>
             <div style={{ flex: "1 1 220px", minWidth: 0 }}>
               <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>Willkommens-Los gezogen: +{losBetrag} Pollen</p>
@@ -272,7 +272,7 @@ export default function ListingsPage() {
           if (!l) return null;
           const verlaengerbar = l.listing_type !== "auction" && (isExpired(l) || laeuftBaldAb(l) || l.status === "expired");
           return (
-            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 14, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 12, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
               <Clock size={20} color={K.ink} />
               <div style={{ flex: "1 1 220px", minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>{l.title}</p>
@@ -291,7 +291,7 @@ export default function ListingsPage() {
         })()}
 
         {mahnPause && (
-          <div style={{ background: "#FFEBEE", border: "1px solid #F5C2C2", borderRadius: 14, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ background: "#FFEBEE", border: "1px solid #F5C2C2", borderRadius: 12, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <span style={{ fontWeight: 800 }}>Inserate pausiert:</span>
             <span style={{ flex: "1 1 200px" }}>Eine Gebührenrechnung ist überfällig. Nach der Zahlung schalten wir deine Inserate wieder frei.</span>
             <Link href="/fees" style={{ fontWeight: 700, color: "#c62828", textDecoration: "underline", whiteSpace: "nowrap" }}>Zur Rechnung</Link>
@@ -346,19 +346,19 @@ export default function ListingsPage() {
         {selected.size > 0 && (
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", marginBottom: 12,
-            background: K.sand, borderRadius: 10, border: "1px solid #E4E0D8",
+            background: K.sand, borderRadius: 12, border: "1px solid #E4E0D8",
           }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
             <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 12, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 12, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Play size={12} /> Aktivieren
             </button>
             <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 10, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 12, fontSize: 12, fontWeight: 700, border: "1px solid #E4E0D8", background:"#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Trash2 size={12} /> Löschen
             </button>
             <button onClick={() => setSelected(new Set())} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
@@ -370,7 +370,7 @@ export default function ListingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8" }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8" }}>
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Keine Inserate</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Erstelle dein erstes Inserat.</p>
@@ -382,7 +382,7 @@ export default function ListingsPage() {
 
         {/* Table */}
         {!loading && filtered.length > 0 && (
-          <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden" }}>
             <div className="ml-table">
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
@@ -419,7 +419,7 @@ export default function ListingsPage() {
                       {/* Artikel */}
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
                         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                          <div style={{ width: 56, height: 56, borderRadius: 10, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <div style={{ width: 56, height: 56, borderRadius: 12, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
                           </div>
                           <div style={{ minWidth: 0 }}>
@@ -498,7 +498,7 @@ export default function ListingsPage() {
                         <div style={{ display: "flex", gap: 6, alignItems: "center", justifyContent: "center" }}>
                           {/* Bearbeiten — immer sichtbar */}
                           <Link href={`/listings/${l.id}`} title="Bearbeiten" style={{
-                            width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.blue, background: `${colors.blue}10`, border: "none", textDecoration: "none", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = `${colors.blue}20`}
@@ -507,7 +507,7 @@ export default function ListingsPage() {
                           </Link>
                           {/* Ähnliches Inserat erstellen (Duplikat als Vorlage) */}
                           <Link href={`/listings/new?duplicate=${l.id}`} title="Ähnliches Inserat erstellen" style={{
-                            width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.teal, background: `${colors.teal}10`, border: "none", textDecoration: "none", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = `${colors.teal}20`}
@@ -516,7 +516,7 @@ export default function ListingsPage() {
                           </Link>
                           {/* Statistik */}
                           <button onClick={() => openStats(l)} title="Statistik" style={{
-                            width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                             color: colors.muted, background: colors.cream, border: "none", cursor: "pointer", transition: "all .15s",
                           }}
                             onMouseEnter={e => e.currentTarget.style.background = colors.warm}
@@ -527,7 +527,7 @@ export default function ListingsPage() {
                           {l.status === "active" && (
                             <div style={{ position: "relative" }}>
                               <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
-                                width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                 color: "#C8860A", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
                               }}>
                                 <Rocket size={14} />
@@ -535,14 +535,14 @@ export default function ListingsPage() {
                               {boostMenuFor === l.id && (
                                 <>
                                   <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                                  <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 10, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
+                                  <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 12, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
                                     <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
                                     {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                       const aff = myNektar >= r.cost;
                                       return (
                                         <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{
                                           width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
-                                          padding: "9px 8px", borderRadius: 10, border: "none", background: "transparent", cursor: aff ? "pointer" : "default",
+                                          padding: "9px 8px", borderRadius: 12, border: "none", background: "transparent", cursor: aff ? "pointer" : "default",
                                           fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt,
                                         }}
                                           onMouseEnter={e => { if (aff) e.currentTarget.style.background = colors.cream; }}
@@ -562,7 +562,7 @@ export default function ListingsPage() {
                               ausgenommen, deren Ende ist Teil des Gebotsablaufs. */}
                           {(isExpired(l) || laeuftBaldAb(l)) && l.listing_type !== "auction" && (
                             <button onClick={() => renew(l)} title="Verlängern (60 Tage neue Laufzeit)" style={{
-                              height: 32, padding: "0 10px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5,
+                              height: 32, padding: "0 10px", borderRadius: 12, display: "inline-flex", alignItems: "center", gap: 5,
                               border: "none", cursor: "pointer", fontFamily: fonts.body, fontSize: 11, fontWeight: 700,
                               color: "#fff", background: K.petrol, transition: "all .15s",
                             }}
@@ -573,7 +573,7 @@ export default function ListingsPage() {
                           )}
                           {(l.status === "active" || l.status === "paused") && !(l.status === "active" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0) && (
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
-                              width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                              width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                               border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
                               color: l.status === "paused" ? "#2E7D32" : "#E65100",
                               background: l.status === "paused" ? "#E8F5E910" : "#FFF3E0",
@@ -588,11 +588,11 @@ export default function ListingsPage() {
                             deleteId === l.id ? (
                               <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
                                 <button onClick={async () => { await deleteListing(l.id); setListings(prev => prev.filter(x => x.id !== l.id)); setDeleteId(null); }} title="Bestätigen" style={{
-                                  width: 28, height: 28, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 28, height: 28, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   background: "#c62828", border: "none", cursor: "pointer", color: "#fff",
                                 }}><CheckCircle size={12} /></button>
                                 <button onClick={() => setDeleteId(null)} title="Abbrechen" style={{
-                                  width: 28, height: 28, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 28, height: 28, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   background: colors.cream, border: "none", cursor: "pointer", color: colors.muted,
                                 }}><XCircle size={12} /></button>
                               </div>
@@ -601,7 +601,7 @@ export default function ListingsPage() {
                                 title={hasBids ? "Kann nicht gelöscht werden (aktive Gebote)" : "Löschen"}
                                 disabled={hasBids}
                                 style={{
-                                  width: 32, height: 32, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                  width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   border: "none", fontFamily: fonts.body, transition: "all .15s",
                                   color: hasBids ? colors.borderLt : "#c62828",
                                   background: hasBids ? "transparent" : "#FFEBEE",
@@ -633,11 +633,11 @@ export default function ListingsPage() {
                 const boost = myBoosts[l.id]?.[0];
                 // Einheitliche Zellen im 3er-Raster: gleich breit, zentriert,
                 // damit die Aktionsleiste auf dem Handy nicht zerfleddert.
-                const actBtn = { display: "inline-flex", alignItems: "center", justifyContent: "center", width: "100%", boxSizing: "border-box", gap: 5, padding: "9px 4px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark, whiteSpace: "nowrap" };
+                const actBtn = { display: "inline-flex", alignItems: "center", justifyContent: "center", width: "100%", boxSizing: "border-box", gap: 5, padding: "9px 4px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", textDecoration: "none", color: colors.dark, whiteSpace: "nowrap" };
                 return (
                   <div key={l.id} style={{ padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}` }}>
                     <div style={{ display: "flex", gap: 12 }}>
-                      <div style={{ width: 60, height: 60, borderRadius: 10, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <div style={{ width: 60, height: 60, borderRadius: 12, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         {l.cover_image ? <img src={l.cover_image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -684,12 +684,12 @@ export default function ListingsPage() {
                           {boostMenuFor === l.id && (
                             <>
                               <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 10, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
+                              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 12, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
                                 <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
                                 {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                   const aff = myNektar >= r.cost;
                                   return (
-                                    <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "9px 8px", borderRadius: 10, border: "none", background: "transparent", cursor: aff ? "pointer" : "default", fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt }}>
+                                    <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "9px 8px", borderRadius: 12, border: "none", background: "transparent", cursor: aff ? "pointer" : "default", fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt }}>
                                       <span style={{ fontWeight: 700 }}>{r.name}</span>
                                       <span style={{ fontWeight: 800, color: aff ? "#C8860A" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
                                     </button>
@@ -725,7 +725,7 @@ export default function ListingsPage() {
             {hasMore && (
               <div style={{ textAlign: "center", padding: "16px 0", borderTop: `1px solid ${colors.borderLt}` }}>
                 <button onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)} style={{
-                  padding: "10px 28px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                  padding: "10px 28px", borderRadius: 12, fontSize: 13, fontWeight: 700,
                   border: "1px solid #E4E0D8", background: "#fff", color: K.ink,
                   cursor: "pointer", fontFamily: fonts.body, display: "inline-flex", alignItems: "center", gap: 6,
                 }}>
@@ -740,7 +740,7 @@ export default function ListingsPage() {
       {/* ── STATISTIK-MODAL ── */}
       {statsFor && (
         <div onClick={() => setStatsFor(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 10, border: "1px solid #E4E0D8", padding: "22px 24px", maxWidth: 460, width: "100%", fontFamily: fonts.body, maxHeight: "85vh", overflowY: "auto" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 12, border: "1px solid #E4E0D8", padding: "22px 24px", maxWidth: 460, width: "100%", fontFamily: fonts.body, maxHeight: "85vh", overflowY: "auto" }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
               <div>
                 <p style={{ margin: 0, fontSize: 10, fontWeight: 700, fontFamily: MONO, color: K.petrol, textTransform: "uppercase", letterSpacing: ".14em" }}>Statistik</p>
@@ -759,7 +759,7 @@ export default function ListingsPage() {
                     { v: statsData.favorites ?? 0, l: "Favoriten", icon: Heart },
                     { v: statsData.chat_requests ?? 0, l: "Chat-Anfragen", icon: MessageCircle },
                   ].map(t => (
-                    <div key={t.l} style={{ flex: 1, padding: "12px 10px", borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
+                    <div key={t.l} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
                       <t.icon size={15} color={K.petrol} style={{ marginBottom: 4 }} />
                       <p style={{ margin: 0, fontSize: 20, fontWeight: 800, fontFamily: fonts.head, color: colors.dark }}>{t.v}</p>
                       <p style={{ margin: "1px 0 0", fontSize: 10, color: colors.muted }}>{t.l}</p>
@@ -777,7 +777,7 @@ export default function ListingsPage() {
                       {daily.map((d, i) => (
                         <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                           <div style={{ fontSize: 9, color: colors.muted }}>{d.count}</div>
-                          <div style={{ width: "100%", height: `${Math.round((d.count / max) * 64)}px`, minHeight: 3, background: d.count > 0 ? K.petrol : colors.borderLt, borderRadius: 10 }} />
+                          <div style={{ width: "100%", height: `${Math.round((d.count / max) * 64)}px`, minHeight: 3, background: d.count > 0 ? K.petrol : colors.borderLt, borderRadius: 12 }} />
                           <div style={{ fontSize: 9, color: colors.mutedLt }}>{d.day}</div>
                         </div>
                       ))}
@@ -792,7 +792,7 @@ export default function ListingsPage() {
                     <p style={{ margin: "0 0 6px", fontSize: 12, fontWeight: 700, color: colors.dark }}>Woher kommen Aufrufe</p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                       {Object.entries(statsData.sources).map(([s, c]) => (
-                        <span key={s} style={{ fontSize: 12, padding: "5px 10px", borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8", color: colors.dark }}>
+                        <span key={s} style={{ fontSize: 12, padding: "5px 10px", borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", color: colors.dark }}>
                           {({ search: "Suche", intern: "Intern", extern: "Extern", direct: "Direkt" })[s] || s}: <b>{c}</b>
                         </span>
                       ))}

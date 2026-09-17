@@ -73,7 +73,7 @@ export default function PurchasesPage() {
         <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
           {FILTERS.map(f => (
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: "7px 14px", borderRadius: 10, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
+              padding: "7px 14px", borderRadius: 12, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
               cursor: "pointer", fontFamily: fonts.body, border: "1px solid #E4E0D8",
               background: filter === f.key ? K.honey : "#fff", color: K.ink,
             }}>{f.label}</button>
@@ -83,7 +83,7 @@ export default function PurchasesPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}><Loader2 size={20} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>}
 
         {!loading && filtered.length === 0 && (
-          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8" }}>
+          <div style={{ textAlign: "center", padding: 60, background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8" }}>
             <ShoppingBag size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Käufe</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Finde Schätze auf dem Marktplatz.</p>
@@ -93,7 +93,7 @@ export default function PurchasesPage() {
 
         {/* Tabelle (Desktop) */}
         {!loading && filtered.length > 0 && (
-          <div className="po-table" style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", overflow: "hidden" }}>
+          <div className="po-table" style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <thead>
                 <tr>
@@ -116,7 +116,7 @@ export default function PurchasesPage() {
                       onMouseEnter={e => e.currentTarget.style.background = colors.cream}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <td style={{ padding: "14px 10px", display: "flex", gap: 12, alignItems: "center" }}>
-                        <div style={{ width: 64, height: 64, borderRadius: 10, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 64, height: 64, borderRadius: 12, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           {p.listingImage ? <img src={p.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
                         </div>
                         <div>
@@ -153,7 +153,7 @@ export default function PurchasesPage() {
 
         {/* Karten (Mobil): gleiche Daten, aber untereinander statt 583px-Tabelle */}
         {!loading && filtered.length > 0 && (
-          <div className="po-cards" style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8" }}>
+          <div className="po-cards" style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8" }}>
             {filtered.map(p => {
               const st = STATUS_CONFIG[p.status] || STATUS_CONFIG.confirmed;
               const StIcon = st.icon;
@@ -162,7 +162,7 @@ export default function PurchasesPage() {
               return (
                 <Link key={p.id} href={`/order/${p.id}`} style={{ display: "block", padding: "12px 14px", borderBottom: `1px solid ${colors.borderLt}`, textDecoration: "none", color: colors.dark }}>
                   <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                    <div style={{ width: 56, height: 56, borderRadius: 10, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 12, border: "1px solid #E4E0D8", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       {p.listingImage ? <img src={p.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={20} color={colors.mutedLt} />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -183,7 +183,7 @@ export default function PurchasesPage() {
 
         {/* Bee Impact */}
         {!loading && purchases.length > 0 && (
-          <div style={{ marginTop: 20, background: "#EEF4EC", borderRadius: 10, border: "1px solid #E4E0D8", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ marginTop: 20, background: "#EEF4EC", borderRadius: 12, border: "1px solid #E4E0D8", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Dein Bee-Impact</p>
               <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>

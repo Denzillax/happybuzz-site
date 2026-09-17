@@ -213,7 +213,7 @@ export default function ChatConversation() {
 
         {/* Inserat (Anker) */}
         <Link href={conv?.listing ? `/listing/${conv.listing.id}` : "#"} style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-          <div style={{ width: 40, height: 40, borderRadius: 10, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {conv?.listing?.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={17} color={colors.mutedLt} />}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -244,7 +244,7 @@ export default function ChatConversation() {
           style={{
             flexShrink: 0, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
             border: `1px solid ${blockiert ? colors.red : colors.border}`, background: blockiert ? colors.redSoft : "#fff",
-            color: blockiert ? colors.red : colors.muted, cursor: "pointer", borderRadius: 10,
+            color: blockiert ? colors.red : colors.muted, cursor: "pointer", borderRadius: 12,
           }}
         >
           <Ban size={15} />
@@ -281,7 +281,7 @@ export default function ChatConversation() {
           const nurEmoji = !!msg.content && /^(?:\p{Extended_Pictographic}|\p{Emoji_Modifier}|\u200d|\ufe0f|\s){1,8}$/u.test(msg.content.trim());
           const dayChip = showDay && (
             <div style={{ textAlign: "center", margin: "12px 0" }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 10 }}>{dayLabel(msg.created_at)}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 12 }}>{dayLabel(msg.created_at)}</span>
             </div>
           );
           if (isSystem) {
@@ -289,7 +289,7 @@ export default function ChatConversation() {
               <div key={msg.id || i}>
                 {dayChip}
                 <div style={{ textAlign: "center", margin: "8px 0" }}>
-                  <span style={{ fontSize: 12, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "6px 14px", borderRadius: 10 }}>{msg.content}</span>
+                  <span style={{ fontSize: 12, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "6px 14px", borderRadius: 12 }}>{msg.content}</span>
                 </div>
               </div>
             );
@@ -301,14 +301,14 @@ export default function ChatConversation() {
               <div key={msg.id || i}>
                 {dayChip}
                 <div style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start", marginBottom: 5 }}>
-                  <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: 10, background: "#FFF9E6", border: `1.5px solid ${colors.yellow}`, borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }}>
+                  <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: 12, background: "#FFF9E6", border: `1.5px solid ${colors.yellow}`, borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }}>
                     <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".04em", textTransform: "uppercase", color: colors.yellowDark }}>Preisvorschlag</p>
                     <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>CHF {amount.toLocaleString("de-CH")}</p>
                     {showActions && (
                       <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-                        <button onClick={() => acceptOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 10, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Annehmen</button>
-                        {canCounter && <button onClick={counterOffer} disabled={sending} style={{ padding: "7px 14px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Gegenvorschlag</button>}
-                        <button onClick={() => rejectOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 10, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.red, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Ablehnen</button>
+                        <button onClick={() => acceptOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Annehmen</button>
+                        {canCounter && <button onClick={counterOffer} disabled={sending} style={{ padding: "7px 14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Gegenvorschlag</button>}
+                        <button onClick={() => rejectOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.red, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Ablehnen</button>
                       </div>
                     )}
                     <p style={{ margin: "8px 0 0", fontSize: 10, color: colors.mutedLt, textAlign: "right" }}>{new Date(msg.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}</p>
@@ -329,7 +329,7 @@ export default function ChatConversation() {
                 }}>
                   {isImage ? (
                     <img src={msg.image_url} alt="Bild" onClick={() => setLightbox(msg.image_url)}
-                      style={{ maxWidth: 220, maxHeight: 260, borderRadius: 10, cursor: "pointer", display: "block" }} />
+                      style={{ maxWidth: 220, maxHeight: 260, borderRadius: 12, cursor: "pointer", display: "block" }} />
                   ) : (
                     <p style={{ margin: 0, fontSize: nurEmoji ? 30 : 13.5, lineHeight: nurEmoji ? 1.2 : 1.45, color: isMe ? "#fff" : colors.dark, whiteSpace: "pre-wrap" }}>
                       {msg.content}
@@ -402,7 +402,7 @@ export default function ChatConversation() {
       {conv?.listing && (
         <aside className="chat-info" style={{ width: 280, flexShrink: 0, borderLeft: `1px solid ${colors.borderLt}`, background: colors.surface, padding: 18, overflowY: "auto", display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".5px", textTransform: "uppercase", color: colors.mutedLt }}>Inserat</div>
-          <Link href={`/listing/${conv.listing.id}`} style={{ display: "block", width: "100%", aspectRatio: "4 / 3", borderRadius: 10, overflow: "hidden", background: colors.warm }}>
+          <Link href={`/listing/${conv.listing.id}`} style={{ display: "block", width: "100%", aspectRatio: "4 / 3", borderRadius: 12, overflow: "hidden", background: colors.warm }}>
             {conv.listing.listing_images?.[0]?.url
               ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={32} color={colors.mutedLt} /></div>}
@@ -430,7 +430,7 @@ export default function ChatConversation() {
       {/* Lightbox */}
       {lightbox && (
         <div onClick={() => setLightbox(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.85)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <img src={lightbox} alt="Bild" style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: 10 }} />
+          <img src={lightbox} alt="Bild" style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: 12 }} />
           <button onClick={() => setLightbox(null)} style={{ position: "absolute", top: 16, right: 16, width: 40, height: 40, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.15)", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><X size={20} /></button>
         </div>
       )}

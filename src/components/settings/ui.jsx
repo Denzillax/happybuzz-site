@@ -19,12 +19,12 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
-      padding: "14px 16px", borderRadius: 10,
+      padding: "14px 16px", borderRadius: 12,
       background: verified ? "#EEF4EC" : pending ? "#FBF1D2" : "#fff",
       border: "1px solid #E4E0D8",
     }}>
       <div style={{
-        width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8",
+        width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8",
         display: "flex", alignItems: "center", justifyContent: "center",
         background: accent,
         color: verified ? "#fff" : K.ink,
@@ -38,7 +38,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
       </div>
       <div style={{
         fontSize: 9.5, fontWeight: 700, fontFamily: MONO, textTransform: "uppercase", letterSpacing: ".1em",
-        padding: "4px 9px", borderRadius: 10, whiteSpace: "nowrap",
+        padding: "4px 9px", borderRadius: 12, whiteSpace: "nowrap",
         background: verified ? K.moss : pending ? K.honey : "transparent",
         color: verified ? "#fff" : K.ink,
         border: `1.5px solid ${verified ? K.moss : pending ? K.ink : C.border}`,
@@ -64,7 +64,7 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
           style={{
             width: "100%", padding: "12px 14px",
             paddingRight: suffix ? 44 : 14,
-            borderRadius: 10, border: "1px solid #E4E0D8",
+            borderRadius: 12, border: "1px solid #E4E0D8",
             background: disabled ? K.sand : "#fff",
             fontSize: 14, fontFamily: "'Manrope', sans-serif",
             color: K.ink, outline: "none", boxSizing: "border-box",
@@ -95,12 +95,12 @@ export function Toggle({ checked, onChange, label, description }) {
       onClick={() => onChange?.(!checked)}
     >
       <div style={{
-        width: 44, height: 24, borderRadius: 10, flexShrink: 0, marginTop: 2,
+        width: 44, height: 24, borderRadius: 12, flexShrink: 0, marginTop: 2,
         background: checked ? K.petrol : "#fff", border: "1px solid #E4E0D8",
         transition: "background .25s", position: "relative",
       }}>
         <div style={{
-          width: 16, height: 16, borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8",
+          width: 16, height: 16, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8",
           position: "absolute", top: 2, left: checked ? 23 : 2,
           transition: "left .25s",
         }} />
@@ -116,7 +116,7 @@ export function Toggle({ checked, onChange, label, description }) {
 export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
     padding: small ? "10px 20px" : "13px 26px",
-    borderRadius: 10, border: "1px solid #E4E0D8", cursor: disabled ? "not-allowed" : "pointer",
+    borderRadius: 12, border: "1px solid #E4E0D8", cursor: disabled ? "not-allowed" : "pointer",
     fontFamily: "'Manrope', sans-serif", fontWeight: 800,
     fontSize: small ? 12 : 14, transition: "all .15s",
     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
@@ -157,7 +157,7 @@ export function TrustMeter({ level }) {
   const labels = ["Starter", "Basis", "Vertraut", "Vollständig"];
   return (
     <div style={{
-      padding: 20, borderRadius: 10, color: "#fff",
+      padding: 20, borderRadius: 12, color: "#fff",
       background: K.ink, border: "1px solid #E4E0D8",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
@@ -167,7 +167,7 @@ export function TrustMeter({ level }) {
       <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
         {Array.from({ length: segments }).map((_, i) => (
           <div key={i} style={{
-            flex: 1, height: 8, borderRadius: 10,
+            flex: 1, height: 8, borderRadius: 12,
             background: i < level ? K.honey : "rgba(255,255,255,.15)",
             transition: "all .4s", transitionDelay: `${i * .08}s`,
           }} />

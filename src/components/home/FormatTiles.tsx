@@ -43,7 +43,7 @@ export function FormatTiles() {
               padding: '16px 14px', textDecoration: 'none', color: INK,
               display: 'flex', alignItems: 'center', gap: 12,
             }}>
-              <div style={{ width: 40, height: 40, flexShrink: 0, background: '#fff', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 40, height: 40, flexShrink: 0, background: '#fff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={19} strokeWidth={1.9} />
               </div>
               <div style={{ minWidth: 0 }}>

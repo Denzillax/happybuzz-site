@@ -166,7 +166,7 @@ export default function PokerTisch() {
 
         {/* Aktionen */}
         {dran && (
-          <div style={{ marginTop: 14, background: K.sand, border: `1px solid ${K.hairline}`, borderRadius: 14, padding: "12px 14px" }}>
+          <div style={{ marginTop: 14, background: K.sand, border: `1px solid ${K.hairline}`, borderRadius: 12, padding: "12px 14px" }}>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
               <button type="button" disabled={busy} onClick={() => rpc("poker_aktion", { p_tisch: id, p_aktion: "fold" })} style={{ padding: "10px 16px", borderRadius: 999, border: `1.5px solid ${K.hairline}`, background: "#fff", color: "#c62828", fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer" }}>Passen</button>
               {toCall === 0
@@ -175,7 +175,7 @@ export default function PokerTisch() {
               {maxRaise > minRaise && (
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <input type="number" value={raise} onChange={(e) => setRaise(e.target.value)} min={minRaise} max={maxRaise} placeholder={`auf ${minRaise}`}
-                    style={{ width: 96, padding: "9px 10px", borderRadius: 10, border: `1.5px solid ${K.hairline}`, fontSize: 13.5, fontFamily: fonts.body, background: "#fff" }} />
+                    style={{ width: 96, padding: "9px 10px", borderRadius: 12, border: `1.5px solid ${K.hairline}`, fontSize: 13.5, fontFamily: fonts.body, background: "#fff" }} />
                   <button type="button" disabled={busy || !(raiseWert >= minRaise && raiseWert <= maxRaise)} onClick={() => rpc("poker_aktion", { p_tisch: id, p_aktion: "raise", p_betrag: raiseWert })}
                     style={{ padding: "10px 16px", borderRadius: 999, border: "none", background: K.petrol, color: "#fff", fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", opacity: raiseWert >= minRaise && raiseWert <= maxRaise ? 1 : .5 }}>Erhöhen auf</button>
                   {[minRaise, Math.min(maxRaise, Math.max(minRaise, hand.pot)), Math.min(maxRaise, Math.max(minRaise, hand.pot * 2))].filter((v, i, a) => a.indexOf(v) === i && v < maxRaise).map(v => (
@@ -192,7 +192,7 @@ export default function PokerTisch() {
 
         {/* Letzte Hand */}
         {letzte_hand?.ergebnis && (
-          <div style={{ marginTop: 16, border: `1px solid ${K.hairline}`, borderRadius: 14, padding: "12px 14px" }}>
+          <div style={{ marginTop: 16, border: `1px solid ${K.hairline}`, borderRadius: 12, padding: "12px 14px" }}>
             <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em", color: colors.muted }}>Hand {letzte_hand.nr}: Ergebnis</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {letzte_hand.ergebnis.map((e, i) => (

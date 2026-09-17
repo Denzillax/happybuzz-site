@@ -161,7 +161,7 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
 /* Karte mit abgerundetem Hairline-Rahmen (Denis, 15.09.) */
 .listing-grid > a, .search-results-grid > a, .listing-grid > div {
   min-width: 0; background: #FFFFFF; padding: 10px; box-shadow: none;
-  border: 1px solid #E4E0D8; border-radius: 14px;
+  border: 1px solid #E4E0D8; border-radius: 12px;
   transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
 }
 .listing-grid > div { display: flex; flex-direction: column; }

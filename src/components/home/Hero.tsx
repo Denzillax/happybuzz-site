@@ -16,7 +16,7 @@ export function Hero() {
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', margin: '14px 0 6px' }}>
 
         {/* Hauptband: Slogan + CTAs + Karten-Collage */}
-        <section style={{ flex: '2 1 460px', minWidth: 0, background: BAND, borderRadius: 14, overflow: 'hidden' }}>
+        <section style={{ flex: '2 1 460px', minWidth: 0, background: BAND, borderRadius: 12, overflow: 'hidden' }}>
           <div style={{ padding: 'clamp(22px, 4vw, 40px) clamp(18px, 4vw, 44px)', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', height: '100%', boxSizing: 'border-box' }}>
             <div style={{ flex: '1 1 300px', minWidth: 0 }}>
               {/* Beta-Feedback Tacocat 08.09.: der gute Zweck soll zuoberst stehen,
@@ -61,7 +61,7 @@ export function Hero() {
         </section>
 
         {/* Separate Beta-Karte: Willkommen + Feedback-CTA */}
-        <section className="beta-card-full" style={{ flex: '1 1 260px', minWidth: 240, maxWidth: 420, background: BETA_BG, borderRadius: 14, padding: 'clamp(20px, 3vw, 28px)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', boxSizing: 'border-box' }}>
+        <section className="beta-card-full" style={{ flex: '1 1 260px', minWidth: 240, maxWidth: 420, background: BETA_BG, borderRadius: 12, padding: 'clamp(20px, 3vw, 28px)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', boxSizing: 'border-box' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '5px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: INK, marginBottom: 12 }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: HONEY }} />
             Geschlossene Beta

@@ -134,7 +134,7 @@ export function ListingCard(props) {
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
     >
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
-      <div style={{ position: "relative", aspectRatio: "1/1", background: colors.cream, overflow: "hidden", borderRadius: 10 }}>
+      <div style={{ position: "relative", aspectRatio: "1/1", background: colors.cream, overflow: "hidden", borderRadius: 12 }}>
         {cover
           ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.03)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
           : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#ccc" /></div>

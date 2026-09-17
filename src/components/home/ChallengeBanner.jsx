@@ -97,7 +97,7 @@ export function ChallengeBanner() {
         }
       `}</style>
       {/* Gleiche Breite wie die Bee-Impact-Box (1080) */}
-      <div className="chal-box home-band-box" style={{ position: "relative", maxWidth: 1080, margin: "0 auto", background: "#FFFCF3", border: "1px solid #F0E3BC", borderRadius: 14, boxShadow: "0 2px 10px rgba(25,22,21,.05)", padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
+      <div className="chal-box home-band-box" style={{ position: "relative", maxWidth: 1080, margin: "0 auto", background: "#FFFCF3", border: "1px solid #F0E3BC", borderRadius: 12, boxShadow: "0 2px 10px rgba(25,22,21,.05)", padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
         {/* Lichtstreif laeuft in einer eigenen, gerundeten Clip-Ebene,
             damit die ueberstehende Biene nicht mitbeschnitten wird */}
         <div className="chal-sheen-clip"><div className="chal-sheen" /></div>

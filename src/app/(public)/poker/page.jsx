@@ -76,11 +76,11 @@ export default function PokerLobby() {
         </p>
 
         {/* Tisch eroeffnen */}
-        <div style={{ background: K.sand, borderRadius: 14, padding: "18px 20px", marginBottom: 22 }}>
+        <div style={{ background: K.sand, borderRadius: 12, padding: "18px 20px", marginBottom: 22 }}>
           <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 800 }}>Tisch eröffnen</p>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
             <input value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Name des Tischs, z. B. Feierabend-Runde"
-              style={{ flex: "1 1 220px", minWidth: 0, padding: "10px 14px", borderRadius: 10, border: `1.5px solid ${K.hairline}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }} />
+              style={{ flex: "1 1 220px", minWidth: 0, padding: "10px 14px", borderRadius: 12, border: `1.5px solid ${K.hairline}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }} />
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
               <span style={{ fontSize: 12, color: colors.muted, fontWeight: 700 }}>Buy-in</span>
               {[20, 50, 100].map(b => <button key={b} type="button" onClick={() => setBuyIn(b)} style={pill(buyIn === b)}>{b}</button>)}
@@ -107,7 +107,7 @@ export default function PokerLobby() {
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10, marginBottom: 24 }}>
                 {daten.meine.map(t => (
-                  <Link key={t.id} href={`/poker/${t.id}`} style={{ display: "block", textDecoration: "none", color: K.ink, border: `1.5px solid ${t.ich_dran ? K.honey : K.hairline}`, background: t.ich_dran ? "#FFF6DB" : "#fff", borderRadius: 14, padding: "14px 16px" }}>
+                  <Link key={t.id} href={`/poker/${t.id}`} style={{ display: "block", textDecoration: "none", color: K.ink, border: `1.5px solid ${t.ich_dran ? K.honey : K.hairline}`, background: t.ich_dran ? "#FFF6DB" : "#fff", borderRadius: 12, padding: "14px 16px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ fontSize: 15, fontWeight: 800, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.name}</span>
                       <ArrowRight size={15} color={colors.muted} />
@@ -131,7 +131,7 @@ export default function PokerLobby() {
             ) : (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
                 {daten.offen.map(t => (
-                  <div key={t.id} style={{ border: `1.5px solid ${K.hairline}`, borderRadius: 14, padding: "14px 16px", background: "#fff" }}>
+                  <div key={t.id} style={{ border: `1.5px solid ${K.hairline}`, borderRadius: 12, padding: "14px 16px", background: "#fff" }}>
                     <p style={{ margin: 0, fontSize: 15, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.name}</p>
                     <div style={{ marginTop: 6, fontSize: 12.5, color: colors.muted, display: "flex", gap: 10, flexWrap: "wrap" }}>
                       <span><Users size={12} style={{ verticalAlign: "-2px" }} /> {t.belegt} / {t.max_seats}</span>

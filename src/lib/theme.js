@@ -61,9 +61,9 @@ export const fonts = {
 // full bleibt fuer Kreise (Avatare, Punkte) erhalten.
 export const radius = {
   sm: 8,
-  md: 10,
+  md: 12,   // Karten und Boxen einheitlich 12 (Denis 17.09.)
   lg: 12,
-  xl: 14,
+  xl: 12,
   full: 9999,
 };
 

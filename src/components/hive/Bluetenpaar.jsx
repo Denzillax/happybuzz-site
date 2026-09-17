@@ -96,7 +96,7 @@ export default function Bluetenpaar({ pollen, onPollen }) {
             return (
               <button key={i} type="button" aria-label={offen ? `Karte ${i + 1}, Motiv ${wert + 1}` : `Karte ${i + 1}`}
                 disabled={!laeuft || offen || busy || !!kurz} onClick={() => aufdecken(i)}
-                style={{ aspectRatio: "3 / 4", borderRadius: 10, border: `1.5px solid ${offen ? (gefunden ? "#5B8C5A" : K.ink) : "transparent"}`, background: offen ? "#fff" : K.honey, cursor: laeuft && !offen ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: fertig && !gefunden ? .6 : 1, transition: "background .2s" }}>
+                style={{ aspectRatio: "3 / 4", borderRadius: 12, border: `1.5px solid ${offen ? (gefunden ? "#5B8C5A" : K.ink) : "transparent"}`, background: offen ? "#fff" : K.honey, cursor: laeuft && !offen ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: fertig && !gefunden ? .6 : 1, transition: "background .2s" }}>
                 {m ? <m.Icon size={24} color={m.farbe} /> : <Flower2 size={16} color="rgba(20,17,13,.3)" />}
               </button>
             );

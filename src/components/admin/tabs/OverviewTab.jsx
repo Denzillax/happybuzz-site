@@ -31,7 +31,7 @@ export function OverviewTab({ admin }) {
     <div>
       {/* ── Betriebsmodus (SiteGate) ─────────────────────────── */}
       <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12, padding: "8px 12px", background: "#F7F6F3", borderRadius: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12, padding: "8px 12px", background: "#F7F6F3", borderRadius: 12 }}>
           <span style={{ fontSize: 12.5, fontWeight: 700 }}>Automatische Freigabe</span>
           <span style={{ fontSize: 11.5, color: colors.muted, flex: 1, minWidth: 200 }}>KI prüft neue Inserate. Unauffällige gehen sofort live, Blocker und auffällige Inserate neuer Konten warten auf dich.</span>
           <button type="button" onClick={toggleAutoReview} style={{ padding: "6px 14px", borderRadius: 999, border: "none", background: autoReview ? "#0B5E5C" : "#E4E0D8", color: autoReview ? "#fff" : colors.dark, fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
@@ -47,7 +47,7 @@ export function OverviewTab({ admin }) {
                 onClick={() => { if (!aktiv && confirm(`Modus auf "${m.label}" umstellen?`)) saveSiteMode(m.key, gateMsg.trim()); }}
                 style={{
                   flex: "1 1 180px", textAlign: "left", padding: "11px 13px", cursor: aktiv ? "default" : "pointer",
-                  border: aktiv ? `2px solid ${m.color}` : `1px solid ${colors.border}`, borderRadius: 10,
+                  border: aktiv ? `2px solid ${m.color}` : `1px solid ${colors.border}`, borderRadius: 12,
                   background: aktiv ? m.bg : "#fff", fontFamily: fonts.body,
                 }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 800, color: m.color }}>
@@ -61,9 +61,9 @@ export function OverviewTab({ admin }) {
         {(siteMode?.mode || "live") !== "live" || gateMsg ? (
           <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
             <input value={gateMsg} onChange={e => setGateMsg(e.target.value)} placeholder="Eigener Text auf der Sperrseite (optional)"
-              style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 10, padding: "8px 10px", fontSize: 12.5, fontFamily: fonts.body }} />
+              style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 12, padding: "8px 10px", fontSize: 12.5, fontFamily: fonts.body }} />
             <button onClick={() => saveSiteMode(siteMode?.mode || "live", gateMsg.trim())}
-              style={{ padding: "8px 14px", borderRadius: 10, border: "none", background: colors.dark, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+              style={{ padding: "8px 14px", borderRadius: 12, border: "none", background: colors.dark, color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
               Text speichern
             </button>
           </div>
@@ -133,7 +133,7 @@ export function OverviewTab({ admin }) {
             const [feeLabel, feeVal, feeImp] = FEE[feeView] || FEE.paid;
             return (
               <div key={i} style={{ gridColumn: "span 2", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
-                <span style={{ width: 34, height: 34, borderRadius: 10, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ width: 34, height: 34, borderRadius: 12, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                   <Receipt size={17} color={s.tint} />
                 </span>
                 <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: colors.dark }}>CHF {fmtCHF(feeVal || 0)}</div>
@@ -149,7 +149,7 @@ export function OverviewTab({ admin }) {
           }
           return (
             <div key={i} style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "17px 18px" }}>
-              <span style={{ width: 34, height: 34, borderRadius: 10, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: 34, height: 34, borderRadius: 12, background: s.tint + "18", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 {s.Bee ? <BeeIcon size={17} color={s.tint} /> : <s.Icon size={17} color={s.tint} />}
               </span>
               <div style={{ fontSize: 27, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1.05, marginTop: 13, color: s.danger ? "#EB5E55" : colors.dark }}>
@@ -194,7 +194,7 @@ export function OverviewTab({ admin }) {
               display: "flex", alignItems: "center", gap: 14, textAlign: "left", cursor: "pointer", fontFamily: fonts.body,
               background: "#fff", border: `1px solid ${a.n > 0 ? a.color + "55" : colors.border}`, borderRadius: radius.lg, padding: "16px 18px",
             }}>
-              <span style={{ width: 44, height: 44, borderRadius: 10, background: (a.n > 0 ? a.color : "#999") + "18", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ width: 44, height: 44, borderRadius: 12, background: (a.n > 0 ? a.color : "#999") + "18", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <a.Icon size={21} color={a.n > 0 ? a.color : "#999"} />
               </span>
               <div style={{ minWidth: 0 }}>

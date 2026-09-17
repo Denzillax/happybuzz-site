@@ -399,11 +399,11 @@ export default function SettingsPage() {
           {/* Avatar card */}
           <div style={{
             display: "flex", alignItems: "center", gap: 20, padding: 20,
-            background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, marginBottom: 20,
+            background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, marginBottom: 20,
           }}>
             <div style={{ position: "relative", cursor: "pointer" }} onClick={() => fileInputRef.current?.click()}>
               <div style={{
-                width: 72, height: 72, borderRadius: 10, overflow: "hidden", border: "1px solid #E4E0D8",
+                width: 72, height: 72, borderRadius: 12, overflow: "hidden", border: "1px solid #E4E0D8",
                 background: profile?.avatar_url
                   ? `url(${profile.avatar_url}) center/cover`
                   : K.honey,
@@ -415,7 +415,7 @@ export default function SettingsPage() {
               </div>
               <div style={{
                 position: "absolute", bottom: -4, right: -4,
-                width: 26, height: 26, borderRadius: 10,
+                width: 26, height: 26, borderRadius: 12,
                 background: K.honey, border: "1px solid #E4E0D8",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}><Camera size={13} /></div>
@@ -473,7 +473,7 @@ export default function SettingsPage() {
                     type="button"
                     onClick={() => updateForm("account_type", o.v)}
                     style={{
-                      flex: 1, padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+                      flex: 1, padding: "10px 12px", borderRadius: 12, cursor: "pointer",
                       border: "1px solid #E4E0D8",
                       background: active ? K.honey : "#fff",
                       color: K.ink,
@@ -542,7 +542,7 @@ export default function SettingsPage() {
               maxLength={200}
               placeholder="Erzähl was über dich – was verkaufst du gerne?"
               style={{
-                width: "100%", padding: "12px 14px", borderRadius: 10,
+                width: "100%", padding: "12px 14px", borderRadius: 12,
                 border: `1.5px solid ${C.border}`, background: "#fff",
                 fontSize: 14, fontFamily: "'Manrope', sans-serif",
                 color: C.dark, resize: "vertical", outline: "none",
@@ -589,7 +589,7 @@ export default function SettingsPage() {
   const VerifyTab = () => (
     <>
       {emailVerified && idVerified && (
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 10, background: "#EEF4EC", border: `1px solid ${K.moss}` }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 12, background: "#EEF4EC", border: `1px solid ${K.moss}` }}>
           <BadgeCheck size={26} color={K.moss} strokeWidth={2.2} />
           <div>
             <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'General Sans','Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
@@ -607,11 +607,11 @@ export default function SettingsPage() {
 
           {/* 1. E-Mail */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 10,
+            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 12,
             background: emailVerified ? "#EEF4EC" : "#fff",
             border: "1px solid #E4E0D8",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:emailVerified ? C.green : K.sand, color: emailVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:emailVerified ? C.green : K.sand, color: emailVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {emailVerified ? <Check size={18} /> : <Shield size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -619,14 +619,14 @@ export default function SettingsPage() {
               <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{emailVerified ? "Bestätigt" : "Bestätigungsmail prüfen oder erneut senden"}</div>
             </div>
             {emailVerified ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 10, background: K.moss, color: "#fff" }}>Verifiziert</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : (
               <button onClick={async () => {
                 setEmailSending(true);
                 await supabase.auth.resend({ type: "signup", email: profile?.email });
                 setEmailSending(false);
                 showToast("Bestätigungsmail gesendet");
-              }} style={{ padding: "7px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
+              }} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
                 {emailSending ? "Sende..." : "Mail senden"}
               </button>
             )}
@@ -634,11 +634,11 @@ export default function SettingsPage() {
 
           {/* 2. Telefon */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 10,
+            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 12,
             background: phoneVerified ? "#EEF4EC" : "#fff",
             border: "1px solid #E4E0D8",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:phoneVerified ? C.green : K.sand, color: phoneVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:phoneVerified ? C.green : K.sand, color: phoneVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {phoneVerified ? <Check size={18} /> : <Shield size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -646,9 +646,9 @@ export default function SettingsPage() {
               <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{phoneVerified ? `${profile.phone.slice(0, 7)}*** bestätigt` : "Unter Adresse hinterlegen"}</div>
             </div>
             {phoneVerified ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 10, background: K.moss, color: "#fff" }}>Verifiziert</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : (
-              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
                 Hinterlegen
               </button>
             )}
@@ -656,11 +656,11 @@ export default function SettingsPage() {
 
           {/* 3. Postadresse */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 10,
+            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 12,
             background: addressVerified ? "#EEF4EC" : "#fff",
             border: "1px solid #E4E0D8",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:addressVerified ? C.green : K.sand, color: addressVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background:addressVerified ? C.green : K.sand, color: addressVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {addressVerified ? <Check size={18} /> : <MapPin size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -668,9 +668,9 @@ export default function SettingsPage() {
               <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{addressVerified ? `${profile.street}, ${profile.postal_code} ${profile.city}` : "Vollständige Adresse hinterlegen"}</div>
             </div>
             {addressVerified ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 10, background: K.moss, color: "#fff" }}>Verifiziert</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : (
-              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
                 Ausfüllen
               </button>
             )}
@@ -678,11 +678,11 @@ export default function SettingsPage() {
 
           {/* 4. Identität (ID) */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 10,
+            display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 12,
             background: idVerified ? "#EEF4EC" : profile?.id_document_url ? "#FBF1D2" : "#fff",
             border: "1px solid #E4E0D8",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? K.honey : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? K.honey : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {idVerified ? <Check size={18} /> : <Shield size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -692,11 +692,11 @@ export default function SettingsPage() {
               </div>
             </div>
             {idVerified ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 10, background: K.moss, color: "#fff" }}>Verifiziert</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : profile?.id_document_url ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 10, border: "1px solid #E4E0D8", background: K.honey, color: K.ink }}>Wird geprüft</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, border: "1px solid #E4E0D8", background: K.honey, color: K.ink }}>Wird geprüft</span>
             ) : (
-              <label style={{ padding: "7px 14px", borderRadius: 10, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
+              <label style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
                 {idUploading ? "Lädt..." : "ID hochladen"}
                 <input type="file" accept="image/*,.pdf" style={{ display: "none" }} onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -723,7 +723,7 @@ export default function SettingsPage() {
       </Section>
 
       <div style={{
-        padding: 16, background: K.sand, borderRadius: 10,
+        padding: 16, background: K.sand, borderRadius: 12,
         border: "1px solid #E4E0D8", display: "flex", gap: 12, alignItems: "flex-start",
       }}>
         <Lock size={18} color={C.muted} style={{ flexShrink: 0, marginTop: 2 }} />
@@ -750,7 +750,7 @@ export default function SettingsPage() {
         />
       </Section>
       <div style={{
-        padding: 14, background: K.sand, borderRadius: 10,
+        padding: 14, background: K.sand, borderRadius: 12,
         border: "1px solid #E4E0D8", marginBottom: 20,
         display: "flex", gap: 10, alignItems: "flex-start",
       }}>
@@ -782,13 +782,13 @@ export default function SettingsPage() {
           profile?.city && profile?.postal_code && profile?.street ? (
             <span style={{
               fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", color: "#fff",
-              background: K.moss, padding: "4px 9px", borderRadius: 10,
+              background: K.moss, padding: "4px 9px", borderRadius: 12,
               display: "inline-flex", alignItems: "center", gap: 4,
             }}><Check size={10} /> Vollständig</span>
           ) : (
             <span style={{
               fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", color: K.ink,
-              background: K.honey, border: "1px solid #E4E0D8", padding: "4px 9px", borderRadius: 10,
+              background: K.honey, border: "1px solid #E4E0D8", padding: "4px 9px", borderRadius: 12,
               display: "inline-flex", alignItems: "center", gap: 4,
             }}><AlertTriangle size={10} /> Unvollständig</span>
           )
@@ -840,7 +840,7 @@ export default function SettingsPage() {
               }}
               placeholder="Gemeindehausstrasse 11B"
               style={{
-                width: "100%", padding: "10px 12px", borderRadius: 10,
+                width: "100%", padding: "10px 12px", borderRadius: 12,
                 border: "1px solid #E4E0D8", fontSize: 14, fontFamily: "'Manrope', sans-serif",
                 color: K.ink, outline: "none", boxSizing: "border-box",
               }}
@@ -848,7 +848,7 @@ export default function SettingsPage() {
               onBlur={e => { setTimeout(() => { e.target.style.borderColor = C.border; setAddrResults([]); }, 200); }}
             />
             {addrResults.length > 0 && (
-              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, maxHeight: 200, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
+              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, maxHeight: 200, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
                 {addrResults.map((r, i) => (
                   <div key={i} onClick={() => {
                     updateForm("street", r.street);
@@ -915,7 +915,7 @@ export default function SettingsPage() {
       >
         {savedAddresses.map((addr, i) => (
           <div key={addr.id} style={{
-            padding: 14, borderRadius: 10, border: "1px solid #E4E0D8",
+            padding: 14, borderRadius: 12, border: "1px solid #E4E0D8",
             marginBottom: 10, background: editAddrIdx === i ? "#FBF1D2" : "#fff",
           }}>
             {editAddrIdx === i ? (
@@ -943,7 +943,7 @@ export default function SettingsPage() {
                     } catch { setExtraAddrHits([]); }
                   }} placeholder="Bahnhofstrasse 1" />
                   {extraAddrHits.length > 0 && (
-                    <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, maxHeight: 160, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
+                    <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, maxHeight: 160, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
                       {extraAddrHits.map((r, j) => (
                         <div key={j} onClick={() => {
                           setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
@@ -964,13 +964,13 @@ export default function SettingsPage() {
                 </div>
                 <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                   <button onClick={() => { setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]); }}
-                    style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
+                    style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
                   <button onClick={async () => {
                     await supabase.from("user_addresses").update({ label: newAddr.label, company: newAddr.company, first_name: newAddr.first_name, last_name: newAddr.last_name, street: newAddr.street, postal_code: newAddr.postal_code, city: newAddr.city }).eq("id", addr.id);
                     setSavedAddresses(prev => prev.map((a, idx) => idx === i ? { ...a, ...newAddr } : a));
                     setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]);
                     showToast("Adresse aktualisiert");
-                  }} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Speichern</button>
+                  }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E4E0D8", background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Speichern</button>
                 </div>
               </>
             ) : (
@@ -1000,7 +1000,7 @@ export default function SettingsPage() {
 
         {/* Inline Add Form */}
         {showAddAddr && editAddrIdx === null ? (
-          <div style={{ padding: 16, borderRadius: 10, border: "1px solid #E4E0D8", background: "#FBF1D2", marginBottom: 10 }}>
+          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E4E0D8", background: "#FBF1D2", marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: C.dark }}>Neue Adresse</div>
             <Input label="Bezeichnung" value={newAddr.label} onChange={v => setNewAddr(p => ({ ...p, label: v }))} placeholder="z.B. Geschäft, Büro" />
             <Input label="Firma (optional)" value={newAddr.company} onChange={v => setNewAddr(p => ({ ...p, company: v }))} placeholder="Firma GmbH" />
@@ -1024,7 +1024,7 @@ export default function SettingsPage() {
                 } catch { setExtraAddrHits([]); }
               }} placeholder="Bahnhofstrasse 1" />
               {extraAddrHits.length > 0 && (
-                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, maxHeight: 160, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
+                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, maxHeight: 160, overflowY: "auto", zIndex: 50, boxShadow: `4px 4px 0 ${K.ink}22` }}>
                   {extraAddrHits.map((r, j) => (
                     <div key={j} onClick={() => {
                       setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
@@ -1045,7 +1045,7 @@ export default function SettingsPage() {
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               <button onClick={() => { setShowAddAddr(false); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]); }}
-                style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
+                style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
               <button onClick={async () => {
                 if (!newAddr.label) return;
                 const { data: { user } } = await supabase.auth.getUser();
@@ -1054,12 +1054,12 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1px solid #E4E0D8", background: newAddr.label ? K.honey : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E4E0D8", background: newAddr.label ? K.honey : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (
           <button onClick={() => setShowAddAddr(true)} style={{
-            width: "100%", padding: "12px", borderRadius: 10,
+            width: "100%", padding: "12px", borderRadius: 12,
             border: "1px dashed #E4E0D8", background: "transparent",
             color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer",
             fontFamily: "'Manrope', sans-serif",
@@ -1097,7 +1097,7 @@ export default function SettingsPage() {
     <div
       onClick={onChange}
       style={{
-        width: 22, height: 22, borderRadius: 10, cursor: "pointer",
+        width: 22, height: 22, borderRadius: 12, cursor: "pointer",
         border: "1px solid #E4E0D8",
         background: checked ? (accent || K.honey) : "transparent",
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -1202,7 +1202,7 @@ export default function SettingsPage() {
           <select
             value={form.noti.buy_auction_end?.lead ?? 30}
             onChange={e => updateForm("noti", { ...form.noti, buy_auction_end: { ...form.noti.buy_auction_end, lead: parseInt(e.target.value) } })}
-            style={{ padding: "8px 10px", border: `1.5px solid ${C.dark}`, borderRadius: 10, fontSize: 13, fontFamily: "inherit", background: "#fff", cursor: "pointer" }}
+            style={{ padding: "8px 10px", border: `1.5px solid ${C.dark}`, borderRadius: 12, fontSize: 13, fontFamily: "inherit", background: "#fff", cursor: "pointer" }}
           >
             <option value={5}>5 Min vorher</option>
             <option value={10}>10 Min vorher</option>
@@ -1302,7 +1302,7 @@ export default function SettingsPage() {
                   try { await unblockUser(b.blocked_id); setBlocks(prev => (prev || []).filter(x => x.blocked_id !== b.blocked_id)); showToast("Sperre aufgehoben"); }
                   catch (e) { console.error(e); showToast("Entsperren fehlgeschlagen"); }
                 }}
-                style={{ padding: "7px 14px", border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", borderRadius: 10, fontFamily: "'Manrope', sans-serif" }}
+                style={{ padding: "7px 14px", border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", borderRadius: 12, fontFamily: "'Manrope', sans-serif" }}
               >
                 Entsperren
               </button>
@@ -1358,7 +1358,7 @@ export default function SettingsPage() {
                   fontFamily: "'Manrope', sans-serif", fontSize: 13,
                   fontWeight: active ? 700 : 500,
                   color: active ? K.ink : C.muted,
-                  borderRadius: 10, marginBottom: 2,
+                  borderRadius: 12, marginBottom: 2,
                   borderLeft: active ? `3px solid ${K.honey}` : "3px solid transparent",
                   transition: "all .15s",
                 }}>
@@ -1394,7 +1394,7 @@ export default function SettingsPage() {
           <div style={{
             position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)",
             background: K.ink, color: "#fff", padding: "12px 24px",
-            borderRadius: 10, fontSize: 14, fontWeight: 600, zIndex: 2000,
+            borderRadius: 12, fontSize: 14, fontWeight: 600, zIndex: 2000,
             boxShadow: "0 0 0 3px rgba(244,192,63,.35)",
             animation: "toastIn .25s ease",
             display: "flex", alignItems: "center", gap: 8,

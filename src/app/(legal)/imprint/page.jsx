@@ -27,7 +27,7 @@ export default function ImprintPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #E4E0D8", padding: "clamp(18px, 4vw, 30px)" }}>
+        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(18px, 4vw, 30px)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "8px 40px" }}>
             <div>
               <p style={L}>Betreiber</p>

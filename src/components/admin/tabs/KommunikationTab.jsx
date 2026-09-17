@@ -28,7 +28,7 @@ const Field = ({ label, children, grow }) => (
 );
 
 const Toggle = ({ on, onChange }) => (
-  <button onClick={onChange} style={{ width: 46, height: 26, borderRadius: 10, border: "1px solid #E4E0D8", cursor: "pointer", background: on ? colors.yellow : "#e7e2d8", position: "relative", transition: "background .2s", flexShrink: 0, padding: 0 }}>
+  <button onClick={onChange} style={{ width: 46, height: 26, borderRadius: 12, border: "1px solid #E4E0D8", cursor: "pointer", background: on ? colors.yellow : "#e7e2d8", position: "relative", transition: "background .2s", flexShrink: 0, padding: 0 }}>
     <div style={{ width: 18, height: 18, background: on ? INK : "#fff", border: "1px solid #E4E0D8", position: "absolute", top: 2, left: on ? 23 : 2, transition: "left .2s", boxSizing: "border-box" }} />
   </button>
 );
@@ -64,7 +64,7 @@ const ColorPick = ({ bg, text, onPick, onBg, onText }) => (
     {[["Hintergrund", bg, onBg], ["Schrift", text, onText]].map(([l, val, on]) => (
       <label key={l} style={{ display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer" }}>
         <input type="color" value={/^#[0-9a-fA-F]{6}$/.test(val) ? val : "#000000"} onChange={e => on(e.target.value)}
-          style={{ width: 34, height: 34, padding: 0, border: "1px solid #E4E0D8", borderRadius: 10, cursor: "pointer", background: "none" }} />
+          style={{ width: 34, height: 34, padding: 0, border: "1px solid #E4E0D8", borderRadius: 12, cursor: "pointer", background: "none" }} />
         <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.25 }}>
           <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.muted }}>{l}</span>
           <span style={{ fontFamily: MONO, fontSize: 11, color: colors.dark }}>{String(val || "").toUpperCase()}</span>
@@ -96,7 +96,7 @@ const PreviewBlock = ({ on, children }) => (
 const SaveBtn = ({ onClick, label }) => (
   <button onClick={onClick} style={{
     fontSize: 13.5, fontWeight: 700, color: INK, background: colors.yellow,
-    border: "1px solid #E4E0D8", borderRadius: 10, padding: "12px 30px",
+    border: "1px solid #E4E0D8", borderRadius: 12, padding: "12px 30px",
     cursor: "pointer", fontFamily: fonts.body, alignSelf: "flex-start",
     boxShadow: "0 2px 8px rgba(25,22,21,.15)",
   }}>
@@ -175,7 +175,7 @@ export function KommunikationTab({ admin }) {
               </div>
             </Field>
             <Field label="Text" grow>
-              <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, borderRadius: 10, border: "1px solid #E4E0D8", maxWidth: 620 }} />
+              <input value={ann.message} onChange={e => setAnn({ ...ann, message: e.target.value })} placeholder="Text des Balkens…" style={{ ...bcInput, borderRadius: 12, border: "1px solid #E4E0D8", maxWidth: 620 }} />
             </Field>
           </div>
           <Field label="Farbe">
@@ -210,7 +210,7 @@ export function KommunikationTab({ admin }) {
               </div>
             </Field>
             <Field label="Text" grow>
-              <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, borderRadius: 10, border: "1px solid #E4E0D8", maxWidth: 620 }} />
+              <input value={ticker.message} onChange={e => setTicker({ ...ticker, message: e.target.value })} placeholder="Text der Laufschrift…" style={{ ...bcInput, borderRadius: 12, border: "1px solid #E4E0D8", maxWidth: 620 }} />
             </Field>
           </div>
           <Field label="Farbe">

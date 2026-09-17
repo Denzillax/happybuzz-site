@@ -63,7 +63,7 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
       <div style={{ position:"relative" }}>
         {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
-          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 10, border:`1.5px solid ${error?C.red:f?"#0E9493":"#E4E0D8"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?"0 0 0 3px rgba(14,148,147,.15)":"none", boxSizing:"border-box" }}/>
+          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 12, border:`1.5px solid ${error?C.red:f?"#0E9493":"#E4E0D8"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s, box-shadow .2s", boxShadow:f?"0 0 0 3px rgba(14,148,147,.15)":"none", boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
       {error && <p style={{ color:C.red, fontSize:13, marginTop:3, fontWeight:500 }}>{error}</p>}
@@ -78,7 +78,7 @@ function PasswordStrength({ password }) {
   if (!password) return null;
   return (
     <div style={{ marginTop:-10, marginBottom:16 }}>
-      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius: 10, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
+      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius: 12, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
       <div style={{ display:"flex", gap:10 }}>{checks.map((c,i)=><span key={i} style={{ display:"inline-flex", alignItems:"center", gap:3, fontSize:11, color:c.ok?C.green:C.muted, fontWeight:500 }}>{c.ok?<Check size={12}/>:<Circle size={12}/>} {c.l}</span>)}</div>
     </div>
   );
@@ -247,7 +247,7 @@ export default function AuthPage() {
   );
 
   const renderError = () => error && (
-    <div style={{ padding:"10px 14px", borderRadius: 10, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:14, color:C.red, fontWeight:500 }}>{error}</div>
+    <div style={{ padding:"10px 14px", borderRadius: 12, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:14, color:C.red, fontWeight:500 }}>{error}</div>
   );
 
   const renderBack = (target, label) => (
@@ -355,7 +355,7 @@ export default function AuthPage() {
               {view==="login"?"Anmelden":view==="register"?"Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 14, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #E4E0D8", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 12, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #E4E0D8", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:11.5, color:C.muted, marginTop:18, fontWeight:600, fontFamily:BODY }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>

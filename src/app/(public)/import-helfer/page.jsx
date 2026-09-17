@@ -14,7 +14,7 @@ const HEAD = "'General Sans', sans-serif";
 const BODY = "'Manrope', sans-serif";
 const MONO = "'Manrope', sans-serif";
 
-const card = { background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, padding: "24px 26px" };
+const card = { background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, padding: "24px 26px" };
 
 export default function ImportHelferPage() {
   const linkRef = useRef(null);
@@ -63,7 +63,7 @@ export default function ImportHelferPage() {
             onClick={(e) => e.preventDefault()}
             title="In die Lesezeichenleiste ziehen, nicht klicken"
             style={{
-              display: "inline-block", padding: "12px 22px", borderRadius: 10,
+              display: "inline-block", padding: "12px 22px", borderRadius: 12,
               border: "1px solid #E4E0D8", background: HONEY, color: INK,
               fontFamily: BODY, fontSize: 14, fontWeight: 800, textDecoration: "none",
               cursor: "grab", boxShadow: "0 2px 8px rgba(25,22,21,.15)",
@@ -93,7 +93,7 @@ export default function ImportHelferPage() {
             {IMPORT_SOURCES.map((s) => (
               <span key={s.key} style={{
                 fontFamily: MONO, fontSize: 11, letterSpacing: ".04em", textTransform: "uppercase",
-                border: `1px solid ${INK}1f`, borderRadius: 10, padding: "4px 9px", color: MUTED,
+                border: `1px solid ${INK}1f`, borderRadius: 12, padding: "4px 9px", color: MUTED,
               }}>{s.label}</span>
             ))}
           </div>
@@ -113,7 +113,7 @@ export default function ImportHelferPage() {
 
         {/* Hinweise */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginBottom: 28 }}>
-          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 10, padding: "14px 16px" }}>
+          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 12, padding: "14px 16px" }}>
             <p style={{ fontFamily: BODY, fontSize: 12.5, color: INK, fontWeight: 700, margin: "0 0 4px", display: "flex", alignItems: "center", gap: 6 }}>
               <ShieldCheck size={14} /> Deine Daten bleiben deine
             </p>
@@ -123,7 +123,7 @@ export default function ImportHelferPage() {
             </p>
           </div>
           {/* Beta-Feedback Michael 30.08.: Wie geht der Import mit Safari? */}
-          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 10, padding: "14px 16px" }}>
+          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 12, padding: "14px 16px" }}>
             <p style={{ fontFamily: BODY, fontSize: 12.5, color: INK, fontWeight: 700, margin: "0 0 4px", display: "flex", alignItems: "center", gap: 6 }}>
               <Bookmark size={14} /> Mit Safari?
             </p>
@@ -133,7 +133,7 @@ export default function ImportHelferPage() {
               öffnen und in der Favoritenleiste auf den Import-Button klicken.
             </p>
           </div>
-          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 10, padding: "14px 16px" }}>
+          <div style={{ background: "#fff", border: `1px solid ${INK}1f`, borderRadius: 12, padding: "14px 16px" }}>
             <p style={{ fontFamily: BODY, fontSize: 12.5, color: INK, fontWeight: 700, margin: "0 0 4px", display: "flex", alignItems: "center", gap: 6 }}>
               <Smartphone size={14} /> Am Handy?
             </p>

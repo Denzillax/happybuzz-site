@@ -52,7 +52,7 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <div key={i} style={{
-                background: '#fff', border: "1px solid #E4E0D8", borderRadius: 10,
+                background: '#fff', border: "1px solid #E4E0D8", borderRadius: 12,
                 padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16,
               }}>
                 {/* Schrittnummer + Icon-Tafel */}
@@ -61,7 +61,7 @@ export function HowItWorks() {
                     {s.step}
                   </span>
                   <div style={{
-                    width: 48, height: 48, borderRadius: 10, background: SAND, border: "1px solid #E4E0D8",
+                    width: 48, height: 48, borderRadius: 12, background: SAND, border: "1px solid #E4E0D8",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: PETROL,
                   }}>
                     <Icon size={23} strokeWidth={1.8} />

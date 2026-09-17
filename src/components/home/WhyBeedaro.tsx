@@ -60,7 +60,7 @@ export function UspGrid() {
               key={i}
               href={usp.href}
               style={{
-                background: '#fff', borderRadius: 10, border: "1px solid #E4E0D8",
+                background: '#fff', borderRadius: 12, border: "1px solid #E4E0D8",
                 padding: '28px 22px', transition: 'all 0.18s ease',
                 textDecoration: 'none', color: 'inherit', display: 'block',
               }}
@@ -79,7 +79,7 @@ export function UspGrid() {
             >
               {/* Icon-Tafel */}
               <div style={{
-                width: 52, height: 52, borderRadius: 10, background: usp.tint, border: "1px solid #E4E0D8",
+                width: 52, height: 52, borderRadius: 12, background: usp.tint, border: "1px solid #E4E0D8",
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: usp.accent, marginBottom: 18,
               }}>

@@ -36,7 +36,7 @@ function KiBegruendung({ l }) {
         {chip.text}
       </button>
       {offen && hatDetails && (
-        <span style={{ position: "fixed", left: offen.left, top: offen.top, zIndex: 1000, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
+        <span style={{ position: "fixed", left: offen.left, top: offen.top, zIndex: 1000, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
           <span style={{ display: "block", fontWeight: 800, color: "#666", marginBottom: 4 }}>
             {ai.vertrauen === "bewaehrt" ? "Bewährter Verkäufer" : "Neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{ai.geprueft_am ? ` · ${new Date(ai.geprueft_am).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}` : ""}
           </span>
