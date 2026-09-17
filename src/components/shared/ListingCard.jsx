@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
-import { getCoverUrl } from "@/lib/formatters";
+import { getCoverUrl, chf } from "@/lib/formatters";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
@@ -162,7 +162,7 @@ export function ListingCard(props) {
         {isAuction && listing.buy_now_price > 0 && !statusOverlay && (
           <span className="sofort-chip" style={{ position: "absolute", bottom: 8, right: 8, fontSize: 11, fontWeight: 700, color: INK, background: "rgba(255,255,255,.92)", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", boxShadow: "0 1px 4px rgba(25,22,21,.15)" }}>
             {/* Ganze Beträge ohne .00, sonst wird der Chip am Handy zu breit (Denis 16.09.) */}
-            Sofort CHF {Number.isInteger(listing.buy_now_price) ? listing.buy_now_price : listing.buy_now_price.toFixed(2)}
+            Sofort CHF {Number.isInteger(listing.buy_now_price) ? listing.buy_now_price.toLocaleString("de-CH") : chf(listing.buy_now_price)}
           </span>
         )}
         {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
@@ -204,13 +204,13 @@ export function ListingCard(props) {
           {isAuction ? (
             <>
               <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
-                CHF {(listing.price || listing.start_price || 0).toFixed(2)}
+                CHF {chf(listing.price || listing.start_price || 0)}
               </span>
               <span style={{ fontSize: 12, color: colors.muted }}>({bidCount} {bidCount === 1 ? "Gebot" : "Gebote"})</span>
             </>
           ) : isRent || isService ? (
             <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
-              CHF {(listing.rent_price || listing.price || 0).toFixed(2)}
+              CHF {chf(listing.rent_price || listing.price || 0)}
               <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted }}> / {PERIOD_LABEL[listing.rent_period] || "Tag"}</span>
             </span>
           ) : isFree ? (
@@ -220,7 +220,7 @@ export function ListingCard(props) {
               {/* Festpreis gleich gesetzt wie der Auktionspreis (Denis 16.09.: die
                   Kopfschrift wirkte dicker), daneben grau "(Festpreis)" wie "(n Gebote)" */}
               <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
-                CHF {Number(listing.price || 0).toFixed(2)}
+                CHF {chf(listing.price || 0)}
               </span>
               <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>
             </>
