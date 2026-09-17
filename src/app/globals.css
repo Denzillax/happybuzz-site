@@ -726,12 +726,14 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Ausnahmen: Zeilen-Buttons (linksbuendig, z. B. Menues und Listen im
    Dropdown), die Bottom-Navigation und alles mit der Klasse .eckig.
    ═══════════════════════════════════════════ */
-button:not(.eckig):not([style*="text-align: left"]) {
+/* React schreibt Inline-Styles ohne Leerzeichen (text-align:left), darum beide Schreibweisen */
+button:not(.eckig):not([style*="text-align:left"]):not([style*="text-align: left"]) {
   border-radius: 999px !important;
 }
 /* Bottom-Navigation: Reiter bleiben eckig-rund, der Plus-Knopf ein Kreis */
-.bottom-nav button:not([style*="border-radius: 50%"]) { border-radius: 12px !important; }
-input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not(.pille-input):not([style*="border-radius: 999px"]),
+.bottom-nav button:not([style*="border-radius:50%"]):not([style*="border-radius: 50%"]) { border-radius: 12px !important; }
+.bottom-nav button[style*="border-radius:50%"] { border-radius: 50% !important; }
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not(.pille-input):not([style*="border-radius:999px"]):not([style*="border-radius: 999px"]),
 textarea, select:not(.eckig) {
   border-radius: 12px !important;
 }

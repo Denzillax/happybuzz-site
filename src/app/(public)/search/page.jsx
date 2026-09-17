@@ -238,6 +238,7 @@ function SearchPageInner() {
   // Text, fuer den er schon lief, damit die KI nicht in Schleife sucht.
   // KI-Schalter (gleicher Speicher wie im Header)
   const [kiModus, setKiModus] = useState(false);
+  const KI_FARBE = "#0E9493"; // helleres Teal fuer den KI-Modus
   useEffect(() => { try { setKiModus(localStorage.getItem("beedaro_ki_suche") === "1"); } catch {} }, []);
   const toggleKi = () => setKiModus(v => { const n = !v; try { localStorage.setItem("beedaro_ki_suche", n ? "1" : "0"); } catch {} return n; });
   const kiFallbackRef = useRef("");
@@ -325,11 +326,11 @@ function SearchPageInner() {
           )}
           {/* KI-Schalter (wie im Header, gleicher Speicher) */}
           <button type="button" onClick={toggleKi} aria-pressed={kiModus} title={kiModus ? "KI-Suche an" : "KI-Suche aus"}
-            style={{ display: "inline-flex", alignItems: "center", gap: 4, height: 30, padding: "0 9px", marginRight: 4, borderRadius: 999, border: `1.5px solid ${kiModus ? PETROL : "#D8D3CB"}`, background: kiModus ? PETROL : "#fff", color: kiModus ? "#fff" : "#6B655F", fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", flexShrink: 0 }}>
+            style={{ display: "inline-flex", alignItems: "center", gap: 4, height: 30, padding: "0 9px", marginRight: 4, borderRadius: 999, border: `1.5px solid ${kiModus ? KI_FARBE : "#D8D3CB"}`, background: kiModus ? KI_FARBE : "#fff", color: kiModus ? "#fff" : "#6B655F", fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", flexShrink: 0 }}>
             <Sparkles size={13} /> KI
           </button>
           <button onClick={suchenStarten}
-            style={{ padding: "9px 18px", background: kiModus ? PETROL : "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: kiModus ? "#fff" : INK, fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "9px 18px", background: kiModus ? KI_FARBE : "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: kiModus ? "#fff" : INK, fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
