@@ -151,13 +151,17 @@ export default function NotificationBell() {
           }
           setOpen(!open);
         }}
+        className="hdr-icon-btn"
+        aria-label="Benachrichtigungen"
         style={{
-          background: "none", border: "none", cursor: "pointer",
-          position: "relative", padding: 6, display: "flex",
-          alignItems: "center", justifyContent: "center",
+          // Gleicher Look wie das Nachrichten-Symbol im Header (Denis 17.09.):
+          // 38er Kreis, Grau, Icon 20, Hover-Kreis aus globals.css
+          width: 38, height: 38, borderRadius: "50%", border: "none", background: "transparent",
+          cursor: "pointer", position: "relative", padding: 0, display: "flex",
+          alignItems: "center", justifyContent: "center", color: "#666", transition: "all 0.15s",
         }}
       >
-        <Bell size={22} color={colors.dark} />
+        <Bell size={20} />
         {unread > 0 && (
           <span style={{
             position: "absolute", top: 2, right: 2,
