@@ -511,6 +511,7 @@ const TESTS = [
       { id: "mob_order", label: "Bestellseite & QR-Rechnung lesbar" },
       { id: "mob_chat", label: "Chat bedienbar" },
       { id: "mob_footer", label: "Footer: Links erreichbar, kein Overlap" },
+      { id: "mob_biene_aus", label: "Footer: 'Biene aus' klicken, Seite neu laden, Alt+B drücken: keine Biene; 'Biene an' und Alt+B: Biene fliegt" },
       { id: "mob_feedback_btn", label: "Feedback-Button erreichbar (nicht im Weg)" },
       { id: "mob_tap_targets", label: "Buttons gross genug zum Tippen (min 44px)" },
       { id: "mob_no_hscroll", label: "Kein horizontales Scrollen auf keiner Seite" },

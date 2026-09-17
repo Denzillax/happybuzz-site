@@ -560,6 +560,11 @@ input:focus, textarea:focus, select:focus {
   padding: 4px 0 8px;
 }
 .cat-pills::-webkit-scrollbar { display: none; }
+/* Desktop: alle Pills sichtbar (umbrechen), mobil bleibt die Wischleiste.
+   Sturzi8 17.09.: die letzte Kachel war auf breiten Screens abgeschnitten. */
+@media (min-width: 900px) {
+  .cat-pills { flex-wrap: wrap; overflow: visible; }
+}
 .cat-pill:hover { background: #F4C03F !important; }
 @media (max-width: 640px) {
   /* Hero-Collage mobil: verkleinert und zentriert unter dem Text.

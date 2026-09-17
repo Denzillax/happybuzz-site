@@ -32,13 +32,21 @@ export function isAllowedImageHost(host) {
 }
 
 // ─── Hilfen ──────────────────────────────────────────────────
+const NAMED = {
+  auml: "ä", ouml: "ö", uuml: "ü", Auml: "Ä", Ouml: "Ö", Uuml: "Ü", szlig: "ß", nbsp: " ",
+  euro: "€", ndash: "–", mdash: "—", hellip: "…", laquo: "«", raquo: "»", bdquo: "„", ldquo: "“", rdquo: "”",
+  sbquo: "‚", lsquo: "‘", rsquo: "’", eacute: "é", egrave: "è", ecirc: "ê", agrave: "à", aacute: "á", acirc: "â",
+  ccedil: "ç", ntilde: "ñ", ocirc: "ô", ugrave: "ù", ucirc: "û", iuml: "ï", deg: "°", times: "×", copy: "©", reg: "®", trade: "™", middot: "·",
+};
 function decodeEntities(s) {
   return (s || "")
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&apos;/g, "'")
     .replace(/&nbsp;/g, " ")
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
-    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)));
+    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)))
+    // Benannte Entities (Sturzi8 16.09.: Umlaute fehlten nach dem Import)
+    .replace(/&([a-z]+);/gi, (m, n) => NAMED[n] ?? m);
 }
 
 function metaContent(html, property) {
@@ -207,6 +215,12 @@ export function parseListingHtml(html, sourceKey = null) {
     } catch { return false; }
   }).slice(0, 10);   // Formular-Limit
 
+  // Kein formatiertes HTML, aber Zeilenumbrueche im Text: als Absaetze
+  // uebernehmen, sonst landet alles als ein Block im Editor (Sturzi8 16.09.).
+  if (!descriptionHtml && /\n/.test(description || "")) {
+    const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    descriptionHtml = description.split(/\n{2,}/).map((abs) => "<p>" + esc(abs.trim()).replace(/\n/g, "<br>") + "</p>").join("");
+  }
   return {
     title: (title || "").slice(0, 120).trim(),
     description: (description || "").slice(0, 4000).trim(),

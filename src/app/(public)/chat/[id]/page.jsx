@@ -84,6 +84,10 @@ export default function ChatConversation() {
         const msgs = await getMessages(params.id);
         setMessages(msgs);
         await markMessagesRead(params.id, u.id);
+        // Glocke: die "Neue Nachricht"-Meldungen zu diesem Chat sind damit erledigt
+        supabase.from("notifications").update({ is_read: true })
+          .eq("user_id", u.id).eq("is_read", false).like("link", `%/chat/${params.id}%`)
+          .then(() => window.dispatchEvent(new Event("beedaro-notifs")));
       } catch (err) { console.error(err); }
       finally { setLoading(false); }
     }

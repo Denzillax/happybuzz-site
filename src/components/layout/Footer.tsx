@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Logo } from '@/components/shared/Logo'
+import BieneSchalter from '@/components/shared/BieneSchalter'
 
 const MONO = "'Manrope', sans-serif"
 
@@ -104,6 +105,7 @@ export function Footer() {
             <Link href="/terms" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>AGB</Link>
             <Link href="/privacy" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>Datenschutz</Link>
             <Link href="/imprint" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>Impressum</Link>
+            <BieneSchalter />
           </div>
         </div>
       </div>

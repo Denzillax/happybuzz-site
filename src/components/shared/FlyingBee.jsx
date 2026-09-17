@@ -19,6 +19,8 @@ const SPRUECHE = [
 ];
 
 const MAX_FLUEGE = 4;        // pro Sitzung; die Tastenkombi zaehlt nicht mit
+export const BIENE_AUS_KEY = "beedaro_biene_aus"; // Sturzi8 17.09.: Ausschalter im Footer
+export function bieneIstAus() { try { return localStorage.getItem(BIENE_AUS_KEY) === "1"; } catch { return false; } }
 const FLUGZEIT_MS = 22000;   // danach fliegt sie von selbst davon
 const AUSWEICH_RADIUS = 150; // ab dieser Cursor-Naehe weicht sie aus
 const TEMPO_FOLGEN = 240;    // px/s Richtung Cursor
@@ -54,7 +56,7 @@ export default function FlyingBee() {
     // SYNCHRON verstecken, bevor React rendert: nach der Abflug-Animation
     // wuerde das Element sonst einen Frame lang auf den alten Inline-Transform
     // (letzte Flugposition) zurueckspringen — das war das kurze Aufpoppen.
-    if (beeRef.current) beeRef.current.style.display = "none";
+    if (beeRef.current) { beeRef.current.style.display = "none"; beeRef.current.style.opacity = "0"; }
     animRef.current?.cancel?.();
     animRef.current = null;
     setVisible(false);
@@ -65,7 +67,7 @@ export default function FlyingBee() {
   const fliegen = (erzwungen = false) => {
     const bee = beeRef.current;
     // Nur im aktiven Tab erscheinen (Zaehler bleibt unverbraucht)
-    if (!bee || stateRef.current !== "idle" || reducedMotion() || document.hidden) return;
+    if (!bee || stateRef.current !== "idle" || reducedMotion() || document.hidden || bieneIstAus()) return;
     if (!erzwungen) {
       const n = parseInt(sessionStorage.getItem("bee_fluege") || "0", 10);
       if (n >= MAX_FLUEGE) return;
@@ -239,8 +241,12 @@ export default function FlyingBee() {
       }
     };
     document.addEventListener("visibilitychange", onVis);
+    // Ausschalter im Footer: sofort landen, egal wo sie gerade ist
+    const onAus = () => { if (bieneIstAus() && stateRef.current !== "idle") { clearTimeout(bubbleTimerRef.current); setBubble(null); landen(); } };
+    window.addEventListener("beedaro-biene", onAus);
 
     return () => {
+      window.removeEventListener("beedaro-biene", onAus);
       aktiv = false;
       clearTimeout(timerRef.current);
       clearTimeout(bubbleTimerRef.current);
@@ -265,6 +271,7 @@ export default function FlyingBee() {
         style={{
           position: "fixed", left: 0, top: 0, width: size, height: "auto",
           zIndex: 9000, cursor: "pointer", willChange: "transform",
+          backfaceVisibility: "hidden", opacity: visible ? 1 : 0,
           display: visible ? "block" : "none",
           pointerEvents: visible ? "auto" : "none",
         }}

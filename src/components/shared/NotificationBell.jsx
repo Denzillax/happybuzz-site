@@ -73,9 +73,28 @@ export default function NotificationBell() {
   // Load full list when dropdown opens
   useEffect(() => {
     if (open && userId) {
-      getNotifications(20).then(setNotifications);
+      getNotifications(20).then(async (list) => {
+        setNotifications(list);
+        // Der Zaehler zaehlt ALLE ungelesenen, die Liste zeigt die letzten 20.
+        // Aeltere ungelesene sieht niemand mehr: als gelesen abhaken, sonst
+        // bleibt die rote Zahl haengen (Sturzi8 16.09.).
+        const sichtbarUngelesen = list.filter(n => !n.is_read).length;
+        if (list.length && sichtbarUngelesen < unread) {
+          const aelteste = list[list.length - 1].created_at;
+          await supabase.from("notifications").update({ is_read: true })
+            .eq("user_id", userId).eq("is_read", false).lt("created_at", aelteste);
+          setUnread(sichtbarUngelesen);
+        }
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, userId]);
+  // Andere Stellen (Chat geoeffnet) melden: Zaehler neu laden
+  useEffect(() => {
+    const h = () => getUnreadCount().then(setUnread);
+    window.addEventListener("beedaro-notifs", h);
+    return () => window.removeEventListener("beedaro-notifs", h);
+  }, []);
 
   // Close on outside click
   useEffect(() => {
