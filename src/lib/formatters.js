@@ -5,6 +5,12 @@
 import { CONDITION_LABELS, LISTING_TYPE_LABELS, RENT_PERIOD_SHORT } from "./constants";
 
 // ─── Preis ───────────────────────────────────────────────────
+// Betrag mit Tausendertrennung und zwei Nachkommastellen, ohne Waehrung:
+// 300000 -> "300'000.00" (Denis 17.09.: Stanzmaschine zeigte 300000.00)
+export function chf(amount) {
+  return (Number(amount) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 export function formatPrice(amount, currency = "CHF") {
   if (amount == null || amount === 0) return "Gratis";
   return `${currency} ${Number(amount).toLocaleString("de-CH", { minimumFractionDigits: amount % 1 ? 2 : 0 })}`;

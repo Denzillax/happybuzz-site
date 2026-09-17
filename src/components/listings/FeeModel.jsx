@@ -3,6 +3,7 @@
 import { colors, fonts, radius } from "@/lib/theme";
 import { FEE_TIERS, BEE_IMPACT_RATE, DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER_CONFIG, FEE_FREE_BELOW, FEE_CAP, isFeeFree } from "@/lib/constants";
 import BeeIcon from "@/components/shared/BeeIcon";
+import { chf } from "@/lib/formatters";
 
 export default function FeeModel({ price, selected, onSelect, defaultTier }) {
   const numPrice = parseFloat(price) || 0;
@@ -87,7 +88,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
               Gebührenfrei
             </span>
             <span style={{ fontSize: 15, fontFamily: fonts.body, fontWeight: 800, color: colors.green }}>
-              CHF {numPrice.toFixed(2)}
+              CHF {chf(numPrice)}
             </span>
           </div>
           <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
@@ -114,13 +115,13 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
               <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted }}>Verkaufspreis</span>
               <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.dark }}>
-                CHF {numPrice.toFixed(2)}
+                CHF {chf(numPrice)}
               </span>
             </div>
 
             {capped && (
               <p style={{ margin: "0 0 8px", fontSize: 12, fontFamily: fonts.body, fontWeight: 700, color: colors.green }}>
-                Gebühren-Deckel aktiv: maximal CHF {FEE_CAP}.00 statt CHF {rawFee.toFixed(2)}.
+                Gebühren-Deckel aktiv: maximal CHF {FEE_CAP}.00 statt CHF {chf(rawFee)}.
               </p>
             )}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
@@ -128,7 +129,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                 Plattform ({(activeTier.pct * (1 - BEE_IMPACT_RATE)).toFixed(1)}%)
               </span>
               <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.red }}>
-                − CHF {platFee.toFixed(2)}
+                − CHF {chf(platFee)}
               </span>
             </div>
 
@@ -137,7 +138,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                 Bee-Impact ({(activeTier.pct * BEE_IMPACT_RATE).toFixed(1)}%) <BeeIcon size={13} color={colors.yellow} />
               </span>
               <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.green }}>
-                − CHF {beeFee.toFixed(2)}
+                − CHF {chf(beeFee)}
               </span>
             </div>
 
@@ -152,7 +153,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                 fontSize: 18, fontFamily: fonts.head,
                 color: colors.green, letterSpacing: ".02em",
               }}>
-                CHF {payout.toFixed(2)}
+                CHF {chf(payout)}
               </span>
             </div>
           </div>

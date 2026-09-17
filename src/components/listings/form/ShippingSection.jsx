@@ -2,6 +2,7 @@
 import { Package } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { inputBase, labelBase, sectionBase, hintStyle } from "./styles";
+import { chf } from "@/lib/formatters";
 
 // Swiss Post Tarife 2026
 const SWISS_POST_TARIFE = {
@@ -222,7 +223,7 @@ function ShipModal({ form, set, tarife }) {
         <div style={{ padding: "12px 16px", background: colors.cream, borderRadius: 10, marginBottom: 16 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, fontWeight: 700 }}>
             <span>Versandkosten</span>
-            <span>CHF {calcCost().toFixed(2)}</span>
+            <span>CHF {chf(calcCost())}</span>
           </div>
         </div>
 

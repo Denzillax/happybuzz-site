@@ -26,7 +26,7 @@ import RichTextEditor from "@/components/shared/RichTextEditor";
 import { descriptionPlainText } from "@/lib/richtext";
 import { checkProfileComplete } from "@/lib/listings";
 import { getCategoryAttributes, saveListingAttributes, getListingAttributes, clearListingAttributes } from "@/lib/api/attributes";
-import { HANDLING_OPTIONS } from "@/lib/formatters";
+import { HANDLING_OPTIONS, chf } from "@/lib/formatters";
 
 // ─── Photo Slot Labels (Ricardo-style) ──────────────────────
 const PHOTO_SLOTS = [
@@ -2039,7 +2039,7 @@ export default function ListingForm({
                               const price = POST_TARIFE.paket?.[form.ship_speed || "economy"]?.[w] || 0;
                               return (
                                 <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
-                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {chf(price)}</span>
                                 </Chip>
                               );
                             })}
@@ -2054,7 +2054,7 @@ export default function ListingForm({
                               const price = POST_TARIFE.brief?.[form.ship_speed || "economy"]?.[w] || 0;
                               return (
                                 <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
-                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {chf(price)}</span>
                                 </Chip>
                               );
                             })}
@@ -2069,7 +2069,7 @@ export default function ListingForm({
                               const price = POST_TARIFE.sperrgut?.[form.ship_speed || "economy"]?.[w] || 0;
                               return (
                                 <Chip key={w} active={form.ship_weight === w} onClick={() => { set("ship_weight", w); set("shipping_cost", price.toFixed(2)); }}>
-                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {price.toFixed(2)}</span>
+                                  {w} <span style={{ fontSize: 10, opacity: .7, marginLeft: 2 }}>CHF {chf(price)}</span>
                                 </Chip>
                               );
                             })}
@@ -2104,7 +2104,7 @@ export default function ListingForm({
                         <div style={{ marginBottom: 14 }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                             <div><div style={{ fontSize: 13, fontWeight: 600 }}>Versandkosten</div><div style={{ fontSize: 12, color: colors.muted, marginBottom: 4 }}>Getragen vom Käufer</div></div>
-                            {tariffBase > 0 && <div style={{ fontSize: 11, color: colors.muted }}>Post-Tarif: CHF {tariffBase.toFixed(2)} · Max: CHF {tariffMax.toFixed(2)}</div>}
+                            {tariffBase > 0 && <div style={{ fontSize: 11, color: colors.muted }}>Post-Tarif: CHF {chf(tariffBase)} · Max: CHF {chf(tariffMax)}</div>}
                           </div>
                           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                             <span style={{ fontSize: 13, color: colors.muted }}>CHF</span>
@@ -2115,7 +2115,7 @@ export default function ListingForm({
                               set("shipping_cost", val.toFixed(2));
                             }} />
                           </div>
-                          {tariffBase > 0 && Number(form.shipping_cost) > tariffBase && <p style={{ ...hintStyle, marginTop: 4, fontSize: 11 }}>+CHF {(Number(form.shipping_cost) - tariffBase).toFixed(2)} Aufschlag (max. CHF {MAX_MARKUP.toFixed(2)})</p>}
+                          {tariffBase > 0 && Number(form.shipping_cost) > tariffBase && <p style={{ ...hintStyle, marginTop: 4, fontSize: 11 }}>+CHF {chf((Number(form.shipping_cost) - tariffBase))} Aufschlag (max. CHF {chf(MAX_MARKUP)})</p>}
                         </div>
                       )}
                         </>
@@ -2335,14 +2335,14 @@ export default function ListingForm({
               <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 10, border: `1px solid ${colors.borderLt}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
                   <span>Plattformgebühr ({(form.fee_percentage * 0.8).toFixed(1)}%)</span>
-                  <span>CHF {platform.toFixed(2)}</span>
+                  <span>CHF {chf(platform)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 8, borderTop: `1px solid ${colors.borderLt}`, fontFamily: fonts.body }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: colors.green, display: "flex", alignItems: "center", gap: 6 }}>
                     <BeeIcon size={14} color={colors.green} />
                     Bee-Impact ({(form.fee_percentage * 0.2).toFixed(1)}%)
                   </span>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: colors.green }}>CHF {beeImpact.toFixed(2)}</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: colors.green }}>CHF {chf(beeImpact)}</span>
                 </div>
                 <p style={{ margin: "6px 0 0", fontSize: 11, color: colors.muted, fontFamily: fonts.body }}>
                   Fliesst direkt in echte Schweizer Naturschutzprojekte. Du erhältst Bee-Level Credits.

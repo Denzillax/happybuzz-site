@@ -5,6 +5,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { INVOICE_TEMPLATES, getInvoiceItems, submitServiceInvoiceWithItems } from "@/lib/api/invoices";
 import { calcFeeFromPrice } from "@/lib/fees";
 import BeeIcon from "@/components/shared/BeeIcon";
+import { chf } from "@/lib/formatters";
 
 const K = { ink: "#14110D", petrol: "#0B5E5C", honey: "#F4C03F" };
 const ICONS = { Car, Clock, Package, Trash2, Pencil };
@@ -148,7 +149,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                   />
                 </div>
                 <span style={{ marginLeft: "auto", fontSize: 14, fontWeight: 700, color: colors.dark, fontFamily: fonts.head, whiteSpace: "nowrap" }}>
-                  CHF {lineTotal.toFixed(2)}
+                  CHF {chf(lineTotal)}
                 </span>
               </div>
 
@@ -216,7 +217,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                   </div>
                   <div>
                     <div style={{ fontWeight: 600 }}>{t.label}</div>
-                    {t.unit_price > 0 && <div style={{ fontSize: 11, color: colors.muted }}>CHF {t.unit_price.toFixed(2)}</div>}
+                    {t.unit_price > 0 && <div style={{ fontSize: 11, color: colors.muted }}>CHF {chf(t.unit_price)}</div>}
                   </div>
                 </button>
               );
@@ -233,22 +234,22 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontSize: 13, color: colors.muted }}>Zwischensumme</span>
-            <span style={{ fontSize: 14, fontWeight: 600, color: colors.dark }}>CHF {subtotal.toFixed(2)}</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: colors.dark }}>CHF {chf(subtotal)}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontSize: 13, color: colors.muted }}>Plattformgebühr ({feePercent}%)</span>
-            <span style={{ fontSize: 13, color: colors.muted }}>- CHF {fee.toFixed(2)}</span>
+            <span style={{ fontSize: 13, color: colors.muted }}>- CHF {chf(fee)}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
             <span style={{ fontSize: 12, color: K.petrol, display: "flex", alignItems: "center", gap: 4 }}>
               <BeeIcon size={12} /> Bee-Impact (20% der Gebühr)
             </span>
-            <span style={{ fontSize: 12, color: K.petrol }}>CHF {beeImpact.toFixed(2)}</span>
+            <span style={{ fontSize: 12, color: K.petrol }}>CHF {chf(beeImpact)}</span>
           </div>
           <div style={{ height: 1, background: colors.borderLt, margin: "8px 0" }} />
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span style={{ fontSize: 15, fontWeight: 700, color: colors.dark, fontFamily: fonts.head }}>Deine Auszahlung</span>
-            <span style={{ fontSize: 15, fontWeight: 800, color: colors.dark, fontFamily: fonts.head }}>CHF {sellerPayout.toFixed(2)}</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: colors.dark, fontFamily: fonts.head }}>CHF {chf(sellerPayout)}</span>
           </div>
         </div>
       )}
@@ -262,7 +263,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         transition: "all .15s",
       }}>
-        <Send size={16} /> {saving ? "Senden..." : `Rechnung senden (CHF ${subtotal.toFixed(2)})`}
+        <Send size={16} /> {saving ? "Senden..." : `Rechnung senden (CHF ${chf(subtotal)})`}
       </button>
     </div>
   );
