@@ -13,7 +13,10 @@ import { th, td, useSort, SortTh, listingPriceText, listingPriceValue } from "@/
 // Artikelnummer, Details erst beim Hover/Klick als Kaertchen (sonst sprengt
 // der Text die Zeile).
 function KiBegruendung({ l }) {
-  const [offen, setOffen] = useState(false);
+  // Die Titelzelle hat overflow:hidden (Ellipsis), darum liegt das Kaertchen
+  // als position:fixed am Chip statt im Zellenfluss, sonst wird es abgeschnitten.
+  const [offen, setOffen] = useState(null); // {left, top} oder null
+  const oeffnen = (e) => { const r = e.currentTarget.getBoundingClientRect(); setOffen({ left: Math.min(r.left, window.innerWidth - 360), top: r.bottom + 4 }); };
   const ai = l.review_ai;
   const blocker = Array.isArray(ai?.blocker) ? ai.blocker : [];
   const hinweise = Array.isArray(ai?.hinweise) ? ai.hinweise : [];
@@ -27,13 +30,13 @@ function KiBegruendung({ l }) {
   const hatDetails = !!ai;
   return (
     <span style={{ position: "relative", display: "inline-block", marginLeft: 6, verticalAlign: "middle" }}
-      onMouseEnter={() => hatDetails && setOffen(true)} onMouseLeave={() => setOffen(false)}>
-      <button type="button" onClick={() => hatDetails && setOffen(o => !o)}
+      onMouseEnter={(e) => hatDetails && oeffnen(e)} onMouseLeave={() => setOffen(null)}>
+      <button type="button" onClick={(e) => { if (!hatDetails) return; offen ? setOffen(null) : oeffnen(e); }}
         style={{ padding: "1px 8px", borderRadius: 999, border: "none", background: chip.bg, color: chip.fg, fontSize: 9.5, fontWeight: 800, fontFamily: "inherit", cursor: hatDetails ? "pointer" : "default", letterSpacing: ".02em", whiteSpace: "nowrap" }}>
         {chip.text}
       </button>
       {offen && hatDetails && (
-        <span style={{ position: "absolute", left: 0, top: "calc(100% + 4px)", zIndex: 50, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
+        <span style={{ position: "fixed", left: offen.left, top: offen.top, zIndex: 1000, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 10, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
           <span style={{ display: "block", fontWeight: 800, color: "#666", marginBottom: 4 }}>
             {ai.vertrauen === "bewaehrt" ? "Bewährter Verkäufer" : "Neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{ai.geprueft_am ? ` · ${new Date(ai.geprueft_am).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}` : ""}
           </span>
