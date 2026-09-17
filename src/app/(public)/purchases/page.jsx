@@ -64,7 +64,7 @@ export default function PurchasesPage() {
             <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Käufe</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{purchases.length} gekauft{openCount > 0 ? ` · ${openCount} offen` : ""}</p>
           </div>
-          <Link href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 18px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>
+          <Link href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 18px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>
             Weiter stöbern
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default function PurchasesPage() {
             <ShoppingBag size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Käufe</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Finde Schätze auf dem Marktplatz.</p>
-            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>Zum Marktplatz</Link>
+            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>Zum Marktplatz</Link>
           </div>
         )}
 

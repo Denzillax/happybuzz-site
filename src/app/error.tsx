@@ -13,7 +13,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <button onClick={() => reset()} style={{ padding: "12px 28px", borderRadius: 10, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
             Nochmal versuchen
           </button>
-          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 10, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
+          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 999, border: "1.5px solid #e0d6c8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
             Zur Startseite
           </a>
         </div>

@@ -331,7 +331,7 @@ export function Header() {
                   )}
                 </div>
               ) : (
-                <Link href="/login" className="hdr-menu-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: INK, fontWeight: 600, fontSize: 13.5, padding: '8px 10px', borderRadius: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                <Link href="/login" className="hdr-menu-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: INK, fontWeight: 600, fontSize: 13.5, padding: '8px 10px', borderRadius: 999, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   <User size={16} /> Anmelden
                 </Link>
               )}
@@ -466,7 +466,7 @@ export function Header() {
                 >
                   <Sparkles size={14} /> KI {kiModus ? 'an' : 'aus'}
                 </button>
-                <button onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: kiModus ? PETROL : YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: kiModus ? '#fff' : DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0, transition: 'background .15s' }}>
+                <button className="eckig" onClick={() => { handleSearch(); setShowSuggestions(false) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 26px', background: kiModus ? PETROL : YELLOW, border: 'none', cursor: 'pointer', fontWeight: 800, fontSize: 15, color: kiModus ? '#fff' : DARK, fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0, transition: 'background .15s' }}>
                   {kiModus ? <Sparkles size={17} strokeWidth={2.5} /> : <Search size={17} strokeWidth={2.5} />} Suchen
                 </button>
               </div>

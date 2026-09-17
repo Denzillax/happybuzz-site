@@ -374,7 +374,7 @@ export default function ListingsPage() {
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Keine Inserate</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Erstelle dein erstes Inserat.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>
               <Plus size={16} style={{ marginRight: 6 }} /> Inserat erstellen
             </Link>
           </div>

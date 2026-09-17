@@ -329,7 +329,7 @@ export default function HelpPage() {
           </p>
           <a href="mailto:support@beedaro.ch" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "12px 26px", borderRadius: 10, background: INK,
+            padding: "12px 26px", borderRadius: 999, background: INK,
             color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none",
             fontFamily: fonts.body, border: "1px solid #E4E0D8",
           }}>

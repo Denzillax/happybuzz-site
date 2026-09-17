@@ -83,7 +83,7 @@ export default function SalesPage() {
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Verkäufe</p>
             <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Stell dein erstes Inserat ein. Gebühr ab 3%, ein Teil geht in den Naturschutz.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #E4E0D8" }}>
               Erstes Inserat erstellen
             </Link>
           </div>

@@ -718,3 +718,20 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 @media (max-width: 767px) {
   .sofort-chip { font-size: 9.5px !important; padding: 2px 6px !important; bottom: 6px !important; right: 6px !important; }
 }
+
+/* ═══════════════════════════════════════════
+   PILLEN-REGEL (Denis 17.09.2026)
+   Alles, was man drueckt, ist eine Pille: Buttons, Chips, Filter, Tabs.
+   Alles, was Inhalt haelt, hat 12px Ecken: Eingabefelder, Karten, Boxen.
+   Ausnahmen: Zeilen-Buttons (linksbuendig, z. B. Menues und Listen im
+   Dropdown), die Bottom-Navigation und alles mit der Klasse .eckig.
+   ═══════════════════════════════════════════ */
+button:not(.eckig):not([style*="text-align: left"]) {
+  border-radius: 999px !important;
+}
+/* Bottom-Navigation: Reiter bleiben eckig-rund, der Plus-Knopf ein Kreis */
+.bottom-nav button:not([style*="border-radius: 50%"]) { border-radius: 12px !important; }
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not(.pille-input):not([style*="border-radius: 999px"]),
+textarea, select:not(.eckig) {
+  border-radius: 12px !important;
+}

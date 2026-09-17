@@ -622,8 +622,8 @@ function SearchPageInner() {
                   <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
                 </button>
               )}
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 10, background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>
         )}

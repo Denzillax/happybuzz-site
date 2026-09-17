@@ -14,10 +14,10 @@ export default function NotFound() {
           Den Blumen geht es gut. Der Link leider nicht: er existiert nicht oder wurde verschoben.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 10, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif", border: "1px solid #E4E0D8", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
+          <Link href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 999, background: "#F4C03F", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif", border: "1px solid #E4E0D8", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
             Zur Startseite
           </Link>
-          <Link href="/search" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 10, border: "1px solid #E4E0D8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
+          <Link href="/search" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Manrope', sans-serif" }}>
             Zum Marktplatz
           </Link>
         </div>

@@ -855,7 +855,7 @@ export default function ListingDetail() {
                     </p>
                   </div>
                   <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 10, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 999, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
@@ -1654,7 +1654,7 @@ export default function ListingDetail() {
               <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 10, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100" }}>• {m}</p>)}
-                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 10, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}
 

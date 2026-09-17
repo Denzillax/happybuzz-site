@@ -147,7 +147,7 @@ export default function AboutPage() {
           </p>
           <Link href="/impact" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "13px 26px", borderRadius: 10, background: HONEY,
+            padding: "13px 26px", borderRadius: 999, background: HONEY,
             color: INK, fontSize: 14.5, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
           }}>
             Mehr erfahren <ArrowRight size={16} />
