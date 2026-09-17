@@ -36,6 +36,8 @@ export function useAdminData() {
   const [adminCategories, setAdminCategories] = useState([]);
   const [challenges, setChallenges] = useState([]);
   const [siteMode, setSiteMode] = useState({ mode: "live", message: null });
+  // Automatische Inserat-Freigabe (KI-Vorpruefung), Schalter in site_settings
+  const [autoReview, setAutoReview] = useState(true);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState("");
@@ -175,13 +177,13 @@ export function useAdminData() {
         supabase.from("email_log").select("*").order("created_at", { ascending: false }).limit(500),
         supabase.from("beta_feedback").select("*").order("created_at", { ascending: false }).limit(200),
         supabase.from("categories").select("*").order("sort_order"),
-        supabase.from("site_settings").select("mode, message").eq("id", 1).maybeSingle(),
+        supabase.from("site_settings").select("*").eq("id", 1).maybeSingle(),
         supabase.from("applications").select("*, profil:profiles(display_name, username)").eq("status", "neu").order("created_at", { ascending: false }),
       ]);
       setEmailLog(mails || []);
       setFeedback(fb || []);
       setAdminCategories(cats || []);
-      if (siteS) setSiteMode(siteS);
+      if (siteS) { setSiteMode({ mode: siteS.mode, message: siteS.message }); setAutoReview(siteS.auto_review_enabled !== false); }
       setApplications(apps || []);
 
       // Challenges (Vorlagen + Instanzen) mit Teilnehmerzahlen
@@ -752,6 +754,16 @@ export function useAdminData() {
     return true;
   };
 
+  // Automatische Freigabe an/aus (Denis 17.09.)
+  const toggleAutoReview = async () => {
+    const next = !autoReview;
+    const { error } = await supabase.from("site_settings").update({ auto_review_enabled: next, updated_at: new Date().toISOString() }).eq("id", 1);
+    if (error) { flash(`Fehler: ${error.message}`); return; }
+    setAutoReview(next);
+    flash(next ? "Automatische Freigabe an" : "Automatische Freigabe aus, alles wartet auf dich");
+    logAdmin("auto_review_toggle", "site", next ? "an" : "aus");
+  };
+
   // Beta-Freigabe pro Konto (SiteGate-Modus 'beta')
   const setBetaAccess = async (userId, name, next) => {
     const { error } = await supabase.from("profiles").update({ beta_access: next }).eq("id", userId);
@@ -1005,6 +1017,7 @@ export function useAdminData() {
   };
 
   // Freigabe-Queue: wartende Inserate (Admin-Liste lädt limit(100) — bei >100 Inseraten ggf. nicht alle alten pending).
+  const autoListings = listings.filter(l => l.review_source === "auto" && l.reviewed_at && (Date.now() - new Date(l.reviewed_at).getTime()) < 7 * 86400000)
   const pendingListings = listings.filter(l => l.status === "pending_review")
     .sort((a, b) => new Date(a.submitted_at || a.created_at) - new Date(b.submitted_at || b.created_at));
 
@@ -1093,7 +1106,7 @@ export function useAdminData() {
     analyticsRange, setAnalyticsRange, analyticsLoading,
     auditLog, auditLoading, logAdmin,
     toggleBan, toggleListingStatus, cancelOrder, deleteReview, resolveReport, setReportStatus, pauseReportedListing, statusPill, modPill, emailCard,
-    pendingListings, approveListing, rejectListing, listingMod, setListingMod,
+    pendingListings, autoListings, approveListing, rejectListing, listingMod, setListingMod, autoReview, toggleAutoReview,
     NAV: visibleNav, pageTitle, exportCurrent, STAT_CARDS, ATTENTION, sc,
     isOwner, myRole, staffRoles, setStaffRole, allowedTabs,
   };

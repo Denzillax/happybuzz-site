@@ -23,7 +23,7 @@ const ROLLE_LABEL = {
 };
 
 export function OverviewTab({ admin }) {
-  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, rejectApplication, setBetaAccess, setTab } = admin;
+  const { stats, gmv, avgOrder, nonCancelledOrders, topSellers, openAnnouncement, setBroadcastOpen, STAT_CARDS, ATTENTION, siteMode, saveSiteMode, applications, resolveApplication, rejectApplication, setBetaAccess, setTab, autoReview = true, toggleAutoReview } = admin;
   const [feeView, setFeeView] = useState("paid");
   const [gateMsg, setGateMsg] = useState(siteMode?.message || "");
 
@@ -31,6 +31,13 @@ export function OverviewTab({ admin }) {
     <div>
       {/* ── Betriebsmodus (SiteGate) ─────────────────────────── */}
       <div style={{ background: "#fff", border: `1px solid ${colors.border}`, borderRadius: radius.lg, padding: "16px 18px", marginBottom: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12, padding: "8px 12px", background: "#F7F6F3", borderRadius: 10 }}>
+          <span style={{ fontSize: 12.5, fontWeight: 700 }}>Automatische Freigabe</span>
+          <span style={{ fontSize: 11.5, color: colors.muted, flex: 1, minWidth: 200 }}>KI prüft neue Inserate. Unauffällige gehen sofort live, Blocker und auffällige Inserate neuer Konten warten auf dich.</span>
+          <button type="button" onClick={toggleAutoReview} style={{ padding: "6px 14px", borderRadius: 999, border: "none", background: autoReview ? "#0B5E5C" : "#E4E0D8", color: autoReview ? "#fff" : colors.dark, fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
+            {autoReview ? "An" : "Aus"}
+          </button>
+        </div>
         <p style={{ margin: "0 0 10px", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".06em", color: colors.muted }}>Betriebsmodus</p>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "stretch" }}>
           {MODI.map(m => {

@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "16. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Inserate", text: "Automatische Freigabe: Neue Inserate prüft eine KI (Text und Bilder). Unauffällige gehen sofort live, meist unter einer Minute. Nur Verbotenes, Betrugsmuster, Fälschungen oder auffällige Inserate neuer Konten warten auf die persönliche Prüfung. Abgelehnt wird nie automatisch", melder: "Denis" },
       { typ: "fix", bereich: "Startseite", text: "Kategorie-Kacheln: auf breiten Bildschirmen war die letzte Kachel abgeschnitten (unsichtbare Wischleiste). Die Reihe bleibt einzeilig, der rechte Rand blendet aus und ein Pfeil scrollt weiter, solange noch Kacheln folgen", melder: "Christian" },
       { typ: "neu", bereich: "Biene", text: "Ausschalter für die Biene im Footer ('Biene aus' / 'Biene an', pro Gerät gemerkt). Beim Ausschalten landet sie sofort, ohne über Bildern hängen zu bleiben", melder: "Christian" },
       { typ: "fix", bereich: "Glocke", text: "Die rote Zahl blieb stehen, obwohl in der Liste nichts Ungelesenes war: ältere ungelesene Meldungen ausserhalb der letzten 20 zählten mit, und Nachrichten-Meldungen blieben ungelesen, auch wenn der Chat geöffnet wurde. Beides behoben", melder: "Christian" },

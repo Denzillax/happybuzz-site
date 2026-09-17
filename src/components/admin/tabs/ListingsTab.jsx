@@ -8,6 +8,23 @@ import { TypeBadge } from "@/components/shared/Badge";
 import { th, td, useSort, SortTh, listingPriceText, listingPriceValue } from "@/components/admin/adminStyles";
 
 // Status-Aktionsknoepfe (Freigeben/Ablehnen/Pause/Aktiv) — Tabelle + Karten
+// Ergebnis der KI-Vorpruefung (Denis 17.09.): Blocker rot, Hinweise grau,
+// Vertrauensstufe, Grund fuer die Warteschlange.
+function KiBegruendung({ l }) {
+  const ai = l.review_ai;
+  if (!ai) return <span style={{ display: "block", fontSize: 10, color: "#999", fontStyle: "italic", whiteSpace: "normal" }}>{l.status === "pending_review" ? "KI-Prüfung ausstehend" : ""}</span>;
+  const blocker = Array.isArray(ai.blocker) ? ai.blocker : [];
+  const hinweise = Array.isArray(ai.hinweise) ? ai.hinweise : [];
+  return (
+    <span style={{ display: "block", fontSize: 10.5, lineHeight: 1.35, whiteSpace: "normal", marginTop: 3 }}>
+      <span style={{ color: "#666", fontWeight: 700 }}>KI: {ai.vertrauen === "bewaehrt" ? "bewährter Verkäufer" : "neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{blocker.length === 0 && hinweise.length === 0 ? " · unauffällig" : ""}</span>
+      {blocker.map((b, i) => <span key={"b" + i} style={{ display: "block", color: "#c62828", fontWeight: 700 }}>Blocker: {b.grund || b.code}</span>)}
+      {hinweise.map((h, i) => <span key={"h" + i} style={{ display: "block", color: "#777" }}>Hinweis: {h.tipp || h.code}{h.vorschlag ? ` (${h.vorschlag})` : ""}</span>)}
+      {l.review_hold_reason && l.status === "pending_review" && <span style={{ display: "block", color: "#8a6d00", fontWeight: 700 }}>Wartet: {l.review_hold_reason}</span>}
+    </span>
+  );
+}
+
 function StatusActions({ l, approveListing, rejectListing, toggleListingStatus }) {
   return (
     <>
@@ -24,8 +41,9 @@ function StatusActions({ l, approveListing, rejectListing, toggleListingStatus }
 }
 
 export function ListingsTab({ admin }) {
-  const { visibleListings, listingMod, setListingMod, pendingListings, approveListing, rejectListing, statusPill, toggleListingStatus, modPill } = admin;
+  const { visibleListings, listingMod, setListingMod, pendingListings, autoListings = [], approveListing, rejectListing, statusPill, toggleListingStatus, modPill } = admin;
   const rows = listingMod === "pending" ? pendingListings
+    : listingMod === "auto" ? autoListings
     : listingMod === "all" ? visibleListings
     : visibleListings.filter(l => l.status === listingMod);
 
@@ -48,6 +66,7 @@ export function ListingsTab({ admin }) {
         {[
           { k: "all", l: `Alle (${visibleListings.length})` },
           { k: "pending", l: `Wartet auf Freigabe (${pendingListings.length})` },
+          { k: "auto", l: `Automatisch freigegeben, 7 Tage (${autoListings.length})` },
           { k: "scheduled", l: `Geplant (${visibleListings.filter(l => l.status === "scheduled").length})` },
           { k: "active", l: "Aktiv" },
           { k: "paused", l: "Pausiert" },
@@ -85,6 +104,7 @@ export function ListingsTab({ admin }) {
                       Geplant für {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
                     </span>
                   )}
+                  {(l.status === "pending_review" || l.review_source === "auto") && <KiBegruendung l={l} />}
                 </td>
                 <td style={{ ...td, color: colors.muted }}>{l.sellerName}</td>
                 <td style={td}><TypeBadge type={l.listing_type} /></td>

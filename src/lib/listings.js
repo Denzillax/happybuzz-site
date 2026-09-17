@@ -260,6 +260,19 @@ export async function submitForReview(listingId) {
     .update({ status: "pending_review", submitted_at: new Date().toISOString() })
     .eq("id", listingId);
   if (error) throw error;
+  // Automatische Vorpruefung anstossen (Denis 17.09.). Entscheidung faellt
+  // auf dem Server; schlaegt der Aufruf fehl, holt der 5-Minuten-Cron nach.
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      fetch("/api/ai-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ listing_id: listingId }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+  } catch { /* egal, Cron holt nach */ }
 }
 
 // Admin: Inserat freigeben / ablehnen (RPC umgeht owner-RLS).

@@ -18,6 +18,7 @@ const STATUS_CONFIG = {
   expired:  { label: "Abgelaufen", color: "#E65100", icon: Clock },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
   pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
+  pending_hold: { label: "Persönliche Prüfung", color: "#E5A100", icon: Clock },
   scheduled: { label: "Geplant", color: "#0B5E5C", icon: Clock },
   paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
@@ -402,7 +403,7 @@ export default function ListingsPage() {
               </thead>
               <tbody>
                 {paginated.map(l => {
-                  const st = isExpired(l) ? STATUS_CONFIG.expired : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active);
+                  const st = isExpired(l) ? STATUS_CONFIG.expired : (l.status === "pending_review" && l.review_hold_reason ? STATUS_CONFIG.pending_hold : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active));
                   const StIcon = st.icon;
                   const isSelected = selected.has(l.id);
                   const hasBids = bidCounts[l.id]?.count > 0;
@@ -625,7 +626,7 @@ export default function ListingsPage() {
             {/* ── MOBILE: Karten-Liste ── */}
             <div className="ml-cards">
               {paginated.map(l => {
-                const st = isExpired(l) ? STATUS_CONFIG.expired : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active);
+                const st = isExpired(l) ? STATUS_CONFIG.expired : (l.status === "pending_review" && l.review_hold_reason ? STATUS_CONFIG.pending_hold : (STATUS_CONFIG[l.status] || STATUS_CONFIG.active));
                 const StIcon = st.icon;
                 const hasBids = bidCounts[l.id]?.count > 0;
                 const bc = bidCounts[l.id] || { count: 0, topBid: 0 };
