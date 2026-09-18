@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { AnimatedAmount } from "@/components/shared/effects";
+import Portal from "@/components/shared/Portal";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
   Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
@@ -1034,6 +1035,7 @@ export default function ListingDetail() {
                   )}
 
                   {showOfferModal && (
+                    <Portal>
                     <div onClick={() => setShowOfferModal(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
                       <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: radius.lg, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
                         <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>Preis vorschlagen</h3>
@@ -1052,6 +1054,7 @@ export default function ListingDetail() {
                         </div>
                       </div>
                     </div>
+                    </Portal>
                   )}
                 </div>
               )}
@@ -1244,10 +1247,11 @@ export default function ListingDetail() {
 
               {/* ── KAUFEN / SOFORTKAUF MODAL (für Festpreis + Auktion) ── */}
               {bidModal && (
+                <Portal>
                     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setBidModal(null)}>
-                      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, width: "100%", maxWidth: 440, maxHeight: "85vh", overflow: "auto", fontFamily: fonts.body }}>
+                      <div onClick={e => e.stopPropagation()} className="bid-modal" style={{ background: "#fff", borderRadius: 12, width: "100%", maxWidth: 440, maxHeight: "min(88vh, 700px)", overflow: "auto", fontFamily: fonts.body }}>
                         {/* Modal Header */}
-                        <div style={{ padding: "18px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div style={{ padding: "14px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                           <div>
                             <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800 }}>{l.title}</h3>
                             <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>
@@ -1264,17 +1268,17 @@ export default function ListingDetail() {
                           {bidModal === "bid" ? (
                             <>
                               {/* Current Bid + naechstes gueltiges Gebot */}
-                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14 }}>
                                 <span style={{ color: colors.muted }}>{bids.length > 0 ? "Aktuelles Gebot" : "Startpreis"}</span>
                                 <span style={{ fontWeight: 700 }}>CHF {fmtPrice(bids[0]?.amount || l.start_price || 0)}</span>
                               </div>
-                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 12 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 12 }}>
                                 <span style={{ color: colors.muted }}>Nächstes Gebot</span>
                                 <span style={{ fontWeight: 700, color: colors.teal }}>CHF {fmtPrice(nextBid)}</span>
                               </div>
 
                               {/* Your Max Bid */}
-                              <div style={{ marginBottom: 16 }}>
+                              <div style={{ marginBottom: 12 }}>
                                 <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 6 }}>Dein Gebot</label>
                                 <p style={{ fontSize: 11, color: colors.muted, margin: "0 0 8px" }}>
                                   {myBid
@@ -1309,7 +1313,7 @@ export default function ListingDetail() {
                                         min={untergrenze}
                                         max={obergrenze ?? undefined}
                                         step={effInc}
-                                        style={{ flex: 1, minWidth: 0, padding: "12px 14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
+                                        style={{ flex: 1, minWidth: 0, padding: "9px 14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
                                         onFocus={e => e.target.style.borderColor = colors.yellow}
                                         onBlur={e => e.target.style.borderColor = colors.border} />
                                       <button type="button" aria-label="Gebot erhöhen" onClick={() => schrittSetzen(1)} style={{ ...stepBtn, background: colors.yellow }}><Plus size={18} /></button>
@@ -1329,7 +1333,7 @@ export default function ListingDetail() {
                           ) : (
                             <>
                               {/* Sofortkauf / Festpreis */}
-                              <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 16 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: `1px solid ${colors.borderLt}`, fontSize: 14, marginBottom: 12 }}>
                                 <span style={{ color: colors.muted }}>{l.listing_type === "auction" ? "Sofortkauf-Preis" : "Preis"}</span>
                                 <span style={{ fontWeight: 700 }}>
                                   CHF {fmtPrice(l.listing_type === "auction" ? l.buy_now_price : l.price)}
@@ -1339,7 +1343,7 @@ export default function ListingDetail() {
 
                               {/* Neuware-Varianten: Pflicht-Wahl vor dem Kauf */}
                               {l.listing_type === "sell" && variantDefs.length > 0 && (
-                                <div style={{ marginBottom: 16 }}>
+                                <div style={{ marginBottom: 12 }}>
                                   {variantDefs.map((d) => (
                                     <div key={d.key} style={{ marginBottom: 10 }}>
                                       <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: colors.dark, marginBottom: 4 }}>{d.name} wählen *</label>
@@ -1359,12 +1363,12 @@ export default function ListingDetail() {
                           )}
 
                           {/* Delivery Options */}
-                          <div style={{ marginBottom: 16 }}>
+                          <div style={{ marginBottom: 12 }}>
                             <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 8 }}>Lieferung</label>
                             {l.shipping_available && (
                               <div onClick={() => setBidShipping("shipping")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "10px 14px", borderRadius: 12, marginBottom: 6, cursor: "pointer",
+                                padding: "8px 14px", borderRadius: 12, marginBottom: 6, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`,
                                 background: bidShipping === "shipping" ? colors.yellowSoft : "transparent",
                               }}>
@@ -1386,7 +1390,7 @@ export default function ListingDetail() {
                             {l.pickup_only && (
                               <div onClick={() => setBidShipping("pickup")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "10px 14px", borderRadius: 12, cursor: "pointer",
+                                padding: "8px 14px", borderRadius: 12, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`,
                                 background: bidShipping === "pickup" ? colors.yellowSoft : "transparent",
                               }}>
@@ -1407,7 +1411,7 @@ export default function ListingDetail() {
                             const shipCost = bidShipping === "pickup" ? 0 : (l.free_shipping ? 0 : parseFloat(l.shipping_cost) || 9);
                             const total = itemPrice + shipCost;
                             return (
-                              <div style={{ padding: "14px 0", borderTop: `1px solid ${colors.border}`, marginBottom: 16 }}>
+                              <div style={{ padding: "10px 0", borderTop: `1px solid ${colors.border}`, marginBottom: 12 }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, color: colors.muted, marginBottom: 6 }}>
                                   <span>{bidModal === "buynow" ? (l.listing_type === "auction" ? "Sofortkauf" : "Artikelpreis") : "Max. Gebotsbetrag"}</span>
                                   <span>CHF {fmtPrice(itemPrice)}</span>
@@ -1428,7 +1432,7 @@ export default function ListingDetail() {
                           })()}
 
                           {/* AGB Text */}
-                          <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.5, marginBottom: 16 }}>
+                          <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.5, marginBottom: 12 }}>
                             {bidModal === "bid"
                               ? <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a>. Das System bietet automatisch für dich bis zu deinem Maximum. Du verpflichtest dich, den Gesamtbetrag zu zahlen, wenn du die Auktion gewinnst.</>
                               : <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a> und verpflichtest dich, den Gesamtbetrag zu zahlen.</>
@@ -1437,8 +1441,8 @@ export default function ListingDetail() {
 
                           {bidError && <p style={{ fontSize: 12, color: "#c00", marginBottom: 10 }}>{bidError}</p>}
 
-                          {/* Buttons */}
-                          <div style={{ display: "flex", gap: 10 }}>
+                          {/* Buttons: bleiben unten stehen, waehrend die Mitte scrollt */}
+                          <div className="bid-modal-actions" style={{ display: "flex", gap: 10, position: "sticky", bottom: 0, background: "#fff", padding: "10px 0 14px", marginBottom: -16, borderTop: `1px solid ${colors.borderLt}` }}>
                             <button onClick={() => setBidModal(null)} style={{ flex: 1, padding: "14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                             <button onClick={async () => {
                               setBidding(true); setBidError("");
@@ -1505,6 +1509,7 @@ export default function ListingDetail() {
                         </div>
                       </div>
                     </div>
+                </Portal>
                   )}
 
               {/* ── RENTAL UI (date range) ─────────────── */}
@@ -1787,6 +1792,7 @@ export default function ListingDetail() {
               const url = typeof window !== "undefined" ? window.location.href : "";
               const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(url)}`;
               return (
+                <Portal>
                 <div onClick={() => setShowQr(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
                   <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 12, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
                     <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 800, color: colors.dark }}>QR-Code</h3>
@@ -1803,11 +1809,13 @@ export default function ListingDetail() {
                     </div>
                   </div>
                 </div>
+                </Portal>
               );
             })()}
 
             {/* Report Modal */}
-            {showReportModal && (              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
+            {showReportModal && (<Portal>
+              <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
                 onClick={() => setShowReportModal(false)}>
                 <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
                   <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 800 }}>Inserat melden</h3>
@@ -1837,7 +1845,7 @@ export default function ListingDetail() {
                   </div>
                 </div>
               </div>
-            )}
+            </Portal>)}
           </div>
         </div>
 
