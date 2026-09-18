@@ -325,7 +325,7 @@ export default function BetaFeedback() {
   return (
     <div style={{
       position: "fixed", bottom: 96, right: 14, zIndex: 9990,
-      width: "min(380px, calc(100vw - 28px))", maxHeight: "75vh", borderRadius: 12, overflow: "hidden",
+      width: "min(380px, calc(100vw / var(--bd-zoom, 1) - 28px))", maxHeight: "75vh", borderRadius: 12, overflow: "hidden",
       background: "#fff", border: `1px solid ${colors.border}`,
       boxShadow: "0 8px 32px rgba(0,0,0,.18)", fontFamily: fonts.body,
       display: "flex", flexDirection: "column",

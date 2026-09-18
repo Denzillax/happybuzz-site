@@ -369,7 +369,7 @@ export function Header() {
 
       {/* ── Mobile Menu ── */}
       {mobileOpen && (
-        <div className="hdr-mobile-only" style={{ borderTop: '1px solid #e8e5e0', background: '#fff', flexDirection: 'column', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
+        <div className="hdr-mobile-only" style={{ borderTop: '1px solid #e8e5e0', background: '#fff', flexDirection: 'column', maxHeight: 'calc(100vh / var(--bd-zoom, 1) - 64px)', overflowY: 'auto' }}>
           {user && (
             <div style={{ padding: '20px 24px', background: '#FAFAF8', borderBottom: '1px solid #f0ede8' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

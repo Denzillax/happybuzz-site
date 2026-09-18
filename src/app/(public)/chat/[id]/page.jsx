@@ -364,7 +364,7 @@ export default function ChatConversation() {
               <Smile size={18} color={emojiOpen ? colors.teal : colors.muted} />
             </button>
             {emojiOpen && (
-              <div style={{ position: "absolute", bottom: 46, left: 0, width: 8 * 34 + 16, maxWidth: "calc(100vw - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, zIndex: 20 }}>
+              <div style={{ position: "absolute", bottom: 46, left: 0, width: 8 * 34 + 16, maxWidth: "calc(100vw / var(--bd-zoom, 1) - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, zIndex: 20 }}>
                 {EMOJI_GRUPPEN.map(g => (
                   <div key={g.name} style={{ marginBottom: 6 }}>
                     <p style={{ margin: "2px 0 2px 4px", fontSize: 10.5, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".04em" }}>{g.name}</p>

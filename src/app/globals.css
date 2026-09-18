@@ -235,9 +235,10 @@ input:focus, textarea:focus, select:focus {
 
 /* ── Grosse Bildschirme: ganze Seite sanft hochzoomen (Laptop +10%,
    ab 1600px +15%, ab 1800px z.B. 27-Zoll +25%). Unter 1280px unveraendert. ── */
-@media (min-width: 1280px) { body { zoom: 1.1; } }
-@media (min-width: 1600px) { body { zoom: 1.15; } }
-@media (min-width: 1800px) { body { zoom: 1.25; } }
+:root { --bd-zoom: 1; } /* aktueller body-Zoom, fuer Rechnungen mit 100vw/100vh (siehe Block MOBIL 8 % GROESSER) */
+@media (min-width: 1280px) { :root { --bd-zoom: 1.1; } body { zoom: 1.1; } }
+@media (min-width: 1600px) { :root { --bd-zoom: 1.15; } body { zoom: 1.15; } }
+@media (min-width: 1800px) { :root { --bd-zoom: 1.25; } body { zoom: 1.25; } }
 
 /* ── Startseiten-Baender (Challenge + Bee-Impact): auf Desktop buendig zum
    Hero-Inhalt (maxWidth 1280 minus 2x32 Padding = 1216) ── */
@@ -371,7 +372,7 @@ input:focus, textarea:focus, select:focus {
 .chat-thread-back { display: none !important; }
 @media (max-width: 1100px) { .chat-info { display: none !important; } }
 @media (max-width: 860px) {
-  .chat-backdrop { padding: 0 !important; height: calc(100dvh - 64px - 56px) !important; }
+  .chat-backdrop { padding: 0 !important; height: calc(100dvh / var(--bd-zoom, 1) - 64px - 56px) !important; }
   .chat-shell { border-radius: 0 !important; box-shadow: none !important; border: none !important; max-width: none !important; }
   .chat-sidebar { width: 100% !important; border-right: none !important; }
   .chat-sidebar.is-hidden-mobile { display: none !important; }
@@ -781,3 +782,31 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
    Bildschirmen bleibt das Fenster scrollbar, nur ohne Leiste. */
 .bid-modal { scrollbar-width: none; }
 .bid-modal::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════════════════
+   MOBIL 8 % GROESSER (Denis 18.09.2026)
+   Ueber 500 Groessen stehen fest in Pixeln in Inline-Styles, einzeln anheben
+   waere endlos. Darum ein Zoom-Faktor auf body, nur unter 768px.
+   Wichtig: Lengths IM gezoomten body werden mitskaliert, Viewport-Einheiten
+   aber nicht. Wer mit 100vw / 100vh / 100dvh rechnet, teilt durch
+   var(--bd-zoom, 1), sonst wird es 8 % zu breit oder zu hoch.
+   ═══════════════════════════════════════════ */
+.bid-auto-kurz { display: none; }
+@media (max-width: 768px) {
+  :root { --bd-zoom: 1.08; }
+  body { zoom: var(--bd-zoom); }
+  /* Leaflet rechnet mit Bildschirmkoordinaten: Karte wieder auf Faktor 1 stellen */
+  .leaflet-container { zoom: 0.9259; }
+
+  /* Gebotsverlauf kompakt: ein Gebot pro Zeile */
+  .bid-row { gap: 8px !important; padding: 6px 8px !important; }
+  .bid-avatar { width: 26px !important; height: 26px !important; font-size: 10px !important; }
+  .bid-text { display: flex !important; align-items: baseline; gap: 6px; }
+  .bid-name-line { flex-wrap: nowrap !important; min-width: 0; flex: 0 1 auto; }
+  .bid-name { font-size: 13px !important; }
+  .bid-time { margin-top: 0 !important; font-size: 11px !important; white-space: nowrap; flex-shrink: 0; }
+  .bid-lead-label { display: none; }
+  .bid-amount { font-size: 13.5px !important; }
+  .bid-auto-lang { display: none; }
+  .bid-auto-kurz { display: inline; }
+}

@@ -1187,9 +1187,9 @@ export default function ListingDetail() {
                       const name = (b.bidder?.display_name || "").trim();
                       const kurz = (name.slice(0, 2) || "?");
                       const basis = { width: 40, height: 40, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
-                      if (offen && b.bidder?.avatar_url) return <span style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
-                      if (offen) return <span style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
-                      return <span style={{ ...basis, background: "#F2EEE7", color: colors.muted }}>{kurz}</span>;
+                      if (offen && b.bidder?.avatar_url) return <span className="bid-avatar" style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
+                      if (offen) return <span className="bid-avatar" style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
+                      return <span className="bid-avatar" style={{ ...basis, background: "#F2EEE7", color: colors.muted }}>{kurz}</span>;
                     };
                     return (
                     <div style={{ marginTop: 18 }}>
@@ -1203,7 +1203,7 @@ export default function ListingDetail() {
                         const isMine = bidderUid && user?.id && bidderUid === user.id;
                         const fuehrt = isTopBidder && i === 0;
                         return (
-                        <div key={b.id || i} style={{
+                        <div key={b.id || i} className="bid-row" style={{
                           display: "flex", alignItems: "center", gap: 12,
                           padding: "10px 12px", borderRadius: fuehrt ? 12 : 0,
                           background: fuehrt ? "#E6F5F5" : "transparent",
@@ -1211,20 +1211,20 @@ export default function ListingDetail() {
                           marginBottom: fuehrt ? 2 : 0,
                         }}>
                           {bild(b, isTopBidder || isMine)}
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                              <span style={{ fontSize: 14, fontWeight: (isMine || isTopBidder) ? 700 : 500, color: fuehrt ? colors.tealDark : (isMine ? colors.teal : colors.dark), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <div className="bid-text" style={{ flex: 1, minWidth: 0 }}>
+                            <div className="bid-name-line" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                              <span className="bid-name" style={{ fontSize: 14, fontWeight: (isMine || isTopBidder) ? 700 : 500, color: fuehrt ? colors.tealDark : (isMine ? colors.teal : colors.dark), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {bidderLabel(b, isTopBidder || isMine)}{isMine && " (du)"}
                               </span>
                               {b.bid_type === "auto" && (
-                                <span style={{ fontSize: 10.5, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 7px", borderRadius: 999 }}>automatisch</span>
+                                <span style={{ fontSize: 10.5, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 7px", borderRadius: 999 }}><span className="bid-auto-lang">automatisch</span><span className="bid-auto-kurz">auto</span></span>
                               )}
                             </div>
-                            <div style={{ fontSize: 12, color: fuehrt ? colors.tealDark : colors.muted, marginTop: 1 }}>
-                              {fuehrt ? "Höchstbietend · " : ""}{zeitLabel(b.created_at)}
+                            <div className="bid-time" style={{ fontSize: 12, color: fuehrt ? colors.tealDark : colors.muted, marginTop: 1 }}>
+                              {fuehrt && <span className="bid-lead-label">Höchstbietend · </span>}{zeitLabel(b.created_at)}
                             </div>
                           </div>
-                          <span style={{ fontSize: fuehrt ? 16 : 14.5, fontWeight: 700, color: fuehrt ? colors.tealDark : colors.muted, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(b.amount)}</span>
+                          <span className="bid-amount" style={{ fontSize: fuehrt ? 16 : 14.5, fontWeight: 700, color: fuehrt ? colors.tealDark : colors.muted, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(b.amount)}</span>
                         </div>
                         );
                       })}

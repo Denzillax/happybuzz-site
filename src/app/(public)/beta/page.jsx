@@ -244,6 +244,8 @@ const TESTS = [
       { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
       { id: "ch_emoji_kompakt", label: "Chat: Emoji-Knopf links neben dem Eingabefeld öffnet 24 Emojis, Klick fügt an der Cursorposition ein; reine Emoji-Nachrichten gross ohne Blase; keine Schnellantworten mehr; Blasen kompakt mit Uhrzeit am Zeilenende, Folge-Nachrichten derselben Person enger" },
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
+      { id: "mob_zoom", label: "Handy: alles wirkt 8 Prozent grösser. Bitte prüfen: nichts ragt seitlich über den Rand, Chat-Eingabe und untere Navigation sind sichtbar, Menü und Glocke passen in den Bildschirm, die Karte auf dem Inserat lässt sich normal ziehen" },
+      { id: "mob_gebote", label: "Handy: Gebotsverlauf zeigt ein Gebot pro Zeile (kleines Bild, Name, Zeit, Betrag), am Desktop bleibt er zweizeilig" },
       { id: "au_verlauf_bild", label: "Auktionsbox: Restzeit neben dem Preis, Gebotsverlauf mit Profilbild (Foto nur vom Führenden und von dir, andere Bieter grauer Kreis mit zwei Buchstaben), Anzahl Gebote und Bieter, führendes Gebot hervorgehoben" },
       { id: "au_ende_garantiert", label: "Festpreis-Inserat beim Bearbeiten zur Auktion machen: Die Auktion bekommt sofort ein Enddatum und zeigt die Restzeit" },
       { id: "fx_handlung", label: "Effekte bei Handlungen: Herz springt beim Merken, Preis zählt bei neuem Gebot hoch und blitzt gelb, Stempel 'Gekauft' direkt nach dem Kauf auf der Bestellseite, Nektar im Header zählt hoch mit '+N'" },
