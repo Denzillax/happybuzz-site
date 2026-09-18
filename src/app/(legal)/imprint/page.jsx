@@ -1,7 +1,7 @@
 "use client";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";

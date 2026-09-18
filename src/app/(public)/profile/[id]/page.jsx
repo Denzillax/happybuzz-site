@@ -28,15 +28,15 @@ export default function ProfilePage() {
     load();
   }, [id]);
 
-  if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#888" }}>Lade Profil...</div>;
-  if (!profile) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#888" }}>Profil nicht gefunden</div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#8A8580" }}>Lade Profil...</div>;
+  if (!profile) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#8A8580" }}>Profil nicht gefunden</div>;
 
   const avgRating = ratings.length > 0 ? (ratings.reduce((s, r) => s + r.score, 0) / ratings.length).toFixed(1) : null;
   const img = (l) => l.listing_images?.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))?.[0]?.url;
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "30px 20px 60px" }}>
+      <div className="bd-seite">
         {/* Header */}
         <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 30 }}>
           <div style={{ width: 80, height: 80, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, fontWeight: 800, color: colors.dark, flexShrink: 0 }}>
@@ -69,7 +69,7 @@ export default function ProfilePage() {
               {listings.map(l => (
                 <Link key={l.id} href={`/listing/${l.id}`} style={{ textDecoration: "none", color: colors.dark }}>
                   <div style={{ background: "#fff", borderRadius: radius.md, overflow: "hidden", border: `1px solid ${colors.borderLt}` }}>
-                    <div style={{ height: 140, background: "#f0f0f0" }}>
+                    <div style={{ height: 140, background: "#EEEBE5" }}>
                       {img(l) && <img src={img(l)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
                     </div>
                     <div style={{ padding: "10px 12px" }}>

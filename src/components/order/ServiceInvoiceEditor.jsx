@@ -7,7 +7,7 @@ import { calcFeeFromPrice } from "@/lib/fees";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { chf } from "@/lib/formatters";
 
-const K = { ink: "#14110D", petrol: "#0B5E5C", honey: "#F4C03F" };
+const K = { ink: "#191615", petrol: "#0B5E5C", honey: "#F4C03F" };
 const ICONS = { Car, Clock, Package, Trash2, Pencil };
 
 function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitted }) {
@@ -209,7 +209,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                   cursor: "pointer", borderRadius: 12, transition: "background .1s",
                   fontFamily: fonts.body, fontSize: 13, color: colors.dark, textAlign: "left",
                 }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#f8f6f3"}
+                  onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
                   <div style={{ width: 28, height: 28, borderRadius: 12, background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -257,7 +257,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Submit */}
       <button onClick={handleSubmit} disabled={items.length === 0 || saving || subtotal <= 0} style={{
         width: "100%", padding: "13px 20px", borderRadius: 12, border: "none",
-        background: items.length > 0 && subtotal > 0 ? K.petrol : "#ddd",
+        background: items.length > 0 && subtotal > 0 ? K.petrol : "#E4E0D8",
         color: items.length > 0 && subtotal > 0 ? "#fff" : colors.muted,
         fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: items.length > 0 ? "pointer" : "default",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

@@ -3,7 +3,7 @@ import { Ban, CheckCircle, Pause, Play, BellRing, XCircle, ShieldCheck, Star, Me
 import { colors, radius } from "@/lib/theme";
 
 export const AUDIT_META = {
-  ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#EB5E55", bg: "#FFEBEB" },
+  ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#C62828", bg: "#FFEBEE" },
   site_mode_set:        { label: "Betriebsmodus geändert", Icon: ShieldCheck, color: "#c62828", bg: "#FFEBEE" },
   application_done:     { label: "Bewerbung erledigt",     Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   beta_access_set:      { label: "Beta-Zugang geändert",  Icon: ShieldCheck, color: "#C8860A", bg: "#FBF1D2" },
@@ -28,7 +28,7 @@ export const AUDIT_META = {
   reminder:             { label: "Mahnung gesendet",      Icon: BellRing,    color: "#E65100", bg: "#FFF3E0" },
   fee_paid:             { label: "Bezahlt + reaktiviert", Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   order_cancel:         { label: "Bestellung storniert",  Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
-  id_verify:            { label: "ID verifiziert",        Icon: ShieldCheck, color: "#0A7170", bg: "#E6F5F5" },
+  id_verify:            { label: "ID verifiziert",        Icon: ShieldCheck, color: "#0B5E5C", bg: "#E6F5F5" },
   id_reject:            { label: "ID abgelehnt",          Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
   review_delete:        { label: "Bewertung gelöscht",    Icon: Star,        color: "#c62828", bg: "#FFEBEE" },
   broadcast:            { label: "Ankündigung gesendet",  Icon: Megaphone,   color: "#0E9493", bg: "#E6F5F5" },
@@ -70,7 +70,7 @@ export function AuditTab({ admin }) {
           const time = a.created_at ? new Date(a.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) : "";
           return (
             <div key={a.id}>
-              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#9E9E9E", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
+              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#8A8580", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
               <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "9px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
                 <span style={{ width: 34, height: 34, borderRadius: 12, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={17} color={meta.color} /></span>
                 <div style={{ flex: 1, minWidth: 0 }}>

@@ -14,7 +14,7 @@ import { BeeLevelCard } from "@/components/shared/BeeLevel";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 
 import FeeModel from "@/components/listings/FeeModel";
@@ -87,7 +87,7 @@ function PushDeviceBox({ showToast }) {
           <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: K.honey, border: "1px solid #E4E0D8", color: K.ink }}>AKTIV</span>
         )}
       </div>
-      <div style={{ fontSize: 12.5, color: C.muted || "#6b6560", lineHeight: 1.6, marginBottom: (status === "on" || status === "off") ? 10 : 0 }}>
+      <div style={{ fontSize: 12.5, color: C.muted || "#6B655F", lineHeight: 1.6, marginBottom: (status === "on" || status === "off") ? 10 : 0 }}>
         {text}
       </div>
       {(status === "on" || status === "off") && (
@@ -855,11 +855,11 @@ export default function SettingsPage() {
                     updateForm("postal_code", r.plz);
                     updateForm("city", r.city);
                     setAddrResults([]);
-                  }} style={{ padding: "10px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #f0f0f0" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#f5f5f5"}
+                  }} style={{ padding: "10px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEEBE5" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     <span style={{ fontWeight: 600 }}>{r.street}</span>
-                    <span style={{ color: "#888", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                    <span style={{ color: "#8A8580", marginLeft: 6 }}>{r.plz} {r.city}</span>
                   </div>
                 ))}
               </div>
@@ -948,11 +948,11 @@ export default function SettingsPage() {
                         <div key={j} onClick={() => {
                           setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                           setExtraAddrHits([]);
-                        }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #f0f0f0" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#f5f5f5"}
+                        }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEEBE5" }}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <span style={{ fontWeight: 600 }}>{r.street}</span>
-                          <span style={{ color: "#888", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                          <span style={{ color: "#8A8580", marginLeft: 6 }}>{r.plz} {r.city}</span>
                         </div>
                       ))}
                     </div>
@@ -1029,11 +1029,11 @@ export default function SettingsPage() {
                     <div key={j} onClick={() => {
                       setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                       setExtraAddrHits([]);
-                    }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #f0f0f0" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#f5f5f5"}
+                    }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEEBE5" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <span style={{ fontWeight: 600 }}>{r.street}</span>
-                      <span style={{ color: "#888", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                      <span style={{ color: "#8A8580", marginLeft: 6 }}>{r.plz} {r.city}</span>
                     </div>
                   ))}
                 </div>
@@ -1341,8 +1341,7 @@ export default function SettingsPage() {
       }}>
 
         {/* ── LAYOUT: Sidebar + Content ── */}
-        <div className="settings-layout" style={{
-          maxWidth: 900, margin: "0 auto", padding: "28px 20px 60px",
+        <div className="settings-layout bd-seite" style={{
           display: "grid", gridTemplateColumns: "200px 1fr", gap: 32,
         }}>
           {/* Sidebar Navigation */}
@@ -1379,7 +1378,7 @@ export default function SettingsPage() {
         <style>{`
           @media (max-width: 700px) {
             .settings-layout { grid-template-columns: 1fr !important; }
-            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid #e8e5e0; margin-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid #E4E0D8; margin-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
             .settings-layout nav::-webkit-scrollbar { display: none; }
             /* Sidebar-Buttons sind inline width:100%; als horizontale Tab-Zeile
                muessen sie auf Inhaltsbreite schrumpfen, sonst ist jeder Knopf

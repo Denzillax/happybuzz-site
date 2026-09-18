@@ -26,7 +26,7 @@ const links = {
 export function Footer() {
   return (
     <footer style={{ background: '#FFFFFF', color: '#191615', borderTop: '1px solid #E4E0D8' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 32px 24px' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 24px 24px' }}>
         {/* Top Grid */}
         <div className="ftr-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
           {/* Brand */}

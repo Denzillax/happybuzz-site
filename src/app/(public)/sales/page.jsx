@@ -13,7 +13,7 @@ import { makeBeeRef } from "@/lib/fees";
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
@@ -57,7 +57,7 @@ export default function SalesPage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite">
 
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Meine Verkäufe</div>

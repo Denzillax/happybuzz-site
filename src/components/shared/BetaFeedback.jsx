@@ -296,7 +296,7 @@ export default function BetaFeedback() {
       return (
         <div key={item.id} style={{
           padding: "8px 0", display: "flex", alignItems: "center", gap: 8,
-          borderBottom: `1px solid ${colors.borderLt || "#f0f0f0"}`, opacity: 0.55,
+          borderBottom: `1px solid ${colors.borderLt || "#EEEBE5"}`, opacity: 0.55,
         }}>
           <CheckCircle size={16} color={colors.muted} style={{ flexShrink: 0 }} />
           <span style={{ flex: 1, fontSize: 12, color: colors.muted, textDecoration: "line-through" }}>{item.label}</span>
@@ -310,7 +310,7 @@ export default function BetaFeedback() {
       <div key={item.id}>
         <div onClick={() => toggleCheck(item.id)} style={{
           padding: "8px 0", cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
-          borderBottom: `1px solid ${colors.borderLt || "#f0f0f0"}`,
+          borderBottom: `1px solid ${colors.borderLt || "#EEEBE5"}`,
         }}>
           <Icon size={16} color={STATUS_COLORS[s]} style={{ flexShrink: 0 }} />
           <span style={{ flex: 1, fontSize: 12, color: s === 1 ? "#5B8C5A" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>
@@ -408,7 +408,7 @@ export default function BetaFeedback() {
             {/* Submit */}
             <button onClick={submitChecks} disabled={testedCount === 0} style={{
               width: "100%", padding: "10px", borderRadius: 12, border: "none", marginTop: 14,
-              background: testedCount > 0 ? colors.yellow : "#ddd", color: colors.dark,
+              background: testedCount > 0 ? colors.yellow : "#E4E0D8", color: colors.dark,
               fontSize: 13, fontWeight: 700, cursor: testedCount > 0 ? "pointer" : "default",
               fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
             }}>
@@ -448,7 +448,7 @@ export default function BetaFeedback() {
             <div style={{ fontSize: 10, color: colors.muted, marginBottom: 10 }}>Seite: {pagePath}</div>
             <button onClick={submitFeedback} disabled={!form.title.trim()} style={{
               width: "100%", padding: "10px", borderRadius: 12, border: "none",
-              background: form.title.trim() ? colors.yellow : "#ddd", color: colors.dark,
+              background: form.title.trim() ? colors.yellow : "#E4E0D8", color: colors.dark,
               fontSize: 13, fontWeight: 700, cursor: form.title.trim() ? "pointer" : "default",
               fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
             }}>

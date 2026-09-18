@@ -61,12 +61,12 @@ export default function NektarBadge() {
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 800, color: level.color, whiteSpace: "nowrap" }}>
           <BeeIcon size={13} color={level.color} /> <span className="nektar-level-name">{level.name}</span>
         </span>
-        <span className="nektar-level-name" style={{ width: 1, height: 14, background: "#E2E2E2" }} />
+        <span className="nektar-level-name" style={{ width: 1, height: 14, background: "#E4E0D8" }} />
         <span style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#C8860A" }}>
           <Droplets size={12} color="#C8860A" /> <NektarZahl wert={data.nektar} />
           {plus && <span key={plus.k} className="bd-fx-plus">+{plus.n}</span>}
         </span>
-        <ChevronDown size={13} color="#9E9E9E" />
+        <ChevronDown size={13} color="#8A8580" />
       </button>
 
       {open && (
@@ -77,22 +77,22 @@ export default function NektarBadge() {
             </div>
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 800, color: "#191615" }}>{level.name}</p>
-              <p style={{ margin: 0, fontSize: 11, color: "#757575" }}>{data.xp.toLocaleString("de-CH")} Pollen</p>
+              <p style={{ margin: 0, fontSize: 11, color: "#6B655F" }}>{data.xp.toLocaleString("de-CH")} Pollen</p>
             </div>
           </div>
           {/* heller Track braucht eine Kontur, sonst verschwindet er auf Weiss */}
           <div style={{ height: 8, borderRadius: 12, background: "#F4F4F2", border: "1px solid rgba(20,17,13,.2)", overflow: "hidden", marginBottom: 6 }}>
             <div style={{ height: "100%", borderRadius: 12, background: level.color, width: `${next ? progress : 100}%`, transition: "width .4s" }} />
           </div>
-          <p style={{ margin: "0 0 12px", fontSize: 11, color: "#757575" }}>
+          <p style={{ margin: "0 0 12px", fontSize: 11, color: "#6B655F" }}>
             {next ? `Noch ${toNext.toLocaleString("de-CH")} Pollen bis ${next.name}` : "Maximales Level erreicht"}
           </p>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: 12, background: "#5B8C5A14", border: "1px solid #5B8C5A33", marginBottom: 8 }}>
-            <span style={{ fontSize: 12, color: "#757575", fontWeight: 600 }}>Blüten</span>
+            <span style={{ fontSize: 12, color: "#6B655F", fontWeight: 600 }}>Blüten</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#5B8C5A" }}><Flower2 size={14} color="#5B8C5A" /> {data.blueten.toLocaleString("de-CH")}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: 12, background: "#E8A82014", border: "1px solid #E8A82033", marginBottom: 12 }}>
-            <span style={{ fontSize: 12, color: "#757575", fontWeight: 600 }}>Nektar</span>
+            <span style={{ fontSize: 12, color: "#6B655F", fontWeight: 600 }}>Nektar</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#C8860A" }}><Droplets size={14} color="#C8860A" /> {data.nektar}</span>
           </div>
           <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 12, background: "#0E9493", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>

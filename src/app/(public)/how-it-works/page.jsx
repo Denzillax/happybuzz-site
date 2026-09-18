@@ -5,7 +5,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { FEE_TIERS, DEFAULT_FEE_TIER, FEE_FREE_BELOW , FEE_CAP } from "@/lib/constants";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";

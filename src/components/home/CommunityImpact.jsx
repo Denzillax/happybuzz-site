@@ -9,7 +9,7 @@ import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
 const MOSS = "#5B8C5A";
-const INK = "#14110D";
+const INK = "#191615";
 const PAPER = "#FFFFFF";
 const SAND = "#F4F4F2";
 const HONEY = "#F4C03F";

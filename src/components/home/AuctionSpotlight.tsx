@@ -6,7 +6,7 @@ import { SwipeRow } from '@/components/shared/SwipeRow'
 import { SectionHeader } from './SectionHeader'
 
 const MONO = "'Manrope', sans-serif"
-const INK = '#14110D'
+const INK = '#191615'
 const HONEY = '#F4C03F'
 
 // Laufende Auktionen mit tickendem Countdown: der Grund, heute wiederzukommen.

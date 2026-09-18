@@ -26,8 +26,8 @@ export function CompanyTab({ admin }) {
             {g.items.map(([k, label]) => (
               <label key={k} style={{ fontSize: 12, fontWeight: 600, color: colors.dark }}>
                 {label}
-                <input value={form[k] || ""} onChange={e => set(k, e.target.value)} style={{ width: "100%", marginTop: 4, border: `1px solid ${k === "iban" && !ibanOk ? "#EB5E55" : colors.border}`, borderRadius: 12, padding: "9px 11px", fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
-                {k === "iban" && !ibanOk && <span style={{ display: "block", marginTop: 3, fontSize: 11, color: "#EB5E55" }}>Ungültige IBAN: CH/LI, 21 Zeichen, Prüfsumme muss stimmen.</span>}
+                <input value={form[k] || ""} onChange={e => set(k, e.target.value)} style={{ width: "100%", marginTop: 4, border: `1px solid ${k === "iban" && !ibanOk ? "#C62828" : colors.border}`, borderRadius: 12, padding: "9px 11px", fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
+                {k === "iban" && !ibanOk && <span style={{ display: "block", marginTop: 3, fontSize: 11, color: "#C62828" }}>Ungültige IBAN: CH/LI, 21 Zeichen, Prüfsumme muss stimmen.</span>}
               </label>
             ))}
           </div>

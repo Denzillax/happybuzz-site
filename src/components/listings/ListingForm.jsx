@@ -802,7 +802,7 @@ export default function ListingForm({
   const Err = ({ field }) => (
     <div data-field={field}>
       {errors[field] ? (
-        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FFF3F3", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
+        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FFEBEE", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
           {errors[field]}
         </div>
       ) : null}
@@ -810,7 +810,7 @@ export default function ListingForm({
   );
 
   // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
-  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6" } : {});
+  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFEBEE" } : {});
 
   // KI-Erkennung: Fotos (max 5) verkleinern, /api/ai-listing fragen, Felder fuellen.
   // Ohne target: Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen),
@@ -940,9 +940,9 @@ export default function ListingForm({
 
       {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
       {draftRestored && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 12, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#0A7170", fontFamily: fonts.body }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 12, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#0B5E5C", fontFamily: fonts.body }}>
           <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
-          <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#0A7170", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
+          <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#0B5E5C", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
         </div>
       )}
 
@@ -1274,7 +1274,7 @@ export default function ListingForm({
         {!isFree && (
           <div style={{ marginTop: 18, opacity: form.listing_type === "service" ? 0.4 : 1, pointerEvents: form.listing_type === "service" ? "none" : "auto" }}>
             <label style={labelBase}>Zustand {form.listing_type === "service" && <span style={{ fontSize: 11, fontWeight: 400, color: colors.muted }}> (nicht relevant bei Service)</span>}</label>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFF6F6", padding: 8 } : {}), ...gesperrtStyle }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFEBEE", padding: 8 } : {}), ...gesperrtStyle }}>
               {CONDITIONS.map((c) => (
                 <Chip key={c.value} active={form.condition === c.value} onClick={() => set("condition", c.value)}>{c.label}</Chip>
               ))}
@@ -1294,7 +1294,7 @@ export default function ListingForm({
           </div>
           {gesperrt ? (
             <div>
-              <div style={{ ...inputBase, minHeight: 80, background: "#F7F6F3", color: "#5F5A55", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
+              <div style={{ ...inputBase, minHeight: 80, background: "#F4F4F2", color: "#6B655F", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
               <label style={{ ...labelBase, marginTop: 12 }}>Nachtrag (wird unter den Text gehängt, mit Datum)</label>
               <textarea value={nachtrag} onChange={(e) => setNachtrag(e.target.value)} rows={3} maxLength={1000}
                 placeholder="z. B. Kabel ist doch dabei, Abholung auch am Wochenende möglich"
@@ -1328,7 +1328,7 @@ export default function ListingForm({
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 12, cursor: "pointer",
                   border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.yellow : colors.border}`,
-                  background: errors.category ? "#FFF6F6" : form.category_id ? `${colors.yellow}08` : "#fff",
+                  background: errors.category ? "#FFEBEE" : form.category_id ? `${colors.yellow}08` : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>

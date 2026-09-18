@@ -112,11 +112,11 @@ export const FEE_STATUS = {
 
 export const LISTING_STATUS = {
   active:        { color: "#2E7D32", bg: "#E8F5E9", label: "Aktiv" },
-  draft:         { color: "#666",    bg: "#f5f5f5", label: "Entwurf" },
+  draft:         { color: "#6B655F",    bg: "#F4F4F2", label: "Entwurf" },
   paused:        { color: "#E65100", bg: "#FFF3E0", label: "Pausiert" },
   sold:          { color: "#1565C0", bg: "#E3F2FD", label: "Verkauft" },
   rented:        { color: "#1565C0", bg: "#E3F2FD", label: "Vermietet" },
-  inactive:      { color: "#666",    bg: "#f5f5f5", label: "Inaktiv" },
+  inactive:      { color: "#6B655F",    bg: "#F4F4F2", label: "Inaktiv" },
   pending_pause: { color: "#c62828", bg: "#FFEBEE", label: "Wird pausiert" },
 };
 
@@ -125,7 +125,7 @@ export const ORDER_STATUS = {
   cancelled:  { color: "#c62828", bg: "#FFEBEE", label: "Storniert" },
   completed:  { color: "#1565C0", bg: "#E3F2FD", label: "Abgeschlossen" },
   disputed:   { color: "#E65100", bg: "#FFF3E0", label: "Streitfall" },
-  refunded:   { color: "#666",    bg: "#f5f5f5", label: "Erstattet" },
+  refunded:   { color: "#6B655F",    bg: "#F4F4F2", label: "Erstattet" },
 };
 
 // Zahlungsinfos für QR-Rechnungen kommen aus der Tabelle company_settings

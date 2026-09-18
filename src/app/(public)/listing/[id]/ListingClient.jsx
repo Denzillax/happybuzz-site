@@ -39,7 +39,7 @@ import { handlingLabel } from "@/lib/formatters";
 import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
@@ -75,7 +75,7 @@ function LocationMap({ city, canton }) {
 
       let bounds = null;
       if (place.geojson && place.geojson.type !== "Point") {
-        const poly = L.geoJSON(place.geojson, { style: { color: "#EB5E55", weight: 2.5, fillColor: "#EB5E55", fillOpacity: 0.12 } }).addTo(map);
+        const poly = L.geoJSON(place.geojson, { style: { color: "#C62828", weight: 2.5, fillColor: "#C62828", fillOpacity: 0.12 } }).addTo(map);
         bounds = poly.getBounds();
       }
       L.circleMarker([lat, lon], { radius: 8, color: "#fff", weight: 2.5, fillColor: "#5B8C5A", fillOpacity: 1 }).addTo(map);
@@ -545,7 +545,7 @@ export default function ListingDetail() {
 
   return (
     <div className="listing-page" style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "20px 32px 80px" }}>
+      <div className="bd-seite-breit">
 
         {/* ── BREADCRUMBS ─────────────────────────────── */}
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16, fontSize: 13, color: colors.muted, flexWrap: "wrap" }}>
@@ -756,7 +756,7 @@ export default function ListingDetail() {
                   <>
                     <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
                     {teile.filter(t => t.text).map((t, i) => (
-                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F6F4EF", borderLeft: "3px solid #F4C03F" }}>
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F4F4F2", borderLeft: "3px solid #F4C03F" }}>
                         <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
                           Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
                         </p>
@@ -1154,7 +1154,7 @@ export default function ListingDetail() {
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
                       disabled={isOwner}
-                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E0DCD4", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E4E0D8", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> Sofort kaufen · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -1263,7 +1263,7 @@ export default function ListingDetail() {
                     </div>
                     );
                   })()}
-                  {bidError && <p style={{ fontSize: 12, color: "#c00", margin: "8px 0 0" }}>{bidError}</p>}
+                  {bidError && <p style={{ fontSize: 12, color: "#C62828", margin: "8px 0 0" }}>{bidError}</p>}
                 </div>
               )}
 
@@ -1467,7 +1467,7 @@ export default function ListingDetail() {
                             }
                           </p>
 
-                          {bidError && <p style={{ fontSize: 12, color: "#c00", marginBottom: 10 }}>{bidError}</p>}
+                          {bidError && <p style={{ fontSize: 12, color: "#C62828", marginBottom: 10 }}>{bidError}</p>}
 
                           {/* Buttons: bleiben unten stehen, waehrend die Mitte scrollt */}
                           <div className="bid-modal-actions" style={{ display: "flex", gap: 10, position: "sticky", bottom: 0, background: "#fff", padding: "10px 0 14px", marginBottom: -16, borderTop: `1px solid ${colors.borderLt}` }}>
@@ -1704,8 +1704,8 @@ export default function ListingDetail() {
                 </div>
               )}
               {buyState === "error" && (
-                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#fff0f0", textAlign: "center" }}>
-                  <p style={{ margin: 0, fontSize: 13, color: "#c00" }}>{buyError}</p>
+                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#FFEBEE", textAlign: "center" }}>
+                  <p style={{ margin: 0, fontSize: 13, color: "#C62828" }}>{buyError}</p>
                   <button onClick={() => setBuyState("idle")} style={{ marginTop: 6, fontSize: 12, color: colors.blue, background: "none", border: "none", cursor: "pointer" }}>Nochmal versuchen</button>
                 </div>
               )}

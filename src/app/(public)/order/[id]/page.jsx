@@ -30,7 +30,7 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
@@ -77,7 +77,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
       {items.length > 0 ? (
         <div style={{ background: "#F4F4F2", borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
           {items.map((item, i) => (
-            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid #e8e4df" : "none" }}>
+            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid #E4E0D8" : "none" }}>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{item.label}</div>
                 {item.description && <div style={{ fontSize: 11, color: colors.muted }}>{item.description}</div>}
@@ -86,7 +86,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
               <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, whiteSpace: "nowrap" }}>CHF {parseFloat(item.total).toFixed(2)}</div>
             </div>
           ))}
-          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 10, marginTop: 4, borderTop: "2px solid #e8e4df" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 10, marginTop: 4, borderTop: "2px solid #E4E0D8" }}>
             <span>Total</span><span>CHF {total.toFixed(2)}</span>
           </div>
         </div>
@@ -349,7 +349,7 @@ export default function OrderDetailPage() {
         </div>
       )}
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 20px 80px" }}>
+      <div className="bd-seite">
 
         <button onClick={() => router.back()} style={{ display: "flex", alignItems: "center", gap: 4, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: colors.muted, fontFamily: fonts.body, marginBottom: 20, padding: 0 }}>
           <ArrowLeft size={16} /> Zurück
@@ -416,7 +416,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Kunde wartet */}
                 {isService && isBuyer && p.status === "confirmed" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#9A9490", margin: 0 }}>Der Anbieter fuehrt den Service durch und sendet dir anschliessend die Rechnung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#8A8580", margin: 0 }}>Der Anbieter fuehrt den Service durch und sendet dir anschliessend die Rechnung.</p></div>
                 )}
                 {/* SERVICE: Rechnung erhalten — mit Positionen */}
                 {isService && isBuyer && p.status === "payment_pending" && (
@@ -424,11 +424,11 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Buyer hat bezahlt, wartet */}
                 {isService && isBuyer && p.status === "payment_marked" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#9A9490", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#8A8580", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
                 )}
                 {/* SERVICE: Anbieter wartet auf Zahlung */}
                 {isService && isSeller && p.status === "payment_pending" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#9A9490", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#8A8580", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (

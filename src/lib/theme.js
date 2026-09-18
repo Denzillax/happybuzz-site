@@ -13,7 +13,7 @@ export const colors = {
 
   // CTA (Teal = alles Klickbare)
   teal:       "#0E9493",
-  tealDark:   "#0A7170",
+  tealDark:   "#0B5E5C",
 
   // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #5B8C5A.
   // NICHT mit `green` verwechseln: das ist ein Legacy-Alias auf Teal (s.u.).
@@ -21,14 +21,14 @@ export const colors = {
   natureSoft: "#EAF1E9",
 
   // Signal (Red = Dringlichkeit, Badges, Alerts)
-  red:        "#EB5E55",
-  redSoft:    "#FFF0F0",
+  red:        "#C62828",
+  redSoft:    "#FFEBEE",
 
   // Text
   dark:       "#191615",
   graphite:   "#34343B",
-  muted:      "#757575",
-  mutedLt:    "#9E9E9E",
+  muted:      "#6B655F",
+  mutedLt:    "#8A8580",
 
   // Surface
   cream:      "#F4F4F2",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
@@ -37,8 +37,8 @@ export const colors = {
   cloud:      "#F4F4F2",
 
   // Borders
-  border:     "#E2E2E2",
-  borderLt:   "#EEEEEE",
+  border:     "#E4E0D8",
+  borderLt:   "#EEEBE5",
 
   // Info
   sky:        "#6BA9FF",

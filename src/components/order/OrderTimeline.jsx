@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 
-const K = { ink: "#14110D", petrol: "#0B5E5C" };
+const K = { ink: "#191615", petrol: "#0B5E5C" };
 
 export default function OrderTimeline({ events, isFinished, finishedLabel, isBuyer, seller, fmtDate, getEventCategory, getEventDisplay }) {
   const [showFullTimeline, setShowFullTimeline] = useState(false);

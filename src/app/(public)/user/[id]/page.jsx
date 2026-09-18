@@ -16,7 +16,7 @@ import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRati
 import { supabase } from "@/lib/supabase/supabase";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".07em", textTransform: "uppercase", color: "#8A8580" };
@@ -94,7 +94,7 @@ export default function PublicProfilePage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite">
 
         <div style={{ ...monoLabel, color: K.ink, marginBottom: 12 }}>Verkäuferprofil</div>
 

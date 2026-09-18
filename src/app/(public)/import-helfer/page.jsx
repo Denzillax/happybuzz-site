@@ -6,7 +6,7 @@ import { Bookmark, MousePointerClick, ArrowRight, ShieldCheck, Smartphone } from
 import { bookmarkletHref } from "@/lib/importBookmarklet";
 import { IMPORT_SOURCES } from "@/lib/importListing";
 
-const INK = "#14110D";
+const INK = "#191615";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const MUTED = "rgba(20,17,13,0.6)";
@@ -30,7 +30,7 @@ export default function ImportHelferPage() {
 
   return (
     <div style={{ background: PAPER, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div className="bd-seite-schmal">
 
         <p style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: MUTED, margin: "0 0 10px" }}>
           Import-Helfer · Umzug leicht gemacht

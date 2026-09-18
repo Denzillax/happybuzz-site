@@ -363,10 +363,10 @@ input:focus, textarea:focus, select:focus {
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
 .tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
-.tab.active { color:#14110D; }
+.tab.active { color:#191615; }
 .tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
 .link { color:#0B5E5C; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
-.link:hover { color:#14110D; }
+.link:hover { color:#191615; }
 .bd-link { text-decoration: none; }
 .bd-link:hover { text-decoration: underline; }
 /* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
@@ -464,7 +464,7 @@ input:focus, textarea:focus, select:focus {
 /* ── Richtext: Beschreibungs-Editor + Anzeige (gemeinsame Formate) ── */
 .rte-area:empty::before {
   content: attr(data-placeholder);
-  color: #9b968f;
+  color: #8A8580;
   pointer-events: none;
 }
 .rte-area h3, .rich-desc h3 {
@@ -472,7 +472,7 @@ input:focus, textarea:focus, select:focus {
   font-size: 16px;
   font-weight: 700;
   margin: 14px 0 6px;
-  color: #14110D;
+  color: #191615;
 }
 .rte-area h3:first-child, .rich-desc h3:first-child { margin-top: 0; }
 .rte-area ul, .rich-desc ul {
@@ -673,9 +673,9 @@ input:focus, textarea:focus, select:focus {
 button, a[href] { transition: filter .15s ease, transform .15s ease; }
 button:not(:disabled):hover, a[href]:hover { filter: brightness(.93); }
 button:not(:disabled):active { transform: translateY(1px); }
-button[style*="background:#14110D"]:not(:disabled):hover, a[href][style*="background:#14110D"]:hover,
 button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
-button[style*="background:#1a1a1a"]:not(:disabled):hover, a[href][style*="background:#1a1a1a"]:hover,
+button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
+button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
 button[style*="background:#0B5E5C"]:not(:disabled):hover, a[href][style*="background:#0B5E5C"]:hover,
 button[style*="background:#0E9493"]:not(:disabled):hover, a[href][style*="background:#0E9493"]:hover,
 button[style*="background:rgb(20, 17, 13)"]:not(:disabled):hover, button[style*="background:rgb(25, 22, 21)"]:not(:disabled):hover,
@@ -867,3 +867,38 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 }
 @media (max-width: 640px) { .bd-seitentitel { font-size: 24px !important; } }
 
+
+/* ═══════════════════════════════════════════
+   SEITENBREITEN (Denis 19.09.2026): drei Stufen statt zwölf Werten (500 bis 1320 px)
+     .bd-seite-breit   1280  Raster und Detail: Suche, Inserat, Meine Inserate, Favoriten
+                             (gleiche Breite und gleicher Rand wie Header und Startseite,
+                             die linke Kante fluchtet mit dem Logo)
+     .bd-seite         1000  Listen und Tabellen: Käufe, Verkäufe, Buchungen, Gebote,
+                             Bestellung, Hive, Poker, Profil, Einstellungen, Kontakt, Gebühren
+     .bd-seite-schmal   720  Formulare und Lesetext: Inserat erstellen und bearbeiten,
+                             Bewerben, Import-Helfer
+   Bewusst ausgenommen: Rechnungen (Druckformat 660), Chat-Spalte, die schmalen
+   Textblöcke in den Heros von Impact, Hilfe, Über uns.
+   ═══════════════════════════════════════════ */
+.bd-seite-breit, .bd-seite, .bd-seite-schmal { margin-left: auto; margin-right: auto; padding: 32px 24px 80px; width: 100%; box-sizing: border-box; }
+.bd-seite-breit { max-width: 1280px; }
+.bd-seite { max-width: 1000px; }
+.bd-seite-schmal { max-width: 720px; }
+@media (max-width: 768px) {
+  .bd-seite-breit, .bd-seite, .bd-seite-schmal { padding: 24px 16px 72px; }
+}
+
+/* ═══════════════════════════════════════════
+   FARBFAMILIE (Denis 19.09.2026): 190 Farbwerte, viele Beinahe-Doppelte, und zwei
+   Familien durcheinander (Theme neutral-grau, Seiten warm-grau). Jetzt eine warme
+   Familie, passend zu Ink und Sand. Neue Stellen nur noch diese Werte:
+     Ink          #191615   (vorher auch #14110D, #1a1a1a)
+     Nebentext    #6B655F   (vorher #757575, #666, #555 ...)     Kontrast 5.7 auf Weiss
+     Hinweistext  #8A8580   (vorher #999, #888, #9E9E9E ...)     Kontrast 3.7, nur Kleines
+     Rand         #E4E0D8   (vorher #E2E2E2, #e8e5e0, #ddd ...)
+     feiner Rand  #EEEBE5   (vorher #EEEEEE, #eee, #f0f0f0)
+     Sand         #F4F4F2   (vorher #f5f5f5, #fafafa, #f8f6f3 ...)
+     Chip         #F2EEE7
+     Honig        #F4C03F   Teal #0E9493   Petrol #0B5E5C (einziges dunkles Teal)
+     Rot          #C62828 auf #FFEBEE   Grün #2E7D32 auf #E8F5E9   Markengrün #5B8C5A
+   ═══════════════════════════════════════════ */

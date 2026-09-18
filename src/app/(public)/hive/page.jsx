@@ -51,7 +51,7 @@ const reasonLabel = (r) => {
 };
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
@@ -202,7 +202,7 @@ export default function HivePage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite">
 
         {/* Header */}
         <div style={{ marginBottom: 20 }}>
@@ -421,7 +421,7 @@ export default function HivePage() {
                 <div key={key} style={{
                   display: "flex", gap: 10, padding: "10px 12px", borderRadius: radius.md,
                   border: `1px solid ${unlocked ? colors.yellow + "55" : colors.borderLt}`,
-                  background: unlocked ? colors.yellowSoft : "#fafafa", opacity: unlocked ? 1 : 0.7,
+                  background: unlocked ? colors.yellowSoft : "#F4F4F2", opacity: unlocked ? 1 : 0.7,
                 }}>
                   <div style={{ flexShrink: 0, marginTop: 1 }}>
                     {unlocked ? <Trophy size={18} color={colors.yellowDark} /> : <Lock size={16} color={colors.mutedLt} />}
@@ -446,7 +446,7 @@ export default function HivePage() {
             <div style={{ display: "flex", flexDirection: "column" }}>
               {leaderboard.map(row => {
                 const isMe = row.userId === me;
-                const medal = row.rank === 1 ? "#F4C03E" : row.rank === 2 ? "#B0B0B0" : row.rank === 3 ? "#CD7F32" : null;
+                const medal = row.rank === 1 ? "#F4C03F" : row.rank === 2 ? "#B0B0B0" : row.rank === 3 ? "#CD7F32" : null;
                 return (
                   <div key={row.userId} style={{
                     display: "flex", alignItems: "center", gap: 12, padding: "9px 10px", borderRadius: 12,

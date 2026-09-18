@@ -11,7 +11,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
@@ -133,7 +133,7 @@ const CATEGORIES = [
     icon: Mail,
     title: "Kontakt & Rechtliches",
     desc: "Support, AGB, Datenschutz & Impressum",
-    color: "#666",
+    color: "#6B655F",
     faqs: [
       { q: "Wie erreiche ich den Support?", a: "Schreibe uns an support@beedaro.ch. Wir antworten in der Regel innerhalb von 24 Stunden." },
       { q: "Wo finde ich die AGB?", a: "Unsere Allgemeinen Geschäftsbedingungen findest du unter /terms." },
@@ -153,7 +153,7 @@ function FaqItem({ q, a, open, onClick }) {
         borderBottom: `1px solid ${colors.borderLt}`,
         transition: "background .15s",
       }}
-      onMouseEnter={e => e.currentTarget.style.background = "#fafaf8"}
+      onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

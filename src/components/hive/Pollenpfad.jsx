@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import EinsatzWahl from "./EinsatzWahl";
 
-const K = { ink: "#14110D", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", moss: "#5B8C5A", rot: "#c62828" };
+const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", moss: "#5B8C5A", rot: "#c62828" };
 const WEGE = [
   { key: "sicher", name: "Sicherer Weg", info: "8 % Wespe · Stand +0.1", Icon: Footprints, farbe: K.moss },
   { key: "riskant", name: "Riskanter Weg", info: "35 % Wespe · Stand +0.5", Icon: Flame, farbe: "#C8860A" },

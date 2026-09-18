@@ -10,16 +10,16 @@ export function MahnPreviewModal({ admin }) {
     <div onClick={() => setMahnModal(null)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={e => e.stopPropagation()} style={{ width: 440, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
         <div style={{ background: "#F3FAFA", padding: "13px 18px", borderBottom: "1px solid #E6F0F0", display: "flex", alignItems: "center", gap: 8 }}>
-          <Mail size={16} color="#0A7170" />
-          <span style={{ fontSize: 13, fontWeight: 700, color: "#0A7170" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
+          <Mail size={16} color="#0B5E5C" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: "#0B5E5C" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
         </div>
         <div style={{ padding: "16px 18px", maxHeight: "60vh", overflowY: "auto" }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "3px 0 12px" }}>{mahnModal.subject}</div>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" }}>Text</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" }}>Text</div>
           <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6, marginTop: 4 }}>{mahnModal.body}</div>
         </div>
-        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEEEE" }}>
+        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEBE5" }}>
           {mahnModal.mode === "view" ? (
             <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
           ) : (

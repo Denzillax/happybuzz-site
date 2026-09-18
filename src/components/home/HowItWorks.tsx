@@ -25,7 +25,7 @@ const steps = [
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const MONO = "'Manrope', sans-serif"
-const INK = '#14110D'
+const INK = '#191615'
 const SAND = '#F4F4F2'
 const PAPER = '#FFFFFF'
 const HONEY = '#F4C03F'

@@ -29,7 +29,7 @@ export function AdminShell({ admin }) {
     <div className="admin-shell" style={{ fontFamily: fonts.body, background: "#fff", color: colors.dark, minHeight: "100vh" }}>
 
       {/* ═══ SIDEBAR ═══ */}
-      <aside className="admin-sidebar" style={{ background: "#1a1a1a", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <aside className="admin-sidebar" style={{ background: "#191615", color: "#fff", display: "flex", flexDirection: "column" }}>
         <div className="admin-brand" style={{ padding: "20px 20px 18px" }}>
           {/* Original-Wortmarke, weiss invertiert fuer die dunkle Sidebar */}
           <a href="/" style={{ display: "inline-block" }}>
@@ -52,7 +52,7 @@ export function AdminShell({ admin }) {
               }}>
                 <n.Icon size={17} strokeWidth={2} />
                 <span style={{ flex: 1 }}>{n.label}</span>
-                {n.badge > 0 && <span style={{ background: "#EB5E55", color: "#fff", fontSize: 10, fontWeight: 700, borderRadius: 999, padding: "1px 7px" }}>{n.badge}</span>}
+                {n.badge > 0 && <span style={{ background: "#C62828", color: "#fff", fontSize: 10, fontWeight: 700, borderRadius: 999, padding: "1px 7px" }}>{n.badge}</span>}
               </button>
             );
           })}
@@ -140,7 +140,7 @@ export function AdminShell({ admin }) {
       <BroadcastComposer admin={admin} />
 
       {/* Toast */}
-      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "#fff", padding: "9px 22px", borderRadius: 999, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
+      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#191615", color: "#fff", padding: "9px 22px", borderRadius: 999, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
     </div>
   );
 }

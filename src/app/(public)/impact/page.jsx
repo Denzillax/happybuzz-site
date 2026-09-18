@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";

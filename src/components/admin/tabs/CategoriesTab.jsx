@@ -134,7 +134,7 @@ export function CategoriesTab({ admin }) {
           display: "flex", alignItems: "center", gap: 8,
           padding: "9px 14px", paddingLeft: 14 + depth * 26,
           borderBottom: `1px solid ${colors.borderLt}`,
-          background: inactive ? "#fafafa" : "transparent", opacity: inactive ? 0.55 : 1,
+          background: inactive ? "#F4F4F2" : "transparent", opacity: inactive ? 0.55 : 1,
         }}>
           {/* Auf-/Zuklappen (oder Platzhalter bei Blättern) */}
           {hasKids ? (
@@ -178,7 +178,7 @@ export function CategoriesTab({ admin }) {
               {hasKids && <span style={{ fontSize: 10, color: colors.muted, marginLeft: 6 }}>({kids.length})</span>}
             </span>
           )}
-          {inactive && pill("#f5f5f5", "#666", "Deaktiviert")}
+          {inactive && pill("#F4F4F2", "#6B655F", "Deaktiviert")}
           {/* Aktionen */}
           {!isEditing && confirmDelId === cat.id && (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>

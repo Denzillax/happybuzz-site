@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import { restzeit } from "@/lib/poker";
 
-const K = { ink: "#14110D", sand: "#F4F4F2", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7" };
+const K = { ink: "#191615", sand: "#F4F4F2", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7" };
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 export default function PokerLobby() {
@@ -64,7 +64,7 @@ export default function PokerLobby() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite">
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Hive · Spiele</div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
           <Spade size={24} color={K.ink} />

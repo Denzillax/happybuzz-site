@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import { karte, PHASEN, aktionText, restzeit } from "@/lib/poker";
 
-const K = { ink: "#14110D", sand: "#F4F4F2", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", filz: "#0B5E5C" };
+const K = { ink: "#191615", sand: "#F4F4F2", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", filz: "#0B5E5C" };
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 function Karte({ c, gross, verdeckt }) {
@@ -82,7 +82,7 @@ export default function PokerTisch() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "20px 16px 90px" }}>
+      <div className="bd-seite">
         {/* Kopf */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>
           <Link href="/poker" aria-label="Zur Lobby" style={{ display: "flex", color: K.ink }}><ArrowLeft size={20} /></Link>

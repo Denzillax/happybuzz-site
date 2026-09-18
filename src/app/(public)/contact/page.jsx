@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
@@ -36,7 +36,7 @@ export default function ContactPage() {
         <p style={{ fontSize: 15, color: MUTED, margin: 0 }}>Fragen, Feedback oder Probleme? Wir helfen dir gerne.</p>
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "44px 24px 80px" }}>
+      <div className="bd-seite">
         <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 28 }}>
 
           {/* Form */}
@@ -80,7 +80,7 @@ export default function ContactPage() {
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
                   width: "100%", padding: "14px", borderRadius: 12, border: "1px solid #E4E0D8",
                   background: ready ? INK : "#cfcabf",
-                  color: ready ? PAPER : "#8a857c", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
+                  color: ready ? PAPER : "#8A8580", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 }}>
                   <Send size={16} /> Nachricht senden

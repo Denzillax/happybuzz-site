@@ -12,7 +12,7 @@ import { getCompanySettings, formatIban } from "@/lib/company";
 import { feeQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
-const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em" };
+const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
 
 export default function FeesPage() {
@@ -125,17 +125,17 @@ export default function FeesPage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite">
         <h1 style={{ fontSize: 24, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 4px" }}>Gebühren & Beiträge</h1>
         <p style={{ margin: "0 0 24px", fontSize: 13, color: colors.muted }}>Übersicht deiner Plattformgebühren und Bee-Impact Beiträge</p>
 
         {/* Warn-Banner für überfällige Rechnungen */}
         {invoices.some(i => i.status === "overdue" && i.reminder_level >= 3 && i.listings_paused) && (
-          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF5F5", border: "1.5px solid #FFCDD2", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFEBEE", border: "1.5px solid #FFCDD2", display: "flex", alignItems: "center", gap: 10 }}>
             <AlertCircle size={20} color="#c62828" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert: offene Rechnung begleichen</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Nach Zahlung werden deine Inserate automatisch reaktiviert.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Nach Zahlung werden deine Inserate automatisch reaktiviert.</p>
             </div>
           </div>
         )}
@@ -144,7 +144,7 @@ export default function FeesPage() {
             <AlertCircle size={20} color="#E65100" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Mahnung: Inserate werden bald pausiert</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
             </div>
           </div>
         )}
@@ -153,7 +153,7 @@ export default function FeesPage() {
             <Clock size={20} color="#E65100" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Erinnerung: Gebührenrechnung überfällig</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>Bitte überweise den offenen Betrag.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Bitte überweise den offenen Betrag.</p>
             </div>
           </div>
         )}
@@ -273,7 +273,7 @@ export default function FeesPage() {
                               const payload = feeQrPayload(inv, profile, company || {});
                               return payload ? (
                                 <>
-                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #eee" }} />
+                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #EEEBE5" }} />
                                   <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
                                 </>
                               ) : (
@@ -309,7 +309,7 @@ export default function FeesPage() {
       </div>
 
       {/* Toast */}
-      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "#fff", padding: "8px 20px", borderRadius: 12, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
+      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#191615", color: "#fff", padding: "8px 20px", borderRadius: 12, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
     </div>
   );
 }

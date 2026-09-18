@@ -10,7 +10,7 @@ export function BannerModal({ admin }) {
   return (
     <div onClick={() => setAnnOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={e => e.stopPropagation()} style={{ width: 460, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
-        <div style={{ background: "#1a1a1a", padding: "14px 18px", display: "flex", alignItems: "center", gap: 9 }}>
+        <div style={{ background: "#191615", padding: "14px 18px", display: "flex", alignItems: "center", gap: 9 }}>
           <Megaphone size={17} color={colors.yellow} />
           <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>Ankündigungsbalken</span>
         </div>
@@ -46,7 +46,7 @@ export function BannerModal({ admin }) {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEEEE" }}>
+        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEBE5" }}>
           <button onClick={() => setAnnOpen(false)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           <button onClick={saveAnnouncement} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
         </div>

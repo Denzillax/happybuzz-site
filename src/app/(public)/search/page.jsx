@@ -13,7 +13,7 @@ import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/rece
 import { getActiveBoosts } from "@/lib/gamification";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
-const INK = "#14110D";
+const INK = "#191615";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
 const MONO = "'Manrope', sans-serif";
@@ -49,7 +49,7 @@ function FilterPill({ label, value, options, onChange, active }) {
           padding: "8px 14px", borderRadius: 12,
           border: active ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
-          color: active ? "#0A7170" : INK,
+          color: active ? "#0B5E5C" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
           fontFamily: fonts.body, cursor: "pointer",
           transition: "all .15s", whiteSpace: "nowrap",
@@ -83,7 +83,7 @@ function FilterPill({ label, value, options, onChange, active }) {
                 fontWeight: value === opt.value ? 700 : 400,
                 transition: "background .1s",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = "#f8f6f3"}
+              onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
               onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#F0FAFA" : "transparent"}
             >
               {opt.label}
@@ -308,11 +308,11 @@ function SearchPageInner() {
   return (
     <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#FFFFFF" }}>
 
-      <div style={{ maxWidth: 1320, margin: "0 auto", padding: "24px 24px 48px" }}>
+      <div className="bd-seite-breit">
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
         <div className="search-mobile-bar" style={{ background: "#F2EEE7", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
-          <Search size={16} style={{ marginLeft: 12, color: "#999", flexShrink: 0, alignSelf: "center" }} />
+          <Search size={16} style={{ marginLeft: 12, color: "#8A8580", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
             className="pille-input"
@@ -325,7 +325,7 @@ function SearchPageInner() {
           {draft && (
             <button onClick={() => { setDraft(""); setQuery(""); setPage(1); }} aria-label="Suche leeren"
               style={{ background: "none", border: "none", cursor: "pointer", padding: "0 4px", display: "flex", alignItems: "center" }}>
-              <X size={16} color="#999" />
+              <X size={16} color="#8A8580" />
             </button>
           )}
           {/* KI-Schalter (wie im Header, gleicher Speicher) */}
@@ -452,7 +452,7 @@ function SearchPageInner() {
                 padding: "8px 14px", borderRadius: 12,
                 border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
-                color: (minPrice || maxPrice) ? "#0A7170" : INK,
+                color: (minPrice || maxPrice) ? "#0B5E5C" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
                 fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",
               }}>
@@ -470,9 +470,9 @@ function SearchPageInner() {
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
                   <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                     <input type="number" placeholder="Von" value={minPrice} onChange={e => setMinPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E4E0D8", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                     <input type="number" placeholder="Bis" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #e0ddd8", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E4E0D8", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
                     width: "100%", padding: "8px", background: colors.teal, color: "#fff",
@@ -492,12 +492,12 @@ function SearchPageInner() {
                 display: "inline-flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 12, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
-                border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#14110D"}`,
+                border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#191615"}`,
                 background: verifiedOnly ? "#EEF4EC" : "#fff",
-                color: verifiedOnly ? "#5B8C5A" : "#14110D",
+                color: verifiedOnly ? "#5B8C5A" : "#191615",
               }}
             >
-              <BadgeCheck size={15} color={verifiedOnly ? "#5B8C5A" : "#14110D"} strokeWidth={2.2} /> Verifiziert
+              <BadgeCheck size={15} color={verifiedOnly ? "#5B8C5A" : "#191615"} strokeWidth={2.2} /> Verifiziert
             </button>
           </div>
 

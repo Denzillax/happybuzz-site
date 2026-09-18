@@ -48,7 +48,7 @@ export function BottomNav() {
     <nav className="bottom-nav" style={{
       position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
       background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)',
-      borderTop: '1px solid #e8e5e0',
+      borderTop: '1px solid #E4E0D8',
       paddingBottom: 'env(safe-area-inset-bottom, 0px)',
     }}>
       <div style={{
@@ -81,14 +81,14 @@ export function BottomNav() {
               }}>
                 <div style={{
                   width: 24, height: 24, borderRadius: '50%',
-                  background: active ? YELLOW : '#e8e5e0',
+                  background: active ? YELLOW : '#E4E0D8',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: active ? DARK : '#888',
+                  fontSize: 10, fontWeight: 700, color: active ? DARK : '#8A8580',
                   transition: 'all 0.15s',
                 }}>
                   {getInitials()}
                 </div>
-                <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#999', fontFamily: 'inherit' }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#8A8580', fontFamily: 'inherit' }}>
                   {tab.label}
                 </span>
               </button>
@@ -101,8 +101,8 @@ export function BottomNav() {
               background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px',
               transition: 'all 0.15s',
             }}>
-              <tab.icon size={22} color={active ? DARK : '#999'} strokeWidth={active ? 2.2 : 1.8} />
-              <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#999', fontFamily: 'inherit' }}>
+              <tab.icon size={22} color={active ? DARK : '#8A8580'} strokeWidth={active ? 2.2 : 1.8} />
+              <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#8A8580', fontFamily: 'inherit' }}>
                 {tab.label}
               </span>
             </button>

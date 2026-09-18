@@ -28,13 +28,13 @@ const usps = [
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#14110D', tint: '#F4F4F2', href: '/about',
+    accent: '#191615', tint: '#F4F4F2', href: '/about',
   },
 ]
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const MONO = "'Manrope', sans-serif"
-const INK = '#14110D'
+const INK = '#191615'
 const PETROL = '#0B5E5C'
 
 // Wird als Unterblock in "So funktioniert Beedaro" gerendert (HowItWorks),

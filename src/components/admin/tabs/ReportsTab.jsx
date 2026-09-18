@@ -10,7 +10,7 @@ const REPORT_STATUS = {
   offen:       { label: "Offen",      bg: "#FFEBEE", color: "#c62828" },
   in_pruefung: { label: "In Prüfung", bg: "#FFF3E0", color: "#E65100" },
   erledigt:    { label: "Erledigt",   bg: "#E8F5E9", color: "#2E7D32" },
-  abgelehnt:   { label: "Abgelehnt",  bg: "#f5f5f5", color: "#666" },
+  abgelehnt:   { label: "Abgelehnt",  bg: "#F4F4F2", color: "#6B655F" },
 };
 const normStatus = (r) => (r.status && REPORT_STATUS[r.status] ? r.status : (r.is_resolved ? "erledigt" : "offen"));
 
@@ -28,7 +28,7 @@ export function ReportsTab({ admin }) {
         const st = normStatus(r);
         const closed = st === "erledigt" || st === "abgelehnt";
         return (
-        <div key={r.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: closed ? "#fafafa" : "transparent", opacity: st === "abgelehnt" ? 0.55 : closed ? 0.7 : 1 }}>
+        <div key={r.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: closed ? "#F4F4F2" : "transparent", opacity: st === "abgelehnt" ? 0.55 : closed ? 0.7 : 1 }}>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
             <Flag size={16} color={closed ? colors.muted : "#c62828"} style={{ marginTop: 2, flexShrink: 0 }} />
             <div style={{ flex: 1 }}>
@@ -47,7 +47,7 @@ export function ReportsTab({ admin }) {
               <p style={{ margin: "0 0 4px", fontSize: 11, color: colors.muted }}>
                 Gemeldet von <strong>{r.reporterName}</strong> · Besitzer: <strong>{r.ownerName}</strong> · {fmtDate(r.created_at)}
               </p>
-              {r.description && <p style={{ margin: "0 0 6px", fontSize: 12, color: "#666" }}>{r.description}</p>}
+              {r.description && <p style={{ margin: "0 0 6px", fontSize: 12, color: "#6B655F" }}>{r.description}</p>}
               {/* Aktionen */}
               {!closed && (
                 <div style={{ display: "flex", gap: 4 }}>

@@ -6,7 +6,7 @@ export const ANNOUNCEMENT_PRESETS = [
   { name: "Gelb", bg: "#F4C03F", text: "#191615" },
   { name: "Grün", bg: "#5B8C5A", text: "#FFFFFF" },
   { name: "Dark", bg: "#191615", text: "#FFFFFF" },
-  { name: "Rot",  bg: "#EB5E55", text: "#FFFFFF" },
+  { name: "Rot",  bg: "#C62828", text: "#FFFFFF" },
 ];
 
 export async function getAnnouncement() {

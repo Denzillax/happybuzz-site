@@ -17,7 +17,7 @@ const PETROL = '#0B5E5C'
 const KI_FARBE = '#0E9493' // KI-Modus im Suchfeld: helleres Teal (Denis 17.09.)
 const KI_KEY = 'beedaro_ki_suche'
 const DARK = '#191615'
-const INK = '#14110D'
+const INK = '#191615'
 const PAPER = '#FFFFFF'
 
 export function Header() {
@@ -178,7 +178,7 @@ export function Header() {
     { href: '/favorites?tab=searches', icon: Search, label: 'Suchen' },
   ]
 
-  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #e5e5e5', zIndex: 100 }
+  const dropdownStyle = { position: 'absolute' as const, right: 0, top: 'calc(100% + 8px)', background: '#fff', borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,.12)', border: '1px solid #E4E0D8', zIndex: 100 }
   const menuItemStyle = { display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px', fontSize: 14, fontWeight: 500, color: '#444', textDecoration: 'none', transition: 'all 0.12s', cursor: 'pointer', border: 'none', background: 'none', width: '100%', fontFamily: 'inherit' }
 
   return (
@@ -190,11 +190,11 @@ export function Header() {
       <style>{`
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
-        .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
+        .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #E4E0D8; }
         .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F4F4F2 !important; filter: none !important; }
         .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #F4F4F2 !important; color: #14110D !important; filter: none !important; }
+        .hdr-menu-item:hover { background: #F4F4F2 !important; color: #191615 !important; filter: none !important; }
         .hdr-menu-item:hover svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F4F4F2 !important; filter: none !important; }
         .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
@@ -212,11 +212,11 @@ export function Header() {
           .hdr-logo img { width: 122px !important; }
           .hdr-mobile-only { gap: 3px !important; }
           .hdr-mobile-search { display: flex !important; }
-          .hdr-top { border-bottom: 1px solid #e8e5e0; }
+          .hdr-top { border-bottom: 1px solid #E4E0D8; }
         }
       `}</style>
 
-      <div className="hdr-wrap" style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 32, paddingRight: 32, position: 'relative' }}>
+      <div className="hdr-wrap" style={{ maxWidth: 1280, margin: '0 auto', paddingLeft: 24, paddingRight: 24, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', height: 58 }}>
 
           {/* ── Logo: klickbar zur Startseite ── */}
@@ -282,7 +282,7 @@ export function Header() {
                       <div style={{ ...dropdownStyle, width: 220, padding: '6px 0' }}>
                         {menu.items.map(item => (
                           <Link key={item.href} href={item.href} onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}>
-                            <item.icon size={16} style={{ color: '#888' }} />
+                            <item.icon size={16} style={{ color: '#8A8580' }} />
                             {item.label}
                           </Link>
                         ))}
@@ -295,8 +295,8 @@ export function Header() {
               <div className="hdr-sep" />
 
               {/* Glocke + Chat: bleiben Symbole, die Zaehler brauchen den Platz */}
-              {user ? <NotificationBell /> : <button className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s' }} onClick={() => router.push('/login')}><Bell size={20} /></button>}
-              <button className="hdr-icon-btn" aria-current={pathname?.startsWith('/chat') ? 'page' : undefined} onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
+              {user ? <NotificationBell /> : <button className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B655F', transition: 'all 0.15s' }} onClick={() => router.push('/login')}><Bell size={20} /></button>}
+              <button className="hdr-icon-btn" aria-current={pathname?.startsWith('/chat') ? 'page' : undefined} onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B655F', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
                   <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 12, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
@@ -320,18 +320,18 @@ export function Header() {
                   </button>
                   {openMenu === 'profil' && (
                     <div style={{ ...dropdownStyle, width: 250, padding: '6px 0' }}>
-                      <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0ede8' }}>
+                      <div style={{ padding: '14px 16px', borderBottom: '1px solid #F2EEE7' }}>
                         <p style={{ fontWeight: 700, fontSize: 14, color: DARK, margin: 0 }}>{displayName}</p>
-                        <p style={{ fontSize: 12, color: '#888', margin: '2px 0 0' }}>{user?.email}</p>
+                        <p style={{ fontSize: 12, color: '#8A8580', margin: '2px 0 0' }}>{user?.email}</p>
                         <div style={{ marginTop: 10 }}><NektarBadge /></div>
                       </div>
                       <div style={{ padding: '6px 0' }}>
-                        <Link href="/hive" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Trophy size={16} style={{ color: '#888' }} /> Mein Hive</Link>
-                        <Link href="/settings" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Settings size={16} style={{ color: '#888' }} /> Einstellungen</Link>
-                        {canAdmin && <Link href="/admin" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><ShieldCheck size={16} style={{ color: '#888' }} /> Admin Dashboard</Link>}
+                        <Link href="/hive" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Trophy size={16} style={{ color: '#8A8580' }} /> Mein Hive</Link>
+                        <Link href="/settings" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><Settings size={16} style={{ color: '#8A8580' }} /> Einstellungen</Link>
+                        {canAdmin && <Link href="/admin" onClick={() => setOpenMenu(null)} className="hdr-menu-item" style={menuItemStyle}><ShieldCheck size={16} style={{ color: '#8A8580' }} /> Admin Dashboard</Link>}
                       </div>
-                      <div style={{ padding: '6px 0', borderTop: '1px solid #f0ede8' }}>
-                        <button onClick={handleLogout} className="hdr-menu-item" style={{ ...menuItemStyle, color: '#999' }}><LogOut size={16} /> Abmelden</button>
+                      <div style={{ padding: '6px 0', borderTop: '1px solid #F2EEE7' }}>
+                        <button onClick={handleLogout} className="hdr-menu-item" style={{ ...menuItemStyle, color: '#8A8580' }}><LogOut size={16} /> Abmelden</button>
                       </div>
                     </div>
                   )}
@@ -355,7 +355,7 @@ export function Header() {
               </button>
             )}
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ width: 40, height: 40, borderRadius: 12, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555' }}>
+              style={{ width: 40, height: 40, borderRadius: 12, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B655F' }}>
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -374,16 +374,16 @@ export function Header() {
 
       {/* ── Mobile Menu ── */}
       {mobileOpen && (
-        <div className="hdr-mobile-only" style={{ borderTop: '1px solid #e8e5e0', background: '#fff', flexDirection: 'column', maxHeight: 'calc(100vh / var(--bd-zoom, 1) - 64px)', overflowY: 'auto' }}>
+        <div className="hdr-mobile-only" style={{ borderTop: '1px solid #E4E0D8', background: '#fff', flexDirection: 'column', maxHeight: 'calc(100vh / var(--bd-zoom, 1) - 64px)', overflowY: 'auto' }}>
           {user && (
-            <div style={{ padding: '20px 24px', background: '#FAFAF8', borderBottom: '1px solid #f0ede8' }}>
+            <div style={{ padding: '20px 24px', background: '#F4F4F2', borderBottom: '1px solid #F2EEE7' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ width: 44, height: 44, borderRadius: '50%', background: YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: DARK, flexShrink: 0 }}>
                   {getInitials()}
                 </div>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: 15, color: DARK, margin: 0 }}>{displayName}</p>
-                  <p style={{ fontSize: 12, color: '#888', margin: '2px 0 0' }}>{user.email}</p>
+                  <p style={{ fontSize: 12, color: '#8A8580', margin: '2px 0 0' }}>{user.email}</p>
                 </div>
               </div>
             </div>
@@ -397,12 +397,12 @@ export function Header() {
             ].map(link => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
                 style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 12 }}>
-                <link.icon size={18} style={{ color: '#999' }} />
+                <link.icon size={18} style={{ color: '#8A8580' }} />
                 {link.label}
               </Link>
             ))}
           </div>
-          <div style={{ height: 1, background: '#f0ede8', margin: '4px 24px' }} />
+          <div style={{ height: 1, background: '#F2EEE7', margin: '4px 24px' }} />
           {user && (
             <div style={{ padding: '4px 12px' }}>
               {[
@@ -420,7 +420,7 @@ export function Header() {
               ].map(link => (
                 <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', fontSize: 15, fontWeight: 600, color: '#333', textDecoration: 'none', borderRadius: 12 }}>
-                  <link.icon size={18} style={{ color: '#999' }} />
+                  <link.icon size={18} style={{ color: '#8A8580' }} />
                   {link.label}
                 </Link>
               ))}
@@ -429,12 +429,12 @@ export function Header() {
           <div style={{ padding: '12px 24px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {user ? (
               <button onClick={() => { handleLogout(); setMobileOpen(false); }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #e8e5e0', color: '#999', fontWeight: 600, fontSize: 14, borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: 'transparent', border: '1.5px solid #E4E0D8', color: '#8A8580', fontWeight: 600, fontSize: 14, borderRadius: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
                 <LogOut size={16} /> Abmelden
               </button>
             ) : (
               <Link href="/login" onClick={() => setMobileOpen(false)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #e8e5e0', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 12, textDecoration: 'none' }}>
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', background: '#fff', border: '1.5px solid #E4E0D8', color: DARK, fontWeight: 600, fontSize: 14, borderRadius: 12, textDecoration: 'none' }}>
                 <User size={16} /> Anmelden
               </Link>
             )}
@@ -445,7 +445,7 @@ export function Header() {
 
       {/* ── Zeile 2: Suche ueber die volle Breite (nur Desktop) ── */}
       <div className="hdr-searchrow hdr-desktop">
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 32px 10px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4px 24px 10px', width: '100%', boxSizing: 'border-box' }}>
             {/* Klar-Look Suchleiste: runde Chip-Pille, Honey-Knopf innen */}
             <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'stretch', background: '#fff', border: `2px solid ${kiModus ? KI_FARBE : YELLOW}`, borderRadius: 999, overflow: 'hidden', height: 48, transition: 'border-color .15s' }}>
@@ -479,8 +479,8 @@ export function Header() {
 
               {/* Autocomplete */}
               {showSuggestions && suggestions.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #e8e5e0', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 6, overflow: 'hidden' }}>
-                  <div style={{ padding: '6px 14px', fontSize: 11, fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '.04em' }}>Kategorien</div>
+                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 999, background: '#fff', border: '1px solid #E4E0D8', borderRadius: 12, boxShadow: '0 6px 20px rgba(0,0,0,.08)', marginTop: 6, overflow: 'hidden' }}>
+                  <div style={{ padding: '6px 14px', fontSize: 11, fontWeight: 600, color: '#8A8580', textTransform: 'uppercase', letterSpacing: '.04em' }}>Kategorien</div>
                   {suggestions.map(cat => (
                     <button key={cat.id}
                       onMouseDown={(e) => { e.preventDefault(); router.push(`/search?category=${cat.slug}`); setShowSuggestions(false); setSearchQuery('') }}
@@ -488,9 +488,9 @@ export function Header() {
                       onMouseEnter={e => e.currentTarget.style.background = '#FDF8E8'}
                       onMouseLeave={e => e.currentTarget.style.background = 'none'}
                     >
-                      <Search size={14} style={{ color: '#999' }} />
+                      <Search size={14} style={{ color: '#8A8580' }} />
                       <span>{cat.name}</span>
-                      {cat.parent_id && <span style={{ fontSize: 12, color: '#999', marginLeft: 'auto' }}>in Kategorie</span>}
+                      {cat.parent_id && <span style={{ fontSize: 12, color: '#8A8580', marginLeft: 'auto' }}>in Kategorie</span>}
                     </button>
                   ))}
                 </div>

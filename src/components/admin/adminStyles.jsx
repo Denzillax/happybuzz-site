@@ -4,11 +4,11 @@ import { ArrowUp, ArrowDown } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 import { fmtDate, fmtCHF } from "@/lib/formatters";
 
-export const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#999", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
+export const th = { padding: "11px 14px", fontSize: 9.5, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em", textAlign: "left", fontFamily: fonts.body };
 export const td = { padding: "12px 14px", fontSize: 12.5, fontFamily: fonts.body };
 export const pill = (bg, color, label) => <span style={{ padding: "2px 9px", borderRadius: 12, fontSize: 10, fontWeight: 700, background: bg, color }}>{label}</span>;
-export const bcFieldLabel = { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#999", marginBottom: 4 };
-export const bcInput = { width: "100%", boxSizing: "border-box", border: "1px solid #E2E2E2", borderRadius: 12, padding: "9px 12px", fontSize: 13, fontFamily: fonts.body, color: "#191615", outline: "none" };
+export const bcFieldLabel = { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#8A8580", marginBottom: 4 };
+export const bcInput = { width: "100%", boxSizing: "border-box", border: "1px solid #E4E0D8", borderRadius: 12, padding: "9px 12px", fontSize: 13, fontFamily: fonts.body, color: "#191615", outline: "none" };
 export const chartCard = { border: `1px solid ${colors.border}`, borderRadius: 12, padding: 14, background: "#fff" };
 export const chartHead = { display: "flex", justifyContent: "space-between", alignItems: "baseline" };
 export const chartLabel = { fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted };

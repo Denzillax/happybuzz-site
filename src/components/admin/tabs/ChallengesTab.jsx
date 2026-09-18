@@ -159,12 +159,12 @@ export function ChallengesTab({ admin }) {
                   {c.is_template ? <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><Repeat size={11} /> wöchentlich</span> : `${fmtD(c.starts_at)} bis ${fmtD(c.ends_at)}`}
                 </td>
                 <td style={{ ...td, textAlign: "right" }}>{c.is_template ? "" : c.participants}</td>
-                <td style={{ ...td, textAlign: "center" }}>{c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#f5f5f5", "#666", "Aus")}</td>
+                <td style={{ ...td, textAlign: "center" }}>{c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F4F4F2", "#6B655F", "Aus")}</td>
                 <td style={{ ...td, textAlign: "center" }}>
                   <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                     {c.is_template && (
                       <button onClick={() => startEdit(c)} title="Vorlage bearbeiten (gilt ab nächster Woche)"
-                        style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+                        style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0B5E5C", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
                         Bearbeiten
                       </button>
                     )}
@@ -193,7 +193,7 @@ export function ChallengesTab({ admin }) {
                   <p style={{ margin: 0, fontSize: 13.5, fontWeight: 700 }}>{c.title} {c.featured && pill("#FFF5D8", "#5c4708", "Startseite")}</p>
                   {c.description && <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{c.description}</p>}
                 </div>
-                {c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#f5f5f5", "#666", "Aus")}
+                {c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F4F4F2", "#6B655F", "Aus")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6, flexWrap: "wrap", fontSize: 12, color: colors.muted }}>
                 <span>{aLabel(c.target_action)}{c.category_id ? ` · ${catName(c.category_id)}` : ""}</span>
@@ -204,7 +204,7 @@ export function ChallengesTab({ admin }) {
               </div>
               <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
                 {c.is_template && (
-                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0A7170", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
+                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0B5E5C", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
                 )}
                 <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                   <Power size={10} /> {c.active ? "Aus" : "An"}

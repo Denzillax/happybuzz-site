@@ -885,7 +885,7 @@ export default function BetaTestPage() {
                           padding: "10px 16px", cursor: "pointer",
                           display: "flex", alignItems: "center", gap: 10,
                         }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#fafaf8"}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                         >
                           <SI size={18} color={color} style={{ flexShrink: 0 }} />
@@ -909,7 +909,7 @@ export default function BetaTestPage() {
 
         <button onClick={submitAll} disabled={tested === 0} style={{
           width: "100%", padding: "16px", borderRadius: 12, border: "none", marginTop: 20,
-          background: tested > 0 ? colors.yellow : "#ddd", color: colors.dark,
+          background: tested > 0 ? colors.yellow : "#E4E0D8", color: colors.dark,
           fontSize: 15, fontWeight: 800, cursor: tested > 0 ? "pointer" : "default",
           fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>

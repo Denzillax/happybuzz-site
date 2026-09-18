@@ -36,7 +36,7 @@ export function UserProfile({ admin }) {
   const viol = u.contact_violations || 0;
   const hasUnpaid = (userInvoices[u.id] || []).some(i => i.status !== "paid");
   const risk = (u.is_banned || viol >= 3 || openFees > 0)
-    ? { c: "#EB5E55", l: "Hoch", why: u.is_banned ? "Konto gesperrt" : openFees > 0 ? "offene Gebühren" : "≥3 Verstösse" }
+    ? { c: "#C62828", l: "Hoch", why: u.is_banned ? "Konto gesperrt" : openFees > 0 ? "offene Gebühren" : "≥3 Verstösse" }
     : (viol >= 1 || hasUnpaid)
     ? { c: "#E5A100", l: "Mittel", why: viol >= 1 ? `${viol} Verstoss/Verstösse` : "unbezahlte Rechnung" }
     : { c: colors.green, l: "Niedrig", why: "keine Auffälligkeiten" };
@@ -53,13 +53,13 @@ export function UserProfile({ admin }) {
       {/* Kopf */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, flexWrap: "wrap" }}>
         <button onClick={closeProfile} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: colors.cream, border: "none", borderRadius: 999, padding: "8px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}><ArrowLeft size={15} /> Zurück</button>
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EDEDEA" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#999" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EEEBE5" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#8A8580" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head }}>{u.display_name || "—"} <span style={{ fontSize: 13, fontWeight: 400, color: colors.muted }}>@{u.username || "—"}</span></div>
           <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
-            {u.is_banned ? pill("#EB5E55", "#fff", "Gesperrt") : pill("#E8F5E9", "#2E7D32", "Aktiv")}
+            {u.is_banned ? pill("#C62828", "#fff", "Gesperrt") : pill("#E8F5E9", "#2E7D32", "Aktiv")}
             {u.beta_access ? pill("#FBF1D2", "#C8860A", "Beta-Zugang") : null}
-            {u.id_verified ? pill("#E6F5F5", "#0A7170", "ID verifiziert") : u.id_document_url ? pill("#FFF8E1", "#E65100", "ID ausstehend") : null}
+            {u.id_verified ? pill("#E6F5F5", "#0B5E5C", "ID verifiziert") : u.id_document_url ? pill("#FFF8E1", "#E65100", "ID ausstehend") : null}
             {pill(colors.cream, colors.dark, u.account_type === "business" ? "Unternehmen" : "Privat")}
           </div>
         </div>
@@ -68,7 +68,7 @@ export function UserProfile({ admin }) {
           style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.beta_access ? "#E5C868" : "#C8860A55"}`, color: "#C8860A" }}>
           {u.beta_access ? "Beta-Zugang entziehen" : "Beta-Zugang erteilen"}
         </button>
-        <button onClick={() => toggleBan(u)} style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.is_banned ? "#aed8b0" : "#e6a6a6"}`, color: u.is_banned ? "#2E7D32" : "#c0392b" }}>{u.is_banned ? "Entsperren" : "Konto sperren"}</button>
+        <button onClick={() => toggleBan(u)} style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.is_banned ? "#aed8b0" : "#e6a6a6"}`, color: u.is_banned ? "#2E7D32" : "#C62828" }}>{u.is_banned ? "Entsperren" : "Konto sperren"}</button>
       </div>
 
       {/* ID-Prüfung (falls Dokument + nicht verifiziert) */}
@@ -194,7 +194,7 @@ export function UserProfile({ admin }) {
               const isInvOpen = openInvoice === inv.id;
               const invFees = uFee.filter(f => f.fee_invoice_id === inv.id);
               return (
-                <div key={inv.id} style={{ marginBottom: 6, borderRadius: 12, border: `1px solid ${rl >= 2 ? "#FFCDD2" : colors.borderLt}`, overflow: "hidden", background: rl >= 3 ? "#FFF5F5" : "transparent" }}>
+                <div key={inv.id} style={{ marginBottom: 6, borderRadius: 12, border: `1px solid ${rl >= 2 ? "#FFCDD2" : colors.borderLt}`, overflow: "hidden", background: rl >= 3 ? "#FFEBEE" : "transparent" }}>
                   <div onClick={() => setOpenInvoice(isInvOpen ? null : inv.id)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", cursor: "pointer" }}>
                     <span style={{ fontSize: 12, fontWeight: 700, flex: 1 }}>{inv.invoice_ref}</span>
                     {pill(s.bg, s.color, s.label)}

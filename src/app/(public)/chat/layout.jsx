@@ -83,7 +83,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
                 </span>
               )}
               {grau && (
-                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E8E5E0", color: "#6b655e" }}>
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E4E0D8", color: "#6B655F" }}>
                   {c.listingStatus === "sold" ? "Verkauft" : "Nicht mehr aktiv"}
                 </span>
               )}

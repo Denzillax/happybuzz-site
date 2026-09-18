@@ -17,13 +17,13 @@ export const LISTING_TYPE_LABELS = Object.fromEntries(LISTING_TYPES.map(t => [t.
 // ─── Listing Status ──────────────────────────────────────────
 // DB ENUM listing_status: draft, active, paused, sold, rented, expired, deleted
 export const LISTING_STATUSES = [
-  { value: "draft",   label: "Entwurf",   color: "#8A8279" },
+  { value: "draft",   label: "Entwurf",   color: "#8A8580" },
   { value: "active",  label: "Aktiv",     color: "#5B8C5A" },
   { value: "paused",  label: "Pausiert",  color: "#E5A100" },
   { value: "sold",    label: "Verkauft",  color: "#94B9C9" },
   { value: "rented",  label: "Vermietet", color: "#94B9C9" },
-  { value: "expired", label: "Abgelaufen",color: "#D94444" },
-  { value: "deleted", label: "Gelöscht",  color: "#D94444" },
+  { value: "expired", label: "Abgelaufen",color: "#C62828" },
+  { value: "deleted", label: "Gelöscht",  color: "#C62828" },
 ];
 export const STATUS_LABELS = Object.fromEntries(LISTING_STATUSES.map(s => [s.value, s.label]));
 

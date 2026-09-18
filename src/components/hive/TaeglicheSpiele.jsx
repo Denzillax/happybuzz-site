@@ -9,7 +9,7 @@ import WabenSpiel from "./WabenSpiel";
 import Pollenpfad from "./Pollenpfad";
 import Bluetenpaar from "./Bluetenpaar";
 
-const K = { ink: "#14110D", hairline: "#E4E0D8", chip: "#F2EEE7" };
+const K = { ink: "#191615", hairline: "#E4E0D8", chip: "#F2EEE7" };
 const SPIELE = [
   { key: "waben", name: "Wabenspiel", Icon: Hexagon, Komp: WabenSpiel },
   { key: "pfad", name: "Pollenpfad", Icon: Footprints, Komp: Pollenpfad },
@@ -21,10 +21,10 @@ const SPIELE = [
 function PokerTeaser() {
   return (
     <div>
-      <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.5, color: "#14110D" }}>
+      <p style={{ margin: "0 0 12px", fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
         Texas Hold'em gegen andere Bienen, mit Pollen als Chips. Zeitversetzt: wer am Zug ist, hat 12 Stunden und bekommt eine Meldung. Buy-in 20, 50 oder 100 Pollen, 2 bis 6 Plätze.
       </p>
-      <Link href="/poker" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 999, background: "#F4C03F", color: "#14110D", fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none" }}>
+      <Link href="/poker" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 18px", borderRadius: 999, background: "#F4C03F", color: "#191615", fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none" }}>
         <Spade size={14} /> Zu den Tischen <ArrowRight size={14} />
       </Link>
     </div>

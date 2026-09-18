@@ -8,7 +8,7 @@ import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 const DISPLAY = "'General Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
 const HONEY = '#F4C03F'
-const BAND = '#F6F4EF'
+const BAND = '#F4F4F2'
 const BETA_BG = '#FBF0D2'
 
 export function Hero() {

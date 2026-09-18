@@ -7,7 +7,7 @@ import { colors, fonts } from "@/lib/theme";
 import { getAllCategories } from "@/lib/listings";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#14110D";
+const INK = "#191615";
 const SAND = "#F4F4F2";
 const PETROL = "#0B5E5C";
 const MONO = "'Manrope', sans-serif";

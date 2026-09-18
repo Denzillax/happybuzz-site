@@ -159,7 +159,7 @@ export default function NotificationBell() {
           // 38er Kreis, Grau, Icon 20, Hover-Kreis aus globals.css
           width: 38, height: 38, borderRadius: "50%", border: "none", background: "transparent",
           cursor: "pointer", position: "relative", padding: 0, display: "flex",
-          alignItems: "center", justifyContent: "center", color: "#666", transition: "all 0.15s",
+          alignItems: "center", justifyContent: "center", color: "#6B655F", transition: "all 0.15s",
         }}
       >
         <Bell size={20} />

@@ -44,7 +44,7 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
       style={{
         display: "block", textAlign: "left", padding: "20px 20px 18px",
         cursor: klickbar ? "pointer" : "default",
-        background: gruen ? "#EEF4EC" : zustand === "abgesagt" ? "#F3EFE8" : "#fff",
+        background: gruen ? "#EEF4EC" : zustand === "abgesagt" ? "#F2EEE7" : "#fff",
         opacity: zustand === "gesperrt" ? 0.55 : 1,
         border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 12,
         boxShadow: zustand === "frei" ? "0 2px 8px rgba(25,22,21,.15)" : "none",
@@ -101,11 +101,11 @@ export default function BewerbenPage() {
     setBusy(null);
   };
 
-  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#9A9490" }}>Lade…</div>;
+  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#8A8580" }}>Lade…</div>;
 
   return (
     <div style={{ background: K.paper, minHeight: "100vh" }}>
-      <div style={{ maxWidth: 740, margin: "0 auto", padding: "44px 24px 80px" }}>
+      <div className="bd-seite-schmal">
         <p style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".14em", textTransform: "uppercase", color: K.petrol, margin: "0 0 10px" }}>
           Beta-Crew · Bewerbung
         </p>

@@ -6,9 +6,9 @@ import { getShowcaseSellers } from '@/lib/gamification'
 import { AccountBadge } from '@/components/shared/AccountBadge'
 import { SectionHeader } from './SectionHeader'
 
-const MUTED = '#9A9490'
+const MUTED = '#8A8580'
 const YELLOW = '#F4C03F'
-const INK = '#14110D'
+const INK = '#191615'
 const SAND = '#F4F4F2'
 const PETROL = '#0B5E5C'
 

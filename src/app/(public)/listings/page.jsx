@@ -10,7 +10,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 
 const STATUS_CONFIG = {
@@ -251,7 +251,7 @@ export default function ListingsPage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 20px 80px" }}>
+      <div className="bd-seite-breit">
 
         {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}
         {losBetrag > 0 && (
@@ -811,5 +811,5 @@ export default function ListingsPage() {
 function daily0Note(statsData) {
   const total = (statsData.daily || []).reduce((s, d) => s + (d.count || 0), 0);
   if (total > 0) return null;
-  return <p style={{ fontSize: 11, color: "#9A9490", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
+  return <p style={{ fontSize: 11, color: "#8A8580", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
 }

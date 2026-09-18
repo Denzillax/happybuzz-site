@@ -121,7 +121,7 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#9A9490" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#8A8580" }}>
       Lade…
     </div>
   );
@@ -129,7 +129,7 @@ function NewListingPageInner() {
   return (
     <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
       {/* Seitenkopf */}
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 16px 0" }}>
+      <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
         <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
           Inserat erstellen
         </h1>
@@ -160,7 +160,7 @@ function NewListingPageInner() {
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #0E949333", fontSize: 13, color: "#0A7170", fontFamily: "'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #0E949333", fontSize: 13, color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

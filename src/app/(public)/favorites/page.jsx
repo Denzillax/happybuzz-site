@@ -114,25 +114,25 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="bd-seite-breit">
       {/* Header */}
       <div className="mb-6">
         <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkt</div>
-        <h1 className="bd-seitentitel font-bold text-[#14110D] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
+        <h1 className="bd-seitentitel font-bold text-[#191615] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
           <Heart size={26} className="text-honey" fill="#F4C03F" />
           Meine Favoriten
         </h1>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-0 border-b-2 border-[#14110D] mb-6">
-        <button onClick={() => { setTab('listings'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'listings' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+      <div className="flex gap-0 border-b-2 border-[#191615] mb-6">
+        <button onClick={() => { setTab('listings'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'listings' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Inserate ({favorites.length})
         </button>
-        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Verkäufer ({sellers.length})
         </button>
-        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#14110D] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
           Suchen ({searches.length})
         </button>
       </div>
@@ -146,7 +146,7 @@ export default function FavoritesPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={tab === 'listings' ? 'Favoriten durchsuchen...' : 'Verkäufer suchen...'}
-            className="w-full pl-10 pr-4 py-3 rounded-none border border-[#14110D] bg-white text-sm focus:outline-none focus:border-[#0B5E5C] transition-colors"
+            className="w-full pl-10 pr-4 py-3 rounded-none border border-[#191615] bg-white text-sm focus:outline-none focus:border-[#0B5E5C] transition-colors"
           />
         </div>
       )}
@@ -167,7 +167,7 @@ export default function FavoritesPage() {
                 <div className={activeFavs.length > 0 ? 'mt-10' : ''}>
                   <button
                     onClick={() => setShowInactive(v => !v)}
-                    className="w-full flex items-center gap-2 border-t-2 border-[#14110D] pt-3 pb-1 font-sans text-[11px] font-bold uppercase tracking-[.15em] text-[#14110D] cursor-pointer bg-transparent"
+                    className="w-full flex items-center gap-2 border-t-2 border-[#191615] pt-3 pb-1 font-sans text-[11px] font-bold uppercase tracking-[.15em] text-[#191615] cursor-pointer bg-transparent"
                   >
                     Nicht mehr verfügbar ({inactiveFavs.length})
                     <ChevronDown size={14} className={`transition-transform ${showInactive ? 'rotate-180' : ''}`} />
@@ -185,7 +185,7 @@ export default function FavoritesPage() {
             </>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#14110D] bg-honey/20 mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#191615] bg-honey/20 mb-6">
                 <Heart size={36} className="text-honey" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Favoriten'}</h2>
@@ -208,9 +208,9 @@ export default function FavoritesPage() {
           {filteredSellers.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredSellers.map(s => (
-                <div key={s.seller_id} className="bg-white rounded-none border border-[#14110D] p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+                <div key={s.seller_id} className="bg-white rounded-none border border-[#191615] p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
                   <Link href={`/user/${s.seller_id}`} className="flex items-center gap-4 flex-1 min-w-0 no-underline">
-                    <div className="w-14 h-14 rounded-none border border-[#14110D] bg-honey/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-14 h-14 rounded-none border border-[#191615] bg-honey/30 flex items-center justify-center overflow-hidden flex-shrink-0">
                       {s.seller?.avatar_url
                         ? <img src={s.seller.avatar_url} alt="" className="w-full h-full object-cover" />
                         : <User size={24} className="text-honey" />
@@ -229,7 +229,7 @@ export default function FavoritesPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#14110D] bg-honey/20 mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#191615] bg-honey/20 mb-6">
                 <User size={36} className="text-honey" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Verkäufer gemerkt'}</h2>
@@ -245,17 +245,17 @@ export default function FavoritesPage() {
       {tab === 'searches' && (
         <>
           {searches.length > 0 ? (
-            <div className="flex flex-col gap-0 border border-[#14110D] bg-white">
+            <div className="flex flex-col gap-0 border border-[#191615] bg-white">
               {searches.map((s, i) => {
                 const label = s.query || s.category?.name || 'Suche'
                 const href = s.query
                   ? `/search?q=${encodeURIComponent(s.query)}${s.category?.slug ? `&category=${s.category.slug}` : ''}`
                   : `/search?category=${s.category?.slug || ''}`
                 return (
-                  <div key={s.id} className={`flex items-center gap-3 px-4 py-3 ${i < searches.length - 1 ? 'border-b border-[#14110D]/15' : ''}`}>
+                  <div key={s.id} className={`flex items-center gap-3 px-4 py-3 ${i < searches.length - 1 ? 'border-b border-[#191615]/15' : ''}`}>
                     <Search size={16} className="text-[#0B5E5C] shrink-0" />
                     <Link href={href} className="flex-1 min-w-0 no-underline">
-                      <div className="text-sm font-semibold text-[#14110D] truncate">{label}</div>
+                      <div className="text-sm font-semibold text-[#191615] truncate">{label}</div>
                       <div className="text-xs text-text/50">
                         {s.query && s.category?.name ? `in ${s.category.name}` : s.query ? 'Alle Kategorien' : 'Ganze Kategorie'}
                         {' · Wir melden dir neue Treffer'}
@@ -272,7 +272,7 @@ export default function FavoritesPage() {
           ) : (
             <div className="text-center py-16">
               <Search size={40} className="mx-auto mb-4 text-text/20" />
-              <h3 className="text-lg font-bold text-[#14110D] mb-2">Keine gespeicherten Suchen</h3>
+              <h3 className="text-lg font-bold text-[#191615] mb-2">Keine gespeicherten Suchen</h3>
               <p className="text-text/50 mb-8 max-w-md mx-auto">
                 Speichere eine Suche auf der Suchseite ("Suche speichern"), dann melden wir dir neue Treffer per Glocke, Mail oder Push.
               </p>

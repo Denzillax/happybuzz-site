@@ -27,7 +27,7 @@ function OrderDetail({ o, det, deposit, setOrderDeposit, orderStatusPill, cancel
           </div>
         )}
         <a href={invoiceHref} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, fontWeight: 600, color: "#fff", background: colors.teal, borderRadius: 999, padding: "6px 13px", textDecoration: "none" }}>Volle Rechnung öffnen</a>
-        {o.status !== "cancelled" && <button onClick={(e) => { e.stopPropagation(); if (confirm(`${refText} stornieren?`)) cancelOrder(o.id, o.listing_id); }} style={{ fontSize: 11, fontWeight: 600, color: "#c0392b", background: "#fff", border: "1px solid #e6a6a6", borderRadius: 999, padding: "6px 13px", cursor: "pointer" }}>Stornieren</button>}
+        {o.status !== "cancelled" && <button onClick={(e) => { e.stopPropagation(); if (confirm(`${refText} stornieren?`)) cancelOrder(o.id, o.listing_id); }} style={{ fontSize: 11, fontWeight: 600, color: "#C62828", background: "#fff", border: "1px solid #e6a6a6", borderRadius: 999, padding: "6px 13px", cursor: "pointer" }}>Stornieren</button>}
       </div>
     </>
   );
@@ -82,7 +82,7 @@ export function OrdersTab({ admin }) {
               return [
                 <tr key={o.id} onClick={() => toggleOrder(o.id)} className="adm-row"
                   style={{ borderBottom: `1px solid ${colors.borderLt}`, cursor: "pointer", background: isOpen ? "#F3FAFA" : undefined, opacity: o.status === "cancelled" ? 0.65 : 1 }}>
-                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0A7170" : colors.muted, whiteSpace: "nowrap" }}>{ref}</td>
+                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0B5E5C" : colors.muted, whiteSpace: "nowrap" }}>{ref}</td>
                   <td style={{ ...td, fontWeight: 600, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.listingTitle}</td>
                   <td style={{ ...td, color: colors.muted, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.buyerName} → {o.sellerName}</td>
                   <td style={{ ...td, color: colors.muted, whiteSpace: "nowrap" }}>{o.created_at ? fmtDate(o.created_at) : "…"}</td>

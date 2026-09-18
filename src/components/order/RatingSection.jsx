@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import { createNotification } from "@/lib/notifications";
 
-const K = { ink: "#14110D", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
+const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
 
 // Beta-Feedback xmelbel 30.08.: Kaeufer und Verkaeufer bekamen dieselbe
 // Standard-Maske - "Schneller Versand" ergibt fuer einen Kaeufer keinen Sinn.
@@ -112,7 +112,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           </div>
           <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: "1px solid #E4E0D8", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E4E0D8", background: rating ? K.honey : "#ddd", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(25,22,21,.15)" : "none" }}>Bewertung abgeben</button>
+            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E4E0D8", background: rating ? K.honey : "#E4E0D8", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(25,22,21,.15)" : "none" }}>Bewertung abgeben</button>
             <button onClick={() => setShowModal(false)} style={{ padding: "14px 20px", borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           </div>
         </div>

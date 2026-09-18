@@ -12,7 +12,7 @@ import SwissQRImage from "@/components/shared/SwissQRImage";
 import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
-const g = "#888";
+const g = "#8A8580";
 export default function InvoicePage() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -101,11 +101,11 @@ export default function InvoicePage() {
   const payerLabel = isDeposit ? "Zahlungspflichtiger (Vermieter)" : "Käufer";
 
   return (
-    <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#1a1a1a" }}>
+    <div style={{ fontFamily: f, background: "#fff", minHeight: "100vh", color: "#191615" }}>
       {/* Druckknopf ohne grauen Balken (Denis, 16.09.): rechtsbuendig in der
           Rechnungsbreite, als Pille im Klar-Look; im Druck ausgeblendet */}
       <div className="no-print" style={{ maxWidth: 660, margin: "0 auto", padding: "18px 36px 0", display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={() => window.print()} className="cta-pill" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#1a1a1a", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+        <button onClick={() => window.print()} className="cta-pill" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#191615", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
@@ -116,21 +116,21 @@ export default function InvoicePage() {
           <div style={{ textAlign: "right", fontSize: 10, color: g, fontFamily: f, lineHeight: 1.6 }}>Gemeindehausstrasse 11B<br/>6010 Kriens, Schweiz</div>
         </div>
         {/* Titel */}
-        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: isDeposit ? "#5B8C5A" : "#1a1a1a" }}>{pageTitle}</h1>
-        <p style={{ margin: "0 0 16px", fontSize: 11, color: g, fontFamily: f }}>Ref: <strong style={{ color: "#1a1a1a" }}>{ref}</strong> · {orderDate}</p>
+        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: isDeposit ? "#5B8C5A" : "#191615" }}>{pageTitle}</h1>
+        <p style={{ margin: "0 0 16px", fontSize: 11, color: g, fontFamily: f }}>Ref: <strong style={{ color: "#191615" }}>{ref}</strong> · {orderDate}</p>
         {/* Adressen */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
           {[{ l: payerLabel, d: addr(payer) }, { l: payeeLabel, d: addr(payee) }].map(a => (
             <div key={a.l}>
               <p style={lbl}>{a.l}</p>
-              {a.d.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#1a1a1a" : "#666", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
+              {a.d.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#191615" : "#6B655F", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
             </div>
           ))}
         </div>
         {/* Positionen */}
         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 14, fontFamily: f }}>
           <thead>
-            <tr style={{ borderBottom: "2px solid #1a1a1a" }}>
+            <tr style={{ borderBottom: "2px solid #191615" }}>
               <th style={{ ...cp, textAlign: "left", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>Position</th>
               <th style={{ ...cp, textAlign: "right", fontSize: 9, fontWeight: 700, color: g, textTransform: "uppercase" }}>CHF</th>
             </tr>
@@ -138,7 +138,7 @@ export default function InvoicePage() {
           <tbody>
             {isDeposit ? (
               <>
-                <tr style={{ borderBottom: "1px solid #eee" }}>
+                <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
                   <td style={{ ...cp, fontSize: 12 }}>
                     Kaution
                     <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{order.listing?.title || "Artikel"} · {artRef}</span>
@@ -147,7 +147,7 @@ export default function InvoicePage() {
                   <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(depositAmount)}</td>
                 </tr>
                 {damageAmount > 0 && (
-                  <tr style={{ borderBottom: "1px solid #eee" }}>
+                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
                     <td style={{ ...cp, fontSize: 12, color: "#c62828" }}>Schadensabzug</td>
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#c62828", fontWeight: 600 }}>- {fmt(damageAmount)}</td>
                   </tr>
@@ -157,7 +157,7 @@ export default function InvoicePage() {
               <>
                 {invoiceItems.length > 0 ? (
                   invoiceItems.map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #EEEBE5" }}>
                       <td style={{ ...cp, fontSize: 12 }}>
                         {item.label}
                         {item.description && <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{item.description}</span>}
@@ -167,7 +167,7 @@ export default function InvoicePage() {
                     </tr>
                   ))
                 ) : (
-                  <tr style={{ borderBottom: "1px solid #eee" }}>
+                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
                     <td style={{ ...cp, fontSize: 12 }}>
                       {isRental ? `Miete: ${order.listing?.title || "Artikel"}` : (order.listing?.title || "Artikel")}
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
@@ -188,30 +188,30 @@ export default function InvoicePage() {
                 {/* Lieferzeile immer zeigen (Beta-Feedback Denis 15.09.: "steht nicht
                     Lieferung?"): Abholung bzw. Versandart, auch wenn CHF 0.00 */}
                 {!isDeposit && (
-                  <tr style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>
+                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
+                    <td style={{ ...cp, fontSize: 12, color: "#6B655F" }}>
                       {order.listing?.pickup_only ? "Lieferung: Abholung" : versandArt}
                       {!order.listing?.pickup_only && shipping === 0 && (
                         <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Versand inklusive</span>
                       )}
                     </td>
-                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#666" }}>{fmt(shipping)}</td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#6B655F" }}>{fmt(shipping)}</td>
                   </tr>
                 )}
                 {isRental && depositAmount > 0 && (
-                  <tr style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#666" }}>
+                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
+                    <td style={{ ...cp, fontSize: 12, color: "#6B655F" }}>
                       Kaution
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Wird nach der Rückgabe zurückerstattet</span>
                     </td>
-                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#666" }}>{fmt(depositAmount)}</td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#6B655F" }}>{fmt(depositAmount)}</td>
                   </tr>
                 )}
               </>
             )}
           </tbody>
           <tfoot>
-            <tr style={{ borderTop: "2px solid #1a1a1a" }}>
+            <tr style={{ borderTop: "2px solid #191615" }}>
               <td style={{ ...cp, fontSize: 14, fontWeight: 800 }}>{isDeposit ? "Rückerstattung" : "Gesamtpreis"}</td>
               <td style={{ ...cp, fontSize: 16, fontWeight: 800, textAlign: "right" }}>CHF {fmt(total)}</td>
             </tr>
@@ -219,7 +219,7 @@ export default function InvoicePage() {
         </table>
         {/* Gebühren-Info (nur bei regulärer Rechnung) */}
         {!isDeposit && (
-          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#f8f8f8", borderRadius: 0, fontSize: 10, color: "#666", fontFamily: f, lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#F4F4F2", borderRadius: 0, fontSize: 10, color: "#6B655F", fontFamily: f, lineHeight: 1.5 }}>
             Plattformgebühr ({feePercent}%): CHF {fmt(fee)} (Verkäufer) · Ref: {feeRef}. Davon CHF {fmt(beeImpact)} Bee-Impact für Schweizer Naturschutz.
           </p>
         )}
@@ -231,7 +231,7 @@ export default function InvoicePage() {
           </p>
         )}
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#ddd"}`, borderRadius: 0, marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#E4E0D8"}`, borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
@@ -248,12 +248,12 @@ export default function InvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #eee" }} />
+            <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #EEEBE5" }} />
             <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
           </div>
         </div>
         {/* Zahlungsfrist */}
-        <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 600, color: "#1a1a1a", fontFamily: f, textAlign: "center" }}>
+        <p style={{ margin: "0 0 16px", fontSize: 11, fontWeight: 600, color: "#191615", fontFamily: f, textAlign: "center" }}>
           {isDeposit ? "Bitte innert 5 Tagen zurückerstatten" : `Zahlbar innert 30 Tagen · Fällig am ${dueDateStr}`}
         </p>
         {/* Footer */}
