@@ -336,7 +336,8 @@ input:focus, textarea:focus, select:focus {
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
-.listing-form select:focus { border-color:#0E9493 !important; box-shadow:0 0 0 3px rgba(14,148,147,.13) !important; }
+/* Kein Schein nach aussen (Denis 18.09.): beim Fokus nur der Rand in Teal */
+.listing-form select:focus { border-color:#0E9493 !important; box-shadow:none !important; }
 .lf-section { animation: fadeIn .3s ease-out both; }
 .lf-actionbar { backdrop-filter: saturate(1.1) blur(8px); }
 @media (max-width: 768px) { .nektar-badge .nektar-level-name { display: none !important; } }
