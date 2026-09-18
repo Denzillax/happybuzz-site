@@ -811,7 +811,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   .bid-name-line { flex-wrap: nowrap !important; min-width: 0; flex: 0 1 auto; }
   .bid-name { font-size: 13px !important; }
   .bid-time { margin-top: 0 !important; font-size: 11px !important; white-space: nowrap; flex-shrink: 0; }
-  .bid-lead-label { display: none; }
+  .bid-lead-label { display: none !important; }
   .bid-amount { font-size: 13.5px !important; }
   .bid-auto-lang { display: none; }
   .bid-auto-kurz { display: inline; }
@@ -819,8 +819,8 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 
 /* ═══════════════════════════════════════════
    HOVER: GRAU GEFUELLT, SYMBOL IN AKZENTFARBE (Denis 18.09.2026)
-   Weisse Knoepfe mit Rand werden beim Hovern hellgrau, nur das Symbol wechselt auf
-   Teal. Die Schrift bleibt, so stimmt der Kontrast immer. Header-Knoepfe regelt
+   Weisse Knoepfe mit Rand werden beim Hovern hellgrau, Symbol UND Schrift wechseln auf
+   Teal (Kontrast 3.6 auf dem Grau, fuer Knopftext in 13px fett ausreichend). Header-Knoepfe regelt
    Header.tsx gleich und haelt den Zustand, solange ihr Menue offen ist
    (aria-expanded) bzw. man auf der Seite ist (aria-current).
    Erkannt wird ueber den Inline-Style: SSR schreibt "background:#fff", im Browser
@@ -836,6 +836,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   a[href].cta-pill[style*="background:#fff"]:hover,
   .nektar-badge > button:hover {
     background: #F4F4F2 !important;
+    color: #0E9493 !important;
     filter: none !important;
   }
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,

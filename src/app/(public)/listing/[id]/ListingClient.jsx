@@ -1207,7 +1207,7 @@ export default function ListingDetail() {
                     const bild = (b, offen) => {
                       const name = (b.bidder?.display_name || "").trim();
                       const kurz = (name.slice(0, 2) || "?");
-                      const basis = { width: 40, height: 40, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
+                      const basis = { width: 36, height: 36, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
                       if (offen && b.bidder?.avatar_url) return <span className="bid-avatar" style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
                       if (offen) return <span className="bid-avatar" style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
                       return <span className="bid-avatar" style={{ ...basis, background: "#F2EEE7", color: colors.muted }}>{kurz}</span>;
@@ -1225,7 +1225,7 @@ export default function ListingDetail() {
                         const fuehrt = isTopBidder && i === 0;
                         return (
                         <div key={b.id || i} className="bid-row" style={{
-                          display: "flex", alignItems: "center", gap: 12,
+                          display: "flex", alignItems: "center", gap: 10,
                           padding: "10px 12px", borderRadius: fuehrt ? 12 : 0,
                           background: fuehrt ? "#E6F5F5" : "transparent",
                           borderBottom: fuehrt ? "none" : `1px solid ${colors.borderLt}`,
@@ -1233,7 +1233,7 @@ export default function ListingDetail() {
                         }}>
                           {bild(b, isTopBidder || isMine)}
                           <div className="bid-text" style={{ flex: 1, minWidth: 0 }}>
-                            <div className="bid-name-line" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                            <div className="bid-name-line" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "nowrap", minWidth: 0 }}>
                               <span className="bid-name" style={{ fontSize: 14, fontWeight: (isMine || isTopBidder) ? 700 : 500, color: fuehrt ? colors.tealDark : (isMine ? colors.teal : colors.dark), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {bidderLabel(b, isTopBidder || isMine)}{isMine && " (du)"}
                               </span>
@@ -1241,11 +1241,16 @@ export default function ListingDetail() {
                                 <span style={{ fontSize: 10.5, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 7px", borderRadius: 999 }}><span className="bid-auto-lang">automatisch</span><span className="bid-auto-kurz">auto</span></span>
                               )}
                             </div>
-                            <div className="bid-time" style={{ fontSize: 12, color: fuehrt ? colors.tealDark : colors.muted, marginTop: 1 }}>
-                              {fuehrt && <span className="bid-lead-label">Höchstbietend · </span>}{zeitLabel(b.created_at)}
+                            {/* Nur die Zeit, einzeilig: "Höchstbietend · gestern, 09:06" brach im schmalen
+                                Textblock um und machte die Zeile dreizeilig. Das Label steht jetzt rechts über dem Betrag. */}
+                            <div className="bid-time" style={{ fontSize: 12, color: fuehrt ? colors.tealDark : colors.muted, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {zeitLabel(b.created_at)}
                             </div>
                           </div>
-                          <span className="bid-amount" style={{ fontSize: fuehrt ? 16 : 14.5, fontWeight: 700, color: fuehrt ? colors.tealDark : colors.muted, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(b.amount)}</span>
+                          <span style={{ textAlign: "right", flexShrink: 0 }}>
+                            {fuehrt && <span className="bid-lead-label" style={{ display: "block", fontSize: 10.5, fontWeight: 700, color: colors.tealDark, letterSpacing: ".02em", lineHeight: 1.2 }}>Höchstbietend</span>}
+                            <span className="bid-amount" style={{ fontSize: fuehrt ? 16 : 14.5, fontWeight: 700, color: fuehrt ? colors.tealDark : colors.muted, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(b.amount)}</span>
+                          </span>
                         </div>
                         );
                       })}

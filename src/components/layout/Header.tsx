@@ -191,12 +191,12 @@ export function Header() {
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
         .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #E4E0D8; }
-        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F4F4F2 !important; filter: none !important; }
+        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F4F4F2 !important; color: #0E9493 !important; filter: none !important; }
         .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #F4F4F2 !important; color: #191615 !important; filter: none !important; }
+        .hdr-menu-item:hover { background: #F4F4F2 !important; color: #0E9493 !important; filter: none !important; }
         .hdr-menu-item:hover svg { stroke: #0E9493 !important; color: #0E9493 !important; }
-        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F4F4F2 !important; filter: none !important; }
+        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F4F4F2 !important; color: #0E9493 !important; filter: none !important; }
         .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
