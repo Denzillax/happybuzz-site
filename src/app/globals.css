@@ -596,7 +596,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 }
 .cat-scroll-btn.right { right: 0; } .cat-scroll-btn.left { left: 0; }
 @media (min-width: 900px) { .cat-scroll-btn { display: inline-flex; } }
-.cat-pill:hover { background: #F4C03F !important; }
+.cat-pill:hover { background: #FFF5D8 !important; filter: none !important; }
 @media (max-width: 640px) {
   /* Hero-Collage mobil: verkleinert und zentriert unter dem Text.
      scale() aendert die Layout-Box nicht, darum negative Raender. */

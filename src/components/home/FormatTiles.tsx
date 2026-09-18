@@ -21,7 +21,7 @@ export function FormatTiles() {
     <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .fmt-tile { transition: background .15s ease; }
-        .fmt-tile:hover { background: #F4C03F !important; }
+        .fmt-tile:hover { background: #FFF5D8 !important; filter: none !important; }
         .fmt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         /* Mobile: wischbare Zeile, gleiches Muster wie Kategorien-Pills.
            Keine Kind-Selektoren in Inline-Styles (Hydration-Error). */
