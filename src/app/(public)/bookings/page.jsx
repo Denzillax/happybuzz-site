@@ -95,7 +95,7 @@ export default function BookingsPage() {
         {/* Preis + Status (Desktop rechts, Handy als eigene Zeile) */}
         <div className="bk-side">
           <p style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>CHF {fmtPrice(b.total_price)}</p>
-          {b.days > 0 && <p className="bk-side-sub" style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{b.days} Tage</p>}
+          {b.days > 0 && <p className="bk-side-sub" style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{b.days} {b.days === 1 ? "Tag" : "Tage"}</p>}
           {b.bee_impact > 0 && <p className="bk-side-sub" style={{ margin: "2px 0 0", fontSize: 11, color: colors.green, fontWeight: 600 }}>Impact CHF {fmtPrice(b.bee_impact)}</p>}
           <div className="bk-status" style={{ display: "flex", alignItems: "center", gap: 4, color: st.color, fontSize: 12, fontWeight: 600, marginTop: 4, justifyContent: "flex-end" }}>
             <StIcon size={14} /> {st.label}

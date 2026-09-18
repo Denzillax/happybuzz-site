@@ -253,11 +253,11 @@ export default function ChatConversation() {
 
       {!dealActive && (myViolations >= 2 ? (
         <div style={{ background: colors.redSoft, borderBottom: `1px solid #F3C0C0`, padding: "8px 16px", fontSize: 12, fontWeight: 700, color: colors.red, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
-          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Wiederholtes Teilen von Kontaktdaten verstösst gegen die AGB und kann zur Kontosperre führen.
+          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Kontakt- oder Zahlungsdaten vor dem Kauf auszutauschen verstösst gegen die AGB und kann zur Kontosperre führen.
         </div>
       ) : (
         <div style={{ background: "#E6F5F5", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
-          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln = Käuferschutz und Bewertung. Kontaktdaten erscheinen erst nach Abschluss.
+          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln = Käuferschutz und Bewertung. Kontakt- und Zahlungsdaten (IBAN, Telefon, Mail) erscheinen erst nach Abschluss.
         </div>
       ))}
 

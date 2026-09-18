@@ -23,6 +23,13 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "18. September 2026",
+    punkte: [
+      { typ: "fix", bereich: "Chat", text: "Der Kontaktfilter im Chat erkannte nur konkrete Daten (Nummer, Mail, Link, Messenger). Die Frage nach IBAN, Kontonummer, PayPal, Vorkasse oder nach Telefonnummer und Mailadresse vor dem Kauf ging durch. Jetzt wird auch das ausgeblendet und gezählt, ebenso ausgeschriebene IBAN-Nummern. TWINT, Bank und bar bleiben erlaubt, das sind Zahlarten der Plattform", melder: "Denis" },
+      { typ: "fix", bereich: "Miete", text: "Buchungen zeigten immer '1 Tage', egal wie lang der Zeitraum war (18. bis 21. September). Die Tage wurden beim Anlegen nie gespeichert. Jetzt rechnet die Datenbank sie selbst, bestehende Buchungen sind nachgezogen, und bei einem Tag steht 'Tag' statt 'Tage'", melder: "Denis" },
+    ],
+  },
+  {
     datum: "16. September 2026",
     punkte: [
       { typ: "neu", bereich: "Inserate", text: "Automatische Freigabe: Neue Inserate prüft eine KI (Text und Bilder). Unauffällige gehen sofort live, meist unter einer Minute. Nur Verbotenes, Betrugsmuster, Fälschungen oder auffällige Inserate neuer Konten warten auf die persönliche Prüfung. Abgelehnt wird nie automatisch", melder: "Denis" },
