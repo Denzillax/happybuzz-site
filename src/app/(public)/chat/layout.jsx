@@ -227,7 +227,7 @@ export default function ChatLayout({ children }) {
     return { titel: "Keine Nachrichten", sub: "Schreib einem Verkäufer über ein Inserat." };
   };
 
-  // Handy (Denis 18.09.): Der Chat sitzt fest zwischen Header und unterer Navigation,
+  // Handy und Desktop (Denis 18./19.09.): Der Chat sitzt fest zwischen Header und unterer Navigation,
   // die Seite selbst scrollt nicht. Der Header ist seit dem 15.09. zweizeilig, die
   // alte feste Rechnung (100dvh - 64px - 56px) war darum zu hoch und die Seite liess
   // sich nach unten ziehen. Gemessen wird in Bildschirm-Pixeln und durch den body-Zoom
@@ -240,7 +240,8 @@ export default function ChatLayout({ children }) {
     const messen = () => {
       const el = backdropRef.current;
       if (!el) return;
-      if (!mq.matches) { root.classList.remove("bd-chat-lock"); el.style.removeProperty("--chat-top"); el.style.removeProperty("--chat-bottom"); return; }
+      // Auch am Desktop (Denis 19.09.): Header ist zweizeilig und der body gezoomt, die feste
+      // Rechnung 100dvh - 64px liess die Eingabezeile unter den Bildschirmrand rutschen.
       root.classList.add("bd-chat-lock");
       if (window.scrollY) window.scrollTo(0, 0);
       const z = parseFloat(getComputedStyle(document.body).zoom) || 1;
@@ -273,8 +274,8 @@ export default function ChatLayout({ children }) {
   }, []);
 
   return (
-    <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#ECEEF1", padding: 16, display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
-      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1360, height: "100%", overflow: "hidden", borderRadius: 12, border: `1px solid ${colors.borderLt}`, boxShadow: "0 6px 24px rgba(0,0,0,.07)" }}>
+    <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#fff", padding: "16px 24px", display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
+      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1232, height: "100%", overflow: "hidden", borderRadius: 12, border: `1px solid ${colors.border}` }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
       <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 320, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>

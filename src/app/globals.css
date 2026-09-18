@@ -370,12 +370,18 @@ input:focus, textarea:focus, select:focus {
 .bd-link { text-decoration: none; }
 .bd-link:hover { text-decoration: underline; }
 /* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
+/* Der Chat sitzt auf jeder Breite fest zwischen Header und unterem Rand, die Seite selbst
+   scrollt nicht (Werte misst chat/layout.jsx). So ist die Eingabezeile immer sichtbar. */
+.chat-backdrop { position: fixed; left: 0; right: 0; top: var(--chat-top, 120px); bottom: var(--chat-bottom, 0px); height: auto !important; z-index: 40; }
+html.bd-chat-lock, html.bd-chat-lock body { overflow: hidden !important; overscroll-behavior: none; }
+/* Im Chat lägen die schwebenden Knöpfe über der Eingabezeile: Inserieren gibt es im Header */
+html.bd-chat-lock .fab-btn { display: none !important; }
+html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 .chat-thread-back { display: none !important; }
 @media (max-width: 1100px) { .chat-info { display: none !important; } }
 @media (max-width: 860px) {
   /* Fest zwischen Header und unterer Navigation, Werte misst chat/layout.jsx */
-  .chat-backdrop { padding: 0 !important; position: fixed; left: 0; right: 0; top: var(--chat-top, 64px); bottom: var(--chat-bottom, 56px); height: auto !important; z-index: 40; }
-  html.bd-chat-lock, html.bd-chat-lock body { overflow: hidden !important; overscroll-behavior: none; }
+  .chat-backdrop { padding: 0 !important; bottom: var(--chat-bottom, 56px) !important; }
   .chat-shell { border-radius: 0 !important; box-shadow: none !important; border: none !important; max-width: none !important; }
   .chat-sidebar { width: 100% !important; border-right: none !important; }
   .chat-sidebar.is-hidden-mobile { display: none !important; }
