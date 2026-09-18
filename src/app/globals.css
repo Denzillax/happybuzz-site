@@ -776,3 +776,8 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   .bd-fx-plus { display: none; }
   html.bd-fx-on .bd-fx-reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* Gebotsfenster: keine sichtbare Scroll-Leiste (Denis 18.09.). Auf sehr kleinen
+   Bildschirmen bleibt das Fenster scrollbar, nur ohne Leiste. */
+.bid-modal { scrollbar-width: none; }
+.bid-modal::-webkit-scrollbar { display: none; }

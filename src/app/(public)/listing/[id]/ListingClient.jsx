@@ -10,7 +10,7 @@ import Portal from "@/components/shared/Portal";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
   Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
-  AlertCircle as AlertCircleBid,
+  AlertCircle as AlertCircleBid, Info as InfoBid,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -189,6 +189,7 @@ export default function ListingDetail() {
   const [bidding, setBidding] = useState(false);
   const [bidError, setBidError] = useState("");
   const [bidModal, setBidModal] = useState(null); // null | "bid" | "buynow"
+  const [bidInfo, setBidInfo] = useState(false); // Erklaerungen im Gebotsfenster, per Info-Symbol aufklappbar
   const [bidShipping, setBidShipping] = useState("shipping");
   const [bookStart, setBookStart] = useState("");
   const [bookEnd, setBookEnd] = useState("");
@@ -1248,7 +1249,7 @@ export default function ListingDetail() {
               {/* ── KAUFEN / SOFORTKAUF MODAL (für Festpreis + Auktion) ── */}
               {bidModal && (
                 <Portal>
-                    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setBidModal(null)}>
+                    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => { setBidModal(null); setBidInfo(false); }}>
                       <div onClick={e => e.stopPropagation()} className="bid-modal" style={{ background: "#fff", borderRadius: 12, width: "100%", maxWidth: 440, maxHeight: "min(88vh, 700px)", overflow: "auto", fontFamily: fonts.body }}>
                         {/* Modal Header */}
                         <div style={{ padding: "14px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -1261,7 +1262,7 @@ export default function ListingDetail() {
                               }
                             </p>
                           </div>
-                          <button onClick={() => setBidModal(null)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}><X size={20} /></button>
+                          <button onClick={() => { setBidModal(null); setBidInfo(false); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}><X size={20} /></button>
                         </div>
 
                         <div style={{ padding: "16px 20px" }}>
@@ -1279,13 +1280,24 @@ export default function ListingDetail() {
 
                               {/* Your Max Bid */}
                               <div style={{ marginBottom: 12 }}>
-                                <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark, display: "block", marginBottom: 6 }}>Dein Gebot</label>
-                                <p style={{ fontSize: 11, color: colors.muted, margin: "0 0 8px" }}>
-                                  {myBid
-                                    ? `Aktuelles Preislimit: CHF ${Number(myBid.max_amount).toFixed(2)}. Erhöhen jederzeit, senken bis auf dein aktuelles Gebot von CHF ${Number(myBid.amount).toFixed(2)}.`
-                                    : "Gib dein Preislimit ein. Das System bietet automatisch nur so viel wie nötig."
-                                  }
-                                </p>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                                  <label style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>Dein Gebot</label>
+                                  {myBid && <span style={{ fontSize: 11.5, color: colors.muted }}>Preislimit bisher CHF {fmtPrice(myBid.max_amount)}</span>}
+                                  <button type="button" onClick={() => setBidInfo(v => !v)} aria-expanded={bidInfo} aria-label="So funktioniert das Bieten"
+                                    style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 9px", border: `1px solid ${colors.border}`, background: bidInfo ? colors.cream : "#fff", color: colors.muted, fontSize: 11.5, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                                    <InfoBid size={13} /> So funktioniert es
+                                  </button>
+                                </div>
+                                {bidInfo && (
+                                  <ul style={{ margin: "0 0 8px", padding: "8px 12px 8px 26px", background: colors.cream, borderRadius: 12, fontSize: 11.5, lineHeight: 1.45, color: colors.dark }}>
+                                    <li>Du gibst dein Preislimit ein. Das System bietet automatisch für dich, immer nur so viel wie nötig.</li>
+                                    <li>Du zahlst nur so viel wie nötig: {bids.length === 0 ? "Als erster Bieter steht die Auktion auf dem Startpreis, " : ""}dein Maximum greift erst, wenn jemand mitbietet.</li>
+                                    {myBid && <li>Dein Preislimit kannst du jederzeit erhöhen, senken nur bis auf dein aktuelles Gebot von CHF {fmtPrice(myBid.amount)}.</li>}
+                                    <li>Ein Gebot in den letzten 3 Minuten verlängert die Auktion automatisch um 3 Minuten.</li>
+                                    {l.buy_now_price > 0 && <li>Höchstens CHF {fmtPrice(l.buy_now_price - 1)}: ab dem Sofortkauf-Preis wird direkt gekauft.</li>}
+                                    <li>Gewinnst du die Auktion, verpflichtest du dich, den Gesamtbetrag zu zahlen.</li>
+                                  </ul>
+                                )}
                                 {/* Plus/Minus-Knoepfe: die nativen Spinner des Zahlenfelds gibt es
                                     auf dem Handy nicht — eigene Stepper schrittweise um den Gebotsschritt */}
                                 {(() => {
@@ -1320,8 +1332,6 @@ export default function ListingDetail() {
                                     </div>
                                   );
                                 })()}
-                                {l.buy_now_price > 0 && <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Max: CHF {fmtPrice(l.buy_now_price - 1)} (ab Sofortkauf-Preis wird direkt gekauft)</p>}
-                                <p style={{ fontSize: 11, color: colors.muted, marginTop: 4 }}>Gebot in den letzten 3 Minuten verlängert die Auktion automatisch um 3 Minuten.</p>
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
                                   <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 12, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
@@ -1424,18 +1434,15 @@ export default function ListingDetail() {
                                   <span>{bidModal === "bid" ? "Max. Total" : "Total"}</span>
                                   <span>CHF {fmtPrice(total)}</span>
                                 </div>
-                                {bidModal === "bid" && (
-                                  <p style={{ fontSize: 11, color: colors.muted, marginTop: 6 }}>Du zahlst nur so viel wie nötig: {bids.length === 0 ? "Als erster Bieter steht die Auktion auf dem Startpreis, " : ""}dein Maximum greift erst, wenn jemand mitbietet.</p>
-                                )}
                               </div>
                             );
                           })()}
 
                           {/* AGB Text */}
-                          <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.5, marginBottom: 12 }}>
+                          <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.4, margin: "0 0 8px" }}>
                             {bidModal === "bid"
-                              ? <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a>. Das System bietet automatisch für dich bis zu deinem Maximum. Du verpflichtest dich, den Gesamtbetrag zu zahlen, wenn du die Auktion gewinnst.</>
-                              : <>Wenn du auf «Bestätigen» klickst, akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB von BEEDARO</a> und verpflichtest dich, den Gesamtbetrag zu zahlen.</>
+                              ? <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB</a>. Dein Gebot ist verbindlich.</>
+                              : <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB</a>. Der Kauf ist verbindlich.</>
                             }
                           </p>
 
@@ -1443,7 +1450,7 @@ export default function ListingDetail() {
 
                           {/* Buttons: bleiben unten stehen, waehrend die Mitte scrollt */}
                           <div className="bid-modal-actions" style={{ display: "flex", gap: 10, position: "sticky", bottom: 0, background: "#fff", padding: "10px 0 14px", marginBottom: -16, borderTop: `1px solid ${colors.borderLt}` }}>
-                            <button onClick={() => setBidModal(null)} style={{ flex: 1, padding: "14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                            <button onClick={() => { setBidModal(null); setBidInfo(false); }} style={{ flex: 1, padding: "14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                             <button onClick={async () => {
                               setBidding(true); setBidError("");
                               try {
