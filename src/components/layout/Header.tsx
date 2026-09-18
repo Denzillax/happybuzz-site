@@ -191,10 +191,13 @@ export function Header() {
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
         .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
-        .hdr-menu-btn:hover { background: #F4C03F !important; color: #14110D !important; filter: none !important; }
+        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded="true"] { background: #F4F4F2 !important; filter: none !important; }
+        .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded="true"] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #FFF6DB !important; color: #14110D !important; filter: none !important; }
-        .hdr-icon-btn:hover { background: #F4C03F !important; color: #14110D !important; filter: none !important; }
+        .hdr-menu-item:hover { background: #F4F4F2 !important; color: #14110D !important; filter: none !important; }
+        .hdr-menu-item:hover svg { stroke: #0E9493 !important; color: #0E9493 !important; }
+        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded="true"], .hdr-icon-btn[aria-current="page"] { background: #F4F4F2 !important; filter: none !important; }
+        .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded="true"] svg, .hdr-icon-btn[aria-current="page"] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }
@@ -226,7 +229,7 @@ export function Header() {
           <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 4 }}>
 
             {/* Kategorien (Mega-Menue) */}
-            <button className="hdr-menu-btn" onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
+            <button className="hdr-menu-btn" aria-expanded={megaMenuOpen} onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
               border: '1px solid #E4E0D8',
               borderRadius: 999, background: megaMenuOpen ? '#F4F4F2' : '#fff',
@@ -292,7 +295,7 @@ export function Header() {
 
               {/* Glocke + Chat: bleiben Symbole, die Zaehler brauchen den Platz */}
               {user ? <NotificationBell /> : <button className="hdr-icon-btn" style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s' }} onClick={() => router.push('/login')}><Bell size={20} /></button>}
-              <button className="hdr-icon-btn" onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
+              <button className="hdr-icon-btn" aria-current={pathname?.startsWith('/chat') ? 'page' : undefined} onClick={() => { if (!user) { router.push('/login'); return; } router.push('/chat') }} style={{ width: 38, height: 38, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', transition: 'all 0.15s', position: 'relative' }}>
                 <MessageCircle size={20} />
                 {unreadCount > 0 && (
                   <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 16, height: 16, borderRadius: 12, background: '#c62828', color: '#fff', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', border: '2px solid #fff' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>
@@ -307,6 +310,7 @@ export function Header() {
                   <button
                     onClick={() => setOpenMenu(openMenu === 'profil' ? null : 'profil')}
                     className="hdr-menu-btn"
+                    aria-expanded={openMenu === 'profil'}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: openMenu === 'profil' ? '#F4F4F2' : 'transparent', color: INK, fontWeight: 600, fontSize: 13.5, padding: '4px 10px 4px 4px', borderRadius: 999, border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
                   >
                     <span style={{ width: 32, height: 32, borderRadius: '50%', background: YELLOW, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12.5, fontWeight: 800, color: DARK }}>{getInitials()}</span>

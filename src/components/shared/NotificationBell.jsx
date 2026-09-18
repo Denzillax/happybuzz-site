@@ -153,6 +153,7 @@ export default function NotificationBell() {
         }}
         className="hdr-icon-btn"
         aria-label="Benachrichtigungen"
+        aria-expanded={open}
         style={{
           // Gleicher Look wie das Nachrichten-Symbol im Header (Denis 17.09.):
           // 38er Kreis, Grau, Icon 20, Hover-Kreis aus globals.css

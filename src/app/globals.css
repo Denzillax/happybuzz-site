@@ -818,14 +818,16 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 }
 
 /* ═══════════════════════════════════════════
-   HOVER IN AKZENTFARBE (Denis 18.09.2026)
-   Weisse Knoepfe mit Rand (Sekundaerknoepfe, Chips, Filter) werden beim Hovern
-   honiggelb, wie es die Kategorie-Pillen schon tun. Der Header regelt seine Knoepfe
-   in Header.tsx gleich. Erkannt wird ueber den Inline-Style: SSR schreibt
-   "background:#fff", im Browser gerenderte Knoepfe "background: rgb(255, 255, 255)".
-   Ausnahmen: linksbuendige Zeilen (Menues, Listen), .eckig, .type-tab und alles
-   mit der Klasse .kein-akzent. Nur mit echter Maus, am Handy bliebe der Hover kleben.
+   HOVER: GRAU GEFUELLT, SYMBOL IN AKZENTFARBE (Denis 18.09.2026)
+   Weisse Knoepfe mit Rand werden beim Hovern hellgrau, nur das Symbol wechselt auf
+   Teal. Die Schrift bleibt, so stimmt der Kontrast immer. Header-Knoepfe regelt
+   Header.tsx gleich und haelt den Zustand, solange ihr Menue offen ist
+   (aria-expanded) bzw. man auf der Seite ist (aria-current).
+   Erkannt wird ueber den Inline-Style: SSR schreibt "background:#fff", im Browser
+   gerenderte Knoepfe "background: rgb(255, 255, 255)". Ausnahmen: linksbuendige
+   Zeilen, .eckig, .type-tab, .kein-akzent. Nur mit echter Maus.
    ═══════════════════════════════════════════ */
+.nektar-badge > button[aria-expanded="true"] { background: #F4F4F2 !important; }
 @media (hover: hover) and (pointer: fine) {
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
   button[style*="background:#FFF"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
@@ -833,25 +835,14 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
   a[href].cta-pill[style*="background:#fff"]:hover,
   .nektar-badge > button:hover {
-    background: #F4C03F !important;
-    border-color: #F4C03F !important;
-    color: #14110D !important;
+    background: #F4F4F2 !important;
     filter: none !important;
   }
-  /* Kontrast auf Honig (Denis 18.09.): Kinder mit eigener Farbe (Level-Name, Nektar-Zahl,
-     graue Zusatztexte, Icons) werden beim Hovern ebenfalls dunkel. Lucide-Icons faerben
-     ueber stroke, das BeeIcon ueber fill. Der Trennstrich im Nektar-Knopf wird dunkler. */
-  .nektar-badge > button:hover span, .nektar-badge > button:hover b,
-  .hdr-menu-btn:hover span, .hdr-icon-btn:hover span:not([style*="background"]),
-  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):hover span:not([style*="background"]),
-  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align: left"]):hover span:not([style*="background"]) {
-    color: #14110D !important;
+  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
+  button[style*="background:#FFF"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
+  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
+  button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
+  a[href].cta-pill[style*="background:#fff"]:hover svg {
+    stroke: #0E9493 !important; color: #0E9493 !important;
   }
-  .nektar-badge > button:hover svg, .hdr-menu-btn:hover svg, .hdr-icon-btn:hover svg,
-  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):hover svg,
-  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align: left"]):hover svg {
-    stroke: #14110D !important; color: #14110D !important;
-  }
-  .nektar-badge > button:hover svg[fill]:not([fill="none"]) { fill: #14110D !important; stroke: none !important; }
-  .nektar-badge > button:hover .nektar-level-name[style*="width"] { background: rgba(20,17,13,.35) !important; }
 }

@@ -54,7 +54,7 @@ export default function NektarBadge() {
 
   return (
     <div ref={ref} className="nektar-badge" style={{ position: "relative" }}>
-      <button onClick={() => setOpen((o) => !o)} style={{
+      <button aria-expanded={open} onClick={() => setOpen((o) => !o)} style={{
         display: "flex", alignItems: "center", gap: 8, padding: "7px 12px", borderRadius: 12,
         border: "1px solid #E4E0D8", background: "#fff", cursor: "pointer", fontFamily: "'Manrope', sans-serif",
       }}>
