@@ -1,15 +1,27 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Coins, Timer, Truck } from 'lucide-react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/supabase'
 import { CategoryIcon } from '@/components/shared/CategoryIcon'
 import { fonts } from '@/lib/theme'
+import { FEE_FREE_BELOW } from '@/lib/constants'
 
 const BODY = fonts.body
 const INK = '#191615'
 const CHIP = '#F2EEE7'
 const HONEY = '#F4C03F'
+
+// Schnelleinstiege nach Preis und Anlass (19.09.2026, Anregung marko.ch). Sie stehen IN
+// der Kategorie-Reihe, nicht als eigene Reihe: eine zweite, kurze Reihe liess die rechte
+// Hälfte leer und wirkte verwaist. Ein feiner Trennstrich trennt sie von den Kategorien.
+// Die Suche liest max / sort / delivery aus der URL.
+const SCHNELL = [
+  { label: `Unter CHF ${FEE_FREE_BELOW}`, href: `/search?max=${FEE_FREE_BELOW}`, icon: Coins },
+  { label: 'Unter CHF 50', href: '/search?max=50', icon: Coins },
+  { label: 'Endet bald', href: '/search?type=auction&sort=endet_bald', icon: Timer },
+  { label: 'Mit Versand', href: '/search?delivery=shipping', icon: Truck },
+]
 
 // Klar-Look: eine wischbare Pill-Zeile mit ALLEN Hauptkategorien.
 // Kuratierte Reihenfolge vorne, Rest nach sort_order hinten dran.
@@ -68,11 +80,27 @@ export function Categories() {
 
 
   return (
-    <section style={{ padding: '10px 24px 6px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '14px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <div className={'cat-pills-wrap' + (more ? ' has-more' : '') + (less ? ' has-less' : '')}>
       {less && <button type="button" className="cat-scroll-btn left" aria-label="Kategorien zurück" onClick={() => schieben(-1)}><ChevronLeft size={16} /></button>}
       {more && <button type="button" className="cat-scroll-btn right" aria-label="Weitere Kategorien" onClick={() => schieben(1)}><ChevronRight size={16} /></button>}
       <div className="cat-pills" ref={rowRef}>
+        {SCHNELL.map((c) => {
+          const Icon = c.icon
+          return (
+            <Link key={c.href} href={c.href} className="cat-pill" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+              background: '#fff', color: INK, textDecoration: 'none', border: '1px solid #E4E0D8',
+              fontFamily: BODY, fontSize: 13, fontWeight: 600,
+              padding: '7px 13px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0,
+              transition: 'background .15s ease',
+            }}>
+              <Icon size={15} />
+              {c.label}
+            </Link>
+          )
+        })}
+        <span aria-hidden="true" style={{ width: 1, alignSelf: 'stretch', margin: '6px 4px', background: '#E4E0D8', flexShrink: 0 }} />
         {shown.map((cat) => (
           <Link key={cat.id} href={`/search?category=${cat.slug}`} className="cat-pill" style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,

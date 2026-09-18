@@ -44,7 +44,7 @@ export function NewListings() {
   if (!listings.length) return null
 
   return (
-    <section style={{ padding: '44px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '40px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Neu eingestellt" href="/search?sort=newest" raster />
 
       <SwipeRow className="listing-grid home-swipe">
