@@ -1,5 +1,7 @@
 'use client'
+import { useRef } from 'react'
 import Link from 'next/link'
+import { useInView } from '@/components/shared/effects'
 import { Tag, Gavel, CalendarClock, Gift, Wrench } from 'lucide-react'
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
@@ -17,6 +19,10 @@ const FORMATE = [
 ]
 
 export function FormatTiles() {
+  // Icons bewegen sich einmal, wenn die Reihe ins Bild kommt (gestaffelt), und beim Hovern
+  // der Kachel erneut. Die Bewegungen stehen in globals.css unter FORMAT-ICONS.
+  const gridRef = useRef<HTMLDivElement>(null)
+  const imBild = useInView(gridRef)
   return (
     <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
@@ -34,8 +40,8 @@ export function FormatTiles() {
       <h2 className="bd-abschnittstitel" style={{ fontFamily: HEAD, fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em', color: INK, margin: '0 0 14px' }}>
         Fünf Formate, ein Marktplatz
       </h2>
-      <div className="fmt-grid">
-        {FORMATE.map((f) => {
+      <div ref={gridRef} className={"fmt-grid" + (imBild ? " is-in" : "")}>
+        {FORMATE.map((f, i) => {
           const Icon = f.icon
           return (
             <Link key={f.type} href={`/search?type=${f.type}`} className={`fmt-tile fmt-tile-${f.type}`} style={{
@@ -44,7 +50,9 @@ export function FormatTiles() {
               display: 'flex', alignItems: 'center', gap: 12,
             }}>
               <div style={{ width: 40, height: 40, flexShrink: 0, background: '#fff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Icon size={19} strokeWidth={1.9} />
+                <span className={`fmt-icon fmt-icon-${f.type}`} style={{ display: 'inline-flex', animationDelay: `${i * 140}ms` }}>
+                  <Icon size={19} strokeWidth={1.9} />
+                </span>
               </div>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontFamily: HEAD, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em' }}>{f.label}</div>
