@@ -59,7 +59,8 @@ plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architek
 ### Tonalität
 Modern, direkt, trockener Humor, Swiss-clean. NICHT süss/honig-lastig/öko-romantisch.
 Kurze starke Sätze, kein Werbedeutsch.
-- Gut: "Nicht neu. Nur interessanter." / "Dein Keller hat Inventar. Wir haben Käufer."
+- Gut: "Was du suchst, hat schon jemand." / "Dein Keller hat Inventar. Wir haben Käufer."
+- Nicht mehr verwenden: "Nicht neu. Nur interessanter." (Denis 19.09.2026: klingt komisch). Generell keine "Nicht X, sondern Y"-Sätze, keine Wirkungsversprechen ("Du rettest ein Ökosystem"), keine Ausrufezeichen in Systemtexten.
 - Schlecht: "Entdecke die Magie des nachhaltigen Handels! 🐝✨"
 
 ### Regeln

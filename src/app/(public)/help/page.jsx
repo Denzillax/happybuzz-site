@@ -46,7 +46,7 @@ const CATEGORIES = [
       { q: "Kann ich einen Preisvorschlag machen?", a: "Wenn der Verkäufer «Preis verhandelbar» aktiviert hat, kannst du einen Preisvorschlag zwischen 70% und 99% des Preises senden. Dieselbe Grenze gilt auch für Gegenvorschläge, maximal 3 Runden." },
       { q: "Kann ich jemanden blockieren?", a: "Ja. Öffne den Chat mit der Person und tippe oben auf das Sperr-Symbol. Blockierte können dir nicht mehr schreiben, keine Preisvorschläge machen, nicht auf deine Auktionen bieten und nichts von dir kaufen. Entsperren kannst du jederzeit unter Einstellungen → Blockierte Nutzer." },
       { q: "Was ist der Käuferschutz?", a: "Eine Geld-zurück-Garantie gibt es nicht, du bezahlst direkt an den Verkäufer. Dafür siehst du vor dem Kauf, ob das Konto verifiziert ist und wie andere es bewertet haben. Wickle alles über BEEDARO ab: dann ist der Ablauf festgehalten, falls etwas schiefgeht." },
-      { q: "Wie funktioniert die Abholung?", a: "Bei Abholung vereinbarst du mit dem Verkäufer einen Termin. Die Adresse wird dir nach dem Kauf angezeigt. Bezahlung erfolgt bar bei Übergabe." },
+      { q: "Wie funktioniert die Abholung?", a: "Bei Abholung vereinbarst du mit dem Verkäufer einen Termin. Die Adresse siehst du nach dem Kauf. Bezahlt wird bar bei der Übergabe." },
     ],
   },
   {
@@ -58,7 +58,7 @@ const CATEGORIES = [
     faqs: [
       { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Vor der Veröffentlichung läuft eine kurze automatische Prüfung." },
       { q: "Wer prüft mein Inserat und wie schnell ist es online?", a: "Eine automatische Prüfung schaut sich Text und Bilder an. Unauffällige Inserate gehen sofort online, meist in unter einer Minute. Verbotenes, Betrugsmuster, Fälschungen und auffällige Inserate neuer Konten gehen an uns zur Prüfung von Hand. Automatisch abgelehnt wird nie." },
-      { q: "Was kostet es, ein Inserat zu erstellen?", a: "Das Erstellen eines Inserats ist kostenlos. Erst bei einem erfolgreichen Verkauf fällt die Bee-Rate Gebühr an (3-10%, je nach gewählter Stufe)." },
+      { q: "Was kostet es, ein Inserat zu erstellen?", a: "Inserieren kostet nichts. Erst wenn du verkaufst, fällt die Bee-Rate an: 3 bis 10 Prozent, je nach gewählter Stufe. Verkäufe unter CHF 20 sind gebührenfrei." },
       { q: "Was ist die Bee-Rate?", a: "Die Bee-Rate ist deine selbst gewählte Gebühr (Fair 3%, Supporter 5%, Impact 7% oder Bee Hero 10%). Sie wird nur bei erfolgreichem Verkauf vom Erlös abgezogen. 20% davon fliessen als Bee-Impact in Schweizer Naturschutzprojekte." },
       { q: "Wie funktioniert der Versand?", a: "Beim Inserieren wählst du Paket, Brief, Sperrgut oder andere Versandarten. Die Versandkosten basieren auf den aktuellen Post-Tarifen. Du kannst maximal CHF 5 über den Post-Tarif aufschlagen." },
       { q: "Kann ich mein Inserat bearbeiten?", a: "Ja, unter «Meine Inserate» kannst du deine Inserate jederzeit bearbeiten, pausieren oder löschen, solange keine aktiven Gebote oder Buchungen bestehen." },
@@ -87,7 +87,7 @@ const CATEGORIES = [
     faqs: [
       { q: "Was ist der Bee-Impact?", a: "20 Prozent deiner Bee-Rate gehen an Schweizer Naturschutzprojekte. Das passiert bei jedem Verkauf automatisch, du musst nichts dafür tun." },
       { q: "Was ist das Bee-Level?", a: "Dein Bee-Level steigt mit deinen Pollen. Die sammelst du, wenn du inserierst, kaufst, verkaufst oder Challenges löst. Die Stufen heissen Entdecker, Sammler, Hive Builder, Queen Bee und Legende. Höhere Stufen bringen ein Abzeichen und eine bessere Platzierung." },
-      { q: "Wo sehe ich den Gesamtbeitrag?", a: "Auf der Startseite zeigt der Counter den Gesamtbeitrag der BEEDARO Community in Echtzeit." },
+      { q: "Wo sehe ich den Gesamtbeitrag?", a: "Auf der Startseite steht, wie viel bisher zusammengekommen ist." },
     ],
   },
   {
@@ -98,7 +98,7 @@ const CATEGORIES = [
     color: "#F4A100",
     faqs: [
       { q: "Wie bewerte ich einen Kauf?", a: "Nach Abschluss einer Bestellung (Empfang bestätigt) kannst du den Verkäufer mit 1-5 Sternen bewerten und einen Kommentar hinterlassen." },
-      { q: "Kann ich eine Bewertung ändern?", a: "Bewertungen können nach dem Absenden nicht mehr geändert werden. Kontaktiere den Support bei Problemen." },
+      { q: "Kann ich eine Bewertung ändern?", a: "Eine abgeschickte Bewertung lässt sich nicht mehr ändern. Wenn etwas daran falsch ist, schreib uns." },
       { q: "Warum sind Bewertungen wichtig?", a: "Wer bei dir kaufen will, schaut zuerst auf deine Bewertungen. Der Durchschnitt steht auf deinem Profil." },
     ],
   },
@@ -109,7 +109,7 @@ const CATEGORIES = [
     desc: "Bee-Rate, Rechnungen, IBAN & Auszahlung",
     color: "#94B9C9",
     faqs: [
-      { q: "Welche Gebühren fallen an?", a: "Inserieren ist kostenlos. Bei erfolgreichem Verkauf fällt die Bee-Rate an (3-10%, selbst gewählt). 20% davon gehen in den Bee-Impact." },
+      { q: "Welche Gebühren fallen an?", a: "Inserieren kostet nichts. Wenn du verkaufst, fällt die Bee-Rate an, 3 bis 10 Prozent nach deiner Wahl. 20 Prozent davon gehen an den Bienenschutz." },
       { q: "Wie erhalte ich meine Gebührenrechnung?", a: "Unter «Gebühren» findest du alle offenen und bezahlten Gebühren. Monatlich wird eine Sammelrechnung erstellt mit QR-Zahlschein." },
       { q: "Wo hinterlege ich meine IBAN?", a: "Unter Einstellungen → Zahlung. Deine IBAN wird Käufern nach einem bestätigten Kauf angezeigt, damit sie per Überweisung bezahlen können." },
       { q: "Was passiert bei unbezahlten Gebühren?", a: "Nach 30 Tagen erhältst du eine Erinnerung, nach 45 Tagen eine Mahnung. Nach 60 Tagen werden deine Inserate pausiert bis die Zahlung eingeht." },
@@ -135,7 +135,7 @@ const CATEGORIES = [
     desc: "Support, AGB, Datenschutz & Impressum",
     color: "#6B655F",
     faqs: [
-      { q: "Wie erreiche ich den Support?", a: "Schreibe uns an support@beedaro.ch. Wir antworten in der Regel innerhalb von 24 Stunden." },
+      { q: "Wie erreiche ich den Support?", a: "Schreib an support@beedaro.ch. Wir antworten meist innert 24 Stunden." },
       { q: "Wo finde ich die AGB?", a: "Unsere Allgemeinen Geschäftsbedingungen findest du unter /terms." },
       { q: "Wo finde ich die Datenschutzerklärung?", a: "Unsere Datenschutzerklärung findest du unter /privacy." },
       { q: "Wer betreibt BEEDARO?", a: "BEEDARO wird betrieben von Denis Mihaljevic, Gemeindehausstrasse 11B, 6010 Kriens, Schweiz. Mehr Infos unter /imprint." },
@@ -198,7 +198,7 @@ export default function HelpPage() {
             Wie können wir helfen?
           </h1>
           <p style={{ fontSize: 15, color: "rgba(20,17,13,0.6)", margin: "0 0 24px" }}>
-            Finde Antworten zu Konto, Kaufen, Verkaufen, Gebühren und mehr.
+            Antworten zu Konto, Kaufen, Verkaufen und Gebühren.
           </p>
 
           {/* Search */}
@@ -325,7 +325,7 @@ export default function HelpPage() {
           <Mail size={26} color={PETROL} style={{ marginBottom: 8 }} />
           <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>Nicht gefunden, was du suchst?</h3>
           <p style={{ fontSize: 13.5, color: "rgba(20,17,13,0.6)", margin: "0 0 18px" }}>
-            Unser Team hilft dir gerne weiter.
+            Schreib uns, wir antworten meist innert 24 Stunden.
           </p>
           <a href="mailto:support@beedaro.ch" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,

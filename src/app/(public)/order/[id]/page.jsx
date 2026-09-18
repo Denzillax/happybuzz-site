@@ -295,7 +295,7 @@ export default function OrderDetailPage() {
       case "purchased": return isRental
         ? (isBuyer ? "Du hast den Artikel gemietet." : "Dein Artikel wurde gemietet.")
         : (isBuyer ? "Der Artikel gehört dir." : "Verkauft. Der Käufer wartet auf deine nächsten Schritte.");
-      case "payment_marked": return isBuyer ? "Du hast als bezahlt markiert." : (isRental ? "Mieter hat als bezahlt markiert. Muss überprüft werden." : "Käufer hat den Kauf als bezahlt markiert. Muss überprüft werden.");
+      case "payment_marked": return isBuyer ? "Du hast als bezahlt markiert." : (isRental ? "Der Mieter hat die Zahlung markiert. Prüf, ob das Geld da ist." : "Der Käufer hat die Zahlung markiert. Prüf, ob das Geld da ist.");
       case "payment_confirmed": return isSeller ? "Du hast die Zahlung erhalten." : (isRental ? "Der Vermieter hat die Zahlung erhalten." : "Der Verkäufer hat die Zahlung erhalten.");
       case "payment_rejected": return isSeller ? "Du hast die Zahlung abgelehnt." : (isRental ? "Der Vermieter hat die Zahlung abgelehnt." : "Der Verkäufer hat die Zahlung abgelehnt.");
       case "shipped": return isSeller ? "Du hast den Artikel verschickt" : (isRental ? "Der Vermieter hat den Artikel verschickt." : "Der Verkäufer hat den Artikel verschickt.");
@@ -416,7 +416,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Kunde wartet */}
                 {isService && isBuyer && p.status === "confirmed" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#8A8580", margin: 0 }}>Der Anbieter fuehrt den Service durch und sendet dir anschliessend die Rechnung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#8A8580", margin: 0 }}>Der Anbieter erledigt den Auftrag und schickt dir danach die Rechnung.</p></div>
                 )}
                 {/* SERVICE: Rechnung erhalten — mit Positionen */}
                 {isService && isBuyer && p.status === "payment_pending" && (

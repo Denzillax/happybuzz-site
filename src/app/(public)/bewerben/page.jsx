@@ -36,7 +36,7 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
   const text =
     zustand === "neu" ? "Beworben. Denis meldet sich bei dir." :
     zustand === "erledigt" ? "Bewerbung abgeschlossen." :
-    zustand === "abgesagt" ? "Leider müssen wir dir mitteilen: diesmal hat es nicht geklappt. Danke für dein Interesse." :
+    zustand === "abgesagt" ? "Diesmal hat es nicht geklappt. Danke, dass du dich beworben hast." :
     zustand === "gesperrt" ? sperrtext :
     r.desc;
   return (

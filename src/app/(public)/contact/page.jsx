@@ -33,7 +33,7 @@ export default function ContactPage() {
       }}>
         <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 10 }}>Schreib uns</div>
         <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>Kontakt</h1>
-        <p style={{ fontSize: 15, color: MUTED, margin: 0 }}>Fragen, Feedback oder Probleme? Wir helfen dir gerne.</p>
+        <p style={{ fontSize: 15, color: MUTED, margin: 0 }}>Schreib uns, wenn etwas klemmt oder du eine Frage hast.</p>
       </div>
 
       <div className="bd-seite">

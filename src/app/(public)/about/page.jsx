@@ -67,7 +67,7 @@ export default function AboutPage() {
         <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, margin: "56px 0", alignItems: "center" }}>
           <div>
             <Eyebrow>Unsere Geschichte</Eyebrow>
-            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Nicht neu. Nur interessanter.</h2>
+            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Was du suchst, hat schon jemand.</h2>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 12 }}>
               Secondhand ist in der Schweiz auf mehrere Plattformen verteilt: eine für Auktionen, eine für Kleinanzeigen, keine fürs Mieten. Wir wollten das an einem Ort, mit Gebühren, die man versteht.
             </p>

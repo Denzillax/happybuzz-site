@@ -336,7 +336,7 @@ export default function AuthPage() {
 
     reset: () => <>
       <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Neues Passwort wählen</h2>
-      <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Wähle ein sicheres neues Passwort für deinen Account.</p>
+      <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Wähle ein neues Passwort.</p>
       {renderError()}
       <Input label="Neues Passwort" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mind. 8 Zeichen" icon={<LockIcon/>} error={fieldErrors.password}/>
       <PasswordStrength password={password}/>

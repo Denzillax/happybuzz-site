@@ -27,7 +27,7 @@ export function Hero() {
                 <ArrowRight size={13} strokeWidth={2.4} />
               </Link>
               <h1 style={{ fontFamily: DISPLAY, fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.12, color: INK, margin: '0 0 10px' }}>
-                Nicht neu. Nur interessanter.
+                Was du suchst, hat schon jemand.
               </h1>
               <p style={{ fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'rgba(25,22,21,0.65)', lineHeight: 1.55, margin: '0 0 18px', maxWidth: 540 }}>
                 Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.

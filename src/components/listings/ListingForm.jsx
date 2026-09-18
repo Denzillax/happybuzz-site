@@ -2228,10 +2228,10 @@ export default function ListingForm({
         <div style={sectionBase} className="lf-section">
           <label style={{ ...labelBase, fontFamily: fonts.head, fontSize: 20, letterSpacing: ".04em" }}>DEIN BEE-IMPACT</label>
           <p style={{ margin: "0 0 6px", fontSize: 14, color: colors.dark, fontFamily: fonts.body, lineHeight: 1.5 }}>
-            Jeder Verkauf schützt Bienen und Natur in der Schweiz. Je grösser, desto mehr bewirkst du.
+            Ein Teil jeder Gebühr geht an Bienen- und Naturschutz in der Schweiz. Je höher die Stufe, desto mehr.
           </p>
           <p style={{ ...hintStyle, marginTop: 0, marginBottom: 16, fontSize: 11 }}>
-            Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20% fliessen in echte Schweizer Naturschutzprojekte. Höherer Impact = bessere Platzierung.
+            Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20 Prozent gehen an Schweizer Naturschutzprojekte. Eine höhere Stufe bringt dein Inserat in der Suche weiter nach oben.
           </p>
           {gesperrt && <p style={{ ...hintStyle, marginTop: -8, marginBottom: 10, fontSize: 11.5, fontWeight: 700, color: "#8a6d00" }}>Gesperrt: die Bieter haben mit dieser Bee-Rate geboten.</p>}
           <div style={gesperrtStyle}>

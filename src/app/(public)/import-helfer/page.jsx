@@ -33,7 +33,7 @@ export default function ImportHelferPage() {
       <div className="bd-seite-schmal">
 
         <p style={{ fontFamily: MONO, fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: MUTED, margin: "0 0 10px" }}>
-          Import-Helfer · Umzug leicht gemacht
+          Import-Helfer
         </p>
         <h1 style={{ fontFamily: HEAD, fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 700, color: INK, margin: "0 0 12px", letterSpacing: "-0.01em" }}>
           Dein Inserat mit einem Klick übernehmen

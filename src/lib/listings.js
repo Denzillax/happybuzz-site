@@ -1705,7 +1705,7 @@ export async function updateBookingStatus(bookingId, status) {
       if (status === "confirmed") {
         await createNotification(bk.renter_id, "rental", `${label} bestätigt`, `Deine Anfrage für "${bk.listing?.title}" wurde bestätigt.`, "/bookings");
       } else if (status === "rejected" || status === "cancelled") {
-        await createNotification(bk.renter_id, "rental", `${label} abgelehnt`, `Deine Anfrage für "${bk.listing?.title}" wurde leider abgelehnt.`, "/bookings");
+        await createNotification(bk.renter_id, "rental", `${label} abgelehnt`, `Deine Anfrage für "${bk.listing?.title}" wurde abgelehnt.`, "/bookings");
       }
     }
   } catch (e) { console.error("Booking notification:", e); }
