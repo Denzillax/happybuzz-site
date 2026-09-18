@@ -26,9 +26,6 @@ const KURATIERT = [
 
 export function Categories() {
   const [categories, setCategories] = useState<any[]>([])
-  // Foto pro Hauptkategorie: Titelbild des neusten aktiven Inserats darin (19.09., Anregung marko.ch).
-  // Gibt es keines, bleibt das Symbol stehen.
-  const [fotos, setFotos] = useState<Record<string, string>>({})
 
   useEffect(() => {
     async function load() {
@@ -39,25 +36,6 @@ export function Categories() {
         .neq('is_active', false)
         .order('sort_order')
       setCategories(data || [])
-      try {
-        const [{ data: alle }, { data: neu }] = await Promise.all([
-          supabase.from('categories').select('id, parent_id'),
-          supabase.from('listings').select('category_id, listing_images(url, sort_order)')
-            .eq('status', 'active').order('created_at', { ascending: false }).limit(80),
-        ])
-        const eltern: Record<string, string | null> = {}
-        for (const c of alle || []) eltern[c.id] = c.parent_id
-        const wurzel = (id: string) => { let x = id, n = 0; while (eltern[x] && n++ < 5) x = eltern[x] as string; return x }
-        const map: Record<string, string> = {}
-        for (const l of (neu || []) as any[]) {
-          if (!l.category_id) continue
-          const w = wurzel(l.category_id)
-          if (map[w]) continue
-          const bild = [...(l.listing_images || [])].sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0))[0]?.url
-          if (bild) map[w] = bild
-        }
-        setFotos(map)
-      } catch { /* ohne Fotos bleiben die Symbole */ }
     }
     load()
   }, [])
@@ -103,9 +81,7 @@ export function Categories() {
             padding: '8px 14px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0,
             transition: 'background .15s ease',
           }}>
-            {fotos[cat.id]
-              ? <img src={fotos[cat.id]} alt="" loading="lazy" style={{ width: 24, height: 24, borderRadius: '50%', objectFit: 'cover', margin: '-3px 0 -3px -5px', flexShrink: 0 }} />
-              : <CategoryIcon name={cat.icon || 'Package'} size={15} />}
+            <CategoryIcon name={cat.icon || 'Package'} size={15} />
             {cat.name}
           </Link>
         ))}
