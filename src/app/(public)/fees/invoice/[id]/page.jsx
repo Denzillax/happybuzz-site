@@ -207,7 +207,6 @@ export default function FeeInvoicePage() {
         @media (max-width: 560px) {
           .inv-addr { grid-template-columns: 1fr !important; gap: 14px !important; }
           .inv-pay { grid-template-columns: 1fr !important; }
-          .inv-pay > div:last-child { align-items: flex-start !important; }
         }
         @media print { .no-print{display:none!important} html,body{margin:0!important;padding:0!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact} @page{size:A4;margin:0} .invoice-body{padding:18mm 22mm 15mm!important;max-width:none!important} }`}</style>
     </div>

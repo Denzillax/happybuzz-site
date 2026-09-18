@@ -846,3 +846,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
     stroke: #0E9493 !important; color: #0E9493 !important;
   }
 }
+
+/* Gebuehrenrechnung mobil: Kind-Selektor gehoert hierher, im Inline-style-Block der
+   Seite bricht das Groesser-Zeichen die Hydration (Projektregel). */
+@media (max-width: 560px) { .inv-pay > div:last-child { align-items: flex-start !important; } }
