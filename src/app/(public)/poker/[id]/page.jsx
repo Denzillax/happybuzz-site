@@ -81,7 +81,7 @@ export default function PokerTisch() {
   const leer = Array.from({ length: tisch.max_seats }, (_, i) => sitze.find(x => x.seat === i) || null);
 
   return (
-    <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: K.ink }}>
+    <div style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: K.ink }}>
       <div className="bd-seite">
         {/* Kopf */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 14 }}>

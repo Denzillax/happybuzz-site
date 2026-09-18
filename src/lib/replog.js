@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "19. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Design", text: "Kleiner Honig-Balken vor den Abschnittstiteln der Startseite (Fünf Formate, Neu eingestellt, Endet bald, Gerade beliebt). Er trägt die Markenfarbe durch die Seite", melder: "Denis" },
       { typ: "fix", bereich: "Chat", text: "Chat am Desktop: Das Nachrichtenfenster ist jetzt beim Öffnen ganz sichtbar, man muss nicht mehr nach unten scrollen, um zu schreiben. Es sitzt fest zwischen Header und unterem Rand, wie schon am Handy. Der graue Hintergrund ist weg, der gelbe Inserieren-Kreis ist im Chat ausgeblendet, damit er nicht über der Eingabezeile liegt", melder: "Denis" },
       { typ: "fix", bereich: "Design", text: "Farben aufgefrischt: Die Seite war zu grau und sandig. Flächen, Pillen und Ränder sind jetzt neutral hellgrau statt beige, der Nebentext ist ein klares Grau. Honiggelb und Teal wirken dadurch kräftiger, die Fotos auch. Das Hero-Band auf der Startseite ist neu in hellem Teal, als einziger Farbmoment oben", melder: "Denis" },
       { typ: "fix", bereich: "Texte", text: "Zweite Textrunde über die ganze Seite. Neuer Hauptsatz auf der Startseite: 'Was du suchst, hat schon jemand.' Die Sprüche zu den Gebührenstufen im Inserat-Formular sind neu: statt 'Du rettest ein Ökosystem' stehen dort kurze, ehrliche Zeilen, der echte Betrag steht ja direkt daneben. Dazu rund zwanzig steife Stellen in Hilfe, Kontakt, Bestellung, Anmeldung und Fehlerseite umformuliert", melder: "Denis" },

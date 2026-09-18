@@ -326,7 +326,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: colors.dark }}>
+    <div style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: colors.dark }}>
 
       {/* Verkaufs-Popup (Verkäufer, einmalig) */}
       {salePopup && (

@@ -306,7 +306,7 @@ function SearchPageInner() {
   const deliveryOpts = [{ value: "shipping", label: "Versand" }, { value: "pickup", label: "Abholung" }];
 
   return (
-    <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "#FFFFFF" }}>
+    <div style={{ minHeight: "100vh", fontFamily: fonts.body, background: "var(--bd-grund)" }}>
 
       <div className="bd-seite-breit">
 

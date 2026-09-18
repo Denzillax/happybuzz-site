@@ -544,7 +544,7 @@ export default function ListingDetail() {
   };
 
   return (
-    <div className="listing-page" style={{ fontFamily: fonts.body, background: "#FFFFFF", minHeight: "100vh", color: colors.dark }}>
+    <div className="listing-page" style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: colors.dark }}>
       <div className="bd-seite-breit">
 
         {/* ── BREADCRUMBS ─────────────────────────────── */}

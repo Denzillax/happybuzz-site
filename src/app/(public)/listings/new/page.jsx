@@ -121,7 +121,7 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#7D848E" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#7D848E" }}>
       Lade…
     </div>
   );

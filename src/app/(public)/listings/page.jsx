@@ -250,7 +250,7 @@ export default function ListingsPage() {
   const selectStyle = { padding: "7px 12px", borderRadius: 12, fontSize: 12, fontWeight: 600, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontFamily: fonts.body, cursor: "pointer", outline: "none" };
 
   return (
-    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
+    <div style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: K.ink }}>
       <div className="bd-seite-breit">
 
         {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}

@@ -1337,7 +1337,7 @@ export default function SettingsPage() {
 
       <div style={{
         fontFamily: "'Manrope', sans-serif",
-        background: K.paper, minHeight: "100vh", color: K.ink,
+        background: "var(--bd-grund)", minHeight: "100vh", color: K.ink,
       }}>
 
         {/* ── LAYOUT: Sidebar + Content ── */}

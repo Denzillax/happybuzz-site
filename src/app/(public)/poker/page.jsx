@@ -63,7 +63,7 @@ export default function PokerLobby() {
   const pill = (aktiv) => ({ padding: "7px 14px", borderRadius: 999, border: `1.5px solid ${aktiv ? K.ink : K.hairline}`, background: aktiv ? K.ink : "#fff", color: aktiv ? "#fff" : K.ink, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" });
 
   return (
-    <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: K.ink }}>
+    <div style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: K.ink }}>
       <div className="bd-seite">
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Hive · Spiele</div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>

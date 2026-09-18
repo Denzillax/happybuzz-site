@@ -31,7 +31,7 @@ export function FormatTiles() {
           .fmt-tile { flex: 0 0 58vw; max-width: 240px; scroll-snap-align: start; }
         }
       `}</style>
-      <h2 style={{ fontFamily: HEAD, fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em', color: INK, margin: '0 0 14px' }}>
+      <h2 className="bd-abschnittstitel" style={{ fontFamily: HEAD, fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em', color: INK, margin: '0 0 14px' }}>
         Fünf Formate, ein Marktplatz
       </h2>
       <div className="fmt-grid">

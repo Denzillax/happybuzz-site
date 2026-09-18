@@ -201,7 +201,7 @@ export default function HivePage() {
   const streak = profile?.current_streak || 0;
 
   return (
-    <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
+    <div style={{ fontFamily: fonts.body, background: "var(--bd-grund)", minHeight: "100vh", color: K.ink }}>
       <div className="bd-seite">
 
         {/* Header */}

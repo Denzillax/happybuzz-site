@@ -5,11 +5,14 @@
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
+/* Seitengrund: weiss. Ein hellgrauer Grund mit weissen Karten wurde am 19.09.2026 ausprobiert
+   und von Denis wieder verworfen. Die Variable bleibt, die App-Seiten lesen ihren Grund daraus. */
+:root { --bd-grund: #FFFFFF; }
 body {
   font-family: 'Manrope', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #FFFFFF;
+  background: var(--bd-grund);
   color: #191615;
 }
 
@@ -579,11 +582,11 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 .cat-pills-wrap { position: relative; }
 .cat-pills-wrap.has-more::after {
   content: ''; position: absolute; top: 0; right: 0; bottom: 8px; width: 90px; pointer-events: none;
-  background: linear-gradient(90deg, rgba(255,255,255,0), #fff 70%);
+  background: linear-gradient(90deg, rgba(255,255,255,0), var(--bd-grund) 70%);
 }
 .cat-pills-wrap.has-less::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 8px; width: 60px; pointer-events: none; z-index: 1;
-  background: linear-gradient(270deg, rgba(255,255,255,0), #fff 70%);
+  background: linear-gradient(270deg, rgba(255,255,255,0), var(--bd-grund) 70%);
 }
 .cat-scroll-btn {
   /* kein transform hier: die globale button:active-Regel (translateY(1px)) wuerde es ueberschreiben und den Pfeil springen lassen (Denis 17.09.) */
@@ -909,3 +912,8 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
      Honig        #F4C03F   Teal #0E9493   Petrol #0B5E5C
      Rot          #C62828 auf #FFEBEE   Grün #2E7D32 auf #E8F5E9   Markengrün #5B8C5A
    ═══ */
+
+/* Honig-Balken vor Abschnittstiteln (Denis 19.09.2026): trägt die Markenfarbe durch die Seite */
+.bd-abschnittstitel { display: flex; align-items: center; gap: 10px; }
+.bd-abschnittstitel::before { content: ""; width: 4px; height: 18px; border-radius: 2px; background: #F4C03F; flex-shrink: 0; }
+

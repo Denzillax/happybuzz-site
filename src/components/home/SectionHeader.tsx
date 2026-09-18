@@ -27,11 +27,11 @@ export function SectionHeader({
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-        <h2 style={{
+        <h2 className="bd-abschnittstitel" style={{
           fontFamily: HEAD, fontSize: 20, fontWeight: 700,
           letterSpacing: '-0.01em', color: INK, margin: 0, lineHeight: 1.2,
           whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0,
-        }}>{title}</h2>
+        }}><span style={{ overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{title}</span></h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
         {raster && <RasterUmschalter />}
         {href && (
