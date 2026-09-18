@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import EmojiPicker, { istNurEmoji } from "@/components/shared/EmojiPicker";
 import { Send, ArrowLeft, User, Package, Loader2, X, ImagePlus, ShieldCheck, Ban, Smile } from "lucide-react";
 import { colors, fonts, radius } from "@/lib/theme";
 import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice, setConversationHidden } from "@/lib/listings";
@@ -26,29 +27,7 @@ export default function ChatConversation() {
   const [blockiert, setBlockiert] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
-  // Emoji-Panel (Denis, 16.09.): 24 gaengige Emojis, Einfuegen an der Cursorposition
-  const [emojiOpen, setEmojiOpen] = useState(false);
-  const msgInputRef = useRef(null);
-  const emojiRef = useRef(null);
-  // Denis 16.09.: mehr Emojis, in Gruppen, Panel scrollt
-  const EMOJI_GRUPPEN = [
-    { name: "Smileys", liste: ["🙂","😄","😁","😂","🤣","😉","😊","😍","🥰","😘","😎","🤩","🥳","😅","😜","🤔","🤨","😐","🙄","😴","😢","😭","😡","🤯","🤗","🤫","🤭","🫣","😇","🥺","🤒","🤠"] },
-    { name: "Gesten", liste: ["👍","👎","👌","🤞","✌️","🤙","👋","🙏","🙌","👏","🤝","💪","☝️","👉","👈","🫶","❤️","🧡","💛","💚","💙","💔","🔥","⭐","✨","💯","✅","❌","❓","❗","⚠️","🚫"] },
-    { name: "Handel", liste: ["📦","🚚","🚗","🚲","🏠","📍","🗓️","⏰","💰","💵","💳","🧾","🏷️","🎁","🔑","📸","📱","💻","🎮","🎧","👕","👟","👜","⌚","📚","🛋️","🌱","🐝","🎉","🍀","☀️","🌧️"] },
-  ];
-  const insertEmoji = (e) => {
-    const el = msgInputRef.current;
-    const start = el?.selectionStart ?? newMsg.length, end = el?.selectionEnd ?? newMsg.length;
-    const next = newMsg.slice(0, start) + e + newMsg.slice(end);
-    setNewMsg(next);
-    requestAnimationFrame(() => { if (el) { el.focus(); const pos = start + e.length; el.setSelectionRange(pos, pos); } });
-  };
-  useEffect(() => {
-    if (!emojiOpen) return;
-    const h = (ev) => { if (emojiRef.current && !emojiRef.current.contains(ev.target)) setEmojiOpen(false); };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, [emojiOpen]);
+  const msgInputRef = useRef(null); // Emoji-Auswahl fuegt an der Cursorposition ein (EmojiPicker)
   const [user, setUser] = useState(null);
   const [conv, setConv] = useState(null);
   const [dealActive, setDealActive] = useState(false);
@@ -278,7 +257,7 @@ export default function ChatConversation() {
           const next = messages[i + 1];
           const folgt = next && next.sender_id === msg.sender_id && next.message_type !== "offer" && next.message_type !== "system"
             && (new Date(next.created_at) - new Date(msg.created_at)) < 180000;
-          const nurEmoji = !!msg.content && /^(?:\p{Extended_Pictographic}|\p{Emoji_Modifier}|\u200d|\ufe0f|\s){1,8}$/u.test(msg.content.trim());
+          const nurEmoji = istNurEmoji(msg.content);
           const dayChip = showDay && (
             <div style={{ textAlign: "center", margin: "12px 0" }}>
               <span style={{ fontSize: 11, fontWeight: 700, color: colors.muted, background: colors.surface, border: `1px solid ${colors.borderLt}`, padding: "3px 12px", borderRadius: 12 }}>{dayLabel(msg.created_at)}</span>
@@ -358,26 +337,7 @@ export default function ChatConversation() {
       <div style={{ background: colors.surface, borderTop: `1px solid ${colors.border}`, padding: "8px 14px", position: "sticky", bottom: 0 }}>
         <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", gap: 8, alignItems: "center", position: "relative" }}>
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
-          <div ref={emojiRef} style={{ position: "relative", flexShrink: 0 }}>
-            <button type="button" onClick={() => setEmojiOpen(o => !o)} title="Emoji einfügen" aria-label="Emoji einfügen"
-              style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${emojiOpen ? colors.teal : colors.border}`, background: emojiOpen ? "#E6F5F5" : colors.cream, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Smile size={18} color={emojiOpen ? colors.teal : colors.muted} />
-            </button>
-            {emojiOpen && (
-              <div style={{ position: "absolute", bottom: 46, left: 0, width: 8 * 34 + 16, maxWidth: "calc(100vw / var(--bd-zoom, 1) - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)", padding: 8, zIndex: 20 }}>
-                {EMOJI_GRUPPEN.map(g => (
-                  <div key={g.name} style={{ marginBottom: 6 }}>
-                    <p style={{ margin: "2px 0 2px 4px", fontSize: 10.5, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".04em" }}>{g.name}</p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 34px)", gap: 2 }}>
-                      {g.liste.map(e => (
-                        <button key={e} type="button" onClick={() => insertEmoji(e)} style={{ width: 34, height: 34, border: "none", background: "transparent", borderRadius: 8, cursor: "pointer", fontSize: 20, lineHeight: 1 }}>{e}</button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <EmojiPicker value={newMsg} onChange={setNewMsg} inputRef={msgInputRef} />
           <button onClick={() => fileRef.current?.click()} disabled={uploading} title="Bild senden"
             style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: colors.cream, cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {uploading ? <Loader2 size={18} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <ImagePlus size={18} color={colors.muted} />}

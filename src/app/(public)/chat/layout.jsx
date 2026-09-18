@@ -227,8 +227,53 @@ export default function ChatLayout({ children }) {
     return { titel: "Keine Nachrichten", sub: "Schreib einem Verkäufer über ein Inserat." };
   };
 
+  // Handy (Denis 18.09.): Der Chat sitzt fest zwischen Header und unterer Navigation,
+  // die Seite selbst scrollt nicht. Der Header ist seit dem 15.09. zweizeilig, die
+  // alte feste Rechnung (100dvh - 64px - 56px) war darum zu hoch und die Seite liess
+  // sich nach unten ziehen. Gemessen wird in Bildschirm-Pixeln und durch den body-Zoom
+  // geteilt, weil Lengths im gezoomten body mitskaliert werden. Bei offener Tastatur
+  // endet der Chat an der Tastatur (visualViewport).
+  const backdropRef = useRef(null);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 860px)");
+    const root = document.documentElement;
+    const messen = () => {
+      const el = backdropRef.current;
+      if (!el) return;
+      if (!mq.matches) { root.classList.remove("bd-chat-lock"); el.style.removeProperty("--chat-top"); el.style.removeProperty("--chat-bottom"); return; }
+      root.classList.add("bd-chat-lock");
+      if (window.scrollY) window.scrollTo(0, 0);
+      const z = parseFloat(getComputedStyle(document.body).zoom) || 1;
+      const hdr = document.querySelector("header");
+      const nav = document.querySelector(".bottom-nav");
+      const vv = window.visualViewport;
+      const oben = hdr ? Math.max(0, hdr.getBoundingClientRect().bottom) : 64;
+      const navH = nav && nav.offsetParent !== null ? Math.max(0, window.innerHeight - nav.getBoundingClientRect().top) : 0;
+      const tastatur = vv ? Math.max(0, window.innerHeight - (vv.offsetTop + vv.height)) : 0;
+      el.style.setProperty("--chat-top", `${(oben / z).toFixed(1)}px`);
+      el.style.setProperty("--chat-bottom", `${(Math.max(navH, tastatur) / z).toFixed(1)}px`);
+    };
+    messen();
+    const hdr = document.querySelector("header");
+    const ro = typeof ResizeObserver !== "undefined" && hdr ? new ResizeObserver(messen) : null;
+    ro?.observe(hdr);
+    window.addEventListener("resize", messen);
+    window.visualViewport?.addEventListener("resize", messen);
+    window.visualViewport?.addEventListener("scroll", messen);
+    mq.addEventListener?.("change", messen);
+    const spaeter = setTimeout(messen, 400); // Header laedt Badge und Banner nach
+    return () => {
+      ro?.disconnect(); clearTimeout(spaeter);
+      window.removeEventListener("resize", messen);
+      window.visualViewport?.removeEventListener("resize", messen);
+      window.visualViewport?.removeEventListener("scroll", messen);
+      mq.removeEventListener?.("change", messen);
+      root.classList.remove("bd-chat-lock");
+    };
+  }, []);
+
   return (
-    <div className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#ECEEF1", padding: 16, display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
+    <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#ECEEF1", padding: 16, display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
       <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1360, height: "100%", overflow: "hidden", borderRadius: 12, border: `1px solid ${colors.borderLt}`, boxShadow: "0 6px 24px rgba(0,0,0,.07)" }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
@@ -248,7 +293,7 @@ export default function ChatLayout({ children }) {
           {searchOpen && (
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #E4E0D8", background: "#fff", padding: "7px 10px" }}>
               <Search size={14} color={colors.muted} />
-              <input
+              <input className="pille-input"
                 autoFocus
                 value={searchQ}
                 onChange={(e) => setSearchQ(e.target.value)}

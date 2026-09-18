@@ -75,7 +75,7 @@ export function AdminShell({ admin }) {
           {(tab === "users" || tab === "listings" || tab === "orders" || tab === "invoices" || tab === "emails" || tab === "audit") && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, background: colors.cream, borderRadius: 999, padding: "8px 15px", minWidth: 220 }}>
               <Search size={15} color={colors.muted} />
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : tab === "emails" ? "Empfänger, Betreff oder Template..." : tab === "audit" ? "Aktion oder Ziel suchen..." : "Nummer (BEE/FEE) oder Name..."}
+              <input className="pille-input" value={search} onChange={e => setSearch(e.target.value)} placeholder={tab === "users" ? "Benutzer suchen..." : tab === "listings" ? "Inserate suchen..." : tab === "orders" ? "BEE-Nummer, Artikel oder Name..." : tab === "emails" ? "Empfänger, Betreff oder Template..." : tab === "audit" ? "Aktion oder Ziel suchen..." : "Nummer (BEE/FEE) oder Name..."}
                 style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
             </div>
           )}

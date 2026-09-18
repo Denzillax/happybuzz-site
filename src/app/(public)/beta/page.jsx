@@ -244,6 +244,8 @@ const TESTS = [
       { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
       { id: "ch_emoji_kompakt", label: "Chat: Emoji-Knopf links neben dem Eingabefeld öffnet 24 Emojis, Klick fügt an der Cursorposition ein; reine Emoji-Nachrichten gross ohne Blase; keine Schnellantworten mehr; Blasen kompakt mit Uhrzeit am Zeilenende, Folge-Nachrichten derselben Person enger" },
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
+      { id: "mob_chat_fest", label: "Handy: Im Chat lässt sich die Seite nicht nach unten ziehen, Eingabefeld und untere Navigation sind immer sichtbar, bei offener Tastatur bleibt das Eingabefeld über der Tastatur" },
+      { id: "lv_fragen_design", label: "Öffentliche Fragen auf dem Inserat: neues Blasen-Design wie im Chat, Emoji-Knopf fügt an der Cursorposition ein, reine Emoji-Nachricht wird gross gezeigt" },
       { id: "mob_zoom", label: "Handy: alles wirkt 8 Prozent grösser. Bitte prüfen: nichts ragt seitlich über den Rand, Chat-Eingabe und untere Navigation sind sichtbar, Menü und Glocke passen in den Bildschirm, die Karte auf dem Inserat lässt sich normal ziehen" },
       { id: "mob_gebote", label: "Handy: Gebotsverlauf zeigt ein Gebot pro Zeile (kleines Bild, Name, Zeit, Betrag), am Desktop bleibt er zweizeilig" },
       { id: "au_verlauf_bild", label: "Auktionsbox: Restzeit neben dem Preis, Gebotsverlauf mit Profilbild (Foto nur vom Führenden und von dir, andere Bieter grauer Kreis mit zwei Buchstaben), Anzahl Gebote und Bieter, führendes Gebot hervorgehoben" },

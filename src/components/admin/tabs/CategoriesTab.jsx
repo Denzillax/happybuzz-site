@@ -250,7 +250,7 @@ export function CategoriesTab({ admin }) {
       <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, background: colors.cream, borderRadius: 999, padding: "8px 14px", flex: 1, maxWidth: 360 }}>
           <Search size={15} color={colors.muted} />
-          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Kategorie suchen..."
+          <input className="pille-input" value={query} onChange={e => setQuery(e.target.value)} placeholder="Kategorie suchen..."
             style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 13, fontFamily: fonts.body, color: colors.dark }} />
           {query && <button onClick={() => setQuery("")} title="Suche leeren" style={{ border: "none", background: "none", cursor: "pointer", padding: 0, lineHeight: 0, color: colors.muted }}><X size={14} /></button>}
         </div>

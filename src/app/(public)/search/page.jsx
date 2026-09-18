@@ -311,7 +311,9 @@ function SearchPageInner() {
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
         <div className="search-mobile-bar" style={{ background: "#F2EEE7", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
           <Search size={16} style={{ marginLeft: 12, color: "#999", flexShrink: 0, alignSelf: "center" }} />
+          {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
+            className="pille-input"
             type="text" value={draft} autoFocus={!query}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { suchenStarten(); e.target.blur(); } }}

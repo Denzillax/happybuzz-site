@@ -7,10 +7,11 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { AnimatedAmount } from "@/components/shared/effects";
 import Portal from "@/components/shared/Portal";
+import EmojiPicker, { istNurEmoji } from "@/components/shared/EmojiPicker";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
   Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
-  AlertCircle as AlertCircleBid, Info as InfoBid,
+  AlertCircle as AlertCircleBid, Info as InfoBid, Send as SendFrage,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -202,6 +203,7 @@ export default function ListingDetail() {
   const [msgText, setMsgText] = useState("");
   const [sendingMsg, setSendingMsg] = useState(false);
   const [msgOpen, setMsgOpen] = useState(false);
+  const msgFeldRef = useRef(null); // Eingabefeld der oeffentlichen Fragen (fuer die Emoji-Auswahl)
   const [msgSent, setMsgSent] = useState(false);
   const [profileWarning, setProfileWarning] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -899,33 +901,44 @@ export default function ListingDetail() {
               </div>
 
               {/* Chat-Bereich — feste Höhe, WhatsApp-Style */}
-              <div style={{ height: 320, overflowY: "auto", padding: "16px 20px", background: "#fff" }}>
+              <div className="chat-scroll" style={{ height: 320, overflowY: "auto", padding: "14px 16px", background: colors.cream }}>
                 {(() => {
                   const filtered = questions.filter(q => q.is_public);
                   const allMsgs = filtered.flatMap(q => q.messages.map(m => ({ ...m, convId: q.id })));
                   allMsgs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
                   return allMsgs.length > 0 ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       {allMsgs.map((msg) => {
                         const isMe = msg.sender_id === user?.id;
                         const isSeller = msg.sender_id === l.user_id;
+                        const nurEmoji = istNurEmoji(msg.content);
                         return (
                           <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" }}>
+                            {/* Gleiches Blasen-Design wie im Chat (Denis 18.09.): eigene in Teal, andere hell mit Schatten */}
                             <div style={{
-                              maxWidth: "75%", padding: "8px 12px", borderRadius: 12,
-                              background: isMe ? colors.yellow : "#fff",
-                              border: `1px solid ${isMe ? INK : "rgba(20,17,13,.25)"}`,
+                              maxWidth: "78%", padding: nurEmoji ? "2px 6px" : "6px 11px", borderRadius: 12,
+                              background: nurEmoji ? "transparent" : (isMe ? colors.teal : colors.surface),
+                              boxShadow: (isMe || nurEmoji) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
                             }}>
                               {/* Name IMMER zeigen, oeffentliche Fragen sieht jeder */}
-                              <p style={{ margin: "0 0 2px", fontSize: 11, fontWeight: 700, color: isSeller ? "#0B5E5C" : colors.dark }}>
+                              <p style={{ margin: "0 0 1px", fontSize: 11, fontWeight: 700, color: nurEmoji ? colors.muted : (isMe ? "rgba(255,255,255,.85)" : (isSeller ? "#0B5E5C" : colors.dark)) }}>
                                 {isMe ? `Du · ${msg.sender?.display_name || ""}`.replace(/ · $/, "") : (msg.sender?.display_name || "Benutzer")}
-                                {isSeller && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 12, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5, border: "1px solid #E4E0D8" }}>Verkäufer</span>}
+                                {isSeller && <span style={{ fontSize: 9, padding: "1px 6px", borderRadius: 999, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5 }}>Verkäufer</span>}
                               </p>
-                              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45, color: colors.dark }}>{msg.content}</p>
-                              <p style={{ margin: "3px 0 0", fontSize: 10, color: isMe ? "rgba(0,0,0,.4)" : colors.mutedLt, textAlign: "right" }}>
-                                {new Date(msg.created_at).toLocaleString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              <p style={{ margin: 0, fontSize: nurEmoji ? 30 : 13.5, lineHeight: nurEmoji ? 1.2 : 1.45, color: isMe && !nurEmoji ? "#fff" : colors.dark, whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+                                {msg.content}
+                                {!nurEmoji && (
+                                  <span style={{ fontSize: 10, color: isMe ? "rgba(255,255,255,.7)" : colors.mutedLt, marginLeft: 8, whiteSpace: "nowrap", float: "right", position: "relative", top: 5 }}>
+                                    {new Date(msg.created_at).toLocaleString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                                  </span>
+                                )}
                               </p>
+                              {nurEmoji && (
+                                <p style={{ margin: 0, fontSize: 10, color: colors.mutedLt, textAlign: isMe ? "right" : "left" }}>
+                                  {new Date(msg.created_at).toLocaleString("de-CH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                                </p>
+                              )}
                             </div>
                           </div>
                         );
@@ -943,14 +956,15 @@ export default function ListingDetail() {
 
               {/* Input-Bar — für Käufer UND Verkäufer */}
               {user && l.status === "active" && (
-                <div style={{ padding: "10px 16px", borderTop: `1px solid ${colors.borderLt}`, background: colors.surface, display: "flex", gap: 8, alignItems: "center" }}>
-                  <input type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
+                <div style={{ padding: "10px 12px", borderTop: `1px solid ${colors.borderLt}`, background: colors.surface, display: "flex", gap: 8, alignItems: "center" }}>
+                  <EmojiPicker value={msgText} onChange={setMsgText} inputRef={msgFeldRef} />
+                  <input ref={msgFeldRef} type="text" value={msgText} onChange={(e) => setMsgText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && msgText.trim() && handleSendMsg()}
                     placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
-                    style={{ flex: 1, padding: "10px 14px", borderRadius: 12, border: "1px solid #E4E0D8", fontSize: 13, fontFamily: fonts.body, outline: "none", background: "#fff" }} />
-                  <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg}
-                    style={{ padding: "10px 20px", borderRadius: 12, border: "1px solid #E4E0D8", background: msgText.trim() ? colors.yellow : "#eee", color: INK, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: msgText.trim() ? "pointer" : "default", flexShrink: 0, transition: "all .15s", boxShadow: "none" }}>
-                    {sendingMsg ? "..." : "Senden"}
+                    style={{ flex: 1, minWidth: 0, padding: "9px 16px", borderRadius: 999, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", background: colors.cream }} />
+                  <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg} aria-label="Senden" title="Senden"
+                    style={{ width: 38, height: 38, flexShrink: 0, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {sendingMsg ? <Loader2 size={17} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <SendFrage size={18} color={msgText.trim() ? colors.dark : colors.mutedLt} />}
                   </button>
                 </div>
               )}
