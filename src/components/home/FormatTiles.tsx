@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useInView } from '@/components/shared/effects'
 import { Tag, Gavel, CalendarClock, Gift, Wrench } from 'lucide-react'
@@ -23,6 +23,15 @@ export function FormatTiles() {
   // der Kachel erneut. Die Bewegungen stehen in globals.css unter FORMAT-ICONS.
   const gridRef = useRef<HTMLDivElement>(null)
   const imBild = useInView(gridRef)
+  // Nach dem ersten Durchlauf die Einblend-Animation abschalten. Sonst greift sie beim
+  // VERLASSEN einer Kachel wieder (die Hover-Regel fällt weg, der Animationsname wechselt
+  // zurück) und das Icon bewegt sich ein zweites Mal. Gewollt ist nur: beim Draufgehen.
+  const [fertig, setFertig] = useState(false)
+  useEffect(() => {
+    if (!imBild) return
+    const t = setTimeout(() => setFertig(true), 1700)
+    return () => clearTimeout(t)
+  }, [imBild])
   return (
     <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
@@ -40,7 +49,7 @@ export function FormatTiles() {
       <h2 className="bd-abschnittstitel" style={{ fontFamily: HEAD, fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em', color: INK, margin: '0 0 14px' }}>
         Fünf Formate, ein Marktplatz
       </h2>
-      <div ref={gridRef} className={"fmt-grid" + (imBild ? " is-in" : "")}>
+      <div ref={gridRef} className={"fmt-grid" + (imBild && !fertig ? " is-in" : "")}>
         {FORMATE.map((f, i) => {
           const Icon = f.icon
           return (

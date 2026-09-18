@@ -672,7 +672,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
    Hover). Klasse auf Hero-, Header- und Banner-Pillen; Inline-Styles bleiben. */
 .cta-pill { transition: filter .15s ease, transform .15s ease, box-shadow .15s ease; }
 /* Ohne Schatten (Denis 19.09.2026): der graue Hoverschatten unter dem Inserieren-Knopf im Hero störte */
-.cta-pill:hover { filter: brightness(.94); transform: translateY(-1px); box-shadow: none; }
+.cta-pill:hover { filter: none !important; transform: translateY(-1px); box-shadow: none; }
 .cta-pill:active { transform: translateY(0); box-shadow: none; }
 
 /* Hover ueberall (Beta-Feedback Denis 15.09.): jeder Knopf und Link reagiert.
@@ -954,3 +954,13 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 .fmt-grid.is-in .fmt-icon-service { animation: fmt-service .8s cubic-bezier(.3,.7,.3,1) both; }
 .fmt-tile:hover .fmt-icon-service { animation: fmt-service-h .7s cubic-bezier(.3,.7,.3,1); animation-delay: 0s !important; }
 @media (prefers-reduced-motion: reduce) { .fmt-icon { animation: none !important; } }
+
+/* Gelbe Knoepfe ohne grauen Schleier (Denis 19.09.2026): die allgemeine Hover-Regel dunkelt um
+   7 % ab, auf Honiggelb wirkt das stumpf und senfig. Gelbe Knoepfe hellen stattdessen leicht auf.
+   SSR schreibt "background:#F4C03F", im Browser gerenderte Knoepfe "background: rgb(244, 192, 63)". */
+button[style*="background:#F4C03F"]:not(:disabled):hover, a[href][style*="background:#F4C03F"]:hover,
+button[style*="background: rgb(244, 192, 63)"]:not(:disabled):hover, a[href][style*="background: rgb(244, 192, 63)"]:hover,
+button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][style*="background:rgb(244, 192, 63)"]:hover {
+  filter: none !important; background: #F7CB57 !important;
+}
+
