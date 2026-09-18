@@ -16,10 +16,10 @@ const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Manrope', system-ui, sans-serif";
 
 const VALUES = [
-  { icon: Heart, title: "Secondhand mit Haltung", desc: "Jedes Ding verdient eine zweite Chance. Nicht aus Mitleid, sondern weil es besser ist." },
-  { icon: Users, title: "Community First", desc: "BEEDARO gehört der Community. Faire Gebühren, transparente Regeln, kein Bullshit." },
+  { icon: Heart, title: "Secondhand mit Haltung", desc: "Das meiste, was im Keller steht, funktioniert noch. Es fehlt nur jemand, der es braucht." },
+  { icon: Users, title: "Community First", desc: "Du wählst deine Gebühr selbst, und die Regeln stehen offen da. Kein Kleingedrucktes." },
   { icon: Leaf, title: "Bee-Impact", desc: "20% jeder Gebühr fliessen in Schweizer Naturschutzprojekte. Kein Greenwashing, echte Projekte." },
-  { icon: ShieldCheck, title: "Vertrauen & Sicherheit", desc: "Geprüfte Inserate, Verifizierung und Bewertungen schaffen ein sicheres Handelsumfeld." },
+  { icon: ShieldCheck, title: "Vertrauen & Sicherheit", desc: "Inserate werden geprüft, Konten lassen sich verifizieren, und nach jedem Handel bewertet ihr euch gegenseitig." },
 ];
 
 const DIFF = [
@@ -69,10 +69,10 @@ export default function AboutPage() {
             <Eyebrow>Unsere Geschichte</Eyebrow>
             <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Nicht neu. Nur interessanter.</h2>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 12 }}>
-              BEEDARO entstand aus einer einfachen Idee: Gebrauchte Dinge verdienen mehr als ein zweites Leben. Sie verdienen einen besseren Marktplatz. Fair für Verkäufer, Käufer und die Umwelt.
+              Secondhand ist in der Schweiz auf mehrere Plattformen verteilt: eine für Auktionen, eine für Kleinanzeigen, keine fürs Mieten. Wir wollten das an einem Ort, mit Gebühren, die man versteht.
             </p>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75 }}>
-              Anders als andere Plattformen kombiniert BEEDARO Festpreis, Auktion, Miete, Service und Verschenken in einem. Mit der selbst gewählten Bee-Rate bestimmst du, wie viel du beiträgst. 20% davon gehen direkt in Schweizer Naturschutzprojekte.
+              Auf BEEDARO kannst du verkaufen, versteigern, vermieten, eine Dienstleistung anbieten oder etwas verschenken. Die Gebühr wählst du selbst, zwischen 3 und 10 Prozent. Ein Fünftel davon geht an Schweizer Naturschutzprojekte.
             </p>
           </div>
           {/* Specimen-Statement statt Platzhalter */}
@@ -116,9 +116,9 @@ export default function AboutPage() {
         <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36, margin: "56px 0", alignItems: "center" }}>
           <div>
             <Eyebrow>Was uns unterscheidet</Eyebrow>
-            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Mehr als kaufen und verkaufen</h2>
+            <h2 style={{ fontSize: "clamp(24px, 3.2vw, 30px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.01em" }}>Was BEEDARO anders macht</h2>
             <p style={{ fontSize: 14.5, color: MUTED, lineHeight: 1.75, marginBottom: 16 }}>
-              Ricardo hat Auktionen. Tutti hat Gratis-Inserate. Vinted hat Mode. BEEDARO hat alles. Und dazu ein Modell, das allen etwas zurückgibt.
+              Ricardo hat Auktionen. Tutti hat Gratis-Inserate. Vinted hat Mode. Bei BEEDARO findest du das an einem Ort, dazu Miete und Service.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {DIFF.map((item, i) => (
@@ -133,7 +133,7 @@ export default function AboutPage() {
           <div style={{ padding: "30px 28px", borderRadius: 12, background: SAND, border: "1px solid #E4E0D8" }}>
             <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: MUTED, marginBottom: 14, textTransform: "uppercase" }}>Differenzierung</div>
             <p style={{ fontFamily: HEAD, fontSize: "clamp(19px, 2.4vw, 24px)", fontWeight: 600, lineHeight: 1.3, margin: 0, color: INK, letterSpacing: "-0.01em" }}>
-              Fünf Inserattypen. Eine wählbare Gebühr. Ein Beitrag, der bei der Natur ankommt.
+              Fünf Inserattypen, eine Gebühr, die du selbst wählst, und ein Teil davon für die Natur.
             </p>
           </div>
         </div>
@@ -141,9 +141,9 @@ export default function AboutPage() {
         {/* ── Bee-Impact Band ── */}
         <div style={{ padding: 34, borderRadius: 12, textAlign: "center", marginBottom: 56, background: INK, color: PAPER }}>
           <BeeIcon size={30} color={HONEY} />
-          <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Bee-Impact: dein Beitrag zählt</h2>
+          <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Bee-Impact: wohin ein Teil der Gebühr geht</h2>
           <p style={{ fontSize: 14.5, color: "rgba(251,248,242,0.65)", maxWidth: 520, margin: "0 auto 22px", lineHeight: 1.6 }}>
-            Jede Transaktion unterstützt Schweizer Naturschutzprojekte. Nicht als Marketing-Gag, sondern als fester Bestandteil unseres Modells.
+            Von jeder Gebühr gehen 20 Prozent an Schweizer Naturschutzprojekte. Das ist fest eingebaut und hängt nicht davon ab, wie das Jahr läuft.
           </p>
           <Link href="/impact" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
@@ -184,7 +184,7 @@ export default function AboutPage() {
           <div style={{ padding: 32, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
             <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, margin: "0 0 6px", color: INK }}>Zurzeit keine offenen Stellen</h3>
             <p style={{ fontSize: 13.5, color: MUTED, maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>
-              Wir sind ein kleines Team mit grossen Plänen. Initiativbewerbungen sind willkommen. Schreib uns an <a href="mailto:jobs@beedaro.ch" style={{ color: PETROL, fontWeight: 700 }}>jobs@beedaro.ch</a>.
+              Wir sind ein kleines Team. Wenn du glaubst, dass du zu uns passt, schreib uns an <a href="mailto:jobs@beedaro.ch" style={{ color: PETROL, fontWeight: 700 }}>jobs@beedaro.ch</a>.
             </p>
           </div>
         </div>

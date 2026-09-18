@@ -6,19 +6,19 @@ const steps = [
   {
     icon: Camera,
     title: 'Inserat erstellen',
-    description: 'Fotos hochladen, Preis festlegen, Gebührenmodell wählen. In wenigen Minuten ist dein Artikel online.',
+    description: 'Fotos hochladen, Preis setzen, Gebühr wählen. Das dauert ein paar Minuten.',
     step: '01',
   },
   {
     icon: Handshake,
     title: 'Kaufen oder bieten',
-    description: 'Sofort kaufen zum Festpreis, auf Auktionen mitbieten oder Artikel mieten. Alles sicher über die Plattform.',
+    description: 'Zum Festpreis kaufen, bei Auktionen mitbieten oder etwas mieten. Chat, Bestellung und Bewertung laufen über BEEDARO.',
     step: '02',
   },
   {
     icon: Leaf,
     title: 'Gutes tun',
-    description: 'Ein Teil deines Plattformbeitrags fliesst direkt in Schweizer Bienen- und Naturschutzprojekte.',
+    description: '20 Prozent jeder Gebühr gehen an Schweizer Bienen- und Naturschutzprojekte.',
     step: '03',
   },
 ]

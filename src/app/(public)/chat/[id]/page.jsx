@@ -236,7 +236,7 @@ export default function ChatConversation() {
         </div>
       ) : (
         <div style={{ background: "#E6F5F5", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
-          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln = Käuferschutz und Bewertung. Kontakt- und Zahlungsdaten (IBAN, Telefon, Mail) erscheinen erst nach Abschluss.
+          <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln: der Ablauf ist festgehalten und ihr könnt euch bewerten. Kontakt- und Zahlungsdaten (IBAN, Telefon, Mail) erscheinen erst nach Abschluss.
         </div>
       ))}
 

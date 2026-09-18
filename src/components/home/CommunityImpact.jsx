@@ -77,7 +77,7 @@ export function CommunityImpact() {
             <span style={{ fontSize: 12.5, fontWeight: 700, color: MOSS }}>Bee-Impact</span>
           </div>
           <h2 style={{ margin: "0 0 16px", fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.15 }}>
-            Gemeinsam bewirken
+            Was bisher zusammengekommen ist
           </h2>
 
           <div style={{ display: "flex", gap: "clamp(14px, 3vw, 34px)", flexWrap: "wrap" }}>

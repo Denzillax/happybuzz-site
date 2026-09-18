@@ -17,17 +17,17 @@ const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Manrope', system-ui, sans-serif";
 
 const TYPES = [
-  { icon: Tag, title: "Festpreis", desc: "Sofort kaufen zum festen Preis. Ideal für Artikel mit klarem Marktwert.", color: HONEY },
-  { icon: Gavel, title: "Auktion", desc: "Bieten lassen und den besten Preis erzielen. Perfekt für Sammlerstücke und Raritäten.", color: PETROL },
-  { icon: Home, title: "Miete", desc: "Artikel zeitweise vermieten statt verkaufen. Ideal für Werkzeug, Geräte, Sportartikel.", color: "#8B6DB0" },
-  { icon: Wrench, title: "Service", desc: "Dienstleistungen anbieten und Termine buchen lassen. Abgerechnet nach Abschluss.", color: "#C2410C" },
+  { icon: Tag, title: "Festpreis", desc: "Fester Preis, sofort kaufen. Passt, wenn du weisst, was dein Artikel wert ist.", color: HONEY },
+  { icon: Gavel, title: "Auktion", desc: "Du setzt einen Startpreis, die Bieter entscheiden. Lohnt sich bei Sammlerstücken und allem, dessen Wert schwer zu schätzen ist.", color: PETROL },
+  { icon: Home, title: "Miete", desc: "Vermieten statt verkaufen. Gut für Werkzeug, Geräte und Sportsachen, die man selten braucht.", color: "#8B6DB0" },
+  { icon: Wrench, title: "Service", desc: "Du bietest eine Dienstleistung an, Kunden fragen einen Termin an. Abgerechnet wird, wenn die Arbeit gemacht ist.", color: "#C2410C" },
   { icon: Gift, title: "Gratis", desc: "Verschenken statt wegwerfen. Nur Abholung, keine Gebühren.", color: MOSS },
 ];
 
 const STEPS_SELL = [
   { icon: Camera, num: "01", title: "Fotografieren", desc: "Mach ein paar Fotos von deinem Artikel. Das Hauptbild entscheidet. Mach es gut." },
   { icon: Tag, num: "02", title: "Inserieren", desc: "Titel, Beschreibung, Kategorie und Preis. Wähle Festpreis, Auktion, Miete, Service oder Gratis." },
-  { icon: ShieldCheck, num: "03", title: "Freigabe", desc: "Wir prüfen dein Inserat kurz, bevor es online geht. So bleibt der Katalog sauber." },
+  { icon: ShieldCheck, num: "03", title: "Freigabe", desc: "Eine automatische Prüfung schaut auf Text und Bilder. Unauffällige Inserate sind meist in unter einer Minute online, nur Auffälliges sehen wir uns von Hand an." },
   { icon: ShoppingBag, num: "04", title: "Verkaufen", desc: "Jemand kauft, bietet oder bucht. Du wirst sofort benachrichtigt." },
   { icon: Truck, num: "05", title: "Versenden", desc: "Per Post verschicken oder Abholung vereinbaren. Bezahlt wird per TWINT oder Überweisung." },
 ];
@@ -36,7 +36,7 @@ const STEPS_BUY = [
   { icon: ShoppingBag, num: "01", title: "Stöbern", desc: "Durchsuche den Katalog nach Kategorie, Preis, Zustand oder Standort. Oder per Artikelnummer." },
   { icon: CreditCard, num: "02", title: "Kaufen oder bieten", desc: "Festpreis sofort kaufen, bei Auktionen mitbieten, bei Miete und Service einen Termin buchen." },
   { icon: Truck, num: "03", title: "Erhalten", desc: "Dein Artikel kommt per Post oder du holst ihn direkt beim Verkäufer ab." },
-  { icon: Star, num: "04", title: "Bewerten", desc: "Empfang bestätigen und bewerten. So hilfst du der Community, Vertrauen aufzubauen." },
+  { icon: Star, num: "04", title: "Bewerten", desc: "Bestätige den Empfang und bewerte den Verkäufer. Die nächsten Käufer verlassen sich darauf." },
 ];
 
 // Aus FEE_TIERS abgeleitet, damit Saetze und Empfehlung nie von der App abweichen.
@@ -48,7 +48,7 @@ const TIERS = FEE_TIERS.map((t) => ({
 }));
 
 const SAFETY = [
-  { title: "Geprüfte Inserate", desc: "Jedes Inserat wird vor Veröffentlichung kurz von uns kontrolliert." },
+  { title: "Geprüfte Inserate", desc: "Jedes Inserat wird vor der Veröffentlichung automatisch geprüft. Was auffällt, schauen wir uns von Hand an." },
   { title: "Bewertungen", desc: "Nach jeder Transaktion bewerten sich Käufer und Verkäufer gegenseitig." },
   { title: "Melden", desc: "Verdächtige Inserate kannst du jederzeit melden. Unser Team prüft jede Meldung." },
 ];

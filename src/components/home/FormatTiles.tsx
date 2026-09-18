@@ -13,7 +13,7 @@ const FORMATE = [
   { type: 'auction', label: 'Auktion', sub: 'Bieten und gewinnen', icon: Gavel },
   { type: 'rent', label: 'Mieten', sub: 'Nutzen statt besitzen', icon: CalendarClock },
   { type: 'free', label: 'Gratis', sub: 'Verschenken, abholen', icon: Gift },
-  { type: 'service', label: 'Service', sub: 'Können buchen', icon: Wrench },
+  { type: 'service', label: 'Service', sub: 'Handwerk und Hilfe buchen', icon: Wrench },
 ]
 
 export function FormatTiles() {

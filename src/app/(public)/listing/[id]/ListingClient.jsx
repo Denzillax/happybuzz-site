@@ -1704,7 +1704,7 @@ export default function ListingDetail() {
               {/* Success */}
               {buyState === "success" && (
                 <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Kauf erfolgreich!</p>
+                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Gekauft.</p>
                   <Link href="/purchases" style={{ fontSize: 13, color: colors.blue }}>Zu meinen Käufen</Link>
                 </div>
               )}

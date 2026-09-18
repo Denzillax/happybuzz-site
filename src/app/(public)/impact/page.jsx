@@ -72,7 +72,7 @@ export default function ImpactPage() {
             <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
-            Jede Transaktion auf BEEDARO unterstützt Schweizer Naturschutzprojekte. Nicht als Versprechen, als Fakt.
+            Von jeder Gebühr auf BEEDARO gehen 20 Prozent an Schweizer Naturschutzprojekte. Das passiert automatisch bei jedem Verkauf.
           </p>
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function ImpactPage() {
           <BeeIcon size={30} color={INK} />
           <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Mach mit</h2>
           <p style={{ fontSize: 14.5, color: MUTED, maxWidth: 460, margin: "0 auto 22px", lineHeight: 1.6 }}>
-            Jeder Verkauf, jeder Kauf, jede Buchung trägt bei. Wenig pro Transaktion, zusammen viel.
+            Pro Verkauf ist es wenig. Über alle Verkäufe kommt etwas zusammen.
           </p>
           <Link href="/listings/new" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,

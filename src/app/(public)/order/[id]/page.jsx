@@ -293,8 +293,8 @@ export default function OrderDetailPage() {
   function getEventDisplay(ev) {
     switch (ev.event_type) {
       case "purchased": return isRental
-        ? (isBuyer ? "Du hast den Artikel gemietet!" : "Dein Artikel wurde gemietet!")
-        : (isBuyer ? "Gratuliere, der Artikel gehört dir!" : "Gratuliere, du hast diesen Artikel verkauft!");
+        ? (isBuyer ? "Du hast den Artikel gemietet." : "Dein Artikel wurde gemietet.")
+        : (isBuyer ? "Der Artikel gehört dir." : "Verkauft. Der Käufer wartet auf deine nächsten Schritte.");
       case "payment_marked": return isBuyer ? "Du hast als bezahlt markiert." : (isRental ? "Mieter hat als bezahlt markiert. Muss überprüft werden." : "Käufer hat den Kauf als bezahlt markiert. Muss überprüft werden.");
       case "payment_confirmed": return isSeller ? "Du hast die Zahlung erhalten." : (isRental ? "Der Vermieter hat die Zahlung erhalten." : "Der Verkäufer hat die Zahlung erhalten.");
       case "payment_rejected": return isSeller ? "Du hast die Zahlung abgelehnt." : (isRental ? "Der Vermieter hat die Zahlung abgelehnt." : "Der Verkäufer hat die Zahlung abgelehnt.");
@@ -843,7 +843,7 @@ export default function OrderDetailPage() {
             {/* Hilfe-Box */}
             <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", padding: 20 }}>
               <h4 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 6px" }}>{isRental ? (isBuyer ? "Vermieter reagiert nicht?" : "Mieter reagiert nicht?") : (isBuyer ? "Verkäufer reagiert nicht?" : "Käufer reagiert nicht?")}</h4>
-              <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Entdecke unsere <Link href="/help" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>Tipps</Link> oder <Link href="/contact" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>kontaktiere uns</Link>.</p>
+              <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Schau in die <Link href="/help" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>Tipps</Link> oder <Link href="/contact" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>schreib uns</Link>.</p>
             </div>
           </div>
         </div>

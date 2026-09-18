@@ -30,8 +30,8 @@ const CATEGORIES = [
       { q: "Wie registriere ich mich auf BEEDARO?", a: "Klicke oben rechts auf «Registrieren» und erstelle dein Konto mit E-Mail-Adresse und Passwort. Du erhältst eine Bestätigungsmail." },
       { q: "Wie verifiziere ich mein Konto?", a: "Unter Einstellungen → Verifizierung kannst du E-Mail, Telefonnummer, Postadresse und ID verifizieren. Je mehr du verifizierst, desto höher dein Trust Level." },
       { q: "Wie ändere ich mein Passwort?", a: "Klicke auf der Login-Seite auf «Passwort vergessen» und folge den Anweisungen in der E-Mail." },
-      { q: "Was ist das Trust Level?", a: "Dein Trust Level zeigt anderen Nutzern, wie vertrauenswürdig du bist. Es steigt mit jeder Verifizierung: Starter → Basis → Vertraut → Vollständig." },
-      { q: "Wie lade ich ein Profilbild hoch?", a: "Unter Einstellungen → Profil kannst du deinen Anzeigenamen und dein «Über mich» anpassen. Profilbilder werden automatisch aus deinen Initialen generiert." },
+      { q: "Was ist das Trust Level?", a: "Das Trust Level zeigt anderen, wie viel du über dich bestätigt hast. Es steigt mit jeder Verifizierung: Starter → Basis → Vertraut → Vollständig." },
+      { q: "Wie lade ich ein Profilbild hoch?", a: "Unter Einstellungen → Profil lädst du ein Profilbild hoch und passt Anzeigenamen und «Über mich» an. Ohne Bild zeigen wir deine Initialen." },
     ],
   },
   {
@@ -45,7 +45,7 @@ const CATEGORIES = [
       { q: "Wie bezahle ich?", a: "Nach dem Kauf erhältst du eine QR-Rechnung mit den Zahlungsinformationen des Verkäufers. Du überweist den Betrag per Banküberweisung oder TWINT." },
       { q: "Kann ich einen Preisvorschlag machen?", a: "Wenn der Verkäufer «Preis verhandelbar» aktiviert hat, kannst du einen Preisvorschlag zwischen 70% und 99% des Preises senden. Dieselbe Grenze gilt auch für Gegenvorschläge, maximal 3 Runden." },
       { q: "Kann ich jemanden blockieren?", a: "Ja. Öffne den Chat mit der Person und tippe oben auf das Sperr-Symbol. Blockierte können dir nicht mehr schreiben, keine Preisvorschläge machen, nicht auf deine Auktionen bieten und nichts von dir kaufen. Entsperren kannst du jederzeit unter Einstellungen → Blockierte Nutzer." },
-      { q: "Was ist der Käuferschutz?", a: "BEEDARO bietet einen Bewertungs-System. Prüfe immer das Trust Level und die Bewertungen des Verkäufers bevor du kaufst." },
+      { q: "Was ist der Käuferschutz?", a: "Eine Geld-zurück-Garantie gibt es nicht, du bezahlst direkt an den Verkäufer. Dafür siehst du vor dem Kauf, ob das Konto verifiziert ist und wie andere es bewertet haben. Wickle alles über BEEDARO ab: dann ist der Ablauf festgehalten, falls etwas schiefgeht." },
       { q: "Wie funktioniert die Abholung?", a: "Bei Abholung vereinbarst du mit dem Verkäufer einen Termin. Die Adresse wird dir nach dem Kauf angezeigt. Bezahlung erfolgt bar bei Übergabe." },
     ],
   },
@@ -56,8 +56,8 @@ const CATEGORIES = [
     desc: "Inserate erstellen, Versand & Gebühren",
     color: "#F4C03F",
     faqs: [
-      { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Jedes Inserat wird vor Veröffentlichung kurz geprüft." },
-      { q: "Wer prüft mein Inserat und wie schnell ist es online?", a: "Jedes neue Inserat durchläuft vor der Veröffentlichung eine kurze Prüfung durch das BEEDARO-Team (Inhalt, Bilder, Marktplatz-Regeln). In der Beta passiert das von Hand, meist innert weniger Stunden. Für den offiziellen Start ist eine automatische Vorprüfung geplant: Inserate gehen dann sofort online, und nur Auffälliges landet in der manuellen Kontrolle." },
+      { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Vor der Veröffentlichung läuft eine kurze automatische Prüfung." },
+      { q: "Wer prüft mein Inserat und wie schnell ist es online?", a: "Eine automatische Prüfung schaut sich Text und Bilder an. Unauffällige Inserate gehen sofort online, meist in unter einer Minute. Verbotenes, Betrugsmuster, Fälschungen und auffällige Inserate neuer Konten gehen an uns zur Prüfung von Hand. Automatisch abgelehnt wird nie." },
       { q: "Was kostet es, ein Inserat zu erstellen?", a: "Das Erstellen eines Inserats ist kostenlos. Erst bei einem erfolgreichen Verkauf fällt die Bee-Rate Gebühr an (3-10%, je nach gewählter Stufe)." },
       { q: "Was ist die Bee-Rate?", a: "Die Bee-Rate ist deine selbst gewählte Gebühr (Fair 3%, Supporter 5%, Impact 7% oder Bee Hero 10%). Sie wird nur bei erfolgreichem Verkauf vom Erlös abgezogen. 20% davon fliessen als Bee-Impact in Schweizer Naturschutzprojekte." },
       { q: "Wie funktioniert der Versand?", a: "Beim Inserieren wählst du Paket, Brief, Sperrgut oder andere Versandarten. Die Versandkosten basieren auf den aktuellen Post-Tarifen. Du kannst maximal CHF 5 über den Post-Tarif aufschlagen." },
@@ -85,8 +85,8 @@ const CATEGORIES = [
     desc: "Dein Beitrag für Schweizer Naturschutz",
     color: "#5B8C5A",
     faqs: [
-      { q: "Was ist der Bee-Impact?", a: "20% deiner Bee-Rate Gebühr fliessen direkt in Schweizer Naturschutzprojekte. So trägst du mit jedem Kauf und Verkauf zum Schutz der Umwelt bei." },
-      { q: "Was ist das Bee-Level?", a: "Dein Bee-Level steigt mit deinem gesammelten Bee-Impact: Bee Starter → Busy Bee → Hive Builder → Queen Bee → Bee Legend. Höhere Level bringen Plattform-Vorteile." },
+      { q: "Was ist der Bee-Impact?", a: "20 Prozent deiner Bee-Rate gehen an Schweizer Naturschutzprojekte. Das passiert bei jedem Verkauf automatisch, du musst nichts dafür tun." },
+      { q: "Was ist das Bee-Level?", a: "Dein Bee-Level steigt mit deinen Pollen. Die sammelst du, wenn du inserierst, kaufst, verkaufst oder Challenges löst. Die Stufen heissen Entdecker, Sammler, Hive Builder, Queen Bee und Legende. Höhere Stufen bringen ein Abzeichen und eine bessere Platzierung." },
       { q: "Wo sehe ich den Gesamtbeitrag?", a: "Auf der Startseite zeigt der Counter den Gesamtbeitrag der BEEDARO Community in Echtzeit." },
     ],
   },
@@ -99,7 +99,7 @@ const CATEGORIES = [
     faqs: [
       { q: "Wie bewerte ich einen Kauf?", a: "Nach Abschluss einer Bestellung (Empfang bestätigt) kannst du den Verkäufer mit 1-5 Sternen bewerten und einen Kommentar hinterlassen." },
       { q: "Kann ich eine Bewertung ändern?", a: "Bewertungen können nach dem Absenden nicht mehr geändert werden. Kontaktiere den Support bei Problemen." },
-      { q: "Warum sind Bewertungen wichtig?", a: "Bewertungen helfen anderen Nutzern, vertrauenswürdige Verkäufer zu erkennen. Deine Durchschnittsbewertung wird auf deinem Profil angezeigt." },
+      { q: "Warum sind Bewertungen wichtig?", a: "Wer bei dir kaufen will, schaut zuerst auf deine Bewertungen. Der Durchschnitt steht auf deinem Profil." },
     ],
   },
   {
