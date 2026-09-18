@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
-import { getCoverUrl, chf } from "@/lib/formatters";
+import { getCoverUrl, chf, preisGesenkt } from "@/lib/formatters";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
@@ -95,6 +95,7 @@ export function ListingCard(props) {
   const statusOverlay = statusOverlayProp ?? listingInactiveLabel(listing);
   const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
+  const gesenkt = statusOverlay ? null : preisGesenkt(listing); // durchgestrichener früherer Preis
   const cover = getCoverUrl(listing);
 
   const handleToggleFav = async () => {
@@ -225,7 +226,14 @@ export function ListingCard(props) {
               <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {chf(listing.price || 0)}
               </span>
-              <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>
+              {gesenkt ? (
+                <>
+                  <span style={{ fontSize: 12, color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>{chf(gesenkt.alt)}</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: "#2E7D32", background: "#E8F5E9", padding: "1px 7px", borderRadius: 999 }}>-{gesenkt.prozent} %</span>
+                </>
+              ) : (
+                <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>
+              )}
             </>
           )}
         </div>

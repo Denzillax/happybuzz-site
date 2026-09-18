@@ -1,6 +1,8 @@
 import { Hero } from '@/components/home/Hero'
 import { Ticker } from '@/components/layout/Ticker'
 import { FormatTiles } from '@/components/home/FormatTiles'
+import { FaktenKacheln } from '@/components/home/FaktenKacheln'
+import { EntdeckenChips } from '@/components/home/EntdeckenChips'
 import { AuctionSpotlight } from '@/components/home/AuctionSpotlight'
 import { ChallengeBanner } from '@/components/home/ChallengeBanner'
 import { CommunityImpact } from '@/components/home/CommunityImpact'
@@ -21,7 +23,10 @@ export default function HomePage() {
           trennt so keine Inhalts-Kacheln (Beta-Feedback Tacocat, 30.08.) */}
       <Ticker placement="home" />
       <Hero />
+      {/* Vier Fakten in einer Zeile, danach Kategorien und Schnelleinstiege (19.09., Anregung marko.ch) */}
+      <FaktenKacheln />
       <Categories />
+      <EntdeckenChips />
       {/* Fuenf Formate als Direkteinstieg (Miete/Service/Gratis = USP) */}
       <FormatTiles />
       <NewListings />

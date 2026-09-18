@@ -11,6 +11,17 @@ export function chf(amount) {
   return (Number(amount) || 0).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// "Preis gesenkt" (19.09.2026): price_before pflegt ein DB-Trigger (Migration
+// 20260919_preis_gesenkt.sql), nur bei Festpreis. Gezeigt wird ab 5 % Senkung,
+// darunter wäre das Rauschen. Rückgabe: { alt, prozent } oder null.
+export function preisGesenkt(listing) {
+  if (!listing || listing.listing_type !== "sell") return null;
+  const alt = parseFloat(listing.price_before), neu = parseFloat(listing.price);
+  if (!(alt > 0) || !(neu > 0) || neu >= alt) return null;
+  const prozent = Math.round((1 - neu / alt) * 100);
+  return prozent >= 5 ? { alt, prozent } : null;
+}
+
 export function formatPrice(amount, currency = "CHF") {
   if (amount == null || amount === 0) return "Gratis";
   return `${currency} ${Number(amount).toLocaleString("de-CH", { minimumFractionDigits: amount % 1 ? 2 : 0 })}`;

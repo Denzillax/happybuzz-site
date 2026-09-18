@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { AnimatedAmount } from "@/components/shared/effects";
 import Portal from "@/components/shared/Portal";
+import { preisGesenkt } from "@/lib/formatters";
 import EmojiPicker, { istNurEmoji } from "@/components/shared/EmojiPicker";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
@@ -1007,6 +1008,12 @@ export default function ListingDetail() {
                 <p style={{ margin: "2px 0 0", fontSize: "clamp(24px, 5.5vw, 30px)", fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
                   {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : <>CHF <AnimatedAmount value={parseFloat(displayPrice) || 0} format={fmtPrice} /></>}
                 </p>
+                {(() => { const g = preisGesenkt(l); return g && l.status === "active" ? (
+                  <p style={{ margin: "2px 0 0", display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+                    <span style={{ color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(g.alt)}</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#2E7D32", background: "#E8F5E9", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
+                  </p>
+                ) : null; })()}
               </div>
               {l.listing_type === "auction" && l.status !== "paused" && (
                 <div style={{ textAlign: "right", fontSize: 13, color: colors.muted, lineHeight: 1.4 }}>

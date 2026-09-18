@@ -23,6 +23,14 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "19. September 2026",
+    punkte: [
+      { typ: "neu", bereich: "Startseite", text: "Vier Fakten direkt unter dem Hero: unter CHF 20 gebührenfrei, 20 Prozent der Gebühr für Bienen, TWINT, Bank oder bar, fünf Formate auf einer Plattform. Darunter neue Schnelleinstiege 'Entdecken': Unter CHF 20, Unter CHF 50, Unter CHF 100, Endet bald, Neu eingestellt, Mit Versand, Verifizierte Verkäufer. Die Suche übernimmt Preisgrenze und Lieferart jetzt aus dem Link", melder: "Denis" },
+      { typ: "neu", bereich: "Startseite", text: "Die Kategorie-Pillen zeigen statt des Symbols ein kleines Foto des neusten Inserats der Kategorie. Kategorien ohne Inserat behalten ihr Symbol", melder: "Denis" },
+      { typ: "neu", bereich: "Inserate", text: "Preis gesenkt: Senkt ein Verkäufer den Festpreis, zeigen Karte und Inseratseite den früheren Preis durchgestrichen mit Prozentangabe (ab 5 Prozent). Den Vergleichspreis führt die Datenbank selbst. Wer den Preis erst hochsetzt und gleich wieder senkt, bekommt keinen Rabatt angezeigt: Ein Preis zählt erst als Vergleich, wenn er 24 Stunden gestanden hat", melder: "Denis" },
+    ],
+  },
+  {
     datum: "18. September 2026",
     punkte: [
       { typ: "neu", bereich: "Design", text: "Knöpfe reagieren beim Hovern einheitlich: Die Fläche wird hellgrau, das Symbol wechselt auf Türkis, die Schrift bleibt. Im Header (Kategorien, Inserieren, Kaufen, Favoriten, Glocke, Nachrichten, Konto) bleibt dieser Zustand stehen, solange das Menü offen ist, beim Nachrichten-Symbol solange man im Chat ist. Gleiches gilt für weisse Knöpfe mit Rand auf der ganzen Seite. Nur mit Maus", melder: "Denis" },

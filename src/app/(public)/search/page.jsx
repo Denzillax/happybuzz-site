@@ -151,10 +151,12 @@ function SearchPageInner() {
     return ["sell", "auction", "rent", "free", "service"].includes(t) ? t : "";
   });
   const [condition, setCondition] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  // Preis und Lieferung kommen auch aus der URL (Entdecken-Chips der Startseite: ?max=20)
+  const zahlAusUrl = (k) => { const v = parseFloat(searchParams.get(k) || ""); return Number.isFinite(v) && v >= 0 ? String(v) : ""; };
+  const [minPrice, setMinPrice] = useState(() => zahlAusUrl("min"));
+  const [maxPrice, setMaxPrice] = useState(() => zahlAusUrl("max"));
   const [city, setCity] = useState("");
-  const [delivery, setDelivery] = useState("");
+  const [delivery, setDelivery] = useState(() => (["shipping", "pickup"].includes(searchParams.get("delivery") || "") ? searchParams.get("delivery") : ""));
   const [verifiedOnly, setVerifiedOnly] = useState(searchParams.get("verified") === "1");
   const [sortBy, setSortBy] = useState("relevanz");
   const [page, setPage] = useState(1);
