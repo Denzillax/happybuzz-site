@@ -61,7 +61,7 @@ export default function SalesPage() {
 
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Meine Verkäufe</div>
-          <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Verkäufe</h1>
+          <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Verkäufe</h1>
           <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{sales.length} verkauft{openCount > 0 ? ` · ${openCount} offen` : ""}</p>
         </div>
 

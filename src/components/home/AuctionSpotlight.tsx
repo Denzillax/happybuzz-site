@@ -66,7 +66,7 @@ export function AuctionSpotlight() {
   if (!listings.length) return null
 
   return (
-    <section style={{ padding: '44px 24px 24px', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <SectionHeader title="Endet bald" href="/search?type=auction" linkLabel="Alle Auktionen" />
 
       <SwipeRow className="listing-grid home-swipe">

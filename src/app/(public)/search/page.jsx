@@ -386,7 +386,7 @@ function SearchPageInner() {
 
         {/* ── Page Title + Überrasch-mich (Beta-Feedback Tacocat 08.09.) ── */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", margin: "0 0 20px" }}>
-          <h1 style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.05, flex: "1 1 auto", minWidth: 0 }}>
+          <h1 className="bd-seitentitel" style={{ fontFamily: fonts.head, fontSize: "clamp(26px, 3.4vw, 32px)", fontWeight: 700, color: INK, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.05, flex: "1 1 auto", minWidth: 0 }}>
             {query ? `Ergebnisse für "${query}"` : mainCatId ? (mainCats.find(c => c.id === mainCatId)?.name || "Suche") : "Alle Inserate"}
           </h1>
           <button onClick={zeigeZufall} disabled={zufallLaedt} style={{

@@ -25,6 +25,8 @@ export const REP_LOG = [
   {
     datum: "19. September 2026",
     punkte: [
+      { typ: "fix", bereich: "Design", text: "Design-Durchgang über die ganze Seite: Alle Seitentitel sind jetzt gleich gross und normal geschrieben (vorher vier Grössen, 'MEINE GEBOTE' in Grossbuchstaben), der Abstand zum Header ist angeglichen. Auf der Startseite haben alle Abschnitte denselben Abstand und dieselbe Titelgrösse, vorher waren es acht verschiedene Abstände", melder: "Denis" },
+      { typ: "fix", bereich: "Header", text: "Zwei Fehler beim Laden jeder Seite behoben (Hydration): Die neuen Hover-Regeln im Header enthielten Anführungszeichen, die Server und Browser unterschiedlich schreiben", melder: "Denis" },
       { typ: "neu", bereich: "Startseite", text: "Unter dem Hero steht mittig eine schmale Zeile mit drei Fakten: unter CHF 20 gebührenfrei, 20 Prozent der Gebühr für Bienen, TWINT, Bank oder bar. In der Kategorie-Reihe stehen vorne vier Schnelleinstiege: Unter CHF 20, Unter CHF 50, Endet bald, Mit Versand. Die Suche übernimmt Preisgrenze und Lieferart jetzt aus dem Link. Die Abstände zwischen den Abschnitten sind vereinheitlicht", melder: "Denis" },
       { typ: "neu", bereich: "Inserate", text: "Preis gesenkt: Senkt ein Verkäufer den Festpreis, zeigen Karte und Inseratseite den früheren Preis durchgestrichen mit Prozentangabe (ab 5 Prozent). Den Vergleichspreis führt die Datenbank selbst. Wer den Preis erst hochsetzt und gleich wieder senkt, bekommt keinen Rabatt angezeigt: Ein Preis zählt erst als Vergleich, wenn er 24 Stunden gestanden hat", melder: "Denis" },
     ],

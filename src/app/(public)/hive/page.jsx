@@ -202,14 +202,14 @@ export default function HivePage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "28px 20px 80px" }}>
+      <div style={{ maxWidth: 920, margin: "0 auto", padding: "32px 20px 80px" }}>
 
         {/* Header */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Dein Bienenstock</div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <BeeIcon size={26} color={colors.yellow} />
-            <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Dein Hive</h1>
+            <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Dein Hive</h1>
           </div>
         </div>
 

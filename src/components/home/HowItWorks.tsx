@@ -33,7 +33,7 @@ const PETROL = '#0B5E5C'
 
 export function HowItWorks() {
   return (
-    <section style={{ padding: '72px 0', background: PAPER, borderTop: "1px solid #E4E0D8", borderBottom: "1px solid #E4E0D8" }}>
+    <section style={{ padding: '64px 0', marginTop: 64, background: PAPER, borderTop: "1px solid #E4E0D8", borderBottom: "1px solid #E4E0D8" }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>

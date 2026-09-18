@@ -55,7 +55,7 @@ export function CommunityImpact() {
   ];
 
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px 44px" }}>
+    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "48px 24px 0" }}>
       {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
       <div style={{ background: "#EEF3EC", borderRadius: 12, padding: "clamp(22px, 3.5vw, 36px)" }}>
       <div className="impact-layout">
@@ -76,7 +76,7 @@ export function CommunityImpact() {
             <Leaf size={14} color={MOSS} />
             <span style={{ fontSize: 12.5, fontWeight: 700, color: MOSS }}>Bee-Impact</span>
           </div>
-          <h2 style={{ margin: "0 0 16px", fontSize: "clamp(20px, 2.4vw, 26px)", fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.15 }}>
+          <h2 style={{ margin: "0 0 16px", fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.15 }}>
             Gemeinsam bewirken
           </h2>
 

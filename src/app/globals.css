@@ -850,3 +850,20 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 /* Gebuehrenrechnung mobil: Kind-Selektor gehoert hierher, im Inline-style-Block der
    Seite bricht das Groesser-Zeichen die Hydration (Projektregel). */
 @media (max-width: 560px) { .inv-pay > div:last-child { align-items: flex-start !important; } }
+
+/* ═══════════════════════════════════════════
+   TYPO- UND ABSTANDSSYSTEM (Denis 19.09.2026, Design-Durchgang)
+   Gemessen waren Seitentitel in 26 / 28 / 30 / 32 px (einer in Grossbuchstaben) und
+   acht verschiedene Abschnittsabstaende auf der Startseite. Jetzt gilt:
+     Seitentitel App-Seiten   28 px / 700, normale Schreibweise, Container 32 px oben
+     Abschnittstitel          20 px / 700 (SectionHeader)
+     Kapitel (Erklaerteil, Impact, Hilfe)  bewusst groesser, bleiben
+     Startseite               jeder Abschnitt 48 px nach oben, 0 nach unten
+   Neue Seiten: h1 mit className="bd-seitentitel".
+   ═══════════════════════════════════════════ */
+.bd-seitentitel {
+  font-size: 28px !important; font-weight: 700 !important; line-height: 1.15 !important;
+  letter-spacing: -0.01em !important; text-transform: none !important;
+}
+@media (max-width: 640px) { .bd-seitentitel { font-size: 24px !important; } }
+

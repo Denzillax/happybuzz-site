@@ -114,11 +114,11 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-6">
         <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkt</div>
-        <h1 className="text-2xl md:text-3xl font-bold text-[#14110D] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
+        <h1 className="bd-seitentitel font-bold text-[#14110D] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
           <Heart size={26} className="text-honey" fill="#F4C03F" />
           Meine Favoriten
         </h1>

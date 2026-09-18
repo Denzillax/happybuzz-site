@@ -64,11 +64,11 @@ export default function PokerLobby() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: "#fff", minHeight: "100vh", color: K.ink }}>
-      <div style={{ maxWidth: 920, margin: "0 auto", padding: "28px 20px 80px" }}>
+      <div style={{ maxWidth: 920, margin: "0 auto", padding: "32px 20px 80px" }}>
         <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Hive · Spiele</div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
           <Spade size={24} color={K.ink} />
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Poker</h1>
+          <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: 26, fontWeight: 700, fontFamily: HEAD, letterSpacing: "-0.01em" }}>Poker</h1>
           {pollen != null && <span style={{ marginLeft: "auto", fontSize: 13, fontWeight: 700, color: colors.muted }}>{pollen} Pollen</span>}
         </div>
         <p style={{ margin: "0 0 22px", fontSize: 14, color: colors.muted, lineHeight: 1.5, maxWidth: 640 }}>

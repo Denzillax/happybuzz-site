@@ -61,7 +61,7 @@ export default function PurchasesPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div>
             <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Meine Käufe</div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Käufe</h1>
+            <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Meine Käufe</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{purchases.length} gekauft{openCount > 0 ? ` · ${openCount} offen` : ""}</p>
           </div>
           <Link href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 18px", borderRadius: 999, border: "1px solid #E4E0D8", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>

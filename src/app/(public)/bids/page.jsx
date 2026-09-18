@@ -130,8 +130,8 @@ export default function MeinGebotePage() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", color: colors.dark }}>
-      <div style={{ maxWidth: 800, margin: "0 auto", padding: "24px 20px 80px" }}>
-        <h1 style={{ fontSize: 28, fontWeight: 800, fontFamily: fonts.head, margin: "0 0 4px", letterSpacing: ".02em" }}>MEINE GEBOTE</h1>
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "32px 20px 80px" }}>
+        <h1 className="bd-seitentitel" style={{ fontSize: 28, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 4px" }}>Meine Gebote</h1>
         <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 24px" }}>
           {bids.length} {bids.length === 1 ? "Auktion" : "Auktionen"} auf die du geboten hast
         </p>

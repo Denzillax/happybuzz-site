@@ -42,7 +42,7 @@ export function SeasonalRecommendations() {
   // kein weisser Text auf Foto). Mobil steht das Bild als flacher
   // Streifen ueber dem Text (per CSS .season-band).
   return (
-    <section style={{ padding: "24px 24px 48px", maxWidth: 1280, margin: "0 auto" }}>
+    <section style={{ padding: "48px 24px 0", maxWidth: 1280, margin: "0 auto" }}>
       <style>{`
         .season-band { display: flex; }
         .season-img { flex: 0 0 42%; min-height: 180; }

@@ -129,8 +129,8 @@ function NewListingPageInner() {
   return (
     <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
       {/* Seitenkopf */}
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 16px 0" }}>
-        <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "32px 16px 0" }}>
+        <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
           Inserat erstellen
         </h1>
       </div>

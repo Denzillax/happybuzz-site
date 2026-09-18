@@ -302,7 +302,7 @@ export default function ListingsPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div>
             <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Verkäuferpult</div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'General Sans','Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
+            <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'General Sans','Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{counts.all} Inserate · {counts.active} aktiv</p>
           </div>
           <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>

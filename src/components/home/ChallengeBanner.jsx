@@ -57,7 +57,7 @@ export function ChallengeBanner() {
   return (
     // Durchgehendes Creme-Band: gleiche Flaeche wie Hero und Bee-Impact,
     // symmetrischer Abstand (40px) ober- und unterhalb der Box
-    <section className="home-band" style={{ background: PAPER, padding: "40px 20px" }}>
+    <section className="home-band" style={{ background: PAPER, padding: "40px 24px", marginTop: 48 }}>
       <style>{`
         /* Aufmerksamkeit ohne Kitsch: ein goldener Lichtstreif gleitet alle
            paar Sekunden ueber die Karte, die Bee-Loud-Marke wippt kurz */

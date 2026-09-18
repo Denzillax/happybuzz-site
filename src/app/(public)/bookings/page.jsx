@@ -126,7 +126,7 @@ export default function BookingsPage() {
     <div style={{ fontFamily: fonts.body, background: K.paper, minHeight: "100vh", color: K.ink }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 80px" }}>
         <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Termine & Mieten</div>
-        <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
+        <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
         <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #E4E0D8", marginBottom: 24 }}>
