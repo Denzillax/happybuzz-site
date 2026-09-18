@@ -536,6 +536,9 @@ input:focus, textarea:focus, select:focus {
     width: 36px !important; height: 36px !important;
     opacity: .85;
   }
+  /* Im Chat sass der Knopf genau ueber dem Senden-Knopf (Denis 18.09.): ueber die
+     Eingabezeile heben. bd-chat-lock setzt chat/layout.jsx, solange der Chat offen ist. */
+  html.bd-chat-lock .beta-fab { bottom: calc(136px + env(safe-area-inset-bottom, 0px)) !important; }
 }
 
 /* Buchungen: Desktop eine Zeile, Handy als Karte mit Umbruechen
@@ -812,4 +815,27 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   .bid-amount { font-size: 13.5px !important; }
   .bid-auto-lang { display: none; }
   .bid-auto-kurz { display: inline; }
+}
+
+/* ═══════════════════════════════════════════
+   HOVER IN AKZENTFARBE (Denis 18.09.2026)
+   Weisse Knoepfe mit Rand (Sekundaerknoepfe, Chips, Filter) werden beim Hovern
+   honiggelb, wie es die Kategorie-Pillen schon tun. Der Header regelt seine Knoepfe
+   in Header.tsx gleich. Erkannt wird ueber den Inline-Style: SSR schreibt
+   "background:#fff", im Browser gerenderte Knoepfe "background: rgb(255, 255, 255)".
+   Ausnahmen: linksbuendige Zeilen (Menues, Listen), .eckig, .type-tab und alles
+   mit der Klasse .kein-akzent. Nur mit echter Maus, am Handy bliebe der Hover kleben.
+   ═══════════════════════════════════════════ */
+@media (hover: hover) and (pointer: fine) {
+  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
+  button[style*="background:#FFF"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
+  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
+  button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
+  a[href].cta-pill[style*="background:#fff"]:hover,
+  .nektar-badge > button:hover {
+    background: #F4C03F !important;
+    border-color: #F4C03F !important;
+    color: #14110D !important;
+    filter: none !important;
+  }
 }

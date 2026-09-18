@@ -25,6 +25,8 @@ export const REP_LOG = [
   {
     datum: "18. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Design", text: "Knöpfe wechseln beim Hovern auf die Akzentfarbe: Im Header werden Kategorien, Inserieren, Kaufen, Favoriten, Glocke, Nachrichten und das Konto honiggelb, die Einträge in den Menüs hell-honig. Auf der ganzen Seite gilt das Gleiche für weisse Knöpfe mit Rand. Nur mit Maus, am Handy bleibt alles ruhig", melder: "Denis" },
+      { typ: "fix", bereich: "Feedback", text: "Die Feedback-Sprechblase sitzt am Desktop etwas höher und mittig über dem gelben Inserieren-Kreis. Im Chat am Handy lag sie genau über dem Senden-Knopf, dort rückt sie jetzt über die Eingabezeile. Ausserdem: kein türkiser Schein mehr um die Felder beim Anmelden und beim Inserieren", melder: "Denis" },
       { typ: "fix", bereich: "Chat", text: "Chat am Handy: Das Nachrichtenfeld sitzt jetzt fest zwischen Header und unterer Navigation, die Seite lässt sich nicht mehr nach unten ziehen. Seit der Header zweizeilig ist, war der Chat zu hoch gerechnet. Bei offener Tastatur endet der Chat an der Tastatur", melder: "Denis" },
       { typ: "neu", bereich: "Inserat", text: "Die öffentlichen Fragen auf dem Inserat haben das neue Chat-Design: eigene Nachrichten in Teal, andere hell, Zeit am Zeilenende, reine Emoji-Nachrichten gross. Dazu der Emoji-Knopf mit den gleichen rund 100 Emojis wie im Chat und ein runder Senden-Knopf", melder: "Denis" },
       { typ: "fix", bereich: "Suche", text: "Der gelbe viereckige Schein im mobilen Suchfeld ist weg. Gleiches Muster behoben in der Gesprächssuche im Chat und in zwei Admin-Suchfeldern", melder: "Denis" },

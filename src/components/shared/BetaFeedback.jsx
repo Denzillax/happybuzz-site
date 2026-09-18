@@ -275,7 +275,9 @@ export default function BetaFeedback() {
   if (!open) {
     return (
       <button onClick={() => setOpen(true)} title="Beta Feedback" className="beta-fab" style={{
-        position: "fixed", bottom: 96, right: 20, zIndex: 9990,
+        // Desktop: mittig ueber dem gelben Inserieren-Kreis (der sitzt bei right 28, Breite 50,
+        // Mitte also 53 von rechts; 53 - 20 = 33) und etwas hoeher (Denis 18.09.)
+        position: "fixed", bottom: 104, right: 33, zIndex: 9990,
         width: 40, height: 40, borderRadius: "50%",
         background: colors.teal, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",

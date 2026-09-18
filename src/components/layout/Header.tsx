@@ -191,10 +191,10 @@ export function Header() {
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E4E0D8; flex-shrink: 0; margin: 0 6px; }
         .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e5e0; }
-        .hdr-menu-btn:hover { background: #F4F4F2 !important; }
+        .hdr-menu-btn:hover { background: #F4C03F !important; color: #14110D !important; filter: none !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #f8f6f3 !important; color: #1a1a1a !important; }
-        .hdr-icon-btn:hover { background: #f5f3f0 !important; color: #1a1a1a !important; }
+        .hdr-menu-item:hover { background: #FFF6DB !important; color: #14110D !important; filter: none !important; }
+        .hdr-icon-btn:hover { background: #F4C03F !important; color: #14110D !important; filter: none !important; }
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }
@@ -226,7 +226,7 @@ export function Header() {
           <div className="hdr-desktop" style={{ flex: 1, alignItems: 'center', gap: 4 }}>
 
             {/* Kategorien (Mega-Menue) */}
-            <button onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
+            <button className="hdr-menu-btn" onClick={() => setMegaMenuOpen(!megaMenuOpen)} style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px',
               border: '1px solid #E4E0D8',
               borderRadius: 999, background: megaMenuOpen ? '#F4F4F2' : '#fff',
