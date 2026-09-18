@@ -12,7 +12,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
 const MONO = "'Manrope', sans-serif";
@@ -133,7 +133,7 @@ const CATEGORIES = [
     icon: Mail,
     title: "Kontakt & Rechtliches",
     desc: "Support, AGB, Datenschutz & Impressum",
-    color: "#6B655F",
+    color: "#5B626C",
     faqs: [
       { q: "Wie erreiche ich den Support?", a: "Schreib an support@beedaro.ch. Wir antworten meist innert 24 Stunden." },
       { q: "Wo finde ich die AGB?", a: "Unsere Allgemeinen Geschäftsbedingungen findest du unter /terms." },
@@ -153,7 +153,7 @@ function FaqItem({ q, a, open, onClick }) {
         borderBottom: `1px solid ${colors.borderLt}`,
         transition: "background .15s",
       }}
-      onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
+      onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -189,7 +189,7 @@ export default function HelpPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "60px 20px 56px", textAlign: "center",
-        borderBottom: "1px solid #E4E0D8",
+        borderBottom: "1px solid #E5E8EC",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
@@ -210,7 +210,7 @@ export default function HelpPage() {
               placeholder="Suchbegriff eingeben..."
               style={{
                 width: "100%", padding: "13px 16px 13px 42px", borderRadius: 12,
-                border: "1px solid #E4E0D8", background: "#fff",
+                border: "1px solid #E5E8EC", background: "#fff",
                 fontSize: 15, fontFamily: fonts.body, color: INK, outline: "none",
                 boxSizing: "border-box",
               }}
@@ -240,7 +240,7 @@ export default function HelpPage() {
                 <h3 style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 6 }}>
                   <cat.icon size={16} color={cat.color} /> {cat.title}
                 </h3>
-                <div style={{ borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden", background: "#fff" }}>
+                <div style={{ borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", background: "#fff" }}>
                   {cat.faqs.map((f, i) => (
                     <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                       onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -265,7 +265,7 @@ export default function HelpPage() {
                     onClick={() => { setOpenCat(isOpen ? null : cat.id); setOpenFaq(null); }}
                     style={{
                       padding: "20px", borderRadius: 12, cursor: "pointer",
-                      background: "#fff", border: "1px solid #E4E0D8",
+                      background: "#fff", border: "1px solid #E5E8EC",
                       boxShadow: isOpen ? `0 10px 24px rgba(20,17,13,.12)` : "none",
                       transition: "all .2s",
                     }}
@@ -276,7 +276,7 @@ export default function HelpPage() {
                       <div style={{
                         width: 40, height: 40, borderRadius: 12, display: "flex",
                         alignItems: "center", justifyContent: "center",
-                        background: SAND, border: "1px solid #E4E0D8",
+                        background: SAND, border: "1px solid #E5E8EC",
                       }}>
                         <Icon size={20} color={cat.color} />
                       </div>
@@ -305,7 +305,7 @@ export default function HelpPage() {
                     <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: colors.dark }}>{cat.title}</h2>
                     <span style={{ fontSize: 12, color: colors.muted }}>· {cat.faqs.length} Artikel</span>
                   </div>
-                  <div style={{ borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden", background: "#fff" }}>
+                  <div style={{ borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", background: "#fff" }}>
                     {cat.faqs.map((f, i) => (
                       <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                         onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -320,7 +320,7 @@ export default function HelpPage() {
         {/* ── Contact Box ── */}
         <div style={{
           padding: 28, borderRadius: 12, background: "#fff",
-          border: "1px solid #E4E0D8", textAlign: "center",
+          border: "1px solid #E5E8EC", textAlign: "center",
         }}>
           <Mail size={26} color={PETROL} style={{ marginBottom: 8 }} />
           <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>Nicht gefunden, was du suchst?</h3>
@@ -331,7 +331,7 @@ export default function HelpPage() {
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "12px 26px", borderRadius: 999, background: INK,
             color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none",
-            fontFamily: fonts.body, border: "1px solid #E4E0D8",
+            fontFamily: fonts.body, border: "1px solid #E5E8EC",
           }}>
             <Mail size={16} /> support@beedaro.ch
           </a>

@@ -51,13 +51,13 @@ const reasonLabel = (r) => {
 };
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 function Card({ children, style }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", padding: "20px 22px", ...style }}>
+    <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: "20px 22px", ...style }}>
       {children}
     </div>
   );
@@ -245,7 +245,7 @@ export default function HivePage() {
 
           {/* So haengt alles zusammen - kompakt erklaert
               (Beta-Feedback Tacocat + Michael, 30.08.: Reihenfolge unklar) */}
-          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F4F4F2", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
+          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F5F6F8", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
             <b style={{ color: colors.dark }}>So funktioniert dein Hive, und was du davon hast:</b><br />
             <b style={{ color: colors.dark }}>Pollen</b> sammelst du durch Aktivität (Inserate, Käufe, Logins, Challenges). Sie bestimmen dein Level, und ein höheres Level bringt dir sichtbare Vorteile: das Abzeichen auf deinem Profil und ab Hive Builder einen Ranking-Boost für deine Inserate.<br />
             <b style={{ color: colors.dark }}>Blüten</b> sind dein Bienenschutz-Beitrag aus Verkäufen. Sie zahlen automatisch aufs Level ein (100 Blüten = 1 Pollen). Du musst nichts damit tun, und ohne Verkäufe ist 0 Blüten völlig normal.<br />
@@ -421,7 +421,7 @@ export default function HivePage() {
                 <div key={key} style={{
                   display: "flex", gap: 10, padding: "10px 12px", borderRadius: radius.md,
                   border: `1px solid ${unlocked ? colors.yellow + "55" : colors.borderLt}`,
-                  background: unlocked ? colors.yellowSoft : "#F4F4F2", opacity: unlocked ? 1 : 0.7,
+                  background: unlocked ? colors.yellowSoft : "#F5F6F8", opacity: unlocked ? 1 : 0.7,
                 }}>
                   <div style={{ flexShrink: 0, marginTop: 1 }}>
                     {unlocked ? <Trophy size={18} color={colors.yellowDark} /> : <Lock size={16} color={colors.mutedLt} />}

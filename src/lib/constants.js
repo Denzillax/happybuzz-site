@@ -17,7 +17,7 @@ export const LISTING_TYPE_LABELS = Object.fromEntries(LISTING_TYPES.map(t => [t.
 // ─── Listing Status ──────────────────────────────────────────
 // DB ENUM listing_status: draft, active, paused, sold, rented, expired, deleted
 export const LISTING_STATUSES = [
-  { value: "draft",   label: "Entwurf",   color: "#8A8580" },
+  { value: "draft",   label: "Entwurf",   color: "#7D848E" },
   { value: "active",  label: "Aktiv",     color: "#5B8C5A" },
   { value: "paused",  label: "Pausiert",  color: "#E5A100" },
   { value: "sold",    label: "Verkauft",  color: "#94B9C9" },
@@ -45,7 +45,7 @@ export const BEE_IMPACT_RATE = 0.20;
 
 // ─── Bee-Impact Levels (Gamification) ────────────────────────
 export const BEE_LEVELS = [
-  { key: "starter",      label: "Bee Starter",   min: 0,   max: 10,  color: "#B5AFA8", maxListings: 5,  benefits: ["5 aktive Inserate"] },
+  { key: "starter",      label: "Bee Starter",   min: 0,   max: 10,  color: "#B3B9C1", maxListings: 5,  benefits: ["5 aktive Inserate"] },
   { key: "busy_bee",     label: "Busy Bee",      min: 10,  max: 50,  color: "#F4C03F", maxListings: 10, benefits: ["10 aktive Inserate", "Bee-Badge im Profil"] },
   { key: "hive_builder", label: "Hive Builder",  min: 50,  max: 150, color: "#E5922E", maxListings: 25, benefits: ["25 aktive Inserate", "Verified-Badge", "Inserate werden höher angezeigt"] },
   { key: "queen",        label: "Queen Bee",     min: 150, max: 500, color: "#5B8C5A", maxListings: 50, benefits: ["50 aktive Inserate", "Priority Support", "Profil-Highlight"] },

@@ -240,7 +240,7 @@ export function ListingCard(props) {
 
         {/* Kleingedrucktes: eigener Block mit Luft und Linie, am Kartenboden */}
         <div style={{ marginTop: "auto", paddingTop: 12 }}>
-          <div style={{ borderTop: "1px solid #EEEBE5", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
+          <div style={{ borderTop: "1px solid #EEF0F3", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
             {/* Zeile 1: nur der Ort (Denis 16.09.: der Zustand "Gut" davor ist weg,
                 er steht im Inserat selbst) */}
             <div style={{ display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", overflow: "hidden" }}>

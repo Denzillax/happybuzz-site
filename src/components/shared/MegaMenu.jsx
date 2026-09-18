@@ -8,7 +8,7 @@ import { getAllCategories } from "@/lib/listings";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PETROL = "#0B5E5C";
 const MONO = "'Manrope', sans-serif";
 
@@ -65,7 +65,7 @@ export function MegaMenu({ open, onClose }) {
     padding: "10px 16px", fontSize: 13, fontFamily: fonts.body,
     color: active ? INK : colors.muted, fontWeight: active ? 700 : 500,
     // Hellbeige statt Sand, gelber Akzent statt Petrol (Feedback Denis)
-    background: active ? "#F4F4F2" : "transparent",
+    background: active ? "#F5F6F8" : "transparent",
     cursor: "pointer", transition: "all .1s", textDecoration: "none",
     borderLeft: active ? "3px solid #F4C03F" : "3px solid transparent",
   });
@@ -74,7 +74,7 @@ export function MegaMenu({ open, onClose }) {
     <div ref={ref} style={{
       position: "absolute", top: "100%", left: 0, zIndex: 1000,
       background: colors.surface, borderRadius: "0 0 12px 12px",
-      border: "1px solid #E4E0D8", borderTop: "none",
+      border: "1px solid #E5E8EC", borderTop: "none",
       boxShadow: "0 16px 40px rgba(20,17,13,.16)",
       display: "flex", minHeight: 300,
     }}>

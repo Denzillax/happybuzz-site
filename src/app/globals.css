@@ -94,7 +94,7 @@ body {
     bottom: calc(56px + env(safe-area-inset-bottom, 0px));
     z-index: 45; display: flex; align-items: center; justify-content: space-between;
     gap: 12px; padding: 10px 14px;
-    background: #FFFFFF; border-top: 1px solid #E4E0D8;
+    background: #FFFFFF; border-top: 1px solid #E5E8EC;
   }
   .map-desktop-only { display: none; }
   /* Besitzer-Leiste: mobil unten (mobile-cta-bar), oben ausblenden */
@@ -161,13 +161,13 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
 /* Karte mit abgerundetem Hairline-Rahmen (Denis, 15.09.) */
 .listing-grid > a, .search-results-grid > a, .listing-grid > div {
   min-width: 0; background: #FFFFFF; padding: 10px; box-shadow: none;
-  border: 1px solid #E4E0D8; border-radius: 12px;
+  border: 1px solid #E5E8EC; border-radius: 12px;
   transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
 }
 .listing-grid > div { display: flex; flex-direction: column; }
 .listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; border: none; }
-.raster-umschalter { display: inline-flex; gap: 2px; background: #F2EEE7; border-radius: 999px; padding: 3px; flex-shrink: 0; }
-.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #8A8580; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.raster-umschalter { display: inline-flex; gap: 2px; background: #F1F3F5; border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #7D848E; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .raster-umschalter button.on { background: #fff; color: #191615; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 @media (max-width: 1024px) {
   .listing-grid, .search-results-grid,
@@ -332,7 +332,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
-  background: #F2EEE7 !important; color: #8A8580 !important; border-color: #E4E0D8 !important; cursor: not-allowed;
+  background: #F1F3F5 !important; color: #7D848E !important; border-color: #E5E8EC !important; cursor: not-allowed;
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
@@ -362,7 +362,7 @@ input:focus, textarea:focus, select:focus {
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
-.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#8A8580; transition:color .2s; }
+.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#7D848E; transition:color .2s; }
 .tab.active { color:#191615; }
 .tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
 .link { color:#0B5E5C; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
@@ -383,11 +383,11 @@ input:focus, textarea:focus, select:focus {
   .chat-thread-back { display: flex !important; }
 }
 /* Chat: duenner, dezenter Scrollbalken (Nachrichten) + Schnell-Antworten ohne Balken */
-.chat-scroll { scrollbar-width: thin; scrollbar-color: #CFCBC4 transparent; }
+.chat-scroll { scrollbar-width: thin; scrollbar-color: #D5D9DF transparent; }
 .chat-scroll::-webkit-scrollbar { width: 8px; }
 .chat-scroll::-webkit-scrollbar-track { background: transparent; }
-.chat-scroll::-webkit-scrollbar-thumb { background-color: #CFCBC4; border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
-.chat-scroll::-webkit-scrollbar-thumb:hover { background-color: #B6B1A8; background-clip: content-box; }
+.chat-scroll::-webkit-scrollbar-thumb { background-color: #D5D9DF; border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+.chat-scroll::-webkit-scrollbar-thumb:hover { background-color: #B3B9C1; background-clip: content-box; }
 .chat-quickreplies { scrollbar-width: none; -ms-overflow-style: none; }
 .chat-quickreplies::-webkit-scrollbar { display: none; }
 
@@ -410,7 +410,7 @@ input:focus, textarea:focus, select:focus {
    Muss hier stehen (nicht inline) — Pseudoklassen gehen in style={} nicht.
    Kein !important: offene Zeilen setzen ihren Hintergrund inline und
    sollen ihn beim Hovern behalten. */
-.adm-row:hover { background: #FAF8F3; }
+.adm-row:hover { background: #FAFBFC; }
 
 /* ── Hero: Beta-Slide-Effekte ─────────────────────────────────
    Keyframes gehören hierher, nicht in inline <style>-Tags (Hydration).
@@ -464,7 +464,7 @@ input:focus, textarea:focus, select:focus {
 /* ── Richtext: Beschreibungs-Editor + Anzeige (gemeinsame Formate) ── */
 .rte-area:empty::before {
   content: attr(data-placeholder);
-  color: #8A8580;
+  color: #7D848E;
   pointer-events: none;
 }
 .rte-area h3, .rich-desc h3 {
@@ -582,7 +582,7 @@ input:focus, textarea:focus, select:focus {
 .cat-scroll-btn {
   /* kein transform hier: die globale button:active-Regel (translateY(1px)) wuerde es ueberschreiben und den Pfeil springen lassen (Denis 17.09.) */
   position: absolute; top: calc(50% - 20px); z-index: 2; width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid #E4E0D8; background: #fff; color: #191615; cursor: pointer; display: none; align-items: center; justify-content: center;
+  border: 1px solid #E5E8EC; background: #fff; color: #191615; cursor: pointer; display: none; align-items: center; justify-content: center;
   box-shadow: 0 2px 8px rgba(25,22,21,.12);
 }
 .cat-scroll-btn.right { right: 0; } .cat-scroll-btn.left { left: 0; }
@@ -691,7 +691,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 .type-tab:hover:not(.is-active) span { color: #191615 !important; }
 .type-tab:hover:not(.is-active) svg { stroke: #191615; }
 .type-free { transition: border-color .15s ease, background .15s ease; }
-.type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F4F4F2 !important; }
+.type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F5F6F8 !important; }
 
 .spin { animation: spin 1s linear infinite; }
 
@@ -699,7 +699,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
-.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { border-color: #CFC9BE; box-shadow: 0 8px 22px rgba(25,22,21,.12); transform: translateY(-2px); }
+.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { border-color: #D5D9DF; box-shadow: 0 8px 22px rgba(25,22,21,.12); transform: translateY(-2px); }
 
 /* "Warum wir"-Karten haben ihren eigenen farbigen Hover (Akzentrand + Schatten),
    das globale Abdunkeln machte sie grau (Denis, 15.09.) */
@@ -712,7 +712,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
   .swipe-nav {
     display: flex; align-items: center; justify-content: center;
     position: absolute; top: 40%; width: 36px; height: 36px; border-radius: 50%;
-    border: 1px solid #E4E0D8; background: rgba(255,255,255,.95); color: #191615;
+    border: 1px solid #E5E8EC; background: rgba(255,255,255,.95); color: #191615;
     box-shadow: 0 2px 8px rgba(25,22,21,.18); cursor: pointer; z-index: 2;
   }
   .swipe-prev { left: -6px; }
@@ -771,7 +771,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 .bd-fx-tick { display: inline-block; color: #c62828 !important; animation: bd-fx-tick .35s ease-out; }
 
 @keyframes bd-fx-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.bd-fx-skel { background: linear-gradient(90deg, #F2EEE7 25%, #FAF7F2 45%, #F2EEE7 65%) !important; background-size: 200% 100% !important; animation: bd-fx-shimmer 1.4s linear infinite; }
+.bd-fx-skel { background: linear-gradient(90deg, #F1F3F5 25%, #FAFBFC 45%, #F1F3F5 65%) !important; background-size: 200% 100% !important; animation: bd-fx-shimmer 1.4s linear infinite; }
 
 @keyframes bd-fx-page { from { opacity: 0; } to { opacity: 1; } }
 .bd-fx-page { animation: bd-fx-page .22s ease-out; }
@@ -827,7 +827,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
    gerenderte Knoepfe "background: rgb(255, 255, 255)". Ausnahmen: linksbuendige
    Zeilen, .eckig, .type-tab, .kein-akzent. Nur mit echter Maus.
    ═══════════════════════════════════════════ */
-.nektar-badge > button[aria-expanded="true"] { background: #F4F4F2 !important; }
+.nektar-badge > button[aria-expanded="true"] { background: #F5F6F8 !important; }
 @media (hover: hover) and (pointer: fine) {
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
   button[style*="background:#FFF"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
@@ -835,7 +835,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
   a[href].cta-pill[style*="background:#fff"]:hover,
   .nektar-badge > button:hover {
-    background: #F4F4F2 !important;
+    background: #F5F6F8 !important;
     color: #0E9493 !important;
     filter: none !important;
   }
@@ -890,16 +890,16 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 }
 
 /* ═══════════════════════════════════════════
-   FARBFAMILIE (Denis 19.09.2026): 190 Farbwerte, viele Beinahe-Doppelte, und zwei
-   Familien durcheinander (Theme neutral-grau, Seiten warm-grau). Jetzt eine warme
-   Familie, passend zu Ink und Sand. Neue Stellen nur noch diese Werte:
-     Ink          #191615   (vorher auch #14110D, #1a1a1a)
-     Nebentext    #6B655F   (vorher #757575, #666, #555 ...)     Kontrast 5.7 auf Weiss
-     Hinweistext  #8A8580   (vorher #999, #888, #9E9E9E ...)     Kontrast 3.7, nur Kleines
-     Rand         #E4E0D8   (vorher #E2E2E2, #e8e5e0, #ddd ...)
-     feiner Rand  #EEEBE5   (vorher #EEEEEE, #eee, #f0f0f0)
-     Sand         #F4F4F2   (vorher #f5f5f5, #fafafa, #f8f6f3 ...)
-     Chip         #F2EEE7
-     Honig        #F4C03F   Teal #0E9493   Petrol #0B5E5C (einziges dunkles Teal)
+   FARBFAMILIE (Denis 19.09.2026, Richtung "Klar"): Weiss und neutrales Grau statt
+   Sand und Beige. Honig und Teal wirken so kräftiger, die Fotos auch. Erst wurde auf
+   eine warme Familie konsolidiert (190 auf 140 Werte), das war Denis zu grau und sandig.
+   Neue Stellen nur noch diese Werte:
+     Ink          #191615
+     Nebentext    #5B626C   Kontrast 6.2 auf Weiss
+     Hinweistext  #7D848E   Kontrast 3.9, nur für Kleines
+     Rand         #E5E8EC   feiner Rand #EEF0F3   kräftiger Rand #D5D9DF
+     Fläche       #F5F6F8   Chip / Pille #F1F3F5
+     Hero-Band    #E9F6F5   (helles Teal, einziger Farbmoment oben)
+     Honig        #F4C03F   Teal #0E9493   Petrol #0B5E5C
      Rot          #C62828 auf #FFEBEE   Grün #2E7D32 auf #E8F5E9   Markengrün #5B8C5A
-   ═══════════════════════════════════════════ */
+   ═══ */

@@ -76,7 +76,7 @@ const inputBase = {
   width: "100%",
   padding: "12px 14px",
   borderRadius: 12,
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   background: "#fff",
   fontSize: 14,
   fontFamily: fonts.body,
@@ -101,7 +101,7 @@ const sectionBase = {
   background: "#fff",
   borderRadius: 12,
   padding: "26px 24px",
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   marginBottom: 18,
 };
 
@@ -118,7 +118,7 @@ const SectionHead = ({ icon: Icon, title, hint, right }) => (
     {Icon && (
       <div style={{
         width: 34, height: 34, borderRadius: 12, flexShrink: 0,
-        background: colors.yellow, border: "1px solid #E4E0D8",
+        background: colors.yellow, border: "1px solid #E5E8EC",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
         <Icon size={17} color={INK} />
@@ -1190,7 +1190,7 @@ export default function ListingForm({
               disabled={aiBusy}
               style={{
                 width: "100%", marginTop: 10, padding: "12px 16px",
-                border: "1px solid #E4E0D8", borderRadius: 12,
+                border: "1px solid #E5E8EC", borderRadius: 12,
                 background: colors.yellow, color: colors.dark,
                 fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
                 cursor: aiBusy ? "wait" : "pointer", boxShadow: "0 1px 4px rgba(25,22,21,.18)",
@@ -1219,7 +1219,7 @@ export default function ListingForm({
             onClick={() => cameraRef.current?.click()}
             style={{
               width: "100%", marginTop: 10, padding: "12px 16px",
-              border: "1px solid #E4E0D8", borderRadius: 12,
+              border: "1px solid #E5E8EC", borderRadius: 12,
               background: colors.yellow, color: colors.dark,
               fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
               cursor: "pointer", boxShadow: "0 1px 4px rgba(25,22,21,.18)",
@@ -1294,7 +1294,7 @@ export default function ListingForm({
           </div>
           {gesperrt ? (
             <div>
-              <div style={{ ...inputBase, minHeight: 80, background: "#F4F4F2", color: "#6B655F", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
+              <div style={{ ...inputBase, minHeight: 80, background: "#F5F6F8", color: "#5B626C", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
               <label style={{ ...labelBase, marginTop: 12 }}>Nachtrag (wird unter den Text gehängt, mit Datum)</label>
               <textarea value={nachtrag} onChange={(e) => setNachtrag(e.target.value)} rows={3} maxLength={1000}
                 placeholder="z. B. Kabel ist doch dabei, Abholung auch am Wochenende möglich"
@@ -1567,13 +1567,13 @@ export default function ListingForm({
                     {attr.is_required && <span style={{ color: colors.red, marginLeft: 2 }}>*</span>}
                   </label>
                   {istNeuware && attr.attribute_type === "select" && Array.isArray(attr.options) && attr.options.length > 0 && (
-                    <div style={{ display: "inline-flex", border: "1px solid #E4E0D8", flexShrink: 0 }}>
+                    <div style={{ display: "inline-flex", border: "1px solid #E5E8EC", flexShrink: 0 }}>
                       {[["fest", "Fester Wert"], ["wahl", "Käufer wählt"]].map(([k, lbl], i) => {
                         const aktiv = (k === "wahl") === istWaehlbar(attr.attribute_key);
                         return (
                           <button key={k} type="button" onClick={() => { if (!aktiv) umschalten(attr.attribute_key); }} style={{
                             fontSize: 10.5, fontWeight: 700, padding: "5px 10px", border: "none",
-                            borderLeft: i > 0 ? "1px solid #E4E0D8" : "none", cursor: "pointer",
+                            borderLeft: i > 0 ? "1px solid #E5E8EC" : "none", cursor: "pointer",
                             fontFamily: fonts.body, background: aktiv ? colors.yellow : "#fff",
                             color: aktiv ? INK : colors.muted, whiteSpace: "nowrap",
                           }}>{lbl}</button>
@@ -2487,7 +2487,7 @@ export default function ListingForm({
       <div className="lf-actionbar" style={{
         position: "sticky", bottom: 0, zIndex: 30,
         margin: "8px -16px 0", padding: "14px 16px",
-        background: "rgba(249,244,236,.94)", borderTop: "1px solid #E4E0D8",
+        background: "rgba(249,244,236,.94)", borderTop: "1px solid #E5E8EC",
       }}>
         <div className="lf-act-row" style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
@@ -2496,7 +2496,7 @@ export default function ListingForm({
             className="lf-act-preview"
             style={{
               padding: "13px 16px", borderRadius: 12,
-              border: "1px solid #E4E0D8", background: "#fff",
+              border: "1px solid #E5E8EC", background: "#fff",
               color: colors.dark, fontSize: 14, fontFamily: fonts.body,
               cursor: "pointer", transition: "all .15s", display: "flex", alignItems: "center", gap: 6,
             }}
@@ -2510,7 +2510,7 @@ export default function ListingForm({
             className="lf-act-draft"
             style={{
               padding: "13px 18px", borderRadius: 12,
-              border: "1px solid #E4E0D8", background: "#fff",
+              border: "1px solid #E5E8EC", background: "#fff",
               color: colors.dark, fontSize: 14, fontWeight: 700,
               fontFamily: fonts.body, cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
@@ -2524,7 +2524,7 @@ export default function ListingForm({
             disabled={saving}
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
-              borderRadius: 12, border: "1px solid #E4E0D8",
+              borderRadius: 12, border: "1px solid #E5E8EC",
               background: colors.yellow, color: colors.dark,
               fontSize: 14.5, fontWeight: 800, fontFamily: fonts.body,
               cursor: saving ? "not-allowed" : "pointer",

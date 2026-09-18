@@ -4,7 +4,7 @@ import { Tag, Gavel, CalendarClock, Gift, Wrench } from 'lucide-react'
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
-const CHIP = '#F2EEE7'
+const CHIP = '#F1F3F5'
 
 // Die fuenf Formate als Direkteinstieg: Miete/Service/Gratis hat kein
 // Schweizer Konkurrent, also gehoeren sie prominent auf die Startseite.

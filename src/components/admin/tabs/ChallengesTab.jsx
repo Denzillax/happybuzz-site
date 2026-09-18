@@ -159,7 +159,7 @@ export function ChallengesTab({ admin }) {
                   {c.is_template ? <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><Repeat size={11} /> wöchentlich</span> : `${fmtD(c.starts_at)} bis ${fmtD(c.ends_at)}`}
                 </td>
                 <td style={{ ...td, textAlign: "right" }}>{c.is_template ? "" : c.participants}</td>
-                <td style={{ ...td, textAlign: "center" }}>{c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F4F4F2", "#6B655F", "Aus")}</td>
+                <td style={{ ...td, textAlign: "center" }}>{c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F5F6F8", "#5B626C", "Aus")}</td>
                 <td style={{ ...td, textAlign: "center" }}>
                   <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                     {c.is_template && (
@@ -193,7 +193,7 @@ export function ChallengesTab({ admin }) {
                   <p style={{ margin: 0, fontSize: 13.5, fontWeight: 700 }}>{c.title} {c.featured && pill("#FFF5D8", "#5c4708", "Startseite")}</p>
                   {c.description && <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{c.description}</p>}
                 </div>
-                {c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F4F4F2", "#6B655F", "Aus")}
+                {c.active ? pill("#E8F5E9", "#2E7D32", "Aktiv") : pill("#F5F6F8", "#5B626C", "Aus")}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6, flexWrap: "wrap", fontSize: 12, color: colors.muted }}>
                 <span>{aLabel(c.target_action)}{c.category_id ? ` · ${catName(c.category_id)}` : ""}</span>

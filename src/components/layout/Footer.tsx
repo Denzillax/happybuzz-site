@@ -25,7 +25,7 @@ const links = {
 
 export function Footer() {
   return (
-    <footer style={{ background: '#FFFFFF', color: '#191615', borderTop: '1px solid #E4E0D8' }}>
+    <footer style={{ background: '#FFFFFF', color: '#191615', borderTop: '1px solid #E5E8EC' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 24px 24px' }}>
         {/* Top Grid */}
         <div className="ftr-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
@@ -97,7 +97,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="ftr-bottom" style={{ borderTop: '1px solid #E4E0D8', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="ftr-bottom" style={{ borderTop: '1px solid #E5E8EC', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <p style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', margin: 0 }}>
             © 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784. Alle Rechte vorbehalten.
           </p>

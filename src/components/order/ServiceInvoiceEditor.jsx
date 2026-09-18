@@ -81,7 +81,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
   }
 
   const inputStyle = {
-    padding: "9px 12px", border: "1px solid #E4E0D8", borderRadius: 12,
+    padding: "9px 12px", border: "1px solid #E5E8EC", borderRadius: 12,
     fontSize: 13, fontFamily: fonts.body, color: colors.dark, outline: "none",
     background: "#fff", transition: "border-color .15s",
   };
@@ -104,7 +104,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
           <div key={item.id} style={{
             display: "flex", gap: 10, alignItems: "flex-start",
             padding: "12px 14px", background: "#fff", borderRadius: 12,
-            border: "1px solid #E4E0D8", marginBottom: 8,
+            border: "1px solid #E5E8EC", marginBottom: 8,
           }}>
             {/* Icon */}
             <div style={{
@@ -209,7 +209,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                   cursor: "pointer", borderRadius: 12, transition: "background .1s",
                   fontFamily: fonts.body, fontSize: 13, color: colors.dark, textAlign: "left",
                 }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
+                  onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
                   <div style={{ width: 28, height: 28, borderRadius: 12, background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -229,7 +229,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Totals */}
       {items.length > 0 && (
         <div style={{
-          background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8",
+          background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC",
           padding: "16px 18px", marginBottom: 16,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
@@ -257,7 +257,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
       {/* Submit */}
       <button onClick={handleSubmit} disabled={items.length === 0 || saving || subtotal <= 0} style={{
         width: "100%", padding: "13px 20px", borderRadius: 12, border: "none",
-        background: items.length > 0 && subtotal > 0 ? K.petrol : "#E4E0D8",
+        background: items.length > 0 && subtotal > 0 ? K.petrol : "#E5E8EC",
         color: items.length > 0 && subtotal > 0 ? "#fff" : colors.muted,
         fontSize: 14, fontWeight: 700, fontFamily: fonts.body, cursor: items.length > 0 ? "pointer" : "default",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

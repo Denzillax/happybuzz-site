@@ -53,7 +53,7 @@ export function UserProfile({ admin }) {
       {/* Kopf */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, flexWrap: "wrap" }}>
         <button onClick={closeProfile} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: colors.cream, border: "none", borderRadius: 999, padding: "8px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}><ArrowLeft size={15} /> Zurück</button>
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EEEBE5" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#8A8580" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#7D848E" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head }}>{u.display_name || "—"} <span style={{ fontSize: 13, fontWeight: 400, color: colors.muted }}>@{u.username || "—"}</span></div>
           <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
@@ -137,7 +137,7 @@ export function UserProfile({ admin }) {
       {/* Sub-Daten */}
       <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
         {/* Sub-Tabs mit Zählern auf allen Reitern */}
-        <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}`, background: "#FCFBF9" }}>
+        <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}`, background: "#FAFBFC" }}>
           {[
             { key: "inserate", label: "Inserate", n: uLst.length },
             { key: "bestellungen", label: "Bestellungen", n: uOrders.length },
@@ -154,7 +154,7 @@ export function UserProfile({ admin }) {
                 borderBottom: on ? `2.5px solid ${colors.yellow}` : "2.5px solid transparent", transition: "color .12s, background .12s",
               }}>
                 {t.label}
-                {t.n > 0 && <span style={{ fontSize: 10.5, fontWeight: 700, lineHeight: 1, padding: "2px 7px", borderRadius: 999, background: on ? colors.yellowSoft : "#ECE9E3", color: on ? "#8a6d00" : colors.muted }}>{t.n}</span>}
+                {t.n > 0 && <span style={{ fontSize: 10.5, fontWeight: 700, lineHeight: 1, padding: "2px 7px", borderRadius: 999, background: on ? colors.yellowSoft : "#EEF0F3", color: on ? "#8a6d00" : colors.muted }}>{t.n}</span>}
               </button>
             );
           })}

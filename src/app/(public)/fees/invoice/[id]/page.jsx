@@ -14,7 +14,7 @@ import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 
 const f = "'Manrope', sans-serif";
-const g = "#8A8580";
+const g = "#7D848E";
 const cp = { padding: "8px 10px", fontFamily: f };
 const Betrag = ({ v, dim }) => (
   <span style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
@@ -100,19 +100,19 @@ export default function FeeInvoicePage() {
           <div>
             <p style={lbl}>Rechnungssteller</p>
             <p style={{ margin: 0, fontSize: 12, fontWeight: 700, fontFamily: f }}>{co.name}</p>
-            <p style={{ margin: "1px 0", fontSize: 11, color: "#6B655F", fontFamily: f }}>{co.street}</p>
-            <p style={{ margin: 0, fontSize: 11, color: "#6B655F", fontFamily: f }}>{`${co.postal_code || ""} ${co.city || ""}`.trim()}{co.country === "CH" ? ", Schweiz" : co.country ? `, ${co.country}` : ""}</p>
-            {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#8A8580", fontFamily: f }}>{co.uid}</p>}
+            <p style={{ margin: "1px 0", fontSize: 11, color: "#5B626C", fontFamily: f }}>{co.street}</p>
+            <p style={{ margin: 0, fontSize: 11, color: "#5B626C", fontFamily: f }}>{`${co.postal_code || ""} ${co.city || ""}`.trim()}{co.country === "CH" ? ", Schweiz" : co.country ? `, ${co.country}` : ""}</p>
+            {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#7D848E", fontFamily: f }}>{co.uid}</p>}
             {/* Verbindet die Marke im Kopf mit der juristischen Person im Zahlteil.
                 Der Kreditor muss dem Kontoinhaber entsprechen, darum steht die
                 Marke hier als Zusatz und nicht im Empfaengerfeld. */}
-            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#8A8580", fontFamily: f }}>
+            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#7D848E", fontFamily: f }}>
               BEEDARO ist eine Marke von MOQRO.
             </p>
           </div>
           <div>
             <p style={lbl}>Verkäufer / Rechnungsempfänger</p>
-            {sellerAddr.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#191615" : "#6B655F", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
+            {sellerAddr.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#191615" : "#5B626C", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
           </div>
         </div>
 
@@ -130,7 +130,7 @@ export default function FeeInvoicePage() {
           </thead>
           <tbody>
             {fees.map(fee => (
-              <tr key={fee.id} style={{ borderBottom: "1px solid #EEEBE5" }}>
+              <tr key={fee.id} style={{ borderBottom: "1px solid #EEF0F3" }}>
                 <td style={{ ...cp, paddingLeft: 0, fontSize: 11, whiteSpace: "nowrap" }}>{new Date(fee.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}</td>
                 <td style={{ ...cp, fontSize: 11, fontWeight: 600 }}>
                   {fee.listing_title}
@@ -153,12 +153,12 @@ export default function FeeInvoicePage() {
         </table></div>
 
         {/* Bee-Impact Info */}
-        <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#F4F4F2", borderRadius: 0, fontSize: 10, color: "#6B655F", fontFamily: f, lineHeight: 1.5 }}>
+        <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#F5F6F8", borderRadius: 0, fontSize: 10, color: "#5B626C", fontFamily: f, lineHeight: 1.5 }}>
           Von den Gebühren (CHF {fmtCHF(total)}) fliessen CHF {fmtCHF(beeImpact)} als Bee-Impact direkt in Schweizer Bienen- und Naturschutzprojekte.
         </p>
 
         {/* Zahlung + QR */}
-        <div className="inv-pay" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #E4E0D8", borderRadius: 12, marginBottom: 16 }}>
+        <div className="inv-pay" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #E5E8EC", borderRadius: 12, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>Zahlungsinformationen</p>
             {[
@@ -176,7 +176,7 @@ export default function FeeInvoicePage() {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             {qrPayload ? (
               <>
-                <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #EEEBE5" }} />
+                <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #EEF0F3" }} />
                 <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
               </>
             ) : (

@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
 const MONO = "'Manrope', sans-serif";
 const BODY = "Manrope, sans-serif";
 
@@ -63,7 +63,7 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
       <div style={{ position:"relative" }}>
         {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
-          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 12, border:`1.5px solid ${error?C.red:f?"#F4C03F":"#E4E0D8"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s", boxShadow:"none", /* kein Schein nach aussen (Denis 18.09.): nur der Rand wird honiggelb, wie im Rest der Seite */ boxSizing:"border-box" }}/>
+          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 12, border:`1.5px solid ${error?C.red:f?"#F4C03F":"#E5E8EC"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s", boxShadow:"none", /* kein Schein nach aussen (Denis 18.09.): nur der Rand wird honiggelb, wie im Rest der Seite */ boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
       {error && <p style={{ color:C.red, fontSize:13, marginTop:3, fontWeight:500 }}>{error}</p>}
@@ -92,7 +92,7 @@ function SocialBtn({ icon, label, onClick, disabled }) {
     <button type="button" onClick={disabled ? undefined : onClick} disabled={disabled}
       title={disabled ? `Anmeldung mit ${label} folgt in Kürze` : undefined}
       onMouseEnter={()=>!disabled&&setH(true)} onMouseLeave={()=>setH(false)}
-      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(20,17,13,0.15)":"#E4E0D8"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
+      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(20,17,13,0.15)":"#E5E8EC"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
       {icon}{label}
     </button>
   );
@@ -101,7 +101,7 @@ function SocialBtn({ icon, label, onClick, disabled }) {
 function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
-      width:"100%", padding:"13px", border:secondary?"1px solid #E4E0D8":"none", borderRadius: 999,
+      width:"100%", padding:"13px", border:secondary?"1px solid #E5E8EC":"none", borderRadius: 999,
       background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":"0 2px 8px rgba(25,22,21,.15)",
@@ -355,7 +355,7 @@ export default function AuthPage() {
               {view==="login"?"Anmelden":view==="register"?"Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 12, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #E4E0D8", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 12, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #E5E8EC", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:11.5, color:C.muted, marginTop:18, fontWeight:600, fontFamily:BODY }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>

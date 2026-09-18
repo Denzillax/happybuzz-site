@@ -55,13 +55,13 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
   return (
     <div style={{
       background: "#fff", borderRadius: 12,
-      border: "1px solid #E4E0D8", padding: "22px 24px",
+      border: "1px solid #E5E8EC", padding: "22px 24px",
     }}>
       {/* Level + XP */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
-            width: 44, height: 44, borderRadius: 12, border: "1px solid #E4E0D8",
+            width: 44, height: 44, borderRadius: 12, border: "1px solid #E5E8EC",
             background: `${level.color}18`, display: "flex",
             alignItems: "center", justifyContent: "center",
           }}>
@@ -105,7 +105,7 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
       )}
 
       {nektar != null && (
-        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 12, background: "#FBF1D2", border: "1px solid #E4E0D8", textDecoration: "none" }}>
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 12, background: "#FBF1D2", border: "1px solid #E5E8EC", textDecoration: "none" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#854F0B" }}>
             <Droplets size={15} color="#854F0B" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>
@@ -144,7 +144,7 @@ export function CommunityImpactCounter({ total = 0, userImpact = 0, firstName = 
           Das sind über {sqm.toLocaleString("de-CH")} m² neue Blühflächen.
         </p>
         {u > 0 && firstName && (
-          <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid #EEEBE5` }}>
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid #EEF0F3` }}>
             <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>Dein Beitrag</p>
             <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 700, fontFamily: fonts.head, color: colors.dark }}>
               CHF {u.toLocaleString("de-CH", { minimumFractionDigits: 2 })}

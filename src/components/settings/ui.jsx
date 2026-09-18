@@ -7,7 +7,7 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#191615", sand: "#F4F4F2", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
 const MONO = "'Manrope', sans-serif";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
@@ -21,10 +21,10 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
       display: "flex", alignItems: "center", gap: 12,
       padding: "14px 16px", borderRadius: 12,
       background: verified ? "#EEF4EC" : pending ? "#FBF1D2" : "#fff",
-      border: "1px solid #E4E0D8",
+      border: "1px solid #E5E8EC",
     }}>
       <div style={{
-        width: 36, height: 36, borderRadius: 12, border: "1px solid #E4E0D8",
+        width: 36, height: 36, borderRadius: 12, border: "1px solid #E5E8EC",
         display: "flex", alignItems: "center", justifyContent: "center",
         background: accent,
         color: verified ? "#fff" : K.ink,
@@ -64,14 +64,14 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
           style={{
             width: "100%", padding: "12px 14px",
             paddingRight: suffix ? 44 : 14,
-            borderRadius: 12, border: "1px solid #E4E0D8",
+            borderRadius: 12, border: "1px solid #E5E8EC",
             background: disabled ? K.sand : "#fff",
             fontSize: 14, fontFamily: "'Manrope', sans-serif",
             color: K.ink, outline: "none", boxSizing: "border-box",
             transition: "border-color .2s, box-shadow .2s",
           }}
           onFocus={e => { e.target.style.borderColor = "#0E9493"; e.target.style.boxShadow = "0 0 0 3px rgba(14,148,147,.15)"; }}
-          onBlur={e => { e.target.style.borderColor = "#E4E0D8"; e.target.style.boxShadow = "none"; }}
+          onBlur={e => { e.target.style.borderColor = "#E5E8EC"; e.target.style.boxShadow = "none"; }}
         />
         {suffix && (
           <div style={{
@@ -96,11 +96,11 @@ export function Toggle({ checked, onChange, label, description }) {
     >
       <div style={{
         width: 44, height: 24, borderRadius: 12, flexShrink: 0, marginTop: 2,
-        background: checked ? K.petrol : "#fff", border: "1px solid #E4E0D8",
+        background: checked ? K.petrol : "#fff", border: "1px solid #E5E8EC",
         transition: "background .25s", position: "relative",
       }}>
         <div style={{
-          width: 16, height: 16, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8",
+          width: 16, height: 16, borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC",
           position: "absolute", top: 2, left: checked ? 23 : 2,
           transition: "left .25s",
         }} />
@@ -116,7 +116,7 @@ export function Toggle({ checked, onChange, label, description }) {
 export function Btn({ children, variant = "primary", onClick, style: s, small, disabled, loading }) {
   const base = {
     padding: small ? "10px 20px" : "13px 26px",
-    borderRadius: 12, border: "1px solid #E4E0D8", cursor: disabled ? "not-allowed" : "pointer",
+    borderRadius: 12, border: "1px solid #E5E8EC", cursor: disabled ? "not-allowed" : "pointer",
     fontFamily: "'Manrope', sans-serif", fontWeight: 800,
     fontSize: small ? 12 : 14, transition: "all .15s",
     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
@@ -158,7 +158,7 @@ export function TrustMeter({ level }) {
   return (
     <div style={{
       padding: 20, borderRadius: 12, color: "#fff",
-      background: K.ink, border: "1px solid #E4E0D8",
+      background: K.ink, border: "1px solid #E5E8EC",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Trust Level</div>

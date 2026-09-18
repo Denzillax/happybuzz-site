@@ -12,7 +12,7 @@ import { getCompanySettings, formatIban } from "@/lib/company";
 import { feeQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
-const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" };
+const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#7D848E", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
 
 export default function FeesPage() {
@@ -135,7 +135,7 @@ export default function FeesPage() {
             <AlertCircle size={20} color="#c62828" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert: offene Rechnung begleichen</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Nach Zahlung werden deine Inserate automatisch reaktiviert.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Nach Zahlung werden deine Inserate automatisch reaktiviert.</p>
             </div>
           </div>
         )}
@@ -144,7 +144,7 @@ export default function FeesPage() {
             <AlertCircle size={20} color="#E65100" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Mahnung: Inserate werden bald pausiert</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
             </div>
           </div>
         )}
@@ -153,7 +153,7 @@ export default function FeesPage() {
             <Clock size={20} color="#E65100" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#E65100" }}>Erinnerung: Gebührenrechnung überfällig</p>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#6B655F" }}>Bitte überweise den offenen Betrag.</p>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Bitte überweise den offenen Betrag.</p>
             </div>
           </div>
         )}
@@ -273,7 +273,7 @@ export default function FeesPage() {
                               const payload = feeQrPayload(inv, profile, company || {});
                               return payload ? (
                                 <>
-                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #EEEBE5" }} />
+                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #EEF0F3" }} />
                                   <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
                                 </>
                               ) : (

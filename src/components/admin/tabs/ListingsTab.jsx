@@ -22,9 +22,9 @@ function KiBegruendung({ l }) {
   const hinweise = Array.isArray(ai?.hinweise) ? ai.hinweise : [];
   const art = !ai ? "ausstehend" : blocker.length ? "blocker" : hinweise.length ? "hinweis" : "ok";
   const chip = {
-    ausstehend: { text: "KI ausstehend", bg: "#F2EEE7", fg: "#8A8580" },
+    ausstehend: { text: "KI ausstehend", bg: "#F1F3F5", fg: "#7D848E" },
     blocker: { text: `KI · ${blocker.length} Blocker`, bg: "#FFEBEE", fg: "#c62828" },
-    hinweis: { text: `KI · ${hinweise.length} ${hinweise.length === 1 ? "Hinweis" : "Hinweise"}`, bg: "#F2EEE7", fg: "#6B655F" },
+    hinweis: { text: `KI · ${hinweise.length} ${hinweise.length === 1 ? "Hinweis" : "Hinweise"}`, bg: "#F1F3F5", fg: "#5B626C" },
     ok: { text: "KI ✓ unauffällig", bg: "#E8F5E9", fg: "#2E7D32" },
   }[art];
   const hatDetails = !!ai;
@@ -36,12 +36,12 @@ function KiBegruendung({ l }) {
         {chip.text}
       </button>
       {offen && hatDetails && (
-        <span style={{ position: "fixed", left: offen.left, top: offen.top, zIndex: 1000, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
-          <span style={{ display: "block", fontWeight: 800, color: "#6B655F", marginBottom: 4 }}>
+        <span style={{ position: "fixed", left: offen.left, top: offen.top, zIndex: 1000, minWidth: 260, maxWidth: 340, background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, boxShadow: "0 6px 20px rgba(25,22,21,.14)", padding: "10px 12px", fontSize: 11.5, lineHeight: 1.4, whiteSpace: "normal", fontWeight: 500, textAlign: "left" }}>
+          <span style={{ display: "block", fontWeight: 800, color: "#5B626C", marginBottom: 4 }}>
             {ai.vertrauen === "bewaehrt" ? "Bewährter Verkäufer" : "Neues Konto"}{ai.bilder_geprueft === false ? " · Bilder nicht geprüft" : ""}{ai.geprueft_am ? ` · ${new Date(ai.geprueft_am).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}` : ""}
           </span>
           {blocker.map((b, i) => <span key={"b" + i} style={{ display: "block", color: "#c62828", fontWeight: 700 }}>Blocker: {b.grund || b.code}</span>)}
-          {hinweise.map((h, i) => <span key={"h" + i} style={{ display: "block", color: "#6B655F" }}>Hinweis: {h.tipp || h.code}{h.vorschlag ? ` (${h.vorschlag})` : ""}</span>)}
+          {hinweise.map((h, i) => <span key={"h" + i} style={{ display: "block", color: "#5B626C" }}>Hinweis: {h.tipp || h.code}{h.vorschlag ? ` (${h.vorschlag})` : ""}</span>)}
           {blocker.length === 0 && hinweise.length === 0 && <span style={{ display: "block", color: "#2E7D32" }}>Keine Auffälligkeiten.</span>}
           {l.review_hold_reason && l.status === "pending_review" && <span style={{ display: "block", color: "#8a6d00", fontWeight: 700, marginTop: 4 }}>Wartet: {l.review_hold_reason}</span>}
         </span>

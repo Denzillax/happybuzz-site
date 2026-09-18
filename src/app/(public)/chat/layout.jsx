@@ -83,7 +83,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
                 </span>
               )}
               {grau && (
-                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E4E0D8", color: "#6B655F" }}>
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E5E8EC", color: "#5B626C" }}>
                   {c.listingStatus === "sold" ? "Verkauft" : "Nicht mehr aktiv"}
                 </span>
               )}
@@ -95,7 +95,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(); }}
                 title="Wiederherstellen"
-                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: "1px solid #E4E0D8", background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: "1px solid #E5E8EC", background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
               >
                 <RotateCcw size={11} /> Wiederherstellen
               </button>
@@ -291,7 +291,7 @@ export default function ChatLayout({ children }) {
           </div>
 
           {searchOpen && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #E4E0D8", background: "#fff", padding: "7px 10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #E5E8EC", background: "#fff", padding: "7px 10px" }}>
               <Search size={14} color={colors.muted} />
               <input className="pille-input"
                 autoFocus

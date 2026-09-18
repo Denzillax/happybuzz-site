@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import { karte, PHASEN, aktionText, restzeit } from "@/lib/poker";
 
-const K = { ink: "#191615", sand: "#F4F4F2", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", filz: "#0B5E5C" };
+const K = { ink: "#191615", sand: "#F5F6F8", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5", filz: "#0B5E5C" };
 const HEAD = "'General Sans','Manrope',sans-serif";
 
 function Karte({ c, gross, verdeckt }) {
@@ -18,7 +18,7 @@ function Karte({ c, gross, verdeckt }) {
   const w = gross ? 52 : 38, h = gross ? 72 : 52;
   if (verdeckt || !k) return <div style={{ width: w, height: h, borderRadius: 7, background: "repeating-linear-gradient(45deg, #F4C03F 0 4px, #E8B227 4px 8px)", border: "2px solid #fff", boxShadow: "0 2px 6px rgba(0,0,0,.25)", flexShrink: 0 }} />;
   return (
-    <div style={{ width: w, height: h, borderRadius: 7, background: "#fff", border: "1px solid #D8D3CB", boxShadow: "0 2px 6px rgba(0,0,0,.2)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: k.rot ? "#C62828" : K.ink, fontFamily: HEAD, fontWeight: 700, lineHeight: 1, flexShrink: 0 }}>
+    <div style={{ width: w, height: h, borderRadius: 7, background: "#fff", border: "1px solid #D5D9DF", boxShadow: "0 2px 6px rgba(0,0,0,.2)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: k.rot ? "#C62828" : K.ink, fontFamily: HEAD, fontWeight: 700, lineHeight: 1, flexShrink: 0 }}>
       <span style={{ fontSize: gross ? 22 : 16 }}>{k.rang}</span>
       <span style={{ fontSize: gross ? 20 : 15 }}>{k.farbe}</span>
     </div>

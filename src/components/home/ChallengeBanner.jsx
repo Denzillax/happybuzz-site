@@ -11,7 +11,7 @@ import { getFeaturedChallenge, getChallengesWithProgress } from "@/lib/gamificat
 import BeeIcon from "@/components/shared/BeeIcon";
 
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
@@ -109,23 +109,23 @@ export function ChallengeBanner() {
           </p>
           <p style={{ margin: "3px 0 0", fontSize: 17, fontWeight: 800, fontFamily: "'General Sans', 'Manrope', sans-serif", color: INK }}>
             {challenge.title}
-            {challenge.category?.name && <span style={{ fontWeight: 600, color: "#6B655F" }}> · {challenge.category.name}</span>}
+            {challenge.category?.name && <span style={{ fontWeight: 600, color: "#5B626C" }}> · {challenge.category.name}</span>}
           </p>
-          {challenge.description && <p style={{ margin: "2px 0 0", fontSize: 13, color: "#6B655F" }}>{challenge.description}</p>}
+          {challenge.description && <p style={{ margin: "2px 0 0", fontSize: 13, color: "#5B626C" }}>{challenge.description}</p>}
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 6, flexWrap: "wrap", fontSize: 12.5 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontWeight: 800, color: PETROL }}>
               <Zap size={13} /> +{challenge.xp_reward} Pollen
             </span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#6B655F" }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#5B626C" }}>
               <Clock size={13} /> {restzeit(challenge.ends_at)}
             </span>
           </div>
           {progress && (
             <div style={{ marginTop: 8, maxWidth: 340 }}>
-              <div style={{ height: 8, background: "#F2EEE7", borderRadius: 999, overflow: "hidden" }}>
+              <div style={{ height: 8, background: "#F1F3F5", borderRadius: 999, overflow: "hidden" }}>
                 <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#5B8C5A" : HONEY, borderRadius: 999, transition: "width .5s" }} />
               </div>
-              <p style={{ margin: "3px 0 0", fontSize: 11, color: "#6B655F" }}>
+              <p style={{ margin: "3px 0 0", fontSize: 11, color: "#5B626C" }}>
                 {isDone ? (progress.claimed ? "Geschafft, Pollen gutgeschrieben." : "Geschafft. Hol dir deine Pollen.") : `${progress.progress} von ${challenge.target_value}`}
               </p>
             </div>

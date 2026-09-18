@@ -95,7 +95,7 @@ export function InvoicesTab({ admin }) {
                   <td style={{ ...td, textAlign: "center" }}>{isOpen ? <ChevronUp size={14} color={colors.muted} /> : <ChevronDown size={14} color={colors.muted} />}</td>
                 </tr>,
                 isOpen && (
-                  <tr key={`${key}-det`} style={{ borderBottom: `1px solid ${colors.borderLt}`, background: "#FCFBF8" }}>
+                  <tr key={`${key}-det`} style={{ borderBottom: `1px solid ${colors.borderLt}`, background: "#FAFBFC" }}>
                     <td colSpan={6} style={{ padding: 16 }}>
                       {r.kind === "bee" ? <BeeDetail r={r} /> : <FeeDetail inv={r.inv} {...feeProps} />}
                     </td>
@@ -127,7 +127,7 @@ export function InvoicesTab({ admin }) {
                   <p style={{ margin: "5px 0 0", fontSize: 12, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.payer} → {r.payee}</p>
                 </div>
                 {isOpen && (
-                  <div style={{ padding: "0 14px 14px", background: "#FCFBF8" }}>
+                  <div style={{ padding: "0 14px 14px", background: "#FAFBFC" }}>
                     {r.kind === "bee" ? <BeeDetail r={r} /> : <FeeDetail inv={r.inv} {...feeProps} />}
                   </div>
                 )}

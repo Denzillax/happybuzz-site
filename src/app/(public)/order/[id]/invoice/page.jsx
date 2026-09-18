@@ -12,7 +12,7 @@ import SwissQRImage from "@/components/shared/SwissQRImage";
 import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
-const g = "#8A8580";
+const g = "#7D848E";
 export default function InvoicePage() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -123,7 +123,7 @@ export default function InvoicePage() {
           {[{ l: payerLabel, d: addr(payer) }, { l: payeeLabel, d: addr(payee) }].map(a => (
             <div key={a.l}>
               <p style={lbl}>{a.l}</p>
-              {a.d.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#191615" : "#6B655F", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
+              {a.d.map((ln, i) => <p key={i} style={{ margin: 0, fontSize: i === 0 ? 12 : 11, fontWeight: i === 0 ? 700 : 400, color: i === 0 ? "#191615" : "#5B626C", fontFamily: f, lineHeight: 1.5 }}>{ln}</p>)}
             </div>
           ))}
         </div>
@@ -138,7 +138,7 @@ export default function InvoicePage() {
           <tbody>
             {isDeposit ? (
               <>
-                <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
+                <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
                   <td style={{ ...cp, fontSize: 12 }}>
                     Kaution
                     <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{order.listing?.title || "Artikel"} · {artRef}</span>
@@ -147,7 +147,7 @@ export default function InvoicePage() {
                   <td style={{ ...cp, fontSize: 12, textAlign: "right", fontWeight: 600 }}>{fmt(depositAmount)}</td>
                 </tr>
                 {damageAmount > 0 && (
-                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
+                  <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
                     <td style={{ ...cp, fontSize: 12, color: "#c62828" }}>Schadensabzug</td>
                     <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#c62828", fontWeight: 600 }}>- {fmt(damageAmount)}</td>
                   </tr>
@@ -157,7 +157,7 @@ export default function InvoicePage() {
               <>
                 {invoiceItems.length > 0 ? (
                   invoiceItems.map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #EEEBE5" }}>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #EEF0F3" }}>
                       <td style={{ ...cp, fontSize: 12 }}>
                         {item.label}
                         {item.description && <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{item.description}</span>}
@@ -167,7 +167,7 @@ export default function InvoicePage() {
                     </tr>
                   ))
                 ) : (
-                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
+                  <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
                     <td style={{ ...cp, fontSize: 12 }}>
                       {isRental ? `Miete: ${order.listing?.title || "Artikel"}` : (order.listing?.title || "Artikel")}
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>{artRef}</span>
@@ -188,23 +188,23 @@ export default function InvoicePage() {
                 {/* Lieferzeile immer zeigen (Beta-Feedback Denis 15.09.: "steht nicht
                     Lieferung?"): Abholung bzw. Versandart, auch wenn CHF 0.00 */}
                 {!isDeposit && (
-                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#6B655F" }}>
+                  <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
+                    <td style={{ ...cp, fontSize: 12, color: "#5B626C" }}>
                       {order.listing?.pickup_only ? "Lieferung: Abholung" : versandArt}
                       {!order.listing?.pickup_only && shipping === 0 && (
                         <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Versand inklusive</span>
                       )}
                     </td>
-                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#6B655F" }}>{fmt(shipping)}</td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#5B626C" }}>{fmt(shipping)}</td>
                   </tr>
                 )}
                 {isRental && depositAmount > 0 && (
-                  <tr style={{ borderBottom: "1px solid #EEEBE5" }}>
-                    <td style={{ ...cp, fontSize: 12, color: "#6B655F" }}>
+                  <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
+                    <td style={{ ...cp, fontSize: 12, color: "#5B626C" }}>
                       Kaution
                       <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Wird nach der Rückgabe zurückerstattet</span>
                     </td>
-                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#6B655F" }}>{fmt(depositAmount)}</td>
+                    <td style={{ ...cp, fontSize: 12, textAlign: "right", color: "#5B626C" }}>{fmt(depositAmount)}</td>
                   </tr>
                 )}
               </>
@@ -219,7 +219,7 @@ export default function InvoicePage() {
         </table>
         {/* Gebühren-Info (nur bei regulärer Rechnung) */}
         {!isDeposit && (
-          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#F4F4F2", borderRadius: 0, fontSize: 10, color: "#6B655F", fontFamily: f, lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: "#F5F6F8", borderRadius: 0, fontSize: 10, color: "#5B626C", fontFamily: f, lineHeight: 1.5 }}>
             Plattformgebühr ({feePercent}%): CHF {fmt(fee)} (Verkäufer) · Ref: {feeRef}. Davon CHF {fmt(beeImpact)} Bee-Impact für Schweizer Naturschutz.
           </p>
         )}
@@ -231,7 +231,7 @@ export default function InvoicePage() {
           </p>
         )}
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#E4E0D8"}`, borderRadius: 0, marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#E5E8EC"}`, borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
@@ -248,7 +248,7 @@ export default function InvoicePage() {
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #EEEBE5" }} />
+            <SwissQRImage payload={qrPayload} size={260} style={{ width: 130, border: "1px solid #EEF0F3" }} />
             <p style={{ margin: "3px 0 0", fontSize: 8, color: g, fontFamily: f }}>Mit Banking-App scannen</p>
           </div>
         </div>

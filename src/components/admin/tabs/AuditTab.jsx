@@ -70,7 +70,7 @@ export function AuditTab({ admin }) {
           const time = a.created_at ? new Date(a.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) : "";
           return (
             <div key={a.id}>
-              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#8A8580", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
+              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#7D848E", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
               <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "9px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
                 <span style={{ width: 34, height: 34, borderRadius: 12, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={17} color={meta.color} /></span>
                 <div style={{ flex: 1, minWidth: 0 }}>

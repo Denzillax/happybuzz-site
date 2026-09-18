@@ -46,7 +46,7 @@ export function BannerModal({ admin }) {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEBE5" }}>
+        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEF0F3" }}>
           <button onClick={() => setAnnOpen(false)} style={{ flex: 1, fontSize: 13, fontWeight: 600, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           <button onClick={saveAnnouncement} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
         </div>

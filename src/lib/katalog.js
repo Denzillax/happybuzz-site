@@ -2,7 +2,7 @@
 // KLAR-Designsystem (Ricardo-inspiriert, seit 24.08.2026).
 // Frueherer Katalog-Look (eckig, Ink-Rahmen, Space Mono, Versatzschatten)
 // ist abgeloest. Vokabular:
-//   · Flaechen weiss, Panels #F4F4F2, Karten mit Hairline #E4E0D8
+//   · Flaechen weiss, Panels #F5F6F8, Karten mit Hairline #E5E8EC
 //   · Ecken weich (radius 10), Schatten weich und sparsam
 //   · Labels: Manrope, Grossbuchstaben, dezentes Letter-Spacing
 //   · Primaerbutton Honey, rund; Fokus: Teal-Rahmen + weicher Ring
@@ -11,7 +11,7 @@
 
 export const K = {
   ink: "#191615",
-  sand: "#F4F4F2",
+  sand: "#F5F6F8",
   paper: "#FFFFFF",
   honey: "#F4C03F",
   petrol: "#0B5E5C",
@@ -26,7 +26,7 @@ export const BODY = "'Manrope', sans-serif";
 // Karten (Login: Formular-Panel)
 export const card = {
   background: K.paper,
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   borderRadius: 10,
   boxShadow: "0 2px 10px rgba(25,22,21,.08)",
 };
@@ -34,7 +34,7 @@ export const card = {
 // Karten ohne Schatten (Listenzeilen, verschachtelte Flaechen)
 export const cardFlat = {
   background: "#fff",
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   borderRadius: 10,
 };
 
@@ -53,7 +53,7 @@ export const input = {
   width: "100%",
   padding: "12px 16px",
   borderRadius: 10,
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   background: "#fff",
   fontSize: 15,
   fontFamily: BODY,
@@ -71,7 +71,7 @@ export const btnPrimary = {
   width: "100%",
   padding: "13px 16px",
   borderRadius: 10,
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   background: K.honey,
   color: K.ink,
   fontSize: 15,
@@ -85,7 +85,7 @@ export const btnPrimary = {
 export const btnSecondary = {
   padding: "11px 16px",
   borderRadius: 10,
-  border: "1px solid #E4E0D8",
+  border: "1px solid #E5E8EC",
   background: "#fff",
   color: K.ink,
   fontSize: 14,

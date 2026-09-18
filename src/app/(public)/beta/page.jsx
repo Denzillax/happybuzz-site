@@ -672,7 +672,7 @@ export default function BetaTestPage() {
 
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "24px 20px 80px" }}>
         {/* Kurz erklaert: die Beta in menschlichen Worten (Tester = alle Konten) */}
-        <div style={{ background: "#fff", border: "1px solid #E4E0D8", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+        <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={toggleIntro} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: introOpen ? 12 : 0 }}>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
               Kurz erklärt
@@ -735,7 +735,7 @@ export default function BetaTestPage() {
         </div>
 
         {/* ── REPARATUR-LOG: was seit Beta-Start gefixt wurde ── */}
-        <div style={{ background: "#fff", border: "1px solid #E4E0D8", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+        <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={() => setRepOpen(v => !v)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: repOpen ? 12 : 0 }}>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
               Reparatur-Log · {REP_LOG.reduce((s, t) => s + t.punkte.length, 0)} Einträge
@@ -751,7 +751,7 @@ export default function BetaTestPage() {
               {/* Top-Melder: zaehlt Log-Eintraege mit melder (= Meldungen, die
                   zu einem Fix/Feature gefuehrt haben), egal ueber welchen Kanal */}
               {topMelder.length > 0 && (
-                <div style={{ border: "1px solid #E4E0D8", padding: "12px 14px", marginBottom: 18, background: "#FFFFFF" }}>
+                <div style={{ border: "1px solid #E5E8EC", padding: "12px 14px", marginBottom: 18, background: "#FFFFFF" }}>
                   <p style={{ margin: "0 0 2px", fontFamily: "'Manrope', sans-serif", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#0B5E5C" }}>
                     Top-Melder · wer meldet, steigt
                   </p>
@@ -763,7 +763,7 @@ export default function BetaTestPage() {
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
-                        background: i === 0 ? colors.yellow : i === 1 ? "#F4F4F2" : "transparent",
+                        background: i === 0 ? colors.yellow : i === 1 ? "#F5F6F8" : "transparent",
                         border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>
@@ -778,7 +778,7 @@ export default function BetaTestPage() {
 
               {REP_LOG.map(tag => (
                 <div key={tag.datum} style={{ marginBottom: 18 }}>
-                  <p style={{ margin: "0 0 8px", fontFamily: "'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid #E4E0D8", paddingBottom: 5 }}>
+                  <p style={{ margin: "0 0 8px", fontFamily: "'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid #E5E8EC", paddingBottom: 5 }}>
                     {tag.datum} <span style={{ color: colors.muted, fontWeight: 400 }}>· {tag.punkte.length} Einträge</span>
                   </p>
                   {/* Festes Raster: Typ- und Bereichs-Spalte stehen ueber alle
@@ -885,7 +885,7 @@ export default function BetaTestPage() {
                           padding: "10px 16px", cursor: "pointer",
                           display: "flex", alignItems: "center", gap: 10,
                         }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#F4F4F2"}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                         >
                           <SI size={18} color={color} style={{ flexShrink: 0 }} />
@@ -909,7 +909,7 @@ export default function BetaTestPage() {
 
         <button onClick={submitAll} disabled={tested === 0} style={{
           width: "100%", padding: "16px", borderRadius: 12, border: "none", marginTop: 20,
-          background: tested > 0 ? colors.yellow : "#E4E0D8", color: colors.dark,
+          background: tested > 0 ? colors.yellow : "#E5E8EC", color: colors.dark,
           fontSize: 15, fontWeight: 800, cursor: tested > 0 ? "pointer" : "default",
           fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>

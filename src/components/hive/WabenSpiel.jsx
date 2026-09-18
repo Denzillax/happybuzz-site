@@ -10,7 +10,7 @@ import EinsatzWahl from "./EinsatzWahl";
 import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 
-const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7", wespe: "#3A2F2A" };
+const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5", wespe: "#3A2F2A" };
 const MULTI = [0, 1.2, 1.5, 2, 3, 5, 10, 25];
 const HEX = "polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%)";
 

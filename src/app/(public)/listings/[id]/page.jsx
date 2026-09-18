@@ -70,11 +70,11 @@ export default function EditListingPage() {
   }
 
   if (loading) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#8A8580" }}>Lade…</div>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#7D848E" }}>Lade…</div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F5F6F8", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
         <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>

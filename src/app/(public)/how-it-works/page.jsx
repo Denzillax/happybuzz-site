@@ -6,7 +6,7 @@ import { FEE_TIERS, DEFAULT_FEE_TIER, FEE_FREE_BELOW , FEE_CAP } from "@/lib/con
 
 // ── Katalog-Design-Tokens ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
@@ -66,7 +66,7 @@ function StepRow({ step, last }) {
     <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
         <div style={{
-          width: 46, height: 46, borderRadius: 12, background: SAND, border: "1px solid #E4E0D8",
+          width: 46, height: 46, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC",
           display: "flex", alignItems: "center", justifyContent: "center",
           fontFamily: MONO, fontSize: 15, fontWeight: 700, color: INK,
         }}>
@@ -92,7 +92,7 @@ export default function HowItWorksPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "64px 24px 68px", textAlign: "center",
-        borderBottom: "1px solid #E4E0D8",
+        borderBottom: "1px solid #E5E8EC",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -119,12 +119,12 @@ export default function HowItWorksPage() {
             {TYPES.map((t, i) => (
               <div key={i} style={{
                 padding: "22px 18px", borderRadius: 12, background: "#fff",
-                border: "1px solid #E4E0D8", textAlign: "center",
+                border: "1px solid #E5E8EC", textAlign: "center",
               }}>
                 <div style={{
                   width: 46, height: 46, borderRadius: 12, margin: "0 auto 12px",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: SAND, border: "1px solid #E4E0D8", color: t.color,
+                  background: SAND, border: "1px solid #E5E8EC", color: t.color,
                 }}>
                   <t.icon size={21} color={t.color} />
                 </div>
@@ -154,7 +154,7 @@ export default function HowItWorksPage() {
         </div>
 
         {/* ── Bee-Rate ── */}
-        <div style={{ padding: 30, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", margin: "40px 0", position: "relative" }}>
+        <div style={{ padding: 30, borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", margin: "40px 0", position: "relative" }}>
           <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" className="fee-stamp" />
           <Eyebrow>Gebührenmodell</Eyebrow>
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Die Bee-Rate: deine Gebühr, deine Wahl</h2>
@@ -163,7 +163,7 @@ export default function HowItWorksPage() {
             Du entscheidest, wie viel du beiträgst. Das bestimmt auch, wie weit oben dein Inserat erscheint.
             Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind komplett gebührenfrei, und nach oben ist bei CHF {FEE_CAP}.00 Schluss: mehr kostet kein Verkauf, egal wie teuer der Artikel.
           </p>
-          <div style={{ display: "flex", border: "1px solid #E4E0D8", borderRadius: 12, overflow: "hidden", background: "#fff", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", border: "1px solid #E5E8EC", borderRadius: 12, overflow: "hidden", background: "#fff", flexWrap: "wrap" }}>
             {TIERS.map((r, i) => (
               <div key={i} style={{
                 flex: "1 1 130px", padding: "16px 12px", textAlign: "center",
@@ -204,13 +204,13 @@ export default function HowItWorksPage() {
             <Link href="/listings/new" className="bd-btn" style={{
               padding: "14px 28px", borderRadius: 12, background: INK, color: PAPER,
               fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
-              display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #E4E0D8",
+              display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #E5E8EC",
             }}>
               Gratis inserieren <ArrowRight size={16} />
             </Link>
             <Link href="/search" className="bd-btn" style={{
               padding: "14px 28px", borderRadius: 12, background: "#fff",
-              border: "1px solid #E4E0D8", color: INK, fontSize: 15, fontWeight: 700,
+              border: "1px solid #E5E8EC", color: INK, fontSize: 15, fontWeight: 700,
               fontFamily: BODY, textDecoration: "none",
             }}>
               Im Katalog stöbern

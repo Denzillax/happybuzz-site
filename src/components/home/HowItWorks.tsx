@@ -26,14 +26,14 @@ const steps = [
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const MONO = "'Manrope', sans-serif"
 const INK = '#191615'
-const SAND = '#F4F4F2'
+const SAND = '#F5F6F8'
 const PAPER = '#FFFFFF'
 const HONEY = '#F4C03F'
 const PETROL = '#0B5E5C'
 
 export function HowItWorks() {
   return (
-    <section style={{ padding: '64px 0', marginTop: 64, background: PAPER, borderTop: "1px solid #E4E0D8", borderBottom: "1px solid #E4E0D8" }}>
+    <section style={{ padding: '64px 0', marginTop: 64, background: PAPER, borderTop: "1px solid #E5E8EC", borderBottom: "1px solid #E5E8EC" }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -52,7 +52,7 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <div key={i} style={{
-                background: '#fff', border: "1px solid #E4E0D8", borderRadius: 12,
+                background: '#fff', border: "1px solid #E5E8EC", borderRadius: 12,
                 padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16,
               }}>
                 {/* Schrittnummer + Icon-Tafel */}
@@ -61,7 +61,7 @@ export function HowItWorks() {
                     {s.step}
                   </span>
                   <div style={{
-                    width: 48, height: 48, borderRadius: 12, background: SAND, border: "1px solid #E4E0D8",
+                    width: 48, height: 48, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: PETROL,
                   }}>
                     <Icon size={23} strokeWidth={1.8} />

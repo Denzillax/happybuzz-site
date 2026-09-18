@@ -31,9 +31,9 @@ export function UsersTab({ admin }) {
         return (
           <div key={u.id} style={{ marginBottom: 10, background: colors.surface, borderRadius: radius.lg, border: `1px solid ${u.is_banned ? "#f0c9c9" : colors.border}`, overflow: "hidden" }}>
             <div onClick={() => openUserProfile(u.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", cursor: "pointer", background: rowTint }}
-              onMouseEnter={e => { if (rowTint === "transparent") e.currentTarget.style.background = "#F4F4F2"; }}
+              onMouseEnter={e => { if (rowTint === "transparent") e.currentTarget.style.background = "#F5F6F8"; }}
               onMouseLeave={e => { if (rowTint === "transparent") e.currentTarget.style.background = "transparent"; }}>
-              <div style={{ width: 38, height: 38, borderRadius: "50%", background: u.is_banned ? "#EEEBE5" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14, fontWeight: 700, color: u.is_banned ? "#8A8580" : colors.dark }}>
+              <div style={{ width: 38, height: 38, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14, fontWeight: 700, color: u.is_banned ? "#7D848E" : colors.dark }}>
                 {(u.display_name || "?")[0].toUpperCase()}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>

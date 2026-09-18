@@ -40,7 +40,7 @@ import { makeArtRef, calcFee } from "@/lib/fees";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const PETROL = "#0B5E5C";
 const MONO = "'Manrope', sans-serif";
@@ -572,13 +572,13 @@ export default function ListingDetail() {
         {/* ── EIGENTÜMER-LEISTE (Desktop oben; mobil klebt sie unten
                ueber der Bottom-Nav, siehe .mobile-cta-bar weiter unten) ── */}
         {isOwner && (
-          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: "1px solid #E4E0D8" }}>
+          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: "1px solid #E5E8EC" }}>
             <BeeIcon size={16} />
             <span style={{ fontSize: 13, fontWeight: 700, color: INK, marginRight: "auto" }}>Das ist dein Inserat</span>
-            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
+            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -592,7 +592,7 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
+            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
               <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
@@ -696,7 +696,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
-            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden" }}>
+            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden" }}>
               {l.condition && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
                   <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Zustand</p>
@@ -724,7 +724,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── BESCHREIBUNG ───────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
               {/* Formatierte Beschreibungen (Mini-HTML aus dem Editor) werden
                   IMMER frisch durch sanitizeDescription gefiltert — nie
@@ -756,7 +756,7 @@ export default function ListingDetail() {
                   <>
                     <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
                     {teile.filter(t => t.text).map((t, i) => (
-                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F4F4F2", borderLeft: "3px solid #F4C03F" }}>
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F5F6F8", borderLeft: "3px solid #F4C03F" }}>
                         <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
                           Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
                         </p>
@@ -778,7 +778,7 @@ export default function ListingDetail() {
                 ...eigenschaften.filter(e => !variantNamen.has(e.name)).map(e => ({ ...e, waehlbar: false })),
               ];
               return (
-                <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+                <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
                   <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
                     {zeilen.map((e) => (
@@ -796,7 +796,7 @@ export default function ListingDetail() {
             })()}
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
               <div className="lief-grid" style={{ display: "grid", gridTemplateColumns: "minmax(84px, 110px) minmax(0, 1fr)", gap: "12px 14px", fontSize: 13 }}>
                 {/* Lieferung nur zeigen, wenn Versand wirklich aktiviert ist:
@@ -824,7 +824,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── VERKÄUFER ──────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
               {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
                   eigene Zeile statt die Infos zu quetschen */}
@@ -856,7 +856,7 @@ export default function ListingDetail() {
 
             {/* ── STANDORT (KARTE) ──────────────────── */}
             {l.city && (
-              <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
                 <div style={{ padding: "16px 28px 12px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div>
                     <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
@@ -875,7 +875,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── NACHRICHTEN (aufklappbar) ─────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
               {/* Header mit Toggle */}
               <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -986,7 +986,7 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
+            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
               <h1 style={{ fontSize: 23, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.2, letterSpacing: "-0.01em", color: INK }}>{l.title}</h1>
               {/* Kaufbox aufgeraeumt (Denis, 16.09.): eine ruhige Meta-Zeile statt Chip + Symbolzeile */}
               <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
@@ -1154,7 +1154,7 @@ export default function ListingDetail() {
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
                       disabled={isOwner}
-                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E4E0D8", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E5E8EC", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> Sofort kaufen · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -1210,7 +1210,7 @@ export default function ListingDetail() {
                       const basis = { width: 36, height: 36, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
                       if (offen && b.bidder?.avatar_url) return <span className="bid-avatar" style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
                       if (offen) return <span className="bid-avatar" style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
-                      return <span className="bid-avatar" style={{ ...basis, background: "#F2EEE7", color: colors.muted }}>{kurz}</span>;
+                      return <span className="bid-avatar" style={{ ...basis, background: "#F1F3F5", color: colors.muted }}>{kurz}</span>;
                     };
                     return (
                     <div style={{ marginTop: 18 }}>
@@ -1336,7 +1336,7 @@ export default function ListingDetail() {
                                     if (obergrenze != null) neu = Math.min(obergrenze, neu);
                                     setBidAmount(neu.toFixed(2));
                                   };
-                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #E4E0D8", background: "#fff", cursor: "pointer", borderRadius: 12, color: colors.dark };
+                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #E5E8EC", background: "#fff", cursor: "pointer", borderRadius: 12, color: colors.dark };
                                   return (
                                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                       <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
@@ -1456,7 +1456,7 @@ export default function ListingDetail() {
                                   <span>{bidShipping === "pickup" ? "Abholung" : l.shipping_method === "brief" ? "Brief" : "Paket"}</span>
                                   <span>{shipCost === 0 ? "Gratis" : `CHF ${fmtPrice(shipCost)}`}</span>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: "1px solid #E4E0D8" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: "1px solid #E5E8EC" }}>
                                   <span>{bidModal === "bid" ? "Max. Total" : "Total"}</span>
                                   <span>CHF {fmtPrice(total)}</span>
                                 </div>
@@ -1737,7 +1737,7 @@ export default function ListingDetail() {
 
             {/* ── BEE-IMPACT BOX ─────────────────────── */}
             {l.status === "active" && beeImpact > 0 && (
-              <div style={{ background: colors.greenSoft, borderRadius: 12, border: "1px solid #E4E0D8", padding: "18px 22px", marginBottom: 14 }}>
+              <div style={{ background: colors.greenSoft, borderRadius: 12, border: "1px solid #E5E8EC", padding: "18px 22px", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <BeeIcon size={20} color={colors.green} />
                   <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
@@ -1749,7 +1749,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── LIEFERUNG SIDEBAR ──────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Lieferung</p>
               <p style={{ margin: 0, fontWeight: 600 }}>
                 {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}
@@ -1758,7 +1758,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── SELLER MINI-CARD ───────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E4E0D8", padding: "16px 22px", marginBottom: 14 }}>
+            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
@@ -1885,7 +1885,7 @@ export default function ListingDetail() {
         {/* ── ÄHNLICHE ARTIKEL ─────────────────────────── */}
         {similar.length > 0 && (
           <div style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: "1px solid #E4E0D8", letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: "1px solid #E5E8EC", letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
               {similar.map((item) => (
                 <ListingCard key={item.id} listing={item} userId={user?.id} />
@@ -1908,10 +1908,10 @@ export default function ListingDetail() {
             <BeeIcon size={15} /> Dein Inserat
           </span>
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: "0 1px 4px rgba(25,22,21,.18)" }}>
+            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: "0 1px 4px rgba(25,22,21,.18)" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: "1px solid #E4E0D8", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -1929,7 +1929,7 @@ export default function ListingDetail() {
             </p>
           </div>
           <button onClick={() => buyBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
-            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 12, border: "1px solid #E4E0D8", background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
+            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 12, border: "1px solid #E5E8EC", background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
             {l.listing_type === "auction" ? "Jetzt bieten" : l.listing_type === "sell" ? "Jetzt kaufen" : "Anfragen"}
           </button>
         </div>

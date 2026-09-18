@@ -9,7 +9,7 @@ import { fonts } from "@/lib/theme";
 
 const MONO = "'Manrope', sans-serif";
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const MOSS = "#5B8C5A";
 const HONIG = "#F4A100";
 const ROT = "#c62828";
@@ -56,8 +56,8 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   ];
 
   return (
-    <div style={{ background: SAND, border: "1px solid #E4E0D8", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: overdue ? ROT : "#7a756d", marginBottom: 10 }}>
+    <div style={{ background: SAND, border: "1px solid #E5E8EC", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
+      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: overdue ? ROT : "#6B727C", marginBottom: 10 }}>
         {overdue ? "Überfällig seit" : "Rückgabe in"}
       </div>
 
@@ -67,13 +67,13 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
           <div key={label} style={{ flex: "0 0 auto", textAlign: "center" }}>
             <div style={{
               minWidth: 52, padding: "8px 6px", background: "#fff",
-              border: "1px solid #E4E0D8", boxSizing: "border-box",
+              border: "1px solid #E5E8EC", boxSizing: "border-box",
               fontFamily: MONO, fontSize: 24, fontWeight: 700, lineHeight: 1,
               color: overdue ? ROT : INK, fontVariantNumeric: "tabular-nums",
             }}>
               {String(wert).padStart(2, "0")}
             </div>
-            <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#7a756d", marginTop: 4 }}>
+            <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#6B727C", marginTop: 4 }}>
               {label}
             </div>
           </div>
@@ -81,10 +81,10 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
       </div>
 
       {/* Fortschritt mit Start/Ende */}
-      <div style={{ height: 10, border: "1px solid #E4E0D8", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
+      <div style={{ height: 10, border: "1px solid #E5E8EC", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
         <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, transition: "width .5s linear" }} />
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#7a756d" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#6B727C" }}>
         {/* Links steht der tatsaechliche Beginn des Balkens (Uebergabe oder Mietstart) */}
         <span>{fmtDatum(start)}</span>
         <span style={{ fontFamily: fonts.body, fontWeight: 700, color: overdue ? ROT : INK, fontSize: 11.5 }}>

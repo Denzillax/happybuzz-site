@@ -9,7 +9,7 @@ import WabenSpiel from "./WabenSpiel";
 import Pollenpfad from "./Pollenpfad";
 import Bluetenpaar from "./Bluetenpaar";
 
-const K = { ink: "#191615", hairline: "#E4E0D8", chip: "#F2EEE7" };
+const K = { ink: "#191615", hairline: "#E5E8EC", chip: "#F1F3F5" };
 const SPIELE = [
   { key: "waben", name: "Wabenspiel", Icon: Hexagon, Komp: WabenSpiel },
   { key: "pfad", name: "Pollenpfad", Icon: Footprints, Komp: Pollenpfad },

@@ -68,7 +68,7 @@ export default function ImportBox({ onImport }) {
 
   if (busy) {
     return (
-      <div style={{ background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, padding: "12px 18px", marginBottom: 20 }}>
+      <div style={{ background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, padding: "12px 18px", marginBottom: 20 }}>
         <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.teal, fontFamily: fonts.body }}>
           Inserat wird übernommen…
         </p>
@@ -78,7 +78,7 @@ export default function ImportBox({ onImport }) {
 
   return (
     // Nur Desktop: der Import-Helfer (Bookmarklet) funktioniert am Handy nicht
-    <div className="import-promo" style={{ background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, padding: "12px 18px", marginBottom: 20 }}>
+    <div className="import-promo" style={{ background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, padding: "12px 18px", marginBottom: 20 }}>
       <a href="/import-helfer" target="_blank" rel="noopener"
         style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: fonts.body, fontSize: 13.5, fontWeight: 700, color: colors.teal, textDecoration: "none" }}>
         <Download size={16} />

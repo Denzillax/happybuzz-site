@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Sun, Leaf, Snowflake, Flower2 } from "lucide-react";
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const MUTED = "#8A8580";
+const MUTED = "#7D848E";
 const DARK = "#191615";
 const TEAL = "#0E9493";
 

@@ -14,12 +14,12 @@ export function MahnPreviewModal({ admin }) {
           <span style={{ fontSize: 13, fontWeight: 700, color: "#0B5E5C" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
         </div>
         <div style={{ padding: "16px 18px", maxHeight: "60vh", overflowY: "auto" }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#7D848E", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "3px 0 12px" }}>{mahnModal.subject}</div>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "#8A8580", textTransform: "uppercase", letterSpacing: ".05em" }}>Text</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#7D848E", textTransform: "uppercase", letterSpacing: ".05em" }}>Text</div>
           <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6, marginTop: 4 }}>{mahnModal.body}</div>
         </div>
-        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEEBE5" }}>
+        <div style={{ display: "flex", gap: 8, padding: "12px 18px", borderTop: "1px solid #EEF0F3" }}>
           {mahnModal.mode === "view" ? (
             <button onClick={() => setMahnModal(null)} style={{ flex: 1, fontSize: 13, fontWeight: 700, color: colors.muted, background: colors.cream, border: "none", borderRadius: 999, padding: "10px 0", cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
           ) : (

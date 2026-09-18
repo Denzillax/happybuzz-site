@@ -27,18 +27,18 @@ export const colors = {
   // Text
   dark:       "#191615",
   graphite:   "#34343B",
-  muted:      "#6B655F",
-  mutedLt:    "#8A8580",
+  muted:      "#5B626C",
+  mutedLt:    "#7D848E",
 
   // Surface
-  cream:      "#F4F4F2",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
+  cream:      "#F5F6F8",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
   surface:    "#FFFFFF",
-  warm:       "#F4F4F2",
-  cloud:      "#F4F4F2",
+  warm:       "#F5F6F8",
+  cloud:      "#F5F6F8",
 
   // Borders
-  border:     "#E4E0D8",
-  borderLt:   "#EEEBE5",
+  border:     "#E5E8EC",
+  borderLt:   "#EEF0F3",
 
   // Info
   sky:        "#6BA9FF",

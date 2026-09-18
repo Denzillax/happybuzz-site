@@ -121,13 +121,13 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#8A8580" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#7D848E" }}>
       Lade…
     </div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F4F4F2", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F5F6F8", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
         <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
@@ -150,7 +150,7 @@ function NewListingPageInner() {
             onClick={useLastAsTemplate}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
-              borderRadius: 12, border: "1px solid #E4E0D8", background: "#fff",
+              borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff",
               color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
               boxShadow: "0 2px 8px rgba(25,22,21,.15)",
             }}

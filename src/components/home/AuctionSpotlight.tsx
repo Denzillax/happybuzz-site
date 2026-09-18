@@ -79,7 +79,7 @@ export function AuctionSpotlight() {
                 <span style={{
                   fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '.06em',
                   background: dringend ? HONEY : '#fff', color: INK,
-                  border: "1px solid #E4E0D8", padding: '4px 10px',
+                  border: "1px solid #E5E8EC", padding: '4px 10px',
                   display: 'inline-block', fontVariantNumeric: 'tabular-nums',
                 }}>
                   {rest(listing.auction_end)}

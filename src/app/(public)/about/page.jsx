@@ -5,7 +5,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
@@ -46,7 +46,7 @@ export default function AboutPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "64px 24px 68px", textAlign: "center",
-        borderBottom: "1px solid #E4E0D8",
+        borderBottom: "1px solid #E5E8EC",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
@@ -77,8 +77,8 @@ export default function AboutPage() {
           </div>
           {/* Specimen-Statement statt Platzhalter */}
           <div style={{ position: "relative" }}>
-            <div aria-hidden style={{ position: "absolute", inset: "16px -10px -10px 16px", border: "1px solid #E4E0D8", borderRadius: 12, transform: "rotate(2.5deg)", opacity: .25 }} />
-            <div style={{ position: "relative", background: INK, color: PAPER, borderRadius: 12, padding: "30px 28px", transform: "rotate(-1.5deg)", border: "1px solid #E4E0D8" }}>
+            <div aria-hidden style={{ position: "absolute", inset: "16px -10px -10px 16px", border: "1px solid #E5E8EC", borderRadius: 12, transform: "rotate(2.5deg)", opacity: .25 }} />
+            <div style={{ position: "relative", background: INK, color: PAPER, borderRadius: 12, padding: "30px 28px", transform: "rotate(-1.5deg)", border: "1px solid #E5E8EC" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: "rgba(251,248,242,0.7)", borderBottom: "1px solid rgba(251,248,242,0.2)", paddingBottom: 10, marginBottom: 16 }}>
                 <span>№ 0001</span>
                 <span style={{ background: HONEY, color: INK, padding: "3px 8px", borderRadius: 12, fontWeight: 700, fontSize: 10 }}>MANIFEST</span>
@@ -101,8 +101,8 @@ export default function AboutPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 14 }}>
             {VALUES.map((v, i) => (
-              <div key={i} style={{ padding: 24, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
-                <div style={{ width: 48, height: 48, borderRadius: 12, margin: "0 auto 14px", display: "flex", alignItems: "center", justifyContent: "center", background: SAND, border: "1px solid #E4E0D8" }}>
+              <div key={i} style={{ padding: 24, borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", textAlign: "center" }}>
+                <div style={{ width: 48, height: 48, borderRadius: 12, margin: "0 auto 14px", display: "flex", alignItems: "center", justifyContent: "center", background: SAND, border: "1px solid #E5E8EC" }}>
                   <v.icon size={22} color={PETROL} />
                 </div>
                 <h3 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>{v.title}</h3>
@@ -130,7 +130,7 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-          <div style={{ padding: "30px 28px", borderRadius: 12, background: SAND, border: "1px solid #E4E0D8" }}>
+          <div style={{ padding: "30px 28px", borderRadius: 12, background: SAND, border: "1px solid #E5E8EC" }}>
             <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: MUTED, marginBottom: 14, textTransform: "uppercase" }}>Differenzierung</div>
             <p style={{ fontFamily: HEAD, fontSize: "clamp(19px, 2.4vw, 24px)", fontWeight: 600, lineHeight: 1.3, margin: 0, color: INK, letterSpacing: "-0.01em" }}>
               Fünf Inserattypen, eine Gebühr, die du selbst wählst, und ein Teil davon für die Natur.
@@ -161,8 +161,8 @@ export default function AboutPage() {
             <h2 style={{ fontSize: "clamp(24px, 3.4vw, 32px)", fontWeight: 700, fontFamily: HEAD, margin: 0, letterSpacing: "-0.01em" }}>Die Menschen hinter BEEDARO</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, maxWidth: 640, margin: "0 auto" }}>
-            <div style={{ textAlign: "center", padding: "24px 18px", borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8" }}>
-              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: HONEY, border: "1px solid #E4E0D8", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 22, fontWeight: 700, color: INK }}>DM</div>
+            <div style={{ textAlign: "center", padding: "24px 18px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: HONEY, border: "1px solid #E5E8EC", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 22, fontWeight: 700, color: INK }}>DM</div>
               <h4 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 2px", color: INK }}>Denis Mihaljevic</h4>
               <p style={{ fontFamily: MONO, fontSize: 11, color: MUTED, margin: 0, letterSpacing: ".04em" }}>GRÜNDER & DESIGN</p>
             </div>
@@ -181,7 +181,7 @@ export default function AboutPage() {
             <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 6px", letterSpacing: "-0.01em" }}>Jobs</h2>
             <p style={{ fontSize: 14, color: MUTED }}>Arbeiten bei BEEDARO</p>
           </div>
-          <div style={{ padding: 32, borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
+          <div style={{ padding: 32, borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", textAlign: "center" }}>
             <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, margin: "0 0 6px", color: INK }}>Zurzeit keine offenen Stellen</h3>
             <p style={{ fontSize: 13.5, color: MUTED, maxWidth: 420, margin: "0 auto", lineHeight: 1.6 }}>
               Wir sind ein kleines Team. Wenn du glaubst, dass du zu uns passt, schreib uns an <a href="mailto:jobs@beedaro.ch" style={{ color: PETROL, fontWeight: 700 }}>jobs@beedaro.ch</a>.

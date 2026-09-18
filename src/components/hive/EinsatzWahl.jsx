@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 
-const K = { ink: "#191615", honey: "#F4C03F", hairline: "#E4E0D8", chip: "#F2EEE7" };
+const K = { ink: "#191615", honey: "#F4C03F", hairline: "#E5E8EC", chip: "#F1F3F5" };
 export const EINSAETZE = [5, 10, 20];
 
 export default function EinsatzWahl({ pollen, einsatz, setEinsatz, onStart, busy, icon: Icon, label = "Spielen" }) {

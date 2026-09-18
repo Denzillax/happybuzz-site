@@ -134,7 +134,7 @@ export function CategoriesTab({ admin }) {
           display: "flex", alignItems: "center", gap: 8,
           padding: "9px 14px", paddingLeft: 14 + depth * 26,
           borderBottom: `1px solid ${colors.borderLt}`,
-          background: inactive ? "#F4F4F2" : "transparent", opacity: inactive ? 0.55 : 1,
+          background: inactive ? "#F5F6F8" : "transparent", opacity: inactive ? 0.55 : 1,
         }}>
           {/* Auf-/Zuklappen (oder Platzhalter bei Blättern) */}
           {hasKids ? (
@@ -178,7 +178,7 @@ export function CategoriesTab({ admin }) {
               {hasKids && <span style={{ fontSize: 10, color: colors.muted, marginLeft: 6 }}>({kids.length})</span>}
             </span>
           )}
-          {inactive && pill("#F4F4F2", "#6B655F", "Deaktiviert")}
+          {inactive && pill("#F5F6F8", "#5B626C", "Deaktiviert")}
           {/* Aktionen */}
           {!isEditing && confirmDelId === cat.id && (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
@@ -204,7 +204,7 @@ export function CategoriesTab({ admin }) {
         </div>
         {/* Neue Unterkategorie */}
         {addingUnder === cat.id && (
-          <div style={{ display: "flex", gap: 6, padding: "8px 14px", paddingLeft: 14 + (depth + 1) * 26, borderBottom: `1px solid ${colors.borderLt}`, background: "#FBFAF7" }}>
+          <div style={{ display: "flex", gap: 6, padding: "8px 14px", paddingLeft: 14 + (depth + 1) * 26, borderBottom: `1px solid ${colors.borderLt}`, background: "#FAFBFC" }}>
             <input autoFocus value={subName} onChange={e => setSubName(e.target.value)} placeholder={`Neue Unterkategorie in "${cat.name}"...`}
               onKeyDown={e => { if (e.key === "Enter") addSub(cat.id, subName); if (e.key === "Escape") setAddingUnder(null); }}
               style={{ flex: 1, border: `1px solid ${colors.border}`, borderRadius: 12, padding: "6px 10px", fontSize: 12, fontFamily: fonts.body, outline: "none" }} />

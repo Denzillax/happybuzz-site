@@ -91,7 +91,7 @@ export function OrdersTab({ admin }) {
                   <td style={{ ...td, textAlign: "center" }}>{isOpen ? <ChevronUp size={14} color={colors.muted} /> : <ChevronDown size={14} color={colors.muted} />}</td>
                 </tr>,
                 isOpen && (
-                  <tr key={`${o.id}-det`} style={{ borderBottom: `1px solid ${colors.borderLt}`, background: "#FCFBF8" }}>
+                  <tr key={`${o.id}-det`} style={{ borderBottom: `1px solid ${colors.borderLt}`, background: "#FAFBFC" }}>
                     <td colSpan={7} style={{ padding: 16 }}>
                       <OrderDetail o={o} det={det} deposit={deposit} refText={ref} {...detailProps} />
                     </td>
@@ -127,7 +127,7 @@ export function OrdersTab({ admin }) {
                   </div>
                 </div>
                 {isOpen && (
-                  <div style={{ padding: "0 14px 14px", background: "#FCFBF8" }}>
+                  <div style={{ padding: "0 14px 14px", background: "#FAFBFC" }}>
                     <OrderDetail o={o} det={det} deposit={deposit} refText={ref} {...detailProps} />
                   </div>
                 )}

@@ -28,7 +28,7 @@ const usps = [
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#191615', tint: '#F4F4F2', href: '/about',
+    accent: '#191615', tint: '#F5F6F8', href: '/about',
   },
 ]
 
@@ -60,7 +60,7 @@ export function UspGrid() {
               key={i}
               href={usp.href}
               style={{
-                background: '#fff', borderRadius: 12, border: "1px solid #E4E0D8",
+                background: '#fff', borderRadius: 12, border: "1px solid #E5E8EC",
                 padding: '28px 22px', transition: 'all 0.18s ease',
                 textDecoration: 'none', color: 'inherit', display: 'block',
               }}
@@ -72,14 +72,14 @@ export function UspGrid() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement
-                el.style.borderColor = '#E4E0D8'
+                el.style.borderColor = '#E5E8EC'
                 el.style.transform = 'none'
                 el.style.boxShadow = 'none'
               }}
             >
               {/* Icon-Tafel */}
               <div style={{
-                width: 52, height: 52, borderRadius: 12, background: usp.tint, border: "1px solid #E4E0D8",
+                width: 52, height: 52, borderRadius: 12, background: usp.tint, border: "1px solid #E5E8EC",
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: usp.accent, marginBottom: 18,
               }}>
@@ -105,7 +105,7 @@ export function UspGrid() {
 
       {/* Beta-Hinweis: Gruendungsmitglied statt generischem CTA */}
       <div style={{
-        marginTop: 26, border: "1px solid #E4E0D8", background: '#FBF1D2',
+        marginTop: 26, border: "1px solid #E5E8EC", background: '#FBF1D2',
         padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 12, flexWrap: 'wrap', textAlign: 'center',
       }}>

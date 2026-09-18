@@ -14,7 +14,7 @@ const HEAD = "'General Sans', sans-serif";
 const BODY = "'Manrope', sans-serif";
 const MONO = "'Manrope', sans-serif";
 
-const card = { background: "#fff", border: "1px solid #E4E0D8", borderRadius: 12, padding: "24px 26px" };
+const card = { background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, padding: "24px 26px" };
 
 export default function ImportHelferPage() {
   const linkRef = useRef(null);
@@ -64,7 +64,7 @@ export default function ImportHelferPage() {
             title="In die Lesezeichenleiste ziehen, nicht klicken"
             style={{
               display: "inline-block", padding: "12px 22px", borderRadius: 12,
-              border: "1px solid #E4E0D8", background: HONEY, color: INK,
+              border: "1px solid #E5E8EC", background: HONEY, color: INK,
               fontFamily: BODY, fontSize: 14, fontWeight: 800, textDecoration: "none",
               cursor: "grab", boxShadow: "0 2px 8px rgba(25,22,21,.15)",
             }}

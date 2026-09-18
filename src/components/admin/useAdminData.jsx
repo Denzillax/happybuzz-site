@@ -886,7 +886,7 @@ export function useAdminData() {
 
   const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
-    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#F4F4F2", "#6B655F", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#0B5E5C", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#F4F4F2", "#6B655F", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#F4F4F2", "#6B655F", "Abgelaufen"] };
+    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#F5F6F8", "#5B626C", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#0B5E5C", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#F5F6F8", "#5B626C", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#F5F6F8", "#5B626C", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };
@@ -959,12 +959,12 @@ export function useAdminData() {
           const onClick = reached ? () => openSentMail(inv, s) : isNext ? () => openMahn(inv) : undefined;
           return (
             <div key={s} style={{ display: "flex", alignItems: "flex-start", flex: s === 1 ? "0 0 auto" : "1 1 auto" }}>
-              {s > 1 && <div style={{ flex: 1, height: 2, background: rl >= s ? "#2E7D32" : "#E4E0D8", margin: "0 6px", marginTop: 12 }} />}
+              {s > 1 && <div style={{ flex: 1, height: 2, background: rl >= s ? "#2E7D32" : "#E5E8EC", margin: "0 6px", marginTop: 12 }} />}
               <div onClick={onClick} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: 96, cursor: clickable ? "pointer" : "default", opacity: (!reached && !isNext) ? 0.5 : 1 }}>
                 <div style={{ width: 26, height: 26, borderRadius: "50%", background: reached ? "#2E7D32" : "#fff", border: reached ? "none" : `2px solid ${isNext ? "#E65100" : "#ccc"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {reached ? <CheckCircle size={15} color="#fff" /> : isNext ? <div style={{ width: 9, height: 9, borderRadius: "50%", background: "#E65100" }} /> : null}
                 </div>
-                <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#8A8580", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
+                <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#7D848E", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
                 {reached ? (
                   <span style={{ fontSize: 11, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 3 }}><Eye size={12} /> Mail{d ? ` · ${d}` : ""}</span>
                 ) : isNext ? (
@@ -1005,7 +1005,7 @@ export function useAdminData() {
           {isOpen ? <ChevronUp size={15} color={colors.muted} /> : <ChevronDown size={15} color={colors.muted} />}
         </div>
         {isOpen && (
-          <div style={{ borderTop: `1px solid ${colors.borderLt}`, padding: 16, background: "#F4F4F2" }}>
+          <div style={{ borderTop: `1px solid ${colors.borderLt}`, padding: 16, background: "#F5F6F8" }}>
             <div style={{ fontSize: 11, color: colors.muted, marginBottom: 8 }}>An: <strong style={{ color: colors.dark }}>{recName}</strong> · Betreff: <strong style={{ color: colors.dark }}>{e.subject || "—"}</strong></div>
             {body
               ? <div style={{ fontSize: 13, color: "#3a3a3a", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{body}</div>
@@ -1069,7 +1069,7 @@ export function useAdminData() {
     { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#0E9493" },
     { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#0E9493" },
     { feeToggle: true, label: "Gebühren", Icon: Receipt, tint: "#D9A005" },
-    { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#8A8580", danger: stats.reports > 0 },
+    { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#7D848E", danger: stats.reports > 0 },
   ];
 
   const ATTENTION = [

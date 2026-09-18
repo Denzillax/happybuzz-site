@@ -7,7 +7,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#191615";
-const SAND = "#F4F4F2";
+const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#0B5E5C";
@@ -60,7 +60,7 @@ export default function ImpactPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "64px 24px 88px", textAlign: "center",
-        borderBottom: "1px solid #E4E0D8",
+        borderBottom: "1px solid #E5E8EC",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -80,7 +80,7 @@ export default function ImpactPage() {
       <div style={{ maxWidth: 940, margin: "0 auto", padding: "0 24px 88px" }}>
 
         {/* ── Ledger Counter ── */}
-        <div style={{ display: "flex", border: "1px solid #E4E0D8", borderRadius: 12, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap", boxShadow: "0 16px 38px rgba(20,17,13,.12)" }}>
+        <div style={{ display: "flex", border: "1px solid #E5E8EC", borderRadius: 12, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap", boxShadow: "0 16px 38px rgba(20,17,13,.12)" }}>
           {ledger.map((s, i) => (
             <div key={i} style={{ flex: "1 1 160px", padding: "20px 16px", borderLeft: i ? `1px solid ${INK}1a` : "none", display: "flex", flexDirection: "column", gap: 7 }}>
               <span style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase", color: MUTED }}>{s.label}</span>
@@ -97,7 +97,7 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {FLOW.map((s, i) => (
-              <div key={i} style={{ padding: "22px 20px", borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8" }}>
+              <div key={i} style={{ padding: "22px 20px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC" }}>
                 <div style={{ fontFamily: MONO, fontSize: 28, fontWeight: 700, color: INK, lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
                 <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>{s.title}</h3>
                 <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
@@ -124,8 +124,8 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {PROJECTS.map((p, i) => (
-              <div key={i} style={{ borderRadius: 12, overflow: "hidden", background: "#fff", border: "1px solid #E4E0D8" }}>
-                <div style={{ height: 130, background: SAND, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid #E4E0D8" }}>
+              <div key={i} style={{ borderRadius: 12, overflow: "hidden", background: "#fff", border: "1px solid #E5E8EC" }}>
+                <div style={{ height: 130, background: SAND, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid #E5E8EC" }}>
                   <p.icon size={38} color={p.color} />
                 </div>
                 <div style={{ padding: 16 }}>
@@ -158,8 +158,8 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {FUNNEL.map((s, i) => (
-              <div key={i} style={{ padding: "20px 18px", borderRadius: 12, background: "#fff", border: "1px solid #E4E0D8", textAlign: "center" }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: SAND, border: "1px solid #E4E0D8", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+              <div key={i} style={{ padding: "20px 18px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", textAlign: "center" }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
                   {s.icon ? <s.icon size={20} color={s.color} /> : <BeeIcon size={20} color={s.color} />}
                 </div>
                 <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: PETROL, marginBottom: 4, letterSpacing: ".1em" }}>SCHRITT {i + 1}</div>
@@ -171,7 +171,7 @@ export default function ImpactPage() {
         </div>
 
         {/* ── CTA ── */}
-        <div style={{ padding: 36, borderRadius: 12, textAlign: "center", background: SAND, border: "1px solid #E4E0D8" }}>
+        <div style={{ padding: 36, borderRadius: 12, textAlign: "center", background: SAND, border: "1px solid #E5E8EC" }}>
           <BeeIcon size={30} color={INK} />
           <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Mach mit</h2>
           <p style={{ fontSize: 14.5, color: MUTED, maxWidth: 460, margin: "0 auto 22px", lineHeight: 1.6 }}>
@@ -180,7 +180,7 @@ export default function ImpactPage() {
           <Link href="/listings/new" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "14px 28px", borderRadius: 999, background: INK, color: PAPER,
-            fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #E4E0D8",
+            fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #E5E8EC",
           }}>
             Jetzt inserieren <ArrowRight size={16} />
           </Link>

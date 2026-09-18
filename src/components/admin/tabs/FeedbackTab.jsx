@@ -20,7 +20,7 @@ const STATUS_META = {
   new:         { label: "Neu",       bg: "#E3F2FD", color: "#1565C0" },
   in_progress: { label: "In Arbeit", bg: "#FFF3E0", color: "#E65100" },
   resolved:    { label: "Erledigt",  bg: "#E8F5E9", color: "#2E7D32" },
-  wontfix:     { label: "Verworfen", bg: "#F4F4F2", color: "#6B655F" },
+  wontfix:     { label: "Verworfen", bg: "#F5F6F8", color: "#5B626C" },
 };
 // NULL/unbekannt (und Alt-Wert 'neu') gilt als "new"
 const normStatus = (s) => (s && STATUS_META[s] ? s : "new");
@@ -76,7 +76,7 @@ export function FeedbackTab({ admin }) {
           const draft = noteDraft[f.id] !== undefined ? noteDraft[f.id] : (f.admin_note || "");
           const dirty = draft !== (f.admin_note || "");
           return (
-            <div key={f.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: st === "resolved" || st === "wontfix" ? "#F4F4F2" : "transparent", opacity: st === "wontfix" ? 0.65 : 1 }}>
+            <div key={f.id} style={{ padding: "13px 16px", borderBottom: `1px solid ${colors.borderLt}`, background: st === "resolved" || st === "wontfix" ? "#F5F6F8" : "transparent", opacity: st === "wontfix" ? 0.65 : 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                 {pill(t.bg, t.color, t.label)}
                 <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>{f.title || "(ohne Titel)"}</span>
@@ -88,7 +88,7 @@ export function FeedbackTab({ admin }) {
                 </select>
               </div>
               {desc && (
-                <p style={{ margin: "0 0 6px", fontSize: 12, color: "#6B655F", whiteSpace: "pre-wrap" }}>
+                <p style={{ margin: "0 0 6px", fontSize: 12, color: "#5B626C", whiteSpace: "pre-wrap" }}>
                   {isOpen || !long ? desc : `${desc.slice(0, TRUNC)}...`}
                   {long && (
                     <button onClick={() => setOpenId(isOpen ? null : f.id)} style={{ marginLeft: 6, border: "none", background: "none", color: colors.teal, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, padding: 0 }}>

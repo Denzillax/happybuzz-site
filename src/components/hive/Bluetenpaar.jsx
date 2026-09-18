@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import EinsatzWahl from "./EinsatzWahl";
 
-const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E4E0D8", chip: "#F2EEE7" };
+const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5" };
 const MOTIVE = [
   { Icon: Flower, farbe: "#C8860A" }, { Icon: Flower2, farbe: "#B23A48" }, { Icon: Leaf, farbe: "#5B8C5A" },
   { Icon: Sprout, farbe: "#0E9493" }, { Icon: TreeDeciduous, farbe: "#0B5E5C" }, { Icon: Clover, farbe: "#7A5C9E" },

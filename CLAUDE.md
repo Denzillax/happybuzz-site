@@ -47,7 +47,7 @@ plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architek
 ### Farben
 - Yellow: `#F4C03F`
 - Dark: `#191615`
-- Cream: `#F9F4EC`
+- Flächen: `#F5F6F8` (neutral hell), Chips `#F1F3F5`, Rand `#E5E8EC`, Nebentext `#5B626C`. Seit 19.09.2026 KEIN Cream, Sand oder Beige mehr (war Denis zu grau und sandig). Hero-Band `#E9F6F5`. Vollständige Liste: Kommentar FARBFAMILIE in `src/app/globals.css`
 - Teal: `#0E9493` (Buttons, aktive States)
 - Green: `#5B8C5A`
 
