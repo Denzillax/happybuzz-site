@@ -838,4 +838,20 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
     color: #14110D !important;
     filter: none !important;
   }
+  /* Kontrast auf Honig (Denis 18.09.): Kinder mit eigener Farbe (Level-Name, Nektar-Zahl,
+     graue Zusatztexte, Icons) werden beim Hovern ebenfalls dunkel. Lucide-Icons faerben
+     ueber stroke, das BeeIcon ueber fill. Der Trennstrich im Nektar-Knopf wird dunkler. */
+  .nektar-badge > button:hover span, .nektar-badge > button:hover b,
+  .hdr-menu-btn:hover span, .hdr-icon-btn:hover span:not([style*="background"]),
+  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):hover span:not([style*="background"]),
+  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align: left"]):hover span:not([style*="background"]) {
+    color: #14110D !important;
+  }
+  .nektar-badge > button:hover svg, .hdr-menu-btn:hover svg, .hdr-icon-btn:hover svg,
+  button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):hover svg,
+  button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align: left"]):hover svg {
+    stroke: #14110D !important; color: #14110D !important;
+  }
+  .nektar-badge > button:hover svg[fill]:not([fill="none"]) { fill: #14110D !important; stroke: none !important; }
+  .nektar-badge > button:hover .nektar-level-name[style*="width"] { background: rgba(20,17,13,.35) !important; }
 }
