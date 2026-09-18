@@ -1779,7 +1779,7 @@ export async function getBidHistory(listingId) {
   // Zeit sortiert stand der Fuehrende sonst zufaellig unterhalb.
   const { data, error } = await supabase
     .from("bid_history")
-    .select("id, listing_id, bidder_id, amount, bid_type, created_at, bidder:profiles(id, display_name)")
+    .select("id, listing_id, bidder_id, amount, bid_type, created_at, bidder:profiles(id, display_name, avatar_url)")
     .eq("listing_id", listingId)
     .order("created_at", { ascending: false })
     .order("amount", { ascending: false })

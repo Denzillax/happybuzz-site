@@ -9,6 +9,7 @@ import { AnimatedAmount } from "@/components/shared/effects";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
   Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
+  AlertCircle as AlertCircleBid,
 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
@@ -992,11 +993,12 @@ export default function ListingDetail() {
                 </p>
               </div>
               {l.listing_type === "auction" && l.status !== "paused" && (
-                <div style={{ textAlign: "right", fontSize: 13, color: colors.muted, lineHeight: 1.5 }}>
-                  <div>{(bidHistory.length || bids.length) === 1 ? "1 Gebot" : `${bidHistory.length || bids.length} Gebote`}</div>
+                <div style={{ textAlign: "right", fontSize: 13, color: colors.muted, lineHeight: 1.4 }}>
+                  {countdown && countdown !== "Auktion beendet" && <div>{/^\d/.test(countdown) && /[hms]\b/.test(countdown) ? "endet in" : "endet am"}</div>}
                   {countdown && (
-                    <div style={{ fontWeight: 700, color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.dark, whiteSpace: "nowrap" }}>
-                      <span key={countdownMs !== null && countdownMs > 0 && countdownMs < 60000 ? countdown : "ruhig"} className={countdownMs !== null && countdownMs > 0 ? (countdownMs < 60000 ? "bd-fx-tick" : countdownMs < 3600000 ? "bd-fx-urgent" : undefined) : undefined}>{/^\d/.test(countdown) && /[hms]\b/.test(countdown) ? `endet in ${countdown}` : `endet ${countdown}`}</span>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 16, fontWeight: 700, color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.dark, whiteSpace: "nowrap" }}>
+                      {countdown !== "Auktion beendet" && <Clock size={15} />}
+                      <span key={countdownMs !== null && countdownMs > 0 && countdownMs < 60000 ? countdown : "ruhig"} className={countdownMs !== null && countdownMs > 0 ? (countdownMs < 60000 ? "bd-fx-tick" : countdownMs < 3600000 ? "bd-fx-urgent" : undefined) : undefined}>{countdown}</span>
                     </div>
                   )}
                 </div>
@@ -1093,9 +1095,10 @@ export default function ListingDetail() {
                       border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
                       fontSize: 13,
                     }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontWeight: 700, color: bids[0]?.bidder_id === user?.id ? "#2E7D32" : "#E65100" }}>
-                          {bids[0]?.bidder_id === user?.id ? "Du führst!" : "Du wurdest überboten"}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: 14, color: bids[0]?.bidder_id === user?.id ? "#2E7D32" : "#E65100" }}>
+                          {bids[0]?.bidder_id === user?.id ? <CheckCircle size={17} /> : <AlertCircleBid size={17} />}
+                          {bids[0]?.bidder_id === user?.id ? "Du führst" : "Du wurdest überboten"}
                         </span>
                         <span style={{ fontSize: 12, color: colors.muted }}>
                           {myBid.max_amount > myBid.amount
@@ -1159,33 +1162,65 @@ export default function ListingDetail() {
                       if (isTop) return name || "Bieter";
                       return name ? `${name.slice(0, 2)}****` : "Bieter";
                     };
+                    // Bieterzahl + Zeitangabe (frische Gebote relativ, aeltere mit Datum)
+                    const bieterZahl = new Set(allBids.map(b => b.bidder_id || b.bidder?.id).filter(Boolean)).size;
+                    const zeitLabel = (d) => {
+                      const t = new Date(d), diff = Date.now() - t.getTime();
+                      const uhr = t.toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" });
+                      if (diff < 60000) return "gerade eben";
+                      if (diff < 3600000) return `vor ${Math.floor(diff / 60000)} Min.`;
+                      if (diff < 6 * 3600000) return `vor ${Math.floor(diff / 3600000)} Std.`;
+                      const heute = new Date(); heute.setHours(0, 0, 0, 0);
+                      if (t.getTime() >= heute.getTime()) return `heute, ${uhr}`;
+                      if (t.getTime() >= heute.getTime() - 86400000) return `gestern, ${uhr}`;
+                      return `${t.toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, ${uhr}`;
+                    };
+                    // Profilbild nur fuer den Fuehrenden und fuer einen selbst. Maskierte
+                    // Bieter bleiben anonym: grauer Kreis mit den ersten zwei Buchstaben.
+                    // Bewusst eine Funktion, keine Komponente: der Countdown rendert jede
+                    // Sekunde neu, eine innere Komponente wuerde das Bild jedes Mal neu laden.
+                    const bild = (b, offen) => {
+                      const name = (b.bidder?.display_name || "").trim();
+                      const kurz = (name.slice(0, 2) || "?");
+                      const basis = { width: 40, height: 40, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
+                      if (offen && b.bidder?.avatar_url) return <span style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
+                      if (offen) return <span style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
+                      return <span style={{ ...basis, background: "#F2EEE7", color: colors.muted }}>{kurz}</span>;
+                    };
                     return (
-                    <div style={{ fontSize: 13, marginTop: 8 }}>
-                      <p style={{ fontSize: 11, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".06em", margin: "0 0 8px" }}>Gebotsverlauf</p>
+                    <div style={{ marginTop: 18 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, margin: "0 0 8px" }}>
+                        <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: colors.dark, fontFamily: fonts.head }}>Gebotsverlauf</p>
+                        <span style={{ fontSize: 12.5, color: colors.muted }}>{totalBids === 1 ? "1 Gebot" : `${totalBids} Gebote`} · {bieterZahl === 1 ? "1 Bieter" : `${bieterZahl} Bieter`}</span>
+                      </div>
                       {visibleBids.map((b, i) => {
                         const bidderUid = b.bidder_id || b.bidder?.id;
                         const isTopBidder = bidderUid === topBidderId && b.amount >= (bids[0]?.amount || 0);
                         const isMine = bidderUid && user?.id && bidderUid === user.id;
+                        const fuehrt = isTopBidder && i === 0;
                         return (
                         <div key={b.id || i} style={{
-                          display: "flex", justifyContent: "space-between", alignItems: "center",
-                          padding: "8px 0", borderBottom: `1px solid ${colors.borderLt}`,
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "10px 12px", borderRadius: fuehrt ? 12 : 0,
+                          background: fuehrt ? "#E6F5F5" : "transparent",
+                          borderBottom: fuehrt ? "none" : `1px solid ${colors.borderLt}`,
+                          marginBottom: fuehrt ? 2 : 0,
                         }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <span style={{ fontWeight: (isMine || isTopBidder) ? 700 : 500, color: isMine ? colors.teal : (isTopBidder ? colors.dark : colors.muted), fontSize: 12 }}>
-                              {bidderLabel(b, isTopBidder)}{isMine && " (du)"}
-                            </span>
-                            {b.bid_type === "auto" && (
-                              <span style={{ fontSize: 9, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 6px", borderRadius: 12 }}>automatisch</span>
-                            )}
-                            {isTopBidder && <span style={{ fontSize: 9, color: colors.teal, fontWeight: 700 }}>Höchstbietend</span>}
+                          {bild(b, isTopBidder || isMine)}
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                              <span style={{ fontSize: 14, fontWeight: (isMine || isTopBidder) ? 700 : 500, color: fuehrt ? colors.tealDark : (isMine ? colors.teal : colors.dark), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {bidderLabel(b, isTopBidder || isMine)}{isMine && " (du)"}
+                              </span>
+                              {b.bid_type === "auto" && (
+                                <span style={{ fontSize: 10.5, fontWeight: 700, color: colors.muted, background: colors.cream, padding: "1px 7px", borderRadius: 999 }}>automatisch</span>
+                              )}
+                            </div>
+                            <div style={{ fontSize: 12, color: fuehrt ? colors.tealDark : colors.muted, marginTop: 1 }}>
+                              {fuehrt ? "Höchstbietend · " : ""}{zeitLabel(b.created_at)}
+                            </div>
                           </div>
-                          <div style={{ textAlign: "right" }}>
-                            <span style={{ fontWeight: 700, color: colors.dark, fontSize: 12 }}>CHF {fmtPrice(b.amount)}</span>
-                            <span style={{ display: "block", fontSize: 10, color: colors.muted }}>
-                              {new Date(b.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "long", year: "numeric" })}, {new Date(b.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })}
-                            </span>
-                          </div>
+                          <span style={{ fontSize: fuehrt ? 16 : 14.5, fontWeight: 700, color: fuehrt ? colors.tealDark : colors.muted, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(b.amount)}</span>
                         </div>
                         );
                       })}
