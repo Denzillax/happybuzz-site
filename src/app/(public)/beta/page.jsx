@@ -244,6 +244,8 @@ const TESTS = [
       { id: "ch_layout", label: "Desktop: Liste │ Chat │ Inserat-Info (3 Spalten); Mobile einspaltig (Liste ↔ Thread mit Zurück)" },
       { id: "ch_emoji_kompakt", label: "Chat: Emoji-Knopf links neben dem Eingabefeld öffnet 24 Emojis, Klick fügt an der Cursorposition ein; reine Emoji-Nachrichten gross ohne Blase; keine Schnellantworten mehr; Blasen kompakt mit Uhrzeit am Zeilenende, Folge-Nachrichten derselben Person enger" },
       { id: "ch_contactmask", label: "Kontaktdaten (Telefon/E-Mail/WhatsApp/Link) werden VOR Kaufabschluss ausgeblendet (•••) + Hinweis; nach Kauf erlaubt" },
+      { id: "fx_handlung", label: "Effekte bei Handlungen: Herz springt beim Merken, Preis zählt bei neuem Gebot hoch und blitzt gelb, Stempel 'Gekauft' direkt nach dem Kauf auf der Bestellseite, Nektar im Header zählt hoch mit '+N'" },
+      { id: "fx_ruhe", label: "Effekte im Hintergrund: Karten blenden beim Scrollen ein, Zahlenband zählt hoch, Countdown pulsiert in der letzten Stunde und tickt in der letzten Minute rot, Ladeplatzhalter schimmern; mit 'Bewegung reduzieren' im System ist alles still" },
       { id: "ch_paymask", label: "Auch Fragen nach IBAN, Kontonummer, PayPal, Vorkasse, Telefonnummer oder Mailadresse werden VOR Kaufabschluss ausgeblendet (•••); TWINT, Bank und bar bleiben erlaubt" },
       { id: "ch_contactescalate", label: "Wiederholte Kontaktversuche: nach mehreren Malen rote AGB-Warnung im Chat (Versuche werden pro Konto gezählt)" },
       { id: "ch_ban", label: "Admin (Users-Tab): Konto sperren/entsperren; gesperrtes Konto sieht 'Konto gesperrt'-Overlay + kann nicht mehr chatten" },

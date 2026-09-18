@@ -1,21 +1,34 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useCountUp } from "@/components/shared/effects";
 import Link from "next/link";
 import { Droplets, ChevronDown, Gift, Flower2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { calculateLevel, levelProgress, xpToNext, BEE_LEVELS } from "@/lib/gamification";
 
+function NektarZahl({ wert }) {
+  const z = useCountUp(wert, { dauer: 800 });
+  return <span style={{ fontVariantNumeric: "tabular-nums" }}>{Math.round(z)}</span>;
+}
+
 export default function NektarBadge() {
   const [data, setData] = useState(null); // { xp, nektar }
   const [open, setOpen] = useState(false);
+  const [plus, setPlus] = useState(null); // { n, k }: "+N" steigt auf, wenn Nektar dazukommt
+  const letzterNektar = useRef(null);
   const ref = useRef(null);
 
   const load = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setData(null); return; }
     const { data: p } = await supabase.from("profiles").select("xp_total, nektar, blueten").eq("id", user.id).maybeSingle();
-    if (p) setData({ xp: p.xp_total || 0, nektar: p.nektar || 0, blueten: p.blueten || 0 });
+    if (p) {
+      const neu = p.nektar || 0;
+      if (letzterNektar.current !== null && neu > letzterNektar.current) setPlus({ n: neu - letzterNektar.current, k: Date.now() });
+      letzterNektar.current = neu;
+      setData({ xp: p.xp_total || 0, nektar: neu, blueten: p.blueten || 0 });
+    }
   };
 
   useEffect(() => {
@@ -49,8 +62,9 @@ export default function NektarBadge() {
           <BeeIcon size={13} color={level.color} /> <span className="nektar-level-name">{level.name}</span>
         </span>
         <span className="nektar-level-name" style={{ width: 1, height: 14, background: "#E2E2E2" }} />
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#C8860A" }}>
-          <Droplets size={12} color="#C8860A" /> {data.nektar}
+        <span style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#C8860A" }}>
+          <Droplets size={12} color="#C8860A" /> <NektarZahl wert={data.nektar} />
+          {plus && <span key={plus.k} className="bd-fx-plus">+{plus.n}</span>}
         </span>
         <ChevronDown size={13} color="#9E9E9E" />
       </button>

@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { Magnetic } from '@/components/shared/effects'
 import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Klar-Look: schmales Willkommensband + separate Beta-Karte daneben.
@@ -32,12 +33,16 @@ export function Hero() {
                 Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <Magnetic>
                 <Link href="/listings/new" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: HONEY, color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
                   <Plus size={17} strokeWidth={2.4} /> Inserieren
                 </Link>
+                </Magnetic>
+                <Magnetic>
                 <Link href="/search" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
                   Stöbern <ArrowRight size={16} strokeWidth={2.4} />
                 </Link>
+                </Magnetic>
               </div>
             </div>
             {/* Drei Hero-Karten (aus dem frueheren Karussell), jetzt als ruhige Collage */}

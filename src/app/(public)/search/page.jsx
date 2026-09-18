@@ -583,10 +583,10 @@ function SearchPageInner() {
           <div className="search-results-grid" style={{ display: "grid", gap: 16 }}>
             {[...Array(8)].map((_, i) => (
               <div key={i} style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
-                <div style={{ aspectRatio: "4/3", background: colors.warm }} />
+                <div className="bd-fx-skel" style={{ aspectRatio: "1/1", background: colors.warm }} />
                 <div style={{ padding: 14 }}>
-                  <div style={{ height: 14, background: colors.warm, borderRadius: 12, width: "75%", marginBottom: 8 }} />
-                  <div style={{ height: 18, background: colors.warm, borderRadius: 12, width: "40%" }} />
+                  <div className="bd-fx-skel" style={{ height: 14, background: colors.warm, borderRadius: 12, width: "75%", marginBottom: 8 }} />
+                  <div className="bd-fx-skel" style={{ height: 18, background: colors.warm, borderRadius: 12, width: "40%" }} />
                 </div>
               </div>
             ))}

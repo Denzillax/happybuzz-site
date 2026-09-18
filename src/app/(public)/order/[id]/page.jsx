@@ -119,6 +119,7 @@ export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [purchase, setPurchase] = useState(null);
+  const [stempel, setStempel] = useState(false); // "Gekauft"-Stempel direkt nach dem Kauf, einmal pro Bestellung
   const [events, setEvents] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -176,6 +177,14 @@ export default function OrderDetailPage() {
   }, [params.id]);
 
   // Lieferadressen des Käufers laden (nur er darf die Bestelladresse wählen)
+  useEffect(() => {
+    if (!purchase || !user || user.id !== purchase.buyer_id || !purchase.created_at) return;
+    if (Date.now() - new Date(purchase.created_at).getTime() > 120000) return;
+    const k = `bd_stempel_${purchase.id}`;
+    try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, "1"); } catch {}
+    setStempel(true);
+  }, [purchase, user]);
+
   useEffect(() => {
     if (!purchase || !user || user.id !== purchase.buyer_id) return;
     supabase.from("user_addresses").select("*").eq("user_id", user.id).order("created_at")
@@ -352,7 +361,8 @@ export default function OrderDetailPage() {
         </h1>
 
         {/* Produkt-Card */}
-        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
+        <div style={{ position: "relative", background: "#fff", borderRadius: 12, border: "1px solid #E4E0D8", padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
+          {stempel && <span className="bd-fx-stamp" style={{ position: "absolute", right: 18, top: 14 }}>{isRental ? "Gemietet" : "Gekauft"}</span>}
           <div style={{ width: 80, height: 80, borderRadius: 12, overflow: "hidden", background: colors.cream, border: "1px solid #E4E0D8", flexShrink: 0 }}>
             {img ? <img src={img.startsWith("http") ? img : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${img}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={24} color={colors.muted} /></div>}
           </div>

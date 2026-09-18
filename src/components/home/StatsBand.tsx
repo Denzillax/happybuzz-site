@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/supabase'
 import { getCommunityImpactStats } from '@/lib/listings'
+import { CountUp } from '@/components/shared/effects'
 
 const MONO = "'Manrope', sans-serif"
 const INK = '#14110D'
@@ -29,10 +30,12 @@ export function StatsBand() {
 
   if (!stats) return null
 
+  // Zahlen zaehlen hoch, sobald das Band sichtbar ist (Effekte, 18.09.)
+  const chf = (n: number) => n.toLocaleString('de-CH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const teile = [
-    `${stats.exponate.toLocaleString('de-CH')} Inserate`,
-    `${stats.mitglieder.toLocaleString('de-CH')} Mitglieder`,
-    `CHF ${stats.impact.toLocaleString('de-CH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bee-Impact`,
+    <><CountUp value={stats.exponate} /> Inserate</>,
+    <><CountUp value={stats.mitglieder} /> Mitglieder</>,
+    <>CHF <CountUp value={stats.impact} format={chf} /> Bee-Impact</>,
   ]
 
   return (
@@ -43,7 +46,7 @@ export function StatsBand() {
       gap: 'clamp(14px, 4vw, 44px)', flexWrap: 'wrap',
     }}>
       {teile.map((t, i) => (
-        <span key={t} style={{
+        <span key={i} style={{
           fontFamily: MONO, fontSize: 'clamp(10px, 1.4vw, 12px)', fontWeight: 700,
           letterSpacing: '.14em', textTransform: 'uppercase', color: INK, whiteSpace: 'nowrap',
         }}>

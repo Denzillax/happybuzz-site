@@ -19,12 +19,14 @@ const INK = "#191615";
 function Countdown({ endDate, endedLabel = "Beendet" }) {
   const [text, setText] = useState("");
   const [urgent, setUrgent] = useState(false);
+  const [ms, setMs] = useState(null); // letzte Stunde pulsiert, letzte Minute tickt rot
 
   useEffect(() => {
     if (!endDate) { setText(""); return; }
     let iv;
     const tick = () => {
       const diff = new Date(endDate).getTime() - Date.now();
+      setMs(diff);
       if (diff <= 0) {
         setText(endedLabel); setUrgent(true);
         if (iv) { clearInterval(iv); iv = null; }
@@ -52,7 +54,7 @@ function Countdown({ endDate, endedLabel = "Beendet" }) {
   if (!text) return null;
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontSize: 11, fontWeight: urgent ? 700 : 500, color: urgent ? "#c62828" : colors.muted, whiteSpace: "nowrap" }}>
-      <Clock size={10} /> {text}
+      <Clock size={10} /> <span key={ms !== null && ms > 0 && ms < 60000 ? text : "ruhig"} className={ms !== null && ms > 0 ? (ms < 60000 ? "bd-fx-tick" : ms < 3600000 ? "bd-fx-urgent" : undefined) : undefined}>{text}</span>
     </span>
   );
 }
@@ -129,6 +131,7 @@ export function ListingCard(props) {
   return (
     <Link
       href={`/listing/${listing.id}`}
+      className="bd-fx-reveal"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
@@ -136,7 +139,7 @@ export function ListingCard(props) {
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
       <div style={{ position: "relative", aspectRatio: "1/1", background: colors.cream, overflow: "hidden", borderRadius: 12 }}>
         {cover
-          ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.03)" : "scale(1)", transition: "transform .3s ease", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
+          ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.06)" : "scale(1)", transition: "transform .6s cubic-bezier(.2,.7,.2,1)", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
           : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#ccc" /></div>
         }
 

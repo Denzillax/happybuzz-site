@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import { AnimatedAmount } from "@/components/shared/effects";
 import {
   Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
   Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
@@ -115,6 +116,8 @@ export default function ListingDetail() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFav, setIsFav] = useState(false);
+  const [favPop, setFavPop] = useState(0); // Herz springt beim Setzen
+  const [countdownMs, setCountdownMs] = useState(null); // fuer Puls (letzte Stunde) und rotes Ticken (letzte Minute)
   const viewCounted = useRef(false);
   const [sellerRating, setSellerRating] = useState({ avg: 0, count: 0 });
   const [activeImg, setActiveImg] = useState(0);
@@ -303,6 +306,7 @@ export default function ListingDetail() {
       const now = new Date();
       const end = new Date(l.auction_end);
       const diff = end.getTime() - now.getTime();
+      setCountdownMs(diff);
       if (diff <= 0) {
         setCountdown("Auktion beendet");
         // Auto-finalize
@@ -385,7 +389,7 @@ export default function ListingDetail() {
   const beeImpact = calcFee(displayPrice, l.fee_percentage || DEFAULT_FEE_PERCENT) * BEE_IMPACT_RATE;
   const condLabel = CONDITIONS.find((c) => c.value === l.condition)?.label || l.condition;
 
-  const handleFav = async () => { if (!user) { router.push("/login"); return; } setIsFav(await toggleFavorite(user.id, l.id)); };
+  const handleFav = async () => { if (!user) { router.push("/login"); return; } const neu = await toggleFavorite(user.id, l.id); setIsFav(neu); if (neu) setFavPop((n) => n + 1); };
 
   const handleSendMsg = async () => {
     if (!user || !msgText.trim() || sendingMsg) return;
@@ -625,7 +629,7 @@ export default function ListingDetail() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: "0 2px 8px rgba(0,0,0,.1)", transition: "all .15s",
                 }}>
-                  <Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
+                  <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
                 </button>
                 {/* KI-Bildersuche: aehnliche Inserate zu diesem Foto */}
                 {imgs.length > 0 && (
@@ -984,7 +988,7 @@ export default function ListingDetail() {
                   {l.listing_type === "auction" ? (bids.length > 0 ? "Aktuelles Gebot" : "Startpreis") : l.listing_type === "rent" ? "Mietpreis" : l.listing_type === "service" ? "Preis" : l.listing_type === "free" ? "" : "Preis"}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: "clamp(24px, 5.5vw, 30px)", fontWeight: 700, fontFamily: fonts.head, letterSpacing: ".01em" }}>
-                  {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : `CHF ${fmtPrice(displayPrice)}`}
+                  {l.listing_type === "free" ? "Gratis" : (l.listing_type === "rent" || l.listing_type === "service") ? `CHF ${fmtPrice(displayPrice)} / ${l.rent_period === "hour" ? "Stunde" : l.rent_period === "day" ? "Tag" : l.rent_period === "week" ? "Woche" : "Monat"}` : <>CHF <AnimatedAmount value={parseFloat(displayPrice) || 0} format={fmtPrice} /></>}
                 </p>
               </div>
               {l.listing_type === "auction" && l.status !== "paused" && (
@@ -992,7 +996,7 @@ export default function ListingDetail() {
                   <div>{(bidHistory.length || bids.length) === 1 ? "1 Gebot" : `${bidHistory.length || bids.length} Gebote`}</div>
                   {countdown && (
                     <div style={{ fontWeight: 700, color: countdown.includes("m") && !countdown.includes("h") && !countdown.includes("T") ? "#c62828" : colors.dark, whiteSpace: "nowrap" }}>
-                      {/^\d/.test(countdown) && /[hms]\b/.test(countdown) ? `endet in ${countdown}` : `endet ${countdown}`}
+                      <span key={countdownMs !== null && countdownMs > 0 && countdownMs < 60000 ? countdown : "ruhig"} className={countdownMs !== null && countdownMs > 0 ? (countdownMs < 60000 ? "bd-fx-tick" : countdownMs < 3600000 ? "bd-fx-urgent" : undefined) : undefined}>{/^\d/.test(countdown) && /[hms]\b/.test(countdown) ? `endet in ${countdown}` : `endet ${countdown}`}</span>
                     </div>
                   )}
                 </div>
@@ -1642,7 +1646,7 @@ export default function ListingDetail() {
               {!isOwner && (
                 <div style={{ textAlign: "center", marginTop: 10 }}>
                   <button onClick={handleFav} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: "6px 10px", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: isFav ? colors.dark : colors.muted }}>
-                    <Heart size={15} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} />
+                    <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={15} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
                     {isFav ? "Gemerkt" : "Merken"}
                   </button>
                 </div>

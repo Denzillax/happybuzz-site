@@ -737,3 +737,42 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):
 textarea, select:not(.eckig) {
   border-radius: 12px !important;
 }
+
+/* ═══════════════════════════════════════════
+   EFFEKTE (Denis 18.09.2026)
+   Spec: docs/superpowers/specs/2026-09-18-effekte-design.md
+   Bausteine: src/components/shared/effects.jsx
+   ═══════════════════════════════════════════ */
+@keyframes bd-fx-heart { 0% { transform: scale(1); } 35% { transform: scale(1.38); } 60% { transform: scale(.92); } 100% { transform: scale(1); } }
+.bd-fx-heart { animation: bd-fx-heart .42s cubic-bezier(.2,.7,.2,1); }
+
+@keyframes bd-fx-flash { 0% { background-color: rgba(244,192,63,.55); } 100% { background-color: rgba(244,192,63,0); } }
+.bd-fx-flash { animation: bd-fx-flash .9s ease-out; border-radius: 6px; }
+
+@keyframes bd-fx-plus { 0% { opacity: 0; transform: translate(-50%, 4px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -18px); } }
+.bd-fx-plus { position: absolute; left: 50%; top: -6px; font-size: 11px; font-weight: 800; color: #C8860A; pointer-events: none; white-space: nowrap; animation: bd-fx-plus 1.4s ease-out forwards; }
+
+@keyframes bd-fx-stamp { 0% { opacity: 0; transform: rotate(-9deg) scale(1.9); } 55% { opacity: 1; transform: rotate(-9deg) scale(.94); } 100% { opacity: 1; transform: rotate(-9deg) scale(1); } }
+.bd-fx-stamp { display: inline-block; padding: 5px 14px; border: 2.5px solid #0B5E5C; color: #0B5E5C; font-weight: 800; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; border-radius: 6px; transform: rotate(-9deg); animation: bd-fx-stamp .5s cubic-bezier(.2,.7,.2,1) both; background: rgba(255,255,255,.85); }
+
+html.bd-fx-on .bd-fx-reveal { opacity: 0; transform: translateY(10px); transition: opacity .32s ease-out, transform .42s cubic-bezier(.2,.7,.2,1); }
+html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
+
+@keyframes bd-fx-urgent { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+.bd-fx-urgent { animation: bd-fx-urgent 1.6s ease-in-out infinite; }
+@keyframes bd-fx-tick { 0% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.bd-fx-tick { display: inline-block; color: #c62828 !important; animation: bd-fx-tick .35s ease-out; }
+
+@keyframes bd-fx-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.bd-fx-skel { background: linear-gradient(90deg, #F2EEE7 25%, #FAF7F2 45%, #F2EEE7 65%) !important; background-size: 200% 100% !important; animation: bd-fx-shimmer 1.4s linear infinite; }
+
+@keyframes bd-fx-page { from { opacity: 0; } to { opacity: 1; } }
+.bd-fx-page { animation: bd-fx-page .22s ease-out; }
+
+.bd-fx-magnet { transition: transform .25s cubic-bezier(.2,.7,.2,1); will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bd-fx-heart, .bd-fx-flash, .bd-fx-urgent, .bd-fx-tick, .bd-fx-skel, .bd-fx-page, .bd-fx-stamp { animation: none !important; }
+  .bd-fx-plus { display: none; }
+  html.bd-fx-on .bd-fx-reveal { opacity: 1; transform: none; transition: none; }
+}
