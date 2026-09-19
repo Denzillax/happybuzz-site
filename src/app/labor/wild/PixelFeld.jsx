@@ -1,6 +1,10 @@
 "use client";
 // Pixelfeld unter dem Mauszeiger (Denis 19.09.2026, Idee von craft.wild.as, eigene Umsetzung).
 // Auf dem Karoraster (und NUR dort, nicht im Hero oder Header) liegt ein Raster aus 16-px-Kacheln.
+// Vierte Fassung (Denis: Kacheln kleiner, Zeiger weniger nervig, Biene soll nicht stören, über Textstellen
+// sollen Bilder entstehen wie bei wild, Kartenrand soll stehen bleiben): Raster 10 px, die Spur ist schmal
+// und verglüht schnell, die Biene fliegt nur selten einmal vorbei. Elemente mit data-form (herz, smiley,
+// stern, blitz, haus) lassen unter dem Zeiger ein Pixelbild entstehen, solange man darauf steht.
 // Dritte Fassung, "interaktiver und überraschender":
 //  1. Spur: Wo der Zeiger hinkommt, glühen Kacheln farbig auf und verglühen wieder.
 //  2. Aufladen: Maustaste auf freier Fläche gedrückt halten, unter dem Zeiger wächst ein flackerndes
@@ -8,7 +12,7 @@
 //  3. Pixel-Biene: Steht der Zeiger ein paar Sekunden still, kommt eine Biene aus Pixeln angeflogen.
 //     Danach folgt sie dem Zeiger mit Verzögerung und zieht eine gelbe Spur. Verlässt der Zeiger
 //     das Raster, fliegt sie davon.
-//  4. Karten: Fährt man auf ein Inserat (data-typ), blitzt sein Rand im Raster in der Formatfarbe auf.
+//  4. Karten: Steht der Zeiger auf einem Inserat (data-typ), leuchtet sein Rand im Raster in der Formatfarbe und bleibt.
 // Technik:
 //  - Die Fläche fängt keine Klicks ab (pointer-events: none) und liegt HINTER dem Inhalt: Sie färbt
 //    nur das Karopapier, nie Karten, Fotos oder Text (Rastergrund = Stapelkontext, Fläche 0, Inhalt 1).
@@ -17,13 +21,21 @@
 //  - Die Schleife läuft nur, solange etwas glüht, geladen wird oder die Biene fliegt.
 import { useEffect, useRef } from "react";
 
-const Z = 16;
+const Z = 10;
 const FARBEN = ["#FBF062", "#3B5BD9", "#FBF062", "#E0492A", "#D8FF00", "#6C4CF1", "#FBF062", "#1C2541"];
 const TYPFARBE = { sell: "#FBF062", auction: "#3B5BD9", rent: "#6C4CF1", free: "#D8FF00", service: "#E0492A" };
 // Biene als Punktbild, Kopf rechts. Y Körper, K Streifen, W Flügel, E Auge, L Beine. Ein Bildpunkt = 5 px.
 const BIENE = ["..WW.WW..", "..WW.WW..", ".YKYKYKK.", "YYKYKYKEK", ".YKYKYKK.", "..L..L..."];
 const BFARBE = { Y: "#F5C518", K: "#0A0A0A", W: "#B9C4CC", E: "#FFFFFF", L: "#0A0A0A" };
-const BP = 5;
+const BP = 3;
+// Pixelbilder für Textstellen mit data-form. X = gefüllte Kachel.
+const FORMEN = {
+  herz: { f: "#E0492A", b: [".XX...XX.", "XXXX.XXXX", "XXXXXXXXX", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", "...XXX...", "....X...."] },
+  smiley: { f: "#F5C518", b: ["..XXXXX..", ".X.....X.", "X..X.X..X", "X.......X", "X.X...X.X", "X..XXX..X", ".X.....X.", "..XXXXX.."] },
+  stern: { f: "#6C4CF1", b: ["....X....", "....X....", "...XXX...", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", ".XXX.XXX.", ".XX...XX."] },
+  blitz: { f: "#3B5BD9", b: ["....XXX", "...XXX.", "..XXX..", ".XXXXXX", "...XXX.", "..XXX..", ".XXX...", "XX....."] },
+  haus: { f: "#1C2541", b: ["....X....", "...XXX...", "..XXXXX..", ".XXXXXXX.", "XXXXXXXXX", ".XX...XX.", ".XX.X.XX.", ".XX.X.XX."] },
+};
 
 export default function PixelFeld({ ursprung }) {
   const ref = useRef(null);
@@ -42,8 +54,8 @@ export default function PixelFeld({ ursprung }) {
     let beben = 0, bild = 0;
     const maus = { x: 0, y: 0, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
-    const biene = { an: false, geht: false, x: 0, y: 0, vx: 0, vy: 0, blick: 1 };
-    let letzteKarte = null;
+    const biene = { an: false, x: 0, y: 0, basis: 0, blick: 1, zuletzt: -1e9 };
+    let karte = null, form = null; // Karte unter dem Zeiger, und Name des Pixelbilds einer Textstelle
 
     const messen = () => {
       // body trägt auf dem Desktop einen CSS-Zoom: Zeigerkoordinaten sind Bildschirm-Pixel,
@@ -101,6 +113,23 @@ export default function PixelFeld({ ursprung }) {
         }
       }
 
+      // Pixelbild: solange der Zeiger auf einer Textstelle mit data-form steht, bleibt das Bild unter ihm warm
+      if (form && FORMEN[form] && maus.imRaster) {
+        const F = FORMEN[form], [mx, my] = zelle(maus.x, maus.y);
+        const x0 = mx - Math.floor(F.b[0].length / 2), y0 = my - Math.floor(F.b.length / 2);
+        F.b.forEach((zeile, r) => { for (let c = 0; c < zeile.length; c += 1) if (zeile[c] === "X") heizen(x0 + c, y0 + r, 0.22, F.f); });
+      }
+      // Kartenrand: Solange der Zeiger auf einem Inserat steht, leuchtet genau EINE Kachelreihe rund um die Karte
+      // in der Formatfarbe und bleibt stehen. Die Karten sitzen auf dem Raster, der Abstand zur Nachbarkarte ist
+      // zwei Kacheln breit: Der Rand berührt den Nachbarn nicht.
+      if (karte && karte.isConnected) {
+        const r = karte.getBoundingClientRect(), f = TYPFARBE[karte.dataset.typ] || "#FBF062";
+        const x0 = Math.round((r.left + window.scrollX) / zoom / Z) - 1, x1 = Math.round((r.right + window.scrollX) / zoom / Z);
+        const y0 = Math.round(((r.top + window.scrollY) / zoom - oy) / Z) - 1, y1 = Math.round(((r.bottom + window.scrollY) / zoom - oy) / Z);
+        for (let x = x0; x <= x1; x += 1) { heizen(x, y0, 0.3, f); heizen(x, y1, 0.3, f); }
+        for (let y = y0 + 1; y < y1; y += 1) { heizen(x0, y, 0.3, f); heizen(x1, y, 0.3, f); }
+      }
+
       // Wellen: ein Ring aus Kacheln wächst vom Auslösepunkt nach aussen
       wellen = wellen.filter((w) => {
         const r = ((jetzt - w.t) / 1000) * (20 + w.kraft * 14), rand = Math.ceil(r) + 1;
@@ -112,28 +141,23 @@ export default function PixelFeld({ ursprung }) {
         return true;
       });
 
-      // Pixel-Biene: kommt bei Stillstand, folgt danach dem Zeiger mit Verzögerung
-      if (!biene.an && maus.imRaster && !ladung.an && jetzt - maus.zuletzt > 3200) {
-        biene.an = true; biene.geht = false;
-        biene.x = sx - 40; biene.y = maus.y - 60; biene.vx = 0; biene.vy = 0;
+      // Pixel-Biene: seltener Gast. Nach langem Stillstand fliegt sie EINMAL quer durchs Bild und ist wieder weg.
+      // Sie folgt dem Zeiger nicht und zieht keine Spur (die Fassung davor störte).
+      if (!biene.an && maus.imRaster && !ladung.an && jetzt - maus.zuletzt > 9000 && jetzt - biene.zuletzt > 40000) {
+        biene.an = true; biene.zuletzt = jetzt; biene.blick = 1;
+        biene.x = sx - 30; biene.basis = maus.y - 70;
       }
       if (biene.an) {
-        if (!maus.imRaster && !biene.geht && jetzt - maus.zuletzt > 1500) biene.geht = true;
-        const zx = biene.geht ? sx + B + 80 : maus.x + Math.cos(bild / 24) * 46;
-        const zy = biene.geht ? biene.y - 1 : maus.y - 34 + Math.sin(bild / 17) * 20;
-        biene.vx += (zx - biene.x) * 0.006; biene.vy += (zy - biene.y) * 0.006;
-        biene.vx *= 0.93; biene.vy *= 0.93;
-        biene.x += biene.vx; biene.y += biene.vy + Math.sin(bild / 5) * 0.6;
-        if (Math.abs(biene.vx) > 0.4) biene.blick = biene.vx > 0 ? 1 : -1;
-        if (bild % 3 === 0) { const [cx, cy] = zelle(biene.x - biene.blick * 20, biene.y + 8); heizen(cx, cy, 0.4, "#FBF062"); }
-        if (biene.geht && biene.x > sx + B + 60) biene.an = false;
+        biene.x += 2.4;
+        biene.y = biene.basis + Math.sin(bild / 14) * 18 + Math.sin(bild / 5) * 1.5;
+        if (biene.x > sx + B + 40) biene.an = false;
       }
 
       const bx = beben > 0.05 ? (Math.random() - 0.5) * beben * 10 : 0, byy = beben > 0.05 ? (Math.random() - 0.5) * beben * 10 : 0;
       beben *= 0.88;
       ctx.clearRect(0, 0, B, H);
       for (const [k, g] of glut) {
-        const n = g.w * 0.93;
+        const n = g.w * 0.9;
         if (n < 0.03) { glut.delete(k); continue; }
         g.w = n;
         const [cx, cy] = k.split(",").map(Number);
@@ -157,26 +181,17 @@ export default function PixelFeld({ ursprung }) {
       maus.x = p.x; maus.y = p.y; maus.zuletzt = performance.now();
       maus.imRaster = p.y >= oben && p.y <= unten;
       if (ladung.an) { ladung.x = p.x; ladung.y = p.y; }
-      if (!maus.imRaster) { anwerfen(); return; }
+      if (!maus.imRaster) { karte = null; form = null; anwerfen(); return; }
       const [cx, cy] = zelle(p.x, p.y);
-      for (let dy = -2; dy <= 2; dy += 1) for (let dx = -2; dx <= 2; dx += 1) {
-        const d = Math.hypot(dx, dy);
-        if (d > 2.3) continue;
-        // Mitte sicher, Rand zufällig: so franst die Spur aus wie verstreute Pixel
-        if (d > 1 && Math.random() > 0.45) continue;
-        heizen(cx + dx, cy + dy, d < 1 ? 0.55 : 0.3);
-      }
-      // Karte betreten: ihr Rand blitzt im Raster in der Formatfarbe auf
-      const karte = e.target.closest ? e.target.closest("[data-typ]") : null;
-      if (karte !== letzteKarte) {
-        letzteKarte = karte;
-        if (karte) {
-          const r = karte.getBoundingClientRect(), f = TYPFARBE[karte.dataset.typ] || "#FBF062";
-          const [x0, y0] = zelle((r.left + window.scrollX) / zoom - Z, (r.top + window.scrollY) / zoom - Z);
-          const [x1, y1] = zelle((r.right + window.scrollX) / zoom + Z, (r.bottom + window.scrollY) / zoom + Z);
-          for (let x = x0; x <= x1; x += 1) { heizen(x, y0, 1, f); heizen(x, y1, 1, f); }
-          for (let y = y0; y <= y1; y += 1) { heizen(x0, y, 1, f); heizen(x1, y, 1, f); }
-        }
+      const stelle = e.target.closest ? e.target.closest("[data-form]") : null;
+      form = stelle ? stelle.dataset.form : null;
+      karte = e.target.closest ? e.target.closest("[data-typ]") : null;
+      // Dezente Spur: die Kachel unter dem Zeiger, dazu ab und zu ein Nachbar.
+      // Über einem Pixelbild und über einer Karte keine Spur, dort spricht das Bild oder der Rand.
+      if (!form && !karte) {
+        heizen(cx, cy, 0.45);
+        if (Math.random() < 0.5) heizen(cx + (Math.random() < 0.5 ? -1 : 1), cy, 0.25);
+        if (Math.random() < 0.5) heizen(cx, cy + (Math.random() < 0.5 ? -1 : 1), 0.25);
       }
       anwerfen();
     };
@@ -199,7 +214,7 @@ export default function PixelFeld({ ursprung }) {
       beben = 0.3 + ch * 1.6;
       anwerfen();
     };
-    const raus = () => { maus.imRaster = false; maus.zuletzt = performance.now(); letzteKarte = null; anwerfen(); };
+    const raus = () => { maus.imRaster = false; maus.zuletzt = performance.now(); karte = null; form = null; anwerfen(); };
 
     messen();
     window.addEventListener("pointermove", zeiger, { passive: true });

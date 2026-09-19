@@ -1394,12 +1394,14 @@ body:has(.sl) { background: #121212; }
 /* Karopapier: zwei feine Linienraster übereinander */
 .wl-raster-grund { border-top: 1px solid var(--wl-linie);
   background-image: linear-gradient(#EFEFEF 1px, transparent 1px), linear-gradient(90deg, #EFEFEF 1px, transparent 1px);
-  background-size: 16px 16px; background-position: -1px -1px; }
+  background-size: 10px 10px; background-position: -1px -1px; }
 .wl-pixel { display: block; }
 /* Pixelfeld unter dem Mauszeiger: nur auf dem Karoraster und HINTER dem Inhalt. Der Rastergrund ist ein eigener
    Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
 .wl-raster-grund { position: relative; z-index: 0; }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
+/* Textstellen, über denen ein Pixelbild entsteht: fein gepunktet unterstrichen als leiser Hinweis */
+.wl-form { text-decoration: underline dotted 1px; text-underline-offset: .18em; text-decoration-color: var(--wl-leise); cursor: default; }
 .wl-feld-oben { z-index: 5; } /* nur die Pixel-Biene, über Karten und Text */
 .wl-raster-grund .wl-abschnitt, .wl-raster-grund .wl-pixel { position: relative; z-index: 1; }
 /* Gestufte Pixel-Ecken statt Rundung, wie aus dem Raster geschnitten */
@@ -1418,14 +1420,20 @@ body:has(.sl) { background: #121212; }
            padding: 10px 14px; background: #fff; border: 1px solid var(--wl-linie); border-radius: 6px; white-space: nowrap; transition: background .2s ease, border-color .2s ease; }
 .wl-mehr:hover { background: var(--wl-gelb); border-color: var(--wl-gelb); filter: none !important; }
 
-.wl-karten { display: grid; grid-template-columns: repeat(4, 1fr); gap: 44px 20px; }
+/* Karten sitzen exakt auf dem 10-px-Raster: --kw, --kh, --schub-x und --schub-y setzt WildLabor.jsx. Spaltenabstand
+   20 px = zwei Kacheln, die Karte selbst ist mit festem Textblock ein Vielfaches von 10 px hoch, der Reihenabstand auch. */
+.wl-karten { display: grid; grid-template-columns: repeat(4, var(--kw, 1fr)); gap: 40px 20px; justify-content: start;
+             margin-left: var(--schub-x, 0px); padding-top: var(--schub-y, 0px); }
+.wl-karte { background: #fff; }
+.wl-karte .wl-bild { aspect-ratio: auto; height: var(--kh, auto); }
+.wl-karten .wl-textblock { display: flex; flex-direction: column; height: 110px; padding: 0 10px; overflow: hidden; }
 .wl-karte { display: flex; flex-direction: column; min-width: 0; }
 .wl-karte:hover { filter: none !important; }
 .wl-bild { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: #EFEFEF; }
 .wl-bild img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.2,.7,.1,1); }
 .wl-karte:hover .wl-bild img { transform: scale(1.05); }
 .wl-karte { transition: transform .35s cubic-bezier(.2,.7,.1,1); }
-.wl .wl-karte.wl-da:hover { transform: translateY(-4px); transition-delay: 0s !important; }
+/* kein Anheben mehr: Die Karte soll auf dem Raster stehen bleiben, der leuchtende Rand ist das Hover-Zeichen */
 /* Reiter in der Bildecke, wie "View full site" bei wild: weisse Lasche mit Mono-Schrift */
 .wl-reiter { position: absolute; right: 0; bottom: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 12px 8px 14px; background: #fff; border-top-left-radius: 6px;
              font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; transform: translateY(100%); transition: transform .3s cubic-bezier(.2,.7,.1,1); }
@@ -1477,7 +1485,8 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-abschnitt { padding: 48px 16px 0; }
   .wl-abschnitt-kopf { grid-template-columns: 1fr; margin-bottom: 24px; }
   .wl-mehr { justify-self: start; }
-  .wl-karten { grid-template-columns: repeat(2, 1fr); gap: 28px 12px; }
+  .wl-karten { grid-template-columns: repeat(2, var(--kw, 1fr)); gap: 30px 20px; }
+  .wl-karten .wl-textblock { height: 100px; padding: 0 6px; }
   .wl-titel { font-size: 16px; }
   .wl-reiter { transform: none; font-size: 9.5px; padding: 7px 9px 6px 10px; }
   .wl-format { grid-template-columns: 52px minmax(0, 1fr) 20px; gap: 4px 10px; padding: 16px 4px; }

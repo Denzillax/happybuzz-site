@@ -15,6 +15,8 @@ import PixelFeld from "./PixelFeld";
 
 const SCHRIFT = "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
+// Pixelbild, das unter dem Zeiger entsteht, wenn man auf dem Formatnamen steht
+const FORMBILD = { sell: "stern", auction: "blitz", rent: "haus", free: "herz", service: "smiley" };
 const FORMATE = [
   { type: "sell", nr: "01", label: "Festpreis", sub: "Kaufen wie gewohnt" },
   { type: "auction", nr: "02", label: "Auktion", sub: "Bieten und gewinnen" },
@@ -38,7 +40,7 @@ function PixelBand() {
     if (!cv) return;
     const ctx = cv.getContext("2d");
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const Z = 16, REIHEN = 9;
+    const Z = 10, REIHEN = 13;
     let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0, mausSpalte = -99, mausNah = 0;
     // Palette von wild: Blau und Gelb tragen, dazu Orangerot, Lime und Navy
     const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#FBF062" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
@@ -67,7 +69,7 @@ function PixelBand() {
       zeit += 1;
       // Das Mosaik streckt sich zum Zeiger hin: Spalten in seiner Nähe wachsen nach unten
       spalten.forEach((s, i) => {
-        const d = Math.abs(i - mausSpalte), zug = d < 7 ? (1 - d / 7) * 5 * mausNah : 0;
+        const d = Math.abs(i - mausSpalte), zug = d < 10 ? (1 - d / 10) * 6 * mausNah : 0;
         s.h += (s.ziel + zug - s.h) * 0.07;
       });
       malen();
@@ -113,9 +115,11 @@ function Karte({ l }) {
         <Herz id={l.id} />
         <span className="wl-reiter">Ansehen <ArrowUpRight size={13} strokeWidth={2} /></span>
       </span>
-      <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
-      <span className="wl-titel">{l.title}</span>
-      <span className="wl-preis">{preis(l)}</span>
+      <span className="wl-textblock">
+        <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
+        <span className="wl-titel">{l.title}</span>
+        <span className="wl-preis">{preis(l)}</span>
+      </span>
     </Link>
   );
 }
@@ -123,6 +127,32 @@ function Karte({ l }) {
 export default function WildLabor() {
   const [inserate, setInserate] = useState([]);
   const wurzel = useRef(null);
+  const kartenRef = useRef(null);
+
+  // Karten exakt aufs Kachelraster setzen (Denis 19.09.): Breite, Bildhöhe und Lage sind Vielfache von 10 px,
+  // gemessen vom Ursprung des Karopapiers. CSS allein kann das nicht, weil die Spaltenbreite von der
+  // Fensterbreite abhängt. Die Werte gehen als CSS-Variablen an .wl-karten.
+  useEffect(() => {
+    const el = kartenRef.current, grund = el ? el.closest(".wl-raster-grund") : null;
+    if (!el || !grund) return;
+    const Z = 10;
+    const setzen = () => {
+      el.style.setProperty("--schub-x", "0px"); el.style.setProperty("--schub-y", "0px");
+      const zoom = parseFloat(getComputedStyle(document.body).zoom) || 1;
+      const spalten = window.innerWidth / zoom <= 900 ? 2 : 4, luecke = 2 * Z;
+      const breite = Math.floor((el.clientWidth - Z - (spalten - 1) * luecke) / spalten / Z) * Z;
+      const r = el.getBoundingClientRect(), g = grund.getBoundingClientRect();
+      const links = (r.left - g.left) / zoom, oben = (r.top - g.top) / zoom;
+      el.style.setProperty("--kw", breite + "px");
+      el.style.setProperty("--kh", Math.round((breite * 1.25) / Z) * Z + "px");
+      el.style.setProperty("--schub-x", ((Z - (links % Z)) % Z) + "px");
+      el.style.setProperty("--schub-y", ((Z - (oben % Z)) % Z) + "px");
+    };
+    setzen();
+    const ro = new ResizeObserver(setzen);
+    ro.observe(grund);
+    return () => ro.disconnect();
+  }, [inserate]);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -192,23 +222,23 @@ export default function WildLabor() {
 
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
-            <span className="wl-label">Neu eingestellt</span>
-            <h2 className="wl-h2">Frisch aus Kellern, Estrichen und Werkstätten.</h2>
+            <span className="wl-label"><span className="wl-form" data-form="stern">Neu eingestellt</span></span>
+            <h2 className="wl-h2">Frisch aus <span className="wl-form" data-form="haus">Kellern</span>, Estrichen und <span className="wl-form" data-form="smiley">Werkstätten</span>.</h2>
             <Link href="/search" className="wl-mehr">Alle ansehen <ArrowUpRight size={14} strokeWidth={2} /></Link>
           </div>
-          <div className="wl-karten">{inserate.map((l) => <Karte key={l.id} l={l} />)}</div>
+          <div className="wl-karten" ref={kartenRef}>{inserate.map((l) => <Karte key={l.id} l={l} />)}</div>
         </section>
 
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
             <span className="wl-label">Fünf Formate</span>
-            <h2 className="wl-h2">Ein Marktplatz, fünf Wege zum Handel.</h2>
+            <h2 className="wl-h2">Ein Marktplatz, fünf Wege zum <span className="wl-form" data-form="herz">Handel</span>.</h2>
           </div>
           <div className="wl-formate">
             {FORMATE.map((f) => (
               <Link key={f.type} href={`/search?type=${f.type}`} className={`wl-format wl-auf wl-typ-${f.type}`}>
                 <span className="wl-format-nr"><span className="wl-pixelpunkt" />{f.nr}</span>
-                <span className="wl-format-name">{f.label}</span>
+                <span className="wl-format-name" data-form={FORMBILD[f.type]}>{f.label}</span>
                 <span className="wl-format-sub">{f.sub}</span>
                 <ArrowUpRight size={20} strokeWidth={1.6} className="wl-format-pfeil" />
               </Link>
@@ -217,7 +247,7 @@ export default function WildLabor() {
         </section>
 
         <section className="wl-abschnitt wl-herzprobe wl-auf">
-          <span className="wl-label">Das Logo als Herz</span>
+          <span className="wl-label"><span className="wl-form" data-form="herz">Das Logo als Herz</span></span>
           <div className="wl-herzprobe-reihe">
             <span className="wl-probe"><BLogo size={96} title="" /><em>Logo</em></span>
             <span className="wl-probe-pfeil">90°</span>
