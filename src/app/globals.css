@@ -1052,20 +1052,15 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .bh[data-farbe=dunkel] { --bh-feld: #191615; --bh-text: #FFFFFF; --bh-unter: #B3B9C1; }
 
 /* ═══════════════════════════════════════════
-   LC-INFO: Hover-Fläche mit mehr Infos auf Inseratkarten (TEST, Denis 19.09.2026).
-   Nur aktiv innerhalb von .lab-hoverinfo und nur mit echter Maus. Ohne diese Klasse
-   bleibt die Fläche komplett ausgeblendet, die normalen Karten sind unverändert.
+   LC-MEHR: zwei zusätzliche Chips (Zustand, Versand) beim Hovern einer Inseratkarte
+   (TEST, Denis 19.09.2026). Nur aktiv innerhalb von .lab-hoverinfo und nur mit echter Maus.
+   Ohne diese Klasse bleiben sie ausgeblendet, die normalen Karten sind unverändert.
    ═══════════════════════════════════════════ */
-.lc-info { display: none; }
+.lc-mehr { display: none !important; }
 @media (hover: hover) and (pointer: fine) {
-  .lab-hoverinfo .lc-info { display: flex; flex-direction: column; justify-content: space-between; position: absolute; inset: 0;
-    padding: 12px 13px; background: rgba(244,192,63,.96); color: #191615; opacity: 0; transition: opacity .16s ease;
-    font-size: 12.5px; font-weight: 600; line-height: 1.35; pointer-events: none; }
-  .lab-hoverinfo a:hover .lc-info { opacity: 1; }
-  .lc-info-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13.5px; font-weight: 800; }
-  .lc-info-chip { font-size: 11px; font-weight: 700; background: rgba(25,22,21,.12); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
-  .lc-info-liste { display: flex; flex-direction: column; gap: 3px; }
-  .lc-info-liste span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .lc-info-fuss { font-size: 12.5px; font-weight: 800; align-self: flex-end; }
+  .lab-hoverinfo .lc-mehr { display: inline-block !important; opacity: 0; transform: translateY(-4px);
+    transition: opacity .16s ease, transform .2s cubic-bezier(.2,.7,.2,1); box-shadow: 0 1px 4px rgba(25,22,21,.14); }
+  .lab-hoverinfo .lc-mehr-2 { transition-delay: .05s; }
+  .lab-hoverinfo a:hover .lc-mehr { opacity: 1; transform: none; }
 }
 

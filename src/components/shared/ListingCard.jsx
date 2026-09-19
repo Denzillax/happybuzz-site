@@ -14,8 +14,6 @@ import { useFavorite } from "@/hooks/useFavorite";
 const INK = "#191615";
 
 // Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
-const FORMAT_KURZ = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
-
 // < 24h -> Live-Countdown ("3h 5m" / "12m 9s"), abgelaufen -> endedLabel.
 // Live-Intervall nur bei < 24h (Performance bei vielen Karten im Grid).
 function Countdown({ endDate, endedLabel = "Beendet" }) {
@@ -156,26 +154,13 @@ export function ListingCard(props) {
           {hasFeatured && <span style={{ ...chip("#E8A820", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
+          {/* Mehr Infos beim Hovern (TEST, Denis 19.09.2026). Erste Fassung war eine gelbe Fläche über dem
+              ganzen Foto: sie wiederholte, was unter dem Bild schon steht, und verdeckte das Foto. Jetzt
+              erscheinen nur die zwei Angaben, die der Karte fehlen, als Chips im bestehenden Stapel.
+              Nur aktiv innerhalb von .lab-hoverinfo (Test-Route) und nur mit Maus. Styles: globals.css LC-MEHR */}
+          {!statusOverlay && listing.condition && <span className="lc-mehr" style={chip("rgba(255,255,255,.94)", INK)}>{conditionLabel(listing.condition)}</span>}
+          {!statusOverlay && <span className="lc-mehr lc-mehr-2" style={chip("rgba(255,255,255,.94)", INK)}>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>}
         </div>
-
-        {/* Hover-Fläche mit mehr Infos (TEST, Denis 19.09.2026, Idee aus dem Bänder-Hero). Nur aktiv
-            innerhalb von .lab-hoverinfo (Test-Route /labor/hero) und nur mit Maus. Styles: globals.css LC-INFO */}
-        {!statusOverlay && (
-          <span className="lc-info" aria-hidden="true">
-            <span className="lc-info-kopf">
-              <span>{FORMAT_KURZ[listing.listing_type] || "Inserat"}</span>
-              {listing.condition && <span className="lc-info-chip">{conditionLabel(listing.condition)}</span>}
-            </span>
-            <span className="lc-info-liste">
-              <span>{listing.city || "Schweiz"}</span>
-              <span>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>
-              {isAuction && <span>{bidCount === 1 ? "1 Gebot" : `${bidCount} Gebote`}</span>}
-              {listing.is_negotiable && !isAuction && <span>Preis verhandelbar</span>}
-              {listing.seller?.display_name && <span>von {listing.seller.display_name}{listing.seller.avg_rating > 0 ? ` · ${parseFloat(listing.seller.avg_rating).toFixed(1)} Sterne` : ""}</span>}
-            </span>
-            <span className="lc-info-fuss">Ansehen</span>
-          </span>
-        )}
 
         {/* Oben rechts: Merken-Herz */}
         <div style={{ position: "absolute", top: 8, right: 8 }}>

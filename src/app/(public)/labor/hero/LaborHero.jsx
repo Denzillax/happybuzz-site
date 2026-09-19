@@ -68,7 +68,7 @@ export default function LaborHero() {
             <span style={{ fontSize: 12, fontWeight: 800, color: "#5B626C", width: 58 }}>Schrift</span>
             {SCHRIFTEN.map((f) => <button key={f.key} type="button" className="kein-akzent" onClick={() => setSchrift(f.key)} style={{ ...pille(schrift === f.key), fontFamily: `"${f.key}", sans-serif` }}>{f.label}</button>)}
           </div>
-          <p style={{ margin: 0, fontSize: 11.5, color: "#686E78" }}>Testleiste, nur auf dieser Seite. Weiter unten bei «Neu eingestellt»: mit der Maus über eine Karte fahren zeigt die neue Info-Fläche.</p>
+          <p style={{ margin: 0, fontSize: 11.5, color: "#686E78" }}>Testleiste, nur auf dieser Seite. Weiter unten bei «Neu eingestellt»: mit der Maus über eine Karte fahren zeigt oben links zwei zusätzliche Chips (Zustand, Versand).</p>
         </div>
       </div>
       <BandHero farbe={farbe} schrift={schrift} />
