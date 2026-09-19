@@ -1341,11 +1341,11 @@ body:has(.sl) { background: #121212; }
    ═══════════════════════════════════════════ */
 /* Farben von craft.wild.as übernommen (Denis 19.09.: nicht nur Schwarz-Weiss): Gelb, Blau, Violett, Lime,
    Orangerot, Navy. Jedes der fünf Formate hat eine davon (wl-typ-*). */
-.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #8B8B8B; --wl-gelb: #FBF062; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
+.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #6B6B6B; --wl-rot-text: #C23A1E; --wl-honig: #F5C518; --wl-gelb: #FBF062; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
       --wl-lime: #D8FF00; --wl-rot: #E0492A; --wl-navy: #1C2541; --wl-linie: #E6E6E6; background: #fff; color: var(--wl-ink);
       min-height: 100vh; font-family: 'Geist', 'General Sans', 'Manrope', sans-serif; font-weight: 400; overflow-x: clip; }
 .wl a { color: inherit; text-decoration: none; }
-.wl-typ-sell { --typ: var(--wl-gelb); --typ-fg: var(--wl-ink); }
+.wl-typ-sell { --typ: var(--wl-honig); --typ-fg: var(--wl-ink); }
 .wl-typ-auction { --typ: var(--wl-blau); --typ-fg: #fff; }
 .wl-typ-rent { --typ: var(--wl-lila); --typ-fg: #fff; }
 .wl-typ-free { --typ: var(--wl-lime); --typ-fg: var(--wl-ink); }
@@ -1372,7 +1372,7 @@ body:has(.sl) { background: #121212; }
 .wl-rund { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--wl-linie); display: inline-flex; align-items: center; justify-content: center; transition: background .2s ease, border-color .2s ease; }
 .wl-rund:hover { background: var(--wl-gelb); border-color: var(--wl-gelb); filter: none !important; }
 
-.wl-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 6px !important; font: inherit; font-size: 14.5px; font-weight: 500;
+.wl-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 6px !important; font: inherit; font-size: 15px; font-weight: 500;
             border: 1px solid var(--wl-ink); cursor: pointer; transition: background .2s ease, color .2s ease, transform .2s ease; }
 .wl-knopf:hover { filter: none !important; transform: translateY(-1px); }
 .wl .wl-knopf-ink { background: var(--wl-ink); color: #fff; }
@@ -1454,7 +1454,7 @@ body:has(.sl) { background: #121212; }
 /* kein Anheben mehr: Die Karte soll auf dem Raster stehen bleiben, der leuchtende Rand ist das Hover-Zeichen */
 /* Reiter in der Bildecke, wie "View full site" bei wild: weisse Lasche mit Mono-Schrift */
 .wl-reiter { position: absolute; right: 0; bottom: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 12px 8px 14px; background: #fff; border-top-left-radius: 6px;
-             font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; transform: translateY(100%); transition: transform .3s cubic-bezier(.2,.7,.1,1); }
+             font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .16em; transform: translateY(100%); transition: transform .3s cubic-bezier(.2,.7,.1,1); }
 .wl-karte:hover .wl-reiter, .wl-karte:focus-visible .wl-reiter { transform: none; }
 /* Favoriten-Herz: das gedrehte Pixel-B */
 .wl-herz { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; padding: 0; border: none; border-radius: 6px !important; background: #fff; color: #C9C9C9; cursor: pointer;
@@ -1462,7 +1462,7 @@ body:has(.sl) { background: #121212; }
 .wl-herz:hover { color: var(--wl-ink); filter: none !important; }
 .wl-herz-an, .wl-herz-an:hover { background: var(--wl-rot); color: #fff; animation: wl-pop .35s cubic-bezier(.3,1.6,.5,1); }
 @keyframes wl-pop { 0% { transform: scale(.7); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
-.wl-meta { margin-top: 14px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
+.wl-meta { margin-top: 14px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
 .wl-titel { margin-top: 6px; font-size: 19px; font-weight: 500; line-height: 1.2; letter-spacing: -.015em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .wl-preis { margin-top: 6px; font-size: 15px; color: var(--wl-grau); font-variant-numeric: tabular-nums; }
 
@@ -1474,7 +1474,7 @@ body:has(.sl) { background: #121212; }
 .wl-format:hover .wl-format-nr, .wl-format:hover .wl-format-sub { color: inherit; }
 .wl-format:hover .wl-pixelpunkt { background: currentColor; }
 .wl-format-name { font-size: clamp(24px, 2.8vw, 40px); font-weight: 300; letter-spacing: -.025em; text-transform: uppercase; line-height: 1; }
-.wl-format-sub { font-size: 16px; color: var(--wl-grau); }
+.wl-format-sub { font-size: 17px; color: var(--wl-grau); }
 .wl-format-pfeil { align-self: center; transition: transform .25s ease; }
 .wl-format:hover .wl-format-pfeil { transform: translate(3px, -3px); }
 
@@ -1483,7 +1483,7 @@ body:has(.sl) { background: #121212; }
 .wl-probe { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px; background: #fff; border: 1px solid var(--wl-linie); border-radius: 6px; color: var(--wl-ink); }
 .wl-probe:first-child { background: var(--wl-ink); border-color: var(--wl-ink); color: var(--wl-gelb); }
 .wl-probe-an { background: var(--wl-rot); color: #fff; border-color: var(--wl-rot); }
-.wl-probe em { font-style: normal; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; opacity: .7; }
+.wl-probe em { font-style: normal; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .16em; opacity: .7; }
 .wl-probe-pfeil { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; color: var(--wl-leise); padding-bottom: 70px; }
 
 .wl-fuss { background: var(--wl-ink); color: var(--wl-gelb); padding: 72px 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
@@ -1505,10 +1505,10 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-mehr { justify-self: start; }
   .wl-karten { grid-template-columns: repeat(2, var(--kw, 1fr)); gap: 30px 20px; }
   .wl-karten .wl-textblock { height: 100px; padding: 0 6px; }
-  .wl-titel { font-size: 16px; }
-  .wl-reiter { transform: none; font-size: 9.5px; padding: 7px 9px 6px 10px; }
+  .wl-titel { font-size: 17px; }
+  .wl-reiter { transform: none; font-size: 11px; padding: 7px 9px 6px 10px; }
   .wl-format { grid-template-columns: 52px minmax(0, 1fr) 20px; gap: 4px 10px; padding: 16px 4px; }
-  .wl-format-sub { grid-column: 2; font-size: 14px; }
+  .wl-format-sub { grid-column: 2; font-size: 15px; }
   .wl-format-pfeil { grid-row: 1; grid-column: 3; }
   .wl-herzprobe-reihe { gap: 14px; }
   .wl-probe { padding: 16px; }
@@ -1533,14 +1533,14 @@ body:has(.wl) { background: #0A0A0A; }
 .wl-suchzeile { display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; margin-top: 18px; }
 .wl-suchzeile .wl-zahlen { margin: 0; }
 /* Der Hauptsatz erscheint zuerst als Kacheln im Pixelfeld, die echte Schrift fährt erst danach hoch */
-.wl-h1[data-entschluesseln] .wl-zeile > span { animation-delay: .95s; }
-.wl-h1[data-entschluesseln] .wl-zeile:nth-child(2) > span { animation-delay: 1.05s; }
+.wl-h1[data-entschluesseln] .wl-zeile > span { animation-delay: 1.05s; }
+.wl-h1[data-entschluesseln] .wl-zeile:nth-child(2) > span { animation-delay: 1.15s; }
 .wl-suche { display: flex; align-items: center; gap: 14px; width: 100%; height: 76px; padding: 0 10px 0 24px; background: #fff; border: 1px solid var(--wl-ink);
             --e: 6px; clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
               calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
 .wl-suche input { flex: 1; min-width: 0; height: 100%; border: none !important; outline: none; background: transparent; font: inherit; font-size: clamp(18px, 1.8vw, 26px); font-weight: 300; letter-spacing: -.01em; color: var(--wl-ink); box-shadow: none !important; border-radius: 0 !important; }
 .wl-suche input::placeholder { color: var(--wl-leise); }
-.wl-suche .wl-knopf { height: 54px; padding: 0 26px; font-size: 16px; }
+.wl-suche .wl-knopf { height: 54px; padding: 0 26px; font-size: 17px; }
 .wl-zahlen { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 4px 0 0; color: var(--wl-grau); }
 .wl-zahlen span::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; background: var(--wl-ink); }
 
@@ -1559,7 +1559,7 @@ body:has(.wl) { background: #0A0A0A; }
 /* Endet bald: Karte mit Restzeit und Pixelbalken, der Textblock ist dafür höher (bleibt ein Vielfaches von 10 px) */
 .wl-karten-hoch .wl-textblock { height: 160px; }
 .wl-rest { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; min-height: 34px; }
-.wl-rest-zeit { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; color: var(--wl-rot); font-variant-numeric: tabular-nums; }
+.wl-rest-zeit { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; color: var(--wl-rot-text); font-variant-numeric: tabular-nums; }
 .wl-rest-balken { display: grid; grid-template-columns: repeat(20, 1fr); gap: 1px; height: 8px; }
 .wl-rest-balken i { background: #E9E9E9; transition: background .4s ease; }
 .wl-rest-balken i.an { background: var(--wl-rot); }
@@ -1576,7 +1576,7 @@ body:has(.wl) { background: #0A0A0A; }
 .wl-gebuehr { display: flex; flex-direction: column; gap: 10px; }
 .wl-gebuehr-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 17px; }
 .wl-gebuehr-kopf strong { font-size: clamp(24px, 2.6vw, 38px); font-weight: 300; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-.wl-gebuehr-fuss { font-size: 14.5px; color: var(--wl-grau); }
+.wl-gebuehr-fuss { font-size: 15px; color: var(--wl-grau); }
 .wl-balken { display: grid; grid-template-columns: repeat(40, 1fr); gap: 2px; height: 22px; }
 .wl-balken i { background: #ECECEC; }
 /* füllt sich einmal, wenn der Abschnitt ins Bild kommt (die Verzögerung pro Kachel steht inline) */
@@ -1589,20 +1589,20 @@ body:has(.wl) { background: #0A0A0A; }
 
 .wl-protokoll { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--wl-ink); background: rgba(255,255,255,.6); }
 .wl-protokoll li { border-bottom: 1px solid var(--wl-linie); }
-.wl-protokoll a { display: grid; grid-template-columns: 96px 64px minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 13px 8px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .02em; transition: background .2s ease; }
+.wl-protokoll a { display: grid; grid-template-columns: 96px 64px minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 13px 8px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .02em; transition: background .2s ease; }
 .wl-protokoll a:hover { background: var(--wl-gelb); filter: none !important; }
 .wl-protokoll-zeit { color: var(--wl-leise); }
-.wl-protokoll-art { text-transform: uppercase; letter-spacing: .14em; font-size: 10.5px; }
+.wl-protokoll-art { text-transform: uppercase; letter-spacing: .14em; font-size: 11px; }
 .wl-protokoll-gebot { color: var(--wl-blau); }
-.wl-protokoll-neu { color: var(--wl-rot); }
-.wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Geist', sans-serif; font-size: 15.5px; letter-spacing: 0; }
+.wl-protokoll-neu { color: var(--wl-rot-text); }
+.wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Geist', sans-serif; font-size: 15px; letter-spacing: 0; }
 
 @media (max-width: 900px) {
   .wl-hero { padding-bottom: 56px; }
   .wl-hero-unten { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
   .wl-suche { height: 58px; padding: 0 6px 0 14px; gap: 8px; }
-  .wl-suche .wl-knopf { height: 44px; padding: 0 16px; font-size: 14.5px; }
-  .wl-suche input { font-size: 16px; }
+  .wl-suche .wl-knopf { height: 44px; padding: 0 16px; font-size: 15px; }
+  .wl-suche input { font-size: 17px; }
   .wl-kategorien { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wl-kategorie { padding: 14px 10px; gap: 8px; }
   .wl-kategorie-name { font-size: 15px; }
@@ -1613,4 +1613,37 @@ body:has(.wl) { background: #0A0A0A; }
 }
 /* Biene im Hero */
 .wl-biene { margin-bottom: 22px; }
+/* ── Marke und System der neuen Frontseite (Prüfung 19.09.2026). Das ist die verbindliche Kurzfassung. ──
+   FARBEN  Ink #0A0A0A trägt Schrift, Logo, Knöpfe. Zitrone #FBF062 ist die Markenfarbe für FLÄCHEN (Hover, Pixelfeld,
+           Logo auf Dunkel). Auf Weiss nie als kleine Schrift oder feines Zeichen: dafür Honig #F5C518. Akzente (Blau
+           #3B5BD9, Violett #6C4CF1, Lime #D8FF00, Rot #E0492A, Navy #1C2541) kennzeichnen nur die fünf Formate und
+           färben das Pixelfeld. Rot als Schrift: #C23A1E (Kontrast 5.3). Nebentext #2A2A2A, leise Labels #6B6B6B
+           (Kontrast 5.3, vorher #8B8B8B mit 3.5). JavaScript liest dieselben Werte aus labor/wild/farben.js.
+   SCHRIFT Geist für alles, Geist Mono für Labels. Stufen: 11 Label · 12 Mono-Text · 13 · 15 Nebentext · 17 Text ·
+           19 Kartentitel · 22 Wortmarke, darüber fliessend (clamp). Titel leicht (300/400), Versalien nur für den
+           Hauptsatz, Formatnamen und Labels. Inserattitel stehen normal, die schreiben die Nutzer selbst.
+   RASTER  10 px. Karten, Linien und Pixelbilder sitzen darauf. Ecken sind gestuft (clip-path), nie gerundet.
+   LOGO    Pixel-B. Auf hellem Grund Ink, auf dunklem Zitrone. Um 90 Grad gedreht ist es das Favoriten-Herz.
+   BEWEGUNG Abschnitte bewegen sich einmal beim Hereinscrollen. Dauerhaft bewegt sich nur das Pixelfeld.
+   BEDIENUNG Jedes klickbare Element hat einen sichtbaren Fokus (blau). Nichts Wichtiges hängt am Hovern. ── */
+.wl a:focus-visible, .wl button:focus-visible { outline: 2px solid var(--wl-blau); outline-offset: 3px; }
+/* gestufte Ecken schneiden einen äusseren Rahmen ab, darum dort ein innerer */
+.wl .wl-knopf:focus-visible, .wl .wl-rund:focus-visible, .wl .wl-herz:focus-visible, .wl .wl-mehr:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--wl-blau) !important; }
+.wl-suche:focus-within { border-color: var(--wl-blau); box-shadow: inset 0 0 0 1px var(--wl-blau); }
+.wl-karte-link:focus-visible .wl-bild { box-shadow: inset 0 0 0 3px var(--wl-blau); }
+/* Karte: Rahmen mit Link und Herz-Knopf nebeneinander statt Knopf im Link */
+.wl-karte { position: relative; }
+.wl-karte-link { display: flex; flex-direction: column; min-width: 0; }
+.wl-karte-link:hover { filter: none !important; }
+/* Fuss: Marke, drei Linkspalten, Schlusszeile */
+.wl-fuss { align-items: stretch; gap: 48px; }
+.wl-fuss-kopf { display: flex; flex-direction: column; gap: 22px; }
+.wl-fuss-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 220px)); gap: 28px 40px; }
+.wl-fuss-nav div { display: flex; flex-direction: column; gap: 10px; }
+.wl-fuss-nav .wl-label { color: rgba(255,255,255,.55); margin-bottom: 4px; }
+.wl-fuss-nav a { color: #fff; font-size: 15px; width: fit-content; border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease; }
+.wl-fuss-nav a:hover { color: var(--wl-gelb); border-bottom-color: var(--wl-gelb); filter: none !important; }
+.wl-fuss a:focus-visible { outline-color: var(--wl-gelb); }
+.wl-fuss-label { border-top: 1px solid rgba(255,255,255,.16); padding-top: 22px; }
+@media (max-width: 900px) { .wl-fuss-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* WILD-LABOR ENDE */

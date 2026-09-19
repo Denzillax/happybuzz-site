@@ -6,8 +6,9 @@
 // rund neunmal pro Sekunde. Mit "Bewegung reduzieren" steht das erste Bild.
 // Zeichen: Y Körper (Honig), K Ink, R Flügel rot, . leer.
 import { useEffect, useState } from "react";
+import { FARBEN } from "./farben";
 
-const FARBE = { Y: "#F5C518", K: "#0A0A0A", R: "#E0492A" };
+const FARBE = { Y: FARBEN.honig, K: FARBEN.ink, R: FARBEN.rot };
 // Das Logo im Kleinen (eine Kachel pro Logo-Quadrat): links die versetzten Quadrate, rechts der B-Körper mit Taille
 const B_OFFEN = ["..RRR.", ".R.RRR", "R.RRR.", ".R.RRR", "..RRR."];
 const B_SCHMAL = ["..RR..", ".R.R..", "R.RR..", ".R.R..", "..RR.."];

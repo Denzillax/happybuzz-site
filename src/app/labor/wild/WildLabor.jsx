@@ -19,6 +19,7 @@ import { DEFAULT_FEE_PERCENT, BEE_IMPACT_RATE } from "@/lib/constants";
 import BLogo from "@/components/shared/BLogo";
 import PixelFeld from "./PixelFeld";
 import PixelBiene from "./PixelBiene";
+import { FARBEN } from "./farben";
 
 const SCHRIFT = "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
@@ -35,6 +36,12 @@ const SCHRITTE = [
   { nr: "01", label: "Inserieren", sub: "Fotos hochladen, Format wählen, Bee-Rate festlegen. Die KI schreibt den Text auf Wunsch mit." },
   { nr: "02", label: "Handeln", sub: "Verkaufen, versteigern, vermieten oder verschenken. Bezahlt wird direkt zwischen euch, per TWINT, Bank oder bar." },
   { nr: "03", label: "Gutes tun", sub: "Von jeder Gebühr gehen 20 % an den Bienenschutz. Das steht auf jeder Rechnung." },
+];
+// Fusszeile: dieselben Seiten wie im Fuss der echten Startseite
+const FUSS = [
+  { titel: "Marktplatz", links: [{ label: "Stöbern", href: "/search" }, { label: "Inserieren", href: "/listings/new" }, { label: "So funktioniert es", href: "/how-it-works" }] },
+  { titel: "BEEDARO", links: [{ label: "Über uns", href: "/about" }, { label: "Bee-Impact", href: "/impact" }, { label: "Hilfe und FAQ", href: "/help" }, { label: "Kontakt", href: "/contact" }] },
+  { titel: "Rechtliches", links: [{ label: "Impressum", href: "/imprint" }, { label: "Datenschutz", href: "/privacy" }, { label: "AGB", href: "/terms" }] },
 ];
 const LISTE = "id, title, listing_type, price, start_price, rent_price, rent_period, city, created_at, auction_end, listing_images(url, sort_order)";
 
@@ -58,7 +65,7 @@ function Herz({ id }) {
   return (
     <button type="button" className={`wl-herz eckig kein-akzent${an ? " wl-herz-an" : ""}`} aria-pressed={an}
       aria-label={an ? "Aus den Favoriten entfernen" : "Zu den Favoriten"}
-      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setAn((v) => !v); }} data-id={id}>
+      onClick={() => setAn((v) => !v)} data-id={id}>
       <BLogo herz size={18} title="" />
     </button>
   );
@@ -82,22 +89,26 @@ function Restzeit({ start, ende }) {
   );
 }
 
+// Karte: Der Link umfasst Bild und Text, das Herz ist ein eigener Knopf daneben (ein Knopf IM Link wäre ungültiges
+// HTML und für Tastatur und Screenreader verwirrend). Beide liegen in einem Rahmen, der den Inserattyp trägt.
 function Karte({ l, mitRest }) {
   return (
-    <Link href={`/listing/${l.id}`} className="wl-karte wl-auf" data-typ={l.listing_type}>
-      <span className="wl-bild">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={getCoverUrl(l)} alt="" loading="lazy" />
-        <Herz id={l.id} />
-        <span className="wl-reiter">Ansehen <ArrowUpRight size={13} strokeWidth={2} /></span>
-      </span>
-      <span className="wl-textblock">
-        <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
-        <span className="wl-titel">{l.title}</span>
-        <span className="wl-preis">{preis(l)}</span>
-        {mitRest && l.auction_end && <Restzeit start={l.created_at} ende={l.auction_end} />}
-      </span>
-    </Link>
+    <div className="wl-karte wl-auf" data-typ={l.listing_type}>
+      <Link href={`/listing/${l.id}`} className="wl-karte-link" aria-label={`${l.title}, ${FORMAT[l.listing_type]}, ${preis(l)}`}>
+        <span className="wl-bild">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={getCoverUrl(l)} alt="" loading="lazy" />
+          <span className="wl-reiter" aria-hidden="true">Ansehen <ArrowUpRight size={13} strokeWidth={2} /></span>
+        </span>
+        <span className="wl-textblock">
+          <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
+          <span className="wl-titel">{l.title}</span>
+          <span className="wl-preis">{preis(l)}</span>
+          {mitRest && l.auction_end && <Restzeit start={l.created_at} ende={l.auction_end} />}
+        </span>
+      </Link>
+      <Herz id={l.id} />
+    </div>
   );
 }
 
@@ -202,7 +213,7 @@ export default function WildLabor() {
     impuls(r.left + Math.random() * r.width, r.bottom + 14 + Math.random() * 30, 0.35);
   };
 
-  const ricardo = 0.12, unser = DEFAULT_FEE_PERCENT / 100;
+  const ueblich = 0.12, unser = DEFAULT_FEE_PERCENT / 100;
   const neu = inserate.slice(0, 8);
 
   return (
@@ -272,7 +283,7 @@ export default function WildLabor() {
           <section className="wl-abschnitt">
             <div className="wl-abschnitt-kopf wl-auf">
               <span className="wl-label"><span className="wl-form" data-form="blitz">Endet bald</span></span>
-              <h2 className="wl-h2" data-wort="HUI!">Die Uhr läuft. Wer zuletzt bietet, gewinnt.</h2>
+              <h2 className="wl-h2" data-wort="HUI">Die Uhr läuft. Wer zuletzt bietet, gewinnt.</h2>
               <Link href="/search?type=auction" className="wl-mehr">Alle Auktionen <ArrowUpRight size={14} strokeWidth={2} /></Link>
             </div>
             <div className="wl-karten wl-karten-hoch">{endend.map((l) => <Karte key={l.id} l={l} mitRest />)}</div>
@@ -282,7 +293,7 @@ export default function WildLabor() {
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
             <span className="wl-label"><span className="wl-form" data-form="stern">Neu eingestellt</span></span>
-            <h2 className="wl-h2" data-wort="NEU!">Frisch aus <span className="wl-form" data-form="haus">Kellern</span>, Estrichen und <span className="wl-form" data-form="smiley">Werkstätten</span>.</h2>
+            <h2 className="wl-h2" data-wort="NEU">Frisch aus <span className="wl-form" data-form="haus">Kellern</span>, Estrichen und <span className="wl-form" data-form="smiley">Werkstätten</span>.</h2>
             <Link href="/search" className="wl-mehr">Alle ansehen <ArrowUpRight size={14} strokeWidth={2} /></Link>
           </div>
           <div className="wl-karten">{neu.map((l) => <Karte key={l.id} l={l} />)}</div>
@@ -330,18 +341,18 @@ export default function WildLabor() {
           </div>
           <div className="wl-gebuehren wl-auf">
             <div className="wl-gebuehr">
-              <span className="wl-gebuehr-kopf"><span>Ricardo</span><strong>8 bis 12 %</strong></span>
-              <PixelBalken anteil={ricardo / 0.12} farbe="#0A0A0A" />
-              <span className="wl-gebuehr-fuss">Erfolgsprovision je nach Preis</span>
+              <span className="wl-gebuehr-kopf"><span>Üblich bei Auktionsplattformen</span><strong>8 bis 12 %</strong></span>
+              <PixelBalken anteil={ueblich / 0.12} farbe={FARBEN.ink} />
+              <span className="wl-gebuehr-fuss">Erfolgsprovision, je nach Verkaufspreis</span>
             </div>
             <div className="wl-gebuehr">
               <span className="wl-gebuehr-kopf"><span>BEEDARO</span><strong>{DEFAULT_FEE_PERCENT} %</strong></span>
-              <PixelBalken anteil={unser / 0.12} farbe="#3B5BD9" />
+              <PixelBalken anteil={unser / 0.12} farbe={FARBEN.blau} />
               <span className="wl-gebuehr-fuss">Standard. Du wählst selbst zwischen 3, 5, 7 und 10 %.</span>
             </div>
             <div className="wl-gebuehr">
               <span className="wl-gebuehr-kopf"><span>davon für Bienenschutz</span><strong>{Math.round(BEE_IMPACT_RATE * 100)} %</strong></span>
-              <PixelBalken anteil={(unser * BEE_IMPACT_RATE) / 0.12} farbe="#F5C518" />
+              <PixelBalken anteil={(unser * BEE_IMPACT_RATE) / 0.12} farbe={FARBEN.honig} />
               <span className="wl-gebuehr-fuss">Ein Fünftel jeder Gebühr, ausgewiesen auf der Rechnung.</span>
             </div>
           </div>
@@ -391,9 +402,19 @@ export default function WildLabor() {
       </div>
 
       <footer className="wl-fuss">
-        <BLogo size={120} title="" />
-        <p className="wl-fuss-satz">Kaufen. Verkaufen. Gutes tun.</p>
-        <p className="wl-label wl-fuss-label">Vorschau neben der echten Startseite. Noch nichts davon ist dort übernommen.</p>
+        <div className="wl-fuss-kopf">
+          <BLogo size={96} title="BEEDARO" />
+          <p className="wl-fuss-satz">Kaufen. Verkaufen. Gutes tun.</p>
+        </div>
+        <nav className="wl-fuss-nav" aria-label="Fusszeile">
+          {FUSS.map((g) => (
+            <div key={g.titel}>
+              <span className="wl-label">{g.titel}</span>
+              {g.links.map((x) => <Link key={x.href} href={x.href}>{x.label}</Link>)}
+            </div>
+          ))}
+        </nav>
+        <p className="wl-label wl-fuss-label">© {new Date().getFullYear()} BEEDARO · Schweiz · 20 % jeder Gebühr für den Bienenschutz</p>
       </footer>
     </div>
   );

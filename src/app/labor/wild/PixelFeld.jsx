@@ -19,7 +19,7 @@
 // EIN breiter Ring fegt schnell über das Bild, dahinter bleibt die Fläche rot stehen und löst sich Kachel für
 // Kachel auf. Dazu schüttelt das Feld, die Inhalte beben leicht, die Landschaft bekommt eine Delle.
 // Volle Ladung (gut zwei Sekunden halten): Die ganze Seite "explodiert". Das Feld darf dann für einen Moment
-// über die ganze Seite, auch über Hero und Fuss, mehrere Explosionen zünden quer übers Bild, und die Inhalte
+// über die ganze Seite, auch über den Hero, und die Inhalte
 // werden vom Knall weggeschleudert und federn zurück (Klasse wl-spreng, Richtung pro Element als CSS-Variablen).
 // Laufschrift: Im Element .wl-laufband läuft ein Text (data-text) als Pixelschrift durch das Feld. Er ist Wärme,
 // flimmert also zwischen den heissen Farbbändern. Beim Scrollen wirft er einen Schatten in Scrollrichtung, der
@@ -27,28 +27,28 @@
 // Hinter Texten bleiben die Kacheln in voller Farbe sichtbar, die Schrift liegt darüber. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
 // Ohne echte Maus steht nur die Landschaft (ruhig animiert), mit "Bewegung reduzieren" steht sie still.
 import { useEffect, useRef } from "react";
+import { FARBEN, TYPFARBE } from "./farben";
 
 const Z = 10;
-const BAENDER = [[0.3, "#1C2541"], [0.46, "#3B5BD9"], [0.62, "#FBF062"], [0.78, "#E0492A"]];
+const BAENDER = [[0.3, FARBEN.navy], [0.46, FARBEN.blau], [0.62, FARBEN.zitrone], [0.78, FARBEN.rot]];
 const band = (v) => {
   if (v < 0.3) return null;
-  if (v >= 0.88) return "#D8FF00";
+  if (v >= 0.88) return FARBEN.lime;
   let f = BAENDER[0][1];
   for (const [ab, farbe] of BAENDER) if (v >= ab) f = farbe;
   return f;
 };
-const TYPFARBE = { sell: "#F5C518", auction: "#3B5BD9", rent: "#6C4CF1", free: "#9BC400", service: "#E0492A" };
 // BEEDARO-Herz: das Logo in Kacheln (drei Kacheln pro Logo-Quadrat), um 90 Grad gegen den Uhrzeiger gedreht
 const LOGO_LINKS = ["......XXX", "...XXX...", "XXX...XXX", "...XXX...", "......XXX"];
 const LOGO_B = ["XXXXX..", "XXXXXX.", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXX.", "XXXXX..", "XXXXX..", "XXXXXX.", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXX.", "XXXXX.."];
 const LOGO = LOGO_B.map((b, r) => LOGO_LINKS[Math.floor(r / 3)] + b);
 const drehen = (bild) => Array.from({ length: bild[0].length }, (_, i) => Array.from({ length: bild.length }, (_, j) => bild[j][bild[0].length - 1 - i]).join(""));
 const FORMEN = {
-  herz: { f: "#E0492A", b: drehen(LOGO) },
-  smiley: { f: "#F5C518", b: ["...XXXXX...", ".XXXXXXXXX.", ".XXXXXXXXX.", "XXX.XXX.XXX", "XXX.XXX.XXX", "XXXXXXXXXXX", "XX.XXXXX.XX", "XXX.....XXX", ".XXXXXXXXX.", ".XXXXXXXXX.", "...XXXXX..."] },
-  stern: { f: "#6C4CF1", b: ["....X....", "....X....", "...XXX...", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", ".XXX.XXX.", ".XX...XX."] },
-  blitz: { f: "#3B5BD9", b: ["....XXX", "...XXX.", "..XXX..", ".XXXXXX", "...XXX.", "..XXX..", ".XXX...", "XX....."] },
-  haus: { f: "#1C2541", b: ["....X....", "...XXX...", "..XXXXX..", ".XXXXXXX.", "XXXXXXXXX", ".XX...XX.", ".XX.X.XX.", ".XX.X.XX."] },
+  herz: { f: FARBEN.rot, b: drehen(LOGO) },
+  smiley: { f: FARBEN.honig, b: ["...XXXXX...", ".XXXXXXXXX.", ".XXXXXXXXX.", "XXX.XXX.XXX", "XXX.XXX.XXX", "XXXXXXXXXXX", "XX.XXXXX.XX", "XXX.....XXX", ".XXXXXXXXX.", ".XXXXXXXXX.", "...XXXXX..."] },
+  stern: { f: FARBEN.lila, b: ["....X....", "....X....", "...XXX...", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", ".XXX.XXX.", ".XX...XX."] },
+  blitz: { f: FARBEN.blau, b: ["....XXX", "...XXX.", "..XXX..", ".XXXXXX", "...XXX.", "..XXX..", ".XXX...", "XX....."] },
+  haus: { f: FARBEN.navy, b: ["....X....", "...XXX...", "..XXXXX..", ".XXXXXXX.", "XXXXXXXXX", ".XX...XX.", ".XX.X.XX.", ".XX.X.XX."] },
 };
 const GLYPHE = {
   N: ["X.X", "XXX", "XXX", "X.X", "X.X"], E: ["XXX", "X..", "XX.", "X..", "XXX"], U: ["X.X", "X.X", "X.X", "X.X", "XXX"],
@@ -171,7 +171,7 @@ export default function PixelFeld({ ursprung }) {
       const [mx, my] = zelle(x, y), breite = wort.length * 4 - 1;
       [...wort].forEach((ch, i) => {
         const g = GLYPHE[ch];
-        if (g) g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") malFest(mx - Math.floor(breite / 2) + i * 4 + c, my + r, "#0A0A0A"); });
+        if (g) g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") malFest(mx - Math.floor(breite / 2) + i * 4 + c, my + r, FARBEN.ink); });
       });
     };
     // Pfeil vom Zeiger zur Überschrift, gestaltet wie in der Referenz: Der Schaft ist aufgetragene Wärme mit weicher
@@ -223,7 +223,7 @@ export default function PixelFeld({ ursprung }) {
         // Mitte nach aussen auf und bleibt dann ruhig stehen (Denis 19.09.: kein Rand rundherum, kein blinkendes Gelb).
         if (karte !== karteDavor) { karteDavor = karte; karteSeit = jetzt; }
         if (karte && karte.isConnected && maus.imRaster) {
-          const r = seitenRect(karte), f = TYPFARBE[karte.dataset.typ] || "#F5C518";
+          const r = seitenRect(karte), f = TYPFARBE[karte.dataset.typ] || FARBEN.honig;
           const x0 = Math.round(r.l / Z), x1 = Math.round(r.r / Z) - 1, y = Math.round((r.b - oy) / Z);
           const mitte = (x0 + x1) / 2, halb = (x1 - x0) / 2 + 0.5, p = Math.min(1, (jetzt - karteSeit) / 380), weit = halb * (1 - (1 - p) * (1 - p));
           for (let x = x0; x <= x1; x += 1) if (Math.abs(x - mitte) <= weit) malFest(x, y, f);
@@ -267,7 +267,7 @@ export default function PixelFeld({ ursprung }) {
         });
         funken = funken.filter((f) => {
           f.x += f.vx * 3; f.y += f.vy * 3; f.vy += 0.12; f.leben -= 0.035;
-          const [cx, cy] = zelle(f.x, f.y); malFest(cx, cy, "#E0492A", Math.max(0.3, f.leben));
+          const [cx, cy] = zelle(f.x, f.y); malFest(cx, cy, FARBEN.rot, Math.max(0.3, f.leben));
           return f.leben > 0;
         });
 
@@ -276,8 +276,9 @@ export default function PixelFeld({ ursprung }) {
       // Hauptsatz entschlüsseln: In den ersten 1,1 s steht der Satz als Kacheln da (sie streuen herein), dann übernimmt
       // die echte Schrift (ihre Einblendung ist in globals.css entsprechend verzögert) und die Kacheln verglühen.
       const seitStart = (jetzt - start) / 1000;
-      if (!ruhig && seitStart < 1.1 && satz.length) {
-        const dichte = Math.min(1, seitStart / 0.45);
+      // saubere Übergabe: Die Kacheln enden bei 0,75 s und sind verglüht, bevor die echte Schrift ab 1,05 s hochfährt
+      if (!ruhig && seitStart < 0.75 && satz.length) {
+        const dichte = Math.min(1, seitStart / 0.4);
         for (const z of satz) {
           const [c0s, r0s] = zelle(z.x, z.y);
           for (let r = 0; r < z.h; r += 1) for (let c = 0; c < z.b; c += 1) {
@@ -343,26 +344,26 @@ export default function PixelFeld({ ursprung }) {
       const c0 = Math.floor(sx / Z), c1 = Math.ceil((sx + B) / Z);
       const r0 = ueberallBis ? Math.floor((sy - oy) / Z) : Math.max(Math.floor((sy - oy) / Z), Math.ceil((oben - oy) / Z));
       const r1 = ueberallBis ? Math.ceil((sy + H - oy) / Z) : Math.min(Math.ceil((sy + H - oy) / Z), Math.floor((unten - oy) / Z) - 1);
-      for (let cy = r0; cy <= r1; cy += 1) {
+      // Leistung: Jede Kachel einzeln zu rechnen lohnt nur dort, wo die Wolke steht (oberes Band). Überall sonst
+      // glühen nur wenige Kacheln, die werden direkt aus den Listen gezeichnet. Vorher lief die volle Schleife über
+      // das ganze Bild, in jedem Bild, auch wenn nichts zu sehen war.
+      const landEnde = Math.floor((oben + kopfband - oy) / Z);
+      const imBild = (cx, cy) => cx >= c0 && cx <= c1 && cy >= r0 && cy <= r1;
+      for (let cy = r0; cy <= Math.min(r1, landEnde); cy += 1) {
         const py = cy * Z + oy, tiefe = py - oben, ny = py / 900;
         // Oben hängt die Landschaft wie Wolken herab: Mit der Tiefe wird ein wachsender Betrag abgezogen, es bleiben
-        // nur die Gipfel. Sie endet im freien Band über den Inseraten (Denis 19.09.: sie ging zu weit in die
-        // Artikel hinein). Darunter gibt es keine Landschaft mehr, nur noch die Wärme des Zeigers.
-        // Dynamisch: Die Wolke reicht über den ganzen Hero und zieht sich beim Scrollen nach oben zurück
-        const abzug = tiefe / (kopfband * 1.15) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
+        // nur die Gipfel. Sie endet über dem Hauptsatz und zieht sich beim Scrollen nach oben zurück.
+        const abzug = tiefe / (kopfband * 1.15) + Math.min(0.5, sy / 1400);
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
-          const f = fest.get(k);
-          if (f) { ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f; ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1); ctx.globalAlpha = 1; continue; }
-          // Hinter Texten stehen die Kacheln in voller Farbe (Denis 19.09.: abgedämpft wirkte es milchig). Die Schrift liegt darüber.
+          if (fest.has(k)) continue; // feste Kacheln kommen unten
           let v = (waerme.get(k) || 0) * 0.9;
-          const nx = px / 900;
-          if (mitLand && streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
-            let land = wolken(nx, ny, t) * 1.08 - abzug;
+          if (streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
+            let land = wolken(px / 900, ny, t) * 1.08 - abzug;
             if (land > 0) land += (streu(cx, cy) - 0.5) * 0.12 + Math.sin(cx * 0.6 + cy * 0.8 + t * 1.7) * 0.045;
-            for (const l of loecher) { // Explosion reisst ein Loch, das wieder zuwächst
+            for (const l of loecher) { // Explosion drückt eine Delle, die wieder zuwächst
               const d = Math.hypot(px - l.x, py - l.y), alter = (jetzt - l.t) / l.dauer, radius = l.r * (1 - alter * alter);
-              if (d < radius) land *= 0.25 + 0.75 * (d / radius); // Delle, kein Kahlschlag: Am Rand bleibt fast alles stehen
+              if (d < radius) land *= 0.25 + 0.75 * (d / radius);
             }
             if (land > 0) v += land;
           }
@@ -371,6 +372,21 @@ export default function PixelFeld({ ursprung }) {
           ctx.fillStyle = farbe;
           ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1);
         }
+      }
+      // unterhalb der Wolke: nur die glühenden Kacheln
+      for (const [k, w] of waerme) {
+        const tr = k.indexOf(","), cx = +k.slice(0, tr), cy = +k.slice(tr + 1);
+        if (cy <= landEnde || !imBild(cx, cy) || fest.has(k)) continue;
+        const farbe = band(w * 0.9);
+        if (!farbe) continue;
+        ctx.fillStyle = farbe;
+        ctx.fillRect(cx * Z - sx + bx, cy * Z + oy - sy + by, Z - 1, Z - 1);
+      }
+      for (const [k, f] of fest) {
+        const tr = k.indexOf(","), cx = +k.slice(0, tr), cy = +k.slice(tr + 1);
+        if (!imBild(cx, cy)) continue;
+        ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f;
+        ctx.fillRect(cx * Z - sx + bx, cy * Z + oy - sy + by, Z - 1, Z - 1);
       }
       ctx.globalAlpha = 1;
       // feste Kacheln verglühen ebenfalls, nur langsamer sichtbar, weil sie jedes Bild neu gesetzt werden
