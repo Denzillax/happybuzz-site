@@ -83,7 +83,7 @@ export default function StilLabor() {
     return () => io.disconnect();
   }, [inserate]);
 
-  const mosaik = inserate.slice(0, 6), raster = inserate.slice(0, 8), zeilen = inserate.slice(8, 11);
+  const mosaik = inserate.slice(0, 6), raster = inserate.slice(0, 10), zeilen = inserate.slice(10, 13);
   const band = ["Kaufen", "Bieten", "Mieten", "Buchen", "Verschenken", "20 % der Gebühr für Bienenschutz"];
 
   return (
