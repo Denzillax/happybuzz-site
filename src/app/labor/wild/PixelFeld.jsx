@@ -136,9 +136,10 @@ export default function PixelFeld({ ursprung }) {
       const r = grund ? grund.getBoundingClientRect() : null;
       oben = r ? (r.top + window.scrollY) / zoom : 0; unten = r ? (r.bottom + window.scrollY) / zoom : Infinity;
       oy = ((oben % Z) + Z) % Z; // Raster am Karopapier ausrichten
-      // Die Landschaft reicht vom Seitenanfang bis knapp unter den Hero
-      const kb = grund ? grund.querySelector(".wl-hero") : null;
-      if (kb) kopfband = (kb.getBoundingClientRect().bottom - r.top) / zoom + 70;
+      // Die Wolke hängt nur ÜBER dem Hero: vom Seitenanfang bis zur Oberkante des Hauptsatzes (Denis 19.09.: am
+      // Desktop lag sie unter dem Hero). Der Hero lässt oben dafür Platz frei (padding-top in globals.css).
+      const kb = grund ? grund.querySelector(".wl-h1") : null;
+      if (kb) kopfband = Math.max(90, (kb.getBoundingClientRect().top - r.top) / zoom - 14);
       vermessen();
     };
     const streu = (a, b) => { const n = Math.sin(a * 127.1 + b * 311.7 + S1) * 43758.5453; return n - Math.floor(n); };
@@ -344,7 +345,7 @@ export default function PixelFeld({ ursprung }) {
         // nur die Gipfel. Sie endet im freien Band über den Inseraten (Denis 19.09.: sie ging zu weit in die
         // Artikel hinein). Darunter gibt es keine Landschaft mehr, nur noch die Wärme des Zeigers.
         // Dynamisch: Die Wolke reicht über den ganzen Hero und zieht sich beim Scrollen nach oben zurück
-        const abzug = tiefe / (kopfband * 0.8) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
+        const abzug = tiefe / (kopfband * 1.15) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
           const f = fest.get(k);

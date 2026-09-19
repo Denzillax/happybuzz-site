@@ -1382,7 +1382,8 @@ body:has(.sl) { background: #121212; }
 
 /* Hero und Fuss liegen ÜBER dem Pixelfeld (das bei der Seitenexplosion über die ganze Seite geht): Die Schrift steht
    immer vor den Kacheln. Vorher malten die Kacheln mit ihren Fugen über die dünne Hero-Schrift, sie wirkte zerhackt. */
-.wl-hero { max-width: 1720px; margin: 0 auto; padding: 72px 40px 56px; position: relative; z-index: 1; }
+/* oben Luft für die Pixel-Wolke, die nur über dem Hauptsatz hängt */
+.wl-hero { max-width: 1720px; margin: 0 auto; padding: 170px 40px 56px; position: relative; z-index: 1; }
 .wl-fuss { position: relative; z-index: 1; }
 .wl-h1 { margin: 0; font-size: clamp(40px, 7.4vw, 124px); font-weight: 300; line-height: .98; letter-spacing: -.035em; text-transform: uppercase; }
 .wl-zeile { display: block; overflow: hidden; padding-bottom: .06em; }
@@ -1498,7 +1499,7 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-nav, .wl-nur-breit { display: none; }
   .wl-kopf { padding: 12px 16px; gap: 10px; }
   .wl-kopf .wl-knopf { width: 40px; padding: 0; }
-  .wl-hero { padding: 40px 16px 36px; }
+  .wl-hero { padding: 110px 16px 36px; }
   .wl-hero-unten { grid-template-columns: 1fr; gap: 28px; margin-top: 36px; }
   .wl-abschnitt { padding: 48px 16px 0; }
   .wl-abschnitt-kopf { grid-template-columns: 1fr; margin-bottom: 24px; }
