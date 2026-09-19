@@ -16,8 +16,9 @@
 //     (gedrehtes Logo) und kommt mit Funkenregen,
 //   - bei Stillstand fliegt die Pixel-Biene eine Zeile entlang und frisst eine Reihe Pollen,
 //   - unter dem Inserat, auf dem der Zeiger steht, eine Kachelreihe in der Formatfarbe, die sich von der Mitte her aufbaut.
-// Aufladen (Maustaste halten) und Loslassen: Druckwelle, leichtes Beben der Inhalte, und die Explosion
-// reisst ein Loch in die Landschaft, das langsam wieder zuwächst.
+// Aufladen (Maustaste halten) und Loslassen, genau nach der Referenz: ein gefüllter weicher Fleck am Knallpunkt,
+// EIN breiter Ring fegt schnell über das Bild, dahinter bleibt die Fläche rot stehen und löst sich Kachel für
+// Kachel auf. Dazu schüttelt das Feld, die Inhalte beben leicht, die Landschaft bekommt eine Delle.
 // Volle Ladung (gut zwei Sekunden halten): Die ganze Seite "explodiert". Das Feld darf dann für einen Moment
 // über die ganze Seite, auch über Hero und Fuss, mehrere Explosionen zünden quer übers Bild, und die Inhalte
 // werden vom Knall weggeschleudert und federn zurück (Klasse wl-spreng, Richtung pro Element als CSS-Variablen).
@@ -90,7 +91,7 @@ export default function PixelFeld({ ursprung }) {
     const S1 = Math.random() * 40, S2 = Math.random() * 40, S3 = Math.random() * 40; // jede Sitzung eine andere Landschaft
     const waerme = new Map(); // "cx,cy" -> Wärme 0..1 (Zeiger, Wellen), wird in Bänder geschnitten
     const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Wort, Biene, Kartenrand)
-    const feuer = new Map();  // "cx,cy" -> { w, d }: Glut der grossen Explosion. w = Leben, d = Abstand zum Knall (für die laufenden Farbringe)
+    const nachglut = new Map(); // "cx,cy" -> Restdauer: Kacheln, die nach der Druckwelle rot stehen bleiben und sich dann auflösen
     let wellen = [], funken = [], loecher = [], titel = [];
     let raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0, bild = 0, beben = 0, sichtbar = true, start = performance.now();
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
@@ -242,24 +243,27 @@ export default function PixelFeld({ ursprung }) {
           // grösserer Kreis beim Drücken (Denis 19.09.): startet sichtbar grösser als der Zeigerfleck und wächst bis etwa 150 px Radius
           auftragen(ladung.x + (Math.random() - 0.5) * ch * 10, ladung.y + (Math.random() - 0.5) * ch * 10, 0.3, 6 + ch * 17);
         }
+        // Druckwelle wie in der Referenz: ein breiter, weicher RING, der in gut einer halben Sekunde über das ganze
+        // Bild fegt (Radius wächst mit der Bilddiagonale). Breite und Stärke hängen von der Ladung ab, nach 1,5 s ist
+        // die Welle vorbei. Wo die Front kräftig genug war, bleibt die Kachel danach rot stehen (nachglut).
         wellen = wellen.filter((w) => {
-          const r = ((jetzt - w.t) / 1000) * (24 + w.kraft * 20), rand = Math.ceil(r) + 1;
-          w.r = r; // aktueller Radius, die Laufschrift weicht der Wellenfront aus
-          if (r < 0) return true;
-          if (r > w.weite) return false;
-          // Gefüllte Scheibe wie bei wild, kein leerer Ring (Denis 19.09.): innen am heissesten, nach aussen kühler.
-          // So zeigt die Explosion alle Farbbänder als Ringe. Mit dem Wachsen kühlt sie insgesamt ab.
-          const kuehl = 1 - (r / w.weite) * 0.55;
-          // nur die Kacheln im Bild rechnen: Die Scheibe der Seitenexplosion ist sonst riesig
-          const xa = Math.max(-rand, Math.floor(sx / Z) - 1 - w.cx), xe = Math.min(rand, Math.ceil((sx + B) / Z) + 1 - w.cx);
-          const ya = Math.max(-rand, Math.floor((sy - oy) / Z) - 1 - w.cy), ye = Math.min(rand, Math.ceil((sy + H - oy) / Z) + 1 - w.cy);
-          for (let dy = ya; dy <= ye; dy += 1) for (let dx = xa; dx <= xe; dx += 1) {
-            const d = Math.hypot(dx, dy);
-            if (d > r) continue;
-            if (w.feuer) { // grosse Explosion: Glut statt Wärme, sie kühlt nicht durch Blau und Navy ab
-              const k = (w.cx + dx) + "," + (w.cy + dy), alt = feuer.get(k);
-              if (!alt) feuer.set(k, { w: 1, d }); else if (d > r - 2.5) alt.w = Math.max(alt.w, 0.9); // die Front frischt auf
-            } else heiss(w.cx + dx, w.cy + dy, (1 - (d / Math.max(1, r)) * 0.62) * kuehl);
+          const alter = (jetzt - w.t) / 1000;
+          if (alter > 1.5) return false;
+          const R = alter * Math.hypot(B, H) * 1.7, sig = Z * 5.5 * w.kraft, amp = Math.max(0, 1 - alter / 1.5) * 1.2 * w.kraft, inv = 1 / (2 * sig * sig);
+          w.r = R / Z; // Radius in Kacheln, die Laufschrift weicht der Front aus
+          const ca = Math.floor(sx / Z) - 1, ce = Math.ceil((sx + B) / Z) + 1, ra = Math.floor((sy - oy) / Z) - 1, re = Math.ceil((sy + H - oy) / Z) + 1;
+          for (let cy = ra; cy <= re; cy += 1) {
+            if (!imFeld(cy)) continue;
+            const dy = cy * Z + oy + Z / 2 - w.y;
+            for (let cx = ca; cx <= ce; cx += 1) {
+              const dx = cx * Z + Z / 2 - w.x, ab = Math.hypot(dx, dy) - R;
+              if (ab > sig * 3 || ab < -sig * 3) continue;
+              const g = amp * Math.exp(-(ab * ab) * inv);
+              if (g <= 0.02) continue;
+              const k = cx + "," + cy;
+              if ((waerme.get(k) || 0) < g) waerme.set(k, Math.min(1, g));
+              if (g > 0.25 && !nachglut.has(k)) nachglut.set(k, 0.45 + streu(cx, cy) * 0.7); // jede Kachel hält unterschiedlich lang
+            }
           }
           return true;
         });
@@ -302,7 +306,7 @@ export default function PixelFeld({ ursprung }) {
         schatten += (Math.max(-9, Math.min(9, tempo * 0.9)) - schatten) * 0.18;
         const wurf = Math.abs(schatten) > 0.4 ? Math.round(schatten) : 0;
         const r0l = zelle(0, lauf.mitte)[1] - Math.floor(lauf.hoch / 2), so = Math.floor(laufX);
-        const [mcx, mcy] = zelle(maus.x, maus.y), rest = ueberallBis ? Math.max(0, (ueberallBis - jetzt) / 2600) : 0;
+        const [mcx, mcy] = zelle(maus.x, maus.y), rest = ueberallBis ? Math.max(0, (ueberallBis - jetzt) / 1600) : 0;
         for (let c = Math.floor(sx / Z) - 8; c <= (sx + B) / Z + 8; c += 1) {
           const mc = (((so + c) % lauf.breit) + lauf.breit) % lauf.breit;
           for (let r = 0; r < lauf.hoch; r += 1) {
@@ -331,10 +335,18 @@ export default function PixelFeld({ ursprung }) {
 
       letztesSy = sy;
       // Wärme verglüht schnell (kurze Spur), Löcher der Explosion wachsen zu
-      for (const [k, w] of waerme) { const n = w * 0.88; if (n < 0.01) waerme.delete(k); else waerme.set(k, n); }
+      // Nachglut: Die Kachel hält ihre Wärme bei 0.9 (das rote Band), bis ihre Restdauer fast abgelaufen ist, dann
+      // verglüht sie rasch. Weil jede Kachel eine andere Dauer hat, löst sich die rote Fläche ausgefranst auf.
+      for (const [k, d] of nachglut) {
+        const n = d - 0.007;
+        if (n <= 0) { nachglut.delete(k); waerme.delete(k); continue; }
+        nachglut.set(k, n);
+        const w = waerme.get(k) || 0;
+        waerme.set(k, n < 0.3 ? w * 0.88 : Math.max(w * 0.95, 0.9));
+      }
+      for (const [k, w] of waerme) { if (nachglut.has(k)) continue; const n = w * 0.88; if (n < 0.01) waerme.delete(k); else waerme.set(k, n); }
       loecher = loecher.filter((l) => jetzt - l.t < l.dauer);
-      for (const [k, g] of feuer) { g.w *= 0.972; if (g.w < 0.08) feuer.delete(k); }
-      if (ueberallBis && jetzt > ueberallBis && !wellen.length && !feuer.size) ueberallBis = 0;
+      if (ueberallBis && jetzt > ueberallBis && !wellen.length && !nachglut.size) ueberallBis = 0;
 
       // Zeichnen: für jede sichtbare Kachel des Rasters Landschaft + Wärme, in Farbbänder geschnitten
       const bx = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0, by = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0;
@@ -352,17 +364,6 @@ export default function PixelFeld({ ursprung }) {
         const abzug = tiefe / (kopfband * 1.15) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
-          const gl = feuer.get(k);
-          if (gl) {
-            // Glut: Rot und Gelb in laufenden Ringen vom Knall weg, dazu Flackern. Beim Erlöschen fallen die Kacheln
-            // zufällig aus, statt dunkel zu werden.
-            if (streu(cx * 1.3, cy * 1.9) < gl.w * 1.25) {
-              const welle = Math.sin(gl.d * 0.55 - t * 9) * 0.5 + 0.5, fl = streu(cx + Math.floor(t * 9) * 3.1, cy - Math.floor(t * 9) * 1.7);
-              ctx.fillStyle = fl < 0.1 ? "#D8FF00" : fl > 0.93 ? "#FFFFFF" : welle > 0.62 ? "#E0492A" : welle > 0.3 ? "#F5A018" : "#FBF062";
-              ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1);
-            }
-            continue;
-          }
           const f = fest.get(k);
           if (f) { ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f; ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1); ctx.globalAlpha = 1; continue; }
           // Hinter Texten stehen die Kacheln in voller Farbe (Denis 19.09.: abgedämpft wirkte es milchig). Die Schrift liegt darüber.
@@ -420,11 +421,13 @@ export default function PixelFeld({ ursprung }) {
       ladung.an = false; document.body.style.userSelect = "";
       const t = performance.now(), ch = Math.min((t - ladung.t0) / 2200, 1); // kurzer Klick sanft, langes Halten kräftig
       const [cx, cy] = zelle(ladung.x, ladung.y);
-      wellen.push({ cx, cy, t, kraft: ch, weite: 9 + ch * 30 }); // Reichweite in Kacheln: kurzer Klick klein, volle Ladung gross
+      // Referenz: Stärke 0.35 (Antippen) bis 2.45 (volle Ladung), dazu ein gefüllter weicher Fleck am Knallpunkt
+      wellen.push({ x: ladung.x, y: ladung.y, cx, cy, t, kraft: 0.35 + ch * 2.1, r: 0 });
+      auftragen(ladung.x, ladung.y, 1, (2.5 + ch * 18) * 1.1);
       // Die Explosion drückt eine Delle in die Landschaft, nur rund um den Knall, und sie wächst rasch wieder zu.
       // Die Fassung davor räumte bei voller Ladung alles ab (Denis: "verschwindet alles, das sollte nicht so sein").
       loecher.push({ x: ladung.x, y: ladung.y, r: 70 + ch * 170, t, dauer: 1400 + ch * 1400 });
-      beben = 0.2 + ch * 1.6; maus.zuletzt = t;
+      beben = 0.45 + ch * 1.9; maus.zuletzt = t;
       if (ch >= 0.97) seiteSprengen(t);
       if (grund) { // leichtes Beben der Inhalte, nur angedeutet (Klasse wl-beben, Stärke --beben)
         grund.style.setProperty("--beben", (0.6 + ch * 2.2).toFixed(1) + "px");
@@ -432,17 +435,11 @@ export default function PixelFeld({ ursprung }) {
         setTimeout(() => grund.classList.remove("wl-beben"), 500);
       }
     };
-    // Volle Ladung: Die ganze Seite explodiert. Eine Scheibe füllt das Bild, weitere zünden quer darüber,
-    // die Inhalte fliegen vom Knall weg und federn zurück.
+    // Volle Ladung: Der Ring fegt über die GANZE Seite (auch Hero und Fuss) und lässt sie rot zurück, die Inhalte
+    // fliegen vom Knall weg und federn zurück. Kein Mehrfach-Knall, kein Flackern (Denis: "kein Feuerwerk").
     const seiteSprengen = (t) => {
       const sx = window.scrollX / zoom, sy = window.scrollY / zoom;
-      ueberallBis = t + 2600; beben = 3;
-      const [cx, cy] = zelle(ladung.x, ladung.y);
-      wellen.push({ cx, cy, t, kraft: 1.6, weite: Math.ceil(Math.hypot(B, H) / Z), feuer: true });
-      for (let i = 0; i < 9; i += 1) {
-        const [wx, wy] = zelle(sx + Math.random() * B, sy + Math.random() * H);
-        wellen.push({ cx: wx, cy: wy, t: t + 120 + Math.random() * 700, kraft: 0.6 + Math.random() * 0.8, weite: 14 + Math.random() * 26, feuer: true });
-      }
+      ueberallBis = t + 1600; // der Ring braucht 1,5 s, danach hält die Nachglut das Feld offen, bis sie erloschen ist
       const wurzel = cv.closest(".wl");
       if (!wurzel) return;
       const kx = ladung.x - sx, ky = ladung.y - sy; // Knallpunkt im Bild (gezoomte CSS-Pixel)
