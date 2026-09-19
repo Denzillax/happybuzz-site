@@ -9,12 +9,12 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Plus, ArrowRight, ArrowUpRight, Tag, Gavel, CalendarClock, Gift, Wrench, Search, Heart } from "lucide-react";
+import StilKopf, { useStil } from "./StilKopf";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import { TYP_FARBEN } from "@/lib/constants";
 import BeeLogo from "@/components/shared/BeeLogo";
 
-const SCHRIFT = "https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@400;500;600;700;800&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 const FORMATE = [
   { type: "sell", label: "Festpreis", sub: "Kaufen wie gewohnt", icon: Tag },
@@ -48,18 +48,10 @@ function Karte({ l }) {
 
 export default function StilLabor() {
   const [inserate, setInserate] = useState([]);
-  // Variante: "weiss" = weisser Grund mit gelben Akzenten, "gelb" = vollflächig gelb. Steht auch in der Adresse (?grund=).
-  const [grund, setGrund] = useState("weiss");
+  const { grund, waehle } = useStil();
   const wurzel = useRef(null);
 
   useEffect(() => {
-    try { const g = new URLSearchParams(window.location.search).get("grund"); if (g === "gelb" || g === "weiss") setGrund(g); } catch {}
-  }, []);
-  const waehle = (g) => { setGrund(g); try { window.history.replaceState(null, "", `${window.location.pathname}?grund=${g}`); } catch {} };
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet"; link.href = SCHRIFT; document.head.appendChild(link);
     supabase
       .from("listings")
       .select("id, title, listing_type, price, start_price, rent_price, rent_period, city, listing_images(url, sort_order)")
@@ -68,7 +60,6 @@ export default function StilLabor() {
       .order("created_at", { ascending: false })
       .limit(24)
       .then(({ data }) => setInserate((data || []).filter((l) => getCoverUrl(l))));
-    return () => link.remove();
   }, []);
 
   // Einblenden beim Scrollen. Ohne IntersectionObserver oder mit "Bewegung reduzieren" ist alles sofort da.
@@ -89,26 +80,7 @@ export default function StilLabor() {
   return (
     <div className="sl" data-grund={grund} ref={wurzel}>
       <div className="sl-rahmen">
-        <div className="sl-schalter">
-          <span>Variante</span>
-          <button type="button" className="kein-akzent" aria-pressed={grund === "weiss"} onClick={() => waehle("weiss")}>Weiss mit Gelb</button>
-          <button type="button" className="kein-akzent" aria-pressed={grund === "gelb"} onClick={() => waehle("gelb")}>Ganz gelb</button>
-        </div>
-        <header className="sl-kopf">
-          <Link href="/labor/stil" className="sl-logo" aria-label="BEEDARO">
-            <span className="sl-logo-marke"><BeeLogo size={46} /></span>
-            <span className="sl-wort">BEE<i>DARO</i></span>
-          </Link>
-          <nav className="sl-nav" aria-label="Hauptnavigation">
-            <Link href="/search">Stöbern</Link>
-            <Link href="/how-it-works">So funktioniert es</Link>
-            <Link href="/impact">Bienenschutz</Link>
-          </nav>
-          <div className="sl-kopf-rechts">
-            <Link href="/search" className="sl-rund" aria-label="Suchen"><Search size={18} strokeWidth={2.2} /></Link>
-            <Link href="/listings/new" className="sl-knopf sl-knopf-ink sl-kopf-cta" aria-label="Inserieren"><Plus size={16} strokeWidth={2.6} /> <span className="sl-nur-breit">Inserieren</span></Link>
-          </div>
-        </header>
+        <StilKopf grund={grund} waehle={waehle} />
 
         <section className="sl-hero">
           <div className="sl-mosaik" aria-hidden="true">
