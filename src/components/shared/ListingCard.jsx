@@ -158,7 +158,7 @@ export function ListingCard(props) {
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
         <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
           {TYP_CHIP[listing.listing_type] && (
-            <span style={chip(TYP_CHIP[listing.listing_type].bg, TYP_CHIP[listing.listing_type].color)}>
+            <span className={`lc-typ-${listing.listing_type}`} style={chip(TYP_CHIP[listing.listing_type].bg, TYP_CHIP[listing.listing_type].color)}>
               {TYP_CHIP[listing.listing_type].label}
             </span>
           )}
