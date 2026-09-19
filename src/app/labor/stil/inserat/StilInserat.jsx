@@ -56,7 +56,8 @@ function Countdown({ ende }) {
 }
 
 export default function StilInserat() {
-  const { grund, waehle } = useStil();
+  const stil = useStil();
+  const { grund, gelb } = stil;
   const [l, setL] = useState(null);
   const [gebote, setGebote] = useState([]);
   const [bild, setBild] = useState(0);
@@ -106,9 +107,9 @@ export default function StilInserat() {
   const farbe = TYP_FARBEN.auction;
 
   return (
-    <div className="sl" data-grund={grund}>
+    <div className="sl" data-grund={grund} data-gelb={gelb}>
       <div className="sl-rahmen">
-        <StilKopf grund={grund} waehle={waehle} />
+        <StilKopf {...stil} />
 
         {leer && <p className="sl-i-hinweis">Gerade läuft keine Auktion mit Bildern. Sobald eine aktiv ist, erscheint sie hier.</p>}
         {!l && !leer && <p className="sl-i-hinweis">Inserat wird geladen.</p>}
@@ -116,7 +117,7 @@ export default function StilInserat() {
         {l && (
           <>
             <nav className="sl-i-pfad" aria-label="Pfad">
-              <Link href={`/labor/stil?grund=${grund}`}>Start</Link><span>/</span>
+              <Link href={`/labor/stil?grund=${grund}&gelb=${gelb}`}>Start</Link><span>/</span>
               <span>{l.category?.name || "Auktionen"}</span><span>/</span>
               <span className="sl-i-pfad-hier">{l.title}</span>
             </nav>
@@ -216,7 +217,7 @@ export default function StilInserat() {
         )}
 
         <footer className="sl-fuss">
-          <BeeLogo size={64} style={{ color: "#FFF55B" }} />
+          <BeeLogo size={64} style={{ color: "var(--sl-gelb)" }} />
           <p className="sl-fuss-satz">20 % jeder Gebühr gehen an den Bienenschutz.</p>
           <p className="sl-fuss-klein">Stilseite zum Entscheiden. Geboten wird auf dem echten Inserat.</p>
         </footer>

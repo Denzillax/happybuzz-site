@@ -48,7 +48,8 @@ function Karte({ l }) {
 
 export default function StilLabor() {
   const [inserate, setInserate] = useState([]);
-  const { grund, waehle } = useStil();
+  const stil = useStil();
+  const { grund, gelb } = stil;
   const wurzel = useRef(null);
 
   useEffect(() => {
@@ -78,9 +79,9 @@ export default function StilLabor() {
   const band = ["Kaufen", "Bieten", "Mieten", "Buchen", "Verschenken", "20 % der Gebühr für Bienenschutz"];
 
   return (
-    <div className="sl" data-grund={grund} ref={wurzel}>
+    <div className="sl" data-grund={grund} data-gelb={gelb} ref={wurzel}>
       <div className="sl-rahmen">
-        <StilKopf grund={grund} waehle={waehle} />
+        <StilKopf {...stil} />
 
         <section className="sl-hero">
           <div className="sl-mosaik" aria-hidden="true">
@@ -173,7 +174,7 @@ export default function StilLabor() {
         </section>
 
         <footer className="sl-fuss">
-          <BeeLogo size={64} style={{ color: "#FFF55B" }} />
+          <BeeLogo size={64} style={{ color: "var(--sl-gelb)" }} />
           <p className="sl-fuss-satz">20 % jeder Gebühr gehen an den Bienenschutz.</p>
           <p className="sl-fuss-klein">Stilseite zum Entscheiden. Noch nichts davon ist auf der echten Seite.</p>
         </footer>
