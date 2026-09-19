@@ -5,7 +5,7 @@
 //
 // Prinzip: Jede Kachel des Karorasters hat einen Wert. Er setzt sich zusammen aus
 //   - der LANDSCHAFT: langsam wandernde Wolken aus überlagerten Sinuswellen. Am oberen Rand des Rasters
-//     ist sie dicht (das "Mosaik"), tiefer in der Seite bleibt sie nur in Inseln stehen,
+//     hängt sie herab (das "Mosaik") und endet im freien Band über den Inseraten,
 //   - der WÄRME des Zeigers: ein weicher Fleck, entlang des Wegs gestempelt, der schnell verglüht.
 // Der Wert wird wie bei einer Höhenkarte in Farbbänder geschnitten: Navy, Blau, Zitrone, Orangerot, am
 // heissesten Lime. Der Zeiger hebt also dieselbe Landschaft an, darum entstehen um ihn die Farbringe.
@@ -71,7 +71,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
-    let karte = null, form = null, formDavor = null;
+    let karte = null, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
 
     const seitenRect = (el) => {
       const r = el.getBoundingClientRect();
@@ -95,6 +95,8 @@ export default function PixelFeld({ ursprung }) {
       const r = grund ? grund.getBoundingClientRect() : null;
       oben = r ? (r.top + window.scrollY) / zoom : 0; unten = r ? (r.bottom + window.scrollY) / zoom : Infinity;
       oy = ((oben % Z) + Z) % Z; // Raster am Karopapier ausrichten
+      const kb = grund ? grund.querySelector(".wl-kopfband") : null;
+      if (kb) kopfband = kb.getBoundingClientRect().height / zoom;
       vermessen();
     };
     const streu = (a, b) => { const n = Math.sin(a * 127.1 + b * 311.7 + S1) * 43758.5453; return n - Math.floor(n); };
@@ -113,8 +115,6 @@ export default function PixelFeld({ ursprung }) {
         + 0.45 * Math.sin(ny * 10.2 + nx * 2.7 + S3) + 0.25 * Math.sin(nx * 14.1 - S2);
       return 0.5 + 0.5 * (v / 2.6);
     };
-    // Inseln: nur wo dieser grobe Wert hoch ist, bleibt die Landschaft tiefer in der Seite stehen
-    const insel = (x, y, t) => 0.5 + 0.5 * Math.sin(x * 2.3 + t * 0.11 + S1) * Math.cos(y * 1.9 - t * 0.08 + S3);
 
     const seite = (e) => ({ x: (e.clientX + window.scrollX) / zoom, y: (e.clientY + window.scrollY) / zoom });
     const zelle = (x, y) => [Math.floor(x / Z), Math.floor((y - oy) / Z)];
@@ -259,8 +259,9 @@ export default function PixelFeld({ ursprung }) {
       for (let cy = r0; cy <= r1; cy += 1) {
         const py = cy * Z + oy, tiefe = py - oben, ny = py / 900;
         // Oben hängt die Landschaft wie Wolken herab: Mit der Tiefe wird ein wachsender Betrag abgezogen, es bleiben
-        // nur die Gipfel. Tiefer in der Seite steht sie nur noch in Inseln.
-        const abzug = tiefe / 300;
+        // nur die Gipfel. Sie endet im freien Band über den Inseraten (Denis 19.09.: sie ging zu weit in die
+        // Artikel hinein). Darunter gibt es keine Landschaft mehr, nur noch die Wärme des Zeigers.
+        const abzug = tiefe / 170, mitLand = tiefe < kopfband;
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
           const f = fest.get(k);
@@ -268,13 +269,12 @@ export default function PixelFeld({ ursprung }) {
           if (gesperrt(px + Z / 2, py + Z / 2, cx, cy)) continue;
           let v = (waerme.get(k) || 0) * 0.9;
           const nx = px / 900;
-          if (streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
-            const w = wolken(nx, ny, t), haengend = w * 1.08 - abzug, inselLand = insel(nx, ny, t) > 0.72 ? w * 0.95 : 0;
-            let land = Math.max(haengend, inselLand);
+          if (mitLand && streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
+            let land = wolken(nx, ny, t) * 1.08 - abzug;
             if (land > 0) land += (streu(cx, cy) - 0.5) * 0.12 + Math.sin(cx * 0.6 + cy * 0.8 + t * 1.7) * 0.045;
             for (const l of loecher) { // Explosion reisst ein Loch, das wieder zuwächst
               const d = Math.hypot(px - l.x, py - l.y), alter = (jetzt - l.t) / l.dauer, radius = l.r * (1 - alter * alter);
-              if (d < radius) land *= Math.min(1, d / radius) * 0.6;
+              if (d < radius) land *= 0.25 + 0.75 * (d / radius); // Delle, kein Kahlschlag: Am Rand bleibt fast alles stehen
             }
             if (land > 0) v += land;
           }
@@ -323,8 +323,9 @@ export default function PixelFeld({ ursprung }) {
       wellen.push({ cx, cy, t, kraft: ch, weite: 12 + ch * 46 });
       if (ch > 0.4) wellen.push({ cx, cy, t: t + 160, kraft: ch * 0.6, weite: 8 + ch * 30 });
       auftragen(ladung.x, ladung.y, 1, 4 + ch * 14);
-      // Die Explosion reisst ein Loch in die Landschaft (auch oben in den dichten Teil), das langsam zuwächst
-      loecher.push({ x: ladung.x, y: ladung.y, r: 120 + ch * 1100, t, dauer: 2600 + ch * 3400 });
+      // Die Explosion drückt eine Delle in die Landschaft, nur rund um den Knall, und sie wächst rasch wieder zu.
+      // Die Fassung davor räumte bei voller Ladung alles ab (Denis: "verschwindet alles, das sollte nicht so sein").
+      loecher.push({ x: ladung.x, y: ladung.y, r: 70 + ch * 170, t, dauer: 1400 + ch * 1400 });
       beben = 0.2 + ch * 1.6; maus.zuletzt = t;
       if (grund) { // leichtes Beben der Inhalte, nur angedeutet (Klasse wl-beben, Stärke --beben)
         grund.style.setProperty("--beben", (0.6 + ch * 2.2).toFixed(1) + "px");
