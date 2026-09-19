@@ -1755,12 +1755,15 @@ a:hover .mk-pfeil svg { transform: translateX(6px); }
 .mk-karten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
 .mk-karte { position: relative; }
 .mk-karte-link { display: flex; flex-direction: column; gap: 18px; }
-.mk-tafel { display: block; padding: 22px; border: var(--mk-rand); border-radius: 28px; aspect-ratio: 1 / 1; }
-.mk-tafel img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 14px; border: var(--mk-rand); transition: transform .5s cubic-bezier(.2,.7,.1,1); }
+/* Die Tafel ist immer quadratisch. Das Bild liegt absolut darin: Als normales Kind drückte ein Hochformat-Foto die
+   Tafel in die Höhe (height: 100 % greift nicht, wenn die Höhe nur aus aspect-ratio kommt), die Karten wurden ungleich. */
+.mk-tafel { position: relative; display: block; border: var(--mk-rand); border-radius: 28px; aspect-ratio: 1 / 1; overflow: hidden; }
+.mk-tafel img { position: absolute; inset: 22px; width: calc(100% - 44px); height: calc(100% - 44px); object-fit: cover; display: block; border-radius: 14px; border: var(--mk-rand); transition: transform .5s cubic-bezier(.2,.7,.1,1); }
 .mk-karte-link:hover .mk-tafel img { transform: scale(1.03) rotate(-1.2deg); }
 .mk-karte-text { display: flex; flex-direction: column; gap: 6px; padding: 0 6px; }
 .mk-tags { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; opacity: .62; }
-.mk-karte-titel { font-size: 24px; font-weight: 500; line-height: 1.18; letter-spacing: -.03em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* immer Platz für zwei Zeilen, damit Preis und nächste Reihe auf gleicher Höhe stehen */
+.mk-karte-titel { min-height: 2.36em; font-size: 24px; font-weight: 500; line-height: 1.18; letter-spacing: -.03em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mk-karte-unten { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .mk-preis { font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .mk-rest { font-size: 15px; font-weight: 600; padding: 3px 10px; border: var(--mk-rand); border-radius: 999px; background: var(--mk-rose); font-variant-numeric: tabular-nums; white-space: nowrap; }
