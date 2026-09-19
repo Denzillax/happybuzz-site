@@ -1,10 +1,12 @@
 "use client";
 // Pixelfeld unter dem Mauszeiger (Denis 19.09.2026, Idee von craft.wild.as, eigene Umsetzung):
-// Über der ganzen Seite liegt ein unsichtbares Raster aus 16-px-Kacheln. Wo der Zeiger hinkommt,
+// Auf dem Karoraster (und NUR dort, nicht im Hero oder Header) liegt ein Raster aus 16-px-Kacheln. Wo der Zeiger hinkommt,
 // leuchten die Kacheln farbig auf und verglühen wieder. Ein Klick auf freie Fläche schickt eine
 // Ringwelle durchs Raster.
-//  - Die Fläche fängt keine Klicks ab (pointer-events: none) und liegt per "multiply" über der
-//    Seite: Auf Weiss sieht man die Farbe, Text und Fotos bleiben lesbar.
+//  - Die Fläche fängt keine Klicks ab (pointer-events: none) und liegt HINTER dem Inhalt: Sie färbt
+//    nur das Karopapier, nie Karten, Fotos oder Text. Dafür sitzt sie im Rastergrund (eigener
+//    Stapelkontext, Fläche z-index 0, Inhalt z-index 1).
+//  - Zweite Fassung: Die erste lag über der ganzen Seite, das war zu viel (Denis: "nur auf dem Kachelraster").
 //  - Die Wärme wird in Seitenkoordinaten gespeichert, die Spur scrollt also mit dem Karoraster mit.
 //  - Nur mit echter Maus. Mit Touch oder "Bewegung reduzieren" passiert nichts.
 //  - Die Schleife läuft nur, solange etwas glüht.
@@ -24,7 +26,7 @@ export default function PixelFeld({ ursprung }) {
     if (!fein || ruhig) return;
     const ctx = cv.getContext("2d");
     const glut = new Map(); // "cx,cy" (Seitenkoordinaten in Kacheln) -> Wärme 0..1
-    let wellen = [], raf = 0, B = 0, H = 0, zoom = 1, oy = 0;
+    let wellen = [], raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0;
 
     const messen = () => {
       // body trägt auf dem Desktop einen CSS-Zoom: Zeigerkoordinaten sind Bildschirm-Pixel,
@@ -37,11 +39,18 @@ export default function PixelFeld({ ursprung }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // Raster am Karopapier ausrichten: dessen Ursprung ist die Oberkante des Rastergrunds
       const el = ursprung ? document.querySelector(ursprung) : null;
-      oy = el ? (((el.getBoundingClientRect().top / zoom + window.scrollY / zoom) % Z) + Z) % Z : 0;
+      const r = el ? el.getBoundingClientRect() : null;
+      // oben/unten: Grenzen des Rastergrunds in Seitenkoordinaten. Ausserhalb glüht nichts.
+      oben = r ? (r.top + window.scrollY) / zoom : 0; unten = r ? (r.bottom + window.scrollY) / zoom : Infinity;
+      oy = ((oben % Z) + Z) % Z;
     };
 
     const farbeVon = (cx, cy) => FARBEN[Math.abs((cx * 73856093) ^ (cy * 19349663)) % FARBEN.length];
-    const heizen = (cx, cy, wert) => { const k = cx + "," + cy; glut.set(k, Math.min(1, (glut.get(k) || 0) + wert)); };
+    const heizen = (cx, cy, wert) => {
+      const y = cy * Z + oy;
+      if (y < oben || y + Z > unten) return; // nur auf dem Karoraster
+      const k = cx + "," + cy; glut.set(k, Math.min(1, (glut.get(k) || 0) + wert));
+    };
 
     const takt = () => {
       raf = 0;
@@ -76,6 +85,7 @@ export default function PixelFeld({ ursprung }) {
     const zeiger = (e) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
       const px = (e.clientX + window.scrollX) / zoom, py = (e.clientY + window.scrollY) / zoom - oy;
+      if (py + oy < oben || py + oy > unten) return;
       const cx = Math.floor(px / Z), cy = Math.floor(py / Z);
       for (let dy = -2; dy <= 2; dy += 1) for (let dx = -2; dx <= 2; dx += 1) {
         const d = Math.hypot(dx, dy);
@@ -98,9 +108,12 @@ export default function PixelFeld({ ursprung }) {
     window.addEventListener("pointermove", zeiger, { passive: true });
     window.addEventListener("pointerdown", klick, { passive: true });
     window.addEventListener("resize", messen);
+    // Die Höhe des Rastergrunds ändert sich, wenn die Inserate geladen sind
+    const ro = typeof ResizeObserver !== "undefined" && ursprung && document.querySelector(ursprung) ? new ResizeObserver(messen) : null;
+    ro?.observe(document.querySelector(ursprung));
     window.addEventListener("scroll", anwerfen, { passive: true });
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(raf); ro?.disconnect();
       window.removeEventListener("pointermove", zeiger); window.removeEventListener("pointerdown", klick);
       window.removeEventListener("resize", messen); window.removeEventListener("scroll", anwerfen);
     };

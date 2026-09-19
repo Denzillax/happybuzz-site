@@ -1352,12 +1352,15 @@ body:has(.sl) { background: #121212; }
 .wl-typ-service { --typ: var(--wl-rot); --typ-fg: #fff; }
 /* kleines Farbquadrat vor Labels, wie ein Pixel aus dem Logo */
 .wl-pixelpunkt { display: inline-block; width: 9px; height: 9px; margin-right: 8px; background: var(--typ, var(--wl-gelb)); vertical-align: -1px; }
+/* helle Farben (Zitrone, Lime) bekommen auf Weiss eine feine Ink-Kante, sonst sieht man das Quadrat kaum */
+.wl-typ-sell .wl-pixelpunkt, .wl-typ-free .wl-pixelpunkt { box-shadow: inset 0 0 0 1px var(--wl-ink); }
 .wl-label { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
 
 .wl-kopf { display: flex; align-items: center; gap: 28px; padding: 16px 40px; position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--wl-linie); }
 .wl-logo { display: inline-flex; align-items: center; gap: 10px; }
-/* Logo frei auf Weiss, ohne Kachel, in der Zitronenfarbe aus Denis' Logodatei (#FBF062) */
-.wl-logo-marke { color: var(--wl-gelb); display: inline-flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
+/* Logo frei auf Weiss, ohne Kachel. Zitrone #FBF062 hat auf Weiss zu wenig Kontrast (Denis 19.09.), darum steht das
+   Logo auf hellem Grund in Ink. Zitrone trägt es dort, wo der Grund dunkel ist (Fuss) oder die Fläche gross (Hover, Mosaik). */
+.wl-logo-marke { color: var(--wl-ink); display: inline-flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
 .wl-logo:hover .wl-logo-marke { transform: rotate(-90deg); }
 .wl-logo:hover { filter: none !important; }
 .wl-wort { font-size: 22px; font-weight: 500; letter-spacing: -.03em; }
@@ -1384,7 +1387,7 @@ body:has(.sl) { background: #121212; }
 @keyframes wl-hoch { from { transform: translateY(108%); } to { transform: translateY(0); } }
 .wl-hero-unten { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 64px; align-items: start; }
 .wl-gross { margin: 0; font-size: clamp(18px, 1.9vw, 28px); line-height: 1.15; text-transform: uppercase; letter-spacing: -.01em; }
-.wl-hero-b { color: var(--wl-gelb); margin-bottom: 18px; }
+.wl-hero-b { color: var(--wl-ink); margin-bottom: 18px; }
 .wl-text { margin: 0 0 24px; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.4; color: var(--wl-grau); max-width: 30em; }
 .wl-knoepfe { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -1393,8 +1396,11 @@ body:has(.sl) { background: #121212; }
   background-image: linear-gradient(#EFEFEF 1px, transparent 1px), linear-gradient(90deg, #EFEFEF 1px, transparent 1px);
   background-size: 16px 16px; background-position: -1px -1px; }
 .wl-pixel { display: block; }
-/* Pixelfeld unter dem Mauszeiger: liegt über der ganzen Seite, fängt keine Klicks ab. multiply lässt Text und Fotos lesbar. */
-.wl-feld { position: fixed; left: 0; top: 0; z-index: 40; pointer-events: none; mix-blend-mode: multiply; }
+/* Pixelfeld unter dem Mauszeiger: nur auf dem Karoraster und HINTER dem Inhalt. Der Rastergrund ist ein eigener
+   Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
+.wl-raster-grund { position: relative; z-index: 0; }
+.wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
+.wl-raster-grund .wl-abschnitt, .wl-raster-grund .wl-pixel { position: relative; z-index: 1; }
 /* Gestufte Pixel-Ecken statt Rundung, wie aus dem Raster geschnitten */
 .wl-knopf, .wl-rund, .wl-herz, .wl-mehr { border-radius: 0 !important; --e: 4px;
   clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
@@ -1448,7 +1454,7 @@ body:has(.sl) { background: #121212; }
 .wl-herzprobe { padding-bottom: 88px; }
 .wl-herzprobe-reihe { display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-top: 28px; }
 .wl-probe { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px; background: #fff; border: 1px solid var(--wl-linie); border-radius: 6px; color: var(--wl-ink); }
-.wl-probe:first-child { color: var(--wl-gelb); }
+.wl-probe:first-child { background: var(--wl-ink); border-color: var(--wl-ink); color: var(--wl-gelb); }
 .wl-probe-an { background: var(--wl-rot); color: #fff; border-color: var(--wl-rot); }
 .wl-probe em { font-style: normal; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; opacity: .7; }
 .wl-probe-pfeil { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; color: var(--wl-leise); padding-bottom: 70px; }

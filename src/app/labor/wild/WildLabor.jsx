@@ -138,7 +138,6 @@ export default function WildLabor() {
 
   return (
     <div className="wl" ref={wurzel}>
-      <PixelFeld ursprung=".wl-raster-grund" />
       <header className="wl-kopf">
         <Link href="/labor/wild" className="wl-logo" aria-label="BEEDARO">
           <span className="wl-logo-marke"><BLogo size={36} title="" /></span>
@@ -175,6 +174,7 @@ export default function WildLabor() {
       </section>
 
       <div className="wl-raster-grund">
+        <PixelFeld ursprung=".wl-raster-grund" />
         <PixelBand />
 
         <section className="wl-abschnitt">
