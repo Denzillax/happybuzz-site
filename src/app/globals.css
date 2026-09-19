@@ -2084,4 +2084,99 @@ body:has(.mk) { background: #fff; }
   .mk-s-wahl { flex: 1; min-width: 0; }
   .mk-s-wahl select { width: 100%; }
 }
+/* ── Inserieren im Meeko-Stil (mk-f-*): links Abschnitte als Karten, rechts klebt die Vorschau. Der Kopf trägt die Farbe
+   des gewählten Formats, genau wie die Tafel in der Vorschau. ── */
+.mk-f-hero { margin-top: -94px; padding: 150px 24px 60px; text-align: center; border-bottom: var(--mk-rand); transition: background .35s ease; }
+.mk-f-hero-text { margin: 18px auto 0; max-width: 36em; }
+.mk-f-seite { max-width: 1240px; margin: 0 auto; padding: 40px 24px 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; align-items: start; }
+.mk-f-spalte { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.mk-f-karte { padding: 32px; border: var(--mk-rand); border-radius: 28px; background: #fff; display: flex; flex-direction: column; gap: 22px; }
+.mk-f-kopf { display: flex; flex-direction: column; gap: 6px; }
+.mk-f-titel { margin: 0; font-size: 30px; font-weight: 500; letter-spacing: -.035em; line-height: 1.15; }
+.mk-f-hinweis { margin: 0; max-width: 40em; opacity: .7; font-size: 16px; }
+/* Formate */
+.mk-f-formate { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.mk-f-format { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 148px; padding: 16px 14px 18px; text-align: left; border: var(--mk-rand); border-radius: 18px !important; color: var(--mk-ink); font: inherit; font-size: 14px; line-height: 1.3; cursor: pointer;
+                box-shadow: inset 0 -5px 0 rgba(29,29,29,.12); transition: transform .25s cubic-bezier(.2,.7,.1,1), box-shadow .15s ease; }
+.mk-f-format strong { margin-top: auto; font-size: 19px; font-weight: 600; letter-spacing: -.025em; }
+.mk-f-format:hover { transform: translateY(-4px); }
+.mk-f-format-an { box-shadow: inset 0 0 0 2px var(--mk-ink); }
+/* Fotos */
+.mk-f-fotos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.mk-f-foto { position: relative; aspect-ratio: 1 / 1; border: var(--mk-rand); border-radius: 18px !important; overflow: hidden; }
+.mk-f-foto img { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 11px; border: var(--mk-rand); }
+.mk-f-foto-neu { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: var(--mk-lavendel); color: var(--mk-ink); font: inherit; font-size: 14px; font-weight: 600; line-height: 1.25; text-align: center; cursor: pointer; box-shadow: inset 0 -5px 0 rgba(29,29,29,.12); }
+.mk-f-foto-neu:hover { background: var(--mk-butter); }
+.mk-f-foto-leer { border-style: dashed; border-color: rgba(29,29,29,.3); }
+.mk-f-cover { position: absolute; left: 14px; bottom: 14px; padding: 2px 9px 3px; border: var(--mk-rand); border-radius: 999px !important; background: var(--mk-butter); color: var(--mk-ink); font: inherit; font-size: 12px; font-weight: 600; }
+.mk-f-cover-knopf { background: #fff; cursor: pointer; opacity: 0; transition: opacity .15s ease; }
+.mk-f-foto:hover .mk-f-cover-knopf, .mk-f-cover-knopf:focus-visible { opacity: 1; }
+.mk-f-foto-weg { position: absolute; top: 14px; right: 14px; width: 28px; height: 28px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px !important; background: #fff; color: var(--mk-ink); cursor: pointer; }
+.mk-f-foto-weg:hover { background: var(--mk-rosa); }
+/* Felder */
+.mk-f-feld { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.mk-f-feld > span { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; }
+.mk-f-feld small { font-size: 14px; opacity: .65; }
+.mk-f-feld input, .mk-f-feld select, .mk-f-feld textarea { width: 100%; min-height: 52px; padding: 0 16px; border: var(--mk-rand) !important; border-radius: 10px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 17px; box-shadow: none !important; outline: none; }
+.mk-f-feld textarea { padding: 14px 16px; line-height: 1.45; resize: vertical; min-height: 140px; }
+.mk-f-feld select { cursor: pointer; }
+.mk-f-feld input:focus, .mk-f-feld select:focus, .mk-f-feld textarea:focus { box-shadow: 0 0 0 3px rgba(29,29,29,.16) !important; }
+.mk-f-feld input::placeholder, .mk-f-feld textarea::placeholder { color: rgba(29,29,29,.45); }
+.mk-f-feld .mk-f-gross { min-height: 68px; font-size: 30px; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.mk-f-zwei { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mk-f-drei { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mk-f-pillen { display: flex; flex-wrap: wrap; gap: 8px; }
+/* Schalter */
+.mk-f-schalter { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 10px 16px 13px; text-align: left; border: var(--mk-rand); border-radius: 14px !important; background: #fff; color: var(--mk-ink); font: inherit; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.1); transition: background .2s ease; }
+.mk-f-schalter-text { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 14px; line-height: 1.3; }
+.mk-f-schalter-text strong { font-size: 17px; font-weight: 600; letter-spacing: -.02em; }
+.mk-f-schalter-text span { opacity: .7; }
+.mk-f-haken { flex-shrink: 0; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 8px; background: #fff; }
+.mk-f-schalter-an { background: var(--mk-mint); }
+.mk-f-schalter-an .mk-f-haken { background: var(--mk-ink); color: #fff; }
+/* Bee-Rate */
+.mk-f-stufen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.mk-f-stufe { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 16px 16px 20px; text-align: left; border: var(--mk-rand); border-radius: 18px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 14px; line-height: 1.3; cursor: pointer; box-shadow: inset 0 -5px 0 rgba(29,29,29,.12); transition: background .2s ease, transform .25s cubic-bezier(.2,.7,.1,1); }
+.mk-f-stufe:hover { transform: translateY(-4px); }
+.mk-f-stufe strong { font-size: 17px; font-weight: 600; }
+.mk-f-stufe > span:last-child { opacity: .7; }
+.mk-f-prozent { font-size: 44px; font-weight: 500; letter-spacing: -.05em; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+.mk-f-prozent small { font-size: 20px; margin-left: 2px; }
+.mk-f-stufe-an { background: var(--mk-butter); box-shadow: inset 0 0 0 2px var(--mk-ink); }
+.mk-f-schluss { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mk-f-schluss p { flex-basis: 100%; margin: 4px 0 0; min-height: 1.5em; }
+/* Vorschau */
+.mk-f-vorschau { position: sticky; top: 118px; display: flex; flex-direction: column; gap: 16px; }
+.mk-f-vorschau > .mk-tags { margin: 0; }
+.mk-f-probe { pointer-events: none; }
+.mk-f-probe .mk-tafel { transition: background .35s ease; }
+.mk-f-ohne-bild { position: absolute; inset: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 1px dashed rgba(29,29,29,.45); border-radius: 16px; font-size: 15px; opacity: .75; }
+.mk-f-rechnung, .mk-f-offen { padding: 20px 22px; border: var(--mk-rand); border-radius: 20px; background: #fff; }
+.mk-f-rechnung .mk-tags, .mk-f-offen .mk-tags { margin: 0 0 10px; }
+.mk-f-rechnung dl { margin: 0; display: flex; flex-direction: column; gap: 8px; font-variant-numeric: tabular-nums; }
+.mk-f-rechnung dl div { display: flex; justify-content: space-between; gap: 12px; }
+.mk-f-rechnung dd { margin: 0; white-space: nowrap; }
+.mk-f-bienen { font-size: 15px; opacity: .7; padding-left: 14px; }
+.mk-f-summe { margin-top: 6px; padding-top: 12px; border-top: var(--mk-rand); font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
+.mk-f-leise { margin: 0; font-size: 16px; opacity: .75; }
+.mk-f-rechnung dl + .mk-f-leise { margin-top: 10px; }
+.mk-f-offen { background: var(--mk-rose); }
+.mk-f-offen ul { margin: 0; padding-left: 1.1em; font-size: 16px; }
+@media (max-width: 1000px) {
+  .mk-f-seite { grid-template-columns: minmax(0, 1fr); }
+  .mk-f-vorschau { position: static; order: 2; max-width: 420px; width: 100%; margin: 0 auto; }
+  .mk-f-formate { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .mk-f-hero { margin-top: -80px; padding: 120px 16px 40px; }
+  .mk-f-seite { padding: 24px 16px 0; }
+  .mk-f-karte { padding: 22px 18px; border-radius: 24px; gap: 18px; }
+  .mk-f-titel { font-size: 26px; }
+  .mk-f-formate, .mk-f-stufen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mk-f-format { min-height: 124px; }
+  .mk-f-fotos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .mk-f-zwei, .mk-f-drei { grid-template-columns: minmax(0, 1fr); }
+  .mk-f-cover-knopf { opacity: 1; }
+  .mk-f-schluss .mk-knopf { flex: 1; }
+}
 /* MEEKO-LABOR ENDE */

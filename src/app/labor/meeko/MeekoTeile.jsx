@@ -143,7 +143,7 @@ export function Kopf() {
         <div className="mk-kopf-rechts">
           <Link href="/favorites" className="mk-knopf mk-kopf-icon" aria-label="Favoriten" title="Favoriten"><BLogo size={17} herz title="" /></Link>
           <Link href="/settings" className="mk-knopf mk-kopf-icon" aria-label="Konto" title="Konto"><User size={19} strokeWidth={2} aria-hidden="true" /></Link>
-          <Link href="/listings/new" className="mk-knopf mk-knopf-dunkel" aria-label="Inserieren"><Plus size={16} strokeWidth={2.4} aria-hidden="true" /><Roll>Inserieren</Roll></Link>
+          <Link href="/labor/meeko/inserieren" className="mk-knopf mk-knopf-dunkel" aria-label="Inserieren"><Plus size={16} strokeWidth={2.4} aria-hidden="true" /><Roll>Inserieren</Roll></Link>
           <button type="button" className="mk-knopf mk-menue-knopf eckig kein-akzent" aria-label={menue ? "Menü schliessen" : "Menü öffnen"} aria-expanded={menue} aria-controls="mk-menue" onClick={() => setMenue((v) => !v)}>
             {menue ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
           </button>
@@ -155,7 +155,7 @@ export function Kopf() {
             <Search size={18} strokeWidth={2.2} aria-hidden="true" />
             <input className="pille-input" type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Inserate durchsuchen" aria-label="Inserate durchsuchen" />
           </form>
-          {[[zahl !== null ? `Stöbern (${zahl})` : "Stöbern", "/labor/meeko/suche"], ["Inserieren", "/listings/new"], ["Favoriten", "/favorites"], ["Konto", "/settings"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]].map(([t, h]) => (
+          {[[zahl !== null ? `Stöbern (${zahl})` : "Stöbern", "/labor/meeko/suche"], ["Inserieren", "/labor/meeko/inserieren"], ["Favoriten", "/favorites"], ["Konto", "/settings"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]].map(([t, h]) => (
             <Link key={h} href={h} onClick={() => setMenue(false)}>{t}</Link>
           ))}
         </nav>
