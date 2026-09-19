@@ -31,8 +31,13 @@ function preis(l) {
   return `${p.prefix}${p.text}${p.suffix}`;
 }
 
-// Pixel-Mosaik: Spalten aus Quadraten wachsen von oben herab und ziehen sich wieder zurück.
-// In den Farben von wild. Läuft nur im Bild, steht mit "Bewegung reduzieren" still.
+// Pixel-Mosaik am oberen Rand des Rasters. Zweite, dynamischere Fassung (Denis 19.09.: "die Kacheln oben
+// sollten dynamischer sein"):
+//  - Zwei Wellen wandern gegeneinander durch die Spalten, die Kante ist ständig in Bewegung.
+//  - Kacheln wechseln ab und zu die Farbe, und ein heller Farbstreifen zieht durch das Mosaik.
+//  - Von der Unterkante lösen sich Tropfen, fallen ins Karoraster und verglühen.
+//  - Scrollen gibt dem Ganzen einen Schub, der wieder ausklingt. Der Zeiger zieht die Spalten zu sich.
+// Läuft nur im Bild. Mit "Bewegung reduzieren" steht ein ruhiges Mosaik ohne Tropfen.
 function PixelBand() {
   const ref = useRef(null);
   useEffect(() => {
@@ -40,10 +45,12 @@ function PixelBand() {
     if (!cv) return;
     const ctx = cv.getContext("2d");
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const Z = 10, REIHEN = 13;
-    let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0, mausSpalte = -99, mausNah = 0;
-    // Palette von wild: Blau und Gelb tragen, dazu Orangerot, Lime und Navy
-    const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#FBF062" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
+    const Z = 10, REIHEN = 24, KANTE = 9; // Fläche 24 Reihen hoch, das Mosaik selbst pendelt um 9, darunter fallen die Tropfen
+    const PALETTE = ["#3B5BD9", "#3B5BD9", "#FBF062", "#FBF062", "#E0492A", "#D8FF00", "#1C2541", "#6C4CF1"];
+    const farbe = () => PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    let spalten = [], tropfen = [], B = 0, raf = 0, sichtbar = true, zeit = 0, schub = 0, letztesY = window.scrollY;
+    let mausSpalte = -99, mausNah = 0;
+
     const bauen = () => {
       B = cv.parentElement.clientWidth;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -51,27 +58,41 @@ function PixelBand() {
       cv.style.width = B + "px"; cv.style.height = REIHEN * Z + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.ceil(B / Z);
-      spalten = Array.from({ length: n }, (_, i) => {
-        // Hügelform: zwei breite Wellen über die Breite, dazu Zufall
-        const welle = (Math.sin((i / n) * Math.PI * 2.2) + 1) / 2 * 0.6 + (Math.sin((i / n) * Math.PI * 7) + 1) / 2 * 0.25;
-        return { ziel: welle * REIHEN, h: 0, phase: Math.random() * 6.28, farben: Array.from({ length: REIHEN }, farbe) };
-      });
+      spalten = Array.from({ length: n }, () => ({ h: 0, farben: Array.from({ length: REIHEN }, farbe) }));
+    };
+    const hoehe = (i, n, t) => {
+      const breit = (Math.sin((i / n) * Math.PI * 2.2 + t * 0.35) + 1) / 2; // lange Dünung
+      const kurz = Math.sin(i * 0.42 - t * 1.4) * (1.6 + schub * 3) + Math.sin(i * 0.17 + t * 0.8) * 1.2; // zwei Wellen gegeneinander
+      const d = Math.abs(i - mausSpalte), zug = d < 10 ? (1 - d / 10) * 6 * mausNah : 0;
+      return Math.max(1, Math.min(REIHEN - 6, 2 + breit * (KANTE - 2) + kurz + zug));
     };
     const malen = () => {
       ctx.clearRect(0, 0, B, REIHEN * Z);
+      const n = spalten.length, streif = ((zeit * 0.6) % (n + 30)) - 15; // heller Streifen wandert durch
       spalten.forEach((s, i) => {
-        const hoehe = Math.max(0, Math.min(REIHEN, s.h + Math.sin(zeit / 50 + s.phase) * 0.9));
-        const voll = Math.floor(hoehe);
-        for (let r = 0; r < voll; r += 1) { ctx.fillStyle = s.farben[r]; ctx.fillRect(i * Z, r * Z, Z - 1, Z - 1); }
+        const voll = Math.floor(s.h);
+        for (let r = 0; r < voll; r += 1) {
+          ctx.fillStyle = Math.abs(i - streif - r * 0.8) < 2 ? "#FBF062" : s.farben[r];
+          ctx.fillRect(i * Z, r * Z, Z - 1, Z - 1);
+        }
       });
+      for (const t of tropfen) {
+        ctx.globalAlpha = Math.max(0, Math.min(1, t.leben));
+        ctx.fillStyle = t.farbe;
+        ctx.fillRect(t.spalte * Z, Math.floor(t.y) * Z, Z - 1, Z - 1);
+      }
+      ctx.globalAlpha = 1;
     };
     const takt = () => {
       zeit += 1;
-      // Das Mosaik streckt sich zum Zeiger hin: Spalten in seiner Nähe wachsen nach unten
+      const t = zeit / 60, n = spalten.length;
       spalten.forEach((s, i) => {
-        const d = Math.abs(i - mausSpalte), zug = d < 10 ? (1 - d / 10) * 6 * mausNah : 0;
-        s.h += (s.ziel + zug - s.h) * 0.07;
+        s.h += (hoehe(i, n, t) - s.h) * 0.12;
+        if (Math.random() < 0.004 + schub * 0.02) s.farben[Math.floor(Math.random() * REIHEN)] = farbe(); // Farbwechsel
+        if (Math.random() < 0.0035 + schub * 0.03) tropfen.push({ spalte: i, y: Math.floor(s.h), v: 0.05, leben: 1.4, farbe: s.farben[Math.max(0, Math.floor(s.h) - 1)] });
       });
+      tropfen = tropfen.filter((d) => { d.y += d.v; d.v += 0.012; d.leben -= 0.012; return d.leben > 0 && d.y < REIHEN; });
+      schub *= 0.94;
       malen();
       raf = sichtbar ? requestAnimationFrame(takt) : 0;
     };
@@ -80,17 +101,23 @@ function PixelBand() {
       const r = cv.getBoundingClientRect();
       const zoom = r.width ? r.width / B : 1; // body-Zoom herausrechnen
       mausSpalte = Math.floor((e.clientX - r.left) / zoom / Z);
-      const ab = (e.clientY - r.bottom) / zoom; // Abstand unter dem Mosaik
-      mausNah = ab < -REIHEN * Z ? 0 : Math.max(0, 1 - Math.max(0, ab) / 260);
+      const ab = (e.clientY - (r.top + KANTE * Z * zoom)) / zoom; // Abstand unter der Mosaik-Kante
+      mausNah = ab < -KANTE * Z ? 0 : Math.max(0, 1 - Math.max(0, ab) / 260);
     };
-    if (!ruhig) window.addEventListener("pointermove", zeiger, { passive: true });
+    const rollen = () => { schub = Math.min(1, schub + Math.abs(window.scrollY - letztesY) / 400); letztesY = window.scrollY; };
+
     bauen();
-    if (ruhig) { spalten.forEach((s) => { s.h = s.ziel; }); malen(); }
+    const stillstand = () => { const n = spalten.length; spalten.forEach((s, i) => { s.h = hoehe(i, n, 0); }); malen(); };
+    if (ruhig) stillstand();
+    else { window.addEventListener("pointermove", zeiger, { passive: true }); window.addEventListener("scroll", rollen, { passive: true }); }
     const io = new IntersectionObserver((es) => { sichtbar = es[0].isIntersecting; if (sichtbar && !raf && !ruhig) raf = requestAnimationFrame(takt); });
     io.observe(cv);
-    const ro = new ResizeObserver(() => { bauen(); if (ruhig) { spalten.forEach((s) => { s.h = s.ziel; }); malen(); } });
+    const ro = new ResizeObserver(() => { bauen(); if (ruhig) stillstand(); });
     ro.observe(cv.parentElement);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); window.removeEventListener("pointermove", zeiger); };
+    return () => {
+      cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
+      window.removeEventListener("pointermove", zeiger); window.removeEventListener("scroll", rollen);
+    };
   }, []);
   return <canvas ref={ref} className="wl-pixel" aria-hidden="true" />;
 }

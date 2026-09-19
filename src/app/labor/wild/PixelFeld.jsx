@@ -9,7 +9,7 @@
 //  - Pfeil: Nahe einer Überschrift wird der Fleck zu einem Pfeil, der auf sie zeigt, mit einem hellen Puls
 //    zur Spitze und einem kurzen Wort in Klötzchenschrift darüber (data-wort an der Überschrift).
 //  - Pixelbilder: Über Textstellen mit data-form füllt der Fleck ein Bild (Smiley, Stern, Blitz, Haus).
-//    Das Herz ist doppelt so gross und erscheint mit einem kleinen Funkenregen.
+//    Das Herz ist das BEEDARO-Herz (gedrehtes Logo) und erscheint mit einem kleinen Funkenregen.
 //  - Stillstand: Nach ein paar Sekunden ohne Bewegung fliegt die Pixel-Biene eine Rasterzeile entlang und
 //    frisst eine Reihe Pollen-Punkte. Am Rand kehrt sie auf einer neuen Zeile zurück. Jede Bewegung beendet das.
 //  - Inserate: Um die Karte unter dem Zeiger liegt eine ein Kachel breite Linie in der Formatfarbe, durch die
@@ -24,9 +24,15 @@ const Z = 10;
 const band = (h) => (h > 0.72 ? "#FBF062" : h > 0.5 ? "#3B5BD9" : h > 0.3 ? "#6C4CF1" : h > 0.12 ? "#CBD5F7" : null);
 const AKZENT = ["#E0492A", "#D8FF00", "#1C2541"];
 const TYPFARBE = { sell: "#F5C518", auction: "#3B5BD9", rent: "#6C4CF1", free: "#9BC400", service: "#E0492A" };
+// BEEDARO-Herz: das Logo in Kacheln (drei Kacheln pro Logo-Quadrat), um 90 Grad gegen den Uhrzeiger gedreht.
+// Links die sechs Quadrate des Logos, rechts der B-Körper mit seinen zwei Bögen. Gedreht liegen die Bögen oben.
+const LOGO_LINKS = ["......XXX", "...XXX...", "XXX...XXX", "...XXX...", "......XXX"]; // je Logo-Reihe, wird dreifach gestapelt
+const LOGO_B = ["XXXXX..", "XXXXXX.", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXX.", "XXXXX..", "XXXXX..", "XXXXXX.", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXXX", "XXXXXX.", "XXXXX.."];
+const LOGO = LOGO_B.map((b, r) => LOGO_LINKS[Math.floor(r / 3)] + b);
+const drehen = (bild) => Array.from({ length: bild[0].length }, (_, i) => Array.from({ length: bild.length }, (_, j) => bild[j][bild[0].length - 1 - i]).join(""));
 // Bilder haben eine feste Farbe: So gelten sie nicht als Feld und werden über Texten nicht ausgespart.
 const FORMEN = {
-  herz: { mal: 2, f: "#E0492A", b: [".XX...XX.", "XXXX.XXXX", "XXXXXXXXX", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", "...XXX...", "....X...."] },
+  herz: { mal: 1, f: "#E0492A", b: drehen(LOGO) }, // das BEEDARO-Herz (Denis 19.09.), mit Funkenregen
   smiley: { mal: 1, f: "#F5C518", b: ["...XXXXX...", ".XXXXXXXXX.", ".XXXXXXXXX.", "XXX.XXX.XXX", "XXX.XXX.XXX", "XXXXXXXXXXX", "XX.XXXXX.XX", "XXX.....XXX", ".XXXXXXXXX.", ".XXXXXXXXX.", "...XXXXX..."] },
   stern: { mal: 1, f: "#6C4CF1", b: ["....X....", "....X....", "...XXX...", "XXXXXXXXX", ".XXXXXXX.", "..XXXXX..", ".XXX.XXX.", ".XX...XX."] },
   blitz: { mal: 1, f: "#3B5BD9", b: ["....XXX", "...XXX.", "..XXX..", ".XXXXXX", "...XXX.", "..XXX..", ".XXX...", "XX....."] },
@@ -66,7 +72,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
-    let karte = null, form = null, formDavor = null;
+    let karte = null, form = null, formDavor = null, mosaik = 0; // mosaik: Höhe des Pixel-Mosaiks oben im Raster
 
     // Flächen, die frei bleiben (Texte), und die Überschriften, auf die der Pfeil zeigt. In Seitenkoordinaten.
     const seitenRect = (el) => {
@@ -91,6 +97,8 @@ export default function PixelFeld({ ursprung }) {
       const r = grund ? grund.getBoundingClientRect() : null;
       oben = r ? (r.top + window.scrollY) / zoom : 0; unten = r ? (r.bottom + window.scrollY) / zoom : Infinity;
       oy = ((oben % Z) + Z) % Z; // Raster am Karopapier ausrichten
+      const m = grund ? grund.querySelector(".wl-pixel") : null;
+      mosaik = m ? Math.min(150, m.getBoundingClientRect().height / zoom) : 0; // die Fläche ist höher (Tropfen), das Mosaik selbst reicht etwa 150 px
       vermessen();
     };
     const gesperrt = (px, py, cx, cy) => {
@@ -129,7 +137,7 @@ export default function PixelFeld({ ursprung }) {
       [...wort].forEach((ch, i) => {
         const g = GLYPHE[ch];
         if (!g) return;
-        g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") setzen(mx - Math.floor(breite / 2) + i * 4 + c, my + r, 0.62); });
+        g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") setzen(mx - Math.floor(breite / 2) + i * 4 + c, my + r, 0.95, "#0A0A0A"); });
       });
     };
     // Pfeil vom Zeiger zur Überschrift: dünner Schaft, Widerhaken, heller Puls Richtung Spitze
@@ -144,8 +152,9 @@ export default function PixelFeld({ ursprung }) {
         const [cx, cy] = zelle(sx - Math.cos(w + seitlich) * i * Z, sy - Math.sin(w + seitlich) * i * Z);
         setzen(cx, cy, 0.95);
       }
-      // Wort auf der vom Ziel abgewandten Seite des Zeigers
-      if (wort) wortStempeln(wort, x, zy < y ? y + 4 * Z : y - 9 * Z);
+      // Wort auf der vom Ziel abgewandten Seite des Zeigers. Es hat eine feste Farbe (wird über Texten nicht
+      // ausgespart) und bleibt unter dem Pixel-Mosaik am oberen Rand, das sonst die oberen Zeilen verdeckte.
+      if (wort) wortStempeln(wort, Math.max(wort.length * 2 * Z + Z, x), Math.max(oben + mosaik + Z, zy < y ? y + 4 * Z : y - 9 * Z));
     };
 
     const takt = () => {
