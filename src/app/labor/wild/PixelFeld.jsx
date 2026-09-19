@@ -14,7 +14,6 @@
 //   - Pfeil zur nächsten Überschrift mit hellem Puls und einem kurzen Klötzchenwort (data-wort),
 //   - Pixelbilder über Textstellen mit data-form (Smiley, Stern, Blitz, Haus), das Herz ist das BEEDARO-Herz
 //     (gedrehtes Logo) und kommt mit Funkenregen,
-//   - bei Stillstand fliegt die Pixel-Biene eine Zeile entlang und frisst eine Reihe Pollen,
 //   - unter dem Inserat, auf dem der Zeiger steht, eine Kachelreihe in der Formatfarbe, die sich von der Mitte her aufbaut.
 // Aufladen (Maustaste halten) und Loslassen, genau nach der Referenz: ein gefüllter weicher Fleck am Knallpunkt,
 // EIN breiter Ring fegt schnell über das Bild, dahinter bleibt die Fläche rot stehen und löst sich Kachel für
@@ -57,27 +56,6 @@ const GLYPHE = {
   I: ["XXX", ".X.", ".X.", ".X.", "XXX"], A: [".X.", "X.X", "XXX", "X.X", "X.X"], "5": ["XXX", "X..", "XXX", "..X", "XXX"],
   X: ["X.X", "X.X", ".X.", "X.X", "X.X"], "!": [".X.", ".X.", ".X.", "...", ".X."],
 };
-// Biene in Kacheln, Kopf rechts. Zweite Gestalt (Denis 19.09.: die erste war zu dünn): runder, dicker Körper
-// mit breiten Doppelstreifen, Stachel hinten, Auge, zwei Beinen. Der Flügel darüber ist das BEEDARO-Herz im
-// Kleinen: zwei Bögen oben, darunter die versetzten Quadrate als Spitze.
-// Y Körper, K Streifen und Stachel, W Flügel, E Auge. Körper = Zeilen 6 bis 11, Mitte auf Zeile 9.
-const BIENE = [
-  "...WW.WW.....",
-  "..WWWWWWW....",
-  "..WWWWWWW....",
-  "..W.W.W.W....",
-  "...W.W.W.....",
-  ".....W.......",
-  "...YYKKYYKK..",
-  "..YYYKKYYKKK.",
-  "KYYYYKKYYKKEK",
-  "KYYYYKKYYKKKK",
-  "..YYYKKYYKKK.",
-  "...YYKKYYKK..",
-  "....K...K....",
-];
-const BFARBE = { Y: "#F5C518", K: "#0A0A0A", W: "#E0492A", E: "#FFFFFF" }; // Flügel im Rot des Favoriten-Herzens
-
 export default function PixelFeld({ ursprung }) {
   const ref = useRef(null);
 
@@ -90,13 +68,12 @@ export default function PixelFeld({ ursprung }) {
     const grund = ursprung ? document.querySelector(ursprung) : null;
     const S1 = Math.random() * 40, S2 = Math.random() * 40, S3 = Math.random() * 40; // jede Sitzung eine andere Landschaft
     const waerme = new Map(); // "cx,cy" -> Wärme 0..1 (Zeiger, Wellen), wird in Bänder geschnitten
-    const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Wort, Biene, Kartenrand)
+    const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Wort, Funken, Kartenlinie)
     const nachglut = new Map(); // "cx,cy" -> Restdauer: Kacheln, die nach der Druckwelle rot stehen bleiben und sich dann auflösen
     let wellen = [], funken = [], loecher = [], titel = [];
     let raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0, bild = 0, beben = 0, sichtbar = true, start = performance.now();
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
-    const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
     let satz = []; // Hauptsatz zum Entschlüsseln: gerasterte Zeilen, die beim Laden zuerst als Kacheln erscheinen
     let schatten = 0, letztesSy = null; // Schatten der Laufschrift: folgt dem Scrolltempo und klingt aus
     let ueberallBis = 0, lauf = null, laufX = 0; // ueberallBis: bis wann das Feld die ganze Seite bedecken darf. lauf: Laufschrift
@@ -224,7 +201,6 @@ export default function PixelFeld({ ursprung }) {
       if (fein && !ruhig) {
         const aktiv = maus.imRaster && !ladung.an && jetzt - maus.zuletzt < 5000;
         if (aktiv) {
-          biene.an = false;
           if (form && FORMEN[form]) {
             bildStempeln(FORMEN[form], maus.x, maus.y);
             if (form === "herz" && formDavor !== "herz") { // Funkenregen beim ersten Auftauchen
@@ -295,29 +271,6 @@ export default function PixelFeld({ ursprung }) {
           return f.leben > 0;
         });
 
-        // Stillstand: Die Biene fliegt eine Rasterzeile entlang und frisst die Pollen-Punkte darauf
-        if (maus.imRaster && !ladung.an && !karte && jetzt - maus.zuletzt >= 5000) {
-          const pollenLegen = () => { biene.pollen = []; for (let c = Math.floor(sx / Z); c < (sx + B) / Z; c += 3) biene.pollen.push(c); };
-          if (!biene.an) { biene.an = true; biene.richtung = 1; biene.reihe = zelle(maus.x, maus.y)[1]; biene.x = sx / Z - 10; pollenLegen(); }
-          biene.x += 0.22 * biene.richtung;
-          const maul = biene.x + (biene.richtung === 1 ? 6 : -6);
-          biene.pollen = biene.pollen.filter((c) => (biene.richtung === 1 ? c > maul : c < maul));
-          for (const c of biene.pollen) malFest(c, biene.reihe, "#F5C518");
-          const schlag = Math.floor(bild / 5) % 2, wipp = Math.round(Math.sin(bild / 9));
-          BIENE.forEach((zeile, r) => {
-            if (schlag && (r === 0 || r === 5)) return; // Flügelschlag: das Herz zieht sich kurz zusammen
-            for (let c = 0; c < zeile.length; c += 1) {
-              const ch = zeile[biene.richtung === 1 ? c : zeile.length - 1 - c];
-              if (ch !== ".") malFest(Math.round(biene.x) - 6 + c, biene.reihe - 9 + r + wipp, BFARBE[ch]); // Körpermitte (Zeile 9) auf der Pollenreihe
-            }
-          });
-          if (biene.x * Z > sx + B + 60 || biene.x * Z < sx - 120) { // am Rand: neue Zeile, zurück
-            biene.richtung *= -1;
-            const min = Math.max(oben, sy) + 60, max = Math.min(unten, sy + H) - 40;
-            biene.reihe = zelle(0, min + Math.random() * Math.max(10, max - min))[1];
-            pollenLegen();
-          }
-        } else biene.an = false;
       }
 
       // Hauptsatz entschlüsseln: In den ersten 1,1 s steht der Satz als Kacheln da (sie streuen herein), dann übernimmt

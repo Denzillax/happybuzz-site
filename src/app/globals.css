@@ -1611,4 +1611,6 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-protokoll a { grid-template-columns: 78px minmax(0, 1fr); }
   .wl-protokoll-art { display: none; }
 }
+/* Biene im Hero */
+.wl-biene { margin-bottom: 22px; }
 /* WILD-LABOR ENDE */

@@ -18,6 +18,7 @@ import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import { DEFAULT_FEE_PERCENT, BEE_IMPACT_RATE } from "@/lib/constants";
 import BLogo from "@/components/shared/BLogo";
 import PixelFeld from "./PixelFeld";
+import PixelBiene from "./PixelBiene";
 
 const SCHRIFT = "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
@@ -239,7 +240,8 @@ export default function WildLabor() {
           <div className="wl-hero-unten">
             <p className="wl-gross">Ein Marktplatz<br />für zweite Hand in der Schweiz</p>
             <div className="wl-hero-rechts">
-              <BLogo size={44} title="" className="wl-hero-b" />
+              {/* Die Biene steht hier und schlägt mit den Flügeln, sie fliegt nicht. Ihre Flügel sind das BEEDARO-B. */}
+              <PixelBiene />
               <p className="wl-text">Kaufen, bieten, mieten, buchen oder verschenken. Fünf Formate an einem Ort. 20 % jeder Gebühr gehen an den Bienenschutz.</p>
             </div>
           </div>
