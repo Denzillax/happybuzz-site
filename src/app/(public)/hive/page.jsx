@@ -51,7 +51,7 @@ const reasonLabel = (r) => {
 };
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
@@ -255,22 +255,22 @@ export default function HivePage() {
           {/* Blüten-Balance + Umwandlung in Pollen */}
           <div style={{
             marginTop: 16, padding: "12px 14px", borderRadius: 12,
-            background: "#5B8C5A12", border: `1px solid #5B8C5A33`,
+            background: "#50804F12", border: `1px solid #50804F33`,
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#5B8C5A22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Flower2 size={18} color="#5B8C5A" />
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#50804F22", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Flower2 size={18} color="#50804F" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: 16, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>{blueten.toLocaleString("de-CH")} Blüten</p>
                 <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>Aus deinen Transaktionen. {BLUETEN_PER_POLLEN} Blüten = 1 Pollen.</p>
               </div>
-              {convertMsg && <span style={{ fontSize: 12, fontWeight: 800, color: "#5B8C5A", whiteSpace: "nowrap" }}>{convertMsg}</span>}
+              {convertMsg && <span style={{ fontSize: 12, fontWeight: 800, color: "#50804F", whiteSpace: "nowrap" }}>{convertMsg}</span>}
             </div>
             {convertiblePollen >= 1 ? (
               <button onClick={convertAll} disabled={converting} style={{
                 width: "100%", marginTop: 10, padding: "9px 0", borderRadius: 12, border: "none",
-                background: "#5B8C5A", color: "#fff", fontSize: 13, fontWeight: 800, fontFamily: fonts.body,
+                background: "#50804F", color: "#fff", fontSize: 13, fontWeight: 800, fontFamily: fonts.body,
                 cursor: converting ? "default" : "pointer", opacity: converting ? 0.6 : 1,
               }}>
                 {converting ? "Wird umgewandelt..." : `${(convertiblePollen * BLUETEN_PER_POLLEN).toLocaleString("de-CH")} Blüten in ${convertiblePollen.toLocaleString("de-CH")} Pollen umwandeln`}
@@ -311,7 +311,7 @@ export default function HivePage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {history.map(h => (
                 <div key={h.id} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: h.amount < 0 ? "#c62828" : "#5B8C5A", minWidth: 54 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontWeight: 800, color: h.amount < 0 ? "#c62828" : "#50804F", minWidth: 54 }}>
                     <Zap size={12} /> {h.amount < 0 ? `−${Math.abs(h.amount)}` : `+${h.amount}`}
                   </span>
                   <span style={{ flex: 1, color: colors.dark }}>{reasonLabel(h.reason)}</span>
@@ -392,16 +392,16 @@ export default function HivePage() {
                   <div key={c.id}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
                       <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>
-                        {c.done && <Check size={14} color="#5B8C5A" style={{ verticalAlign: "-2px", marginRight: 4 }} />}
+                        {c.done && <Check size={14} color="#50804F" style={{ verticalAlign: "-2px", marginRight: 4 }} />}
                         {c.title}
                       </span>
-                      <span style={{ fontSize: 12, fontWeight: 800, color: c.done ? "#5B8C5A" : colors.teal, display: "inline-flex", alignItems: "center", gap: 3 }}>
+                      <span style={{ fontSize: 12, fontWeight: 800, color: c.done ? "#50804F" : colors.teal, display: "inline-flex", alignItems: "center", gap: 3 }}>
                         <Zap size={12} /> {c.claimed ? `+${c.xp_reward} Pollen gutgeschrieben` : `${c.xp_reward} Pollen`}
                       </span>
                     </div>
                     <p style={{ margin: "0 0 6px", fontSize: 12, color: colors.muted }}>{c.description}{c.category?.name ? ` · Kategorie: ${c.category.name}` : ""}</p>
                     <div style={{ height: 8, borderRadius: 12, background: colors.borderLt, overflow: "hidden" }}>
-                      <div style={{ height: "100%", borderRadius: 12, background: c.done ? "#5B8C5A" : colors.teal, width: `${pct}%`, transition: "width .5s" }} />
+                      <div style={{ height: "100%", borderRadius: 12, background: c.done ? "#50804F" : colors.teal, width: `${pct}%`, transition: "width .5s" }} />
                     </div>
                     <p style={{ margin: "4px 0 0", fontSize: 11, color: colors.muted, textAlign: "right" }}>{c.progress} / {c.target_value}</p>
                   </div>
@@ -429,7 +429,7 @@ export default function HivePage() {
                   <div style={{ minWidth: 0 }}>
                     <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: unlocked ? colors.dark : colors.muted }}>{a.name}</p>
                     <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted, lineHeight: 1.35 }}>{a.desc}</p>
-                    <p style={{ margin: "3px 0 0", fontSize: 11, fontWeight: 700, color: unlocked ? "#5B8C5A" : colors.mutedLt }}>+{a.xp} Pollen</p>
+                    <p style={{ margin: "3px 0 0", fontSize: 11, fontWeight: 700, color: unlocked ? "#50804F" : colors.mutedLt }}>+{a.xp} Pollen</p>
                   </div>
                 </div>
               );

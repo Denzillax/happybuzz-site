@@ -12,12 +12,12 @@ export const colors = {
   yellowDark: "#D9A005",
 
   // CTA (Teal = alles Klickbare)
-  teal:       "#0E9493",
+  teal:       "#007C7C",
   tealDark:   "#0B5E5C",
 
-  // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #5B8C5A.
+  // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #50804F.
   // NICHT mit `green` verwechseln: das ist ein Legacy-Alias auf Teal (s.u.).
-  nature:     "#5B8C5A",
+  nature:     "#50804F",
   natureSoft: "#EAF1E9",
 
   // Signal (Red = Dringlichkeit, Badges, Alerts)
@@ -46,7 +46,7 @@ export const colors = {
 
   // Legacy aliases (backward compat) — ACHTUNG: green = Teal (für Verifiziert/
   // Erfolg). Für echtes Natur-Grün `nature`/`natureSoft` nutzen.
-  green:      "#0E9493",
+  green:      "#007C7C",
   greenSoft:  "#E6F5F5",
   blue:       "#6BA9FF",
   blueSoft:   "#EBF3FF",

@@ -14,7 +14,7 @@ import { BeeLevelCard } from "@/components/shared/BeeLevel";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
 const MONO = "'Manrope', sans-serif";
 
 import FeeModel from "@/components/listings/FeeModel";

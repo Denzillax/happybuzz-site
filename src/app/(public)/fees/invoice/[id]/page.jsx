@@ -139,7 +139,7 @@ export default function FeeInvoicePage() {
                 <td style={{ ...cp, fontSize: 11, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.sale_price)} /></td>
                 <td style={{ ...cp, fontSize: 11, textAlign: "center", color: g, whiteSpace: "nowrap" }}>{parseFloat(fee.fee_percent)}%</td>
                 <td style={{ ...cp, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.fee_amount)} /></td>
-                <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#5B8C5A", whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.bee_impact)} /></td>
+                <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#50804F", whiteSpace: "nowrap" }}><Betrag v={fmtCHF(fee.bee_impact)} /></td>
               </tr>
             ))}
           </tbody>
@@ -147,7 +147,7 @@ export default function FeeInvoicePage() {
             <tr style={{ borderTop: "2px solid #191615" }}>
               <td colSpan={4} style={{ ...cp, paddingLeft: 0, fontSize: 14, fontWeight: 800 }}>Gesamtpreis</td>
               <td style={{ ...cp, fontSize: 15, fontWeight: 800, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(total)} /></td>
-              <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#5B8C5A", fontWeight: 600, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(beeImpact)} /></td>
+              <td style={{ ...cp, paddingRight: 0, fontSize: 11, color: "#50804F", fontWeight: 600, whiteSpace: "nowrap" }}><Betrag v={fmtCHF(beeImpact)} /></td>
             </tr>
           </tfoot>
         </table></div>
@@ -196,8 +196,8 @@ export default function FeeInvoicePage() {
         <div style={{ textAlign: "center", fontSize: 9, color: g, fontFamily: f }}>
           <p style={{ margin: 0 }}>{coAddr.join(" · ")}{co.uid ? ` · ${co.uid}` : ""}</p>
           {(co.contact_email || co.contact_phone) && <p style={{ margin: "2px 0 0" }}>{[co.contact_email, co.contact_phone].filter(Boolean).join(" · ")}</p>}
-          <p style={{ margin: "2px 0 0", color: "#5B8C5A", display: "flex", alignItems: "center", justifyContent: "center", gap: 3 }}>
-            <BeeIcon size={9} color="#5B8C5A" /> CHF {fmtCHF(beeImpact)} fliessen in Schweizer Bienenprojekte
+          <p style={{ margin: "2px 0 0", color: "#50804F", display: "flex", alignItems: "center", justifyContent: "center", gap: 3 }}>
+            <BeeIcon size={9} color="#50804F" /> CHF {fmtCHF(beeImpact)} fliessen in Schweizer Bienenprojekte
           </p>
         </div>
       </div>

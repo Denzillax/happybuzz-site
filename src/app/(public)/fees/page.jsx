@@ -111,7 +111,7 @@ export default function FeesPage() {
               <td style={{ ...td, textAlign: "right" }}>CHF {fmtCHF(f.sale_price)}</td>
               <td style={{ ...td, textAlign: "center", color: colors.muted }}>{parseFloat(f.fee_percent)}%</td>
               <td style={{ ...td, textAlign: "right", fontWeight: 700 }}>CHF {fmtCHF(f.fee_amount)}</td>
-              <td style={{ ...td, textAlign: "right", color: "#5B8C5A" }}>CHF {fmtCHF(f.bee_impact)}</td>
+              <td style={{ ...td, textAlign: "right", color: "#50804F" }}>CHF {fmtCHF(f.bee_impact)}</td>
               {showStatus && <td style={{ ...td, textAlign: "center" }}><span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 10, fontWeight: 700, background: st.bg, color: st.color }}>{st.label}</span></td>}
             </tr>
           );
@@ -171,8 +171,8 @@ export default function FeesPage() {
             <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{invoices.filter(i => i.status === "open").length} offen</p>
           </div>
           <div style={{ background: colors.surface, borderRadius: radius.lg, border: `1px solid ${colors.border}`, padding: "16px 20px" }}>
-            <p style={{ margin: 0, fontSize: 10, color: "#5B8C5A", fontWeight: 700, textTransform: "uppercase" }}>Bee-Impact Total</p>
-            <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 800, color: "#5B8C5A" }}>CHF {fmtCHF(totalBeeImpact)}</p>
+            <p style={{ margin: 0, fontSize: 10, color: "#50804F", fontWeight: 700, textTransform: "uppercase" }}>Bee-Impact Total</p>
+            <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 800, color: "#50804F" }}>CHF {fmtCHF(totalBeeImpact)}</p>
             <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>für Schweizer Naturschutz</p>
           </div>
         </div>
@@ -198,7 +198,7 @@ export default function FeesPage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderTop: `2px solid ${colors.border}` }}>
                   <div>
                     <span style={{ fontSize: 13, fontWeight: 800 }}>Total: CHF {fmtCHF(totalPending)}</span>
-                    <span style={{ fontSize: 11, color: "#5B8C5A", marginLeft: 12 }}>davon CHF {fmtCHF(totalPendingImpact)} Bee-Impact</span>
+                    <span style={{ fontSize: 11, color: "#50804F", marginLeft: 12 }}>davon CHF {fmtCHF(totalPendingImpact)} Bee-Impact</span>
                   </div>
                 </div>
                 <p style={{ margin: 0, padding: "8px 14px 12px", fontSize: 11, color: colors.muted }}>
@@ -283,8 +283,8 @@ export default function FeesPage() {
                           </div>
                         </div>
 
-                        <p style={{ margin: "12px 0", fontSize: 11, color: "#5B8C5A", display: "flex", alignItems: "center", gap: 4, fontFamily: fonts.body }}>
-                          <BeeIcon size={12} color="#5B8C5A" /> Davon CHF {fmtCHF(inv.total_bee_impact)} Bee-Impact für Schweizer Naturschutz
+                        <p style={{ margin: "12px 0", fontSize: 11, color: "#50804F", display: "flex", alignItems: "center", gap: 4, fontFamily: fonts.body }}>
+                          <BeeIcon size={12} color="#50804F" /> Davon CHF {fmtCHF(inv.total_bee_impact)} Bee-Impact für Schweizer Naturschutz
                         </p>
 
                         {/* Buttons — volle Breite, gestapelt */}

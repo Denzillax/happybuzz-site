@@ -78,7 +78,7 @@ function LocationMap({ city, canton }) {
         const poly = L.geoJSON(place.geojson, { style: { color: "#C62828", weight: 2.5, fillColor: "#C62828", fillOpacity: 0.12 } }).addTo(map);
         bounds = poly.getBounds();
       }
-      L.circleMarker([lat, lon], { radius: 8, color: "#fff", weight: 2.5, fillColor: "#5B8C5A", fillOpacity: 1 }).addTo(map);
+      L.circleMarker([lat, lon], { radius: 8, color: "#fff", weight: 2.5, fillColor: "#50804F", fillOpacity: 1 }).addTo(map);
       if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [24, 24] });
       else map.setView([lat, lon], 13);
       setLoading(false);
@@ -667,7 +667,7 @@ export default function ListingDetail() {
 
             {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
             {bildSuche.status !== "idle" && (
-              <div style={{ background: "#E8F4F3", border: "1px solid #0E949333", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
+              <div style={{ background: "#E8F4F3", border: "1px solid #007C7C33", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
                   <ScanSearch size={18} color="#0B5E5C" />
                   <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>

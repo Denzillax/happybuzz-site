@@ -123,7 +123,7 @@ export function ChallengeBanner() {
           {progress && (
             <div style={{ marginTop: 8, maxWidth: 340 }}>
               <div style={{ height: 8, background: "#F1F3F5", borderRadius: 999, overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#5B8C5A" : HONEY, borderRadius: 999, transition: "width .5s" }} />
+                <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#50804F" : HONEY, borderRadius: 999, transition: "width .5s" }} />
               </div>
               <p style={{ margin: "3px 0 0", fontSize: 11, color: "#5B626C" }}>
                 {isDone ? (progress.claimed ? "Geschafft, Pollen gutgeschrieben." : "Geschafft. Hol dir deine Pollen.") : `${progress.progress} von ${challenge.target_value}`}

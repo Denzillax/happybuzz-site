@@ -184,7 +184,7 @@ export function UserProfile({ admin }) {
             {uFee.length > 0 && (
               <div style={{ display: "flex", gap: 12, marginBottom: 10, padding: "8px 10px", background: colors.cream, borderRadius: 12, fontSize: 11 }}>
                 <span>Gebühren: <strong>CHF {fmtCHF(totalUserFees)}</strong></span>
-                <span style={{ color: "#5B8C5A" }}>Bee-Impact: <strong>CHF {fmtCHF(totalUserImpact)}</strong></span>
+                <span style={{ color: "#50804F" }}>Bee-Impact: <strong>CHF {fmtCHF(totalUserImpact)}</strong></span>
                 <span style={{ color: colors.muted }}>{uFee.length} Einträge</span>
               </div>
             )}
@@ -211,7 +211,7 @@ export function UserProfile({ admin }) {
                           <span style={{ fontWeight: 600 }}>CHF {fmtCHF(f.fee_amount)}</span>
                         </div>
                       ))}
-                      <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 11, color: "#5B8C5A" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 11, color: "#50804F" }}>
                         <span>Bee-Impact</span><span>CHF {fmtCHF(inv.total_bee_impact)}</span>
                       </div>
                       {dunningTimeline(inv)}

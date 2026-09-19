@@ -1,5 +1,5 @@
 // Selbstgebauter SVG-Trendchart fuer eine Tagesreihe data=[{date, value}]. type: area | line | bar.
-export function TrendChart({ data = [], color = "#0E9493", type = "area", height = 70 }) {
+export function TrendChart({ data = [], color = "#007C7C", type = "area", height = 70 }) {
   const W = 240, H = height, pad = 6;
   const n = data.length;
   const max = Math.max(1, ...data.map(d => d.value));

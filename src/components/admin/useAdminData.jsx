@@ -54,7 +54,7 @@ export function useAdminData() {
   const [feeSeller, setFeeSeller] = useState({});
   const [refListings, setRefListings] = useState([]);
   const [annOpen, setAnnOpen] = useState(false);
-  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#0E9493", text_color: "#FFFFFF", effect: "none" });
+  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#007C7C", text_color: "#FFFFFF", effect: "none" });
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -541,7 +541,7 @@ export function useAdminData() {
 
   const openAnnouncement = async () => {
     const row = await getAnnouncement();
-    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#0E9493", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
+    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#007C7C", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
     setAnnOpen(true);
   };
   const saveAnnouncement = async () => {
@@ -1065,9 +1065,9 @@ export function useAdminData() {
 
   // Übersicht-Karten
   const STAT_CARDS = [
-    { label: "Benutzer", value: (stats.users ?? 0).toLocaleString("de-CH"), Icon: Users, tint: "#0E9493" },
-    { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#0E9493" },
-    { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#0E9493" },
+    { label: "Benutzer", value: (stats.users ?? 0).toLocaleString("de-CH"), Icon: Users, tint: "#007C7C" },
+    { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#007C7C" },
+    { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#007C7C" },
     { feeToggle: true, label: "Gebühren", Icon: Receipt, tint: "#D9A005" },
     { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#686E78", danger: stats.reports > 0 },
   ];

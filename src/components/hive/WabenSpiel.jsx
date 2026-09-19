@@ -76,7 +76,7 @@ export default function WabenSpiel({ pollen, onPollen }) {
       {spiel.honig < 7 && <span style={{ color: colors.muted }}> · nächste Honigwabe: {Math.floor(spiel.einsatz * naechster)}</span>}
     </span>
   );
-  else if (spiel.status === "mitgenommen") kopf = <span>Mitgenommen: <b style={{ color: "#5B8C5A" }}>+{spiel.gewinn} Pollen</b> bei Einsatz {spiel.einsatz}. Nächstes Spiel morgen.</span>;
+  else if (spiel.status === "mitgenommen") kopf = <span>Mitgenommen: <b style={{ color: "#50804F" }}>+{spiel.gewinn} Pollen</b> bei Einsatz {spiel.einsatz}. Nächstes Spiel morgen.</span>;
   else if (spiel.status === "verloren") kopf = <span>Wespe. <b style={{ color: "#c62828" }}>{spiel.einsatz} Pollen weg.</b> Morgen wieder.</span>;
   else kopf = <span>Das Spiel von gestern ist verfallen, der Einsatz ist weg. Heute geht es neu.</span>;
 

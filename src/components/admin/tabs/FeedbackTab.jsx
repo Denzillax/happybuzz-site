@@ -10,7 +10,7 @@ import { pill } from "@/components/admin/adminStyles";
 const TYPE_META = {
   bug:      { label: "Bug",      bg: "#FFEBEE", color: "#c62828" },
   feedback: { label: "Feedback", bg: "#FFF8E1", color: "#B07E09" },
-  idea:     { label: "Idee",     bg: "#E8F5E9", color: "#5B8C5A" },
+  idea:     { label: "Idee",     bg: "#E8F5E9", color: "#50804F" },
   frage:    { label: "Frage",    bg: "#E9F2F6", color: "#4A7A8C" },
 };
 // ACHTUNG: die DB-Spalte hat einen CHECK auf ENGLISCHE Werte

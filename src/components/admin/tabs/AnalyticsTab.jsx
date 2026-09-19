@@ -25,7 +25,7 @@ export function AnalyticsTab({ admin }) {
           <div style={chartCard}>
             <div style={chartHead}><span style={chartLabel}>Neue Nutzer</span><span style={{ fontSize: 11, color: "#2E7D32", fontWeight: 700 }}>+{sumSeries(analytics.users)}</span></div>
             <div style={chartBig}>{sumSeries(analytics.users)} <span style={chartSub}>in {analyticsRange} Tagen</span></div>
-            <TrendChart data={analytics.users} color="#0E9493" type="area" />
+            <TrendChart data={analytics.users} color="#007C7C" type="area" />
             {axisLabels(analytics.users)}
           </div>
           <div style={chartCard}>
@@ -37,7 +37,7 @@ export function AnalyticsTab({ admin }) {
           <div style={chartCard}>
             <div style={chartHead}><span style={chartLabel}>Neue Inserate</span><span style={{ fontSize: 11, color: "#2E7D32", fontWeight: 700 }}>+{sumSeries(analytics.listings)}</span></div>
             <div style={chartBig}>{sumSeries(analytics.listings)} <span style={chartSub}>in {analyticsRange} Tagen</span></div>
-            <TrendChart data={analytics.listings} color="#5B8C5A" type="line" />
+            <TrendChart data={analytics.listings} color="#50804F" type="line" />
             {axisLabels(analytics.listings)}
           </div>
           <div style={chartCard}>
@@ -46,7 +46,7 @@ export function AnalyticsTab({ admin }) {
               {(() => {
                 const maxT = Math.max(1, ...analytics.byType.map(t => t.count));
                 const lbl = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
-                const col = { sell: "#F4C03F", auction: "#94B9C9", rent: "#8B6DB0", free: "#5B8C5A", service: "#E67E22" };
+                const col = { sell: "#F4C03F", auction: "#94B9C9", rent: "#8B6DB0", free: "#50804F", service: "#E67E22" };
                 return analytics.byType.map(t => (
                   <div key={t.type} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11 }}>
                     <span style={{ width: 62, color: "#3a3a3a" }}>{lbl[t.type]}</span>

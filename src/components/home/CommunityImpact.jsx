@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
-const MOSS = "#5B8C5A";
+const MOSS = "#487848"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
 const INK = "#191615";
 const PAPER = "#FFFFFF";
 const SAND = "#F5F6F8";

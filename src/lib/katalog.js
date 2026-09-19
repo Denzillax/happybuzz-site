@@ -15,7 +15,7 @@ export const K = {
   paper: "#FFFFFF",
   honey: "#F4C03F",
   petrol: "#0B5E5C",
-  moss: "#5B8C5A",
+  moss: "#50804F",
   muted: "rgba(20,17,13,0.6)",
 };
 
@@ -62,8 +62,8 @@ export const input = {
   boxSizing: "border-box",
 };
 export const inputFocus = {
-  border: "1.5px solid #0E9493",
-  boxShadow: "0 0 0 3px rgba(14,148,147,.15)",
+  border: "1.5px solid #007C7C",
+  boxShadow: "0 0 0 3px rgba(0,124,124,.15)",
 };
 
 // Primaerbutton (Login: "Anmelden")

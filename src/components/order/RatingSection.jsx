@@ -72,7 +72,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
       {myRating || ratingDone ? (
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ display: "flex", gap: 3 }}>{[1,2,3,4,5].map(s => <Star key={s} size={16} fill={s <= (myRating?.rating || rating) ? colors.yellow : "none"} color={s <= (myRating?.rating || rating) ? colors.yellow : colors.muted} />)}</div>
-          <span style={{ fontSize: 13, color: "#5B8C5A", fontWeight: 600 }}>Bewertung abgegeben</span>
+          <span style={{ fontSize: 13, color: "#50804F", fontWeight: 600 }}>Bewertung abgegeben</span>
           {(myRating?.comment || ratingComment) && <span style={{ fontSize: 12, color: colors.muted, marginLeft: "auto" }}>"{myRating?.comment || ratingComment}"</span>}
         </div>
       ) : (

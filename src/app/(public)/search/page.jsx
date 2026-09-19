@@ -47,7 +47,7 @@ function FilterPill({ label, value, options, onChange, active }) {
         style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "8px 14px", borderRadius: 12,
-          border: active ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
+          border: active ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
           color: active ? "#0B5E5C" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
@@ -240,7 +240,7 @@ function SearchPageInner() {
   // Text, fuer den er schon lief, damit die KI nicht in Schleife sucht.
   // KI-Schalter (gleicher Speicher wie im Header)
   const [kiModus, setKiModus] = useState(false);
-  const KI_FARBE = "#0E9493"; // helleres Teal fuer den KI-Modus
+  const KI_FARBE = "#007C7C"; // helleres Teal fuer den KI-Modus
   useEffect(() => { try { setKiModus(localStorage.getItem("beedaro_ki_suche") === "1"); } catch {} }, []);
   const toggleKi = () => setKiModus(v => { const n = !v; try { localStorage.setItem("beedaro_ki_suche", n ? "1" : "0"); } catch {} return n; });
   const kiFallbackRef = useRef("");
@@ -403,7 +403,7 @@ function SearchPageInner() {
         {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
             Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
         {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#0E949333"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#007C7C33"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
             <Sparkles size={14} />
             <span style={{ flex: 1 }}>
               {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
@@ -450,7 +450,7 @@ function SearchPageInner() {
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 12,
-                border: (minPrice || maxPrice) ? "1.5px solid #0E9493" : "1.5px solid #d8d4cd",
+                border: (minPrice || maxPrice) ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
                 color: (minPrice || maxPrice) ? "#0B5E5C" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
@@ -492,12 +492,12 @@ function SearchPageInner() {
                 display: "inline-flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 12, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
-                border: `1px solid ${verifiedOnly ? "#5B8C5A" : "#191615"}`,
+                border: `1px solid ${verifiedOnly ? "#50804F" : "#191615"}`,
                 background: verifiedOnly ? "#EEF4EC" : "#fff",
-                color: verifiedOnly ? "#5B8C5A" : "#191615",
+                color: verifiedOnly ? "#50804F" : "#191615",
               }}
             >
-              <BadgeCheck size={15} color={verifiedOnly ? "#5B8C5A" : "#191615"} strokeWidth={2.2} /> Verifiziert
+              <BadgeCheck size={15} color={verifiedOnly ? "#50804F" : "#191615"} strokeWidth={2.2} /> Verifiziert
             </button>
           </div>
 
@@ -551,8 +551,8 @@ function SearchPageInner() {
                   setTimeout(() => setSearchSaved(false), 4000);
                 } catch (e) { console.error("saveSearch:", e); }
               }} style={{
-                fontSize: 13, fontWeight: 700, color: searchSaved ? "#5B8C5A" : colors.teal,
-                background: "none", border: `1.5px solid ${searchSaved ? "#5B8C5A" : colors.teal}`,
+                fontSize: 13, fontWeight: 700, color: searchSaved ? "#50804F" : colors.teal,
+                background: "none", border: `1.5px solid ${searchSaved ? "#50804F" : colors.teal}`,
                 padding: "5px 10px", borderRadius: 12, cursor: searchSaved ? "default" : "pointer",
                 fontFamily: fonts.body, whiteSpace: "nowrap",
               }}>

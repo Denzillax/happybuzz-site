@@ -7,7 +7,7 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
 const MONO = "'Manrope', sans-serif";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
@@ -70,7 +70,7 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
             color: K.ink, outline: "none", boxSizing: "border-box",
             transition: "border-color .2s, box-shadow .2s",
           }}
-          onFocus={e => { e.target.style.borderColor = "#0E9493"; e.target.style.boxShadow = "0 0 0 3px rgba(14,148,147,.15)"; }}
+          onFocus={e => { e.target.style.borderColor = "#007C7C"; e.target.style.boxShadow = "0 0 0 3px rgba(0,124,124,.15)"; }}
           onBlur={e => { e.target.style.borderColor = "#E5E8EC"; e.target.style.boxShadow = "none"; }}
         />
         {suffix && (

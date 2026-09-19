@@ -155,12 +155,12 @@ function NewListingPageInner() {
               boxShadow: "0 2px 8px rgba(25,22,21,.15)",
             }}
           >
-            <Copy size={15} color="#0E9493" /> Letztes Inserat als Vorlage verwenden
+            <Copy size={15} color="#007C7C" /> Letztes Inserat als Vorlage verwenden
           </button>
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #0E949333", fontSize: 13, color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #007C7C33", fontSize: 13, color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

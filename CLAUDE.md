@@ -48,8 +48,8 @@ plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architek
 - Yellow: `#F4C03F`
 - Dark: `#191615`
 - Flächen: `#F5F6F8` (neutral hell), Chips `#F1F3F5`, Rand `#E5E8EC`, Nebentext `#5B626C`. Seit 19.09.2026 KEIN Cream, Sand oder Beige mehr (war Denis zu grau und sandig). Hero-Band `#E9F6F5`. Vollständige Liste: Kommentar FARBFAMILIE in `src/app/globals.css`
-- Teal: `#0E9493` (Buttons, aktive States)
-- Green: `#5B8C5A`
+- Teal: `#007C7C` (Buttons, aktive States). Seit 19.09.2026 dunkler: `#0E9493` hatte als Schrift und mit weisser Schrift darauf nur Kontrast 3.7
+- Green: `#50804F` (seit 19.09.2026, vorher `#5B8C5A` mit Kontrast 3.9)
 
 ### Fonts
 - Headlines: General Sans (Fontshare, via `<link>` in layout.tsx)

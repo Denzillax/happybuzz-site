@@ -75,7 +75,7 @@ const TYP_CHIP = {
   sell: { label: "Festpreis", bg: "#F4C03F", color: INK },
   auction: { label: "Auktion", bg: "#94B9C9", color: INK },
   rent: { label: "Miete", bg: "#8B6DB0", color: "#fff" },
-  free: { label: "Gratis", bg: "#5B8C5A", color: "#fff" },
+  free: { label: "Gratis", bg: "#50804F", color: "#fff" },
   service: { label: "Service", bg: "#E67E22", color: "#fff" },
 };
 const PERIOD_LABEL = { hour: "Std", day: "Tag", week: "Woche", month: "Monat" };

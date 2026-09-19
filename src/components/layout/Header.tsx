@@ -14,7 +14,7 @@ import { getMyRole } from '@/lib/staff'
 
 const YELLOW = '#F4C03F'
 const PETROL = '#0B5E5C'
-const KI_FARBE = '#0E9493' // KI-Modus im Suchfeld: helleres Teal (Denis 17.09.)
+const KI_FARBE = '#007C7C' // KI-Modus im Suchfeld: helleres Teal (Denis 17.09.)
 const KI_KEY = 'beedaro_ki_suche'
 const DARK = '#191615'
 const INK = '#191615'
@@ -191,13 +191,13 @@ export function Header() {
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E5E8EC; flex-shrink: 0; margin: 0 6px; }
         .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #E5E8EC; }
-        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F5F6F8 !important; color: #0E9493 !important; filter: none !important; }
-        .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
+        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
+        .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: #007C7C !important; color: #007C7C !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #F5F6F8 !important; color: #0E9493 !important; filter: none !important; }
-        .hdr-menu-item:hover svg { stroke: #0E9493 !important; color: #0E9493 !important; }
-        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F5F6F8 !important; color: #0E9493 !important; filter: none !important; }
-        .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: #0E9493 !important; color: #0E9493 !important; }
+        .hdr-menu-item:hover { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
+        .hdr-menu-item:hover svg { stroke: #007C7C !important; color: #007C7C !important; }
+        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
+        .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: #007C7C !important; color: #007C7C !important; }
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }

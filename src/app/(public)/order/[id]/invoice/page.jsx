@@ -105,7 +105,7 @@ export default function InvoicePage() {
       {/* Druckknopf ohne grauen Balken (Denis, 16.09.): rechtsbuendig in der
           Rechnungsbreite, als Pille im Klar-Look; im Druck ausgeblendet */}
       <div className="no-print" style={{ maxWidth: 660, margin: "0 auto", padding: "18px 36px 0", display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={() => window.print()} className="cta-pill" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, border: "none", background: isDeposit ? "#5B8C5A" : colors.yellow, color: isDeposit ? "#fff" : "#191615", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
+        <button onClick={() => window.print()} className="cta-pill" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 20px", borderRadius: 999, border: "none", background: isDeposit ? "#50804F" : colors.yellow, color: isDeposit ? "#fff" : "#191615", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: f }}>
           <Printer size={16} /> Drucken / PDF
         </button>
       </div>
@@ -116,7 +116,7 @@ export default function InvoicePage() {
           <div style={{ textAlign: "right", fontSize: 10, color: g, fontFamily: f, lineHeight: 1.6 }}>Gemeindehausstrasse 11B<br/>6010 Kriens, Schweiz</div>
         </div>
         {/* Titel */}
-        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: isDeposit ? "#5B8C5A" : "#191615" }}>{pageTitle}</h1>
+        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: isDeposit ? "#50804F" : "#191615" }}>{pageTitle}</h1>
         <p style={{ margin: "0 0 16px", fontSize: 11, color: g, fontFamily: f }}>Ref: <strong style={{ color: "#191615" }}>{ref}</strong> · {orderDate}</p>
         {/* Adressen */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
@@ -224,14 +224,14 @@ export default function InvoicePage() {
           </p>
         )}
         {isDeposit && (
-          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: damageAmount > 0 ? "#FFF3E0" : "#E8F5E9", borderRadius: 0, fontSize: 10, color: damageAmount > 0 ? "#E65100" : "#5B8C5A", fontFamily: f, lineHeight: 1.5 }}>
+          <p style={{ margin: "0 0 16px", padding: "8px 12px", background: damageAmount > 0 ? "#FFF3E0" : "#E8F5E9", borderRadius: 0, fontSize: 10, color: damageAmount > 0 ? "#E65100" : "#50804F", fontFamily: f, lineHeight: 1.5 }}>
             {damageAmount > 0
               ? `Teilrückerstattung: Kaution CHF ${fmt(depositAmount)} abzüglich Schaden CHF ${fmt(damageAmount)} = CHF ${fmt(refundAmount)}.`
               : "Die Kaution wird vollständig an den Mieter zurückerstattet. Keine Gebühren auf Kautionsrückerstattungen."}
           </p>
         )}
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#5B8C5A" : "#E5E8EC"}`, borderRadius: 0, marginBottom: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#50804F" : "#E5E8EC"}`, borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
@@ -260,8 +260,8 @@ export default function InvoicePage() {
         <div style={{ textAlign: "center", fontSize: 9, color: g, fontFamily: f }}>
           <p style={{ margin: 0 }}>BEEDARO · Gemeindehausstrasse 11B · 6010 Kriens</p>
           {!isDeposit && (
-            <p style={{ margin: "2px 0 0", color: "#5B8C5A", display: "flex", alignItems: "center", justifyContent: "center", gap: 3 }}>
-              <BeeIcon size={9} color="#5B8C5A" /> CHF {fmt(beeImpact)} fliessen in Schweizer Bienenprojekte
+            <p style={{ margin: "2px 0 0", color: "#50804F", display: "flex", alignItems: "center", justifyContent: "center", gap: 3 }}>
+              <BeeIcon size={9} color="#50804F" /> CHF {fmt(beeImpact)} fliessen in Schweizer Bienenprojekte
             </p>
           )}
         </div>

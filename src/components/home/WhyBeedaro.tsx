@@ -22,7 +22,7 @@ const usps = [
     icon: TreePine,
     title: 'Für die Natur',
     description: 'Ein Teil jedes Verkaufs unterstützt direkt Schweizer Bienen- und Naturschutzprojekte.',
-    accent: '#5B8C5A', tint: '#E7EFE6', href: '/impact',
+    accent: '#50804F', tint: '#E7EFE6', href: '/impact',
   },
   {
     icon: ShieldCheck,

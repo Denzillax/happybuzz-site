@@ -200,7 +200,7 @@ export default function PokerTisch() {
                   <span style={{ fontWeight: 800, minWidth: 90 }}>{nameVonSeat(e.seat)}</span>
                   {e.karten && <span style={{ display: "flex", gap: 4 }}>{e.karten.map((c, j) => { const k = karte(c); return <span key={j} style={{ color: k.rot ? "#C62828" : K.ink, fontWeight: 700 }}>{k.rang}{k.farbe}</span>; })}</span>}
                   <span style={{ color: colors.muted }}>{e.blatt}</span>
-                  <span style={{ marginLeft: "auto", fontWeight: 800, color: e.gewinn > 0 ? "#5B8C5A" : colors.mutedLt }}>{e.gewinn > 0 ? `+${e.gewinn}` : "0"}</span>
+                  <span style={{ marginLeft: "auto", fontWeight: 800, color: e.gewinn > 0 ? "#50804F" : colors.mutedLt }}>{e.gewinn > 0 ? `+${e.gewinn}` : "0"}</span>
                 </div>
               ))}
             </div>

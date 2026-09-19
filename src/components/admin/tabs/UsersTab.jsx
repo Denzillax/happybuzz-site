@@ -48,7 +48,7 @@ export function UsersTab({ admin }) {
                 <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 700, color: "#C62828", background: "#FFEBEE", padding: "4px 10px", borderRadius: 999 }}>{u.contact_violations}× Kontakt</span>
               )}
               <span className="admin-hide-narrow" style={{ flexShrink: 0 }}>{pill(colors.yellowSoft, colors.dark, u.bee_level || "starter")}</span>
-              <span className="admin-hide-narrow" style={{ fontSize: 11, color: "#5B8C5A", fontWeight: 600, minWidth: 64, textAlign: "right" }}>{(u.blueten || 0).toLocaleString("de-CH")}</span>
+              <span className="admin-hide-narrow" style={{ fontSize: 11, color: "#50804F", fontWeight: 600, minWidth: 64, textAlign: "right" }}>{(u.blueten || 0).toLocaleString("de-CH")}</span>
               <button onClick={(e) => { e.stopPropagation(); toggleBan(u); }} style={{
                 flexShrink: 0, padding: "6px 14px", borderRadius: 999, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff",
                 border: `1px solid ${u.is_banned ? "#aed8b0" : "#e6a6a6"}`, color: u.is_banned ? "#2E7D32" : "#C62828",

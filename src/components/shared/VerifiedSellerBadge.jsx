@@ -2,7 +2,7 @@
 import { BadgeCheck } from "lucide-react";
 import { fonts } from "@/lib/theme";
 
-const MOSS = "#5B8C5A";
+const MOSS = "#50804F";
 const MOSS_SOFT = "#EEF4EC";
 const INK = "#191615";
 

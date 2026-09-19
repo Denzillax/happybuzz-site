@@ -11,8 +11,8 @@ import EinsatzWahl from "./EinsatzWahl";
 
 const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5" };
 const MOTIVE = [
-  { Icon: Flower, farbe: "#C8860A" }, { Icon: Flower2, farbe: "#B23A48" }, { Icon: Leaf, farbe: "#5B8C5A" },
-  { Icon: Sprout, farbe: "#0E9493" }, { Icon: TreeDeciduous, farbe: "#0B5E5C" }, { Icon: Clover, farbe: "#7A5C9E" },
+  { Icon: Flower, farbe: "#C8860A" }, { Icon: Flower2, farbe: "#B23A48" }, { Icon: Leaf, farbe: "#50804F" },
+  { Icon: Sprout, farbe: "#007C7C" }, { Icon: TreeDeciduous, farbe: "#0B5E5C" }, { Icon: Clover, farbe: "#7A5C9E" },
 ];
 const STUFEN = { 2: 0.7, 3: 1, 4: 1.5, 5: 2, 6: 3 };
 
@@ -76,7 +76,7 @@ export default function Bluetenpaar({ pollen, onPollen }) {
     </span>
   );
   else if (fertig) kopf = spiel.gewinn > 0
-    ? <span>{spiel.paare} Paare: <b style={{ color: "#5B8C5A" }}>+{spiel.gewinn} Pollen</b> bei Einsatz {spiel.einsatz}. Nächstes Spiel morgen.</span>
+    ? <span>{spiel.paare} Paare: <b style={{ color: "#50804F" }}>+{spiel.gewinn} Pollen</b> bei Einsatz {spiel.einsatz}. Nächstes Spiel morgen.</span>
     : <span>{spiel.paare} {spiel.paare === 1 ? "Paar" : "Paare"}. <b style={{ color: "#c62828" }}>{spiel.einsatz} Pollen weg.</b> Morgen wieder.</span>;
   else kopf = <span>Das Spiel von gestern ist verfallen, der Einsatz ist weg. Heute geht es neu.</span>;
 
@@ -96,7 +96,7 @@ export default function Bluetenpaar({ pollen, onPollen }) {
             return (
               <button key={i} type="button" aria-label={offen ? `Karte ${i + 1}, Motiv ${wert + 1}` : `Karte ${i + 1}`}
                 disabled={!laeuft || offen || busy || !!kurz} onClick={() => aufdecken(i)}
-                style={{ aspectRatio: "3 / 4", borderRadius: 12, border: `1.5px solid ${offen ? (gefunden ? "#5B8C5A" : K.ink) : "transparent"}`, background: offen ? "#fff" : K.honey, cursor: laeuft && !offen ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: fertig && !gefunden ? .6 : 1, transition: "background .2s" }}>
+                style={{ aspectRatio: "3 / 4", borderRadius: 12, border: `1.5px solid ${offen ? (gefunden ? "#50804F" : K.ink) : "transparent"}`, background: offen ? "#fff" : K.honey, cursor: laeuft && !offen ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", opacity: fertig && !gefunden ? .6 : 1, transition: "background .2s" }}>
                 {m ? <m.Icon size={24} color={m.farbe} /> : <Flower2 size={16} color="rgba(20,17,13,.3)" />}
               </button>
             );

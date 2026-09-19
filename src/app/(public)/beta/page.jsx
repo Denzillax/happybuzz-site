@@ -551,7 +551,7 @@ const TESTS = [
 
 const STATUS_ICON = {
   0: { icon: Circle, color: "#aaa", label: "Nicht getestet" },
-  1: { icon: CheckCircle, color: "#5B8C5A", label: "OK" },
+  1: { icon: CheckCircle, color: "#50804F", label: "OK" },
   2: { icon: AlertTriangle, color: "#F4A100", label: "Teilweise" },
   3: { icon: AlertTriangle, color: "#c62828", label: "Kaputt" },
 };
@@ -648,7 +648,7 @@ export default function BetaTestPage() {
     return (
       <div style={{ fontFamily: fonts.body, background: colors.cream, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center", padding: 40 }}>
-          <CheckCircle size={60} color="#5B8C5A" style={{ marginBottom: 16 }} />
+          <CheckCircle size={60} color="#50804F" style={{ marginBottom: 16 }} />
           <h2 style={{ fontSize: 24, fontWeight: 900, fontFamily: fonts.head }}>Danke, {testerName || "Tester"}!</h2>
           <p style={{ fontSize: 15, color: colors.muted, marginTop: 8 }}>{tested} Features getestet: {okCount} OK, {partialCount} teilweise, {brokenCount} kaputt</p>
           <p style={{ fontSize: 13, color: colors.muted, marginTop: 12 }}>Deine Ergebnisse wurden gespeichert.</p>
@@ -790,7 +790,7 @@ export default function BetaTestPage() {
                           marginTop: 2, fontFamily: "'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 0",
                           textAlign: "center",
-                          background: p.typ === "neu" ? "#0E9493" : colors.yellow,
+                          background: p.typ === "neu" ? "#007C7C" : colors.yellow,
                           color: p.typ === "neu" ? "#fff" : colors.dark,
                         }}>
                           {p.typ === "neu" ? "NEU" : "FIX"}
@@ -836,7 +836,7 @@ export default function BetaTestPage() {
             <div style={{ height: "100%", borderRadius: 12, background: colors.yellow, width: `${(tested / totalItems) * 100}%`, transition: "width .3s" }} />
           </div>
           <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 12 }}>
-            <span style={{ color: "#5B8C5A", fontWeight: 600 }}>{okCount} OK</span>
+            <span style={{ color: "#50804F", fontWeight: 600 }}>{okCount} OK</span>
             <span style={{ color: "#F4A100", fontWeight: 600 }}>{partialCount} teilweise</span>
             <span style={{ color: "#c62828", fontWeight: 600 }}>{brokenCount} kaputt</span>
           </div>
@@ -860,7 +860,7 @@ export default function BetaTestPage() {
               }}>
                 <Icon size={18} color={section.highlight ? colors.dark : colors.muted} />
                 <span style={{ flex: 1, fontSize: 14, fontWeight: 700 }}>{section.title}</span>
-                <span style={{ fontSize: 11, color: sOk === sTotal && sTotal > 0 ? "#5B8C5A" : colors.muted, fontWeight: 600 }}>{sOk}/{sTotal}</span>
+                <span style={{ fontSize: 11, color: sOk === sTotal && sTotal > 0 ? "#50804F" : colors.muted, fontWeight: 600 }}>{sOk}/{sTotal}</span>
                 {isOpen ? <ChevronDown size={16} color={colors.muted} /> : <ChevronRight size={16} color={colors.muted} />}
               </div>
               {isOpen && (
@@ -889,7 +889,7 @@ export default function BetaTestPage() {
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                         >
                           <SI size={18} color={color} style={{ flexShrink: 0 }} />
-                          <span style={{ flex: 1, fontSize: 13, color: s === 1 ? "#5B8C5A" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>
+                          <span style={{ flex: 1, fontSize: 13, color: s === 1 ? "#50804F" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>
                         </div>
                         {(s === 2 || s === 3) && (
                           <div style={{ padding: "0 16px 10px 44px" }}>

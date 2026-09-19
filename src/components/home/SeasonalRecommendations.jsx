@@ -5,7 +5,7 @@ import { Sun, Leaf, Snowflake, Flower2 } from "lucide-react";
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
 const MUTED = "#686E78";
 const DARK = "#191615";
-const TEAL = "#0E9493";
+const TEAL = "#007C7C";
 
 // Jahreszeit aus Monat (0-11) ableiten.
 function getSeason(month) {

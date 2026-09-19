@@ -10,7 +10,7 @@ import { fonts } from "@/lib/theme";
 const MONO = "'Manrope', sans-serif";
 const INK = "#191615";
 const SAND = "#F5F6F8";
-const MOSS = "#5B8C5A";
+const MOSS = "#50804F";
 const HONIG = "#F4A100";
 const ROT = "#c62828";
 

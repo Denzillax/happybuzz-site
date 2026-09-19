@@ -27,7 +27,7 @@ function FeeDetail({ inv, feeLedger, dunningTimeline, mahnButton, confirmAndReac
           <span>{fmtDate(f.created_at)} · {f.purchase_id ? makeBeeRef(f.purchase_id) + " · " : ""}{f.listing_id ? makeArtRef(f.listing_id) + " · " : ""}{f.listing_title}</span><span style={{ fontWeight: 600 }}>CHF {fmtCHF(f.fee_amount)}</span>
         </div>
       ))}
-      <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", color: "#5B8C5A" }}><span>Bee-Impact</span><span>CHF {fmtCHF(inv.total_bee_impact)}</span></div>
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", color: "#50804F" }}><span>Bee-Impact</span><span>CHF {fmtCHF(inv.total_bee_impact)}</span></div>
       {dunningTimeline(inv)}
       {inv.status !== "paid" ? (
         <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap", alignItems: "center" }}>

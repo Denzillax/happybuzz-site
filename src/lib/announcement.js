@@ -2,9 +2,9 @@ import { supabase } from "@/lib/supabase/supabase";
 
 // Brand-Presets (Hintergrund + lesbare Textfarbe).
 export const ANNOUNCEMENT_PRESETS = [
-  { name: "Teal", bg: "#0E9493", text: "#FFFFFF" },
+  { name: "Teal", bg: "#007C7C", text: "#FFFFFF" },
   { name: "Gelb", bg: "#F4C03F", text: "#191615" },
-  { name: "Grün", bg: "#5B8C5A", text: "#FFFFFF" },
+  { name: "Grün", bg: "#50804F", text: "#FFFFFF" },
   { name: "Dark", bg: "#191615", text: "#FFFFFF" },
   { name: "Rot",  bg: "#C62828", text: "#FFFFFF" },
 ];

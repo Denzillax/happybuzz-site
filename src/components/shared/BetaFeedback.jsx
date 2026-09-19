@@ -164,11 +164,11 @@ const MOBILE_TESTS = [
 const FEEDBACK_TYPES = [
   { value: "bug", label: "Bug", icon: Bug, color: "#c62828" },
   { value: "feedback", label: "Feedback", icon: MessageCircle, color: "#F4C03F" },
-  { value: "idea", label: "Idee", icon: Lightbulb, color: "#5B8C5A" },
+  { value: "idea", label: "Idee", icon: Lightbulb, color: "#50804F" },
   { value: "frage", label: "Frage", icon: HelpCircle, color: "#94B9C9" },
 ];
 
-const STATUS_COLORS = { 0: "#bbb", 1: "#5B8C5A", 2: "#F4A100", 3: "#c62828" };
+const STATUS_COLORS = { 0: "#bbb", 1: "#50804F", 2: "#F4A100", 3: "#c62828" };
 const STATUS_ICONS = { 0: Circle, 1: CheckCircle, 2: AlertTriangle, 3: AlertTriangle };
 const STATUS_LABELS = { 0: "Nicht getestet", 1: "OK", 2: "Teilweise", 3: "Kaputt" };
 
@@ -281,7 +281,7 @@ export default function BetaFeedback() {
         width: 40, height: 40, borderRadius: "50%",
         background: colors.teal, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 3px 10px rgba(14,148,147,.35)", transition: "transform .2s",
+        boxShadow: "0 3px 10px rgba(0,124,124,.35)", transition: "transform .2s",
       }}
         onMouseEnter={e => e.currentTarget.style.transform = "scale(1.1)"}
         onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
@@ -313,7 +313,7 @@ export default function BetaFeedback() {
           borderBottom: `1px solid ${colors.borderLt || "#EEF0F3"}`,
         }}>
           <Icon size={16} color={STATUS_COLORS[s]} style={{ flexShrink: 0 }} />
-          <span style={{ flex: 1, fontSize: 12, color: s === 1 ? "#5B8C5A" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>
+          <span style={{ flex: 1, fontSize: 12, color: s === 1 ? "#50804F" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>
         </div>
         {(s === 2 || s === 3) && (
           <input value={notes[item.id] || ""} onChange={e => setNotes(p => ({ ...p, [item.id]: e.target.value }))}
@@ -369,7 +369,7 @@ export default function BetaFeedback() {
       <div style={{ flex: 1, overflow: "auto", padding: 14 }}>
         {sent ? (
           <div style={{ textAlign: "center", padding: "30px 0" }}>
-            <CheckCircle size={36} color="#5B8C5A" style={{ marginBottom: 8 }} />
+            <CheckCircle size={36} color="#50804F" style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>Danke!</p>
             <p style={{ fontSize: 12, color: colors.muted }}>Gespeichert.</p>
           </div>

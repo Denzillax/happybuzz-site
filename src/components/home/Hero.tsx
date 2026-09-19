@@ -23,7 +23,7 @@ export function Hero() {
               {/* Beta-Feedback Tacocat 08.09.: der gute Zweck soll zuoberst stehen,
                   nicht im Fliesstext untergehen - eigene Zeile ueber dem Titel. */}
               <Link href="/impact" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '6px 13px', fontSize: 12, fontWeight: 700, letterSpacing: '.02em', color: '#3E6B3D', textDecoration: 'none', marginBottom: 12 }}>
-                <Flower2 size={14} color="#5B8C5A" /> 20% jeder Gebühr fliessen in den Bienenschutz
+                <Flower2 size={14} color="#50804F" /> 20% jeder Gebühr fliessen in den Bienenschutz
                 <ArrowRight size={13} strokeWidth={2.4} />
               </Link>
               <h1 style={{ fontFamily: DISPLAY, fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.12, color: INK, margin: '0 0 10px' }}>

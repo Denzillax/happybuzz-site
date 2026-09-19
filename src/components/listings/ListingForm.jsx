@@ -1015,7 +1015,7 @@ export default function ListingForm({
               <span style={{
                 marginLeft: "auto", fontSize: 11, fontWeight: 700,
                 fontFamily: fonts.body, color: colors.green,
-                background: "rgba(91,140,90,.12)", padding: "2px 8px",
+                background: "rgba(80,128,79,.12)", padding: "2px 8px",
                 borderRadius: 12, textTransform: "uppercase",
               }}>
                 Aktiv

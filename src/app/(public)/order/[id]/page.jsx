@@ -30,7 +30,7 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#5B8C5A" };
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
 
@@ -46,7 +46,7 @@ function CopyBtn({ text }) {
   const [copied, setCopied] = useState(false);
   return (
     <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: copied ? "#5B8C5A" : colors.muted, display: "flex", alignItems: "center", transition: "color .2s" }}
+      style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: copied ? "#50804F" : colors.muted, display: "flex", alignItems: "center", transition: "color .2s" }}
       title="Kopieren">
       {copied ? <CheckCircle size={14} /> : <Copy size={14} />}
     </button>
@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#0E9493", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#007C7C", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -337,7 +337,7 @@ export default function OrderDetailPage() {
             </div>
             <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "0 0 14px", flexWrap: "wrap" }}>
-              {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#5B8C5A", background: "#5B8C5A14", padding: "6px 12px", borderRadius: 12 }}>+{salePopup.pollen} Pollen</span>}
+              {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#50804F", background: "#50804F14", padding: "6px 12px", borderRadius: 12 }}>+{salePopup.pollen} Pollen</span>}
               {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#A66700", background: "#E8A82014", padding: "6px 12px", borderRadius: 12 }}>+{salePopup.nektar} Nektar</span>}
             </div>
             <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#A66700" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
@@ -393,10 +393,10 @@ export default function OrderDetailPage() {
             {/* Status-Banner */}
             {isFinished && (
               <div style={{ background: "#E8F5E9", borderRadius: 12, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
-                <CheckCircle size={20} color="#5B8C5A" />
+                <CheckCircle size={20} color="#50804F" />
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: "#5B8C5A" }}>{finishedLabel}</div>
-                  <div style={{ fontSize: 13, color: "#5B8C5A" }}>Fertig!</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: "#50804F" }}>{finishedLabel}</div>
+                  <div style={{ fontSize: 13, color: "#50804F" }}>Fertig!</div>
                 </div>
               </div>
             )}
@@ -424,15 +424,15 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Buyer hat bezahlt, wartet */}
                 {isService && isBuyer && p.status === "payment_marked" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
                 )}
                 {/* SERVICE: Anbieter wartet auf Zahlung */}
                 {isService && isSeller && p.status === "payment_pending" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#686E78", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#686E78", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#0E9493", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#007C7C", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (
@@ -493,7 +493,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {isService && isBuyer && p.status === "paid" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#0E9493" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Anbieter schliesst den Auftrag ab.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Anbieter schliesst den Auftrag ab.</p></div>
                 )}
                 {isBuyer && (p.status === "shipped" || p.status === "picked_up") && (
                   <div>
@@ -631,13 +631,13 @@ export default function OrderDetailPage() {
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 12, border: `1.5px solid #5B8C5A`, background: "#E8F5E9", color: "#5B8C5A", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 12, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
                     <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
                 {isRental && isBuyer && p.status === "returned" && (
                   <div style={{ textAlign: "center", padding: 10 }}>
-                    <CreditCard size={28} color="#5B8C5A" style={{ marginBottom: 8 }} />
+                    <CreditCard size={28} color="#50804F" style={{ marginBottom: 8 }} />
                     <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Rückgabe bestätigt</p>
                     <p style={{ fontSize: 13, color: colors.muted, margin: "0 0 12px" }}>Der Vermieter erstattet die Kaution zurück.</p>
                     {depositAmount > 0 && (
@@ -650,7 +650,7 @@ export default function OrderDetailPage() {
                           )}
                           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                         </div>
-                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 12, border: `1.5px solid #5B8C5A`, background: "#E8F5E9", color: "#5B8C5A", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 12, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
                       </>
                     )}
                   </div>
@@ -776,7 +776,7 @@ export default function OrderDetailPage() {
                 <SidebarSection icon={CreditCard} title="Kaution">
                   <div style={{ lineHeight: 1.5 }}>
                     CHF {fmtCHF(depositAmount)}
-                    {p.status === "completed" && <><br /><span style={{ fontSize: 12, color: "#5B8C5A", fontWeight: 600 }}>Zurückerstattet</span></>}
+                    {p.status === "completed" && <><br /><span style={{ fontSize: 12, color: "#50804F", fontWeight: 600 }}>Zurückerstattet</span></>}
                     {p.status === "returned" && <><br /><span style={{ fontSize: 12, color: "#F4A100", fontWeight: 600 }}>Rückerstattung ausstehend</span></>}
                     {p.status === "damage_reported" && <><br /><span style={{ fontSize: 12, color: "#c62828", fontWeight: 600 }}>Schaden gemeldet</span></>}
                   </div>

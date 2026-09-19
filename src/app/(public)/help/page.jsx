@@ -25,7 +25,7 @@ const CATEGORIES = [
     icon: User,
     title: "Mein Konto",
     desc: "Registrierung, Login, Profil & Verifizierung",
-    color: "#5B8C5A",
+    color: "#50804F",
     faqs: [
       { q: "Wie registriere ich mich auf BEEDARO?", a: "Klicke oben rechts auf «Registrieren» und erstelle dein Konto mit E-Mail-Adresse und Passwort. Du erhältst eine Bestätigungsmail." },
       { q: "Wie verifiziere ich mein Konto?", a: "Unter Einstellungen → Verifizierung kannst du E-Mail, Telefonnummer, Postadresse und ID verifizieren. Je mehr du verifizierst, desto höher dein Trust Level." },
@@ -83,7 +83,7 @@ const CATEGORIES = [
     icon: Heart,
     title: "Bee-Impact",
     desc: "Dein Beitrag für Schweizer Naturschutz",
-    color: "#5B8C5A",
+    color: "#50804F",
     faqs: [
       { q: "Was ist der Bee-Impact?", a: "20 Prozent deiner Bee-Rate gehen an Schweizer Naturschutzprojekte. Das passiert bei jedem Verkauf automatisch, du musst nichts dafür tun." },
       { q: "Was ist das Bee-Level?", a: "Dein Bee-Level steigt mit deinen Pollen. Die sammelst du, wenn du inserierst, kaufst, verkaufst oder Challenges löst. Die Stufen heissen Entdecker, Sammler, Hive Builder, Queen Bee und Legende. Höhere Stufen bringen ein Abzeichen und eine bessere Platzierung." },

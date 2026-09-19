@@ -7,7 +7,7 @@ import { RasterUmschalter } from '@/components/shared/RasterUmschalter'
 // auf derselben Zeile. Kein Eyebrow-Geschrei, keine Trennlinie.
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
-const TEAL = '#0E9493'
+const TEAL = '#007C7C'
 
 export function SectionHeader({
   title,

@@ -50,7 +50,7 @@ export function Footer() {
               {links.marktplatz.map(l => (
                 <li key={l.href} style={{ marginBottom: 10 }}>
                   <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#0E9493'}
+                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#007C7C'}
                     onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
                     {l.label}
                   </Link>
@@ -68,7 +68,7 @@ export function Footer() {
               {links.unternehmen.map(l => (
                 <li key={l.href} style={{ marginBottom: 10 }}>
                   <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#0E9493'}
+                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#007C7C'}
                     onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
                     {l.label}
                   </Link>
@@ -86,7 +86,7 @@ export function Footer() {
               {links.support.map(l => (
                 <li key={l.href} style={{ marginBottom: 10 }}>
                   <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#0E9493'}
+                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#007C7C'}
                     onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
                     {l.label}
                   </Link>

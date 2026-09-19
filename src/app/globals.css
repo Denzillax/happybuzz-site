@@ -340,7 +340,7 @@ input:focus, textarea:focus, select:focus {
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
 /* Kein Schein nach aussen (Denis 18.09.): beim Fokus nur der Rand in Teal */
-.listing-form select:focus { border-color:#0E9493 !important; box-shadow:none !important; }
+.listing-form select:focus { border-color:#007C7C !important; box-shadow:none !important; }
 .lf-section { animation: fadeIn .3s ease-out both; }
 .lf-actionbar { backdrop-filter: saturate(1.1) blur(8px); }
 @media (max-width: 768px) { .nektar-badge .nektar-level-name { display: none !important; } }
@@ -687,9 +687,9 @@ button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="backgr
 button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
 button[style*="background:#191615"]:not(:disabled):hover, a[href][style*="background:#191615"]:hover,
 button[style*="background:#0B5E5C"]:not(:disabled):hover, a[href][style*="background:#0B5E5C"]:hover,
-button[style*="background:#0E9493"]:not(:disabled):hover, a[href][style*="background:#0E9493"]:hover,
+button[style*="background:#007C7C"]:not(:disabled):hover, a[href][style*="background:#007C7C"]:hover,
 button[style*="background:rgb(20, 17, 13)"]:not(:disabled):hover, button[style*="background:rgb(25, 22, 21)"]:not(:disabled):hover,
-button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*="background:rgb(14, 148, 147)"]:not(:disabled):hover {
+button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*="background:rgb(0, 124, 124)"]:not(:disabled):hover {
   filter: brightness(1.18);
 }
 
@@ -846,7 +846,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   a[href].cta-pill[style*="background:#fff"]:hover,
   .nektar-badge > button:hover {
     background: #F5F6F8 !important;
-    color: #0E9493 !important;
+    color: #007C7C !important;
     filter: none !important;
   }
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
@@ -854,7 +854,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
   button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
   a[href].cta-pill[style*="background:#fff"]:hover svg {
-    stroke: #0E9493 !important; color: #0E9493 !important;
+    stroke: #007C7C !important; color: #007C7C !important;
   }
 }
 
@@ -913,8 +913,8 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
      Rand         #E5E8EC   feiner Rand #EEF0F3   kräftiger Rand #D5D9DF
      Fläche       #F5F6F8   Chip / Pille #F1F3F5
      Hero-Band    #E9F6F5   (helles Teal, einziger Farbmoment oben)
-     Honig        #F4C03F   Teal #0E9493   Petrol #0B5E5C
-     Rot          #C62828 auf #FFEBEE   Grün #2E7D32 auf #E8F5E9   Markengrün #5B8C5A
+     Honig        #F4C03F   Teal #007C7C (seit 19.09., vorher #0E9493 mit Kontrast 3.7)   Petrol #0B5E5C
+     Rot          #C62828 auf #FFEBEE   Grün #2E7D32 auf #E8F5E9   Markengrün #50804F (seit 19.09., vorher #5B8C5A mit Kontrast 3.9; auf der Impact-Box #487848)
    ═══ */
 
 /* Honig-Balken vor Abschnittstiteln (Denis 19.09.2026): trägt die Markenfarbe durch die Seite */
