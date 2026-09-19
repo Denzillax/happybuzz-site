@@ -846,7 +846,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   a[href].cta-pill[style*="background:#fff"]:hover,
   .nektar-badge > button:hover {
     background: #F5F6F8 !important;
-    color: #007C7C !important;
+    color: var(--bd-akzent, #007C7C) !important;
     filter: none !important;
   }
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
@@ -854,7 +854,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
   button[style*="background: rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
   button[style*="background:rgb(255, 255, 255)"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover svg,
   a[href].cta-pill[style*="background:#fff"]:hover svg {
-    stroke: #007C7C !important; color: #007C7C !important;
+    stroke: var(--bd-akzent, #007C7C) !important; color: var(--bd-akzent, #007C7C) !important;
   }
 }
 
@@ -1069,3 +1069,135 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
   .lab-hoverinfo a:hover .lc-unten, .lab-hoverinfo a:hover .sofort-chip { transform: translateY(-30px); }
 }
 
+/* ═══════════════════════════════════════════
+   FARBTEST PASTELL (Denis 19.09.2026). Nur aktiv mit der Klasse bd-pastell am html-Element,
+   die setzt src/components/shared/FarbTest.jsx (Adresse ?farben=pastell, aus mit ?farben=aus).
+   Ohne die Klasse ändert dieser Block nichts. Erzeugt von scratch pastell.py.
+   Rollen: Papier = neutrale Flächen. Butter = alles, was Honig war. Himmel = Hero-Band und
+   Info. Mint = Bee-Impact, Erfolg, Gratis. Rosa = Warnung und Service. Lavendel = Auktion
+   und Akzentbalken. Teal wird Ink: Auf Pastell trägt keine weisse Schrift, darum sind
+   Knöpfe schwarz und Links schwarz unterstrichen.
+   ═══════════════════════════════════════════ */
+html.bd-pastell [style*="background:#E9F6F5" i],
+html.bd-pastell [style*="background-color:#E9F6F5" i],
+html.bd-pastell [style*="background: rgb(233, 246, 245)" i],
+html.bd-pastell [style*="background-color: rgb(233, 246, 245)" i] { background: #c4e2ff !important; }
+html.bd-pastell [style*="background:#EBF3FF" i],
+html.bd-pastell [style*="background-color:#EBF3FF" i],
+html.bd-pastell [style*="background: rgb(235, 243, 255)" i],
+html.bd-pastell [style*="background-color: rgb(235, 243, 255)" i] { background: #c4e2ff !important; }
+html.bd-pastell [style*="background:#FFF5D8" i],
+html.bd-pastell [style*="background-color:#FFF5D8" i],
+html.bd-pastell [style*="background: rgb(255, 245, 216)" i],
+html.bd-pastell [style*="background-color: rgb(255, 245, 216)" i] { background: #fff2ad !important; }
+html.bd-pastell [style*="background:#FFFCF3" i],
+html.bd-pastell [style*="background-color:#FFFCF3" i],
+html.bd-pastell [style*="background: rgb(255, 252, 243)" i],
+html.bd-pastell [style*="background-color: rgb(255, 252, 243)" i] { background: #fff2ad !important; }
+html.bd-pastell [style*="background:#F4C03F" i],
+html.bd-pastell [style*="background-color:#F4C03F" i],
+html.bd-pastell [style*="background: rgb(244, 192, 63)" i],
+html.bd-pastell [style*="background-color: rgb(244, 192, 63)" i] { background: #fff2ad !important; }
+html.bd-pastell [style*="background:#E8F5E9" i],
+html.bd-pastell [style*="background-color:#E8F5E9" i],
+html.bd-pastell [style*="background: rgb(232, 245, 233)" i],
+html.bd-pastell [style*="background-color: rgb(232, 245, 233)" i] { background: #c6f1db !important; }
+html.bd-pastell [style*="background:#EAF1E9" i],
+html.bd-pastell [style*="background-color:#EAF1E9" i],
+html.bd-pastell [style*="background: rgb(234, 241, 233)" i],
+html.bd-pastell [style*="background-color: rgb(234, 241, 233)" i] { background: #c6f1db !important; }
+html.bd-pastell [style*="background:#E6F5F5" i],
+html.bd-pastell [style*="background-color:#E6F5F5" i],
+html.bd-pastell [style*="background: rgb(230, 245, 245)" i],
+html.bd-pastell [style*="background-color: rgb(230, 245, 245)" i] { background: #c6f1db !important; }
+html.bd-pastell [style*="background:#FFEBEE" i],
+html.bd-pastell [style*="background-color:#FFEBEE" i],
+html.bd-pastell [style*="background: rgb(255, 235, 238)" i],
+html.bd-pastell [style*="background-color: rgb(255, 235, 238)" i] { background: #ffd8d9 !important; }
+html.bd-pastell [style*="background:#F5F6F8" i],
+html.bd-pastell [style*="background-color:#F5F6F8" i],
+html.bd-pastell [style*="background: rgb(245, 246, 248)" i],
+html.bd-pastell [style*="background-color: rgb(245, 246, 248)" i] { background: #f5f5f5 !important; }
+html.bd-pastell [style*="background:#F1F3F5" i],
+html.bd-pastell [style*="background-color:#F1F3F5" i],
+html.bd-pastell [style*="background: rgb(241, 243, 245)" i],
+html.bd-pastell [style*="background-color: rgb(241, 243, 245)" i] { background: #f5f5f5 !important; }
+html.bd-pastell [style*="background:#007C7C" i],
+html.bd-pastell [style*="background-color:#007C7C" i],
+html.bd-pastell [style*="background: rgb(0, 124, 124)" i],
+html.bd-pastell [style*="background-color: rgb(0, 124, 124)" i] { background: #191615 !important; }
+html.bd-pastell [style*="background:#0B5E5C" i],
+html.bd-pastell [style*="background-color:#0B5E5C" i],
+html.bd-pastell [style*="background: rgb(11, 94, 92)" i],
+html.bd-pastell [style*="background-color: rgb(11, 94, 92)" i] { background: #191615 !important; }
+html.bd-pastell button[style*="background:#F4C03F" i],
+html.bd-pastell button[style*="background-color:#F4C03F" i],
+html.bd-pastell button[style*="background: rgb(244, 192, 63)" i],
+html.bd-pastell button[style*="background-color: rgb(244, 192, 63)" i],
+html.bd-pastell a[style*="background:#F4C03F" i],
+html.bd-pastell a[style*="background-color:#F4C03F" i],
+html.bd-pastell a[style*="background: rgb(244, 192, 63)" i],
+html.bd-pastell a[style*="background-color: rgb(244, 192, 63)" i] { box-shadow: inset 0 0 0 1.5px #191615 !important; }
+html.bd-pastell button[style*="background:#F4C03F" i]:hover,
+html.bd-pastell button[style*="background-color:#F4C03F" i]:hover,
+html.bd-pastell button[style*="background: rgb(244, 192, 63)" i]:hover,
+html.bd-pastell button[style*="background-color: rgb(244, 192, 63)" i]:hover,
+html.bd-pastell a[style*="background:#F4C03F" i]:hover,
+html.bd-pastell a[style*="background-color:#F4C03F" i]:hover,
+html.bd-pastell a[style*="background: rgb(244, 192, 63)" i]:hover,
+html.bd-pastell a[style*="background-color: rgb(244, 192, 63)" i]:hover { background: #ffe97a !important; }
+html.bd-pastell [style*="color:#007C7C" i]:not([style*="background-color:#007C7C" i]):not([style*="background-color: rgb(0, 124, 124)" i]):not([style*="border-color:#007C7C" i]):not([style*="border-color: rgb(0, 124, 124)" i]):not([style*="border-top-color:#007C7C" i]):not([style*="border-top-color: rgb(0, 124, 124)" i]):not([style*="border-bottom-color:#007C7C" i]):not([style*="border-bottom-color: rgb(0, 124, 124)" i]):not([style*="border-left-color:#007C7C" i]):not([style*="border-left-color: rgb(0, 124, 124)" i]):not([style*="border-right-color:#007C7C" i]):not([style*="border-right-color: rgb(0, 124, 124)" i]),
+html.bd-pastell [style*="color: rgb(0, 124, 124)" i]:not([style*="background-color:#007C7C" i]):not([style*="background-color: rgb(0, 124, 124)" i]):not([style*="border-color:#007C7C" i]):not([style*="border-color: rgb(0, 124, 124)" i]):not([style*="border-top-color:#007C7C" i]):not([style*="border-top-color: rgb(0, 124, 124)" i]):not([style*="border-bottom-color:#007C7C" i]):not([style*="border-bottom-color: rgb(0, 124, 124)" i]):not([style*="border-left-color:#007C7C" i]):not([style*="border-left-color: rgb(0, 124, 124)" i]):not([style*="border-right-color:#007C7C" i]):not([style*="border-right-color: rgb(0, 124, 124)" i]) { color: #191615 !important; }
+html.bd-pastell a[style*="color:#007C7C" i]:not([style*="background-color:#007C7C" i]):not([style*="background-color: rgb(0, 124, 124)" i]):not([style*="border-color:#007C7C" i]):not([style*="border-color: rgb(0, 124, 124)" i]):not([style*="border-top-color:#007C7C" i]):not([style*="border-top-color: rgb(0, 124, 124)" i]):not([style*="border-bottom-color:#007C7C" i]):not([style*="border-bottom-color: rgb(0, 124, 124)" i]):not([style*="border-left-color:#007C7C" i]):not([style*="border-left-color: rgb(0, 124, 124)" i]):not([style*="border-right-color:#007C7C" i]):not([style*="border-right-color: rgb(0, 124, 124)" i]),
+html.bd-pastell a[style*="color: rgb(0, 124, 124)" i]:not([style*="background-color:#007C7C" i]):not([style*="background-color: rgb(0, 124, 124)" i]):not([style*="border-color:#007C7C" i]):not([style*="border-color: rgb(0, 124, 124)" i]):not([style*="border-top-color:#007C7C" i]):not([style*="border-top-color: rgb(0, 124, 124)" i]):not([style*="border-bottom-color:#007C7C" i]):not([style*="border-bottom-color: rgb(0, 124, 124)" i]):not([style*="border-left-color:#007C7C" i]):not([style*="border-left-color: rgb(0, 124, 124)" i]):not([style*="border-right-color:#007C7C" i]):not([style*="border-right-color: rgb(0, 124, 124)" i]) { text-decoration: underline; text-underline-offset: 3px; }
+html.bd-pastell [style*="solid #007C7C" i],
+html.bd-pastell [style*="solid rgb(0, 124, 124)" i],
+html.bd-pastell [style*="border-color:#007C7C" i],
+html.bd-pastell [style*="border-color: rgb(0, 124, 124)" i] { border-color: #191615 !important; }
+html.bd-pastell svg[stroke="#007C7C" i] { stroke: #191615; }
+html.bd-pastell svg[fill="#007C7C" i] { fill: #191615; }
+html.bd-pastell button[style*="background:#007C7C" i]:hover,
+html.bd-pastell button[style*="background-color:#007C7C" i]:hover,
+html.bd-pastell button[style*="background: rgb(0, 124, 124)" i]:hover,
+html.bd-pastell button[style*="background-color: rgb(0, 124, 124)" i]:hover,
+html.bd-pastell a[style*="background:#007C7C" i]:hover,
+html.bd-pastell a[style*="background-color:#007C7C" i]:hover,
+html.bd-pastell a[style*="background: rgb(0, 124, 124)" i]:hover,
+html.bd-pastell a[style*="background-color: rgb(0, 124, 124)" i]:hover { background: #34343B !important; }
+html.bd-pastell [style*="color:#0B5E5C" i]:not([style*="background-color:#0B5E5C" i]):not([style*="background-color: rgb(11, 94, 92)" i]):not([style*="border-color:#0B5E5C" i]):not([style*="border-color: rgb(11, 94, 92)" i]):not([style*="border-top-color:#0B5E5C" i]):not([style*="border-top-color: rgb(11, 94, 92)" i]):not([style*="border-bottom-color:#0B5E5C" i]):not([style*="border-bottom-color: rgb(11, 94, 92)" i]):not([style*="border-left-color:#0B5E5C" i]):not([style*="border-left-color: rgb(11, 94, 92)" i]):not([style*="border-right-color:#0B5E5C" i]):not([style*="border-right-color: rgb(11, 94, 92)" i]),
+html.bd-pastell [style*="color: rgb(11, 94, 92)" i]:not([style*="background-color:#0B5E5C" i]):not([style*="background-color: rgb(11, 94, 92)" i]):not([style*="border-color:#0B5E5C" i]):not([style*="border-color: rgb(11, 94, 92)" i]):not([style*="border-top-color:#0B5E5C" i]):not([style*="border-top-color: rgb(11, 94, 92)" i]):not([style*="border-bottom-color:#0B5E5C" i]):not([style*="border-bottom-color: rgb(11, 94, 92)" i]):not([style*="border-left-color:#0B5E5C" i]):not([style*="border-left-color: rgb(11, 94, 92)" i]):not([style*="border-right-color:#0B5E5C" i]):not([style*="border-right-color: rgb(11, 94, 92)" i]) { color: #191615 !important; }
+html.bd-pastell a[style*="color:#0B5E5C" i]:not([style*="background-color:#0B5E5C" i]):not([style*="background-color: rgb(11, 94, 92)" i]):not([style*="border-color:#0B5E5C" i]):not([style*="border-color: rgb(11, 94, 92)" i]):not([style*="border-top-color:#0B5E5C" i]):not([style*="border-top-color: rgb(11, 94, 92)" i]):not([style*="border-bottom-color:#0B5E5C" i]):not([style*="border-bottom-color: rgb(11, 94, 92)" i]):not([style*="border-left-color:#0B5E5C" i]):not([style*="border-left-color: rgb(11, 94, 92)" i]):not([style*="border-right-color:#0B5E5C" i]):not([style*="border-right-color: rgb(11, 94, 92)" i]),
+html.bd-pastell a[style*="color: rgb(11, 94, 92)" i]:not([style*="background-color:#0B5E5C" i]):not([style*="background-color: rgb(11, 94, 92)" i]):not([style*="border-color:#0B5E5C" i]):not([style*="border-color: rgb(11, 94, 92)" i]):not([style*="border-top-color:#0B5E5C" i]):not([style*="border-top-color: rgb(11, 94, 92)" i]):not([style*="border-bottom-color:#0B5E5C" i]):not([style*="border-bottom-color: rgb(11, 94, 92)" i]):not([style*="border-left-color:#0B5E5C" i]):not([style*="border-left-color: rgb(11, 94, 92)" i]):not([style*="border-right-color:#0B5E5C" i]):not([style*="border-right-color: rgb(11, 94, 92)" i]) { text-decoration: underline; text-underline-offset: 3px; }
+html.bd-pastell [style*="solid #0B5E5C" i],
+html.bd-pastell [style*="solid rgb(11, 94, 92)" i],
+html.bd-pastell [style*="border-color:#0B5E5C" i],
+html.bd-pastell [style*="border-color: rgb(11, 94, 92)" i] { border-color: #191615 !important; }
+html.bd-pastell svg[stroke="#0B5E5C" i] { stroke: #191615; }
+html.bd-pastell svg[fill="#0B5E5C" i] { fill: #191615; }
+html.bd-pastell button[style*="background:#0B5E5C" i]:hover,
+html.bd-pastell button[style*="background-color:#0B5E5C" i]:hover,
+html.bd-pastell button[style*="background: rgb(11, 94, 92)" i]:hover,
+html.bd-pastell button[style*="background-color: rgb(11, 94, 92)" i]:hover,
+html.bd-pastell a[style*="background:#0B5E5C" i]:hover,
+html.bd-pastell a[style*="background-color:#0B5E5C" i]:hover,
+html.bd-pastell a[style*="background: rgb(11, 94, 92)" i]:hover,
+html.bd-pastell a[style*="background-color: rgb(11, 94, 92)" i]:hover { background: #34343B !important; }
+html.bd-pastell [style*="color:#50804F" i]:not([style*="background-color:#50804F" i]):not([style*="background-color: rgb(80, 128, 79)" i]):not([style*="border-color:#50804F" i]):not([style*="border-color: rgb(80, 128, 79)" i]):not([style*="border-top-color:#50804F" i]):not([style*="border-top-color: rgb(80, 128, 79)" i]):not([style*="border-bottom-color:#50804F" i]):not([style*="border-bottom-color: rgb(80, 128, 79)" i]):not([style*="border-left-color:#50804F" i]):not([style*="border-left-color: rgb(80, 128, 79)" i]):not([style*="border-right-color:#50804F" i]):not([style*="border-right-color: rgb(80, 128, 79)" i]),
+html.bd-pastell [style*="color: rgb(80, 128, 79)" i]:not([style*="background-color:#50804F" i]):not([style*="background-color: rgb(80, 128, 79)" i]):not([style*="border-color:#50804F" i]):not([style*="border-color: rgb(80, 128, 79)" i]):not([style*="border-top-color:#50804F" i]):not([style*="border-top-color: rgb(80, 128, 79)" i]):not([style*="border-bottom-color:#50804F" i]):not([style*="border-bottom-color: rgb(80, 128, 79)" i]):not([style*="border-left-color:#50804F" i]):not([style*="border-left-color: rgb(80, 128, 79)" i]):not([style*="border-right-color:#50804F" i]):not([style*="border-right-color: rgb(80, 128, 79)" i]) { color: #2E5B33 !important; }
+html.bd-pastell .link, html.bd-pastell .bd-fx-stamp { color: #191615; border-color: #191615; }
+html.bd-pastell .listing-form select:focus { border-color: #191615 !important; }
+html.bd-pastell .btn-honey, html.bd-pastell .bh-cta-honig, html.bd-pastell .bh-los { background: #fff2ad !important; box-shadow: inset 0 0 0 1.5px #191615; }
+html.bd-pastell .tab.active::after { background: #191615; }
+html.bd-pastell .bd-abschnittstitel::before { background: #d8c4ff; }
+html.bd-pastell .cat-pill:hover { background: #fff2ad !important; }
+html.bd-pastell .bh { --bh-feld: #c4e2ff; --bh-k1-bg: #fff2ad; --bh-k2-bg: #d8c4ff; --bh-k2-fg: #191615; }
+html.bd-pastell .bh-deck { background: #fff2ad; }
+html.bd-pastell .bh-suche { border-color: #191615; }
+html.bd-pastell .fmt-tile-sell, html.bd-pastell .fmt-tile-sell:hover { background: #fff2ad !important; }
+html.bd-pastell .fmt-tile-auction, html.bd-pastell .fmt-tile-auction:hover { background: #d8c4ff !important; }
+html.bd-pastell .fmt-tile-rent, html.bd-pastell .fmt-tile-rent:hover { background: #c4e2ff !important; }
+html.bd-pastell .fmt-tile-free, html.bd-pastell .fmt-tile-free:hover { background: #c6f1db !important; }
+html.bd-pastell .fmt-tile-service, html.bd-pastell .fmt-tile-service:hover { background: #ffd8d9 !important; }
+html.bd-pastell .fmt-tile:hover { box-shadow: inset 0 0 0 1.5px #191615; }
+html.bd-pastell { --bd-akzent: #191615; }
+/* PASTELL ENDE */

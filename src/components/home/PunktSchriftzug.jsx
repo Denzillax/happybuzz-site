@@ -10,10 +10,11 @@
 import { useEffect, useRef } from "react";
 
 const TEAL = "#007C7C";
-const BIENENFARBE = { H: "#F4C03F", K: "#191615", W: "#191615", w: "#191615", E: "#F4C03F", A: "#191615" };
+// Farben umgekehrt (Denis 19.09.): Figur in Honig, Streifen und Augen in Ink
+const BIENENFARBE = { H: "#191615", K: "#F4C03F", W: "#F4C03F", w: "#F4C03F", E: "#191615", A: "#F4C03F" };
 // Biene als Punktbild, von vorn (dritte Fassung, 17 x 13, nach Denis' Vorlage vom 19.09.2026):
 // Ink-Silhouette mit runden Flügeln, Kugelfühlern, zwei Honigstreifen und Stachel.
-// H Honig, K Ink, W Flügel, w Flügelrand (verschwindet beim Flügelschlag), E Auge, A Fühler.
+// K Körper, H Streifen, W Flügel, w Flügelrand (verschwindet beim Flügelschlag), E Auge, A Fühler.
 // Dieselbe Figur als Vektor: public/bee-flach.svg (scratch "flachbiene.py").
 const BIENE = [
   "...AA.......AA...",

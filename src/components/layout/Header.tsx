@@ -191,13 +191,13 @@ export function Header() {
         .hdr-desktop { display: flex !important; }
         .hdr-sep { width: 1px; height: 26px; background: #E5E8EC; flex-shrink: 0; margin: 0 6px; }
         .hdr-searchrow { position: relative; z-index: 1; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); border-bottom: 1px solid #E5E8EC; }
-        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
-        .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: #007C7C !important; color: #007C7C !important; }
+        .hdr-menu-btn:hover, .hdr-menu-btn[aria-expanded=true] { background: #F5F6F8 !important; color: var(--bd-akzent, #007C7C) !important; filter: none !important; }
+        .hdr-menu-btn:hover svg, .hdr-menu-btn[aria-expanded=true] svg { stroke: var(--bd-akzent, #007C7C) !important; color: var(--bd-akzent, #007C7C) !important; }
         .hdr-mobile-only { display: none !important; }
-        .hdr-menu-item:hover { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
-        .hdr-menu-item:hover svg { stroke: #007C7C !important; color: #007C7C !important; }
-        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F5F6F8 !important; color: #007C7C !important; filter: none !important; }
-        .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: #007C7C !important; color: #007C7C !important; }
+        .hdr-menu-item:hover { background: #F5F6F8 !important; color: var(--bd-akzent, #007C7C) !important; filter: none !important; }
+        .hdr-menu-item:hover svg { stroke: var(--bd-akzent, #007C7C) !important; color: var(--bd-akzent, #007C7C) !important; }
+        .hdr-icon-btn:hover, .hdr-icon-btn[aria-expanded=true], .hdr-icon-btn[aria-current=page] { background: #F5F6F8 !important; color: var(--bd-akzent, #007C7C) !important; filter: none !important; }
+        .hdr-icon-btn:hover svg, .hdr-icon-btn[aria-expanded=true] svg, .hdr-icon-btn[aria-current=page] svg { stroke: var(--bd-akzent, #007C7C) !important; color: var(--bd-akzent, #007C7C) !important; }
         @media (max-width: 767px) {
           .hdr-desktop { display: none !important; }
           .hdr-mobile-only { display: flex !important; }
