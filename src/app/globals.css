@@ -1075,14 +1075,23 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
    Funnel Sans mit Versal-Titeln, feine Ink-Linien, 10 px Rundung an Bildern, Pillen-Knöpfe.
    Alles unter .sl gekapselt, die echte Seite ist nicht betroffen. STIL-LABOR ENDE markiert den Schluss.
    ═══════════════════════════════════════════ */
-.sl { --sl-gelb: #FFF55B; --sl-ink: #121212; --sl-linie: rgba(18,18,18,.9); background: var(--sl-gelb); color: var(--sl-ink);
+/* Zwei Varianten über data-grund: gelb (Grund gelb, Hover und Band in Ink) und weiss (Grund weiss,
+   Gelb nur als Akzent: Band, Hover, Marker unter den Titeln, Logo-Marke). */
+.sl { --sl-gelb: #FFF55B; --sl-ink: #121212; --sl-grund: var(--sl-gelb); --sl-linie: rgba(18,18,18,.9);
+      --sl-hover-bg: var(--sl-ink); --sl-hover-fg: var(--sl-gelb); --sl-band-bg: var(--sl-ink); --sl-band-fg: var(--sl-gelb);
+      --sl-marke: transparent; background: var(--sl-grund); color: var(--sl-ink);
       min-height: 100vh; font-family: 'Funnel Sans', 'General Sans', 'Manrope', sans-serif; }
+.sl[data-grund=weiss] { --sl-grund: #FFFFFF; --sl-linie: rgba(18,18,18,.14); --sl-hover-bg: var(--sl-gelb); --sl-hover-fg: var(--sl-ink);
+      --sl-band-bg: var(--sl-gelb); --sl-band-fg: var(--sl-ink); --sl-marke: var(--sl-gelb); }
 .sl a { color: inherit; text-decoration: none; }
 .sl-rahmen { max-width: 1280px; margin: 0 auto; border-left: 1px solid var(--sl-linie); border-right: 1px solid var(--sl-linie); min-height: 100vh; }
 
 .sl-kopf { display: flex; align-items: center; gap: 28px; padding: 18px 28px; border-bottom: 1px solid var(--sl-linie);
-           position: sticky; top: 0; z-index: 20; background: var(--sl-gelb); }
+           position: sticky; top: 0; z-index: 20; background: var(--sl-grund); }
 .sl-logo { display: inline-flex; align-items: center; gap: 10px; }
+.sl-logo-marke { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--sl-marke); }
+.sl[data-grund=weiss] .sl-logo-marke { width: 54px; height: 54px; }
+.sl[data-grund=weiss] .sl-logo-marke svg { width: 40px; height: auto; }
 .sl-wort { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
 .sl-wort i { font-style: italic; }
 .sl-nav { display: flex; gap: 26px; margin-left: 12px; font-size: 15px; font-weight: 500; }
@@ -1120,7 +1129,7 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-hero-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* Laufband */
-.sl-band { background: var(--sl-ink); color: var(--sl-gelb); overflow: hidden; border-top: 1px solid var(--sl-linie); border-bottom: 1px solid var(--sl-linie); }
+.sl-band { background: var(--sl-band-bg); color: var(--sl-band-fg); overflow: hidden; border-top: 1px solid var(--sl-linie); border-bottom: 1px solid var(--sl-linie); }
 .sl-band-lauf { display: flex; width: max-content; animation: sl-lauf 38s linear infinite; }
 .sl-band-teil { display: inline-flex; align-items: center; padding: 14px 0; font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; white-space: nowrap; }
 @keyframes sl-lauf { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -1129,6 +1138,11 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-abschnitt:last-of-type { padding-bottom: 64px; }
 .sl-abschnitt-kopf { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding-bottom: 18px; margin-bottom: 26px; border-bottom: 1px solid var(--sl-linie); }
 .sl-h2 { margin: 0; font-size: clamp(24px, 3vw, 38px); font-weight: 600; line-height: 1.05; text-transform: uppercase; letter-spacing: -.005em; }
+/* Weiss-Variante: gelber Marker unter den Abschnittstiteln, die Trennlinie darunter bleibt kräftig */
+.sl[data-grund=weiss] .sl-h2 { display: inline; padding: 0 4px; background: linear-gradient(transparent 58%, var(--sl-gelb) 58%); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.sl[data-grund=weiss] .sl-abschnitt-kopf { border-bottom-color: var(--sl-ink); }
+.sl[data-grund=weiss] .sl-feld { background: #F5F6F8; border-color: transparent; }
+.sl[data-grund=weiss] .sl-knopf-weiss { background: var(--sl-gelb); border-color: var(--sl-gelb); }
 .sl-mehr, .sl-link { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; border-bottom: 2px solid var(--sl-ink); padding-bottom: 2px; white-space: nowrap; }
 .sl-mehr svg, .sl-link svg, .sl-reihe-pfeil, .sl-format-pfeil { transition: transform .25s ease; }
 .sl-mehr:hover svg { transform: translate(3px, -3px); }
@@ -1152,7 +1166,7 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-formate { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--sl-linie); border-radius: 10px; overflow: hidden; }
 .sl-format { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 22px 20px 24px; border-right: 1px solid var(--sl-linie); transition: background .25s ease, color .25s ease; }
 .sl-format:last-child { border-right: none; }
-.sl-format:hover { background: var(--sl-ink); color: var(--sl-gelb) !important; filter: none !important; }
+.sl-format:hover { background: var(--sl-hover-bg); color: var(--sl-hover-fg) !important; filter: none !important; }
 .sl-format-icon { width: 44px; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .sl-format-name { font-size: 19px; font-weight: 600; text-transform: uppercase; }
 .sl-format-sub { font-size: 14px; opacity: .75; }
@@ -1162,7 +1176,7 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 /* Liste */
 .sl-liste { border-top: 1px solid var(--sl-linie); margin-top: -26px; }
 .sl-reihe { display: flex; align-items: center; gap: 18px; padding: 14px 8px; border-bottom: 1px solid var(--sl-linie); transition: background .25s ease, color .25s ease, padding .25s ease; }
-.sl-reihe:hover { background: var(--sl-ink); color: var(--sl-gelb) !important; padding-left: 18px; filter: none !important; }
+.sl-reihe:hover { background: var(--sl-hover-bg); color: var(--sl-hover-fg) !important; padding-left: 18px; filter: none !important; }
 .sl-reihe img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
 .sl-reihe-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .sl-reihe-titel { font-size: 18px; font-weight: 600; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1178,6 +1192,10 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-fuss-satz { margin: 0; font-size: clamp(22px, 3vw, 34px); font-weight: 600; text-transform: uppercase; line-height: 1.1; }
 .sl-fuss-klein { margin: 0; font-size: 14px; color: rgba(255,255,255,.65); }
 
+/* Umschalter der Varianten, nur auf der Stilseite */
+.sl-schalter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 28px; border-bottom: 1px dashed var(--sl-linie); font-size: 13px; font-weight: 600; }
+.sl-schalter button { font: inherit; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--sl-ink); background: transparent; color: var(--sl-ink); cursor: pointer; }
+.sl-schalter button[aria-pressed=true] { background: var(--sl-ink); color: var(--sl-gelb); }
 /* Einblenden beim Scrollen */
 .sl-auf { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.1,1); }
 .sl-auf.sl-da { opacity: 1; transform: none; }
@@ -1186,7 +1204,12 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
   .sl-nav, .sl-nur-breit { display: none; }
   .sl-kopf { padding: 14px 16px; gap: 12px; }
   .sl-kopf-cta { width: 42px; height: 42px; padding: 0; }
-  .sl-wort { font-size: 24px; }
+  .sl-wort { font-size: 21px; }
+  .sl-kopf-rechts { flex-shrink: 0; }
+  .sl[data-grund=weiss] .sl-logo-marke { width: 46px; height: 46px; }
+  .sl[data-grund=weiss] .sl-logo-marke svg { width: 34px; }
+  .sl-abschnitt-kopf { flex-wrap: wrap; }
+  .sl-schalter { padding: 8px 16px; }
   .sl-hero { margin: 16px; min-height: 420px; }
   .sl-hero-text { padding: 26px 22px; }
   .sl-abschnitt { padding: 40px 16px 0; }

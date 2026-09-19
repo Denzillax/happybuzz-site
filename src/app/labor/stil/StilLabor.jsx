@@ -48,7 +48,14 @@ function Karte({ l }) {
 
 export default function StilLabor() {
   const [inserate, setInserate] = useState([]);
+  // Variante: "weiss" = weisser Grund mit gelben Akzenten, "gelb" = vollflächig gelb. Steht auch in der Adresse (?grund=).
+  const [grund, setGrund] = useState("weiss");
   const wurzel = useRef(null);
+
+  useEffect(() => {
+    try { const g = new URLSearchParams(window.location.search).get("grund"); if (g === "gelb" || g === "weiss") setGrund(g); } catch {}
+  }, []);
+  const waehle = (g) => { setGrund(g); try { window.history.replaceState(null, "", `${window.location.pathname}?grund=${g}`); } catch {} };
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -80,11 +87,16 @@ export default function StilLabor() {
   const band = ["Kaufen", "Bieten", "Mieten", "Buchen", "Verschenken", "20 % der Gebühr für Bienenschutz"];
 
   return (
-    <div className="sl" ref={wurzel}>
+    <div className="sl" data-grund={grund} ref={wurzel}>
       <div className="sl-rahmen">
+        <div className="sl-schalter">
+          <span>Variante</span>
+          <button type="button" className="kein-akzent" aria-pressed={grund === "weiss"} onClick={() => waehle("weiss")}>Weiss mit Gelb</button>
+          <button type="button" className="kein-akzent" aria-pressed={grund === "gelb"} onClick={() => waehle("gelb")}>Ganz gelb</button>
+        </div>
         <header className="sl-kopf">
           <Link href="/labor/stil" className="sl-logo" aria-label="BEEDARO">
-            <BeeLogo size={46} />
+            <span className="sl-logo-marke"><BeeLogo size={46} /></span>
             <span className="sl-wort">BEE<i>DARO</i></span>
           </Link>
           <nav className="sl-nav" aria-label="Hauptnavigation">
@@ -122,7 +134,7 @@ export default function StilLabor() {
           <div className="sl-band-lauf">
             {[0, 1].map((k) => (
               <span key={k} className="sl-band-teil">
-                {band.map((t) => <span key={t}>{t}<BeeLogo size={22} style={{ color: "#FFF55B", display: "inline-block", margin: "0 28px", verticalAlign: "-3px" }} title="" /></span>)}
+                {band.map((t) => <span key={t}>{t}<BeeLogo size={22} style={{ color: "inherit", display: "inline-block", margin: "0 28px", verticalAlign: "-3px" }} title="" /></span>)}
               </span>
             ))}
           </div>
