@@ -1379,7 +1379,10 @@ body:has(.sl) { background: #121212; }
 .wl .wl-knopf-linie { background: #fff; color: var(--wl-ink); }
 .wl .wl-knopf-linie:hover { background: var(--wl-ink); color: #fff; }
 
-.wl-hero { max-width: 1720px; margin: 0 auto; padding: 72px 40px 56px; }
+/* Hero und Fuss liegen ÜBER dem Pixelfeld (das bei der Seitenexplosion über die ganze Seite geht): Die Schrift steht
+   immer vor den Kacheln. Vorher malten die Kacheln mit ihren Fugen über die dünne Hero-Schrift, sie wirkte zerhackt. */
+.wl-hero { max-width: 1720px; margin: 0 auto; padding: 72px 40px 56px; position: relative; z-index: 1; }
+.wl-fuss { position: relative; z-index: 1; }
 .wl-h1 { margin: 0; font-size: clamp(40px, 7.4vw, 124px); font-weight: 300; line-height: .98; letter-spacing: -.035em; text-transform: uppercase; }
 .wl-zeile { display: block; overflow: hidden; padding-bottom: .06em; }
 .wl-zeile > span { display: block; animation: wl-hoch 1s cubic-bezier(.2,.7,.1,1) both; }

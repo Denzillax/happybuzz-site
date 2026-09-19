@@ -22,7 +22,8 @@
 // über die ganze Seite, auch über Hero und Fuss, mehrere Explosionen zünden quer übers Bild, und die Inhalte
 // werden vom Knall weggeschleudert und federn zurück (Klasse wl-spreng, Richtung pro Element als CSS-Variablen).
 // Laufschrift: Im Element .wl-laufband läuft ein Text (data-text) als Pixelschrift durch das Feld. Er ist Wärme,
-// flimmert also zwischen den heissen Farbbändern.
+// flimmert also zwischen den heissen Farbbändern. Beim Scrollen wirft er einen Schatten in Scrollrichtung, der
+// Zeiger schiebt die Buchstaben zur Seite, Explosionen drücken sie an der Wellenfront weg.
 // Texte bleiben mit ausgefranstem Rand frei. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
 // Ohne echte Maus steht nur die Landschaft (ruhig animiert), mit "Bewegung reduzieren" steht sie still.
 import { useEffect, useRef } from "react";
@@ -94,6 +95,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
+    let schatten = 0, letztesSy = null; // Schatten der Laufschrift: folgt dem Scrolltempo und klingt aus
     let ueberallBis = 0, lauf = null, laufX = 0; // ueberallBis: bis wann das Feld die ganze Seite bedecken darf. lauf: Laufschrift
     let karte = null, karteDavor = null, karteSeit = 0, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
 
@@ -241,6 +243,7 @@ export default function PixelFeld({ ursprung }) {
         }
         wellen = wellen.filter((w) => {
           const r = ((jetzt - w.t) / 1000) * (24 + w.kraft * 20), rand = Math.ceil(r) + 1;
+          w.r = r; // aktueller Radius, die Laufschrift weicht der Wellenfront aus
           if (r < 0) return true;
           if (r > w.weite) return false;
           // Gefüllte Scheibe wie bei wild, kein leerer Ring (Denis 19.09.): innen am heissesten, nach aussen kühler.
@@ -289,15 +292,39 @@ export default function PixelFeld({ ursprung }) {
       // Laufschrift: der gerasterte Text wandert durch die Spalten und wird als Wärme gestempelt
       if (lauf && lauf.mitte > sy - 120 && lauf.mitte < sy + H + 120) {
         if (!ruhig) laufX += 0.35;
+        // Schatten beim Scrollen: Er hängt dem Text in Scrollrichtung nach, je schneller, desto weiter, und klingt aus
+        const tempo = letztesSy === null ? 0 : (sy - letztesSy) / Z;
+        schatten += (Math.max(-9, Math.min(9, tempo * 0.9)) - schatten) * 0.18;
+        const wurf = Math.abs(schatten) > 0.4 ? Math.round(schatten) : 0;
         const r0l = zelle(0, lauf.mitte)[1] - Math.floor(lauf.hoch / 2), so = Math.floor(laufX);
-        for (let c = Math.floor(sx / Z); c <= (sx + B) / Z; c += 1) {
+        const [mcx, mcy] = zelle(maus.x, maus.y), rest = ueberallBis ? Math.max(0, (ueberallBis - jetzt) / 2600) : 0;
+        for (let c = Math.floor(sx / Z) - 8; c <= (sx + B) / Z + 8; c += 1) {
           const mc = (((so + c) % lauf.breit) + lauf.breit) % lauf.breit;
           for (let r = 0; r < lauf.hoch; r += 1) {
-            if (lauf.daten[(r * lauf.breit + mc) * 4 + 3] > 90) heiss(c, r0l + r, 0.84 + 0.13 * Math.sin(c * 0.6 + r * 0.6 - t * 5));
+            if (lauf.daten[(r * lauf.breit + mc) * 4 + 3] <= 90) continue;
+            const rr = r0l + r;
+            let ox = 0, oy2 = 0;
+            // Der Zeiger schiebt die Buchstaben zur Seite
+            if (fein && maus.imRaster) {
+              const dx = c - mcx, dy = rr - mcy, d = Math.hypot(dx, dy);
+              if (d < 9 && d > 0.01) { const k = (1 - d / 9) * 5; ox += (dx / d) * k; oy2 += (dy / d) * k; }
+            }
+            // Jede Explosion drückt die Buchstaben an ihrer Wellenfront nach aussen
+            for (const w of wellen) {
+              if (!(w.r > 0)) continue;
+              const dx = c - w.cx, dy = rr - w.cy, d = Math.hypot(dx, dy), ab = Math.abs(d - w.r);
+              if (ab < 6 && d > 0.01) { const k = (1 - ab / 6) * (3 + w.kraft * 5); ox += (dx / d) * k; oy2 += (dy / d) * k; }
+            }
+            // Seitenexplosion: die Schrift zerstiebt und setzt sich wieder
+            if (rest > 0) { ox += (streu(c + bild, rr) - 0.5) * rest * 14; oy2 += (streu(c, rr + bild) - 0.5) * rest * 14; }
+            const zc = Math.round(c + ox), zr = Math.round(rr + oy2);
+            heiss(zc, zr, 0.84 + 0.13 * Math.sin(c * 0.6 + r * 0.6 - t * 5));
+            if (wurf) { heiss(zc + 1, zr + wurf, 0.36); if (Math.abs(wurf) > 2) heiss(zc + 1, zr + Math.round(wurf / 2), 0.5); }
           }
         }
       }
 
+      letztesSy = sy;
       // Wärme verglüht schnell (kurze Spur), Löcher der Explosion wachsen zu
       for (const [k, w] of waerme) { const n = w * 0.88; if (n < 0.01) waerme.delete(k); else waerme.set(k, n); }
       loecher = loecher.filter((l) => jetzt - l.t < l.dauer);
@@ -408,7 +435,8 @@ export default function PixelFeld({ ursprung }) {
         const wucht = 60 + 9000 / d; // nah am Knall fliegt es weiter
         el.style.setProperty("--sx", ((mx / d) * wucht).toFixed(0) + "px");
         el.style.setProperty("--sy", ((my / d) * wucht - 20).toFixed(0) + "px");
-        el.style.setProperty("--sr", ((Math.random() - 0.5) * 26).toFixed(1) + "deg");
+        // Hero-Zeilen ohne Drehung: Gedrehte dünne Schrift wird beim Bewegen dünn und gezackt gerendert
+        el.style.setProperty("--sr", el.classList.contains("wl-zeile") ? "0deg" : ((Math.random() - 0.5) * 26).toFixed(1) + "deg");
         el.classList.remove("wl-spreng"); void el.offsetWidth; el.classList.add("wl-spreng");
         setTimeout(() => el.classList.remove("wl-spreng"), 1300);
       });
