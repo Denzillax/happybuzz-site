@@ -11,6 +11,7 @@ import { ArrowUpRight, Plus, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import BLogo from "@/components/shared/BLogo";
+import PixelFeld from "./PixelFeld";
 
 const SCHRIFT = "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
@@ -40,7 +41,7 @@ function PixelBand() {
     const Z = 16, REIHEN = 9;
     let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0;
     // Palette von wild: Blau und Gelb tragen, dazu Orangerot, Lime und Navy
-    const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#F5C518" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
+    const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#FBF062" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
     const bauen = () => {
       B = cv.parentElement.clientWidth;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -137,6 +138,7 @@ export default function WildLabor() {
 
   return (
     <div className="wl" ref={wurzel}>
+      <PixelFeld ursprung=".wl-raster-grund" />
       <header className="wl-kopf">
         <Link href="/labor/wild" className="wl-logo" aria-label="BEEDARO">
           <span className="wl-logo-marke"><BLogo size={36} title="" /></span>

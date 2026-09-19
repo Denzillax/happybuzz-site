@@ -1341,7 +1341,7 @@ body:has(.sl) { background: #121212; }
    ═══════════════════════════════════════════ */
 /* Farben von craft.wild.as übernommen (Denis 19.09.: nicht nur Schwarz-Weiss): Gelb, Blau, Violett, Lime,
    Orangerot, Navy. Jedes der fünf Formate hat eine davon (wl-typ-*). */
-.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #8B8B8B; --wl-gelb: #F5C518; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
+.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #8B8B8B; --wl-gelb: #FBF062; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
       --wl-lime: #D8FF00; --wl-rot: #E0492A; --wl-navy: #1C2541; --wl-linie: #E6E6E6; background: #fff; color: var(--wl-ink);
       min-height: 100vh; font-family: 'Geist', 'General Sans', 'Manrope', sans-serif; font-weight: 400; overflow-x: clip; }
 .wl a { color: inherit; text-decoration: none; }
@@ -1356,7 +1356,7 @@ body:has(.sl) { background: #121212; }
 
 .wl-kopf { display: flex; align-items: center; gap: 28px; padding: 16px 40px; position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--wl-linie); }
 .wl-logo { display: inline-flex; align-items: center; gap: 10px; }
-/* Logo frei auf Weiss, ohne Kachel (Denis 19.09.). Dafür das kräftigere Gelb von wild, das blasse Zitronengelb trüge auf Weiss nicht. */
+/* Logo frei auf Weiss, ohne Kachel, in der Zitronenfarbe aus Denis' Logodatei (#FBF062) */
 .wl-logo-marke { color: var(--wl-gelb); display: inline-flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
 .wl-logo:hover .wl-logo-marke { transform: rotate(-90deg); }
 .wl-logo:hover { filter: none !important; }
@@ -1391,8 +1391,17 @@ body:has(.sl) { background: #121212; }
 /* Karopapier: zwei feine Linienraster übereinander */
 .wl-raster-grund { border-top: 1px solid var(--wl-linie);
   background-image: linear-gradient(#EFEFEF 1px, transparent 1px), linear-gradient(90deg, #EFEFEF 1px, transparent 1px);
-  background-size: 16px 16px; background-position: -1px -1px; background-color: #FCFCFC; }
+  background-size: 16px 16px; background-position: -1px -1px; }
 .wl-pixel { display: block; }
+/* Pixelfeld unter dem Mauszeiger: liegt über der ganzen Seite, fängt keine Klicks ab. multiply lässt Text und Fotos lesbar. */
+.wl-feld { position: fixed; left: 0; top: 0; z-index: 40; pointer-events: none; mix-blend-mode: multiply; }
+/* Gestufte Pixel-Ecken statt Rundung, wie aus dem Raster geschnitten */
+.wl-knopf, .wl-rund, .wl-herz, .wl-mehr { border-radius: 0 !important; --e: 4px;
+  clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
+    calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
+.wl-bild { --e: 8px; border-radius: 0 !important;
+  clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
+    calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
 
 .wl-abschnitt { max-width: 1720px; margin: 0 auto; padding: 72px 40px 0; }
 .wl-abschnitt-kopf { display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; align-items: end; margin-bottom: 36px; }
@@ -1408,6 +1417,8 @@ body:has(.sl) { background: #121212; }
 .wl-bild { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: #EFEFEF; }
 .wl-bild img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.2,.7,.1,1); }
 .wl-karte:hover .wl-bild img { transform: scale(1.05); }
+.wl-karte { transition: transform .35s cubic-bezier(.2,.7,.1,1); }
+.wl .wl-karte.wl-da:hover { transform: translateY(-4px); transition-delay: 0s !important; }
 /* Reiter in der Bildecke, wie "View full site" bei wild: weisse Lasche mit Mono-Schrift */
 .wl-reiter { position: absolute; right: 0; bottom: 0; display: inline-flex; align-items: center; gap: 6px; padding: 9px 12px 8px 14px; background: #fff; border-top-left-radius: 6px;
              font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; transform: translateY(100%); transition: transform .3s cubic-bezier(.2,.7,.1,1); }
