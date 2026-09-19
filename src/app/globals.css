@@ -1208,6 +1208,9 @@ html.bd-pastell .lc-typ-rent { background: #c4e2ff !important; color: #191615 !i
 html.bd-pastell .lc-typ-free { background: #c6f1db !important; color: #191615 !important; }
 html.bd-pastell .lc-typ-service { background: #ffd8d9 !important; color: #191615 !important; }
 html.bd-pastell .bh-suche { border-color: #E5E8EC; }
+html.bd-pastell .chal-box.chal-box.chal-box { background: #d8c4ff !important; border-color: #d8c4ff !important; box-shadow: none !important; }
+html.bd-pastell .chal-box .chal-sheen { display: none; }
+html.bd-pastell .chal-box [style*="color:#5B626C" i], html.bd-pastell .chal-box [style*="color: rgb(91, 98, 108)" i], html.bd-pastell .chal-box [style*="color:#686E78" i], html.bd-pastell .chal-box [style*="color: rgb(104, 110, 120)" i] { color: #34343B !important; }
 html.bd-pastell { --bd-akzent: #191615; }
 html.bd-pastell header { --bd-akzent: #007C7C; }
 /* PASTELL ENDE */
