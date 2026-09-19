@@ -967,3 +967,72 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
   filter: none !important; background: #F7CB57 !important;
 }
 
+
+/* ═══════════════════════════════════════════
+   BAENDER-HERO (Prototyp, Denis 19.09.2026). Komponente: src/components/home/BandHero.jsx,
+   Test-Route /labor/hero. Rahmen aus vier Laufbändern mit echten Inseraten, in der Mitte
+   Hauptsatz und Suche. Abstand sitzt als margin an der Kachel (nicht als gap), damit die
+   Schleife bei genau -50 % nahtlos schliesst.
+   ═══════════════════════════════════════════ */
+.bh { --bh-k: 132px; --bh-l: 8px; max-width: 1280px; margin: 0 auto; padding: 16px 24px 0; }
+.bh-band { overflow: hidden; border-radius: 12px; }
+.bh-waag { width: 100%; height: var(--bh-k); }
+.bh-senk { width: var(--bh-k); height: calc(var(--bh-k) * 2 + var(--bh-l)); flex-shrink: 0; }
+.bh-lauf { display: flex; width: max-content; will-change: transform; }
+.bh-senk .bh-lauf { flex-direction: column; width: auto; height: max-content; }
+.bh-mitte { display: flex; gap: var(--bh-l); margin: var(--bh-l) 0; align-items: stretch; }
+
+.bh-k { position: relative; display: block; width: var(--bh-k); height: var(--bh-k); flex: 0 0 auto; margin-right: var(--bh-l);
+        border-radius: 12px; overflow: hidden; background: #F1F3F5; text-decoration: none; }
+.bh-senk .bh-k { margin-right: 0; margin-bottom: var(--bh-l); }
+.bh-k img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bh-k:hover { filter: none !important; }
+.bh-leer { display: block; width: 100%; height: 100%; }
+
+/* Beim Überfahren deckt eine Honigfläche das Foto ab: oben das Format, unten der Preis */
+.bh-deck { position: absolute; inset: 0; background: #F4C03F; color: #191615; display: flex; flex-direction: column;
+           justify-content: space-between; padding: 12px 13px; opacity: 0; transition: opacity .16s ease;
+           font-size: 13px; font-weight: 700; line-height: 1.2; }
+.bh-k:hover .bh-deck, .bh-k:focus-visible .bh-deck { opacity: 1; }
+.bh-preis { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.bh-text { display: flex; align-items: flex-start; padding: 13px 14px; font-family: 'General Sans', 'Manrope', sans-serif;
+           font-size: 17px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
+.bh-honig { background: #F4C03F; color: #191615; }
+.bh-teal { background: #007C7C; color: #fff; }
+
+.bh-feld { flex: 1; min-width: 0; border-radius: 12px; background: #E9F6F5; display: flex; flex-direction: column;
+           align-items: center; justify-content: center; text-align: center; padding: 20px 28px; }
+.bh-satz { font-family: 'General Sans', 'Manrope', sans-serif; font-size: clamp(26px, 3.4vw, 40px); font-weight: 700;
+           letter-spacing: -.02em; line-height: 1.08; color: #191615; margin: 0; }
+.bh-unter { font-size: 15px; color: #5B626C; margin: 10px 0 18px; max-width: 520px; }
+.bh-suche { display: flex; align-items: center; width: 100%; max-width: 520px; height: 50px; background: #fff;
+            border: 2px solid #F4C03F; border-radius: 999px; overflow: hidden; }
+.bh-lupe { margin-left: 16px; color: #7D848E; flex-shrink: 0; }
+.bh-suche input { flex: 1; min-width: 0; height: 100%; border: none !important; outline: none; background: transparent;
+                  padding: 0 12px; font-size: 15px; font-family: inherit; color: #191615; }
+.bh-los { align-self: stretch; padding: 0 22px; border: none; background: #F4C03F; color: #191615; font-weight: 800;
+          font-size: 14.5px; font-family: inherit; cursor: pointer; }
+.bh-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+.bh-cta { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 10px 18px; font-size: 14px;
+          font-weight: 700; text-decoration: none; color: #191615; }
+.bh-cta-honig { background: #F4C03F; }
+.bh-cta-hell { background: #fff; }
+
+@keyframes bh-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes bh-y { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+.bh-waag-links  { animation: bh-x 70s linear infinite; }
+.bh-waag-rechts { animation: bh-x 70s linear infinite reverse; }
+.bh-senk-runter { animation: bh-y 38s linear infinite reverse; }
+.bh-senk-hoch   { animation: bh-y 38s linear infinite; }
+.bh-band:hover .bh-lauf { animation-play-state: paused; }
+
+@media (max-width: 860px) {
+  .bh { --bh-k: 96px; padding: 12px 16px 0; }
+  .bh-senk { display: none; }
+  .bh-feld { padding: 22px 16px; }
+  .bh-unter { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bh-lauf { animation: none !important; }
+}
