@@ -39,7 +39,7 @@ function PixelBand() {
     const ctx = cv.getContext("2d");
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const Z = 16, REIHEN = 9;
-    let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0;
+    let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0, mausSpalte = -99, mausNah = 0;
     // Palette von wild: Blau und Gelb tragen, dazu Orangerot, Lime und Navy
     const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#FBF062" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
     const bauen = () => {
@@ -65,17 +65,30 @@ function PixelBand() {
     };
     const takt = () => {
       zeit += 1;
-      for (const s of spalten) s.h += (s.ziel - s.h) * 0.04;
+      // Das Mosaik streckt sich zum Zeiger hin: Spalten in seiner Nähe wachsen nach unten
+      spalten.forEach((s, i) => {
+        const d = Math.abs(i - mausSpalte), zug = d < 7 ? (1 - d / 7) * 5 * mausNah : 0;
+        s.h += (s.ziel + zug - s.h) * 0.07;
+      });
       malen();
       raf = sichtbar ? requestAnimationFrame(takt) : 0;
     };
+    const zeiger = (e) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      const r = cv.getBoundingClientRect();
+      const zoom = r.width ? r.width / B : 1; // body-Zoom herausrechnen
+      mausSpalte = Math.floor((e.clientX - r.left) / zoom / Z);
+      const ab = (e.clientY - r.bottom) / zoom; // Abstand unter dem Mosaik
+      mausNah = ab < -REIHEN * Z ? 0 : Math.max(0, 1 - Math.max(0, ab) / 260);
+    };
+    if (!ruhig) window.addEventListener("pointermove", zeiger, { passive: true });
     bauen();
     if (ruhig) { spalten.forEach((s) => { s.h = s.ziel; }); malen(); }
     const io = new IntersectionObserver((es) => { sichtbar = es[0].isIntersecting; if (sichtbar && !raf && !ruhig) raf = requestAnimationFrame(takt); });
     io.observe(cv);
     const ro = new ResizeObserver(() => { bauen(); if (ruhig) { spalten.forEach((s) => { s.h = s.ziel; }); malen(); } });
     ro.observe(cv.parentElement);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); window.removeEventListener("pointermove", zeiger); };
   }, []);
   return <canvas ref={ref} className="wl-pixel" aria-hidden="true" />;
 }
@@ -93,7 +106,7 @@ function Herz({ id }) {
 
 function Karte({ l }) {
   return (
-    <Link href={`/listing/${l.id}`} className="wl-karte wl-auf">
+    <Link href={`/listing/${l.id}`} className="wl-karte wl-auf" data-typ={l.listing_type}>
       <span className="wl-bild">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={getCoverUrl(l)} alt="" loading="lazy" />
