@@ -97,6 +97,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
+    let satz = []; // Hauptsatz zum Entschlüsseln: gerasterte Zeilen, die beim Laden zuerst als Kacheln erscheinen
     let schatten = 0, letztesSy = null; // Schatten der Laufschrift: folgt dem Scrolltempo und klingt aus
     let ueberallBis = 0, lauf = null, laufX = 0; // ueberallBis: bis wann das Feld die ganze Seite bedecken darf. lauf: Laufschrift
     let karte = null, karteDavor = null, karteSeit = 0, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
@@ -109,6 +110,20 @@ export default function PixelFeld({ ursprung }) {
     const vermessen = () => {
       if (!grund) return;
       titel = [...grund.querySelectorAll(".wl-h2")].map((el) => ({ ...seitenRect(el), wort: el.dataset.wort || "" }));
+      // Hauptsatz entschlüsseln (data-entschluesseln): jede Zeile einmal in Kachelauflösung rastern
+      const hs = grund.querySelector("[data-entschluesseln]");
+      if (hs && !satz.length && performance.now() - start < 2200) {
+        const stil = getComputedStyle(hs), gross = parseFloat(stil.fontSize) / Z;
+        satz = [...hs.querySelectorAll(".wl-zeile")].map((el) => {
+          const r = seitenRect(el), text = (el.textContent || "").toUpperCase();
+          const b = Math.max(4, Math.ceil((r.r - r.l) / Z) + 2), h = Math.max(3, Math.ceil((r.b - r.t) / Z));
+          const m = document.createElement("canvas"); m.width = b; m.height = h;
+          const mx = m.getContext("2d");
+          mx.font = `500 ${gross}px Geist, Arial, sans-serif`; mx.textBaseline = "middle"; mx.fillStyle = "#000";
+          mx.fillText(text, 0, h / 2);
+          return { x: r.l, y: r.t, b, h, daten: mx.getImageData(0, 0, b, h).data };
+        });
+      }
       const lb = grund.querySelector(".wl-laufband");
       if (lb) {
         const r = seitenRect(lb), text = lb.dataset.text || "";
@@ -305,6 +320,19 @@ export default function PixelFeld({ ursprung }) {
         } else biene.an = false;
       }
 
+      // Hauptsatz entschlüsseln: In den ersten 1,1 s steht der Satz als Kacheln da (sie streuen herein), dann übernimmt
+      // die echte Schrift (ihre Einblendung ist in globals.css entsprechend verzögert) und die Kacheln verglühen.
+      const seitStart = (jetzt - start) / 1000;
+      if (!ruhig && seitStart < 1.1 && satz.length) {
+        const dichte = Math.min(1, seitStart / 0.45);
+        for (const z of satz) {
+          const [c0s, r0s] = zelle(z.x, z.y);
+          for (let r = 0; r < z.h; r += 1) for (let c = 0; c < z.b; c += 1) {
+            if (z.daten[(r * z.b + c) * 4 + 3] > 80 && streu(c * 1.9 + 3.3, r * 2.3 + 7.1) < dichte) heiss(c0s + c, r0s + r, 0.8 + 0.1 * Math.sin(c * 0.7 + r * 0.7 - t * 6));
+          }
+        }
+      }
+
       // Laufschrift: der gerasterte Text wandert durch die Spalten und wird als Wärme gestempelt
       if (lauf && lauf.mitte > sy - 120 && lauf.mitte < sy + H + 120) {
         if (!ruhig) laufX += 0.35;
@@ -467,6 +495,14 @@ export default function PixelFeld({ ursprung }) {
         setTimeout(() => el.classList.remove("wl-spreng"), 1300);
       });
     };
+    // Impuls von der Seite (Suchfeld im Hero): Wärme an einer Bildschirmposition auftragen
+    const stoss = (e) => {
+      if (ruhig) return;
+      const x = (e.detail.x + window.scrollX) / zoom, y = (e.detail.y + window.scrollY) / zoom, k = e.detail.staerke || 0.4;
+      auftragen(x, y, 0.5 + k * 0.5, 2 + k * 6);
+      if (k >= 1) { const [cx, cy] = zelle(x, y); wellen.push({ x, y, cx, cy, t: performance.now(), ch: 0.45, kraft: 1.1, weite: 520, r: 0 }); }
+    };
+    window.addEventListener("wl-impuls", stoss);
     const raus = () => { maus.imRaster = false; maus.lx = null; karte = null; form = null; };
 
     messen();
@@ -492,7 +528,7 @@ export default function PixelFeld({ ursprung }) {
       window.removeEventListener("pointermove", zeiger); window.removeEventListener("pointerdown", runter);
       window.removeEventListener("pointerup", hoch); window.removeEventListener("pointercancel", hoch);
       document.documentElement.removeEventListener("mouseleave", raus);
-      window.removeEventListener("resize", neu); window.removeEventListener("scroll", rollen);
+      window.removeEventListener("resize", neu); window.removeEventListener("scroll", rollen); window.removeEventListener("wl-impuls", stoss);
     };
   }, [ursprung]);
 

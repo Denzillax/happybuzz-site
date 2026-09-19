@@ -1522,4 +1522,87 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-zeile > span, .wl-herz-an { animation: none !important; }
   .wl-auf { opacity: 1; transform: none; transition: none; }
 }
+/* ── Frontseite, zweiter Ausbau (19.09.2026): Hero mit Suche und wechselndem Inserat, Endet bald, Kategorien,
+   Gebühren, So funktioniert es, Gerade passiert. Neue Abschnitte bewegen sich einmal beim Hereinscrollen und stehen dann. ── */
+.wl-hero-unten { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: start; }
+.wl-hero-links { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; min-width: 0; }
+.wl-hero-links .wl-text { margin: 0; }
+/* Der Hauptsatz erscheint zuerst als Kacheln im Pixelfeld, die echte Schrift fährt erst danach hoch */
+.wl-h1[data-entschluesseln] .wl-zeile > span { animation-delay: .95s; }
+.wl-h1[data-entschluesseln] .wl-zeile:nth-child(2) > span { animation-delay: 1.05s; }
+.wl-suche { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 560px; height: 60px; padding: 0 8px 0 18px; background: #fff; border: 1px solid var(--wl-ink);
+            --e: 6px; clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
+              calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
+.wl-suche input { flex: 1; min-width: 0; height: 100%; border: none !important; outline: none; background: transparent; font: inherit; font-size: 18px; color: var(--wl-ink); box-shadow: none !important; border-radius: 0 !important; }
+.wl-suche input::placeholder { color: var(--wl-leise); }
+.wl-suche .wl-knopf { height: 44px; }
+.wl-zahlen { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 4px 0 0; color: var(--wl-grau); }
+.wl-zahlen span::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; background: var(--wl-ink); }
+
+.wl-wechsel { display: flex; flex-direction: column; background: #fff; max-width: 440px; justify-self: end; width: 100%; }
+.wl-wechsel:hover { filter: none !important; }
+.wl-wechsel-leer { aspect-ratio: 4 / 5; background: #EFEFEF; }
+.wl-wechsel-bild { position: relative; display: block; aspect-ratio: 4 / 4.4; overflow: hidden; background: #EFEFEF; --e: 10px;
+  clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
+    calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
+.wl-wechsel-bild img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.2,.7,.1,1); }
+.wl-wechsel:hover .wl-wechsel-bild img { transform: scale(1.04); }
+.wl-wechsel-bild canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.wl-wechsel:hover .wl-reiter { transform: none; }
+.wl-wechsel-text { display: flex; flex-direction: column; padding: 0 10px 12px; }
+
+/* Endet bald: Karte mit Restzeit und Pixelbalken, der Textblock ist dafür höher (bleibt ein Vielfaches von 10 px) */
+.wl-karten-hoch .wl-textblock { height: 160px; }
+.wl-rest { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; min-height: 34px; }
+.wl-rest-zeit { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .06em; color: var(--wl-rot); font-variant-numeric: tabular-nums; }
+.wl-rest-balken { display: grid; grid-template-columns: repeat(20, 1fr); gap: 1px; height: 8px; }
+.wl-rest-balken i { background: #E9E9E9; transition: background .4s ease; }
+.wl-rest-balken i.an { background: var(--wl-rot); }
+
+.wl-kategorien { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--wl-ink); border-left: 1px solid var(--wl-linie); background: rgba(255,255,255,.6); }
+.wl-kategorie { display: flex; align-items: baseline; gap: 12px; padding: 18px 16px; border-right: 1px solid var(--wl-linie); border-bottom: 1px solid var(--wl-linie); transition: background .2s ease; }
+.wl-kategorie:hover { background: var(--wl-gelb); filter: none !important; }
+.wl-kategorie:hover .wl-format-nr { color: var(--wl-ink); }
+.wl-kategorie:hover .wl-format-pfeil { transform: translate(3px, -3px); }
+.wl-kategorie-name { flex: 1; min-width: 0; font-size: 17px; font-weight: 500; letter-spacing: -.01em; }
+.wl-kategorie .wl-format-pfeil { align-self: center; }
+
+.wl-gebuehren { display: grid; gap: 28px; background: rgba(255,255,255,.6); }
+.wl-gebuehr { display: flex; flex-direction: column; gap: 10px; }
+.wl-gebuehr-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 17px; }
+.wl-gebuehr-kopf strong { font-size: clamp(24px, 2.6vw, 38px); font-weight: 300; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.wl-gebuehr-fuss { font-size: 14.5px; color: var(--wl-grau); }
+.wl-balken { display: grid; grid-template-columns: repeat(40, 1fr); gap: 2px; height: 22px; }
+.wl-balken i { background: #ECECEC; }
+/* füllt sich einmal, wenn der Abschnitt ins Bild kommt (die Verzögerung pro Kachel steht inline) */
+.wl-balken i.an { opacity: .08; transition: opacity .25s ease; }
+.wl-auf.wl-da .wl-balken i.an { opacity: 1; }
+
+.wl-schritt { cursor: default; }
+.wl-schritt:hover { background: transparent; padding-left: 8px; }
+.wl-schritt .wl-format-sub { max-width: 46em; }
+
+.wl-protokoll { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--wl-ink); background: rgba(255,255,255,.6); }
+.wl-protokoll li { border-bottom: 1px solid var(--wl-linie); }
+.wl-protokoll a { display: grid; grid-template-columns: 96px 64px minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 13px 8px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .02em; transition: background .2s ease; }
+.wl-protokoll a:hover { background: var(--wl-gelb); filter: none !important; }
+.wl-protokoll-zeit { color: var(--wl-leise); }
+.wl-protokoll-art { text-transform: uppercase; letter-spacing: .14em; font-size: 10.5px; }
+.wl-protokoll-gebot { color: var(--wl-blau); }
+.wl-protokoll-neu { color: var(--wl-rot); }
+.wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Geist', sans-serif; font-size: 15.5px; letter-spacing: 0; }
+
+@media (max-width: 900px) {
+  .wl-hero-unten { grid-template-columns: minmax(0, 1fr); }
+  .wl-wechsel { justify-self: start; max-width: 100%; }
+  .wl-suche { height: 54px; }
+  .wl-suche input { font-size: 16px; }
+  .wl-kategorien { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wl-kategorie { padding: 14px 10px; gap: 8px; }
+  .wl-kategorie-name { font-size: 15px; }
+  .wl-karten-hoch .wl-textblock { height: 150px; }
+  .wl-balken { height: 16px; gap: 1px; }
+  .wl-protokoll a { grid-template-columns: 78px minmax(0, 1fr); }
+  .wl-protokoll-art { display: none; }
+}
 /* WILD-LABOR ENDE */
