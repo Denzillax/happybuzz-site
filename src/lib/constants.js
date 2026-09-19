@@ -185,3 +185,14 @@ export const PAYMENT_METHODS = [
 // profiles: display_name (NICHT full_name)
 // favorites: user_id + listing_id (KEIN id-Feld)
 // FK hint: profiles!listings_user_id_fkey
+
+// Farbe pro Inserattyp: bg = Fläche, fg = Schrift oder Icon darauf. Einzige Quelle für den
+// Typ-Chip auf den Inseraten (ListingCard) und das Icon-Feld der fünf Format-Kacheln auf der
+// Startseite (FormatTiles). So erkennt man ein Format an derselben Farbe wieder (Denis 19.09.2026).
+export const TYP_FARBEN = {
+  sell: { bg: "#F4C03F", fg: "#191615" },
+  auction: { bg: "#94B9C9", fg: "#191615" },
+  rent: { bg: "#8B6DB0", fg: "#fff" },
+  free: { bg: "#50804F", fg: "#fff" },
+  service: { bg: "#E67E22", fg: "#fff" },
+};

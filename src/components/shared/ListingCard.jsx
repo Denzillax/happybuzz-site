@@ -9,6 +9,7 @@ import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
 import { useFavorite } from "@/hooks/useFavorite";
+import { TYP_FARBEN } from "@/lib/constants";
 
 // ── Klar-Look: flache Karte ohne Rahmen, grosses 3:4-Bild, ruhige Meta ──
 const INK = "#191615";
@@ -81,15 +82,10 @@ export function listingInactiveLabel(listing) {
   return null;
 }
 
-// Typ-Kennzeichnung: Pille in der Pastellfarbe des Formats (Denis 19.09.2026), dieselben
-// Farben wie die fünf Format-Kacheln der Startseite (FormatTiles.tsx). Schrift immer Ink.
-const TYP_CHIP = {
-  sell: { label: "Festpreis", bg: "#fff2ad", color: INK },
-  auction: { label: "Auktion", bg: "#d8c4ff", color: INK },
-  rent: { label: "Miete", bg: "#c4e2ff", color: INK },
-  free: { label: "Gratis", bg: "#c6f1db", color: INK },
-  service: { label: "Service", bg: "#ffd8d9", color: INK },
-};
+// Typ-Kennzeichnung: farbige Pille pro Inserattyp. Die Farben kommen aus TYP_FARBEN
+// (src/lib/constants.js), dieselben wie auf den fünf Format-Kacheln der Startseite.
+const TYP_LABEL = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
+const TYP_CHIP = Object.fromEntries(Object.entries(TYP_LABEL).map(([typ, label]) => [typ, { label, bg: TYP_FARBEN[typ].bg, color: TYP_FARBEN[typ].fg }]));
 const PERIOD_LABEL = { hour: "Std", day: "Tag", week: "Woche", month: "Monat" };
 
 // Bild-Chip: weisse Pille auf dem Foto (Typ, Neu, Featured)
