@@ -134,7 +134,7 @@ export function Fuss({ hinweis }) {
         <div className="mk-fuss-kopf">
           <BLogo size={72} title="BEEDARO" />
           <p className="mk-fuss-satz">Kaufen. Verkaufen. Gutes tun.</p>
-          <Link href="/listings/new" className="mk-knopf"><Roll>Jetzt inserieren</Roll></Link>
+          <Link href="/listings/new" className="mk-knopf mk-knopf-dunkel"><Roll>Jetzt inserieren</Roll></Link>
         </div>
         <nav className="mk-fuss-nav" aria-label="Fusszeile">
           {FUSS.map((g) => (
