@@ -1403,9 +1403,8 @@ body:has(.sl) { background: #121212; }
 
 /* Pixelfeld unter dem Mauszeiger: nur auf dem Karoraster und HINTER dem Inhalt. Der Rastergrund ist ein eigener
    Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
-/* Das Raster beginnt schon hinter dem Header: nach oben gezogen, innen wieder eingerückt */
-.wl-raster-grund { position: relative; z-index: 0; margin-top: -72px; padding-top: 72px; }
-@media (max-width: 900px) { .wl-raster-grund { margin-top: -64px; padding-top: 64px; } }
+/* Das Raster beginnt direkt UNTER dem Header, nicht dahinter (Denis 19.09.: am Seitenanfang keine Kacheln unter dem Header) */
+.wl-raster-grund { position: relative; z-index: 0; }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
 /* Band für die Pixel-Laufschrift am Ende des Rasters, der Text selbst kommt aus dem Pixelfeld */
 .wl-laufband { height: 230px; }

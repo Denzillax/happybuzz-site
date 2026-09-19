@@ -24,7 +24,7 @@
 // Laufschrift: Im Element .wl-laufband läuft ein Text (data-text) als Pixelschrift durch das Feld. Er ist Wärme,
 // flimmert also zwischen den heissen Farbbändern. Beim Scrollen wirft er einen Schatten in Scrollrichtung, der
 // Zeiger schiebt die Buchstaben zur Seite, Explosionen drücken sie an der Wellenfront weg.
-// Hinter Texten bleiben die Kacheln sichtbar, dort aber abgedämpft (ausgefranster Rand der Textzone). Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
+// Hinter Texten bleiben die Kacheln in voller Farbe sichtbar, die Schrift liegt darüber. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
 // Ohne echte Maus steht nur die Landschaft (ruhig animiert), mit "Bewegung reduzieren" steht sie still.
 import { useEffect, useRef } from "react";
 
@@ -90,7 +90,8 @@ export default function PixelFeld({ ursprung }) {
     const S1 = Math.random() * 40, S2 = Math.random() * 40, S3 = Math.random() * 40; // jede Sitzung eine andere Landschaft
     const waerme = new Map(); // "cx,cy" -> Wärme 0..1 (Zeiger, Wellen), wird in Bänder geschnitten
     const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Wort, Biene, Kartenrand)
-    let wellen = [], funken = [], loecher = [], sperren = [], titel = [];
+    const feuer = new Map();  // "cx,cy" -> { w, d }: Glut der grossen Explosion. w = Leben, d = Abstand zum Knall (für die laufenden Farbringe)
+    let wellen = [], funken = [], loecher = [], titel = [];
     let raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0, bild = 0, beben = 0, sichtbar = true, start = performance.now();
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
@@ -103,11 +104,9 @@ export default function PixelFeld({ ursprung }) {
       const r = el.getBoundingClientRect();
       return { l: (r.left + window.scrollX) / zoom, t: (r.top + window.scrollY) / zoom, r: (r.right + window.scrollX) / zoom, b: (r.bottom + window.scrollY) / zoom };
     };
-    // Flächen, die frei bleiben (Texte), und die Überschriften, auf die der Pfeil zeigt. In Seitenkoordinaten.
+    // Die Überschriften, auf die der Pfeil zeigt, und das Band der Laufschrift. In Seitenkoordinaten.
     const vermessen = () => {
       if (!grund) return;
-      sperren = [...grund.querySelectorAll(".wl-zeile, .wl-gross, .wl-text, .wl-knoepfe, .wl-hero-b, .wl-label, .wl-h2, .wl-mehr, .wl-format-name, .wl-format-sub, .wl-format-nr, .wl-probe, .wl-probe-pfeil")]
-        .map((el, i) => ({ ...seitenRect(el), pad: 10 + (i % 4) * 6 }));
       titel = [...grund.querySelectorAll(".wl-h2")].map((el) => ({ ...seitenRect(el), wort: el.dataset.wort || "" }));
       const lb = grund.querySelector(".wl-laufband");
       if (lb) {
@@ -143,13 +142,6 @@ export default function PixelFeld({ ursprung }) {
       vermessen();
     };
     const streu = (a, b) => { const n = Math.sin(a * 127.1 + b * 311.7 + S1) * 43758.5453; return n - Math.floor(n); };
-    const gesperrt = (px, py, cx, cy) => {
-      for (const s of sperren) {
-        const p = s.pad + streu(cx, cy) * 16; // ausgefranster Rand statt sauberem Rechteck
-        if (px > s.l - p && px < s.r + p && py > s.t - p && py < s.b + p) return true;
-      }
-      return false;
-    };
 
     // Landschaft: überlagerte Wellen mit leichter Verzerrung, Ergebnis etwa 0..1
     const wolken = (x, y, t) => {
@@ -263,7 +255,11 @@ export default function PixelFeld({ ursprung }) {
           const ya = Math.max(-rand, Math.floor((sy - oy) / Z) - 1 - w.cy), ye = Math.min(rand, Math.ceil((sy + H - oy) / Z) + 1 - w.cy);
           for (let dy = ya; dy <= ye; dy += 1) for (let dx = xa; dx <= xe; dx += 1) {
             const d = Math.hypot(dx, dy);
-            if (d <= r) heiss(w.cx + dx, w.cy + dy, (1 - (d / Math.max(1, r)) * 0.62) * kuehl);
+            if (d > r) continue;
+            if (w.feuer) { // grosse Explosion: Glut statt Wärme, sie kühlt nicht durch Blau und Navy ab
+              const k = (w.cx + dx) + "," + (w.cy + dy), alt = feuer.get(k);
+              if (!alt) feuer.set(k, { w: 1, d }); else if (d > r - 2.5) alt.w = Math.max(alt.w, 0.9); // die Front frischt auf
+            } else heiss(w.cx + dx, w.cy + dy, (1 - (d / Math.max(1, r)) * 0.62) * kuehl);
           }
           return true;
         });
@@ -337,7 +333,8 @@ export default function PixelFeld({ ursprung }) {
       // Wärme verglüht schnell (kurze Spur), Löcher der Explosion wachsen zu
       for (const [k, w] of waerme) { const n = w * 0.88; if (n < 0.01) waerme.delete(k); else waerme.set(k, n); }
       loecher = loecher.filter((l) => jetzt - l.t < l.dauer);
-      if (ueberallBis && jetzt > ueberallBis && !wellen.length) ueberallBis = 0;
+      for (const [k, g] of feuer) { g.w *= 0.972; if (g.w < 0.08) feuer.delete(k); }
+      if (ueberallBis && jetzt > ueberallBis && !wellen.length && !feuer.size) ueberallBis = 0;
 
       // Zeichnen: für jede sichtbare Kachel des Rasters Landschaft + Wärme, in Farbbänder geschnitten
       const bx = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0, by = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0;
@@ -355,11 +352,20 @@ export default function PixelFeld({ ursprung }) {
         const abzug = tiefe / (kopfband * 1.15) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
+          const gl = feuer.get(k);
+          if (gl) {
+            // Glut: Rot und Gelb in laufenden Ringen vom Knall weg, dazu Flackern. Beim Erlöschen fallen die Kacheln
+            // zufällig aus, statt dunkel zu werden.
+            if (streu(cx * 1.3, cy * 1.9) < gl.w * 1.25) {
+              const welle = Math.sin(gl.d * 0.55 - t * 9) * 0.5 + 0.5, fl = streu(cx + Math.floor(t * 9) * 3.1, cy - Math.floor(t * 9) * 1.7);
+              ctx.fillStyle = fl < 0.1 ? "#D8FF00" : fl > 0.93 ? "#FFFFFF" : welle > 0.62 ? "#E0492A" : welle > 0.3 ? "#F5A018" : "#FBF062";
+              ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1);
+            }
+            continue;
+          }
           const f = fest.get(k);
           if (f) { ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f; ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1); ctx.globalAlpha = 1; continue; }
-          // Hinter Texten bleiben die Kacheln sichtbar (Denis 19.09.), aber abgedämpft, damit die Schrift lesbar bleibt.
-          // Der ausgefranste Rand der Textzone bleibt. Bei der Seitenexplosion gilt volle Deckkraft überall.
-          const gedaempft = !ueberallBis && gesperrt(px + Z / 2, py + Z / 2, cx, cy);
+          // Hinter Texten stehen die Kacheln in voller Farbe (Denis 19.09.: abgedämpft wirkte es milchig). Die Schrift liegt darüber.
           let v = (waerme.get(k) || 0) * 0.9;
           const nx = px / 900;
           if (mitLand && streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
@@ -373,7 +379,6 @@ export default function PixelFeld({ ursprung }) {
           }
           const farbe = band(v);
           if (!farbe) continue;
-          ctx.globalAlpha = gedaempft ? 0.34 : 1;
           ctx.fillStyle = farbe;
           ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1);
         }
@@ -433,10 +438,10 @@ export default function PixelFeld({ ursprung }) {
       const sx = window.scrollX / zoom, sy = window.scrollY / zoom;
       ueberallBis = t + 2600; beben = 3;
       const [cx, cy] = zelle(ladung.x, ladung.y);
-      wellen.push({ cx, cy, t, kraft: 1.6, weite: Math.ceil(Math.hypot(B, H) / Z) });
+      wellen.push({ cx, cy, t, kraft: 1.6, weite: Math.ceil(Math.hypot(B, H) / Z), feuer: true });
       for (let i = 0; i < 9; i += 1) {
         const [wx, wy] = zelle(sx + Math.random() * B, sy + Math.random() * H);
-        wellen.push({ cx: wx, cy: wy, t: t + 120 + Math.random() * 700, kraft: 0.6 + Math.random() * 0.8, weite: 14 + Math.random() * 26 });
+        wellen.push({ cx: wx, cy: wy, t: t + 120 + Math.random() * 700, kraft: 0.6 + Math.random() * 0.8, weite: 14 + Math.random() * 26, feuer: true });
       }
       const wurzel = cv.closest(".wl");
       if (!wurzel) return;
