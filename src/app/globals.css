@@ -1402,7 +1402,7 @@ body:has(.sl) { background: #121212; }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
 /* Textstellen, über denen ein Pixelbild entsteht: fein gepunktet unterstrichen als leiser Hinweis */
 .wl-form { text-decoration: underline dotted 1px; text-underline-offset: .18em; text-decoration-color: var(--wl-leise); cursor: default; }
-.wl-feld-oben { z-index: 5; } /* nur die Pixel-Biene, über Karten und Text */
+ /* nur die Pixel-Biene, über Karten und Text */
 .wl-raster-grund .wl-abschnitt, .wl-raster-grund .wl-pixel { position: relative; z-index: 1; }
 /* Gestufte Pixel-Ecken statt Rundung, wie aus dem Raster geschnitten */
 .wl-knopf, .wl-rund, .wl-herz, .wl-mehr { border-radius: 0 !important; --e: 4px;
