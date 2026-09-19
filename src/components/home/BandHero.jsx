@@ -2,8 +2,8 @@
 // Bänder-Hero (Prototyp, Denis 19.09.2026). Idee aus dem Konzept "beedaro-squareo":
 // ein Rahmen aus echten Inseratfotos, in der Mitte Hauptsatz und die zwei Hauptknöpfe.
 // Bewusst anders als das Konzept:
-//  - Die Seite scrollt normal. Das Mausrad wird NICHT umgeleitet: es gibt den Bändern nur
-//    Schwung, während die Seite weiterscrollt. Über einer Kachel laufen sie langsam.
+//  - Die Seite scrollt normal. Nur über den Bilderbändern treibt das Mausrad die Bänder an
+//    statt der Seite (mit Absicherung am Höchsttempo). Über einer Kachel laufen sie langsam.
 //  - In der Mitte steht echter Text statt eines Canvas-Schriftzugs (lesbar für Suchmaschinen
 //    und Screenreader). Die Suche sitzt im Header direkt darüber, ein zweites Feld im Hero
 //    doppelte sich damit (siehe mitSuche).
@@ -61,7 +61,10 @@ function Band({ richtung, achse, inhalt }) {
 
 // mitSuche: eigenes Suchfeld im Hero. Standard aus, weil der Header direkt darüber schon eines
 // hat und sich die zwei Felder sonst doppeln. Für Seiten ohne Header-Suche einschaltbar.
-export default function BandHero({ mitSuche = false }) {
+// farbe / schrift: Varianten zum Testen auf /labor/hero. farbe wählt ein Schema (siehe
+// BAENDER-HERO in globals.css), schrift die Familie für Schriftzug, Hauptsatz und Textkacheln.
+const PUNKTFARBE = { teal: "#007C7C", weiss: "#191615", honig: "#191615", dunkel: "#F4C03F", grau: "#007C7C" };
+export default function BandHero({ mitSuche = false, farbe = "teal", schrift = "General Sans" }) {
   const router = useRouter();
   const [inserate, setInserate] = useState([]);
   const [q, setQ] = useState("");
@@ -79,8 +82,7 @@ export default function BandHero({ mitSuche = false }) {
 
   // Antrieb der Bänder (19.09.2026): Grundtempo plus Schwung. Scrollt man mit dem Mausrad über
   // dem Hero, laufen die Bänder schneller und klingen wieder aus (rückwärts scrollen dreht die
-  // Richtung). Der Listener ist passiv: die Seite scrollt dabei ganz normal weiter, das Rad
-  // wird nicht umgeleitet. Über einer Kachel läuft das Band langsam, damit man sie trifft.
+  // Richtung). Über einer Kachel läuft das Band langsam, damit man sie trifft.
   // Ausserhalb des Bildes ruht die Schleife. Ohne JavaScript oder vor dem Start übernimmt die
   // CSS-Animation, die Klasse bh-js schaltet sie ab.
   const heroRef = useRef(null);
@@ -112,10 +114,21 @@ export default function BandHero({ mitSuche = false }) {
       }
       raf = requestAnimationFrame(takt);
     };
-    const rad = (e) => { schwung = Math.max(-10, Math.min(10, schwung + e.deltaY * 0.014)); };
+    // Über den Bildern treibt das Mausrad NUR die Bänder an, die Seite bleibt stehen (Denis 19.09.).
+    // Über dem Feld in der Mitte und überall sonst scrollt die Seite normal.
+    // Absicherung: Ist das Höchsttempo erreicht, geht das Rad wieder an die Seite. Sonst hinge
+    // man am oberen Band fest, es nimmt die ganze Breite ein.
+    const MAX = 10;
+    const rad = (e) => {
+      if (!(e.target.closest && e.target.closest(".bh-band"))) return;
+      const amAnschlag = (schwung >= MAX - 0.01 && e.deltaY > 0) || (schwung <= -MAX + 0.01 && e.deltaY < 0);
+      if (amAnschlag) return;
+      e.preventDefault();
+      schwung = Math.max(-MAX, Math.min(MAX, schwung + e.deltaY * 0.014));
+    };
     const rein = (e) => { if (e.target.closest && e.target.closest(".bh-band")) ueber = true; };
     const raus = (e) => { if (e.target.closest && e.target.closest(".bh-band")) ueber = false; };
-    hero.addEventListener("wheel", rad, { passive: true });
+    hero.addEventListener("wheel", rad, { passive: false });
     hero.addEventListener("mouseover", rein);
     hero.addEventListener("mouseout", raus);
     const io = typeof IntersectionObserver !== "undefined" ? new IntersectionObserver((es) => { sichtbar = es[0].isIntersecting; }) : null;
@@ -147,14 +160,14 @@ export default function BandHero({ mitSuche = false }) {
   };
 
   return (
-    <section ref={heroRef} className="bh" aria-label="Schaufenster">
+    <section ref={heroRef} className="bh" data-farbe={farbe} style={{ "--bh-font": `"${schrift}", "General Sans", "Manrope", sans-serif` }} aria-label="Schaufenster">
       <Band achse="waag" richtung="links" inhalt={kacheln(oben, "o", { pos: 4, el: <TextKachel key="o-text" art="honig">Kaufen.<br />Verkaufen.<br />Gutes tun.</TextKachel> })} />
       <div className="bh-mitte">
         <Band achse="senk" richtung="runter" inhalt={kacheln(links, "l")} />
         <div className="bh-feld">
           {/* Marke des Schaufensters: Punkt-Schriftzug, durch den eine Biene fliegt. Der Hauptsatz
               darunter bleibt echter Text (die Zeichenfläche ist für Suchmaschinen unsichtbar). */}
-          <div className="bh-wort-rahmen"><PunktSchriftzug /></div>
+          <div className="bh-wort-rahmen"><PunktSchriftzug farbe={PUNKTFARBE[farbe] || PUNKTFARBE.teal} schrift={schrift} /></div>
           <h1 className="bh-satz">Was du suchst, hat schon jemand.</h1>
           <p className="bh-unter">Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.</p>
           {mitSuche && (

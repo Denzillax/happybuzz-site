@@ -998,20 +998,20 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .bh-k:hover .bh-deck, .bh-k:focus-visible .bh-deck { opacity: 1; }
 .bh-preis { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
 
-.bh-text { display: flex; align-items: flex-start; padding: 13px 14px; font-family: 'General Sans', 'Manrope', sans-serif;
+.bh-text { display: flex; align-items: flex-start; padding: 13px 14px; font-family: var(--bh-font, 'General Sans', 'Manrope', sans-serif);
            font-size: 17px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
-.bh-honig { background: #F4C03F; color: #191615; }
-.bh-teal { background: #007C7C; color: #fff; }
+.bh-honig { background: var(--bh-k1-bg, #F4C03F); color: var(--bh-k1-fg, #191615); }
+.bh-teal { background: var(--bh-k2-bg, #007C7C); color: var(--bh-k2-fg, #fff); }
 
-.bh-feld { flex: 1; min-width: 0; border-radius: 12px; background: #E9F6F5; display: flex; flex-direction: column;
+.bh-feld { flex: 1; min-width: 0; border-radius: 12px; background: var(--bh-feld, #E9F6F5); border: 1px solid var(--bh-feld-rand, transparent); display: flex; flex-direction: column;
            align-items: center; justify-content: center; text-align: center; padding: 20px 28px; }
 /* Punkt-Schriftzug über dem Hauptsatz (PunktSchriftzug.jsx). Der Satz ist darum kleiner als
    in der ersten Fassung: die Marke trägt jetzt der Schriftzug. */
 .bh-wort-rahmen { width: 100%; max-width: 620px; display: flex; justify-content: center; margin-bottom: 10px; }
 .bh-wort { display: block; max-width: 100%; }
-.bh-satz { font-family: 'General Sans', 'Manrope', sans-serif; font-size: clamp(20px, 2.2vw, 27px); font-weight: 700;
-           letter-spacing: -.02em; line-height: 1.08; color: #191615; margin: 0; }
-.bh-unter { font-size: 14.5px; color: #5B626C; margin: 6px 0 14px; max-width: 520px; }
+.bh-satz { font-family: var(--bh-font, 'General Sans', 'Manrope', sans-serif); font-size: clamp(20px, 2.2vw, 27px); font-weight: 700;
+           letter-spacing: -.02em; line-height: 1.08; color: var(--bh-text, #191615); margin: 0; }
+.bh-unter { font-size: 14.5px; color: var(--bh-unter, #5B626C); margin: 6px 0 14px; max-width: 520px; }
 .bh-suche { display: flex; align-items: center; width: 100%; max-width: 520px; height: 50px; background: #fff;
             border: 2px solid #F4C03F; border-radius: 999px; overflow: hidden; }
 .bh-lupe { margin-left: 16px; color: #7D848E; flex-shrink: 0; }
@@ -1044,3 +1044,28 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 @media (prefers-reduced-motion: reduce) {
   .bh-lauf { animation: none !important; }
 }
+
+/* Farbschemata des Bänder-Heros zum Testen (/labor/hero). Standard ist "teal" ohne Attribut-Regel. */
+.bh[data-farbe=weiss]  { --bh-feld: #FFFFFF; --bh-feld-rand: #E5E8EC; --bh-k2-bg: #191615; --bh-k2-fg: #FFFFFF; }
+.bh[data-farbe=honig]  { --bh-feld: #FFF5D8; --bh-unter: #5E5A4E; }
+.bh[data-farbe=grau]   { --bh-feld: #F5F6F8; }
+.bh[data-farbe=dunkel] { --bh-feld: #191615; --bh-text: #FFFFFF; --bh-unter: #B3B9C1; }
+
+/* ═══════════════════════════════════════════
+   LC-INFO: Hover-Fläche mit mehr Infos auf Inseratkarten (TEST, Denis 19.09.2026).
+   Nur aktiv innerhalb von .lab-hoverinfo und nur mit echter Maus. Ohne diese Klasse
+   bleibt die Fläche komplett ausgeblendet, die normalen Karten sind unverändert.
+   ═══════════════════════════════════════════ */
+.lc-info { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .lab-hoverinfo .lc-info { display: flex; flex-direction: column; justify-content: space-between; position: absolute; inset: 0;
+    padding: 12px 13px; background: rgba(244,192,63,.96); color: #191615; opacity: 0; transition: opacity .16s ease;
+    font-size: 12.5px; font-weight: 600; line-height: 1.35; pointer-events: none; }
+  .lab-hoverinfo a:hover .lc-info { opacity: 1; }
+  .lc-info-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13.5px; font-weight: 800; }
+  .lc-info-chip { font-size: 11px; font-weight: 700; background: rgba(25,22,21,.12); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .lc-info-liste { display: flex; flex-direction: column; gap: 3px; }
+  .lc-info-liste span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lc-info-fuss { font-size: 12.5px; font-weight: 800; align-self: flex-end; }
+}
+

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Package, Star, Clock, Flame, ScanSearch } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
-import { getCoverUrl, chf, preisGesenkt } from "@/lib/formatters";
+import { getCoverUrl, chf, preisGesenkt, conditionLabel } from "@/lib/formatters";
 import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
@@ -14,6 +14,8 @@ import { useFavorite } from "@/hooks/useFavorite";
 const INK = "#191615";
 
 // Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
+const FORMAT_KURZ = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
+
 // < 24h -> Live-Countdown ("3h 5m" / "12m 9s"), abgelaufen -> endedLabel.
 // Live-Intervall nur bei < 24h (Performance bei vielen Karten im Grid).
 function Countdown({ endDate, endedLabel = "Beendet" }) {
@@ -155,6 +157,25 @@ export function ListingCard(props) {
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
         </div>
+
+        {/* Hover-Fläche mit mehr Infos (TEST, Denis 19.09.2026, Idee aus dem Bänder-Hero). Nur aktiv
+            innerhalb von .lab-hoverinfo (Test-Route /labor/hero) und nur mit Maus. Styles: globals.css LC-INFO */}
+        {!statusOverlay && (
+          <span className="lc-info" aria-hidden="true">
+            <span className="lc-info-kopf">
+              <span>{FORMAT_KURZ[listing.listing_type] || "Inserat"}</span>
+              {listing.condition && <span className="lc-info-chip">{conditionLabel(listing.condition)}</span>}
+            </span>
+            <span className="lc-info-liste">
+              <span>{listing.city || "Schweiz"}</span>
+              <span>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>
+              {isAuction && <span>{bidCount === 1 ? "1 Gebot" : `${bidCount} Gebote`}</span>}
+              {listing.is_negotiable && !isAuction && <span>Preis verhandelbar</span>}
+              {listing.seller?.display_name && <span>von {listing.seller.display_name}{listing.seller.avg_rating > 0 ? ` · ${parseFloat(listing.seller.avg_rating).toFixed(1)} Sterne` : ""}</span>}
+            </span>
+            <span className="lc-info-fuss">Ansehen</span>
+          </span>
+        )}
 
         {/* Oben rechts: Merken-Herz */}
         <div style={{ position: "absolute", top: 8, right: 8 }}>

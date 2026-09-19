@@ -264,7 +264,7 @@ export default function FlyingBee() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         ref={beeRef}
-        src="/bee.svg"
+        src="/bee-punkt.svg"
         alt=""
         aria-hidden="true"
         onClick={angeklickt}

@@ -82,14 +82,14 @@ export function ChallengeBanner() {
           95% { transform: rotate(-10deg); }
         }
         .chal-bee {
-          width: 160px; height: auto; flex-shrink: 0;
-          margin: -30px 2px -26px -8px;
-          transform: rotate(-6deg);
+          width: 190px; height: auto; flex-shrink: 0;
+          margin: 0 12px 0 0;
+          transform: rotate(-4deg);
           animation: chalWiggle 4.5s ease-in-out infinite;
           position: relative; z-index: 1;
         }
         @media (max-width: 640px) {
-          .chal-bee { width: 116px; margin: -16px 0 -8px -4px; }
+          .chal-bee { width: 138px; margin: 0 4px 0 0; }
         }
         @media (prefers-reduced-motion: reduce) {
           .chal-sheen, .chal-bee { animation: none !important; }
@@ -102,7 +102,7 @@ export function ChallengeBanner() {
             damit die ueberstehende Biene nicht mitbeschnitten wird */}
         <div className="chal-sheen-clip"><div className="chal-sheen" /></div>
         {/* Bee-Loud-Marke: ragt oben/unten leicht aus der Box (Sticker-Effekt) */}
-        <img src="/bee-loud.svg" alt="" aria-hidden="true" className="chal-bee" />
+        <img src="/bee-punkt-megafon.svg" alt="" aria-hidden="true" className="chal-bee" />
         <div style={{ flex: 1, minWidth: 220 }}>
           <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: PETROL }}>
             Challenge der Woche

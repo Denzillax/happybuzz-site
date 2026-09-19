@@ -22,7 +22,8 @@ const BIENE = [
   "..HHKHHKHHKK..",
 ];
 
-export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000 }) {
+// farbe: Punktfarbe des Worts. schrift: Schriftfamilie, aus der das Wort gerastert wird.
+export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans" }) {
   const cvRef = useRef(null);
 
   useEffect(() => {
@@ -49,10 +50,10 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000 }) {
       const m = document.createElement("canvas"); m.width = B; m.height = H;
       const mx = m.getContext("2d");
       let grad = H * 0.92;
-      mx.font = `800 ${grad}px "General Sans", "Manrope", Arial, sans-serif`;
+      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
       const w = mx.measureText(wort).width;
       if (w > B - raster * 2) grad *= (B - raster * 2) / w;
-      mx.font = `800 ${grad}px "General Sans", "Manrope", Arial, sans-serif`;
+      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
       mx.textAlign = "center"; mx.textBaseline = "middle";
       mx.fillText(wort, B / 2, H / 2 + grad * 0.04);
       const d = mx.getImageData(0, 0, B, H).data;
@@ -75,7 +76,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000 }) {
 
     const malen = () => {
       ctx.clearRect(0, 0, B, H);
-      ctx.fillStyle = TEAL;
+      ctx.fillStyle = farbe;
       const r = raster * 0.4;
       for (const p of punkte) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
       if (biene.an) {
@@ -129,7 +130,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000 }) {
     const weg = () => { maus.x = -9999; };
 
     const start = () => { if (!tot) { aufbauen(); } };
-    if (document.fonts && document.fonts.load) document.fonts.load('800 80px "General Sans"').then(start, start); else start();
+    if (document.fonts && document.fonts.load) document.fonts.load(`800 80px "${schrift}"`).then(start, start); else start();
 
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => aufbauen()) : null;
     ro?.observe(cv.parentElement);
@@ -145,7 +146,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000 }) {
       ro?.disconnect(); io?.disconnect();
       cv.removeEventListener("mousemove", bewegung); cv.removeEventListener("mouseleave", weg);
     };
-  }, [wort, pause]);
+  }, [wort, pause, farbe, schrift]);
 
   return <canvas ref={cvRef} className="bh-wort" role="img" aria-label="Beedaro" />;
 }
