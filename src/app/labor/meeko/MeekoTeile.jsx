@@ -4,7 +4,9 @@
 // Farbregel: Butter ist die Hauptfarbe (Hero), jedes Format hat seine eigene Pastellfarbe (PASTELL).
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, Plus, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Menu, Plus, Search, User, X } from "lucide-react";
+import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import BLogo from "@/components/shared/BLogo";
 
@@ -13,7 +15,7 @@ export const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", fr
 // Butter gehört dem Hero, darum trägt Festpreis Rosé
 export const PASTELL = { sell: "rose", auction: "lavendel", rent: "himmel", free: "mint", service: "rosa" };
 export const LISTE = "id, title, listing_type, price, start_price, rent_price, rent_period, city, created_at, auction_end, listing_images(url, sort_order)";
-const NAV = [["Stöbern", "/search"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"], ["Favoriten", "/favorites"]];
+const NAV = [["Stöbern", "/labor/meeko/suche"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]];
 const FUSS = [
   { titel: "Marktplatz", links: [{ label: "Stöbern", href: "/search" }, { label: "Inserieren", href: "/listings/new" }, { label: "So funktioniert es", href: "/how-it-works" }] },
   { titel: "BEEDARO", links: [{ label: "Über uns", href: "/about" }, { label: "Bee-Impact", href: "/impact" }, { label: "Hilfe und FAQ", href: "/help" }, { label: "Kontakt", href: "/contact" }] },
@@ -97,28 +99,31 @@ export function Karte({ l, mitRest, ziel }) {
   );
 }
 
-// Farbschalter nur fürs Labor (Denis 20.09.2026): wechselt zwischen den Meeko-Pastelltönen und der kräftigeren Palette,
-// die Denis am 19.09. geschickt hat. Die Wahl steht als data-mk-farben am html-Element und bleibt im Browser gespeichert.
-const PALETTEN = [["meeko", "Meeko"], ["denis", "Palette Denis"]];
-function Farbwahl() {
-  const [wahl, setWahl] = useState("meeko");
-  useEffect(() => { try { const w = localStorage.getItem("mk-farben"); if (w === "denis") setWahl(w); } catch {} }, []);
-  useEffect(() => {
-    document.documentElement.setAttribute("data-mk-farben", wahl);
-    try { localStorage.setItem("mk-farben", wahl); } catch {}
-    return () => document.documentElement.removeAttribute("data-mk-farben");
-  }, [wahl]);
-  return (
-    <div className="mk-farbwahl" role="group" aria-label="Farbpalette im Labor">
-      {PALETTEN.map(([w, name]) => (
-        <button key={w} type="button" className="eckig kein-akzent" aria-pressed={wahl === w} onClick={() => setWahl(w)}>{name}</button>
-      ))}
-    </div>
-  );
-}
-
+// Kopf (Denis 20.09.2026: "sieht noch leer aus"): Logo, Navigation mit der echten Zahl aktiver Inserate bei Stöbern,
+// in der Mitte ein Suchfeld, rechts Favoriten, Konto und Inserieren. Auf Seiten mit grossem Suchfeld (Frontseite, Suche)
+// erscheint das Feld im Kopf erst, wenn das grosse aus dem Bild gescrollt ist. Sonst stünden zwei Suchfelder übereinander.
 export function Kopf() {
   const [menue, setMenue] = useState(false);
+  const [zahl, setZahl] = useState(null);
+  const [sucheDa, setSucheDa] = useState(false);
+  const [q, setQ] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const jetzt = new Date().toISOString();
+    supabase.from("listings").select("id", { count: "exact", head: true }).eq("status", "active").or(`expires_at.is.null,expires_at.gt.${jetzt}`)
+      .then(({ count }) => { if (typeof count === "number") setZahl(count); });
+    const gross = document.querySelector(".mk-hero .mk-suche, .mk-s-kopf .mk-suche");
+    if (!gross) { setSucheDa(true); return; }
+    // Scroll statt IntersectionObserver: der Beobachter meldet in verdeckten Fenstern nichts
+    const pruefen = () => setSucheDa(gross.getBoundingClientRect().bottom < 90);
+    pruefen();
+    window.addEventListener("scroll", pruefen, { passive: true });
+    return () => window.removeEventListener("scroll", pruefen);
+  }, []);
+
+  const suchen = (e) => { e.preventDefault(); const s = q.trim(); setMenue(false); router.push(s ? `/labor/meeko/suche?q=${encodeURIComponent(s)}` : "/labor/meeko/suche"); };
+
   return (
     <header className="mk-kopf">
       <div className="mk-kopf-pille">
@@ -127,9 +132,17 @@ export function Kopf() {
           <span>beedaro</span>
         </Link>
         <nav className="mk-nav" aria-label="Hauptnavigation">
-          {NAV.map(([t, h]) => <Link key={h} href={h}><Roll>{t}</Roll></Link>)}
+          {NAV.map(([t, h]) => (
+            <Link key={h} href={h}><Roll>{t}</Roll>{h === "/labor/meeko/suche" && zahl !== null && <sup className="mk-nav-zahl" aria-label={`${zahl} Inserate`}>{zahl}</sup>}</Link>
+          ))}
         </nav>
+        <form className={`mk-kopf-suche${sucheDa ? " mk-kopf-suche-da" : ""}`} onSubmit={suchen} role="search" aria-hidden={!sucheDa}>
+          <Search size={17} strokeWidth={2.2} aria-hidden="true" />
+          <input className="pille-input" type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Inserate durchsuchen" aria-label="Inserate durchsuchen" tabIndex={sucheDa ? 0 : -1} />
+        </form>
         <div className="mk-kopf-rechts">
+          <Link href="/favorites" className="mk-knopf mk-kopf-icon" aria-label="Favoriten" title="Favoriten"><BLogo size={17} herz title="" /></Link>
+          <Link href="/settings" className="mk-knopf mk-kopf-icon" aria-label="Konto" title="Konto"><User size={19} strokeWidth={2} aria-hidden="true" /></Link>
           <Link href="/listings/new" className="mk-knopf mk-knopf-dunkel" aria-label="Inserieren"><Plus size={16} strokeWidth={2.4} aria-hidden="true" /><Roll>Inserieren</Roll></Link>
           <button type="button" className="mk-knopf mk-menue-knopf eckig kein-akzent" aria-label={menue ? "Menü schliessen" : "Menü öffnen"} aria-expanded={menue} aria-controls="mk-menue" onClick={() => setMenue((v) => !v)}>
             {menue ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
@@ -138,12 +151,15 @@ export function Kopf() {
       </div>
       {menue && (
         <nav id="mk-menue" className="mk-menue" aria-label="Menü">
-          {[["Stöbern", "/search"], ["Inserieren", "/listings/new"], ["Favoriten", "/favorites"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]].map(([t, h]) => (
+          <form className="mk-menue-suche" onSubmit={suchen} role="search">
+            <Search size={18} strokeWidth={2.2} aria-hidden="true" />
+            <input className="pille-input" type="text" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Inserate durchsuchen" aria-label="Inserate durchsuchen" />
+          </form>
+          {[[zahl !== null ? `Stöbern (${zahl})` : "Stöbern", "/labor/meeko/suche"], ["Inserieren", "/listings/new"], ["Favoriten", "/favorites"], ["Konto", "/settings"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]].map(([t, h]) => (
             <Link key={h} href={h} onClick={() => setMenue(false)}>{t}</Link>
           ))}
         </nav>
       )}
-      <Farbwahl />
     </header>
   );
 }
