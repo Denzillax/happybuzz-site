@@ -249,7 +249,13 @@ export default function PixelFeld({ ursprung }) {
         wellen = wellen.filter((w) => {
           const alter = (jetzt - w.t) / 1000;
           if (alter > 1.5) return false;
-          const R = alter * Math.hypot(B, H) * 1.7, sig = Z * 5.5 * w.kraft, amp = Math.max(0, 1 - alter / 1.5) * 1.2 * w.kraft, inv = 1 / (2 * sig * sig);
+          // Die Grösse hängt an der LADUNG (Denis 19.09.: ein blosser Klick darf keine grosse Explosion sein):
+          // Ein Klick gibt nur einen kleinen, langsamen Ring rund um den Zeiger, der nach kurzer Strecke ausläuft.
+          // Erst mit dem Aufladen wächst die Reichweite, bei voller Ladung fegt der Ring schnell über das ganze Bild.
+          const diag = Math.hypot(B, H), R = alter * (180 + w.ch * w.ch * diag * 1.7);
+          const auslauf = Math.max(0, 1 - R / w.weite);
+          if (auslauf <= 0) return false;
+          const sig = Z * 5.5 * w.kraft, amp = Math.max(0, 1 - alter / 1.5) * 1.2 * w.kraft * Math.min(1, auslauf * 2.5), inv = 1 / (2 * sig * sig);
           w.r = R / Z; // Radius in Kacheln, die Laufschrift weicht der Front aus
           const ca = Math.floor(sx / Z) - 1, ce = Math.ceil((sx + B) / Z) + 1, ra = Math.floor((sy - oy) / Z) - 1, re = Math.ceil((sy + H - oy) / Z) + 1;
           for (let cy = ra; cy <= re; cy += 1) {
@@ -262,7 +268,8 @@ export default function PixelFeld({ ursprung }) {
               if (g <= 0.02) continue;
               const k = cx + "," + cy;
               if ((waerme.get(k) || 0) < g) waerme.set(k, Math.min(1, g));
-              if (g > 0.25 && !nachglut.has(k)) nachglut.set(k, 0.45 + streu(cx, cy) * 0.7); // jede Kachel hält unterschiedlich lang
+              // rote Nachglut nur bei ordentlicher Ladung, je voller, desto länger. Jede Kachel hält unterschiedlich lang.
+              if (w.ch >= 0.5 && g > 0.25 && !nachglut.has(k)) nachglut.set(k, (0.45 + streu(cx, cy) * 0.7) * (0.4 + w.ch * 0.6));
             }
           }
           return true;
@@ -422,17 +429,20 @@ export default function PixelFeld({ ursprung }) {
       const t = performance.now(), ch = Math.min((t - ladung.t0) / 2200, 1); // kurzer Klick sanft, langes Halten kräftig
       const [cx, cy] = zelle(ladung.x, ladung.y);
       // Referenz: Stärke 0.35 (Antippen) bis 2.45 (volle Ladung), dazu ein gefüllter weicher Fleck am Knallpunkt
-      wellen.push({ x: ladung.x, y: ladung.y, cx, cy, t, kraft: 0.35 + ch * 2.1, r: 0 });
-      auftragen(ladung.x, ladung.y, 1, (2.5 + ch * 18) * 1.1);
+      // weite = wie weit der Ring kommt: beim Klick rund 70 px, bei voller Ladung über das ganze Bild hinaus
+      wellen.push({ x: ladung.x, y: ladung.y, cx, cy, t, ch, kraft: 0.35 + ch * 2.1, weite: 70 + ch * ch * Math.hypot(B, H) * 1.6, r: 0 });
+      auftragen(ladung.x, ladung.y, 0.6 + ch * 0.4, (1.6 + ch * 19) * 1.1);
       // Die Explosion drückt eine Delle in die Landschaft, nur rund um den Knall, und sie wächst rasch wieder zu.
       // Die Fassung davor räumte bei voller Ladung alles ab (Denis: "verschwindet alles, das sollte nicht so sein").
-      loecher.push({ x: ladung.x, y: ladung.y, r: 70 + ch * 170, t, dauer: 1400 + ch * 1400 });
-      beben = 0.45 + ch * 1.9; maus.zuletzt = t;
+      if (ch > 0.2) loecher.push({ x: ladung.x, y: ladung.y, r: 30 + ch * 210, t, dauer: 1400 + ch * 1400 });
+      beben = 0.05 + ch * ch * 2.3; maus.zuletzt = t; // beim Klick praktisch kein Schütteln
       if (ch >= 0.97) seiteSprengen(t);
       if (grund) { // leichtes Beben der Inhalte, nur angedeutet (Klasse wl-beben, Stärke --beben)
-        grund.style.setProperty("--beben", (0.6 + ch * 2.2).toFixed(1) + "px");
-        grund.classList.remove("wl-beben"); void grund.offsetWidth; grund.classList.add("wl-beben");
-        setTimeout(() => grund.classList.remove("wl-beben"), 500);
+        if (ch > 0.25) { // Inhalte beben erst ab spürbarer Ladung
+          grund.style.setProperty("--beben", (ch * 2.8).toFixed(1) + "px");
+          grund.classList.remove("wl-beben"); void grund.offsetWidth; grund.classList.add("wl-beben");
+          setTimeout(() => grund.classList.remove("wl-beben"), 500);
+        }
       }
     };
     // Volle Ladung: Der Ring fegt über die GANZE Seite (auch Hero und Fuss) und lässt sie rot zurück, die Inhalte
