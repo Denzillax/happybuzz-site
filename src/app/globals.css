@@ -1672,3 +1672,183 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-menue a:last-child { border-bottom: none; }
 }
 /* WILD-LABOR ENDE */
+
+/* ═══════════════════════════════════════════
+   MEEKO-LABOR (Denis 19.09.2026). Test-Route /labor/meeko, Komponente src/app/labor/meeko/MeekoLabor.jsx.
+   Formensprache der Framer-Vorlage "Meeko", Farben von dort, Logo ist das kachelige BEEDARO-B.
+   FARBEN  Ink #1D1D1D · Weiss · Lavendel #E3E3FF · Himmel #E3F2FF · Rosa #FFE3FB · Mint #DBF5F0 · Rosé #FBEBEA ·
+           Butter #FFE7A9. Pastell nur als Fläche, Schrift ist immer Ink (Kontrast auf jedem Pastell über 12).
+   SCHRIFT Instrument Sans (die Vorlage nutzt Uncut Sans, die es bei Google Fonts nicht gibt). Titel 500 mit enger
+           Laufweite (-0.04 bis -0.05em), Text 400 in 18 px, Tags in Versalien 14 px.
+   FORM    Rand immer 1 px Ink. Karten 28 px Rundung, Header-Pille 36 px, Knöpfe 10 px mit eingedrücktem unterem
+           Schatten, Pfeil-Pillen ganz rund. Bilder liegen auf einer Pastelltafel in der Farbe ihres Formats.
+   Alles unter .mk gekapselt. MEEKO-LABOR ENDE markiert den Schluss.
+   ═══════════════════════════════════════════ */
+.mk { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #E3F2FF; --mk-rosa: #FFE3FB; --mk-mint: #DBF5F0; --mk-rose: #FBEBEA; --mk-butter: #FFE7A9;
+      --mk-rand: 1px solid var(--mk-ink); background: #fff; color: var(--mk-ink); min-height: 100vh; overflow-x: clip;
+      font-family: 'Instrument Sans', 'General Sans', 'Manrope', sans-serif; font-size: 18px; line-height: 1.5; }
+.mk a { color: inherit; text-decoration: none; }
+.mk a:hover, .mk button:hover { filter: none !important; }
+.mk-lavendel { background: var(--mk-lavendel); } .mk-himmel { background: var(--mk-himmel); } .mk-rosa { background: var(--mk-rosa); }
+.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); } .mk-weiss { background: #fff; }
+.mk a:focus-visible, .mk button:focus-visible { outline: 2px solid var(--mk-ink); outline-offset: 3px; }
+
+/* Text, der beim Hovern durchrollt */
+.mk-roll { display: inline-grid; overflow: hidden; line-height: 1.25; vertical-align: bottom; }
+.mk-roll span { grid-area: 1 / 1; transition: transform .38s cubic-bezier(.2,.7,.1,1); }
+.mk-roll span:last-child { transform: translateY(110%); }
+a:hover .mk-roll span:first-child, button:hover .mk-roll span:first-child { transform: translateY(-110%); }
+a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transform: translateY(0); }
+
+/* Knopf: weiss, 1 px Rand, 10 px Rundung, unten eingedrückter Schatten. Beim Drücken sinkt er ein. */
+.mk-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 24px 4px; background: #fff; color: var(--mk-ink);
+            border: var(--mk-rand); border-radius: 10px !important; box-shadow: inset 0 -5px 0 rgba(29,29,29,.15); font: inherit; font-size: 17px; font-weight: 600; letter-spacing: -.02em;
+            cursor: pointer; transition: box-shadow .15s ease, padding .15s ease, background .2s ease; white-space: nowrap; }
+.mk-knopf:hover { background: var(--mk-lavendel); }
+.mk-knopf:active { box-shadow: inset 0 -1px 0 rgba(29,29,29,.15); padding-bottom: 0; }
+.mk .mk-knopf-dunkel { background: var(--mk-ink); color: #fff; box-shadow: inset 0 -5px 0 rgba(255,255,255,.22); }
+.mk .mk-knopf-dunkel:hover { background: #000; }
+
+/* Header: schwebende weisse Pille */
+.mk-kopf { position: sticky; top: 0; z-index: 30; padding: 18px 24px 0; }
+.mk-kopf-pille { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 24px; min-height: 76px; padding: 10px 14px 10px 28px; background: #fff; border: var(--mk-rand); border-radius: 36px; }
+.mk-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 600; letter-spacing: -.05em; }
+.mk-logo svg { transition: transform .4s cubic-bezier(.2,.7,.1,1); }
+.mk-logo:hover svg { transform: rotate(-90deg); }
+.mk-nav { display: flex; gap: 28px; margin-left: auto; font-size: 17px; font-weight: 500; letter-spacing: -.02em; }
+.mk-kopf-rechts { display: flex; align-items: center; gap: 8px; }
+.mk-kopf-rechts .mk-knopf { min-height: 50px; }
+.mk-menue-knopf { display: none; width: 50px; padding: 0 0 4px; }
+.mk-menue { max-width: 1240px; margin: 8px auto 0; display: flex; flex-direction: column; background: #fff; border: var(--mk-rand); border-radius: 28px; padding: 8px 24px; }
+.mk-menue a { padding: 16px 0; font-size: 22px; font-weight: 600; letter-spacing: -.03em; border-bottom: 1px solid rgba(29,29,29,.14); }
+.mk-menue a:last-child { border-bottom: none; }
+
+/* Hero: Lavendelfläche, sie läuft hinter den Header und hinter die obere Hälfte der drei Einstiegskarten */
+.mk-hero { margin-top: -94px; padding: 190px 24px 210px; background: var(--mk-lavendel); text-align: center; display: flex; flex-direction: column; align-items: center; }
+.mk-h1 { margin: 0; max-width: 15em; font-size: clamp(44px, 6.6vw, 84px); font-weight: 500; line-height: 1.05; letter-spacing: -.05em; text-wrap: balance; }
+.mk-held { display: inline-block; width: .95em; height: .95em; margin: 0 .04em; vertical-align: -.16em; border-radius: 999px; border: var(--mk-rand); overflow: hidden; background: var(--mk-rosa); }
+.mk-held img { width: 100%; height: 100%; object-fit: cover; display: block; animation: mk-auftauchen .6s cubic-bezier(.2,.7,.1,1) both; }
+@keyframes mk-auftauchen { from { opacity: 0; transform: scale(1.25); } to { opacity: 1; transform: none; } }
+.mk-hero-text { margin: 26px 0 0; max-width: 34em; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; }
+.mk-hero-text strong { font-weight: 600; }
+.mk-suche { margin-top: 34px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 620px; min-height: 68px; padding: 8px 8px 8px 24px; background: #fff; border: var(--mk-rand); border-radius: 20px; }
+.mk-suche:focus-within { box-shadow: 0 0 0 3px rgba(29,29,29,.14); }
+.mk-suche input { flex: 1; min-width: 0; border: none !important; outline: none; background: transparent; font: inherit; font-size: 19px; color: var(--mk-ink); box-shadow: none !important; border-radius: 0 !important; padding: 0; }
+.mk-suche input::placeholder { color: rgba(29,29,29,.5); }
+
+/* Drei Einstiegskarten, sie überlappen die Unterkante des Heros */
+.mk-einstieg { max-width: 1240px; margin: -130px auto 0; padding: 0 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; z-index: 1; }
+.mk-box { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 44px 32px 36px; background: #fff; border: var(--mk-rand); border-radius: 28px; transition: transform .35s cubic-bezier(.2,.7,.1,1); }
+.mk-box:hover { transform: translateY(-6px); }
+.mk-box-titel { margin-top: 12px; font-size: 28px; font-weight: 500; letter-spacing: -.03em; }
+.mk-box-text { max-width: 19em; }
+.mk-pfeil { margin-top: 14px; width: 64px; height: 40px; border: var(--mk-rand); border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; }
+.mk-pfeil svg { transition: transform .35s cubic-bezier(.2,.7,.1,1); }
+a:hover .mk-pfeil svg { transform: translateX(6px); }
+
+.mk-abschnitt { max-width: 1240px; margin: 0 auto; padding: 130px 24px 0; }
+.mk-abschnitt-kopf { text-align: center; max-width: 46em; margin: 0 auto 56px; }
+.mk-h2 { margin: 0 0 14px; font-size: clamp(32px, 3.8vw, 46px); font-weight: 500; line-height: 1.12; letter-spacing: -.04em; text-wrap: balance; }
+.mk-abschnitt-kopf p { margin: 0; }
+
+/* Inseratkarte: Bild auf einer Pastelltafel in der Farbe des Formats, darunter Tags, Titel, Preis */
+.mk-karten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
+.mk-karte { position: relative; }
+.mk-karte-link { display: flex; flex-direction: column; gap: 18px; }
+.mk-tafel { display: block; padding: 22px; border: var(--mk-rand); border-radius: 28px; aspect-ratio: 1 / 1; }
+.mk-tafel img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 14px; border: var(--mk-rand); transition: transform .5s cubic-bezier(.2,.7,.1,1); }
+.mk-karte-link:hover .mk-tafel img { transform: scale(1.03) rotate(-1.2deg); }
+.mk-karte-text { display: flex; flex-direction: column; gap: 6px; padding: 0 6px; }
+.mk-tags { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; opacity: .62; }
+.mk-karte-titel { font-size: 24px; font-weight: 500; line-height: 1.18; letter-spacing: -.03em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mk-karte-unten { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.mk-preis { font-size: 19px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.mk-rest { font-size: 15px; font-weight: 600; padding: 3px 10px; border: var(--mk-rand); border-radius: 999px; background: var(--mk-rose); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mk-herz { position: absolute; top: 36px; right: 36px; width: 44px; height: 44px; padding: 0; border: var(--mk-rand); border-radius: 999px !important; background: #fff; color: rgba(29,29,29,.32); cursor: pointer;
+           display: inline-flex; align-items: center; justify-content: center; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); transition: color .2s ease, background .2s ease, transform .2s ease; }
+.mk-herz:hover { color: var(--mk-ink); }
+.mk-herz-an, .mk-herz-an:hover { background: var(--mk-ink); color: var(--mk-butter); animation: mk-pop .35s cubic-bezier(.3,1.6,.5,1); }
+@keyframes mk-pop { 0% { transform: scale(.7); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.mk-mehr { margin-top: 64px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.mk-mehr-frage { font-size: 28px; font-weight: 500; letter-spacing: -.03em; }
+
+/* Aussage an der Stelle der Kundenstimme */
+.mk-aussage { max-width: 980px; margin: 130px auto 0; padding: 0 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px; }
+.mk-aussage p { margin: 0; font-size: clamp(28px, 3.3vw, 44px); font-weight: 500; line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
+
+/* Fünf Formate als Pastellkarten */
+.mk-formate { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.mk-format { display: flex; flex-direction: column; gap: 8px; min-height: 250px; padding: 28px 24px 24px; border: var(--mk-rand); border-radius: 28px; transition: transform .35s cubic-bezier(.2,.7,.1,1); }
+.mk-format:hover { transform: translateY(-6px); }
+.mk-format-name { font-size: 28px; font-weight: 500; letter-spacing: -.03em; }
+.mk-format-sub { font-size: 17px; line-height: 1.4; }
+.mk-format .mk-pfeil { margin-top: auto; }
+
+/* Prozess: links Titel und Knopf (bleibt beim Scrollen stehen), rechts die nummerierten Schritte */
+.mk-prozess { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 64px; align-items: start; }
+.mk-prozess-links { position: sticky; top: 130px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.mk-prozess-links p { margin: 0 0 18px; }
+.mk-schritte { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+.mk-schritt { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 6px 12px; padding: 32px; border: var(--mk-rand); border-radius: 28px; background: #fff; }
+.mk-schritt-nr { grid-row: 1 / span 2; font-size: 22px; font-weight: 500; letter-spacing: -.02em; }
+.mk-schritt-titel { font-size: 28px; font-weight: 500; letter-spacing: -.03em; line-height: 1.15; }
+
+/* Fuss: grosse gerundete Ink-Tafel */
+.mk-fuss { padding: 130px 24px 24px; }
+.mk-fuss-tafel { max-width: 1240px; margin: 0 auto; padding: 64px 56px 36px; background: var(--mk-ink); color: #fff; border-radius: 36px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; }
+.mk-fuss-kopf { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; color: var(--mk-butter); }
+.mk-fuss-satz { margin: 0; color: #fff; font-size: clamp(30px, 3.4vw, 46px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; }
+.mk-fuss-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.mk-fuss-nav div { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.mk-fuss-nav .mk-tags { opacity: .55; margin-bottom: 6px; }
+.mk-fuss-nav a { font-size: 17px; }
+.mk-fuss a:focus-visible { outline-color: #fff; }
+.mk-fuss-schluss { grid-column: 1 / -1; margin: 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.18); font-size: 15px; opacity: .6; }
+body:has(.mk) { background: #fff; }
+
+.mk-auf { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.1,1); }
+.mk-auf.mk-da { opacity: 1; transform: none; }
+.mk-box.mk-da:hover, .mk-format.mk-da:hover { transform: translateY(-6px); transition-delay: 0s !important; }
+
+@media (max-width: 1000px) {
+  .mk-nav { display: none; }
+  .mk-kopf-rechts { margin-left: auto; }
+  .mk-menue-knopf { display: inline-flex; }
+  .mk-einstieg { grid-template-columns: minmax(0, 1fr); }
+  .mk-karten { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mk-formate { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mk-format { min-height: 200px; }
+  .mk-prozess { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .mk-prozess-links { position: static; }
+  .mk-fuss-tafel { grid-template-columns: minmax(0, 1fr); padding: 44px 28px 28px; }
+}
+@media (max-width: 640px) {
+  .mk { font-size: 17px; }
+  .mk-kopf { padding: 12px 12px 0; }
+  .mk-kopf-pille { min-height: 66px; padding: 8px 8px 8px 20px; border-radius: 28px; gap: 10px; }
+  .mk-logo { font-size: 23px; }
+  .mk-kopf-rechts .mk-knopf-dunkel .mk-roll { display: none; }
+  .mk-kopf-rechts .mk-knopf-dunkel { width: 50px; padding: 0 0 4px; }
+  .mk-hero { margin-top: -80px; padding: 140px 16px 170px; }
+  .mk-suche { min-height: 60px; padding: 6px 6px 6px 16px; border-radius: 18px; }
+  .mk-suche input { font-size: 17px; }
+  .mk-suche .mk-knopf { min-height: 46px; padding: 0 16px 4px; }
+  .mk-einstieg { padding: 0 16px; margin-top: -110px; gap: 16px; }
+  .mk-box { padding: 34px 22px 28px; }
+  .mk-abschnitt { padding: 90px 16px 0; }
+  .mk-abschnitt-kopf { margin-bottom: 36px; }
+  .mk-karten { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .mk-formate { grid-template-columns: minmax(0, 1fr); }
+  .mk-format { min-height: 0; }
+  .mk-format .mk-pfeil { margin-top: 12px; }
+  .mk-aussage { margin-top: 90px; }
+  .mk-schritt { grid-template-columns: minmax(0, 1fr); padding: 24px; }
+  .mk-schritt-nr { grid-row: auto; }
+  .mk-fuss { padding: 90px 12px 12px; }
+  .mk-fuss-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-auf { opacity: 1; transform: none; transition: none; }
+  .mk-roll span, .mk-held img, .mk-herz-an { transition: none; animation: none !important; }
+}
+/* MEEKO-LABOR ENDE */
