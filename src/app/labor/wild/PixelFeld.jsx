@@ -15,7 +15,7 @@
 //   - Pixelbilder über Textstellen mit data-form (Smiley, Stern, Blitz, Haus), das Herz ist das BEEDARO-Herz
 //     (gedrehtes Logo) und kommt mit Funkenregen,
 //   - bei Stillstand fliegt die Pixel-Biene eine Zeile entlang und frisst eine Reihe Pollen,
-//   - um das Inserat unter dem Zeiger eine Kachel breite Linie in der Formatfarbe mit umlaufender Welle.
+//   - unter dem Inserat, auf dem der Zeiger steht, eine Kachelreihe in der Formatfarbe, die sich von der Mitte her aufbaut.
 // Aufladen (Maustaste halten) und Loslassen: Druckwelle, leichtes Beben der Inhalte, und die Explosion
 // reisst ein Loch in die Landschaft, das langsam wieder zuwächst.
 // Texte bleiben mit ausgefranstem Rand frei. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
@@ -50,8 +50,10 @@ const GLYPHE = {
   I: ["XXX", ".X.", ".X.", ".X.", "XXX"], A: [".X.", "X.X", "XXX", "X.X", "X.X"], "5": ["XXX", "X..", "XXX", "..X", "XXX"],
   X: ["X.X", "X.X", ".X.", "X.X", "X.X"], "!": [".X.", ".X.", ".X.", "...", ".X."],
 };
-const BIENE = ["..WW.WW..", "..WW.WW..", ".YKYKYKK.", "YYKYKYKEK", ".YKYKYKK."];
-const BFARBE = { Y: "#F5C518", K: "#0A0A0A", W: "#B9C4CC", E: "#FFFFFF" };
+// Biene in Kacheln, Kopf rechts. Ihr Flügel ist das BEEDARO-Herz im Kleinen (Denis 19.09.): zwei Bögen oben,
+// darunter die versetzten Quadrate als Spitze. Y Körper, K Streifen, W Flügel, E Auge. Körper = Zeilen 6 bis 8.
+const BIENE = ["..WW.WW..", "..WWWWW..", "..WWWWW..", "..W.W.W..", "...W.W...", "....W....", ".YKYKYKK.", "YYKYKYKEK", ".YKYKYKK."];
+const BFARBE = { Y: "#F5C518", K: "#0A0A0A", W: "#E0492A", E: "#FFFFFF" }; // Flügel im Rot des Favoriten-Herzens
 
 export default function PixelFeld({ ursprung }) {
   const ref = useRef(null);
@@ -71,7 +73,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
-    let karte = null, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
+    let karte = null, karteDavor = null, karteSeit = 0, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
 
     const seitenRect = (el) => {
       const r = el.getBoundingClientRect();
@@ -185,33 +187,31 @@ export default function PixelFeld({ ursprung }) {
           formDavor = form;
         }
 
-        // Inserat unter dem Zeiger: eine Kachel breite Linie rundherum, durch die eine helle Welle läuft
+        // Inserat unter dem Zeiger: eine Kachelreihe NUR an der Unterkante, in der Formatfarbe. Sie baut sich von der
+        // Mitte nach aussen auf und bleibt dann ruhig stehen (Denis 19.09.: kein Rand rundherum, kein blinkendes Gelb).
+        if (karte !== karteDavor) { karteDavor = karte; karteSeit = jetzt; }
         if (karte && karte.isConnected && maus.imRaster) {
           const r = seitenRect(karte), f = TYPFARBE[karte.dataset.typ] || "#F5C518";
-          const x0 = Math.round(r.l / Z) - 1, x1 = Math.round(r.r / Z), y0 = Math.round((r.t - oy) / Z) - 1, y1 = Math.round((r.b - oy) / Z);
-          const rand = [];
-          for (let x = x0; x <= x1; x += 1) rand.push([x, y0]);
-          for (let y = y0 + 1; y <= y1; y += 1) rand.push([x1, y]);
-          for (let x = x1 - 1; x >= x0; x -= 1) rand.push([x, y1]);
-          for (let y = y1 - 1; y > y0; y -= 1) rand.push([x0, y]);
-          const kopf = (bild * 0.8) % rand.length;
-          rand.forEach(([x, y], i) => {
-            const ab = Math.min(Math.abs(i - kopf), rand.length - Math.abs(i - kopf));
-            malFest(x, y, ab < 7 ? (ab < 3 ? "#0A0A0A" : "#FBF062") : f);
-          });
+          const x0 = Math.round(r.l / Z), x1 = Math.round(r.r / Z) - 1, y = Math.round((r.b - oy) / Z);
+          const mitte = (x0 + x1) / 2, halb = (x1 - x0) / 2 + 0.5, p = Math.min(1, (jetzt - karteSeit) / 380), weit = halb * (1 - (1 - p) * (1 - p));
+          for (let x = x0; x <= x1; x += 1) if (Math.abs(x - mitte) <= weit) malFest(x, y, f);
         }
 
         if (ladung.an) { // Aufladen: die Wärme unter dem Zeiger wächst mit der Haltedauer
           const ch = Math.min((jetzt - ladung.t0) / 2200, 1);
-          auftragen(ladung.x + (Math.random() - 0.5) * ch * 10, ladung.y + (Math.random() - 0.5) * ch * 10, 0.3, 3 + ch * 7);
+          // grösserer Kreis beim Drücken (Denis 19.09.): startet sichtbar grösser als der Zeigerfleck und wächst bis etwa 150 px Radius
+          auftragen(ladung.x + (Math.random() - 0.5) * ch * 10, ladung.y + (Math.random() - 0.5) * ch * 10, 0.3, 6 + ch * 17);
         }
         wellen = wellen.filter((w) => {
           const r = ((jetzt - w.t) / 1000) * (24 + w.kraft * 20), rand = Math.ceil(r) + 1;
           if (r < 0) return true;
           if (r > w.weite) return false;
-          const staerke = 0.4 + (1 - r / w.weite) * 0.6, dicke = 0.7 + w.kraft * 1.1;
+          // Gefüllte Scheibe wie bei wild, kein leerer Ring (Denis 19.09.): innen am heissesten, nach aussen kühler.
+          // So zeigt die Explosion alle Farbbänder als Ringe. Mit dem Wachsen kühlt sie insgesamt ab.
+          const kuehl = 1 - (r / w.weite) * 0.55;
           for (let dy = -rand; dy <= rand; dy += 1) for (let dx = -rand; dx <= rand; dx += 1) {
-            if (Math.abs(Math.hypot(dx, dy) - r) < dicke) heiss(w.cx + dx, w.cy + dy, staerke);
+            const d = Math.hypot(dx, dy);
+            if (d <= r) heiss(w.cx + dx, w.cy + dy, (1 - (d / Math.max(1, r)) * 0.62) * kuehl);
           }
           return true;
         });
@@ -231,10 +231,10 @@ export default function PixelFeld({ ursprung }) {
           for (const c of biene.pollen) malFest(c, biene.reihe, "#F5C518");
           const schlag = Math.floor(bild / 5) % 2, wipp = Math.round(Math.sin(bild / 9));
           BIENE.forEach((zeile, r) => {
-            if (r === (schlag ? 0 : 1)) return;
+            if (schlag && (r === 0 || r === 5)) return; // Flügelschlag: das Herz zieht sich kurz zusammen
             for (let c = 0; c < zeile.length; c += 1) {
               const ch = zeile[biene.richtung === 1 ? c : zeile.length - 1 - c];
-              if (ch !== ".") malFest(Math.round(biene.x) - 4 + c, biene.reihe - 3 + r + wipp, BFARBE[ch]);
+              if (ch !== ".") malFest(Math.round(biene.x) - 4 + c, biene.reihe - 7 + r + wipp, BFARBE[ch]); // Körpermitte (Zeile 7) auf der Pollenreihe
             }
           });
           if (biene.x * Z > sx + B + 60 || biene.x * Z < sx - 120) { // am Rand: neue Zeile, zurück
@@ -320,9 +320,7 @@ export default function PixelFeld({ ursprung }) {
       ladung.an = false; document.body.style.userSelect = "";
       const t = performance.now(), ch = Math.min((t - ladung.t0) / 2200, 1); // kurzer Klick sanft, langes Halten kräftig
       const [cx, cy] = zelle(ladung.x, ladung.y);
-      wellen.push({ cx, cy, t, kraft: ch, weite: 12 + ch * 46 });
-      if (ch > 0.4) wellen.push({ cx, cy, t: t + 160, kraft: ch * 0.6, weite: 8 + ch * 30 });
-      auftragen(ladung.x, ladung.y, 1, 4 + ch * 14);
+      wellen.push({ cx, cy, t, kraft: ch, weite: 9 + ch * 30 }); // Reichweite in Kacheln: kurzer Klick klein, volle Ladung gross
       // Die Explosion drückt eine Delle in die Landschaft, nur rund um den Knall, und sie wächst rasch wieder zu.
       // Die Fassung davor räumte bei voller Ladung alles ab (Denis: "verschwindet alles, das sollte nicht so sein").
       loecher.push({ x: ladung.x, y: ladung.y, r: 70 + ch * 170, t, dauer: 1400 + ch * 1400 });
