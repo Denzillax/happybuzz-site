@@ -1026,6 +1026,8 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .bh-senk-runter { animation: bh-y 38s linear infinite reverse; }
 .bh-senk-hoch   { animation: bh-y 38s linear infinite; }
 .bh-band:hover .bh-lauf { animation-play-state: paused; }
+/* Sobald das Skript die Bänder antreibt (Schwung per Mausrad), ruht die CSS-Animation */
+.bh-js .bh-lauf { animation: none !important; }
 
 @media (max-width: 860px) {
   .bh { --bh-k: 96px; padding: 12px 16px 0; }
