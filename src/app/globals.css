@@ -1356,7 +1356,8 @@ body:has(.sl) { background: #121212; }
 .wl-typ-sell .wl-pixelpunkt, .wl-typ-free .wl-pixelpunkt { box-shadow: inset 0 0 0 1px var(--wl-ink); }
 .wl-label { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
 
-.wl-kopf { display: flex; align-items: center; gap: 28px; padding: 16px 40px; position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--wl-linie); }
+/* Header ohne Trennlinie und halb durchsichtig: Raster und Wolke laufen darunter durch, es gibt keinen Abschnitt mehr */
+.wl-kopf { display: flex; align-items: center; gap: 28px; padding: 16px 40px; position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.72); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); }
 .wl-logo { display: inline-flex; align-items: center; gap: 10px; }
 /* Logo frei auf Weiss, ohne Kachel. Zitrone #FBF062 hat auf Weiss zu wenig Kontrast (Denis 19.09.), darum steht das
    Logo auf hellem Grund in Ink. Zitrone trägt es dort, wo der Grund dunkel ist (Fuss) oder die Fläche gross (Hover, Mosaik). */
@@ -1395,13 +1396,15 @@ body:has(.sl) { background: #121212; }
 .wl-knoepfe { display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* Karopapier: zwei feine Linienraster übereinander */
-.wl-raster-grund { border-top: 1px solid var(--wl-linie);
+.wl-raster-grund {
   background-image: linear-gradient(#EFEFEF 1px, transparent 1px), linear-gradient(90deg, #EFEFEF 1px, transparent 1px);
   background-size: 10px 10px; background-position: -1px -1px; }
-.wl-kopfband { height: 190px; }
+
 /* Pixelfeld unter dem Mauszeiger: nur auf dem Karoraster und HINTER dem Inhalt. Der Rastergrund ist ein eigener
    Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
-.wl-raster-grund { position: relative; z-index: 0; }
+/* Das Raster beginnt schon hinter dem Header: nach oben gezogen, innen wieder eingerückt */
+.wl-raster-grund { position: relative; z-index: 0; margin-top: -72px; padding-top: 72px; }
+@media (max-width: 900px) { .wl-raster-grund { margin-top: -64px; padding-top: 64px; } }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
 /* Band für die Pixel-Laufschrift am Ende des Rasters, der Text selbst kommt aus dem Pixelfeld */
 .wl-laufband { height: 230px; }

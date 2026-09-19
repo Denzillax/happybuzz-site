@@ -106,7 +106,7 @@ export default function PixelFeld({ ursprung }) {
     // Flächen, die frei bleiben (Texte), und die Überschriften, auf die der Pfeil zeigt. In Seitenkoordinaten.
     const vermessen = () => {
       if (!grund) return;
-      sperren = [...grund.querySelectorAll(".wl-label, .wl-h2, .wl-mehr, .wl-format-name, .wl-format-sub, .wl-format-nr, .wl-probe, .wl-probe-pfeil")]
+      sperren = [...grund.querySelectorAll(".wl-zeile, .wl-gross, .wl-text, .wl-knoepfe, .wl-hero-b, .wl-label, .wl-h2, .wl-mehr, .wl-format-name, .wl-format-sub, .wl-format-nr, .wl-probe, .wl-probe-pfeil")]
         .map((el, i) => ({ ...seitenRect(el), pad: 10 + (i % 4) * 6 }));
       titel = [...grund.querySelectorAll(".wl-h2")].map((el) => ({ ...seitenRect(el), wort: el.dataset.wort || "" }));
       const lb = grund.querySelector(".wl-laufband");
@@ -136,8 +136,9 @@ export default function PixelFeld({ ursprung }) {
       const r = grund ? grund.getBoundingClientRect() : null;
       oben = r ? (r.top + window.scrollY) / zoom : 0; unten = r ? (r.bottom + window.scrollY) / zoom : Infinity;
       oy = ((oben % Z) + Z) % Z; // Raster am Karopapier ausrichten
-      const kb = grund ? grund.querySelector(".wl-kopfband") : null;
-      if (kb) kopfband = kb.getBoundingClientRect().height / zoom;
+      // Die Landschaft reicht vom Seitenanfang bis knapp unter den Hero
+      const kb = grund ? grund.querySelector(".wl-hero") : null;
+      if (kb) kopfband = (kb.getBoundingClientRect().bottom - r.top) / zoom + 70;
       vermessen();
     };
     const streu = (a, b) => { const n = Math.sin(a * 127.1 + b * 311.7 + S1) * 43758.5453; return n - Math.floor(n); };
@@ -342,7 +343,8 @@ export default function PixelFeld({ ursprung }) {
         // Oben hängt die Landschaft wie Wolken herab: Mit der Tiefe wird ein wachsender Betrag abgezogen, es bleiben
         // nur die Gipfel. Sie endet im freien Band über den Inseraten (Denis 19.09.: sie ging zu weit in die
         // Artikel hinein). Darunter gibt es keine Landschaft mehr, nur noch die Wärme des Zeigers.
-        const abzug = tiefe / 170, mitLand = tiefe < kopfband;
+        // Dynamisch: Die Wolke reicht über den ganzen Hero und zieht sich beim Scrollen nach oben zurück
+        const abzug = tiefe / (kopfband * 0.8) + Math.min(0.5, sy / 1400), mitLand = tiefe < kopfband;
         for (let cx = c0; cx <= c1; cx += 1) {
           const px = cx * Z, k = cx + "," + cy;
           const f = fest.get(k);

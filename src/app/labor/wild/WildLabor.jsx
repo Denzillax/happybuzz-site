@@ -134,28 +134,28 @@ export default function WildLabor() {
         </div>
       </header>
 
-      <section className="wl-hero">
-        <h1 className="wl-h1">
-          <span className="wl-zeile"><span>Was du suchst,</span></span>
-          <span className="wl-zeile"><span>hat schon jemand.</span></span>
-        </h1>
-        <div className="wl-hero-unten">
-          <p className="wl-gross">Ein Marktplatz<br />für zweite Hand in der Schweiz</p>
-          <div>
-            <BLogo size={44} title="" className="wl-hero-b" />
-            <p className="wl-text">Kaufen, bieten, mieten, buchen oder verschenken. Fünf Formate an einem Ort. 20 % jeder Gebühr gehen an den Bienenschutz.</p>
-            <div className="wl-knoepfe">
-              <Link href="/listings/new" className="wl-knopf wl-knopf-ink"><Plus size={15} strokeWidth={2.2} /> Inserieren</Link>
-              <Link href="/search" className="wl-knopf wl-knopf-linie">Stöbern <ArrowUpRight size={15} strokeWidth={2} /></Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* Das Karoraster beginnt direkt unter dem Header (Denis 19.09.): Der Hero steht mitten im Raster, die
+          Pixel-Wolke hängt vom Seitenanfang herab und fliesst um die Hero-Schrift. Kein eigener Abschnitt mehr. */}
       <div className="wl-raster-grund">
         <PixelFeld ursprung=".wl-raster-grund" />
-        {/* Platz für den dichten oberen Teil der Pixel-Landschaft (PixelFeld), hier steht sonst nichts */}
-        <div className="wl-kopfband" aria-hidden="true" />
+        <section className="wl-hero">
+          <h1 className="wl-h1">
+            <span className="wl-zeile"><span>Was du suchst,</span></span>
+            <span className="wl-zeile"><span>hat schon jemand.</span></span>
+          </h1>
+          <div className="wl-hero-unten">
+            <p className="wl-gross">Ein Marktplatz<br />für zweite Hand in der Schweiz</p>
+            <div>
+              <BLogo size={44} title="" className="wl-hero-b" />
+              <p className="wl-text">Kaufen, bieten, mieten, buchen oder verschenken. Fünf Formate an einem Ort. 20 % jeder Gebühr gehen an den Bienenschutz.</p>
+              <div className="wl-knoepfe">
+                <Link href="/listings/new" className="wl-knopf wl-knopf-ink"><Plus size={15} strokeWidth={2.2} /> Inserieren</Link>
+                <Link href="/search" className="wl-knopf wl-knopf-linie">Stöbern <ArrowUpRight size={15} strokeWidth={2} /></Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
 
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
