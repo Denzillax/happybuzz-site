@@ -9,7 +9,7 @@ import { colors } from "@/lib/theme";
 import { calcFeeFromPrice, makeBeeRef, makeArtRef, makeFeeRef, calcDueDate, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import { orderQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
-import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel } from "@/lib/formatters";
+import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel, lieferung } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
 const g = "#686E78";
@@ -24,7 +24,7 @@ export default function InvoicePage() {
   useEffect(() => {
     async function load() {
       try {
-        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping, shipping_method, ship_speed, pickup_only)").eq("id", params.id).single();
+        const { data: p } = await supabase.from("purchases").select("*, listing:listings(id, title, price, listing_type, rent_price, rent_period, deposit_amount, fee_percentage, fee_tier, shipping_cost, free_shipping, shipping_method, ship_speed, pickup_only, shipping_available)").eq("id", params.id).single();
         if (!p) { setLoading(false); return; }
         const { data: buyer } = await supabase.from("profiles").select("*").eq("id", p.buyer_id).maybeSingle();
         const { data: seller } = await supabase.from("profiles").select("*").eq("id", p.seller_id).maybeSingle();
@@ -47,7 +47,7 @@ export default function InvoicePage() {
   // listing.price der laufende Gebotsstand (Beta-Feedback Denis 15.09.:
   // Sofortkauf-Rechnung zeigte den letzten Gebotspreis statt CHF 50).
   const price = parseFloat(order.price || order.listing?.price || 0);
-  const shipping = parseFloat(order.listing?.shipping_cost || order.shipping_cost || 0);
+  const { abholung, kosten: shipping } = lieferung(order);
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);
   const refundAmount = Math.max(0, depositAmount - damageAmount);
@@ -190,8 +190,8 @@ export default function InvoicePage() {
                 {!isDeposit && (
                   <tr style={{ borderBottom: "1px solid #EEF0F3" }}>
                     <td style={{ ...cp, fontSize: 12, color: "#5B626C" }}>
-                      {order.listing?.pickup_only ? "Lieferung: Abholung" : versandArt}
-                      {!order.listing?.pickup_only && shipping === 0 && (
+                      {abholung ? "Lieferung: Abholung" : versandArt}
+                      {!abholung && shipping === 0 && (
                         <span style={{ display: "block", fontSize: 9, color: g, marginTop: 1 }}>Versand inklusive</span>
                       )}
                     </td>

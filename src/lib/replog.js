@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "19. September 2026",
     punkte: [
+      { typ: "fix", bereich: "Bestellung", text: "Lieferung auf Bestellseite, Rechnung und QR-Betrag korrigiert. Inserate mit Versand und Abholung standen auf der Rechnung als Abholung, obwohl Versand bezahlt war. Und bei abgeholten Mieten kamen die Versandkosten des Inserats trotzdem ins Total. Jetzt zählt zuerst die Wahl in der Bestellung, alle drei Stellen rechnen gleich. Wer abholt, sieht die Abholadresse, der Vermieter den Knopf Abgeholt.", melder: "Denis" },
       { typ: "neu", bereich: "Biene", text: "Neue Biene: Die fliegende Comic-Biene ist durch eine Biene aus Punkten ersetzt, im gleichen Raster wie der neue Punkt-Schriftzug. Bei der Challenge der Woche trägt sie ein Megafon. Der Ausschalter im Footer gilt weiterhin", melder: "Denis" },
       { typ: "fix", bereich: "Design", text: "Teal und Markengrün sind eine Stufe dunkler, bei gleichem Farbton. Beide waren als Schrift und mit weisser Schrift darauf zu schwach lesbar, etwa Links wie 'Alle ansehen', Teal-Knöpfe, die eigenen Chat-Blasen und das Laufband", melder: "Denis" },
       { typ: "fix", bereich: "Design", text: "Farben auf Lesbarkeit geprüft (Kontrastmessung für jedes Paar aus Schrift und Fläche). Drei Schriftfarben waren für kleine Schrift zu hell und sind nachgedunkelt: der graue Hinweistext, die orange Statusschrift (etwa 'Warten auf Zahlung') und die Nektar-Zahl im Header. Symbole und Flächen behalten ihre Farbe", melder: "Denis" },

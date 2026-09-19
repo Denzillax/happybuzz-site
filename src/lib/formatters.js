@@ -138,3 +138,19 @@ export function getPaymentMethods(listing) {
 }
 
 export const fmtPrice = fmtCHF;
+
+// Lieferung einer Bestellung: Abholung oder Versand, und was der Versand kostet.
+// Einzige Quelle für Bestellseite, Rechnung und QR-Betrag (19.09.2026). Vorher las jede Stelle
+// das Inserat direkt, mit zwei Fehlern:
+//  - listings.pickup_only heisst so, bedeutet aber "Abholung möglich". Inserate mit Versand UND
+//    Abholung standen auf der Rechnung als "Abholung".
+//  - Die Versandkosten des Inserats kamen immer ins Total, auch wenn abgeholt wird (Mieten).
+// Zuerst zählt die Wahl in der Bestellung, erst dann das Inserat.
+export function lieferung(order, listing) {
+  const l = listing || order?.listing || {};
+  const bezahlt = parseFloat(order?.shipping_cost || 0);
+  const abholung = order?.shipping_method === "pickup" || (!(bezahlt > 0) && !l.shipping_available);
+  if (abholung) return { abholung: true, kosten: 0 };
+  if (bezahlt > 0) return { abholung: false, kosten: bezahlt };
+  return { abholung: false, kosten: l.free_shipping ? 0 : parseFloat(l.shipping_cost || 0) };
+}

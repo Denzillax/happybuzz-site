@@ -2,7 +2,7 @@
 // WICHTIG: Seit QR-Standard 2.3 sind nur noch STRUKTURIERTE Adressen (Typ S)
 // zulässig; kombinierte Adressen (Typ K) verarbeiten Banken nur noch bis
 // 30.09.2026. Darum hier Strasse/Nr/PLZ/Ort getrennt.
-import { fullName } from "@/lib/formatters";
+import { fullName, lieferung } from "@/lib/formatters";
 import { makeBeeRef } from "@/lib/fees";
 import { isValidIban } from "@/lib/iban";
 
@@ -42,7 +42,7 @@ export function qrImageUrl(payload, size = 200) {
 export function orderQrPayload(order, { deposit = false } = {}) {
   // Bestellpreis zuerst: listing.price ist bei Auktionen nur der Gebotsstand
   const price = parseFloat(order.price || order.listing?.price || 0);
-  const shipping = parseFloat(order.listing?.shipping_cost || order.shipping_cost || 0);
+  const shipping = lieferung(order).kosten;
   const depositAmount = parseFloat(order.listing?.deposit_amount || 0);
   const damageAmount = parseFloat(order.damage_amount || 0);
   const refundAmount = Math.max(0, depositAmount - damageAmount);

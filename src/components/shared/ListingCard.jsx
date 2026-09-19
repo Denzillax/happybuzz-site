@@ -14,6 +14,17 @@ import { useFavorite } from "@/hooks/useFavorite";
 const INK = "#191615";
 
 // Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
+// Lieferart als kurzer Text. ACHTUNG: pickup_only heisst in der Datenbank so, bedeutet aber
+// "Abholung möglich" (Häkchen im Formular, Standard an), unabhängig vom Versand. Viele Inserate
+// haben beides gesetzt. Wörtlich gelesen stand bei denen fälschlich "Nur Abholung" (Denis 19.09.2026).
+function lieferText(l) {
+  const versand = !!l.shipping_available, abholung = !!l.pickup_only;
+  const v = l.free_shipping ? "Gratis Versand" : "Versand";
+  if (versand && abholung) return `${v} oder Abholung`;
+  if (versand) return v;
+  return "Nur Abholung";
+}
+
 // < 24h -> Live-Countdown ("3h 5m" / "12m 9s"), abgelaufen -> endedLabel.
 // Live-Intervall nur bei < 24h (Performance bei vielen Karten im Grid).
 function Countdown({ endDate, endedLabel = "Beendet" }) {
@@ -165,7 +176,7 @@ export function ListingCard(props) {
           <span className="lc-leiste" aria-hidden="true">
             {listing.condition && <span>{conditionLabel(listing.condition)}</span>}
             {listing.condition && <span className="lc-leiste-punkt" />}
-            <span>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>
+            <span>{lieferText(listing)}</span>
           </span>
         )}
 

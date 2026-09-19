@@ -16,7 +16,7 @@ import {
   uploadDamagePhotos, submitServiceInvoice,
 } from "@/lib/listings";
 import { colors, fonts, radius } from "@/lib/theme";
-import { fmtCHF, fullName, shippingMethodLabel, handlingLabel } from "@/lib/formatters";
+import { fmtCHF, fullName, shippingMethodLabel, handlingLabel, lieferung } from "@/lib/formatters";
 import { makeBeeRef, makeArtRef, DEFAULT_FEE_PERCENT } from "@/lib/fees";
 import ServiceInvoiceEditor from "@/components/order/ServiceInvoiceEditor";
 import { getInvoiceItems } from "@/lib/api/invoices";
@@ -255,7 +255,7 @@ export default function OrderDetailPage() {
   const img = listing?.listing_images?.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))?.[0]?.url;
   const beeRef = makeBeeRef(p.id);
   const artRef = makeArtRef(p.listing_id);
-  const shippingCost = parseFloat(listing?.shipping_cost || 0);
+  const { abholung: wirdAbgeholt, kosten: shippingCost } = lieferung(p, listing);
   // Miete: die Kaution wird mit der Miete bezahlt (und nach Rueckgabe per
   // Kautions-Rechnung zurueckerstattet), gehoert also in den Zahlbetrag
   const rentDeposit = isRental ? parseFloat(listing?.deposit_amount || 0) : 0;
@@ -266,7 +266,7 @@ export default function OrderDetailPage() {
   const depositAmount = parseFloat(listing?.deposit_amount || 0);
   const shipMethodLabel = shippingMethodLabel(listing?.shipping_method) || "–";
   const shipSpeedLabel = listing?.ship_speed === "priority" ? "A-Post" : "B-Post";
-  const shippingLabel = listing?.free_shipping ? `${shipMethodLabel} ${shipSpeedLabel} (Gratis)` : `${shipMethodLabel} ${shipSpeedLabel}`;
+  const shippingLabel = wirdAbgeholt ? "Abholung" : listing?.free_shipping ? `${shipMethodLabel} ${shipSpeedLabel} (Gratis)` : `${shipMethodLabel} ${shipSpeedLabel}`;
   const counterpart = isBuyer ? p.seller : p.buyer;
   // Lieferadresse: Schnappschuss an der Bestellung, sonst Profil-Hauptadresse.
   const deliveryAddr = p.delivery_address
@@ -277,7 +277,7 @@ export default function OrderDetailPage() {
     && ["confirmed", "payment_pending", "payment_marked", "paid"].includes(p.status);
   // Abholadresse bei reiner Abholung: am Inserat gewaehlter Schnappschuss,
   // sonst die Hauptadresse des Verkaeufers.
-  const pickupAddr = (!isService && listing?.pickup_only && !listing?.shipping_available)
+  const pickupAddr = (!isService && wirdAbgeholt)
     ? (listing?.pickup_address
         || (p.seller?.street ? { street: p.seller.street, postal_code: p.seller.postal_code, city: p.seller.city } : null))
     : null;
@@ -459,7 +459,7 @@ export default function OrderDetailPage() {
                 {!isService && isSeller && p.status === "paid" && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Versand / Übergabe</h3>
-                    {listing?.shipping_available && (
+                    {!wirdAbgeholt && (
                       <>
                         <p style={{ fontSize: 13, color: colors.muted, marginBottom: 8 }}>Lieferadresse:</p>
                         <div style={{ padding: 12, background: K.sand, borderRadius: 12, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
@@ -476,7 +476,7 @@ export default function OrderDetailPage() {
                         )}
                       </>
                     )}
-                    {listing?.pickup_only && !listing?.shipping_available && (
+                    {wirdAbgeholt && (
                       <button onClick={() => doAction(markAsPickedUp, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Als übergeben markieren"}</button>
                     )}
                   </div>
