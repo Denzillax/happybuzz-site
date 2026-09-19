@@ -4,7 +4,7 @@
 // Übernommen sind Prinzipien, nicht Code: weisser Grund mit feinem Karoraster, fast schwarze Schrift, leichte
 // Grotesk mit grossen Versal-Titeln, Mono-Labels, ein Pixelfeld (PixelFeld.jsx) mit Wolke, Zeiger-Fleck,
 // Pfeil, Pixelbildern, Explosion und Laufschrift. Das Logo dient gedreht als Favoriten-Herz (BLogo herz).
-// Aufbau von oben nach unten: Hero (Suche, wechselndes Inserat, echte Zahlen), Endet bald, Neu eingestellt,
+// Aufbau von oben nach unten: Hero (fast leer), Suche mit echten Zahlen, Endet bald, Neu eingestellt,
 // Kategorien, Fünf Formate, Gebühren, So funktioniert es, Gerade passiert, Laufschrift, Fuss.
 // Alle Daten sind echt und öffentlich lesbar (Inserate, Kategorien, Gebote ohne Namen). Nichts ist erfunden:
 // Gibt es zu einem Abschnitt keine Daten, erscheint er nicht.
@@ -95,57 +95,6 @@ function Karte({ l, mitRest }) {
         <span className="wl-titel">{l.title}</span>
         <span className="wl-preis">{preis(l)}</span>
         {mitRest && l.auction_end && <Restzeit start={l.created_at} ende={l.auction_end} />}
-      </span>
-    </Link>
-  );
-}
-
-// Wechselndes Inserat im Hero: alle paar Sekunden das nächste. Beim Wechsel deckt ein Schwarm Kacheln das Bild zu,
-// dahinter wird getauscht, dann geben die Kacheln es wieder frei.
-function WechselKarte({ inserate }) {
-  const [nr, setNr] = useState(0);
-  const cvRef = useRef(null);
-  useEffect(() => {
-    if (inserate.length < 2) return;
-    const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const FARBEN = ["#0A0A0A", "#FBF062", "#3B5BD9", "#0A0A0A", "#E0492A"];
-    let raf = 0;
-    const wechseln = () => {
-      const cv = cvRef.current;
-      if (ruhig || !cv || document.hidden) { setNr((n) => (n + 1) % inserate.length); return; }
-      const b = cv.clientWidth, h = cv.clientHeight, Z = 20, sp = Math.ceil(b / Z), ze = Math.ceil(h / Z);
-      cv.width = b; cv.height = h;
-      const ctx = cv.getContext("2d"), folge = Array.from({ length: sp * ze }, (_, i) => i).sort(() => Math.random() - 0.5);
-      const t0 = performance.now();
-      let getauscht = false;
-      const takt = (t) => {
-        const p = (t - t0) / 700; // 0..0.5 zudecken, 0.5..1 freigeben
-        const anteil = p < 0.5 ? p * 2 : (1 - p) * 2;
-        if (p >= 0.5 && !getauscht) { getauscht = true; setNr((n) => (n + 1) % inserate.length); }
-        ctx.clearRect(0, 0, b, h);
-        const n = Math.round(Math.max(0, anteil) * folge.length);
-        for (let i = 0; i < n; i += 1) { const k = folge[i]; ctx.fillStyle = FARBEN[k % FARBEN.length]; ctx.fillRect((k % sp) * Z, Math.floor(k / sp) * Z, Z - 1, Z - 1); }
-        if (p < 1) raf = requestAnimationFrame(takt); else ctx.clearRect(0, 0, b, h);
-      };
-      raf = requestAnimationFrame(takt);
-    };
-    const t = setInterval(wechseln, 4800);
-    return () => { clearInterval(t); cancelAnimationFrame(raf); };
-  }, [inserate]);
-  const l = inserate[nr % Math.max(1, inserate.length)];
-  if (!l) return <div className="wl-wechsel wl-wechsel-leer" />;
-  return (
-    <Link href={`/listing/${l.id}`} className="wl-wechsel" data-typ={l.listing_type}>
-      <span className="wl-wechsel-bild">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={getCoverUrl(l)} alt="" />
-        <canvas ref={cvRef} aria-hidden="true" />
-        <span className="wl-reiter">Ansehen <ArrowUpRight size={13} strokeWidth={2} /></span>
-      </span>
-      <span className="wl-wechsel-text">
-        <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
-        <span className="wl-titel">{l.title}</span>
-        <span className="wl-preis">{preis(l)}</span>
       </span>
     </Link>
   );
@@ -285,28 +234,35 @@ export default function WildLabor() {
             <span className="wl-zeile"><span>Was du suchst,</span></span>
             <span className="wl-zeile"><span>hat schon jemand.</span></span>
           </h1>
+          {/* Fast leer wie bei wild (Denis 19.09.: die Karte rechts und die Aufteilung gefielen nicht): links die
+              Aussage in Versalien, rechts das Pixel-B und ein kurzer Satz. Suche und Knöpfe stehen im Abschnitt darunter. */}
           <div className="wl-hero-unten">
-            <div className="wl-hero-links">
-              <p className="wl-gross">Ein Marktplatz<br />für zweite Hand in der Schweiz</p>
-              <form className="wl-suche" onSubmit={suchen} role="search">
-                <Search size={19} strokeWidth={1.8} aria-hidden="true" />
-                <input className="pille-input" type="text" value={q} onChange={tippen} placeholder="Velo, Kamera, Sofa …" aria-label="Suchbegriff" />
-                <button type="submit" className="wl-knopf wl-knopf-ink eckig kein-akzent">Suchen</button>
-              </form>
+            <p className="wl-gross">Ein Marktplatz<br />für zweite Hand in der Schweiz</p>
+            <div className="wl-hero-rechts">
+              <BLogo size={44} title="" className="wl-hero-b" />
               <p className="wl-text">Kaufen, bieten, mieten, buchen oder verschenken. Fünf Formate an einem Ort. 20 % jeder Gebühr gehen an den Bienenschutz.</p>
-              <div className="wl-knoepfe">
-                <Link href="/listings/new" className="wl-knopf wl-knopf-ink"><Plus size={15} strokeWidth={2.2} /> Inserieren</Link>
-                <Link href="/search" className="wl-knopf wl-knopf-linie">Stöbern <ArrowUpRight size={15} strokeWidth={2} /></Link>
-              </div>
-              {zahlen && (
-                <p className="wl-label wl-zahlen">
-                  <span>{zahlen.inserate.toLocaleString("de-CH")} Inserate</span>
-                  <span>{zahlen.auktionen} Auktionen laufen</span>
-                  <span>{kategorien.length || 14} Kategorien</span>
-                </p>
-              )}
             </div>
-            <WechselKarte inserate={inserate.slice(0, 6)} />
+          </div>
+        </section>
+
+        <section className="wl-abschnitt wl-suchabschnitt">
+          <form className="wl-suche wl-auf" onSubmit={suchen} role="search">
+            <Search size={22} strokeWidth={1.7} aria-hidden="true" />
+            <input className="pille-input" type="text" value={q} onChange={tippen} placeholder="Was suchst du? Velo, Kamera, Sofa …" aria-label="Suchbegriff" />
+            <button type="submit" className="wl-knopf wl-knopf-ink eckig kein-akzent">Suchen</button>
+          </form>
+          <div className="wl-suchzeile wl-auf">
+            {zahlen && (
+              <p className="wl-label wl-zahlen">
+                <span>{zahlen.inserate.toLocaleString("de-CH")} Inserate</span>
+                <span>{zahlen.auktionen} Auktionen laufen</span>
+                <span>{kategorien.length || 14} Kategorien</span>
+              </p>
+            )}
+            <div className="wl-knoepfe">
+              <Link href="/listings/new" className="wl-knopf wl-knopf-ink"><Plus size={15} strokeWidth={2.2} /> Inserieren</Link>
+              <Link href="/search" className="wl-knopf wl-knopf-linie">Stöbern <ArrowUpRight size={15} strokeWidth={2} /></Link>
+            </div>
           </div>
         </section>
 

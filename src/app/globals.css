@@ -1524,18 +1524,23 @@ body:has(.wl) { background: #0A0A0A; }
 }
 /* ── Frontseite, zweiter Ausbau (19.09.2026): Hero mit Suche und wechselndem Inserat, Endet bald, Kategorien,
    Gebühren, So funktioniert es, Gerade passiert. Neue Abschnitte bewegen sich einmal beim Hereinscrollen und stehen dann. ── */
-.wl-hero-unten { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: start; }
-.wl-hero-links { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; min-width: 0; }
-.wl-hero-links .wl-text { margin: 0; }
+/* Hero fast leer wie bei wild: zwei ruhige Spalten, viel Luft, nichts Klickbares */
+.wl-hero { padding-bottom: 96px; }
+.wl-hero-unten { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; margin-top: 88px; }
+.wl-hero-rechts .wl-text { margin: 0; }
+/* Such-Abschnitt direkt unter dem Hero: ein grosses Feld über die ganze Breite, darunter Zahlen links und Knöpfe rechts */
+.wl-suchabschnitt { padding-top: 0; }
+.wl-suchzeile { display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; margin-top: 18px; }
+.wl-suchzeile .wl-zahlen { margin: 0; }
 /* Der Hauptsatz erscheint zuerst als Kacheln im Pixelfeld, die echte Schrift fährt erst danach hoch */
 .wl-h1[data-entschluesseln] .wl-zeile > span { animation-delay: .95s; }
 .wl-h1[data-entschluesseln] .wl-zeile:nth-child(2) > span { animation-delay: 1.05s; }
-.wl-suche { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 560px; height: 60px; padding: 0 8px 0 18px; background: #fff; border: 1px solid var(--wl-ink);
+.wl-suche { display: flex; align-items: center; gap: 14px; width: 100%; height: 76px; padding: 0 10px 0 24px; background: #fff; border: 1px solid var(--wl-ink);
             --e: 6px; clip-path: polygon(var(--e) 0, calc(100% - var(--e)) 0, calc(100% - var(--e)) var(--e), 100% var(--e), 100% calc(100% - var(--e)), calc(100% - var(--e)) calc(100% - var(--e)),
               calc(100% - var(--e)) 100%, var(--e) 100%, var(--e) calc(100% - var(--e)), 0 calc(100% - var(--e)), 0 var(--e), var(--e) var(--e)); }
-.wl-suche input { flex: 1; min-width: 0; height: 100%; border: none !important; outline: none; background: transparent; font: inherit; font-size: 18px; color: var(--wl-ink); box-shadow: none !important; border-radius: 0 !important; }
+.wl-suche input { flex: 1; min-width: 0; height: 100%; border: none !important; outline: none; background: transparent; font: inherit; font-size: clamp(18px, 1.8vw, 26px); font-weight: 300; letter-spacing: -.01em; color: var(--wl-ink); box-shadow: none !important; border-radius: 0 !important; }
 .wl-suche input::placeholder { color: var(--wl-leise); }
-.wl-suche .wl-knopf { height: 44px; }
+.wl-suche .wl-knopf { height: 54px; padding: 0 26px; font-size: 16px; }
 .wl-zahlen { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 4px 0 0; color: var(--wl-grau); }
 .wl-zahlen span::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; background: var(--wl-ink); }
 
@@ -1593,9 +1598,10 @@ body:has(.wl) { background: #0A0A0A; }
 .wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Geist', sans-serif; font-size: 15.5px; letter-spacing: 0; }
 
 @media (max-width: 900px) {
-  .wl-hero-unten { grid-template-columns: minmax(0, 1fr); }
-  .wl-wechsel { justify-self: start; max-width: 100%; }
-  .wl-suche { height: 54px; }
+  .wl-hero { padding-bottom: 56px; }
+  .wl-hero-unten { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
+  .wl-suche { height: 58px; padding: 0 6px 0 14px; gap: 8px; }
+  .wl-suche .wl-knopf { height: 44px; padding: 0 16px; font-size: 14.5px; }
   .wl-suche input { font-size: 16px; }
   .wl-kategorien { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wl-kategorie { padding: 14px 10px; gap: 8px; }
