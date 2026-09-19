@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowUpRight, Plus, Search } from "lucide-react";
+import { ArrowUpRight, Menu, Plus, Search, X } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import { DEFAULT_FEE_PERCENT, BEE_IMPACT_RATE } from "@/lib/constants";
@@ -21,16 +21,16 @@ import PixelFeld from "./PixelFeld";
 import PixelBiene from "./PixelBiene";
 import { FARBEN } from "./farben";
 
-const SCHRIFT = "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
+const SCHRIFT = "https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap";
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 // Pixelbild, das unter dem Zeiger entsteht, wenn man auf dem Formatnamen steht
 const FORMBILD = { sell: "stern", auction: "blitz", rent: "haus", free: "herz", service: "smiley" };
 const FORMATE = [
-  { type: "sell", nr: "01", label: "Festpreis", sub: "Kaufen wie gewohnt" },
-  { type: "auction", nr: "02", label: "Auktion", sub: "Bieten und gewinnen" },
-  { type: "rent", nr: "03", label: "Mieten", sub: "Nutzen statt besitzen" },
-  { type: "free", nr: "04", label: "Gratis", sub: "Verschenken, abholen" },
-  { type: "service", nr: "05", label: "Service", sub: "Handwerk und Hilfe buchen" },
+  { type: "sell", label: "Festpreis", sub: "Kaufen wie gewohnt" },
+  { type: "auction", label: "Auktion", sub: "Bieten und gewinnen" },
+  { type: "rent", label: "Mieten", sub: "Nutzen statt besitzen" },
+  { type: "free", label: "Gratis", sub: "Verschenken, abholen" },
+  { type: "service", label: "Service", sub: "Handwerk und Hilfe buchen" },
 ];
 const SCHRITTE = [
   { nr: "01", label: "Inserieren", sub: "Fotos hochladen, Format wählen, Bee-Rate festlegen. Die KI schreibt den Text auf Wunsch mit." },
@@ -129,7 +129,9 @@ export default function WildLabor() {
   const [kategorien, setKategorien] = useState([]);
   const [zahlen, setZahlen] = useState(null);
   const [gebote, setGebote] = useState([]);
+  const [proKategorie, setProKategorie] = useState({}); // Hauptkategorie -> Zahl aktiver Inserate
   const [q, setQ] = useState("");
+  const [menue, setMenue] = useState(false);
   const wurzel = useRef(null);
 
   useEffect(() => {
@@ -146,6 +148,20 @@ export default function WildLabor() {
       supabase.from("listings").select("id", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("listings").select("id", { count: "exact", head: true }).eq("status", "active").eq("listing_type", "auction").gt("auction_end", jetzt),
     ]).then(([a, b]) => { if (typeof a.count === "number") setZahlen({ inserate: a.count, auktionen: b.count || 0 }); });
+    // Inserate pro Hauptkategorie: Jede Kategorie eines Inserats wird zu ihrer obersten Elternkategorie hochgezählt
+    Promise.all([
+      supabase.from("categories").select("id, parent_id"),
+      supabase.from("listings").select("category_id").eq("status", "active").limit(2000),
+    ]).then(([kat, ins]) => {
+      const eltern = new Map((kat.data || []).map((k) => [k.id, k.parent_id]));
+      const zahl = {};
+      for (const l of ins.data || []) {
+        let id = l.category_id, schritte = 0;
+        while (id && eltern.get(id) && schritte < 6) { id = eltern.get(id); schritte += 1; }
+        if (id) zahl[id] = (zahl[id] || 0) + 1;
+      }
+      setProKategorie(zahl);
+    });
     // öffentliche Gebotsliste (View ohne Höchstgebot), hier ohne Namen verwendet
     supabase.from("public_bids").select("listing_id, amount, created_at").order("created_at", { ascending: false }).limit(6)
       .then(({ data }) => setGebote(data || []));
@@ -197,7 +213,9 @@ export default function WildLabor() {
       ...inserate.slice(0, 6).map((l) => ({ id: `n-${l.id}`, zeit: l.created_at, art: "Neu", text: l.title, ort: l.city, href: `/listing/${l.id}` })),
       ...gebote.filter((g) => titel.has(g.listing_id)).map((g, i) => ({ id: `g-${g.listing_id}-${i}`, zeit: g.created_at, art: "Gebot", text: `CHF ${Number(g.amount).toLocaleString("de-CH")} auf ${titel.get(g.listing_id)}`, href: `/listing/${g.listing_id}` })),
     ];
-    return zeilen.sort((a, b) => new Date(b.zeit) - new Date(a.zeit)).slice(0, 7);
+    const sortiert = zeilen.sort((a, b) => new Date(b.zeit) - new Date(a.zeit)).slice(0, 7);
+    // Nur zeigen, wenn wirklich gerade etwas passiert: Ist das Neuste älter als ein Tag, wirkt die Liste wie Stillstand
+    return sortiert.length && Date.now() - new Date(sortiert[0].zeit).getTime() < 86400000 ? sortiert : [];
   }, [inserate, endend, gebote]);
 
   const suchen = (e) => {
@@ -232,7 +250,19 @@ export default function WildLabor() {
           <Link href="/search" className="wl-rund" aria-label="Suchen"><Search size={17} strokeWidth={1.8} /></Link>
           <Link href="/favorites" className="wl-rund" aria-label="Favoriten"><BLogo herz size={17} title="" /></Link>
           <Link href="/listings/new" className="wl-knopf wl-knopf-ink" aria-label="Inserieren"><Plus size={15} strokeWidth={2.2} /> <span className="wl-nur-breit">Inserieren</span></Link>
+          <button type="button" className="wl-rund wl-menue-knopf eckig kein-akzent" aria-label={menue ? "Menü schliessen" : "Menü öffnen"} aria-expanded={menue} aria-controls="wl-menue" onClick={() => setMenue((v) => !v)}>
+            {menue ? <X size={18} strokeWidth={1.8} /> : <Menu size={18} strokeWidth={1.8} />}
+          </button>
         </div>
+        {menue && (
+          <nav id="wl-menue" className="wl-menue" aria-label="Menü">
+            <Link href="/search" onClick={() => setMenue(false)}>Stöbern</Link>
+            <Link href="/listings/new" onClick={() => setMenue(false)}>Inserieren</Link>
+            <Link href="/favorites" onClick={() => setMenue(false)}>Favoriten</Link>
+            <Link href="/how-it-works" onClick={() => setMenue(false)}>So funktioniert es</Link>
+            <Link href="/impact" onClick={() => setMenue(false)}>Bienenschutz</Link>
+          </nav>
+        )}
       </header>
 
       {/* Das Karoraster beginnt direkt unter dem Header: Der Hero steht mitten im Raster, die Pixel-Wolke hängt
@@ -265,11 +295,11 @@ export default function WildLabor() {
             <button type="submit" className="wl-knopf wl-knopf-ink eckig kein-akzent">Suchen</button>
           </form>
           <div className="wl-suchzeile wl-auf">
-            {zahlen && (
+            {/* Zahlen erst ab 200 Inseraten: Darunter lassen sie den Marktplatz leer wirken */}
+            {zahlen && zahlen.inserate >= 200 && (
               <p className="wl-label wl-zahlen">
                 <span>{zahlen.inserate.toLocaleString("de-CH")} Inserate</span>
                 <span>{zahlen.auktionen} Auktionen laufen</span>
-                <span>{kategorien.length || 14} Kategorien</span>
               </p>
             )}
             <div className="wl-knoepfe">
@@ -305,11 +335,11 @@ export default function WildLabor() {
               <span className="wl-label">Kategorien</span>
               <h2 className="wl-h2">Vom Velo bis zur Spielkonsole.</h2>
             </div>
-            <div className="wl-kategorien">
-              {kategorien.map((k, i) => (
-                <Link key={k.id} href={`/search?category=${k.id}`} className="wl-kategorie wl-auf">
-                  <span className="wl-format-nr">{String(i + 1).padStart(2, "0")}</span>
+            <div className="wl-kategorien wl-auf">
+              {kategorien.map((k) => (
+                <Link key={k.id} href={`/search?category=${k.id}`} className="wl-kategorie">
                   <span className="wl-kategorie-name">{k.name}</span>
+                  {proKategorie[k.id] > 0 && <span className="wl-kategorie-zahl" aria-label={`${proKategorie[k.id]} Inserate`}>{proKategorie[k.id]}</span>}
                   <ArrowUpRight size={16} strokeWidth={1.8} className="wl-format-pfeil" />
                 </Link>
               ))}
@@ -322,10 +352,10 @@ export default function WildLabor() {
             <span className="wl-label">Fünf Formate</span>
             <h2 className="wl-h2" data-wort="5X">Ein Marktplatz, fünf Wege zum <span className="wl-form" data-form="herz">Handel</span>.</h2>
           </div>
-          <div className="wl-formate">
+          <div className="wl-formate wl-auf">
             {FORMATE.map((f) => (
-              <Link key={f.type} href={`/search?type=${f.type}`} className={`wl-format wl-auf wl-typ-${f.type}`}>
-                <span className="wl-format-nr"><span className="wl-pixelpunkt" />{f.nr}</span>
+              <Link key={f.type} href={`/search?type=${f.type}`} className={`wl-format wl-format-ohne-nr wl-typ-${f.type}`}>
+                <span className="wl-format-nr"><span className="wl-pixelpunkt" /></span>
                 <span className="wl-format-name" data-form={FORMBILD[f.type]}>{f.label}</span>
                 <span className="wl-format-sub">{f.sub}</span>
                 <ArrowUpRight size={20} strokeWidth={1.6} className="wl-format-pfeil" />
@@ -363,9 +393,9 @@ export default function WildLabor() {
             <span className="wl-label">So funktioniert es</span>
             <h2 className="wl-h2">Drei Schritte, kein Kleingedrucktes.</h2>
           </div>
-          <div className="wl-formate">
+          <div className="wl-formate wl-auf">
             {SCHRITTE.map((f) => (
-              <div key={f.nr} className="wl-format wl-schritt wl-auf">
+              <div key={f.nr} className="wl-format wl-schritt">
                 <span className="wl-format-nr">{f.nr}</span>
                 <span className="wl-format-name">{f.label}</span>
                 <span className="wl-format-sub">{f.sub}</span>
@@ -380,9 +410,9 @@ export default function WildLabor() {
               <span className="wl-label">Gerade passiert</span>
               <h2 className="wl-h2">Was eben hereinkam.</h2>
             </div>
-            <ul className="wl-protokoll">
+            <ul className="wl-protokoll wl-auf">
               {protokoll.map((z) => (
-                <li key={z.id} className="wl-auf">
+                <li key={z.id}>
                   <Link href={z.href}>
                     <span className="wl-protokoll-zeit">{vorhin(z.zeit)}</span>
                     <span className={`wl-protokoll-art wl-protokoll-${z.art === "Gebot" ? "gebot" : "neu"}`}>{z.art}</span>

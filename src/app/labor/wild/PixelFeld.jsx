@@ -96,7 +96,7 @@ export default function PixelFeld({ ursprung }) {
           const b = Math.max(4, Math.ceil((r.r - r.l) / Z) + 2), h = Math.max(3, Math.ceil((r.b - r.t) / Z));
           const m = document.createElement("canvas"); m.width = b; m.height = h;
           const mx = m.getContext("2d");
-          mx.font = `500 ${gross}px Geist, Arial, sans-serif`; mx.textBaseline = "middle"; mx.fillStyle = "#000";
+          mx.font = `500 ${gross}px "Host Grotesk", Geist, Arial, sans-serif`; mx.textBaseline = "middle"; mx.fillStyle = "#000";
           mx.fillText(text, 0, h / 2);
           return { x: r.l, y: r.t, b, h, daten: mx.getImageData(0, 0, b, h).data };
         });

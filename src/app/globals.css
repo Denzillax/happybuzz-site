@@ -1343,7 +1343,7 @@ body:has(.sl) { background: #121212; }
    Orangerot, Navy. Jedes der fünf Formate hat eine davon (wl-typ-*). */
 .wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #6B6B6B; --wl-rot-text: #C23A1E; --wl-honig: #F5C518; --wl-gelb: #FBF062; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
       --wl-lime: #D8FF00; --wl-rot: #E0492A; --wl-navy: #1C2541; --wl-linie: #E6E6E6; background: #fff; color: var(--wl-ink);
-      min-height: 100vh; font-family: 'Geist', 'General Sans', 'Manrope', sans-serif; font-weight: 400; overflow-x: clip; }
+      min-height: 100vh; font-family: 'Host Grotesk', 'Geist', 'General Sans', 'Manrope', sans-serif; font-weight: 400; overflow-x: clip; }
 .wl a { color: inherit; text-decoration: none; }
 .wl-typ-sell { --typ: var(--wl-honig); --typ-fg: var(--wl-ink); }
 .wl-typ-auction { --typ: var(--wl-blau); --typ-fg: #fff; }
@@ -1419,7 +1419,8 @@ body:has(.sl) { background: #121212; }
   45% { transform: translate(calc(var(--beben) * .7), calc(var(--beben) * .4)); } 60% { transform: translate(calc(var(--beben) * -.5), calc(var(--beben) * -.4)); } 80% { transform: translate(calc(var(--beben) * .25), 0); } }
 .wl-beben .wl-abschnitt-kopf, .wl-beben .wl-karten, .wl-beben .wl-formate, .wl-beben .wl-herzprobe-reihe { animation: wl-zittern .42s linear; }
 /* Textstellen, über denen ein Pixelbild entsteht: fein gepunktet unterstrichen als leiser Hinweis */
-.wl-form { text-decoration: underline dotted 1px; text-underline-offset: .18em; text-decoration-color: var(--wl-leise); cursor: default; }
+/* kein Unterstrich mehr: Gepunktet unterstrichene Wörter sahen wie Links aus, sind aber keine. Das Pixelbild bleibt ein Fund. */
+.wl-form { cursor: default; }
  /* nur die Pixel-Biene, über Karten und Text */
 .wl-raster-grund .wl-abschnitt { position: relative; z-index: 1; }
 /* Gestufte Pixel-Ecken statt Rundung, wie aus dem Raster geschnitten */
@@ -1595,7 +1596,7 @@ body:has(.wl) { background: #0A0A0A; }
 .wl-protokoll-art { text-transform: uppercase; letter-spacing: .14em; font-size: 11px; }
 .wl-protokoll-gebot { color: var(--wl-blau); }
 .wl-protokoll-neu { color: var(--wl-rot-text); }
-.wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Geist', sans-serif; font-size: 15px; letter-spacing: 0; }
+.wl-protokoll-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Host Grotesk', 'Geist', sans-serif; font-size: 15px; letter-spacing: 0; }
 
 @media (max-width: 900px) {
   .wl-hero { padding-bottom: 56px; }
@@ -1619,7 +1620,7 @@ body:has(.wl) { background: #0A0A0A; }
            #3B5BD9, Violett #6C4CF1, Lime #D8FF00, Rot #E0492A, Navy #1C2541) kennzeichnen nur die fünf Formate und
            färben das Pixelfeld. Rot als Schrift: #C23A1E (Kontrast 5.3). Nebentext #2A2A2A, leise Labels #6B6B6B
            (Kontrast 5.3, vorher #8B8B8B mit 3.5). JavaScript liest dieselben Werte aus labor/wild/farben.js.
-   SCHRIFT Geist für alles, Geist Mono für Labels. Stufen: 11 Label · 12 Mono-Text · 13 · 15 Nebentext · 17 Text ·
+   SCHRIFT Host Grotesk für alles (eigenwilliger als die übliche Tech-Grotesk), Geist Mono für Labels. Stufen: 11 Label · 12 Mono-Text · 13 · 15 Nebentext · 17 Text ·
            19 Kartentitel · 22 Wortmarke, darüber fliessend (clamp). Titel leicht (300/400), Versalien nur für den
            Hauptsatz, Formatnamen und Labels. Inserattitel stehen normal, die schreiben die Nutzer selbst.
    RASTER  10 px. Karten, Linien und Pixelbilder sitzen darauf. Ecken sind gestuft (clip-path), nie gerundet.
@@ -1646,4 +1647,28 @@ body:has(.wl) { background: #0A0A0A; }
 .wl-fuss a:focus-visible { outline-color: var(--wl-gelb); }
 .wl-fuss-label { border-top: 1px solid rgba(255,255,255,.16); padding-top: 22px; }
 @media (max-width: 900px) { .wl-fuss-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ── Gestalterische Überarbeitung (19.09.2026): Struktur sagt nur Wahres ── */
+/* Formate ohne Nummer: nur die Farbmarke, sie bedeutet etwas (dieselbe Farbe trägt das Inserat) */
+.wl-format-ohne-nr { grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1.2fr) 24px; }
+.wl-format-ohne-nr .wl-pixelpunkt { width: 12px; height: 12px; margin: 0; vertical-align: 0; }
+/* Kategorie: Name, dahinter die Zahl der Inserate als echte Auskunft */
+.wl-kategorie-zahl { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .08em; color: var(--wl-leise); font-variant-numeric: tabular-nums; }
+.wl-kategorie:hover .wl-kategorie-zahl { color: var(--wl-ink); }
+/* Behälter blenden als Ganzes ein, ihre Zeilen nicht mehr einzeln */
+.wl-suchzeile { min-height: 40px; justify-content: flex-end; }
+.wl-suchzeile .wl-zahlen { margin-right: auto; }
+/* Menü am Handy */
+.wl-menue-knopf { display: none; background: #fff; cursor: pointer; color: var(--wl-ink); }
+.wl-menue { display: none; }
+@media (max-width: 900px) {
+  .wl-format-ohne-nr { grid-template-columns: 20px minmax(0, 1fr) 20px; }
+  .wl-format-ohne-nr .wl-format-pfeil { grid-column: 3; }
+  .wl-menue-knopf { display: inline-flex; }
+  /* einzeilig bleiben: Suche und Favoriten stehen am Handy im Menü und im Such-Abschnitt */
+  .wl-kopf-rechts .wl-rund:not(.wl-menue-knopf) { display: none; }
+  .wl-kopf { flex-wrap: wrap; }
+  .wl-menue { display: flex; flex-direction: column; flex-basis: 100%; border-top: 1px solid var(--wl-linie); margin-top: 4px; }
+  .wl-menue a { padding: 14px 2px; font-size: 19px; border-bottom: 1px solid var(--wl-linie); }
+  .wl-menue a:last-child { border-bottom: none; }
+}
 /* WILD-LABOR ENDE */
