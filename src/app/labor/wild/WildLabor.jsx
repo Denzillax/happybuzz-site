@@ -183,15 +183,11 @@ export default function WildLabor() {
           </div>
         </section>
 
-        <section className="wl-abschnitt wl-herzprobe wl-auf">
-          <span className="wl-label"><span className="wl-form" data-form="herz">Das Logo als Herz</span></span>
-          <div className="wl-herzprobe-reihe">
-            <span className="wl-probe"><BLogo size={96} title="" /><em>Logo</em></span>
-            <span className="wl-probe-pfeil">90°</span>
-            <span className="wl-probe"><BLogo herz size={96} title="" style={{ color: "#0A0A0A" }} /><em>Favorit aus</em></span>
-            <span className="wl-probe wl-probe-an"><BLogo herz size={96} title="" /><em>Favorit an</em></span>
-          </div>
-        </section>
+        {/* Laufschrift aus Pixeln: Das Pixelfeld stempelt den Text in dieses leere Band (siehe PixelFeld, lauf).
+            Für Screenreader steht der Satz als versteckter Text da. */}
+        <div className="wl-laufband" data-text="BEEDARO   KAUFEN.  VERKAUFEN.  GUTES TUN.   ">
+          <span className="wl-nur-leser">Beedaro. Kaufen. Verkaufen. Gutes tun.</span>
+        </div>
       </div>
 
       <footer className="wl-fuss">

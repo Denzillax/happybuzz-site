@@ -18,6 +18,11 @@
 //   - unter dem Inserat, auf dem der Zeiger steht, eine Kachelreihe in der Formatfarbe, die sich von der Mitte her aufbaut.
 // Aufladen (Maustaste halten) und Loslassen: Druckwelle, leichtes Beben der Inhalte, und die Explosion
 // reisst ein Loch in die Landschaft, das langsam wieder zuwächst.
+// Volle Ladung (gut zwei Sekunden halten): Die ganze Seite "explodiert". Das Feld darf dann für einen Moment
+// über die ganze Seite, auch über Hero und Fuss, mehrere Explosionen zünden quer übers Bild, und die Inhalte
+// werden vom Knall weggeschleudert und federn zurück (Klasse wl-spreng, Richtung pro Element als CSS-Variablen).
+// Laufschrift: Im Element .wl-laufband läuft ein Text (data-text) als Pixelschrift durch das Feld. Er ist Wärme,
+// flimmert also zwischen den heissen Farbbändern.
 // Texte bleiben mit ausgefranstem Rand frei. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
 // Ohne echte Maus steht nur die Landschaft (ruhig animiert), mit "Bewegung reduzieren" steht sie still.
 import { useEffect, useRef } from "react";
@@ -50,9 +55,25 @@ const GLYPHE = {
   I: ["XXX", ".X.", ".X.", ".X.", "XXX"], A: [".X.", "X.X", "XXX", "X.X", "X.X"], "5": ["XXX", "X..", "XXX", "..X", "XXX"],
   X: ["X.X", "X.X", ".X.", "X.X", "X.X"], "!": [".X.", ".X.", ".X.", "...", ".X."],
 };
-// Biene in Kacheln, Kopf rechts. Ihr Flügel ist das BEEDARO-Herz im Kleinen (Denis 19.09.): zwei Bögen oben,
-// darunter die versetzten Quadrate als Spitze. Y Körper, K Streifen, W Flügel, E Auge. Körper = Zeilen 6 bis 8.
-const BIENE = ["..WW.WW..", "..WWWWW..", "..WWWWW..", "..W.W.W..", "...W.W...", "....W....", ".YKYKYKK.", "YYKYKYKEK", ".YKYKYKK."];
+// Biene in Kacheln, Kopf rechts. Zweite Gestalt (Denis 19.09.: die erste war zu dünn): runder, dicker Körper
+// mit breiten Doppelstreifen, Stachel hinten, Auge, zwei Beinen. Der Flügel darüber ist das BEEDARO-Herz im
+// Kleinen: zwei Bögen oben, darunter die versetzten Quadrate als Spitze.
+// Y Körper, K Streifen und Stachel, W Flügel, E Auge. Körper = Zeilen 6 bis 11, Mitte auf Zeile 9.
+const BIENE = [
+  "...WW.WW.....",
+  "..WWWWWWW....",
+  "..WWWWWWW....",
+  "..W.W.W.W....",
+  "...W.W.W.....",
+  ".....W.......",
+  "...YYKKYYKK..",
+  "..YYYKKYYKKK.",
+  "KYYYYKKYYKKEK",
+  "KYYYYKKYYKKKK",
+  "..YYYKKYYKKK.",
+  "...YYKKYYKK..",
+  "....K...K....",
+];
 const BFARBE = { Y: "#F5C518", K: "#0A0A0A", W: "#E0492A", E: "#FFFFFF" }; // Flügel im Rot des Favoriten-Herzens
 
 export default function PixelFeld({ ursprung }) {
@@ -73,6 +94,7 @@ export default function PixelFeld({ ursprung }) {
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
     const ladung = { an: false, t0: 0, x: 0, y: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
+    let ueberallBis = 0, lauf = null, laufX = 0; // ueberallBis: bis wann das Feld die ganze Seite bedecken darf. lauf: Laufschrift
     let karte = null, karteDavor = null, karteSeit = 0, form = null, formDavor = null, kopfband = 190; // kopfband: Höhe des freien Bands oben, nur dort steht Landschaft
 
     const seitenRect = (el) => {
@@ -85,6 +107,21 @@ export default function PixelFeld({ ursprung }) {
       sperren = [...grund.querySelectorAll(".wl-label, .wl-h2, .wl-mehr, .wl-format-name, .wl-format-sub, .wl-format-nr, .wl-probe, .wl-probe-pfeil")]
         .map((el, i) => ({ ...seitenRect(el), pad: 10 + (i % 4) * 6 }));
       titel = [...grund.querySelectorAll(".wl-h2")].map((el) => ({ ...seitenRect(el), wort: el.dataset.wort || "" }));
+      const lb = grund.querySelector(".wl-laufband");
+      if (lb) {
+        const r = seitenRect(lb), text = lb.dataset.text || "";
+        if (!lauf || lauf.text !== text) {
+          // Text einmal klein rastern: ein Bildpunkt = eine Kachel, 15 Kacheln hoch
+          const hoch = 15, m = document.createElement("canvas"), mx = m.getContext("2d");
+          mx.font = `900 ${hoch + 2}px Arial, sans-serif`;
+          const breit = Math.ceil(mx.measureText(text).width) + 2;
+          m.width = breit; m.height = hoch;
+          mx.font = `900 ${hoch + 2}px Arial, sans-serif`; mx.textBaseline = "middle"; mx.fillStyle = "#000";
+          mx.fillText(text, 1, hoch / 2 + 1);
+          lauf = { text, hoch, breit, daten: mx.getImageData(0, 0, breit, hoch).data, mitte: 0 };
+        }
+        lauf.mitte = (r.t + r.b) / 2;
+      } else lauf = null;
     };
     const messen = () => {
       // body trägt auf dem Desktop einen CSS-Zoom: Zeigerkoordinaten sind Bildschirm-Pixel, die Fläche rechnet in gezoomten CSS-Pixeln
@@ -120,7 +157,7 @@ export default function PixelFeld({ ursprung }) {
 
     const seite = (e) => ({ x: (e.clientX + window.scrollX) / zoom, y: (e.clientY + window.scrollY) / zoom });
     const zelle = (x, y) => [Math.floor(x / Z), Math.floor((y - oy) / Z)];
-    const imFeld = (cy) => { const y = cy * Z + oy; return y >= oben && y + Z <= unten; };
+    const imFeld = (cy) => { if (ueberallBis) return true; const y = cy * Z + oy; return y >= oben && y + Z <= unten; };
     const malFest = (cx, cy, farbe, w = 1) => { if (imFeld(cy)) fest.set(cx + "," + cy, { w, f: farbe }); };
     // Wärme weich auftragen (Glockenform), gedeckelt bei 1
     const auftragen = (x, y, menge, sigma) => {
@@ -209,7 +246,10 @@ export default function PixelFeld({ ursprung }) {
           // Gefüllte Scheibe wie bei wild, kein leerer Ring (Denis 19.09.): innen am heissesten, nach aussen kühler.
           // So zeigt die Explosion alle Farbbänder als Ringe. Mit dem Wachsen kühlt sie insgesamt ab.
           const kuehl = 1 - (r / w.weite) * 0.55;
-          for (let dy = -rand; dy <= rand; dy += 1) for (let dx = -rand; dx <= rand; dx += 1) {
+          // nur die Kacheln im Bild rechnen: Die Scheibe der Seitenexplosion ist sonst riesig
+          const xa = Math.max(-rand, Math.floor(sx / Z) - 1 - w.cx), xe = Math.min(rand, Math.ceil((sx + B) / Z) + 1 - w.cx);
+          const ya = Math.max(-rand, Math.floor((sy - oy) / Z) - 1 - w.cy), ye = Math.min(rand, Math.ceil((sy + H - oy) / Z) + 1 - w.cy);
+          for (let dy = ya; dy <= ye; dy += 1) for (let dx = xa; dx <= xe; dx += 1) {
             const d = Math.hypot(dx, dy);
             if (d <= r) heiss(w.cx + dx, w.cy + dy, (1 - (d / Math.max(1, r)) * 0.62) * kuehl);
           }
@@ -226,7 +266,7 @@ export default function PixelFeld({ ursprung }) {
           const pollenLegen = () => { biene.pollen = []; for (let c = Math.floor(sx / Z); c < (sx + B) / Z; c += 3) biene.pollen.push(c); };
           if (!biene.an) { biene.an = true; biene.richtung = 1; biene.reihe = zelle(maus.x, maus.y)[1]; biene.x = sx / Z - 10; pollenLegen(); }
           biene.x += 0.22 * biene.richtung;
-          const maul = biene.x + (biene.richtung === 1 ? 4 : -4);
+          const maul = biene.x + (biene.richtung === 1 ? 6 : -6);
           biene.pollen = biene.pollen.filter((c) => (biene.richtung === 1 ? c > maul : c < maul));
           for (const c of biene.pollen) malFest(c, biene.reihe, "#F5C518");
           const schlag = Math.floor(bild / 5) % 2, wipp = Math.round(Math.sin(bild / 9));
@@ -234,7 +274,7 @@ export default function PixelFeld({ ursprung }) {
             if (schlag && (r === 0 || r === 5)) return; // Flügelschlag: das Herz zieht sich kurz zusammen
             for (let c = 0; c < zeile.length; c += 1) {
               const ch = zeile[biene.richtung === 1 ? c : zeile.length - 1 - c];
-              if (ch !== ".") malFest(Math.round(biene.x) - 4 + c, biene.reihe - 7 + r + wipp, BFARBE[ch]); // Körpermitte (Zeile 7) auf der Pollenreihe
+              if (ch !== ".") malFest(Math.round(biene.x) - 6 + c, biene.reihe - 9 + r + wipp, BFARBE[ch]); // Körpermitte (Zeile 9) auf der Pollenreihe
             }
           });
           if (biene.x * Z > sx + B + 60 || biene.x * Z < sx - 120) { // am Rand: neue Zeile, zurück
@@ -246,16 +286,30 @@ export default function PixelFeld({ ursprung }) {
         } else biene.an = false;
       }
 
+      // Laufschrift: der gerasterte Text wandert durch die Spalten und wird als Wärme gestempelt
+      if (lauf && lauf.mitte > sy - 120 && lauf.mitte < sy + H + 120) {
+        if (!ruhig) laufX += 0.35;
+        const r0l = zelle(0, lauf.mitte)[1] - Math.floor(lauf.hoch / 2), so = Math.floor(laufX);
+        for (let c = Math.floor(sx / Z); c <= (sx + B) / Z; c += 1) {
+          const mc = (((so + c) % lauf.breit) + lauf.breit) % lauf.breit;
+          for (let r = 0; r < lauf.hoch; r += 1) {
+            if (lauf.daten[(r * lauf.breit + mc) * 4 + 3] > 90) heiss(c, r0l + r, 0.84 + 0.13 * Math.sin(c * 0.6 + r * 0.6 - t * 5));
+          }
+        }
+      }
+
       // Wärme verglüht schnell (kurze Spur), Löcher der Explosion wachsen zu
       for (const [k, w] of waerme) { const n = w * 0.88; if (n < 0.01) waerme.delete(k); else waerme.set(k, n); }
       loecher = loecher.filter((l) => jetzt - l.t < l.dauer);
+      if (ueberallBis && jetzt > ueberallBis && !wellen.length) ueberallBis = 0;
 
       // Zeichnen: für jede sichtbare Kachel des Rasters Landschaft + Wärme, in Farbbänder geschnitten
       const bx = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0, by = beben > 0.05 ? (Math.random() - 0.5) * beben * 8 : 0;
       beben *= 0.88;
       ctx.clearRect(0, 0, B, H);
       const c0 = Math.floor(sx / Z), c1 = Math.ceil((sx + B) / Z);
-      const r0 = Math.max(Math.floor((sy - oy) / Z), Math.ceil((oben - oy) / Z)), r1 = Math.min(Math.ceil((sy + H - oy) / Z), Math.floor((unten - oy) / Z) - 1);
+      const r0 = ueberallBis ? Math.floor((sy - oy) / Z) : Math.max(Math.floor((sy - oy) / Z), Math.ceil((oben - oy) / Z));
+      const r1 = ueberallBis ? Math.ceil((sy + H - oy) / Z) : Math.min(Math.ceil((sy + H - oy) / Z), Math.floor((unten - oy) / Z) - 1);
       for (let cy = r0; cy <= r1; cy += 1) {
         const py = cy * Z + oy, tiefe = py - oben, ny = py / 900;
         // Oben hängt die Landschaft wie Wolken herab: Mit der Tiefe wird ein wachsender Betrag abgezogen, es bleiben
@@ -266,7 +320,7 @@ export default function PixelFeld({ ursprung }) {
           const px = cx * Z, k = cx + "," + cy;
           const f = fest.get(k);
           if (f) { ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f; ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1); ctx.globalAlpha = 1; continue; }
-          if (gesperrt(px + Z / 2, py + Z / 2, cx, cy)) continue;
+          if (!ueberallBis && gesperrt(px + Z / 2, py + Z / 2, cx, cy)) continue; // bei der Seitenexplosion geht es über alles
           let v = (waerme.get(k) || 0) * 0.9;
           const nx = px / 900;
           if (mitLand && streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
@@ -325,11 +379,39 @@ export default function PixelFeld({ ursprung }) {
       // Die Fassung davor räumte bei voller Ladung alles ab (Denis: "verschwindet alles, das sollte nicht so sein").
       loecher.push({ x: ladung.x, y: ladung.y, r: 70 + ch * 170, t, dauer: 1400 + ch * 1400 });
       beben = 0.2 + ch * 1.6; maus.zuletzt = t;
+      if (ch >= 0.97) seiteSprengen(t);
       if (grund) { // leichtes Beben der Inhalte, nur angedeutet (Klasse wl-beben, Stärke --beben)
         grund.style.setProperty("--beben", (0.6 + ch * 2.2).toFixed(1) + "px");
         grund.classList.remove("wl-beben"); void grund.offsetWidth; grund.classList.add("wl-beben");
         setTimeout(() => grund.classList.remove("wl-beben"), 500);
       }
+    };
+    // Volle Ladung: Die ganze Seite explodiert. Eine Scheibe füllt das Bild, weitere zünden quer darüber,
+    // die Inhalte fliegen vom Knall weg und federn zurück.
+    const seiteSprengen = (t) => {
+      const sx = window.scrollX / zoom, sy = window.scrollY / zoom;
+      ueberallBis = t + 2600; beben = 3;
+      const [cx, cy] = zelle(ladung.x, ladung.y);
+      wellen.push({ cx, cy, t, kraft: 1.6, weite: Math.ceil(Math.hypot(B, H) / Z) });
+      for (let i = 0; i < 9; i += 1) {
+        const [wx, wy] = zelle(sx + Math.random() * B, sy + Math.random() * H);
+        wellen.push({ cx: wx, cy: wy, t: t + 120 + Math.random() * 700, kraft: 0.6 + Math.random() * 0.8, weite: 14 + Math.random() * 26 });
+      }
+      const wurzel = cv.closest(".wl");
+      if (!wurzel) return;
+      const kx = ladung.x - sx, ky = ladung.y - sy; // Knallpunkt im Bild (gezoomte CSS-Pixel)
+      const teile = wurzel.querySelectorAll(".wl-zeile, .wl-gross, .wl-text, .wl-knoepfe, .wl-hero-b, .wl-label, .wl-h2, .wl-mehr, .wl-karte, .wl-format, .wl-fuss-satz, .wl-logo, .wl-kopf-rechts");
+      teile.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > window.innerHeight + 200) return; // nur was im Bild ist
+        const mx = (r.left + r.width / 2) / zoom - kx, my = (r.top + r.height / 2) / zoom - ky, d = Math.max(40, Math.hypot(mx, my));
+        const wucht = 60 + 9000 / d; // nah am Knall fliegt es weiter
+        el.style.setProperty("--sx", ((mx / d) * wucht).toFixed(0) + "px");
+        el.style.setProperty("--sy", ((my / d) * wucht - 20).toFixed(0) + "px");
+        el.style.setProperty("--sr", ((Math.random() - 0.5) * 26).toFixed(1) + "deg");
+        el.classList.remove("wl-spreng"); void el.offsetWidth; el.classList.add("wl-spreng");
+        setTimeout(() => el.classList.remove("wl-spreng"), 1300);
+      });
     };
     const raus = () => { maus.imRaster = false; maus.lx = null; karte = null; form = null; };
 

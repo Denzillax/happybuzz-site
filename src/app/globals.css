@@ -1400,6 +1400,13 @@ body:has(.sl) { background: #121212; }
    Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
 .wl-raster-grund { position: relative; z-index: 0; }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
+/* Band für die Pixel-Laufschrift am Ende des Rasters, der Text selbst kommt aus dem Pixelfeld */
+.wl-laufband { height: 230px; }
+.wl-nur-leser { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* Seitenexplosion bei voller Ladung: Jedes Element fliegt in seine Richtung (--sx, --sy, --sr setzt PixelFeld) und federt zurück */
+@keyframes wl-sprengen { 0% { transform: none; } 14% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)); } 40% { transform: translate(calc(var(--sx) * .82), calc(var(--sy) * .82 + 14px)) rotate(var(--sr)); }
+  78% { transform: translate(calc(var(--sx) * -.05), calc(var(--sy) * -.05)) rotate(calc(var(--sr) * -.08)); } 100% { transform: none; } }
+.wl .wl-spreng { animation: wl-sprengen 1.25s cubic-bezier(.2,.7,.2,1) both !important; position: relative; z-index: 6; }
 /* Leichtes Beben nach einer Explosion im Pixelfeld: Nur die Inhalte zittern kurz, nicht der Rastergrund selbst
    (ein transform dort würde die fest stehende Zeichenfläche des Pixelfelds verschieben). Stärke: --beben. */
 @keyframes wl-zittern { 0%, 100% { transform: translate(0, 0); } 15% { transform: translate(var(--beben), calc(var(--beben) * -.6)); } 30% { transform: translate(calc(var(--beben) * -1), var(--beben)); }
