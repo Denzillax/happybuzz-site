@@ -7,21 +7,19 @@
 // grosse zentrierte Titel mit enger Laufweite, Text der beim Hovern durchrollt, ruhiges Einblenden.
 // Die Vorlage ist ein Portfolio. Hier trägt dieselbe Form einen Marktplatz: Wo dort Projekte stehen, stehen echte
 // Inserate, die drei Einstiegskarten sind Kaufen, Verkaufen und Gutes tun, der Prozess ist "So funktioniert es".
+// Der Hero ist Butter (Denis 19.09.): So bleibt das Bienengelb die Hauptfarbe, Lavendel gehört der Auktion.
 // Alle Daten sind echt. Es gibt keine erfundenen Kundenstimmen: An der Stelle des Zitats steht eine Tatsache.
-// Styles: globals.css unter MEEKO-LABOR (mk-*).
+// Gemeinsame Bausteine: MeekoTeile.jsx. Styles: globals.css unter MEEKO-LABOR (mk-*).
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Camera, Flower2, Menu, Plus, Search, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, Camera, Flower2, Search, ShoppingBag } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
-import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
+import { getCoverUrl } from "@/lib/formatters";
 import { DEFAULT_FEE_PERCENT, BEE_IMPACT_RATE } from "@/lib/constants";
 import BLogo from "@/components/shared/BLogo";
+import { Fuss, Karte, Kopf, LISTE, PASTELL, Roll, useEinblenden, useMeekoSchrift } from "./MeekoTeile";
 
-const SCHRIFT = "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap";
-const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
-// Jedes Format hat seine Pastellfarbe, dieselbe trägt die Fläche hinter dem Inseratbild
-const PASTELL = { sell: "butter", auction: "lavendel", rent: "himmel", free: "mint", service: "rosa" };
 const FORMATE = [
   { type: "sell", label: "Festpreis", sub: "Kaufen wie gewohnt, zum festen Preis." },
   { type: "auction", label: "Auktion", sub: "Bieten, mitfiebern, gewinnen." },
@@ -39,83 +37,23 @@ const SCHRITTE = [
   { nr: "02", titel: "Handeln", text: "Verkaufen, versteigern, vermieten oder verschenken. Bezahlt wird direkt zwischen euch, per TWINT, Bank oder bar." },
   { nr: "03", titel: "Gutes tun", text: "Ein Fünftel der Gebühr geht an den Bienenschutz. Der Betrag ist auf der Rechnung ausgewiesen." },
 ];
-const FUSS = [
-  { titel: "Marktplatz", links: [{ label: "Stöbern", href: "/search" }, { label: "Inserieren", href: "/listings/new" }, { label: "So funktioniert es", href: "/how-it-works" }] },
-  { titel: "BEEDARO", links: [{ label: "Über uns", href: "/about" }, { label: "Bee-Impact", href: "/impact" }, { label: "Hilfe und FAQ", href: "/help" }, { label: "Kontakt", href: "/contact" }] },
-  { titel: "Rechtliches", links: [{ label: "Impressum", href: "/imprint" }, { label: "Datenschutz", href: "/privacy" }, { label: "AGB", href: "/terms" }] },
-];
-const LISTE = "id, title, listing_type, price, start_price, rent_price, rent_period, city, created_at, auction_end, listing_images(url, sort_order)";
-
-function preis(l) {
-  if (l.listing_type === "free") return "Gratis";
-  const p = getDisplayPrice(l);
-  return `${p.prefix}${p.text}${p.suffix}`;
-}
-
-// Text, der beim Hovern durchrollt (zwei gleiche Zeilen übereinander, die obere fährt hinaus, die untere herein)
-function Roll({ children }) {
-  return <span className="mk-roll"><span>{children}</span><span aria-hidden="true">{children}</span></span>;
-}
-
-function Herz() {
-  const [an, setAn] = useState(false);
-  return (
-    <button type="button" className={`mk-herz eckig kein-akzent${an ? " mk-herz-an" : ""}`} aria-pressed={an}
-      aria-label={an ? "Aus den Favoriten entfernen" : "Zu den Favoriten"} onClick={() => setAn((v) => !v)}>
-      <BLogo herz size={17} title="" />
-    </button>
-  );
-}
-
-function Restzeit({ ende }) {
-  const [jetzt, setJetzt] = useState(null);
-  useEffect(() => { setJetzt(Date.now()); const t = setInterval(() => setJetzt(Date.now()), 1000); return () => clearInterval(t); }, []);
-  if (jetzt === null) return null;
-  const sek = Math.max(0, Math.floor((new Date(ende).getTime() - jetzt) / 1000)), tage = Math.floor(sek / 86400);
-  const text = tage > 0 ? `${tage} T ${Math.floor((sek % 86400) / 3600)} Std` : `${String(Math.floor(sek / 3600)).padStart(2, "0")}:${String(Math.floor((sek % 3600) / 60)).padStart(2, "0")}:${String(sek % 60).padStart(2, "0")}`;
-  return <span className="mk-rest">Noch {text}</span>;
-}
-
-function Karte({ l, mitRest }) {
-  return (
-    <article className="mk-karte mk-auf">
-      <Link href={`/listing/${l.id}`} className="mk-karte-link" aria-label={`${l.title}, ${FORMAT[l.listing_type]}, ${preis(l)}`}>
-        <span className={`mk-tafel mk-${PASTELL[l.listing_type] || "lavendel"}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={getCoverUrl(l)} alt="" loading="lazy" />
-        </span>
-        <span className="mk-karte-text">
-          <span className="mk-tags">{FORMAT[l.listing_type]}{l.city ? `, ${l.city}` : ""}</span>
-          <span className="mk-karte-titel">{l.title}</span>
-          <span className="mk-karte-unten">
-            <span className="mk-preis">{preis(l)}</span>
-            {mitRest && l.auction_end && <Restzeit ende={l.auction_end} />}
-          </span>
-        </span>
-      </Link>
-      <Herz />
-    </article>
-  );
-}
 
 export default function MeekoLabor() {
   const router = useRouter();
   const [inserate, setInserate] = useState([]);
   const [endend, setEndend] = useState([]);
   const [q, setQ] = useState("");
-  const [menue, setMenue] = useState(false);
   const [bildNr, setBildNr] = useState(0);
   const wurzel = useRef(null);
+  useMeekoSchrift();
+  useEinblenden(wurzel, [inserate, endend]);
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet"; link.href = SCHRIFT; document.head.appendChild(link);
     const jetzt = new Date().toISOString();
     const aktiv = () => supabase.from("listings").select(LISTE).eq("status", "active").or(`expires_at.is.null,expires_at.gt.${jetzt}`);
     aktiv().order("created_at", { ascending: false }).limit(24).then(({ data }) => setInserate((data || []).filter((l) => getCoverUrl(l))));
     aktiv().eq("listing_type", "auction").gt("auction_end", jetzt).order("auction_end", { ascending: true }).limit(8)
       .then(({ data }) => setEndend((data || []).filter((l) => getCoverUrl(l)).slice(0, 3)));
-    return () => link.remove();
   }, []);
 
   // Das runde Bild im Hauptsatz zeigt echte Inserate und wechselt alle paar Sekunden
@@ -126,53 +64,15 @@ export default function MeekoLabor() {
     return () => clearInterval(t);
   }, [inserate]);
 
-  // Einblenden beim Hereinscrollen, einmal
-  useEffect(() => {
-    const el = wurzel.current;
-    if (!el) return;
-    const teile = [...el.querySelectorAll(".mk-auf:not(.mk-da)")];
-    const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (ruhig || typeof IntersectionObserver === "undefined") { teile.forEach((t) => t.classList.add("mk-da")); return; }
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("mk-da"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
-    teile.forEach((t, i) => { t.style.transitionDelay = `${(i % 3) * 70}ms`; io.observe(t); });
-    return () => io.disconnect();
-  }, [inserate, endend]);
-
   const suchen = (e) => { e.preventDefault(); const t = q.trim(); router.push(t ? `/search?q=${encodeURIComponent(t)}` : "/search"); };
   const held = inserate[bildNr % Math.max(1, Math.min(6, inserate.length))];
   const neu = inserate.slice(0, 6);
 
   return (
     <div className="mk" ref={wurzel}>
-      <header className="mk-kopf">
-        <div className="mk-kopf-pille">
-          <Link href="/labor/meeko" className="mk-logo" aria-label="BEEDARO">
-            <BLogo size={30} title="" />
-            <span>beedaro</span>
-          </Link>
-          <nav className="mk-nav" aria-label="Hauptnavigation">
-            <Link href="/search"><Roll>Stöbern</Roll></Link>
-            <Link href="/how-it-works"><Roll>So funktioniert es</Roll></Link>
-            <Link href="/impact"><Roll>Bienenschutz</Roll></Link>
-            <Link href="/favorites"><Roll>Favoriten</Roll></Link>
-          </nav>
-          <div className="mk-kopf-rechts">
-            <Link href="/listings/new" className="mk-knopf mk-knopf-dunkel"><Plus size={16} strokeWidth={2.4} aria-hidden="true" /><Roll>Inserieren</Roll></Link>
-            <button type="button" className="mk-knopf mk-menue-knopf eckig kein-akzent" aria-label={menue ? "Menü schliessen" : "Menü öffnen"} aria-expanded={menue} aria-controls="mk-menue" onClick={() => setMenue((v) => !v)}>
-              {menue ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
-            </button>
-          </div>
-        </div>
-        {menue && (
-          <nav id="mk-menue" className="mk-menue" aria-label="Menü">
-            {[["Stöbern", "/search"], ["Inserieren", "/listings/new"], ["Favoriten", "/favorites"], ["So funktioniert es", "/how-it-works"], ["Bienenschutz", "/impact"]].map(([t, h]) => (
-              <Link key={h} href={h} onClick={() => setMenue(false)}>{t}</Link>
-            ))}
-          </nav>
-        )}
-      </header>
+      <Kopf />
 
-      <section className="mk-hero">
+      <section className="mk-hero mk-butter">
         <h1 className="mk-h1">
           Was du suchst,{" "}
           <span className="mk-held" aria-hidden="true">
@@ -228,7 +128,8 @@ export default function MeekoLabor() {
             <h2 className="mk-h2">Endet bald</h2>
             <p>Diese Auktionen laufen als Nächste aus. Wer zuletzt bietet, gewinnt.</p>
           </div>
-          <div className="mk-karten">{endend.map((l) => <Karte key={l.id} l={l} mitRest />)}</div>
+          {/* führt in der Vorschau auf die Inseratseite im selben Stil */}
+          <div className="mk-karten">{endend.map((l) => <Karte key={l.id} l={l} mitRest ziel={`/labor/meeko/inserat?id=${l.id}`} />)}</div>
         </section>
       )}
 
@@ -265,24 +166,7 @@ export default function MeekoLabor() {
         </ol>
       </section>
 
-      <footer className="mk-fuss">
-        <div className="mk-fuss-tafel">
-          <div className="mk-fuss-kopf">
-            <BLogo size={72} title="BEEDARO" />
-            <p className="mk-fuss-satz">Kaufen. Verkaufen. Gutes tun.</p>
-            <Link href="/listings/new" className="mk-knopf"><Roll>Jetzt inserieren</Roll></Link>
-          </div>
-          <nav className="mk-fuss-nav" aria-label="Fusszeile">
-            {FUSS.map((g) => (
-              <div key={g.titel}>
-                <span className="mk-tags">{g.titel}</span>
-                {g.links.map((x) => <Link key={x.href} href={x.href}><Roll>{x.label}</Roll></Link>)}
-              </div>
-            ))}
-          </nav>
-          <p className="mk-fuss-schluss">© {new Date().getFullYear()} BEEDARO, Schweiz. Vorschau neben der echten Startseite.</p>
-        </div>
-      </footer>
+      <Fuss />
     </div>
   );
 }
