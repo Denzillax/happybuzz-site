@@ -1339,14 +1339,25 @@ body:has(.sl) { background: #121212; }
    mit grossen Versal-Titeln, Mono-Labels (Geist Mono), 6 px Rundung. Gelb #FFF55B als einzige Farbe.
    Alles unter .wl gekapselt.
    ═══════════════════════════════════════════ */
-.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #8B8B8B; --wl-gelb: #FFF55B; --wl-linie: #E6E6E6; background: #fff; color: var(--wl-ink);
+/* Farben von craft.wild.as übernommen (Denis 19.09.: nicht nur Schwarz-Weiss): Gelb, Blau, Violett, Lime,
+   Orangerot, Navy. Jedes der fünf Formate hat eine davon (wl-typ-*). */
+.wl { --wl-ink: #0A0A0A; --wl-grau: #2A2A2A; --wl-leise: #8B8B8B; --wl-gelb: #F5C518; --wl-blau: #3B5BD9; --wl-lila: #6C4CF1;
+      --wl-lime: #D8FF00; --wl-rot: #E0492A; --wl-navy: #1C2541; --wl-linie: #E6E6E6; background: #fff; color: var(--wl-ink);
       min-height: 100vh; font-family: 'Geist', 'General Sans', 'Manrope', sans-serif; font-weight: 400; overflow-x: clip; }
 .wl a { color: inherit; text-decoration: none; }
+.wl-typ-sell { --typ: var(--wl-gelb); --typ-fg: var(--wl-ink); }
+.wl-typ-auction { --typ: var(--wl-blau); --typ-fg: #fff; }
+.wl-typ-rent { --typ: var(--wl-lila); --typ-fg: #fff; }
+.wl-typ-free { --typ: var(--wl-lime); --typ-fg: var(--wl-ink); }
+.wl-typ-service { --typ: var(--wl-rot); --typ-fg: #fff; }
+/* kleines Farbquadrat vor Labels, wie ein Pixel aus dem Logo */
+.wl-pixelpunkt { display: inline-block; width: 9px; height: 9px; margin-right: 8px; background: var(--typ, var(--wl-gelb)); vertical-align: -1px; }
 .wl-label { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
 
 .wl-kopf { display: flex; align-items: center; gap: 28px; padding: 16px 40px; position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--wl-linie); }
 .wl-logo { display: inline-flex; align-items: center; gap: 10px; }
-.wl-logo-marke { width: 40px; height: 40px; border-radius: 6px; background: var(--wl-ink); color: var(--wl-gelb); display: inline-flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
+/* Logo frei auf Weiss, ohne Kachel (Denis 19.09.). Dafür das kräftigere Gelb von wild, das blasse Zitronengelb trüge auf Weiss nicht. */
+.wl-logo-marke { color: var(--wl-gelb); display: inline-flex; align-items: center; justify-content: center; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
 .wl-logo:hover .wl-logo-marke { transform: rotate(-90deg); }
 .wl-logo:hover { filter: none !important; }
 .wl-wort { font-size: 22px; font-weight: 500; letter-spacing: -.03em; }
@@ -1361,7 +1372,7 @@ body:has(.sl) { background: #121212; }
             border: 1px solid var(--wl-ink); cursor: pointer; transition: background .2s ease, color .2s ease, transform .2s ease; }
 .wl-knopf:hover { filter: none !important; transform: translateY(-1px); }
 .wl .wl-knopf-ink { background: var(--wl-ink); color: #fff; }
-.wl .wl-knopf-ink:hover { background: var(--wl-gelb); color: var(--wl-ink); border-color: var(--wl-gelb); }
+.wl .wl-knopf-ink:hover { background: var(--wl-blau); color: #fff; border-color: var(--wl-blau); }
 .wl .wl-knopf-linie { background: #fff; color: var(--wl-ink); }
 .wl .wl-knopf-linie:hover { background: var(--wl-ink); color: #fff; }
 
@@ -1373,7 +1384,7 @@ body:has(.sl) { background: #121212; }
 @keyframes wl-hoch { from { transform: translateY(108%); } to { transform: translateY(0); } }
 .wl-hero-unten { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 64px; align-items: start; }
 .wl-gross { margin: 0; font-size: clamp(18px, 1.9vw, 28px); line-height: 1.15; text-transform: uppercase; letter-spacing: -.01em; }
-.wl-hero-b { color: var(--wl-ink); margin-bottom: 18px; }
+.wl-hero-b { color: var(--wl-gelb); margin-bottom: 18px; }
 .wl-text { margin: 0 0 24px; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.4; color: var(--wl-grau); max-width: 30em; }
 .wl-knoepfe { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -1405,7 +1416,7 @@ body:has(.sl) { background: #121212; }
 .wl-herz { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; padding: 0; border: none; border-radius: 6px !important; background: #fff; color: #C9C9C9; cursor: pointer;
            display: inline-flex; align-items: center; justify-content: center; transition: color .2s ease, background .2s ease, transform .2s ease; }
 .wl-herz:hover { color: var(--wl-ink); filter: none !important; }
-.wl-herz-an, .wl-herz-an:hover { background: var(--wl-ink); color: var(--wl-gelb); animation: wl-pop .35s cubic-bezier(.3,1.6,.5,1); }
+.wl-herz-an, .wl-herz-an:hover { background: var(--wl-rot); color: #fff; animation: wl-pop .35s cubic-bezier(.3,1.6,.5,1); }
 @keyframes wl-pop { 0% { transform: scale(.7); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
 .wl-meta { margin-top: 14px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; color: var(--wl-leise); }
 .wl-titel { margin-top: 6px; font-size: 19px; font-weight: 500; line-height: 1.2; letter-spacing: -.015em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -1414,9 +1425,10 @@ body:has(.sl) { background: #121212; }
 .wl-formate { border-top: 1px solid var(--wl-ink); }
 .wl-format { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1.2fr) 24px; gap: 16px; align-items: baseline; padding: 22px 8px; border-bottom: 1px solid var(--wl-linie); background: transparent;
              transition: background .25s ease, padding .25s ease; }
-.wl-format:hover { background: var(--wl-gelb); padding-left: 20px; filter: none !important; }
+.wl-format:hover { background: var(--typ); color: var(--typ-fg) !important; padding-left: 20px; filter: none !important; }
 .wl-format-nr { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--wl-leise); }
-.wl-format:hover .wl-format-nr { color: var(--wl-ink); }
+.wl-format:hover .wl-format-nr, .wl-format:hover .wl-format-sub { color: inherit; }
+.wl-format:hover .wl-pixelpunkt { background: currentColor; }
 .wl-format-name { font-size: clamp(24px, 2.8vw, 40px); font-weight: 300; letter-spacing: -.025em; text-transform: uppercase; line-height: 1; }
 .wl-format-sub { font-size: 16px; color: var(--wl-grau); }
 .wl-format-pfeil { align-self: center; transition: transform .25s ease; }
@@ -1425,8 +1437,8 @@ body:has(.sl) { background: #121212; }
 .wl-herzprobe { padding-bottom: 88px; }
 .wl-herzprobe-reihe { display: flex; align-items: flex-end; gap: 40px; flex-wrap: wrap; margin-top: 28px; }
 .wl-probe { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px; background: #fff; border: 1px solid var(--wl-linie); border-radius: 6px; color: var(--wl-ink); }
-.wl-probe:first-child { background: var(--wl-ink); color: var(--wl-gelb); border-color: var(--wl-ink); }
-.wl-probe-an { background: var(--wl-ink); color: var(--wl-gelb); border-color: var(--wl-ink); }
+.wl-probe:first-child { color: var(--wl-gelb); }
+.wl-probe-an { background: var(--wl-rot); color: #fff; border-color: var(--wl-rot); }
 .wl-probe em { font-style: normal; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .16em; opacity: .7; }
 .wl-probe-pfeil { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; color: var(--wl-leise); padding-bottom: 70px; }
 
@@ -1450,7 +1462,7 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-karten { grid-template-columns: repeat(2, 1fr); gap: 28px 12px; }
   .wl-titel { font-size: 16px; }
   .wl-reiter { transform: none; font-size: 9.5px; padding: 7px 9px 6px 10px; }
-  .wl-format { grid-template-columns: 34px minmax(0, 1fr) 20px; gap: 4px 10px; padding: 16px 4px; }
+  .wl-format { grid-template-columns: 52px minmax(0, 1fr) 20px; gap: 4px 10px; padding: 16px 4px; }
   .wl-format-sub { grid-column: 2; font-size: 14px; }
   .wl-format-pfeil { grid-row: 1; grid-column: 3; }
   .wl-herzprobe-reihe { gap: 14px; }

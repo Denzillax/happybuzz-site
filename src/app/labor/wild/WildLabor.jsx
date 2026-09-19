@@ -2,7 +2,7 @@
 // Vorschau (Denis 19.09.2026): BEEDARO in der Richtung von craft.wild.as mit dem neuen Pixel-B.
 // Übernommen sind die Prinzipien, nicht der Code: weisser Grund mit feinem Karoraster, fast
 // schwarze Schrift, leichte Grotesk mit grossen Versal-Titeln, kleine Mono-Labels, ein
-// Pixel-Mosaik, das von oben ins Bild wächst. Gelb #FFF55B ist die einzige Farbe.
+// Pixel-Mosaik, das von oben ins Bild wächst. Farben von wild: Gelb, Blau, Violett, Lime, Orangerot, Navy.
 // Das Logo dient um 90 Grad gedreht als Favoriten-Herz (BLogo herz).
 // Eigene Route ausserhalb von (public) mit eigenem Header. Styles: globals.css unter WILD-LABOR (wl-*).
 import { useEffect, useRef, useState } from "react";
@@ -29,7 +29,7 @@ function preis(l) {
 }
 
 // Pixel-Mosaik: Spalten aus Quadraten wachsen von oben herab und ziehen sich wieder zurück.
-// Gelb und Ink, dazwischen wenige graue. Läuft nur im Bild, steht mit "Bewegung reduzieren" still.
+// In den Farben von wild. Läuft nur im Bild, steht mit "Bewegung reduzieren" still.
 function PixelBand() {
   const ref = useRef(null);
   useEffect(() => {
@@ -39,7 +39,8 @@ function PixelBand() {
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const Z = 16, REIHEN = 9;
     let spalten = [], B = 0, raf = 0, sichtbar = true, zeit = 0;
-    const farbe = () => { const r = Math.random(); return r < 0.55 ? "#FFF55B" : r < 0.9 ? "#0A0A0A" : "#D9D9D9"; };
+    // Palette von wild: Blau und Gelb tragen, dazu Orangerot, Lime und Navy
+    const farbe = () => { const r = Math.random(); return r < 0.3 ? "#3B5BD9" : r < 0.6 ? "#F5C518" : r < 0.75 ? "#E0492A" : r < 0.85 ? "#D8FF00" : "#1C2541"; };
     const bauen = () => {
       B = cv.parentElement.clientWidth;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -98,7 +99,7 @@ function Karte({ l }) {
         <Herz id={l.id} />
         <span className="wl-reiter">Ansehen <ArrowUpRight size={13} strokeWidth={2} /></span>
       </span>
-      <span className="wl-meta">{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
+      <span className={`wl-meta wl-typ-${l.listing_type}`}><span className="wl-pixelpunkt" />{FORMAT[l.listing_type]}{l.city ? ` · ${l.city}` : ""}</span>
       <span className="wl-titel">{l.title}</span>
       <span className="wl-preis">{preis(l)}</span>
     </Link>
@@ -138,7 +139,7 @@ export default function WildLabor() {
     <div className="wl" ref={wurzel}>
       <header className="wl-kopf">
         <Link href="/labor/wild" className="wl-logo" aria-label="BEEDARO">
-          <span className="wl-logo-marke"><BLogo size={26} title="" /></span>
+          <span className="wl-logo-marke"><BLogo size={36} title="" /></span>
           <span className="wl-wort">beedaro</span>
         </Link>
         <nav className="wl-nav" aria-label="Hauptnavigation">
@@ -190,8 +191,8 @@ export default function WildLabor() {
           </div>
           <div className="wl-formate">
             {FORMATE.map((f) => (
-              <Link key={f.type} href={`/search?type=${f.type}`} className="wl-format wl-auf">
-                <span className="wl-format-nr">{f.nr}</span>
+              <Link key={f.type} href={`/search?type=${f.type}`} className={`wl-format wl-auf wl-typ-${f.type}`}>
+                <span className="wl-format-nr"><span className="wl-pixelpunkt" />{f.nr}</span>
                 <span className="wl-format-name">{f.label}</span>
                 <span className="wl-format-sub">{f.sub}</span>
                 <ArrowUpRight size={20} strokeWidth={1.6} className="wl-format-pfeil" />
