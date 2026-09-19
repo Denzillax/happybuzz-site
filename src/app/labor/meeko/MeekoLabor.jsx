@@ -10,7 +10,7 @@
 // Der Hero ist Butter (Denis 19.09.): So bleibt das Bienengelb die Hauptfarbe, Lavendel gehört der Auktion.
 // Alle Daten sind echt. Es gibt keine erfundenen Kundenstimmen: An der Stelle des Zitats steht eine Tatsache.
 // Gemeinsame Bausteine: MeekoTeile.jsx. Styles: globals.css unter MEEKO-LABOR (mk-*).
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Camera, Flower2, Search, ShoppingBag } from "lucide-react";
@@ -43,7 +43,6 @@ export default function MeekoLabor() {
   const [inserate, setInserate] = useState([]);
   const [endend, setEndend] = useState([]);
   const [q, setQ] = useState("");
-  const [bildNr, setBildNr] = useState(0);
   const wurzel = useRef(null);
   useMeekoSchrift();
   useEinblenden(wurzel, [inserate, endend]);
@@ -56,25 +55,44 @@ export default function MeekoLabor() {
       .then(({ data }) => setEndend((data || []).filter((l) => getCoverUrl(l)).slice(0, 3)));
   }, []);
 
-  // Das runde Bild im Hauptsatz zeigt echte Inserate und wechselt alle paar Sekunden
+  // Die schwebenden Inserate weichen dem Mauszeiger leicht aus: Der Hero bekommt die Zeigerposition als --mx/--my (-1 bis 1),
+  // jede Kachel verschiebt sich um ihre eigene Tiefe (--p in globals.css). Nur mit Maus, nicht bei reduzierter Bewegung.
+  const hero = useRef(null);
   useEffect(() => {
-    if (inserate.length < 2) return;
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setBildNr((n) => (n + 1) % Math.min(6, inserate.length)), 3200);
-    return () => clearInterval(t);
-  }, [inserate]);
+    const el = hero.current;
+    if (!el || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let bild = 0;
+    const setzen = (x, y) => { el.style.setProperty("--mx", x.toFixed(3)); el.style.setProperty("--my", y.toFixed(3)); };
+    const bewegt = (e) => {
+      cancelAnimationFrame(bild);
+      bild = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        setzen(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
+      });
+    };
+    const weg = () => { cancelAnimationFrame(bild); setzen(0, 0); };
+    el.addEventListener("pointermove", bewegt);
+    el.addEventListener("pointerleave", weg);
+    return () => { cancelAnimationFrame(bild); el.removeEventListener("pointermove", bewegt); el.removeEventListener("pointerleave", weg); };
+  }, []);
 
   const suchen = (e) => { e.preventDefault(); const t = q.trim(); router.push(t ? `/labor/meeko/suche?q=${encodeURIComponent(t)}` : "/labor/meeko/suche"); };
-  const held = inserate[bildNr % Math.max(1, Math.min(6, inserate.length))];
   const neu = inserate.slice(0, 6);
   // Schwebende Inserate im Hero: andere als unter Neu eingestellt, solange es genug gibt
-  const schweb = (inserate.length >= 12 ? inserate.slice(6, 12) : inserate.slice(0, 6));
+  // Bei jedem Laden eine neue zufällige Auswahl (Denis 20.09.2026). Gemischt wird erst im Browser, wenn die Daten da sind,
+  // darum gibt es keinen Unterschied zwischen Server und Browser.
+  const schweb = useMemo(() => {
+    const topf = inserate.length >= 12 ? inserate.slice(6) : [...inserate];
+    for (let i = topf.length - 1; i > 0; i -= 1) { const j = Math.floor(Math.random() * (i + 1)); [topf[i], topf[j]] = [topf[j], topf[i]]; }
+    return topf.slice(0, 6);
+  }, [inserate]);
 
   return (
     <div className="mk" ref={wurzel}>
       <Kopf />
 
-      <section className="mk-hero mk-butter">
+      <section className="mk-hero mk-butter" ref={hero}>
         {/* Echte Inserate schweben links und rechts vom Hauptsatz, jedes auf der Tafel seiner Formatfarbe */}
         <div className="mk-schweb-feld">
           {schweb.map((l, i) => (
@@ -88,12 +106,7 @@ export default function MeekoLabor() {
           ))}
         </div>
         <h1 className="mk-h1">
-          Was du suchst,{" "}
-          <span className="mk-held" aria-hidden="true">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            {held && <img key={held.id} src={getCoverUrl(held)} alt="" />}
-          </span>{" "}
-          hat schon jemand.
+          Was du suchst, hat schon jemand.
         </h1>
         <p className="mk-hero-text">Der Schweizer Marktplatz für zweite Hand. <strong>Kaufen</strong>, <strong>bieten</strong>, <strong>mieten</strong>, <strong>buchen</strong> oder <strong>verschenken</strong>, alles an einem Ort.</p>
         <form className="mk-suche" onSubmit={suchen} role="search">
