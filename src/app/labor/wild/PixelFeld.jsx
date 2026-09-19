@@ -15,6 +15,7 @@
 //  - Inserate: Um die Karte unter dem Zeiger liegt eine ein Kachel breite Linie in der Formatfarbe, durch die
 //    eine helle Welle läuft. Sie bleibt, solange man auf der Karte ist, und berührt die Nachbarkarte nicht.
 //  - Aufladen: Maustaste auf freier Fläche halten, loslassen schickt eine Druckwelle (kurz = sanft, lang = gross).
+//    Die Explosion fegt die Kacheln des Mosaiks oben weg (Ereignis wl-knall) und lässt die Seite leicht beben.
 //  - Beim ersten Erscheinen streuen ein paar Kacheln ins Feld.
 // Technik: nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab, Wärme in Seitenkoordinaten
 // (scrollt mit). Nur mit echter Maus, nichts bei Touch oder "Bewegung reduzieren". Die Schleife ruht, wenn nichts glüht.
@@ -70,7 +71,7 @@ export default function PixelFeld({ ursprung }) {
     let wellen = [], funken = [], sperren = [], titel = [];
     let raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0, bild = 0, beben = 0, streuen = 0, gestreut = false;
     const maus = { x: 0, y: 0, lx: null, ly: null, imRaster: false, zuletzt: 0 };
-    const ladung = { an: false, t0: 0, x: 0, y: 0 };
+    const ladung = { an: false, t0: 0, x: 0, y: 0, cxBild: 0, cyBild: 0 };
     const biene = { an: false, x: 0, reihe: 0, richtung: 1, pollen: [] };
     let karte = null, form = null, formDavor = null, mosaik = 0; // mosaik: Höhe des Pixel-Mosaiks oben im Raster
 
@@ -287,7 +288,7 @@ export default function PixelFeld({ ursprung }) {
         for (let i = 1; i < n; i += 1) fleck(maus.lx + ((p.x - maus.lx) * i) / n, maus.ly + ((p.y - maus.ly) * i) / n, 2.6, 0.7);
       }
       maus.x = p.x; maus.y = p.y; maus.lx = p.x; maus.ly = p.y; maus.zuletzt = performance.now();
-      if (ladung.an) { ladung.x = p.x; ladung.y = p.y; }
+      if (ladung.an) { ladung.x = p.x; ladung.y = p.y; ladung.cxBild = e.clientX; ladung.cyBild = e.clientY; }
       const stelle = maus.imRaster && e.target.closest ? e.target.closest("[data-form]") : null;
       form = stelle ? stelle.dataset.form : null;
       if (!form) formDavor = null;
@@ -300,6 +301,7 @@ export default function PixelFeld({ ursprung }) {
       const p = seite(e);
       if (p.y < oben || p.y > unten) return;
       ladung.an = true; ladung.t0 = performance.now(); ladung.x = p.x; ladung.y = p.y;
+      ladung.cxBild = e.clientX; ladung.cyBild = e.clientY; // Bildschirmkoordinaten für das Mosaik
       document.body.style.userSelect = "none"; // Halten soll keinen Text markieren
       anwerfen();
     };
@@ -311,6 +313,14 @@ export default function PixelFeld({ ursprung }) {
       wellen.push({ cx, cy, t, kraft: ch, weite: 12 + ch * 46 });
       if (ch > 0.4) wellen.push({ cx, cy, t: t + 160, kraft: ch * 0.6, weite: 8 + ch * 30 });
       beben = 0.2 + ch * 1.8; maus.zuletzt = t;
+      // Die Explosion meldet sich: Das Mosaik oben lässt seine Kacheln wegfliegen (PixelBand in WildLabor.jsx),
+      // und die Seite deutet ein leichtes Beben an (Klasse wl-beben, Stärke als --beben in px).
+      window.dispatchEvent(new CustomEvent("wl-knall", { detail: { x: ladung.cxBild, y: ladung.cyBild, kraft: ch } }));
+      if (grund) {
+        grund.style.setProperty("--beben", (0.6 + ch * 2.2).toFixed(1) + "px");
+        grund.classList.remove("wl-beben"); void grund.offsetWidth; grund.classList.add("wl-beben");
+        setTimeout(() => grund.classList.remove("wl-beben"), 500);
+      }
       anwerfen();
     };
     const raus = () => { maus.imRaster = false; maus.lx = null; karte = null; form = null; anwerfen(); };

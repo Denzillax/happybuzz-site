@@ -37,6 +37,8 @@ function preis(l) {
 //  - Kacheln wechseln ab und zu die Farbe, und ein heller Farbstreifen zieht durch das Mosaik.
 //  - Von der Unterkante lösen sich Tropfen, fallen ins Karoraster und verglühen.
 //  - Scrollen gibt dem Ganzen einen Schub, der wieder ausklingt. Der Zeiger zieht die Spalten zu sich.
+//  - Explosion im Pixelfeld (Ereignis wl-knall): Die Kacheln in Reichweite fliegen vom Knall weg, die Spalten
+//    sind erst leer und wachsen dann langsam nach. Bei voller Ladung räumt es das ganze Mosaik ab.
 // Läuft nur im Bild. Mit "Bewegung reduzieren" steht ein ruhiges Mosaik ohne Tropfen.
 function PixelBand() {
   const ref = useRef(null);
@@ -48,7 +50,7 @@ function PixelBand() {
     const Z = 10, REIHEN = 24, KANTE = 9; // Fläche 24 Reihen hoch, das Mosaik selbst pendelt um 9, darunter fallen die Tropfen
     const PALETTE = ["#3B5BD9", "#3B5BD9", "#FBF062", "#FBF062", "#E0492A", "#D8FF00", "#1C2541", "#6C4CF1"];
     const farbe = () => PALETTE[Math.floor(Math.random() * PALETTE.length)];
-    let spalten = [], tropfen = [], B = 0, raf = 0, sichtbar = true, zeit = 0, schub = 0, letztesY = window.scrollY;
+    let spalten = [], tropfen = [], splitter = [], B = 0, raf = 0, sichtbar = true, zeit = 0, schub = 0, letztesY = window.scrollY;
     let mausSpalte = -99, mausNah = 0;
 
     const bauen = () => {
@@ -58,7 +60,7 @@ function PixelBand() {
       cv.style.width = B + "px"; cv.style.height = REIHEN * Z + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.ceil(B / Z);
-      spalten = Array.from({ length: n }, () => ({ h: 0, farben: Array.from({ length: REIHEN }, farbe) }));
+      spalten = Array.from({ length: n }, () => ({ h: 0, traeg: 0, farben: Array.from({ length: REIHEN }, farbe) }));
     };
     const hoehe = (i, n, t) => {
       const breit = (Math.sin((i / n) * Math.PI * 2.2 + t * 0.35) + 1) / 2; // lange Dünung
@@ -81,17 +83,24 @@ function PixelBand() {
         ctx.fillStyle = t.farbe;
         ctx.fillRect(t.spalte * Z, Math.floor(t.y) * Z, Z - 1, Z - 1);
       }
+      for (const k of splitter) {
+        ctx.globalAlpha = Math.max(0, Math.min(1, k.leben));
+        ctx.fillStyle = k.farbe;
+        ctx.fillRect(Math.round(k.x / Z) * Z, Math.round(k.y / Z) * Z, Z - 1, Z - 1); // auch im Flug auf dem Raster
+      }
       ctx.globalAlpha = 1;
     };
     const takt = () => {
       zeit += 1;
       const t = zeit / 60, n = spalten.length;
       spalten.forEach((s, i) => {
-        s.h += (hoehe(i, n, t) - s.h) * 0.12;
+        // nach einer Explosion wächst die Spalte erst nach einer Pause und dann gemächlich nach
+        if (s.traeg > 0) { s.traeg -= 1; if (s.traeg < 70) s.h += (hoehe(i, n, t) - s.h) * 0.02; } else s.h += (hoehe(i, n, t) - s.h) * 0.12;
         if (Math.random() < 0.004 + schub * 0.02) s.farben[Math.floor(Math.random() * REIHEN)] = farbe(); // Farbwechsel
         if (Math.random() < 0.0035 + schub * 0.03) tropfen.push({ spalte: i, y: Math.floor(s.h), v: 0.05, leben: 1.4, farbe: s.farben[Math.max(0, Math.floor(s.h) - 1)] });
       });
       tropfen = tropfen.filter((d) => { d.y += d.v; d.v += 0.012; d.leben -= 0.012; return d.leben > 0 && d.y < REIHEN; });
+      splitter = splitter.filter((k) => { k.x += k.vx; k.y += k.vy; k.vy += 0.08; k.vx *= 0.985; k.leben -= 0.018; return k.leben > 0; });
       schub *= 0.94;
       malen();
       raf = sichtbar ? requestAnimationFrame(takt) : 0;
@@ -104,19 +113,38 @@ function PixelBand() {
       const ab = (e.clientY - (r.top + KANTE * Z * zoom)) / zoom; // Abstand unter der Mosaik-Kante
       mausNah = ab < -KANTE * Z ? 0 : Math.max(0, 1 - Math.max(0, ab) / 260);
     };
+    const knall = (e) => {
+      const r = cv.getBoundingClientRect(), zoom = r.width ? r.width / B : 1, kraft = e.detail.kraft;
+      const kx = (e.detail.x - r.left) / zoom, ky = (e.detail.y - r.top) / zoom;
+      const reichweite = 140 + kraft * 1600; // kurzer Klick: nur die Kacheln in der Nähe, volle Ladung: alles
+      spalten.forEach((s, i) => {
+        const voll = Math.floor(s.h);
+        let bleibt = voll;
+        for (let z = 0; z < voll; z += 1) {
+          const x = i * Z + Z / 2, y = z * Z + Z / 2, d = Math.hypot(x - kx, y - ky);
+          if (d > reichweite) continue;
+          if (z < bleibt) bleibt = z;
+          const w = Math.atan2(y - ky, x - kx), tempo = (1 - d / reichweite) * (5 + kraft * 9) + 1.5 + Math.random() * 2;
+          splitter.push({ x: i * Z, y: z * Z, vx: Math.cos(w) * tempo, vy: Math.sin(w) * tempo - 1.5, leben: 1 + Math.random() * 0.5, farbe: s.farben[z] });
+        }
+        if (bleibt < voll) { s.h = bleibt; s.traeg = 110 + Math.floor(Math.random() * 40); }
+      });
+      schub = 1;
+      if (!raf && sichtbar) raf = requestAnimationFrame(takt);
+    };
     const rollen = () => { schub = Math.min(1, schub + Math.abs(window.scrollY - letztesY) / 400); letztesY = window.scrollY; };
 
     bauen();
     const stillstand = () => { const n = spalten.length; spalten.forEach((s, i) => { s.h = hoehe(i, n, 0); }); malen(); };
     if (ruhig) stillstand();
-    else { window.addEventListener("pointermove", zeiger, { passive: true }); window.addEventListener("scroll", rollen, { passive: true }); }
+    else { window.addEventListener("pointermove", zeiger, { passive: true }); window.addEventListener("scroll", rollen, { passive: true }); window.addEventListener("wl-knall", knall); }
     const io = new IntersectionObserver((es) => { sichtbar = es[0].isIntersecting; if (sichtbar && !raf && !ruhig) raf = requestAnimationFrame(takt); });
     io.observe(cv);
     const ro = new ResizeObserver(() => { bauen(); if (ruhig) stillstand(); });
     ro.observe(cv.parentElement);
     return () => {
       cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
-      window.removeEventListener("pointermove", zeiger); window.removeEventListener("scroll", rollen);
+      window.removeEventListener("pointermove", zeiger); window.removeEventListener("scroll", rollen); window.removeEventListener("wl-knall", knall);
     };
   }, []);
   return <canvas ref={ref} className="wl-pixel" aria-hidden="true" />;

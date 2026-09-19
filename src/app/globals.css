@@ -1402,6 +1402,11 @@ body:has(.sl) { background: #121212; }
    Stapelkontext, die Fläche liegt auf 0, Abschnitte und Mosaik auf 1. */
 .wl-raster-grund { position: relative; z-index: 0; }
 .wl-feld { position: fixed; left: 0; top: 0; z-index: 0; pointer-events: none; }
+/* Leichtes Beben nach einer Explosion im Pixelfeld: Nur die Inhalte zittern kurz, nicht der Rastergrund selbst
+   (ein transform dort würde die fest stehende Zeichenfläche des Pixelfelds verschieben). Stärke: --beben. */
+@keyframes wl-zittern { 0%, 100% { transform: translate(0, 0); } 15% { transform: translate(var(--beben), calc(var(--beben) * -.6)); } 30% { transform: translate(calc(var(--beben) * -1), var(--beben)); }
+  45% { transform: translate(calc(var(--beben) * .7), calc(var(--beben) * .4)); } 60% { transform: translate(calc(var(--beben) * -.5), calc(var(--beben) * -.4)); } 80% { transform: translate(calc(var(--beben) * .25), 0); } }
+.wl-beben .wl-abschnitt-kopf, .wl-beben .wl-karten, .wl-beben .wl-formate, .wl-beben .wl-herzprobe-reihe, .wl-beben .wl-pixel { animation: wl-zittern .42s linear; }
 /* Textstellen, über denen ein Pixelbild entsteht: fein gepunktet unterstrichen als leiser Hinweis */
 .wl-form { text-decoration: underline dotted 1px; text-underline-offset: .18em; text-decoration-color: var(--wl-leise); cursor: default; }
  /* nur die Pixel-Biene, über Karten und Text */
