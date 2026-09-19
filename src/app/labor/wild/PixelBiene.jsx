@@ -1,38 +1,25 @@
 "use client";
 // Pixel-Biene für den Hero (Denis 19.09.2026): steht an ihrem Platz und schlägt mit den Flügeln, fliegt aber nicht.
-// Gewählt aus vier Entwürfen: die Biene von vorn. Ihre Flügel sind das BEEDARO-B: rechts das Logo (Quadrate zum
+// Es ist der Entwurf 02 ("von vorn"), unverändert in Grösse und Körper: Kugelfühler, zwei Augen, Streifen, Stachel,
+// 7 px pro Kachel. Nur die runden Flügel sind durch das BEEDARO-B ersetzt, in Rot: rechts das Logo (Quadrate zum
 // Körper hin, die zwei Bögen nach aussen), links gespiegelt. Beim Flügelschlag wird das B schmal und wieder breit,
 // rund neunmal pro Sekunde. Mit "Bewegung reduzieren" steht das erste Bild.
-// Zeichen: Y Körper (Honig), K Ink (Streifen, Augen, Fühler, Stachel), F Flügel, . leer.
+// Zeichen: Y Körper (Honig), K Ink, R Flügel rot, . leer.
 import { useEffect, useState } from "react";
 
-const FARBE = { Y: "#F5C518", K: "#0A0A0A", F: "#0A0A0A" };
-// Körper von vorn: Kugelfühler, zwei Augen, Streifen, Stachel
-const KOERPER = ["KK.....KK", ".K.....K.", "..K...K..", "..YYYYY..", ".YYYYYYY.", ".YKYYYKY.", ".YYYYYYY.", "YYYYYYYYY", "KKKKKKKKK", "YYYYYYYYY", "KKKKKKKKK", ".YYYYYYY.", "..KKKKK..", "...YYY...", "....K...."];
+const FARBE = { Y: "#F5C518", K: "#0A0A0A", R: "#E0492A" };
 // Das Logo im Kleinen (eine Kachel pro Logo-Quadrat): links die versetzten Quadrate, rechts der B-Körper mit Taille
-const B_KLEIN = ["..XXX.", ".X.XXX", "X.XXX.", ".X.XXX", "..XXX."];
-const FLUEGEL_AB = 3; // Zeile des Körpers, an der die Flügel ansetzen
+const B_OFFEN = ["..RRR.", ".R.RRR", "R.RRR.", ".R.RRR", "..RRR."];
+const B_SCHMAL = ["..RR..", ".R.R..", "R.RR..", ".R.R..", "..RR.."];
+// Körper des Entwurfs 02, sieben Kacheln breit. Zeilen 5 bis 9 tragen die Flügel.
+const OBEN = ["....KK.......KK....", ".....K.......K.....", "......K.....K......", ".......YYYYY.......", "......YYYYYYY......"];
+const MITTE = ["YKYYYKY", "YYYYYYY", "KKKKKKK", "YYYYYYY", "KKKKKKK"];
+const UNTEN = ["......YYYYYYY......", ".......KKKKK.......", "........YYY........", ".........K........."];
 
-// Flügel aus dem kleinen B: Höhe immer doppelt, Breite doppelt (offen) oder einfach (beim Schlag schmal)
-function fluegel(offen) {
-  const zeilen = [];
-  for (const z of B_KLEIN) {
-    const breit = [...z].map((ch) => (ch === "X" ? "F" : ".").repeat(offen ? 2 : 1)).join("").padEnd(12, ".");
-    zeilen.push(breit, breit);
-  }
-  return zeilen; // 10 Zeilen hoch, 12 breit, Quadrate links (zum Körper), Bögen rechts
-}
-function bild(offen) {
-  const f = fluegel(offen), leer = ".".repeat(12);
-  return KOERPER.map((k, r) => {
-    const rechts = r >= FLUEGEL_AB && r < FLUEGEL_AB + f.length ? f[r - FLUEGEL_AB] : leer;
-    const links = [...rechts].reverse().join("");
-    return `${links}.${k}.${rechts}`;
-  });
-}
-const BILD_OFFEN = bild(true), BILD_SCHMAL = bild(false);
+const bild = (b) => [...OBEN, ...MITTE.map((k, i) => `${[...b[i]].reverse().join("")}${k}${b[i]}`), ...UNTEN];
+const BILD_OFFEN = bild(B_OFFEN), BILD_SCHMAL = bild(B_SCHMAL);
 
-export default function PixelBiene({ pixel = 5, title = "Biene" }) {
+export default function PixelBiene({ pixel = 7, title = "Biene" }) {
   const [schlag, setSchlag] = useState(false);
   useEffect(() => {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
