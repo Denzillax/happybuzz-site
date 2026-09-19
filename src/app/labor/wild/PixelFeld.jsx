@@ -24,7 +24,7 @@
 // Laufschrift: Im Element .wl-laufband läuft ein Text (data-text) als Pixelschrift durch das Feld. Er ist Wärme,
 // flimmert also zwischen den heissen Farbbändern. Beim Scrollen wirft er einen Schatten in Scrollrichtung, der
 // Zeiger schiebt die Buchstaben zur Seite, Explosionen drücken sie an der Wellenfront weg.
-// Texte bleiben mit ausgefranstem Rand frei. Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
+// Hinter Texten bleiben die Kacheln sichtbar, dort aber abgedämpft (ausgefranster Rand der Textzone). Nur auf dem Karoraster, hinter dem Inhalt, fängt keine Klicks ab.
 // Ohne echte Maus steht nur die Landschaft (ruhig animiert), mit "Bewegung reduzieren" steht sie still.
 import { useEffect, useRef } from "react";
 
@@ -189,13 +189,20 @@ export default function PixelFeld({ ursprung }) {
         if (g) g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") malFest(mx - Math.floor(breite / 2) + i * 4 + c, my + r, "#0A0A0A"); });
       });
     };
-    // Pfeil vom Zeiger zur Überschrift: dünner Schaft, Widerhaken, heller Puls Richtung Spitze. Er ist Wärme, also farbig gebändert.
-    const pfeil = (x, y, zx, zy, wort) => {
-      const w = Math.atan2(zy - y, zx - x), L = 9, puls = (bild * 0.35) % L;
-      for (let i = 0; i <= L; i += 0.5) { const [cx, cy] = zelle(x + Math.cos(w) * i * Z, y + Math.sin(w) * i * Z); heiss(cx, cy, Math.abs(i - puls) < 1.2 ? 0.95 : 0.7); }
-      const sx = x + Math.cos(w) * L * Z, sy = y + Math.sin(w) * L * Z;
-      for (const seitlich of [-0.62, 0.62]) for (let i = 0; i <= 4; i += 0.5) {
-        const [cx, cy] = zelle(sx - Math.cos(w + seitlich) * i * Z, sy - Math.sin(w + seitlich) * i * Z); heiss(cx, cy, 0.82);
+    // Pfeil vom Zeiger zur Überschrift, gestaltet wie in der Referenz: Der Schaft ist aufgetragene Wärme mit weicher
+    // Kante (rund zwei bis drei Kacheln stark), kein harter Ein-Kachel-Strich. Ein heller Puls wandert weich zur
+    // Spitze, die Widerhaken sind satt und etwas heisser als der Schaft. Der Pfeil zeigt in jedem Winkel.
+    const pfeil = (x, y, zx, zy, wort, t) => {
+      const w = Math.atan2(zy - y, zx - x), L = 9.5 * Z, ca = Math.cos(w), sa = Math.sin(w);
+      const puls = (t * 0.9) % 1, schritte = Math.max(16, Math.round(L / (Z * 0.5)));
+      for (let i = 0; i <= schritte; i += 1) {
+        const f = i / schritte, hell = Math.exp(-Math.pow((f - puls) * 3, 2));
+        auftragen(x + ca * L * f, y + sa * L * f, 0.5 + 0.46 * hell, 0.95);
+      }
+      const sx = x + ca * L, sy = y + sa * L, haken = 3.6 * Z;
+      for (const seite2 of [-1, 1]) {
+        const b = w + Math.PI + seite2 * 0.62, n = Math.max(8, Math.round(haken / (Z * 0.5)));
+        for (let k = 0; k <= n; k += 1) auftragen(sx + Math.cos(b) * haken * (k / n), sy + Math.sin(b) * haken * (k / n), 0.72, 0.95);
       }
       if (wort) wortStempeln(wort, Math.max(wort.length * 2 * Z + Z, x), Math.max(oben + 3 * Z, zy < y ? y + 4 * Z : y - 9 * Z));
     };
@@ -222,7 +229,7 @@ export default function PixelFeld({ ursprung }) {
               const d = Math.hypot(nx - maus.x, ny - maus.y);
               if (d > 24 && d < nah) { nah = d; ziel = { x: nx, y: ny, wort: ti.wort }; }
             }
-            if (ziel) pfeil(maus.x, maus.y, ziel.x, ziel.y, ziel.wort);
+            if (ziel) pfeil(maus.x, maus.y, ziel.x, ziel.y, ziel.wort, t);
             else auftragen(maus.x, maus.y, 0.16, 3.2);
           }
           formDavor = form;
@@ -350,7 +357,9 @@ export default function PixelFeld({ ursprung }) {
           const px = cx * Z, k = cx + "," + cy;
           const f = fest.get(k);
           if (f) { ctx.globalAlpha = Math.min(1, f.w); ctx.fillStyle = f.f; ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1); ctx.globalAlpha = 1; continue; }
-          if (!ueberallBis && gesperrt(px + Z / 2, py + Z / 2, cx, cy)) continue; // bei der Seitenexplosion geht es über alles
+          // Hinter Texten bleiben die Kacheln sichtbar (Denis 19.09.), aber abgedämpft, damit die Schrift lesbar bleibt.
+          // Der ausgefranste Rand der Textzone bleibt. Bei der Seitenexplosion gilt volle Deckkraft überall.
+          const gedaempft = !ueberallBis && gesperrt(px + Z / 2, py + Z / 2, cx, cy);
           let v = (waerme.get(k) || 0) * 0.9;
           const nx = px / 900;
           if (mitLand && streu(cx * 1.7 + 11.3, cy * 1.3 + 5.1) < einblenden) {
@@ -364,10 +373,12 @@ export default function PixelFeld({ ursprung }) {
           }
           const farbe = band(v);
           if (!farbe) continue;
+          ctx.globalAlpha = gedaempft ? 0.34 : 1;
           ctx.fillStyle = farbe;
           ctx.fillRect(px - sx + bx, py - sy + by, Z - 1, Z - 1);
         }
       }
+      ctx.globalAlpha = 1;
       // feste Kacheln verglühen ebenfalls, nur langsamer sichtbar, weil sie jedes Bild neu gesetzt werden
       for (const [k, f] of fest) { f.w *= 0.8; if (f.w < 0.12) fest.delete(k); }
 
