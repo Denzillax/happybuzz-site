@@ -9,18 +9,25 @@
 //  - Mit "Bewegung reduzieren" steht das Wort still, ohne Biene.
 import { useEffect, useRef } from "react";
 
-const TEAL = "#007C7C", HONIG = "#F4C03F", INK = "#191615", FLUEGEL = "#B9C6CE";
-// Biene als Punktbild, Kopf rechts. H Honig, K Ink, W Flügel. Die oberste Flügelreihe blinkt.
+const TEAL = "#007C7C";
+const BIENENFARBE = { H: "#F4C03F", K: "#191615", W: "#C9D4DA", w: "#9FB1BC", E: "#FFFFFF", A: "#191615", L: "#191615" };
+// Biene als Punktbild, Kopf rechts (zweite Fassung mit mehr Charakter, 18 x 11).
+// H Honig, K Ink, W/w Flügel hell und dunkel, E Auge, A Fühler, L Beine.
+// Dasselbe Bild erzeugt scratch "punktbiene.py" als public/bee-punkt.svg für die fliegende Biene.
 const BIENE = [
-  "....WW..WW....",
-  "...WWWWWWWW...",
-  "....WWWWWW....",
-  "..HHKHHKHHKK..",
-  ".HHHKHHKHHKKK.",
-  "KHHHKHHKHHKKK.",
-  ".HHHKHHKHHKKK.",
-  "..HHKHHKHHKK..",
+  "....WWW..WWW......",
+  "...WWWWW.WWWW..A.A",
+  "...WWwWWWWwWW...A.",
+  "....WWWWWWWW..KKK.",
+  "...HHKHHKHHKKKKKKK",
+  "..HHHKHHKHHKKKEKKK",
+  "KKHHHKHHKHHKKKKKKK",
+  "..HHHKHHKHHKKKKKK.",
+  "...HHKHHKHHKKKKK..",
+  "....HKHHKHH.......",
+  ".....L..L..L......",
 ];
+const SPALTEN = 18;
 
 // farbe: Punktfarbe des Worts. schrift: Schriftfamilie, aus der das Wort gerastert wird.
 export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans" }) {
@@ -32,7 +39,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const ctx = cv.getContext("2d");
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let punkte = [], B = 0, H = 0, raster = 6, raf = 0, sichtbar = true, laeuft = false, tot = false;
-    const biene = { an: false, x: 0, y: 0, t: 0, richtung: 1 };
+    const biene = { an: false, x: 0, y: 0, t: 0, richtung: 1, pollen: null };
     const maus = { x: -9999, y: -9999 };
 
     const aufbauen = () => {
@@ -80,13 +87,21 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       const r = raster * 0.4;
       for (const p of punkte) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
       if (biene.an) {
-        const z = raster * 0.92, flatter = Math.floor(biene.t / 4) % 2;
+        // Eigenleben: Flügelschlag (oberste zwei Reihen), Blinzeln alle paar Sekunden, wippende Fühler
+        const z = raster * 0.8, flatter = Math.floor(biene.t / 3) % 2;
+        const blinzelt = biene.t % 150 > 142;
+        const wipp = Math.sin(biene.t / 7) * z * 0.18;
         for (let zeile = 0; zeile < BIENE.length; zeile++) {
-          for (let spalte = 0; spalte < 14; spalte++) {
-            const ch = BIENE[zeile][biene.richtung === 1 ? spalte : 13 - spalte];
-            if (ch === "." || (ch === "W" && flatter && zeile === 0)) continue;
-            ctx.fillStyle = ch === "H" ? HONIG : ch === "K" ? INK : FLUEGEL;
-            ctx.beginPath(); ctx.arc(biene.x - 7 * z + spalte * z, biene.y - 4 * z + zeile * z, r * 0.95, 0, 6.2832); ctx.fill();
+          for (let spalte = 0; spalte < SPALTEN; spalte++) {
+            let ch = BIENE[zeile][biene.richtung === 1 ? spalte : SPALTEN - 1 - spalte];
+            if (ch === ".") continue;
+            if ((ch === "W" || ch === "w") && flatter && zeile <= 1) continue;
+            if (ch === "E" && blinzelt) ch = "K";
+            ctx.fillStyle = BIENENFARBE[ch];
+            const klein = ch === "A" || ch === "L";
+            ctx.beginPath();
+            ctx.arc(biene.x - (SPALTEN / 2) * z + spalte * z + (ch === "A" ? wipp : 0), biene.y - 5.5 * z + zeile * z, (klein ? 0.3 : 0.42) * z, 0, 6.2832);
+            ctx.fill();
           }
         }
       }
@@ -98,13 +113,28 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       let bewegt = false;
       if (biene.an) {
         bewegt = true;
-        biene.t += 1; biene.x += biene.richtung * (B / 190);
-        biene.y = H / 2 + Math.sin(biene.t / 16) * H * 0.26;
+        biene.t += 1;
+        // In der Wortmitte wird sie langsamer, als sähe sie sich um
+        const mitte = 1 - Math.min(1, Math.abs(biene.x - B / 2) / (B * 0.22));
+        biene.x += biene.richtung * (B / 190) * (1 - mitte * 0.62);
+        biene.y = H / 2 + Math.sin(biene.t / 16) * H * 0.24 + Math.sin(biene.t / 5) * 1.2;
         stoss(biene.x, biene.y, raster * 7.5, 1.7);
-        if (biene.x > B + raster * 12 || biene.x < -raster * 12) biene.an = false;
+        // Pollen: beim Überqueren der Mitte nimmt sie einen Punkt des Worts mit. Fliegt sie
+        // hinaus, lässt sie ihn los und er zischt an seinen Platz zurück.
+        if (!biene.pollen && mitte > 0.9) {
+          let best = null, bd = 1e9;
+          for (const p of punkte) { const q = (p.hx - biene.x) ** 2 + (p.hy - biene.y) ** 2; if (q < bd) { bd = q; best = p; } }
+          biene.pollen = best;
+        }
+        if (biene.pollen) {
+          const p = biene.pollen; p.vx = 0; p.vy = 0;
+          p.x = biene.x - biene.richtung * raster * 1.2; p.y = biene.y + raster * 5.4;
+        }
+        if (biene.x > B + raster * 14 || biene.x < -raster * 14) { biene.an = false; biene.pollen = null; }
       }
       if (maus.x > -9000) stoss(maus.x, maus.y, raster * 6, 0.9);
       for (const p of punkte) {
+        if (p === biene.pollen) continue;
         p.vx += (p.hx - p.x) * 0.05; p.vy += (p.hy - p.y) * 0.05;
         p.vx *= 0.83; p.vy *= 0.83; p.x += p.vx; p.y += p.vy;
         if (Math.abs(p.vx) > 0.02 || Math.abs(p.vy) > 0.02 || Math.abs(p.hx - p.x) > 0.05 || Math.abs(p.hy - p.y) > 0.05) bewegt = true;
@@ -117,7 +147,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const losfliegen = () => {
       if (biene.an || !sichtbar || ruhig || document.hidden) return;
       biene.richtung = biene.richtung === 1 ? -1 : 1;
-      biene.x = biene.richtung === 1 ? -raster * 10 : B + raster * 10;
+      biene.x = biene.richtung === 1 ? -raster * 12 : B + raster * 12;
       biene.t = 0; biene.an = true; anwerfen();
     };
 
