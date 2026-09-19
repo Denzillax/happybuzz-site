@@ -2168,15 +2168,44 @@ body:has(.mk) { background: #fff; }
   .mk-f-formate { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
-  .mk-f-hero { margin-top: -80px; padding: 120px 16px 40px; }
-  .mk-f-seite { padding: 24px 16px 0; }
-  .mk-f-karte { padding: 22px 18px; border-radius: 24px; gap: 18px; }
-  .mk-f-titel { font-size: 26px; }
-  .mk-f-formate, .mk-f-stufen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mk-f-format { min-height: 124px; }
+  /* Handy: Karte in der Seite kostete zweimal Rand. Die Abschnitte verlieren darum ihren Kasten und nutzen die volle
+     Breite, getrennt durch eine Linie. Schrift eine Stufe kleiner, Formate und Schalter als flache Zeilen. */
+  .mk-f-hero { margin-top: -80px; padding: 112px 16px 32px; }
+  .mk-f-hero .mk-s-h1 { font-size: 30px; }
+  .mk-f-hero-text { font-size: 16px; margin-top: 12px; }
+  .mk-f-seite { padding: 8px 16px 0; font-size: 16px; }
+  .mk-f-spalte { gap: 0; }
+  .mk-f-karte { padding: 26px 0; border: none; border-bottom: 1px solid rgba(29,29,29,.18); border-radius: 0; background: transparent; gap: 16px; }
+  .mk-f-titel { font-size: 24px; }
+  .mk-f-hinweis { font-size: 15px; line-height: 1.4; }
+  .mk-f-formate { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .mk-f-format { flex-direction: row; align-items: center; gap: 12px; min-height: 58px; padding: 8px 14px 12px; border-radius: 14px !important; }
+  .mk-f-format svg { width: 24px; height: 24px; flex-shrink: 0; }
+  .mk-f-format strong { margin-top: 0; font-size: 17px; }
+  .mk-f-format span { margin-left: auto; text-align: right; opacity: .75; font-size: 13px; }
   .mk-f-fotos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .mk-f-zwei, .mk-f-drei { grid-template-columns: minmax(0, 1fr); }
+  .mk-f-foto { border-radius: 14px !important; }
+  .mk-f-foto-neu { font-size: 12px; gap: 4px; padding: 6px; }
+  .mk-f-foto-neu svg { width: 22px; height: 22px; }
+  .mk-f-cover { left: 8px; bottom: 8px; font-size: 11px; padding: 1px 7px 2px; }
   .mk-f-cover-knopf { opacity: 1; }
-  .mk-f-schluss .mk-knopf { flex: 1; }
+  .mk-f-foto-weg { top: 8px; right: 8px; width: 26px; height: 26px; }
+  .mk-f-feld input, .mk-f-feld select { min-height: 48px; font-size: 16px; padding: 0 12px; }
+  .mk-f-feld textarea { font-size: 16px; padding: 12px; }
+  .mk-f-feld .mk-f-gross { min-height: 58px; font-size: 26px; }
+  .mk-f-zwei, .mk-f-drei { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .mk-f-pillen { gap: 6px; }
+  .mk-f-pillen .mk-s-pille { min-height: 40px; padding: 0 14px 3px; font-size: 15px; }
+  .mk-f-schalter { min-height: 54px; gap: 10px; padding: 8px 12px 11px; }
+  .mk-f-schalter-text span { display: none; }
+  .mk-f-schalter-text strong { font-size: 16px; }
+  .mk-f-stufen { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .mk-f-stufe { padding: 12px 12px 16px; border-radius: 14px !important; font-size: 13px; }
+  .mk-f-stufe strong { font-size: 15px; }
+  .mk-f-prozent { font-size: 34px; margin-bottom: 4px; }
+  .mk-f-prozent small { font-size: 16px; }
+  .mk-f-schluss { padding-top: 22px; }
+  .mk-f-schluss .mk-knopf { flex: 1 1 100%; }
+  .mk-f-vorschau { margin-top: 28px; }
 }
 /* MEEKO-LABOR ENDE */
