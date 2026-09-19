@@ -97,6 +97,26 @@ export function Karte({ l, mitRest, ziel }) {
   );
 }
 
+// Farbschalter nur fürs Labor (Denis 20.09.2026): wechselt zwischen den Meeko-Pastelltönen und der kräftigeren Palette,
+// die Denis am 19.09. geschickt hat. Die Wahl steht als data-mk-farben am html-Element und bleibt im Browser gespeichert.
+const PALETTEN = [["meeko", "Meeko"], ["denis", "Palette Denis"]];
+function Farbwahl() {
+  const [wahl, setWahl] = useState("meeko");
+  useEffect(() => { try { const w = localStorage.getItem("mk-farben"); if (w === "denis") setWahl(w); } catch {} }, []);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-mk-farben", wahl);
+    try { localStorage.setItem("mk-farben", wahl); } catch {}
+    return () => document.documentElement.removeAttribute("data-mk-farben");
+  }, [wahl]);
+  return (
+    <div className="mk-farbwahl" role="group" aria-label="Farbpalette im Labor">
+      {PALETTEN.map(([w, name]) => (
+        <button key={w} type="button" className="eckig kein-akzent" aria-pressed={wahl === w} onClick={() => setWahl(w)}>{name}</button>
+      ))}
+    </div>
+  );
+}
+
 export function Kopf() {
   const [menue, setMenue] = useState(false);
   return (
@@ -123,6 +143,7 @@ export function Kopf() {
           ))}
         </nav>
       )}
+      <Farbwahl />
     </header>
   );
 }
