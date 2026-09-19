@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { Search, Plus, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
+import PunktSchriftzug from "@/components/home/PunktSchriftzug";
 
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 
@@ -151,6 +152,9 @@ export default function BandHero({ mitSuche = false }) {
       <div className="bh-mitte">
         <Band achse="senk" richtung="runter" inhalt={kacheln(links, "l")} />
         <div className="bh-feld">
+          {/* Marke des Schaufensters: Punkt-Schriftzug, durch den eine Biene fliegt. Der Hauptsatz
+              darunter bleibt echter Text (die Zeichenfläche ist für Suchmaschinen unsichtbar). */}
+          <div className="bh-wort-rahmen"><PunktSchriftzug /></div>
           <h1 className="bh-satz">Was du suchst, hat schon jemand.</h1>
           <p className="bh-unter">Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.</p>
           {mitSuche && (

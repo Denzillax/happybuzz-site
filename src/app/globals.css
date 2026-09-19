@@ -977,7 +977,9 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .bh { --bh-k: 132px; --bh-l: 8px; max-width: 1280px; margin: 0 auto; padding: 16px 24px 0; }
 .bh-band { overflow: hidden; border-radius: 12px; }
 .bh-waag { width: 100%; height: var(--bh-k); }
-.bh-senk { width: var(--bh-k); height: calc(var(--bh-k) * 2 + var(--bh-l)); flex-shrink: 0; }
+.bh-senk { width: var(--bh-k); min-height: calc(var(--bh-k) * 2 + var(--bh-l)); align-self: stretch; position: relative; flex-shrink: 0; }
+/* Das Feld in der Mitte bestimmt die Höhe, die senkrechten Bänder füllen sie aus */
+.bh-senk .bh-lauf { position: absolute; left: 0; top: 0; }
 .bh-lauf { display: flex; width: max-content; will-change: transform; }
 .bh-senk .bh-lauf { flex-direction: column; width: auto; height: max-content; }
 .bh-mitte { display: flex; gap: var(--bh-l); margin: var(--bh-l) 0; align-items: stretch; }
@@ -1003,9 +1005,13 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 
 .bh-feld { flex: 1; min-width: 0; border-radius: 12px; background: #E9F6F5; display: flex; flex-direction: column;
            align-items: center; justify-content: center; text-align: center; padding: 20px 28px; }
-.bh-satz { font-family: 'General Sans', 'Manrope', sans-serif; font-size: clamp(26px, 3.4vw, 40px); font-weight: 700;
+/* Punkt-Schriftzug über dem Hauptsatz (PunktSchriftzug.jsx). Der Satz ist darum kleiner als
+   in der ersten Fassung: die Marke trägt jetzt der Schriftzug. */
+.bh-wort-rahmen { width: 100%; max-width: 620px; display: flex; justify-content: center; margin-bottom: 10px; }
+.bh-wort { display: block; max-width: 100%; }
+.bh-satz { font-family: 'General Sans', 'Manrope', sans-serif; font-size: clamp(20px, 2.2vw, 27px); font-weight: 700;
            letter-spacing: -.02em; line-height: 1.08; color: #191615; margin: 0; }
-.bh-unter { font-size: 15px; color: #5B626C; margin: 10px 0 18px; max-width: 520px; }
+.bh-unter { font-size: 14.5px; color: #5B626C; margin: 6px 0 14px; max-width: 520px; }
 .bh-suche { display: flex; align-items: center; width: 100%; max-width: 520px; height: 50px; background: #fff;
             border: 2px solid #F4C03F; border-radius: 999px; overflow: hidden; }
 .bh-lupe { margin-left: 16px; color: #7D848E; flex-shrink: 0; }
