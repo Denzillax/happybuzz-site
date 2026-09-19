@@ -1758,19 +1758,19 @@ a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transf
 .mk-schweb-tafel { position: relative; display: block; aspect-ratio: 1 / 1; border: var(--mk-rand); border-radius: 24px; overflow: hidden; animation: mk-schweben var(--t) ease-in-out infinite alternate; }
 .mk-schweb-tafel img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: cover; border-radius: 14px; border: var(--mk-rand); }
 .mk-schweb-preis { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); white-space: nowrap; padding: 3px 12px 4px; border: var(--mk-rand); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: inset 0 -3px 0 rgba(29,29,29,.12); }
-.mk-schweb-1 { --p: 34px; --g: 176px; --d: -7deg; --t: 7s;   --v: .15s; left: calc(50% - 640px); top: 150px; }
-.mk-schweb-2 { --p: 16px; --g: 128px; --d: 6deg;  --t: 8.5s; --v: .35s; left: calc(50% - 500px); top: 372px; }
-.mk-schweb-3 { --p: 24px; --g: 150px; --d: -4deg; --t: 6.2s; --v: .55s; left: calc(50% - 668px); top: 462px; }
-.mk-schweb-4 { --p: 24px; --g: 150px; --d: 8deg;  --t: 7.6s; --v: .25s; right: calc(50% - 630px); top: 140px; }
-.mk-schweb-5 { --p: 38px; --g: 184px; --d: -5deg; --t: 9s;   --v: .45s; right: calc(50% - 560px); top: 340px; }
-.mk-schweb-6 { --p: 14px; --g: 120px; --d: 5deg;  --t: 6.8s; --v: .65s; right: calc(50% - 704px); top: 492px; }
+.mk-schweb-1 { --p: 16px; --g: 176px; --d: -7deg; --t: 7s;   --v: .15s; left: calc(50% - 640px); top: 140px; }
+.mk-schweb-2 { --p: 8px;  --g: 128px; --d: 6deg;  --t: 8.5s; --v: .35s; left: calc(50% - 500px); top: calc(50% - 50px); }
+.mk-schweb-3 { --p: 12px; --g: 150px; --d: -4deg; --t: 6.2s; --v: .55s; left: calc(50% - 668px); bottom: 176px; }
+.mk-schweb-4 { --p: 12px; --g: 150px; --d: 8deg;  --t: 7.6s; --v: .25s; right: calc(50% - 630px); top: 132px; }
+.mk-schweb-5 { --p: 18px; --g: 184px; --d: -5deg; --t: 9s;   --v: .45s; right: calc(50% - 560px); top: calc(50% - 84px); }
+.mk-schweb-6 { --p: 7px;  --g: 120px; --d: 5deg;  --t: 6.8s; --v: .65s; right: calc(50% - 704px); bottom: 176px; }
 @keyframes mk-schweben { from { transform: translateY(-7px); } to { transform: translateY(7px); } }
 @keyframes mk-schweb-ein { from { opacity: 0; scale: .6; } }
 @media (prefers-reduced-motion: reduce) { .mk-schweb, .mk-schweb-tafel { animation: none; } }
 /* Unter 1100 ist neben dem Text kein Platz: die Kacheln werden zur kleinen Reihe über dem Hauptsatz */
 @media (max-width: 1100px) {
   .mk-schweb-feld { position: static; order: -1; display: flex; justify-content: center; gap: 10px; margin-bottom: 34px; }
-  .mk-schweb { position: relative; left: auto; right: auto; top: auto; --g: 72px; }
+  .mk-schweb { position: relative; left: auto; right: auto; top: auto; bottom: auto; --g: 72px; }
   .mk-schweb:nth-child(n+5) { display: none; }
   .mk-schweb-tafel { border-radius: 16px; }
   .mk-schweb-tafel img { inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); border-radius: 9px; }

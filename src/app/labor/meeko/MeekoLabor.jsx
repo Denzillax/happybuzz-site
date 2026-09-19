@@ -106,7 +106,8 @@ export default function MeekoLabor() {
           ))}
         </div>
         <h1 className="mk-h1">
-          Was du suchst, hat schon jemand.
+          {/* fester Umbruch: einzeilig wäre der Satz so breit, dass er unter die schwebenden Inserate liefe */}
+          Was du suchst,<br />hat schon jemand.
         </h1>
         <p className="mk-hero-text">Der Schweizer Marktplatz für zweite Hand. <strong>Kaufen</strong>, <strong>bieten</strong>, <strong>mieten</strong>, <strong>buchen</strong> oder <strong>verschenken</strong>, alles an einem Ort.</p>
         <form className="mk-suche" onSubmit={suchen} role="search">
