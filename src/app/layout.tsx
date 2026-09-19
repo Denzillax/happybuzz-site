@@ -1,4 +1,3 @@
-import FarbTest from '@/components/shared/FarbTest'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import BetaFeedback from '@/components/shared/BetaFeedback'
@@ -87,7 +86,7 @@ export default function RootLayout({
         {/* Raster-Umschalter: gespeicherte Stufe vor dem ersten Malen setzen (kein Springen) */}
         <script dangerouslySetInnerHTML={{ __html: "try{var r=localStorage.getItem('beedaro_raster');if(r==='gross'||r==='kompakt'){document.documentElement.classList.add('raster-'+r)}}catch(e){}" }} />
       </head>
-      <body><AppSplash /><SwRegister />{children}<BetaFeedback /><GamificationProvider /><FarbTest /></body>
+      <body><AppSplash /><SwRegister />{children}<BetaFeedback /><GamificationProvider /></body>
     </html>
   )
 }

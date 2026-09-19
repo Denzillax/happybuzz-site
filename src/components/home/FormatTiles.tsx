@@ -6,16 +6,17 @@ import { Tag, Gavel, CalendarClock, Gift, Wrench } from 'lucide-react'
 
 const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
-const CHIP = '#F1F3F5'
 
 // Die fuenf Formate als Direkteinstieg: Miete/Service/Gratis hat kein
 // Schweizer Konkurrent, also gehoeren sie prominent auf die Startseite.
+// Jedes Format hat seine Pastellfarbe (Denis 19.09.2026). Dieselben Farben tragen die
+// Typ-Chips auf den Inseraten, siehe TYP_CHIP in src/components/shared/ListingCard.jsx.
 const FORMATE = [
-  { type: 'sell', label: 'Festpreis', sub: 'Kaufen wie gewohnt', icon: Tag },
-  { type: 'auction', label: 'Auktion', sub: 'Bieten und gewinnen', icon: Gavel },
-  { type: 'rent', label: 'Mieten', sub: 'Nutzen statt besitzen', icon: CalendarClock },
-  { type: 'free', label: 'Gratis', sub: 'Verschenken, abholen', icon: Gift },
-  { type: 'service', label: 'Service', sub: 'Handwerk und Hilfe buchen', icon: Wrench },
+  { type: 'sell', farbe: '#fff2ad', label: 'Festpreis', sub: 'Kaufen wie gewohnt', icon: Tag },
+  { type: 'auction', farbe: '#d8c4ff', label: 'Auktion', sub: 'Bieten und gewinnen', icon: Gavel },
+  { type: 'rent', farbe: '#c4e2ff', label: 'Mieten', sub: 'Nutzen statt besitzen', icon: CalendarClock },
+  { type: 'free', farbe: '#c6f1db', label: 'Gratis', sub: 'Verschenken, abholen', icon: Gift },
+  { type: 'service', farbe: '#ffd8d9', label: 'Service', sub: 'Handwerk und Hilfe buchen', icon: Wrench },
 ]
 
 export function FormatTiles() {
@@ -35,8 +36,8 @@ export function FormatTiles() {
   return (
     <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
-        .fmt-tile { transition: background .15s ease; }
-        .fmt-tile:hover { background: #FFF5D8 !important; filter: none !important; }
+        .fmt-tile { transition: filter .15s ease; }
+        .fmt-tile:hover { filter: brightness(.96) !important; }
         .fmt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         /* Mobile: wischbare Zeile, gleiches Muster wie Kategorien-Pills.
            Keine Kind-Selektoren in Inline-Styles (Hydration-Error). */
@@ -54,7 +55,7 @@ export function FormatTiles() {
           const Icon = f.icon
           return (
             <Link key={f.type} href={`/search?type=${f.type}`} className={`fmt-tile fmt-tile-${f.type}`} style={{
-              background: CHIP, borderRadius: 12,
+              background: f.farbe, borderRadius: 12,
               padding: '16px 14px', textDecoration: 'none', color: INK,
               display: 'flex', alignItems: 'center', gap: 12,
             }}>

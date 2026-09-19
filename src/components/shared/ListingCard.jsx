@@ -81,13 +81,14 @@ export function listingInactiveLabel(listing) {
   return null;
 }
 
-// Typ-Kennzeichnung: farbige Pille pro Inserattyp (BEEDARO-Typfarben)
+// Typ-Kennzeichnung: Pille in der Pastellfarbe des Formats (Denis 19.09.2026), dieselben
+// Farben wie die fünf Format-Kacheln der Startseite (FormatTiles.tsx). Schrift immer Ink.
 const TYP_CHIP = {
-  sell: { label: "Festpreis", bg: "#F4C03F", color: INK },
-  auction: { label: "Auktion", bg: "#94B9C9", color: INK },
-  rent: { label: "Miete", bg: "#8B6DB0", color: "#fff" },
-  free: { label: "Gratis", bg: "#50804F", color: "#fff" },
-  service: { label: "Service", bg: "#E67E22", color: "#fff" },
+  sell: { label: "Festpreis", bg: "#fff2ad", color: INK },
+  auction: { label: "Auktion", bg: "#d8c4ff", color: INK },
+  rent: { label: "Miete", bg: "#c4e2ff", color: INK },
+  free: { label: "Gratis", bg: "#c6f1db", color: INK },
+  service: { label: "Service", bg: "#ffd8d9", color: INK },
 };
 const PERIOD_LABEL = { hour: "Std", day: "Tag", week: "Woche", month: "Monat" };
 
@@ -158,7 +159,7 @@ export function ListingCard(props) {
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
         <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
           {TYP_CHIP[listing.listing_type] && (
-            <span className={`lc-typ-${listing.listing_type}`} style={chip(TYP_CHIP[listing.listing_type].bg, TYP_CHIP[listing.listing_type].color)}>
+            <span style={chip(TYP_CHIP[listing.listing_type].bg, TYP_CHIP[listing.listing_type].color)}>
               {TYP_CHIP[listing.listing_type].label}
             </span>
           )}
