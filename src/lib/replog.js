@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "19. September 2026",
     punkte: [
+      { typ: "neu", bereich: "Biene", text: "Die Biene hat eine neue Form: flach und von vorn, schwarz mit runden Flügeln, Kugelfühlern, zwei Honigstreifen und Stachel. Sie fliegt so über die Seite, hält bei der Challenge der Woche das Megafon und fliegt als Punktbild durch den Schriftzug im Test-Hero. Sie schlägt mit den Flügeln, blinzelt und wippt mit den Fühlern.", melder: "Denis" },
       { typ: "fix", bereich: "Bestellung", text: "Lieferung auf Bestellseite, Rechnung und QR-Betrag korrigiert. Inserate mit Versand und Abholung standen auf der Rechnung als Abholung, obwohl Versand bezahlt war. Und bei abgeholten Mieten kamen die Versandkosten des Inserats trotzdem ins Total. Jetzt zählt zuerst die Wahl in der Bestellung, alle drei Stellen rechnen gleich. Wer abholt, sieht die Abholadresse, der Vermieter den Knopf Abgeholt.", melder: "Denis" },
       { typ: "neu", bereich: "Biene", text: "Neue Biene: Die fliegende Comic-Biene ist durch eine Biene aus Punkten ersetzt, im gleichen Raster wie der neue Punkt-Schriftzug. Bei der Challenge der Woche trägt sie ein Megafon. Der Ausschalter im Footer gilt weiterhin", melder: "Denis" },
       { typ: "fix", bereich: "Design", text: "Teal und Markengrün sind eine Stufe dunkler, bei gleichem Farbton. Beide waren als Schrift und mit weisser Schrift darauf zu schwach lesbar, etwa Links wie 'Alle ansehen', Teal-Knöpfe, die eigenen Chat-Blasen und das Laufband", melder: "Denis" },

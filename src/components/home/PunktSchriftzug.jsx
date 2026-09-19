@@ -10,24 +10,27 @@
 import { useEffect, useRef } from "react";
 
 const TEAL = "#007C7C";
-const BIENENFARBE = { H: "#F4C03F", K: "#191615", W: "#C9D4DA", w: "#9FB1BC", E: "#FFFFFF", A: "#191615", L: "#191615" };
-// Biene als Punktbild, Kopf rechts (zweite Fassung mit mehr Charakter, 18 x 11).
-// H Honig, K Ink, W/w Flügel hell und dunkel, E Auge, A Fühler, L Beine.
-// Dasselbe Bild erzeugt scratch "punktbiene.py" als public/bee-punkt.svg für die fliegende Biene.
+const BIENENFARBE = { H: "#F4C03F", K: "#191615", W: "#191615", w: "#191615", E: "#F4C03F", A: "#191615" };
+// Biene als Punktbild, von vorn (dritte Fassung, 17 x 13, nach Denis' Vorlage vom 19.09.2026):
+// Ink-Silhouette mit runden Flügeln, Kugelfühlern, zwei Honigstreifen und Stachel.
+// H Honig, K Ink, W Flügel, w Flügelrand (verschwindet beim Flügelschlag), E Auge, A Fühler.
+// Dieselbe Figur als Vektor: public/bee-flach.svg (scratch "flachbiene.py").
 const BIENE = [
-  "....WWW..WWW......",
-  "...WWWWW.WWWW..A.A",
-  "...WWwWWWWwWW...A.",
-  "....WWWWWWWW..KKK.",
-  "...HHKHHKHHKKKKKKK",
-  "..HHHKHHKHHKKKEKKK",
-  "KKHHHKHHKHHKKKKKKK",
-  "..HHHKHHKHHKKKKKK.",
-  "...HHKHHKHHKKKKK..",
-  "....HKHHKHH.......",
-  ".....L..L..L......",
+  "...AA.......AA...",
+  "....A.......A....",
+  ".....A.KKK.A.....",
+  ".....KKKKKKK.....",
+  ".....KKEKEKK.....",
+  ".wWW.KKKKKKK.WWw.",
+  "wWWW.KHHHHHK.WWWw",
+  "wWWW.KKKKKKK.WWWw",
+  "wWWW.KHHHHHK.WWWw",
+  ".wWW.KKKKKKK.WWw.",
+  ".....KKKKKKK.....",
+  ".......KKK.......",
+  "........K........",
 ];
-const SPALTEN = 18;
+const SPALTEN = 17;
 
 // farbe: Punktfarbe des Worts. schrift: Schriftfamilie, aus der das Wort gerastert wird.
 export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans" }) {
@@ -87,7 +90,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       const r = raster * 0.4;
       for (const p of punkte) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
       if (biene.an) {
-        // Eigenleben: Flügelschlag (oberste zwei Reihen), Blinzeln alle paar Sekunden, wippende Fühler
+        // Eigenleben: Flügelschlag (Flügelrand), Blinzeln alle paar Sekunden, wippende Fühler
         const z = raster * 0.8, flatter = Math.floor(biene.t / 3) % 2;
         const blinzelt = biene.t % 150 > 142;
         const wipp = Math.sin(biene.t / 7) * z * 0.18;
@@ -95,12 +98,12 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
           for (let spalte = 0; spalte < SPALTEN; spalte++) {
             let ch = BIENE[zeile][biene.richtung === 1 ? spalte : SPALTEN - 1 - spalte];
             if (ch === ".") continue;
-            if ((ch === "W" || ch === "w") && flatter && zeile <= 1) continue;
+            if (ch === "w" && flatter) continue;
             if (ch === "E" && blinzelt) ch = "K";
             ctx.fillStyle = BIENENFARBE[ch];
-            const klein = ch === "A" || ch === "L";
+            const klein = ch === "A" && zeile > 0;
             ctx.beginPath();
-            ctx.arc(biene.x - (SPALTEN / 2) * z + spalte * z + (ch === "A" ? wipp : 0), biene.y - 5.5 * z + zeile * z, (klein ? 0.3 : 0.42) * z, 0, 6.2832);
+            ctx.arc(biene.x - (SPALTEN / 2) * z + spalte * z + (ch === "A" ? wipp : 0), biene.y - (BIENE.length / 2) * z + zeile * z, (klein ? 0.3 : 0.42) * z, 0, 6.2832);
             ctx.fill();
           }
         }
