@@ -1745,6 +1745,34 @@ a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transf
 .mk-held { display: inline-block; width: .95em; height: .95em; margin: 0 .04em; vertical-align: -.16em; border-radius: 999px; border: var(--mk-rand); overflow: hidden; background: var(--mk-rosa); }
 .mk-held img { width: 100%; height: 100%; object-fit: cover; display: block; animation: mk-auftauchen .6s cubic-bezier(.2,.7,.1,1) both; }
 @keyframes mk-auftauchen { from { opacity: 0; transform: scale(1.25); } to { opacity: 1; transform: none; } }
+/* Schwebende Inserate im Hero (Denis 20.09.2026: Hero wirkte leer). Aussen dreht die Kachel, innen schwebt sie, damit sich
+   Drehung und Bewegung nicht in die Quere kommen. Positionen von der Mitte aus gerechnet, damit der Text frei bleibt. */
+.mk-hero { position: relative; overflow: hidden; }
+.mk-hero .mk-h1, .mk-hero .mk-hero-text, .mk-hero .mk-suche { position: relative; z-index: 2; }
+.mk-schweb-feld { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mk-schweb { position: absolute; width: var(--g); pointer-events: auto; transform: rotate(var(--d)); transition: transform .45s cubic-bezier(.2,.7,.1,1); animation: mk-schweb-ein .7s cubic-bezier(.2,.7,.1,1) both; animation-delay: var(--v); }
+.mk-schweb:hover, .mk-schweb:focus-visible { transform: rotate(0deg) scale(1.06); z-index: 3; }
+.mk-schweb-tafel { position: relative; display: block; aspect-ratio: 1 / 1; border: var(--mk-rand); border-radius: 24px; overflow: hidden; animation: mk-schweben var(--t) ease-in-out infinite alternate; }
+.mk-schweb-tafel img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: cover; border-radius: 14px; border: var(--mk-rand); }
+.mk-schweb-preis { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); white-space: nowrap; padding: 3px 12px 4px; border: var(--mk-rand); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; letter-spacing: -.01em; font-variant-numeric: tabular-nums; box-shadow: inset 0 -3px 0 rgba(29,29,29,.12); }
+.mk-schweb-1 { --g: 176px; --d: -7deg; --t: 7s;   --v: .15s; left: calc(50% - 640px); top: 150px; }
+.mk-schweb-2 { --g: 128px; --d: 6deg;  --t: 8.5s; --v: .35s; left: calc(50% - 500px); top: 372px; }
+.mk-schweb-3 { --g: 150px; --d: -4deg; --t: 6.2s; --v: .55s; left: calc(50% - 668px); top: 462px; }
+.mk-schweb-4 { --g: 150px; --d: 8deg;  --t: 7.6s; --v: .25s; right: calc(50% - 630px); top: 140px; }
+.mk-schweb-5 { --g: 184px; --d: -5deg; --t: 9s;   --v: .45s; right: calc(50% - 560px); top: 340px; }
+.mk-schweb-6 { --g: 120px; --d: 5deg;  --t: 6.8s; --v: .65s; right: calc(50% - 704px); top: 492px; }
+@keyframes mk-schweben { from { transform: translateY(-7px); } to { transform: translateY(7px); } }
+@keyframes mk-schweb-ein { from { opacity: 0; transform: rotate(var(--d)) scale(.6); } to { opacity: 1; transform: rotate(var(--d)); } }
+@media (prefers-reduced-motion: reduce) { .mk-schweb, .mk-schweb-tafel { animation: none; } }
+/* Unter 1100 ist neben dem Text kein Platz: die Kacheln werden zur kleinen Reihe über dem Hauptsatz */
+@media (max-width: 1100px) {
+  .mk-schweb-feld { position: static; order: -1; display: flex; justify-content: center; gap: 10px; margin-bottom: 34px; }
+  .mk-schweb { position: relative; left: auto; right: auto; top: auto; --g: 72px; }
+  .mk-schweb:nth-child(n+5) { display: none; }
+  .mk-schweb-tafel { border-radius: 16px; }
+  .mk-schweb-tafel img { inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); border-radius: 9px; }
+  .mk-schweb-preis { display: none; }
+}
 .mk-hero-text { margin: 26px 0 0; max-width: 34em; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; }
 .mk-hero-text strong { font-weight: 600; }
 .mk-suche { margin-top: 34px; display: flex; align-items: center; gap: 12px; width: 100%; max-width: 620px; min-height: 68px; padding: 8px 8px 8px 24px; background: #fff; border: var(--mk-rand); border-radius: 20px; }

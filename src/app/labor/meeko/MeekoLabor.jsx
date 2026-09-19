@@ -18,7 +18,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl } from "@/lib/formatters";
 import { DEFAULT_FEE_PERCENT, BEE_IMPACT_RATE } from "@/lib/constants";
 import BLogo from "@/components/shared/BLogo";
-import { Fuss, Karte, Kopf, LISTE, PASTELL, Roll, useEinblenden, useMeekoSchrift } from "./MeekoTeile";
+import { FORMAT, Fuss, Karte, Kopf, LISTE, PASTELL, Roll, preis, useEinblenden, useMeekoSchrift } from "./MeekoTeile";
 
 const FORMATE = [
   { type: "sell", label: "Festpreis", sub: "Kaufen wie gewohnt, zum festen Preis." },
@@ -67,12 +67,26 @@ export default function MeekoLabor() {
   const suchen = (e) => { e.preventDefault(); const t = q.trim(); router.push(t ? `/labor/meeko/suche?q=${encodeURIComponent(t)}` : "/labor/meeko/suche"); };
   const held = inserate[bildNr % Math.max(1, Math.min(6, inserate.length))];
   const neu = inserate.slice(0, 6);
+  // Schwebende Inserate im Hero: andere als unter Neu eingestellt, solange es genug gibt
+  const schweb = (inserate.length >= 12 ? inserate.slice(6, 12) : inserate.slice(0, 6));
 
   return (
     <div className="mk" ref={wurzel}>
       <Kopf />
 
       <section className="mk-hero mk-butter">
+        {/* Echte Inserate schweben links und rechts vom Hauptsatz, jedes auf der Tafel seiner Formatfarbe */}
+        <div className="mk-schweb-feld">
+          {schweb.map((l, i) => (
+            <Link key={l.id} href={`/listing/${l.id}`} className={`mk-schweb mk-schweb-${i + 1}`} aria-label={`${l.title}, ${FORMAT[l.listing_type]}, ${preis(l)}`}>
+              <span className={`mk-schweb-tafel mk-${PASTELL[l.listing_type] || "lavendel"}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={getCoverUrl(l)} alt="" />
+              </span>
+              <span className="mk-schweb-preis">{preis(l)}</span>
+            </Link>
+          ))}
+        </div>
         <h1 className="mk-h1">
           Was du suchst,{" "}
           <span className="mk-held" aria-hidden="true">
