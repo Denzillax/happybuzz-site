@@ -1560,7 +1560,7 @@ body:has(.wl) { background: #0A0A0A; }
 /* Endet bald: Karte mit Restzeit und Pixelbalken, der Textblock ist dafür höher (bleibt ein Vielfaches von 10 px) */
 .wl-karten-hoch .wl-textblock { height: 160px; }
 .wl-rest { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; min-height: 34px; }
-.wl-rest-zeit { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; color: var(--wl-rot-text); font-variant-numeric: tabular-nums; }
+.wl-rest-zeit { white-space: nowrap; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; color: var(--wl-rot-text); font-variant-numeric: tabular-nums; }
 .wl-rest-balken { display: grid; grid-template-columns: repeat(20, 1fr); gap: 1px; height: 8px; }
 .wl-rest-balken i { background: #E9E9E9; transition: background .4s ease; }
 .wl-rest-balken i.an { background: var(--wl-rot); }
@@ -1607,7 +1607,7 @@ body:has(.wl) { background: #0A0A0A; }
   .wl-kategorien { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wl-kategorie { padding: 14px 10px; gap: 8px; }
   .wl-kategorie-name { font-size: 15px; }
-  .wl-karten-hoch .wl-textblock { height: 150px; }
+  .wl-karten-hoch .wl-textblock { height: 170px; } /* am Handy bricht das Label um, Restzeit und Balken brauchen Platz */
   .wl-balken { height: 16px; gap: 1px; }
   .wl-protokoll a { grid-template-columns: 78px minmax(0, 1fr); }
   .wl-protokoll-art { display: none; }

@@ -83,7 +83,8 @@ function Restzeit({ start, ende }) {
   const voll = Math.max(0, Math.min(20, Math.ceil((ms / Math.max(1, e - s)) * 20)));
   return (
     <span className="wl-rest">
-      <span className="wl-rest-zeit">Endet in {text}</span>
+      {/* "Noch" nur auf breiten Karten, am Handy reicht der Platz für die Zeit allein */}
+      <span className="wl-rest-zeit"><span className="wl-nur-breit">Noch </span>{text}</span>
       <span className="wl-rest-balken" aria-hidden="true">{Array.from({ length: 20 }, (_, i) => <i key={i} className={i < voll ? "an" : ""} />)}</span>
     </span>
   );
@@ -313,7 +314,7 @@ export default function WildLabor() {
           <section className="wl-abschnitt">
             <div className="wl-abschnitt-kopf wl-auf">
               <span className="wl-label"><span className="wl-form" data-form="blitz">Endet bald</span></span>
-              <h2 className="wl-h2" data-wort="HUI">Die Uhr läuft. Wer zuletzt bietet, gewinnt.</h2>
+              <h2 className="wl-h2">Die Uhr läuft. Wer zuletzt bietet, gewinnt.</h2>
               <Link href="/search?type=auction" className="wl-mehr">Alle Auktionen <ArrowUpRight size={14} strokeWidth={2} /></Link>
             </div>
             <div className="wl-karten wl-karten-hoch">{endend.map((l) => <Karte key={l.id} l={l} mitRest />)}</div>
@@ -323,7 +324,7 @@ export default function WildLabor() {
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
             <span className="wl-label"><span className="wl-form" data-form="stern">Neu eingestellt</span></span>
-            <h2 className="wl-h2" data-wort="NEU">Frisch aus <span className="wl-form" data-form="haus">Kellern</span>, Estrichen und <span className="wl-form" data-form="smiley">Werkstätten</span>.</h2>
+            <h2 className="wl-h2">Frisch aus <span className="wl-form" data-form="haus">Kellern</span>, Estrichen und <span className="wl-form" data-form="smiley">Werkstätten</span>.</h2>
             <Link href="/search" className="wl-mehr">Alle ansehen <ArrowUpRight size={14} strokeWidth={2} /></Link>
           </div>
           <div className="wl-karten">{neu.map((l) => <Karte key={l.id} l={l} />)}</div>
@@ -350,7 +351,7 @@ export default function WildLabor() {
         <section className="wl-abschnitt">
           <div className="wl-abschnitt-kopf wl-auf">
             <span className="wl-label">Fünf Formate</span>
-            <h2 className="wl-h2" data-wort="5X">Ein Marktplatz, fünf Wege zum <span className="wl-form" data-form="herz">Handel</span>.</h2>
+            <h2 className="wl-h2">Ein Marktplatz, fünf Wege zum <span className="wl-form" data-form="herz">Handel</span>.</h2>
           </div>
           <div className="wl-formate wl-auf">
             {FORMATE.map((f) => (

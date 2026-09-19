@@ -11,7 +11,7 @@
 // heissesten Lime. Der Zeiger hebt also dieselbe Landschaft an, darum entstehen um ihn die Farbringe.
 //
 // Dazu, fest eingefärbt und über die Landschaft gelegt:
-//   - Pfeil zur nächsten Überschrift mit hellem Puls und einem kurzen Klötzchenwort (data-wort),
+//   - Pfeil zur nächsten Überschrift mit hellem Puls (ohne Wort: der Pfeil sagt schon alles, Denis 19.09.),
 //   - Pixelbilder über Textstellen mit data-form (Smiley, Stern, Blitz, Haus), das Herz ist das BEEDARO-Herz
 //     (gedrehtes Logo) und kommt mit Funkenregen,
 //   - unter dem Inserat, auf dem der Zeiger steht, eine Kachelreihe in der Formatfarbe, die sich von der Mitte her aufbaut.
@@ -50,12 +50,6 @@ const FORMEN = {
   blitz: { f: FARBEN.blau, b: ["....XXX", "...XXX.", "..XXX..", ".XXXXXX", "...XXX.", "..XXX..", ".XXX...", "XX....."] },
   haus: { f: FARBEN.navy, b: ["....X....", "...XXX...", "..XXXXX..", ".XXXXXXX.", "XXXXXXXXX", ".XX...XX.", ".XX.X.XX.", ".XX.X.XX."] },
 };
-const GLYPHE = {
-  N: ["X.X", "XXX", "XXX", "X.X", "X.X"], E: ["XXX", "X..", "XX.", "X..", "XXX"], U: ["X.X", "X.X", "X.X", "X.X", "XXX"],
-  W: ["X.X", "X.X", "XXX", "XXX", "X.X"], O: ["XXX", "X.X", "X.X", "X.X", "XXX"], H: ["X.X", "X.X", "XXX", "X.X", "X.X"],
-  I: ["XXX", ".X.", ".X.", ".X.", "XXX"], A: [".X.", "X.X", "XXX", "X.X", "X.X"], "5": ["XXX", "X..", "XXX", "..X", "XXX"],
-  X: ["X.X", "X.X", ".X.", "X.X", "X.X"], "!": [".X.", ".X.", ".X.", "...", ".X."],
-};
 export default function PixelFeld({ ursprung }) {
   const ref = useRef(null);
 
@@ -68,7 +62,7 @@ export default function PixelFeld({ ursprung }) {
     const grund = ursprung ? document.querySelector(ursprung) : null;
     const S1 = Math.random() * 40, S2 = Math.random() * 40, S3 = Math.random() * 40; // jede Sitzung eine andere Landschaft
     const waerme = new Map(); // "cx,cy" -> Wärme 0..1 (Zeiger, Wellen), wird in Bänder geschnitten
-    const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Wort, Funken, Kartenlinie)
+    const fest = new Map();   // "cx,cy" -> { w, f }: fest eingefärbte Kacheln (Bilder, Funken, Kartenlinie)
     const nachglut = new Map(); // "cx,cy" -> Restdauer: Kacheln, die nach der Druckwelle rot stehen bleiben und sich dann auflösen
     let wellen = [], funken = [], loecher = [], titel = [];
     let raf = 0, B = 0, H = 0, zoom = 1, oy = 0, oben = 0, unten = 0, bild = 0, beben = 0, sichtbar = true, start = performance.now();
@@ -86,7 +80,7 @@ export default function PixelFeld({ ursprung }) {
     // Die Überschriften, auf die der Pfeil zeigt, und das Band der Laufschrift. In Seitenkoordinaten.
     const vermessen = () => {
       if (!grund) return;
-      titel = [...grund.querySelectorAll(".wl-h2")].map((el) => ({ ...seitenRect(el), wort: el.dataset.wort || "" }));
+      titel = [...grund.querySelectorAll(".wl-h2")].map((el) => seitenRect(el));
       // Hauptsatz entschlüsseln (data-entschluesseln): jede Zeile einmal in Kachelauflösung rastern
       const hs = grund.querySelector("[data-entschluesseln]");
       if (hs && !satz.length && performance.now() - start < 2200) {
@@ -167,17 +161,10 @@ export default function PixelFeld({ ursprung }) {
       const x0 = mx - Math.floor(b[0].length / 2), y0 = my - Math.floor(b.length / 2);
       b.forEach((zeile, r) => { for (let c = 0; c < zeile.length; c += 1) if (zeile[c] === "X") malFest(x0 + c, y0 + r, F.f); });
     };
-    const wortStempeln = (wort, x, y) => {
-      const [mx, my] = zelle(x, y), breite = wort.length * 4 - 1;
-      [...wort].forEach((ch, i) => {
-        const g = GLYPHE[ch];
-        if (g) g.forEach((zeile, r) => { for (let c = 0; c < 3; c += 1) if (zeile[c] === "X") malFest(mx - Math.floor(breite / 2) + i * 4 + c, my + r, FARBEN.ink); });
-      });
-    };
     // Pfeil vom Zeiger zur Überschrift, gestaltet wie in der Referenz: Der Schaft ist aufgetragene Wärme mit weicher
     // Kante (rund zwei bis drei Kacheln stark), kein harter Ein-Kachel-Strich. Ein heller Puls wandert weich zur
     // Spitze, die Widerhaken sind satt und etwas heisser als der Schaft. Der Pfeil zeigt in jedem Winkel.
-    const pfeil = (x, y, zx, zy, wort, t) => {
+    const pfeil = (x, y, zx, zy, t) => {
       const w = Math.atan2(zy - y, zx - x), L = 9.5 * Z, ca = Math.cos(w), sa = Math.sin(w);
       const puls = (t * 0.9) % 1, schritte = Math.max(16, Math.round(L / (Z * 0.5)));
       for (let i = 0; i <= schritte; i += 1) {
@@ -189,7 +176,6 @@ export default function PixelFeld({ ursprung }) {
         const b = w + Math.PI + seite2 * 0.62, n = Math.max(8, Math.round(haken / (Z * 0.5)));
         for (let k = 0; k <= n; k += 1) auftragen(sx + Math.cos(b) * haken * (k / n), sy + Math.sin(b) * haken * (k / n), 0.72, 0.95);
       }
-      if (wort) wortStempeln(wort, Math.max(wort.length * 2 * Z + Z, x), Math.max(oben + 3 * Z, zy < y ? y + 4 * Z : y - 9 * Z));
     };
 
     const takt = () => {
@@ -211,9 +197,9 @@ export default function PixelFeld({ ursprung }) {
             for (const ti of titel) {
               const nx = Math.max(ti.l, Math.min(maus.x, ti.r)), ny = Math.max(ti.t, Math.min(maus.y, ti.b));
               const d = Math.hypot(nx - maus.x, ny - maus.y);
-              if (d > 24 && d < nah) { nah = d; ziel = { x: nx, y: ny, wort: ti.wort }; }
+              if (d > 24 && d < nah) { nah = d; ziel = { x: nx, y: ny }; }
             }
-            if (ziel) pfeil(maus.x, maus.y, ziel.x, ziel.y, ziel.wort, t);
+            if (ziel) pfeil(maus.x, maus.y, ziel.x, ziel.y, t);
             else auftragen(maus.x, maus.y, 0.16, 3.2);
           }
           formDavor = form;
