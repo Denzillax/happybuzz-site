@@ -34,7 +34,13 @@ const BIENE = [
 const SPALTEN = 17;
 
 // farbe: Punktfarbe des Worts. schrift: Schriftfamilie, aus der das Wort gerastert wird.
-export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans" }) {
+// maxBreite: grösste Breite der Zeichenfläche. zerfall: der eigentliche Lookbook-Effekt (19.09.2026):
+// Das Wort setzt sich beim Hereinscrollen aus verstreuten Punkten zusammen, steht in der Bildmitte
+// ganz und zerfällt beim Weiterscrollen wieder. Dafür bekommt die Fläche oben und unten Luft.
+// biene: false = nur der Schriftzug, keine Biene fliegt hindurch.
+// woerter: Liste von Wörtern, zwischen denen der Schriftzug wechselt (alle `wechsel` ms). Die Punkte
+// ordnen sich dabei zum nächsten Wort um. Ohne Liste bleibt es bei `wort`.
+export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400 }) {
   const cvRef = useRef(null);
 
   useEffect(() => {
@@ -42,39 +48,81 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     if (!cv) return;
     const ctx = cv.getContext("2d");
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let punkte = [], B = 0, H = 0, raster = 6, raf = 0, sichtbar = true, laeuft = false, tot = false;
+    const liste = woerter && woerter.length ? woerter : [wort];
+    let nr = 0;
+    let punkte = [], B = 0, H = 0, WH = 0, raster = 6, raf = 0, sichtbar = true, laeuft = false, tot = false, streuung = 0;
     const biene = { an: false, x: 0, y: 0, t: 0, richtung: 1, pollen: null };
     const maus = { x: -9999, y: -9999 };
 
+    // Ein Wort unsichtbar setzen und an den Rasterpunkten abtasten. Liefert die Punktpositionen.
+    const abtasten = (text) => {
+      const m = document.createElement("canvas"); m.width = B; m.height = H;
+      const mx = m.getContext("2d");
+      let grad = WH * 0.92;
+      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
+      const w = mx.measureText(text).width;
+      if (w > B - raster * 2) grad *= (B - raster * 2) / w;
+      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
+      mx.textAlign = "center"; mx.textBaseline = "middle";
+      mx.fillText(text, B / 2, H / 2 + grad * 0.04);
+      const d = mx.getImageData(0, 0, B, H).data;
+      const out = [];
+      for (let y = raster / 2; y < H; y += raster) {
+        for (let x = raster / 2; x < B; x += raster) {
+          if (d[(Math.floor(y) * B + Math.floor(x)) * 4 + 3] > 110) out.push({ x, y });
+        }
+      }
+      return out;
+    };
+
+    // Wortwechsel: Die vorhandenen Punkte bekommen neue Plätze und federn dorthin. Braucht das neue
+    // Wort mehr Punkte, teilen sich welche, braucht es weniger, fallen die überzähligen weg.
+    const wechsle = () => {
+      if (liste.length < 2 || !sichtbar || ruhig || document.hidden || streuung > 8 || !punkte.length) return;
+      nr = (nr + 1) % liste.length;
+      const ziele = abtasten(liste[nr]);
+      const alt = punkte.slice().sort(() => Math.random() - 0.5);
+      punkte = ziele.map((z, k) => {
+        const q = k < alt.length ? alt[k] : { ...alt[Math.floor(Math.random() * alt.length)] };
+        q.hx = z.x; q.hy = z.y; q.vx += (Math.random() - 0.5) * 5; q.vy += (Math.random() - 0.5) * 5;
+        return q;
+      });
+      cv.setAttribute("aria-label", liste[nr]);
+      anwerfen();
+    };
+
     const aufbauen = () => {
-      const breite = Math.min(620, cv.parentElement.clientWidth);
+      const breite = Math.min(maxBreite, cv.parentElement.clientWidth);
       if (breite < 60) return;
       if (breite === B && punkte.length) return; // ResizeObserver meldet auch ohne Breitenänderung
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      B = breite; H = Math.round(breite * 0.2);
-      raster = breite > 480 ? 6 : 5;
+      // WH = Höhe des Worts. Mit Zerfall kommt oben und unten Luft dazu, sonst würden die Punkte abgeschnitten.
+      WH = Math.round(breite * 0.2);
+      B = breite; H = WH + (zerfall ? Math.round(WH * 1.1) : 0);
+      raster = breite > 900 ? 8 : breite > 480 ? 6 : 5;
       cv.width = Math.round(B * dpr); cv.height = Math.round(H * dpr);
       cv.style.width = B + "px"; cv.style.height = H + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Wort unsichtbar setzen und an den Rasterpunkten abtasten
-      const m = document.createElement("canvas"); m.width = B; m.height = H;
-      const mx = m.getContext("2d");
-      let grad = H * 0.92;
-      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
-      const w = mx.measureText(wort).width;
-      if (w > B - raster * 2) grad *= (B - raster * 2) / w;
-      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
-      mx.textAlign = "center"; mx.textBaseline = "middle";
-      mx.fillText(wort, B / 2, H / 2 + grad * 0.04);
-      const d = mx.getImageData(0, 0, B, H).data;
-      punkte = [];
-      for (let y = raster / 2; y < H; y += raster) {
-        for (let x = raster / 2; x < B; x += raster) {
-          if (d[(Math.floor(y) * B + Math.floor(x)) * 4 + 3] > 110) punkte.push({ hx: x, hy: y, x, y, vx: 0, vy: 0 });
-        }
-      }
+      punkte = abtasten(liste[nr]).map((z) => {
+        // zx/zy: fester Zufallsversatz pro Punkt, wohin er beim Zerfall treibt
+        const w = Math.random() * 6.2832, weit = 0.35 + Math.random() * 0.65;
+        return { hx: z.x, hy: z.y, x: z.x, y: z.y, vx: 0, vy: 0, zx: Math.cos(w) * weit, zy: Math.sin(w) * weit * 0.6 };
+      });
+      lage();
+      // Gleich verstreut beginnen, sonst sähe man beim ersten Bild ein ganzes Wort auseinanderfliegen
+      for (const p of punkte) { p.x = p.hx + p.zx * streuung; p.y = p.hy + p.zy * streuung; }
       malen();
+    };
+
+    // Zerfall: 0 in der Bildmitte, 1 am oberen und unteren Bildrand. Quadratisch, damit das Wort
+    // in einem breiten Bereich um die Mitte ganz bleibt.
+    const lage = () => {
+      if (!zerfall || ruhig) { streuung = 0; return; }
+      const b = cv.getBoundingClientRect(), vh = window.innerHeight || 1;
+      const ab = Math.abs(b.top + b.height / 2 - vh / 2) / (vh / 2);
+      const t = Math.max(0, Math.min(1, (ab - 0.18) / 0.82));
+      streuung = t * t * Math.min(B * 0.22, 260);
     };
 
     const stoss = (px, py, radius, kraft) => {
@@ -89,7 +137,10 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       ctx.clearRect(0, 0, B, H);
       ctx.fillStyle = farbe;
       const r = raster * 0.4;
-      for (const p of punkte) { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
+      for (const p of punkte) {
+        if (p.x < r || p.x > B - r || p.y < r || p.y > H - r) continue; // halbe Punkte an der Kante weglassen
+        ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill();
+      }
       if (biene.an) {
         // Eigenleben: Flügelschlag (Flügelrand), Blinzeln alle paar Sekunden, wippende Fühler
         const z = raster * 0.8, flatter = Math.floor(biene.t / 3) % 2;
@@ -121,7 +172,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
         // In der Wortmitte wird sie langsamer, als sähe sie sich um
         const mitte = 1 - Math.min(1, Math.abs(biene.x - B / 2) / (B * 0.22));
         biene.x += biene.richtung * (B / 190) * (1 - mitte * 0.62);
-        biene.y = H / 2 + Math.sin(biene.t / 16) * H * 0.24 + Math.sin(biene.t / 5) * 1.2;
+        biene.y = H / 2 + Math.sin(biene.t / 16) * WH * 0.24 + Math.sin(biene.t / 5) * 1.2;
         stoss(biene.x, biene.y, raster * 7.5, 1.7);
         // Pollen: beim Überqueren der Mitte nimmt sie einen Punkt des Worts mit. Fliegt sie
         // hinaus, lässt sie ihn los und er zischt an seinen Platz zurück.
@@ -139,9 +190,11 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       if (maus.x > -9000) stoss(maus.x, maus.y, raster * 6, 0.9);
       for (const p of punkte) {
         if (p === biene.pollen) continue;
-        p.vx += (p.hx - p.x) * 0.05; p.vy += (p.hy - p.y) * 0.05;
+        // Ziel in der Fläche halten, sonst schneidet der Rand der Zeichenfläche die Punkte ab
+        const tx = Math.max(raster, Math.min(B - raster, p.hx + p.zx * streuung)), ty = Math.max(raster, Math.min(H - raster, p.hy + p.zy * streuung));
+        p.vx += (tx - p.x) * 0.05; p.vy += (ty - p.y) * 0.05;
         p.vx *= 0.83; p.vy *= 0.83; p.x += p.vx; p.y += p.vy;
-        if (Math.abs(p.vx) > 0.02 || Math.abs(p.vy) > 0.02 || Math.abs(p.hx - p.x) > 0.05 || Math.abs(p.hy - p.y) > 0.05) bewegt = true;
+        if (Math.abs(p.vx) > 0.02 || Math.abs(p.vy) > 0.02 || Math.abs(tx - p.x) > 0.05 || Math.abs(ty - p.y) > 0.05) bewegt = true;
       }
       malen();
       if (bewegt && sichtbar) raf = requestAnimationFrame(takt); else laeuft = false;
@@ -149,7 +202,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const anwerfen = () => { if (!laeuft && sichtbar && !ruhig && !tot) { laeuft = true; raf = requestAnimationFrame(takt); } };
 
     const losfliegen = () => {
-      if (biene.an || !sichtbar || ruhig || document.hidden) return;
+      if (!mitBiene || biene.an || !sichtbar || ruhig || document.hidden || streuung > 8) return;
       biene.richtung = biene.richtung === 1 ? -1 : 1;
       biene.x = biene.richtung === 1 ? -raster * 12 : B + raster * 12;
       biene.t = 0; biene.an = true; anwerfen();
@@ -172,15 +225,19 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     io?.observe(cv);
     cv.addEventListener("mousemove", bewegung);
     cv.addEventListener("mouseleave", weg);
+    const rollen = () => { lage(); anwerfen(); };
+    if (zerfall) { window.addEventListener("scroll", rollen, { passive: true }); window.addEventListener("resize", rollen); }
     const erster = setTimeout(losfliegen, 1200);
     const takter = setInterval(losfliegen, pause);
+    const wechsler = liste.length > 1 ? setInterval(wechsle, wechsel) : 0;
 
     return () => {
-      tot = true; cancelAnimationFrame(raf); clearTimeout(erster); clearInterval(takter);
+      tot = true; cancelAnimationFrame(raf); clearTimeout(erster); clearInterval(takter); clearInterval(wechsler);
       ro?.disconnect(); io?.disconnect();
       cv.removeEventListener("mousemove", bewegung); cv.removeEventListener("mouseleave", weg);
+      window.removeEventListener("scroll", rollen); window.removeEventListener("resize", rollen);
     };
-  }, [wort, pause, farbe, schrift]);
+  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, (woerter || []).join("|")]);
 
   return <canvas ref={cvRef} className="bh-wort" role="img" aria-label="Beedaro" />;
 }

@@ -10,7 +10,6 @@ import { Gavel, Clock, MapPin, Truck, ShieldCheck, Heart, Share2, ArrowUpRight, 
 import { supabase } from "@/lib/supabase/supabase";
 import { getListingPublic, getBids } from "@/lib/listings";
 import { chf } from "@/lib/formatters";
-import { TYP_FARBEN } from "@/lib/constants";
 import BeeLogo from "@/components/shared/BeeLogo";
 import StilKopf, { useStil } from "../StilKopf";
 
@@ -104,7 +103,6 @@ export default function StilInserat() {
   const bilder = l ? (l.images || l.listing_images || []).map((b) => b.url).filter(Boolean) : [];
   const hoechst = verlauf[0]?.betrag || Number(l?.start_price || 0);
   const schritt = hoechst >= 100 ? 5 : 1;
-  const farbe = TYP_FARBEN.auction;
 
   return (
     <div className="sl" data-grund={grund} data-gelb={gelb}>
@@ -127,7 +125,7 @@ export default function StilInserat() {
                 <div className="sl-i-haupt">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {bilder[bild] && <img key={bilder[bild]} src={bilder[bild]} alt={l.title} />}
-                  <span className="sl-chip" style={{ background: farbe.bg, color: farbe.fg }}>Auktion</span>
+                  <span className="sl-chip">Auktion</span>
                   <span className="sl-i-zaehler">{bild + 1} / {bilder.length}</span>
                 </div>
                 {bilder.length > 1 && (

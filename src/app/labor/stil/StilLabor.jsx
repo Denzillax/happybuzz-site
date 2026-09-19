@@ -10,11 +10,14 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Plus, ArrowRight, ArrowUpRight, Tag, Gavel, CalendarClock, Gift, Wrench, Search, Heart } from "lucide-react";
 import StilKopf, { useStil } from "./StilKopf";
+import PunktSchriftzug from "@/components/home/PunktSchriftzug";
 import { supabase } from "@/lib/supabase/supabase";
 import { getCoverUrl, getDisplayPrice } from "@/lib/formatters";
 import { TYP_FARBEN } from "@/lib/constants";
 import BeeLogo from "@/components/shared/BeeLogo";
 
+// Der Punkt-Schriftzug wechselt zwischen der Marke und den fünf Tätigkeiten
+const WOERTER = ["BEEDARO", "KAUFEN", "BIETEN", "MIETEN", "BUCHEN", "SCHENKEN"];
 const FORMAT = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 const FORMATE = [
   { type: "sell", label: "Festpreis", sub: "Kaufen wie gewohnt", icon: Tag },
@@ -37,7 +40,7 @@ function Karte({ l }) {
       <span className="sl-bild">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={getCoverUrl(l)} alt="" loading="lazy" />
-        {f && <span className="sl-chip" style={{ background: f.bg, color: f.fg }}>{FORMAT[l.listing_type]}</span>}
+        {f && <span className="sl-chip">{FORMAT[l.listing_type]}</span>}
         <span className="sl-herz" aria-hidden="true"><Heart size={16} strokeWidth={2.2} /></span>
       </span>
       <span className="sl-preis">{preis(l)}</span>
@@ -127,10 +130,10 @@ export default function StilLabor() {
           </div>
           <div className="sl-formate">
             {FORMATE.map((f) => {
-              const Icon = f.icon, farbe = TYP_FARBEN[f.type];
+              const Icon = f.icon;
               return (
                 <Link key={f.type} href={`/search?type=${f.type}`} className="sl-format sl-auf">
-                  <span className="sl-format-icon" style={{ background: farbe.bg, color: farbe.fg }}><Icon size={20} strokeWidth={2} /></span>
+                  <span className="sl-format-icon"><Icon size={20} strokeWidth={2} /></span>
                   <span className="sl-format-name">{f.label}</span>
                   <span className="sl-format-sub">{f.sub}</span>
                   <ArrowUpRight size={18} strokeWidth={2.2} className="sl-format-pfeil" />
@@ -171,6 +174,14 @@ export default function StilLabor() {
             <span className="sl-link">Alle Auktionen <ArrowUpRight size={15} strokeWidth={2.4} /></span>
             <label className="sl-feld"><Search size={17} strokeWidth={2.2} /><input className="pille-input" type="text" placeholder="Was suchst du?" aria-label="Suchfeld Muster" /></label>
           </div>
+        </section>
+
+        {/* Lookbook-Effekt: Das Wort setzt sich beim Scrollen aus Punkten zusammen, in der Bildmitte steht es
+            ganz, danach zerfällt es wieder. Hier ohne Biene, nur der Schriftzug (Denis 19.09.). */}
+        <section className="sl-punkt" aria-label="BEEDARO">
+          {/* Rahmen mit voller Breite: Die Zeichenfläche misst ihre Breite am Elternelement */}
+          <div className="sl-punkt-rahmen"><PunktSchriftzug wort="BEEDARO" woerter={WOERTER} farbe="#121212" schrift="Funnel Sans" maxBreite={1500} zerfall biene={false} /></div>
+          <p className="sl-punkt-satz">Kaufen. Verkaufen. Gutes tun.</p>
         </section>
 
         <footer className="sl-fuss">

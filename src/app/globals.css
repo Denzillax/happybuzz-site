@@ -1160,7 +1160,10 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-bild { position: relative; display: block; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: var(--sl-ink); }
 .sl-bild img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.7,.1,1); }
 .sl-karte:hover .sl-bild img { transform: scale(1.06); }
-.sl-chip { position: absolute; top: 10px; left: 10px; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+/* Typ-Chip im System: Ink mit gelber Schrift für alle Formate (Denis 19.09.: die bunten Typfarben
+   bissen sich mit dem Zitronengelb). Das Format steht als Wort da, das reicht. */
+.sl-chip { position: absolute; top: 10px; left: 10px; font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px;
+           background: var(--sl-ink); color: var(--sl-gelb); text-transform: uppercase; letter-spacing: .05em; }
 .sl-herz { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border-radius: 999px; background: var(--sl-gelb); color: var(--sl-ink);
            display: inline-flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(-6px); transition: opacity .2s ease, transform .2s ease; }
 .sl-karte:hover .sl-herz { opacity: 1; transform: none; }
@@ -1173,7 +1176,9 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-format { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 22px 20px 24px; border-right: 1px solid var(--sl-linie); transition: background .25s ease, color .25s ease; }
 .sl-format:last-child { border-right: none; }
 .sl-format:hover { background: var(--sl-hover-bg); color: var(--sl-hover-fg) !important; filter: none !important; }
-.sl-format-icon { width: 44px; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.sl-format-icon { width: 44px; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px;
+                  background: var(--sl-ink); color: var(--sl-gelb); transition: background .25s ease, color .25s ease; }
+.sl[data-grund=gelb] .sl-format:hover .sl-format-icon { background: var(--sl-gelb); color: var(--sl-ink); }
 .sl-format-name { font-size: 19px; font-weight: 600; text-transform: uppercase; }
 .sl-format-sub { font-size: 14px; opacity: .75; }
 .sl-format-pfeil { position: absolute; top: 20px; right: 18px; }
@@ -1194,6 +1199,11 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .sl-feld { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; background: #fff; border: 1px solid var(--sl-ink); border-radius: 999px; min-width: 260px; }
 .sl-feld input { border: none !important; outline: none; background: transparent; font: inherit; font-size: 15px; color: var(--sl-ink); flex: 1; min-width: 0; box-shadow: none !important; }
 
+/* Punkt-Schriftzug vor dem Fuss. overflow hidden: verstreute Punkte sollen nicht seitlich überlaufen. */
+.sl-punkt { padding: 72px 28px 56px; display: flex; flex-direction: column; align-items: center; gap: 6px; overflow: hidden; border-top: 1px solid var(--sl-linie); }
+.sl-punkt-rahmen { width: 100%; display: flex; justify-content: center; }
+.sl-punkt canvas { display: block; }
+.sl-punkt-satz { margin: 0; font-size: clamp(16px, 2vw, 22px); font-weight: 600; text-transform: uppercase; letter-spacing: .12em; }
 .sl-fuss { margin-top: 0; background: var(--sl-ink); color: var(--sl-gelb); padding: 56px 28px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .sl-fuss-satz { margin: 0; font-size: clamp(22px, 3vw, 34px); font-weight: 600; text-transform: uppercase; line-height: 1.1; }
 .sl-fuss-klein { margin: 0; font-size: 14px; color: rgba(255,255,255,.65); }
