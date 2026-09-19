@@ -28,7 +28,7 @@ const FORMATE = [
   { type: "service", label: "Service", sub: "Handwerk und Hilfe buchen." },
 ];
 const EINSTIEG = [
-  { titel: "Kaufen", text: "Stöbere durch Inserate aus der ganzen Schweiz, vom Velo bis zur Spielkonsole.", href: "/search", icon: ShoppingBag, farbe: "mint" },
+  { titel: "Kaufen", text: "Stöbere durch Inserate aus der ganzen Schweiz, vom Velo bis zur Spielkonsole.", href: "/labor/meeko/suche", icon: ShoppingBag, farbe: "mint" },
   { titel: "Verkaufen", text: "Fotos hochladen, Format wählen, fertig. Die KI schreibt den Text auf Wunsch mit.", href: "/listings/new", icon: Camera, farbe: "butter" },
   { titel: "Gutes tun", text: "Von jeder Gebühr gehen 20 % an den Bienenschutz. Das steht auf jeder Rechnung.", href: "/impact", icon: Flower2, farbe: "lavendel" },
 ];
@@ -64,7 +64,7 @@ export default function MeekoLabor() {
     return () => clearInterval(t);
   }, [inserate]);
 
-  const suchen = (e) => { e.preventDefault(); const t = q.trim(); router.push(t ? `/search?q=${encodeURIComponent(t)}` : "/search"); };
+  const suchen = (e) => { e.preventDefault(); const t = q.trim(); router.push(t ? `/labor/meeko/suche?q=${encodeURIComponent(t)}` : "/labor/meeko/suche"); };
   const held = inserate[bildNr % Math.max(1, Math.min(6, inserate.length))];
   const neu = inserate.slice(0, 6);
 
@@ -111,7 +111,7 @@ export default function MeekoLabor() {
         <div className="mk-karten">{neu.map((l) => <Karte key={l.id} l={l} />)}</div>
         <div className="mk-mehr mk-auf">
           <span className="mk-mehr-frage">Lust auf mehr?</span>
-          <Link href="/search" className="mk-knopf"><Roll>Alle Inserate ansehen</Roll></Link>
+          <Link href="/labor/meeko/suche" className="mk-knopf"><Roll>Alle Inserate ansehen</Roll></Link>
         </div>
       </section>
 
@@ -140,7 +140,7 @@ export default function MeekoLabor() {
         </div>
         <div className="mk-formate">
           {FORMATE.map((f) => (
-            <Link key={f.type} href={`/search?type=${f.type}`} className={`mk-format mk-${PASTELL[f.type]} mk-auf`}>
+            <Link key={f.type} href={`/labor/meeko/suche?type=${f.type}`} className={`mk-format mk-${PASTELL[f.type]} mk-auf`}>
               <span className="mk-format-name">{f.label}</span>
               <span className="mk-format-sub">{f.sub}</span>
               <span className="mk-pfeil mk-weiss" aria-hidden="true"><ArrowRight size={20} strokeWidth={1.8} /></span>
