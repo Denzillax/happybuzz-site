@@ -19,7 +19,7 @@ import { supabase } from "@/lib/supabase/supabase";
 const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
 const MONO = "'Manrope', sans-serif";
 const HEAD = "'General Sans','Manrope',sans-serif";
-const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".07em", textTransform: "uppercase", color: "#7D848E" };
+const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".07em", textTransform: "uppercase", color: "#686E78" };
 
 export default function PublicProfilePage() {
   const params = useParams();

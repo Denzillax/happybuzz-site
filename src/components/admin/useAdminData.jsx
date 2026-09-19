@@ -884,7 +884,7 @@ export function useAdminData() {
     const _r = reports.find(x => x.id === reportId); logAdmin("report_pause_listing", "listing", _r?.listingTitle || listingId);
   };
 
-  const sc = { open: { color: "#E65100", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
+  const sc = { open: { color: "#CD3800", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
     const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#F5F6F8", "#5B626C", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#0B5E5C", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#F5F6F8", "#5B626C", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#F5F6F8", "#5B626C", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
@@ -964,11 +964,11 @@ export function useAdminData() {
                 <div style={{ width: 26, height: 26, borderRadius: "50%", background: reached ? "#2E7D32" : "#fff", border: reached ? "none" : `2px solid ${isNext ? "#E65100" : "#ccc"}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {reached ? <CheckCircle size={15} color="#fff" /> : isNext ? <div style={{ width: 9, height: 9, borderRadius: "50%", background: "#E65100" }} /> : null}
                 </div>
-                <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#7D848E", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
+                <span style={{ fontSize: 11, lineHeight: 1.25, textAlign: "center", color: isNext ? "#E65100" : reached ? colors.dark : "#686E78", fontWeight: isNext ? 700 : 500 }}>{STAGE_LABELS[s]}</span>
                 {reached ? (
                   <span style={{ fontSize: 11, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 3 }}><Eye size={12} /> Mail{d ? ` · ${d}` : ""}</span>
                 ) : isNext ? (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 8px", borderRadius: 999 }}>senden</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#CD3800", background: "#FFF3E0", padding: "1px 8px", borderRadius: 999 }}>senden</span>
                 ) : null}
               </div>
             </div>
@@ -1069,15 +1069,15 @@ export function useAdminData() {
     { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#0E9493" },
     { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#0E9493" },
     { feeToggle: true, label: "Gebühren", Icon: Receipt, tint: "#D9A005" },
-    { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#7D848E", danger: stats.reports > 0 },
+    { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#686E78", danger: stats.reports > 0 },
   ];
 
   const ATTENTION = [
     { n: flaggedUsers.length, label: "Geflaggte Konten", desc: "Kontaktversuche ausserhalb BEEDARO", Icon: Flag, color: "#C62828", onClick: () => { setTab("users"); setSearch(""); setUserMod("flagged"); } },
     { n: bannedUsers.length, label: "Gesperrte Konten", desc: "Aktuell blockiert", Icon: Ban, color: "#C62828", onClick: () => { setTab("users"); setSearch(""); setUserMod("banned"); } },
-    { n: openReports.length, label: "Offene Meldungen", desc: "Von Nutzern gemeldet", Icon: AlertTriangle, color: "#E65100", onClick: () => { setTab("reports"); setSearch(""); } },
-    { n: openFeeInvoices.length, label: "Offene Rechnungen", desc: "Gebühren-Rechnungen unbezahlt", Icon: ReceiptText, color: "#E65100", onClick: () => { setTab("invoices"); setSearch(""); setInvoiceType("fee"); } },
-    { n: pendingListings.length, label: "Wartet auf Freigabe", desc: "Neue Inserate zur Prüfung", Icon: Package, color: "#E65100", onClick: () => { setTab("listings"); setSearch(""); setListingMod("pending"); } },
+    { n: openReports.length, label: "Offene Meldungen", desc: "Von Nutzern gemeldet", Icon: AlertTriangle, color: "#CD3800", onClick: () => { setTab("reports"); setSearch(""); } },
+    { n: openFeeInvoices.length, label: "Offene Rechnungen", desc: "Gebühren-Rechnungen unbezahlt", Icon: ReceiptText, color: "#CD3800", onClick: () => { setTab("invoices"); setSearch(""); setInvoiceType("fee"); } },
+    { n: pendingListings.length, label: "Wartet auf Freigabe", desc: "Neue Inserate zur Prüfung", Icon: Package, color: "#CD3800", onClick: () => { setTab("listings"); setSearch(""); setListingMod("pending"); } },
   ];
 
   return {

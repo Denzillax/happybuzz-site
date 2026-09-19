@@ -12,7 +12,7 @@ import SwissQRImage from "@/components/shared/SwissQRImage";
 import { fmtCHF, fmtDateLong, fullName, shippingMethodLabel } from "@/lib/formatters";
 import { getInvoiceItems } from "@/lib/api/invoices";
 const f = "'Manrope', sans-serif";
-const g = "#7D848E";
+const g = "#686E78";
 export default function InvoicePage() {
   const params = useParams();
   const searchParams = useSearchParams();

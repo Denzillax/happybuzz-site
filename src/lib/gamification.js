@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase/supabase";
 
 // Bee-Level Definitionen (minXp = Pollen-Schwelle)
 export const BEE_LEVELS = [
-  { key: "starter",      name: "Entdecker",    minXp: 0,    color: "#7D848E", perk: "Willkommen im Schwarm" },
+  { key: "starter",      name: "Entdecker",    minXp: 0,    color: "#686E78", perk: "Willkommen im Schwarm" },
   { key: "busy",         name: "Sammler",      minXp: 100,  color: "#CD7F32", perk: "Sammler-Badge + bessere Platzierung" },
   { key: "hive_builder", name: "Hive Builder", minXp: 500,  color: "#9FB1BC", perk: "Verified-Badge + Ranking-Boost" },
   { key: "queen",        name: "Queen Bee",    minXp: 2000, color: "#E8A820", perk: "Shop-Name + Top-Platzierung" },

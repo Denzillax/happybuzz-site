@@ -83,12 +83,12 @@ export function BottomNav() {
                   width: 24, height: 24, borderRadius: '50%',
                   background: active ? YELLOW : '#E5E8EC',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: active ? DARK : '#7D848E',
+                  fontSize: 10, fontWeight: 700, color: active ? DARK : '#686E78',
                   transition: 'all 0.15s',
                 }}>
                   {getInitials()}
                 </div>
-                <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#7D848E', fontFamily: 'inherit' }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#686E78', fontFamily: 'inherit' }}>
                   {tab.label}
                 </span>
               </button>
@@ -101,8 +101,8 @@ export function BottomNav() {
               background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px',
               transition: 'all 0.15s',
             }}>
-              <tab.icon size={22} color={active ? DARK : '#7D848E'} strokeWidth={active ? 2.2 : 1.8} />
-              <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#7D848E', fontFamily: 'inherit' }}>
+              <tab.icon size={22} color={active ? DARK : '#686E78'} strokeWidth={active ? 2.2 : 1.8} />
+              <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#686E78', fontFamily: 'inherit' }}>
                 {tab.label}
               </span>
             </button>

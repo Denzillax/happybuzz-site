@@ -28,8 +28,8 @@ export default function ProfilePage() {
     load();
   }, [id]);
 
-  if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#7D848E" }}>Lade Profil...</div>;
-  if (!profile) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#7D848E" }}>Profil nicht gefunden</div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#686E78" }}>Lade Profil...</div>;
+  if (!profile) return <div style={{ fontFamily: fonts.body, padding: 60, textAlign: "center", color: "#686E78" }}>Profil nicht gefunden</div>;
 
   const avgRating = ratings.length > 0 ? (ratings.reduce((s, r) => s + r.score, 0) / ratings.length).toFixed(1) : null;
   const img = (l) => l.listing_images?.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))?.[0]?.url;

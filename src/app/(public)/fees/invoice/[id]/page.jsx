@@ -14,7 +14,7 @@ import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 
 const f = "'Manrope', sans-serif";
-const g = "#7D848E";
+const g = "#686E78";
 const cp = { padding: "8px 10px", fontFamily: f };
 const Betrag = ({ v, dim }) => (
   <span style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
@@ -102,11 +102,11 @@ export default function FeeInvoicePage() {
             <p style={{ margin: 0, fontSize: 12, fontWeight: 700, fontFamily: f }}>{co.name}</p>
             <p style={{ margin: "1px 0", fontSize: 11, color: "#5B626C", fontFamily: f }}>{co.street}</p>
             <p style={{ margin: 0, fontSize: 11, color: "#5B626C", fontFamily: f }}>{`${co.postal_code || ""} ${co.city || ""}`.trim()}{co.country === "CH" ? ", Schweiz" : co.country ? `, ${co.country}` : ""}</p>
-            {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#7D848E", fontFamily: f }}>{co.uid}</p>}
+            {co.uid && <p style={{ margin: "1px 0 0", fontSize: 10, color: "#686E78", fontFamily: f }}>{co.uid}</p>}
             {/* Verbindet die Marke im Kopf mit der juristischen Person im Zahlteil.
                 Der Kreditor muss dem Kontoinhaber entsprechen, darum steht die
                 Marke hier als Zusatz und nicht im Empfaengerfeld. */}
-            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#7D848E", fontFamily: f }}>
+            <p style={{ margin: "3px 0 0", fontSize: 10, color: "#686E78", fontFamily: f }}>
               BEEDARO ist eine Marke von MOQRO.
             </p>
           </div>

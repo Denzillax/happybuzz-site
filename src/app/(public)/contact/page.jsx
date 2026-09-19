@@ -80,7 +80,7 @@ export default function ContactPage() {
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
                   width: "100%", padding: "14px", borderRadius: 12, border: "1px solid #E5E8EC",
                   background: ready ? INK : "#D5D9DF",
-                  color: ready ? PAPER : "#7D848E", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
+                  color: ready ? PAPER : "#686E78", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 }}>
                   <Send size={16} /> Nachricht senden

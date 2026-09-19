@@ -26,7 +26,7 @@ const PROJECTS = [
 const FUNNEL = [
   { icon: Flower2, color: MOSS, title: "Blüten", desc: "Jede Transaktion (Kauf und Verkauf) bringt Blüten. Dein Naturschutz-Beitrag in Punkten." },
   { icon: null, color: HONEY, title: "Pollen", desc: "100 Blüten = 1 Pollen. Plus Pollen fürs Mitmachen. Pollen heben dein Bee-Level." },
-  { icon: Droplets, color: "#C8860A", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
+  { icon: Droplets, color: "#A66700", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
 ];
 
 const FLOW = [

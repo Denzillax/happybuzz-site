@@ -104,7 +104,7 @@ export async function getInvoicesForSeller(sellerId) {
 
 // ─── Status-Konfiguration ────────────────────────────────────
 export const FEE_STATUS = {
-  open:            { color: "#E65100", bg: "#FFF3E0", label: "Offen" },
+  open:            { color: "#CD3800", bg: "#FFF3E0", label: "Offen" },
   pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" },
   paid:            { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" },
   overdue:         { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" },
@@ -113,7 +113,7 @@ export const FEE_STATUS = {
 export const LISTING_STATUS = {
   active:        { color: "#2E7D32", bg: "#E8F5E9", label: "Aktiv" },
   draft:         { color: "#5B626C",    bg: "#F5F6F8", label: "Entwurf" },
-  paused:        { color: "#E65100", bg: "#FFF3E0", label: "Pausiert" },
+  paused:        { color: "#CD3800", bg: "#FFF3E0", label: "Pausiert" },
   sold:          { color: "#1565C0", bg: "#E3F2FD", label: "Verkauft" },
   rented:        { color: "#1565C0", bg: "#E3F2FD", label: "Vermietet" },
   inactive:      { color: "#5B626C",    bg: "#F5F6F8", label: "Inaktiv" },
@@ -124,7 +124,7 @@ export const ORDER_STATUS = {
   confirmed:  { color: "#2E7D32", bg: "#E8F5E9", label: "Bestätigt" },
   cancelled:  { color: "#c62828", bg: "#FFEBEE", label: "Storniert" },
   completed:  { color: "#1565C0", bg: "#E3F2FD", label: "Abgeschlossen" },
-  disputed:   { color: "#E65100", bg: "#FFF3E0", label: "Streitfall" },
+  disputed:   { color: "#CD3800", bg: "#FFF3E0", label: "Streitfall" },
   refunded:   { color: "#5B626C",    bg: "#F5F6F8", label: "Erstattet" },
 };
 

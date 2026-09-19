@@ -20,7 +20,7 @@ export function TypeBadge({ type }) {
     auction: { bg: "#EDE7F6", color: "#5E35B1", label: "Auktion" },
     rent:    { bg: "#E3F2FD", color: "#1565C0", label: "Mieten" },
     service: { bg: "#FFF0E6", color: "#E67E22", label: "Service" },
-    free:    { bg: "#FFF3E0", color: "#E65100", label: "Gratis" },
+    free:    { bg: "#FFF3E0", color: "#CD3800", label: "Gratis" },
   };
   const c = config[type] || config.sell;
   return <Badge bg={c.bg} color={c.color}>{c.label}</Badge>;
@@ -30,7 +30,7 @@ export function StatusBadge({ status }) {
   const config = {
     active:   { bg: "#E8F5E9", color: "#2E7D32", label: "Aktiv" },
     draft:    { bg: colors.warm, color: colors.muted, label: "Entwurf" },
-    paused:   { bg: "#FFF3E0", color: "#E65100", label: "Pausiert" },
+    paused:   { bg: "#FFF3E0", color: "#CD3800", label: "Pausiert" },
     sold:     { bg: "#E3F2FD", color: "#1565C0", label: "Verkauft" },
     rented:   { bg: "#E3F2FD", color: "#1565C0", label: "Vermietet" },
     inactive: { bg: colors.warm, color: colors.muted, label: "Inaktiv" },

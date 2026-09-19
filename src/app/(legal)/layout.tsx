@@ -17,11 +17,11 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       <main style={{ flex: 1 }}>{children}</main>
       <footer style={{ background: '#fff', borderTop: '1px solid #E5E8EC', padding: '14px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-          <span style={{ fontSize: 12, color: '#7D848E' }}>© 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784</span>
+          <span style={{ fontSize: 12, color: '#686E78' }}>© 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784</span>
           <span style={{ display: 'flex', gap: 16 }}>
-            <Link href="/terms" style={{ fontSize: 12, color: '#7D848E', textDecoration: 'none' }}>AGB</Link>
-            <Link href="/privacy" style={{ fontSize: 12, color: '#7D848E', textDecoration: 'none' }}>Datenschutz</Link>
-            <Link href="/imprint" style={{ fontSize: 12, color: '#7D848E', textDecoration: 'none' }}>Impressum</Link>
+            <Link href="/terms" style={{ fontSize: 12, color: '#686E78', textDecoration: 'none' }}>AGB</Link>
+            <Link href="/privacy" style={{ fontSize: 12, color: '#686E78', textDecoration: 'none' }}>Datenschutz</Link>
+            <Link href="/imprint" style={{ fontSize: 12, color: '#686E78', textDecoration: 'none' }}>Impressum</Link>
           </span>
         </div>
       </footer>

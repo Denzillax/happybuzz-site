@@ -312,7 +312,7 @@ function SearchPageInner() {
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
         <div className="search-mobile-bar" style={{ background: "#F1F3F5", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
-          <Search size={16} style={{ marginLeft: 12, color: "#7D848E", flexShrink: 0, alignSelf: "center" }} />
+          <Search size={16} style={{ marginLeft: 12, color: "#686E78", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
             className="pille-input"
@@ -325,7 +325,7 @@ function SearchPageInner() {
           {draft && (
             <button onClick={() => { setDraft(""); setQuery(""); setPage(1); }} aria-label="Suche leeren"
               style={{ background: "none", border: "none", cursor: "pointer", padding: "0 4px", display: "flex", alignItems: "center" }}>
-              <X size={16} color="#7D848E" />
+              <X size={16} color="#686E78" />
             </button>
           )}
           {/* KI-Schalter (wie im Header, gleicher Speicher) */}

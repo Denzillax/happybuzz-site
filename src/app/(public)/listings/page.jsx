@@ -15,7 +15,7 @@ const MONO = "'Manrope', sans-serif";
 
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
-  expired:  { label: "Abgelaufen", color: "#E65100", icon: Clock },
+  expired:  { label: "Abgelaufen", color: "#CD3800", icon: Clock },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
   pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
   pending_hold: { label: "Persönliche Prüfung", color: "#E5A100", icon: Clock },
@@ -350,7 +350,7 @@ export default function ListingsPage() {
           }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
             <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 12, fontSize: 12, fontWeight: 700, border: "1px solid #E5E8EC", background:"#FFF3E0", color: "#E65100", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 12, fontSize: 12, fontWeight: 700, border: "1px solid #E5E8EC", background:"#FFF3E0", color: "#CD3800", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
@@ -490,7 +490,7 @@ export default function ListingsPage() {
                           const b = myBoosts[l.id][0];
                           const rem = b.expires_at ? Math.max(0, new Date(b.expires_at).getTime() - Date.now()) : null;
                           const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`;
-                          return <div style={{ marginTop: 4, fontSize: 10, fontWeight: 800, color: "#C8860A", display: "flex", alignItems: "center", gap: 3 }}><Rocket size={10} /> {labels[b.reward_type] || b.reward_type}{remStr ? ` · ${remStr}` : ""}</div>;
+                          return <div style={{ marginTop: 4, fontSize: 10, fontWeight: 800, color: "#A66700", display: "flex", alignItems: "center", gap: 3 }}><Rocket size={10} /> {labels[b.reward_type] || b.reward_type}{remStr ? ` · ${remStr}` : ""}</div>;
                         })()}
                       </td>
                       {/* Actions — Icon-Only mit Hover-Tooltip */}
@@ -528,7 +528,7 @@ export default function ListingsPage() {
                             <div style={{ position: "relative" }}>
                               <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
                                 width: 32, height: 32, borderRadius: 12, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                color: "#C8860A", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
+                                color: "#A66700", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
                               }}>
                                 <Rocket size={14} />
                               </button>
@@ -536,7 +536,7 @@ export default function ListingsPage() {
                                 <>
                                   <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
                                   <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 12, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
-                                    <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
+                                    <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#A66700" }}>{myNektar} Nektar</span></p>
                                     {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                       const aff = myNektar >= r.cost;
                                       return (
@@ -655,7 +655,7 @@ export default function ListingsPage() {
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: colors.muted }}><Eye size={14} /> {l.view_count || 0}</span>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? colors.yellow : colors.muted }}><Heart size={14} fill={l.favorite_count > 0 ? colors.yellow : "none"} /> {l.favorite_count || 0}</span>
                       {l.listing_type === "auction" && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: bc.count > 0 ? colors.green : colors.muted, fontWeight: bc.count > 0 ? 700 : 400 }}><Gavel size={14} /> {bc.count}{bc.topBid > 0 ? ` · CHF ${fmtPrice(bc.topBid)}` : ""}</span>}
-                      {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#C8860A", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
+                      {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#A66700", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
                     </div>
 
                     {l.status === "scheduled" && l.publish_at && (
@@ -680,12 +680,12 @@ export default function ListingsPage() {
                       )}
                       {l.status === "active" && (
                         <div style={{ position: "relative", width: "100%" }}>
-                          <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#C8860A", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
+                          <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#A66700", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
                           {boostMenuFor === l.id && (
                             <>
                               <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
                               <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 12, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
-                                <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#C8860A" }}>{myNektar} Nektar</span></p>
+                                <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#A66700" }}>{myNektar} Nektar</span></p>
                                 {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                   const aff = myNektar >= r.cost;
                                   return (
@@ -811,5 +811,5 @@ export default function ListingsPage() {
 function daily0Note(statsData) {
   const total = (statsData.daily || []).reduce((s, d) => s + (d.count || 0), 0);
   if (total > 0) return null;
-  return <p style={{ fontSize: 11, color: "#7D848E", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
+  return <p style={{ fontSize: 11, color: "#686E78", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
 }

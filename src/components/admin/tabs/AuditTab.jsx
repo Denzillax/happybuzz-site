@@ -6,26 +6,26 @@ export const AUDIT_META = {
   ban:                  { label: "Konto gesperrt",        Icon: Ban,         color: "#C62828", bg: "#FFEBEE" },
   site_mode_set:        { label: "Betriebsmodus geändert", Icon: ShieldCheck, color: "#c62828", bg: "#FFEBEE" },
   application_done:     { label: "Bewerbung erledigt",     Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
-  beta_access_set:      { label: "Beta-Zugang geändert",  Icon: ShieldCheck, color: "#C8860A", bg: "#FBF1D2" },
+  beta_access_set:      { label: "Beta-Zugang geändert",  Icon: ShieldCheck, color: "#A66700", bg: "#FBF1D2" },
   challenge_created:    { label: "Challenge angelegt",    Icon: Target,      color: "#0E9493", bg: "#E6F5F5" },
-  challenge_toggled:    { label: "Challenge (de)aktiviert", Icon: Target,    color: "#E65100", bg: "#FFF3E0" },
+  challenge_toggled:    { label: "Challenge (de)aktiviert", Icon: Target,    color: "#CD3800", bg: "#FFF3E0" },
   challenge_updated:    { label: "Challenge-Vorlage geändert", Icon: Target, color: "#0E9493", bg: "#E6F5F5" },
   unban:                { label: "Konto entsperrt",       Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   report_resolve:       { label: "Meldung erledigt",      Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
-  report_status:        { label: "Meldungs-Status geändert", Icon: CheckCircle, color: "#E65100", bg: "#FFF3E0" },
-  report_pause_listing: { label: "Inserat pausiert (Meldung)", Icon: Pause,  color: "#E65100", bg: "#FFF3E0" },
+  report_status:        { label: "Meldungs-Status geändert", Icon: CheckCircle, color: "#CD3800", bg: "#FFF3E0" },
+  report_pause_listing: { label: "Inserat pausiert (Meldung)", Icon: Pause,  color: "#CD3800", bg: "#FFF3E0" },
   feedback_status:      { label: "Feedback-Status geändert", Icon: CheckCircle, color: "#0E9493", bg: "#E6F5F5" },
   feedback_note:        { label: "Feedback-Notiz gespeichert", Icon: Star,   color: "#0E9493", bg: "#E6F5F5" },
   category_create:      { label: "Kategorie angelegt",       Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   category_update:      { label: "Kategorie umbenannt",      Icon: Clock,       color: "#0E9493", bg: "#E6F5F5" },
-  category_toggle:      { label: "Kategorie (de)aktiviert",  Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
+  category_toggle:      { label: "Kategorie (de)aktiviert",  Icon: Pause,       color: "#CD3800", bg: "#FFF3E0" },
   category_move:        { label: "Kategorie sortiert",       Icon: Clock,       color: "#0E9493", bg: "#E6F5F5" },
   category_delete:      { label: "Kategorie gelöscht",       Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
-  listing_pause:        { label: "Inserat pausiert",      Icon: Pause,       color: "#E65100", bg: "#FFF3E0" },
+  listing_pause:        { label: "Inserat pausiert",      Icon: Pause,       color: "#CD3800", bg: "#FFF3E0" },
   listing_activate:     { label: "Inserat aktiviert",     Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
   listing_approve:      { label: "Inserat freigegeben",   Icon: Play,        color: "#2E7D32", bg: "#E8F5E9" },
   listing_reject:       { label: "Inserat abgelehnt",     Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
-  reminder:             { label: "Mahnung gesendet",      Icon: BellRing,    color: "#E65100", bg: "#FFF3E0" },
+  reminder:             { label: "Mahnung gesendet",      Icon: BellRing,    color: "#CD3800", bg: "#FFF3E0" },
   fee_paid:             { label: "Bezahlt + reaktiviert", Icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9" },
   order_cancel:         { label: "Bestellung storniert",  Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
   id_verify:            { label: "ID verifiziert",        Icon: ShieldCheck, color: "#0B5E5C", bg: "#E6F5F5" },
@@ -36,7 +36,7 @@ export const AUDIT_META = {
   company_update:       { label: "Firmendaten geändert",  Icon: Building2,   color: "#0E9493", bg: "#E6F5F5" },
   staff_role_set:       { label: "Mitarbeiter-Rolle gesetzt", Icon: Users2,  color: "#0E9493", bg: "#E6F5F5" },
   listing_auto_approve: { label: "Inserat automatisch freigegeben (KI)", Icon: Play, color: "#2E7D32", bg: "#E8F5E9" },
-  listing_auto_hold:    { label: "Inserat zur Prüfung zurückgehalten (KI)", Icon: Pause, color: "#E65100", bg: "#FFF3E0" },
+  listing_auto_hold:    { label: "Inserat zur Prüfung zurückgehalten (KI)", Icon: Pause, color: "#CD3800", bg: "#FFF3E0" },
   auto_review_toggle:   { label: "Automatische Freigabe umgeschaltet", Icon: ShieldCheck, color: "#0E9493", bg: "#E6F5F5" },
   application_rejected: { label: "Bewerbung abgelehnt",   Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
   challenge_deleted:    { label: "Challenge gelöscht",    Icon: XCircle,     color: "#c62828", bg: "#FFEBEE" },
@@ -70,11 +70,11 @@ export function AuditTab({ admin }) {
           const time = a.created_at ? new Date(a.created_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" }) : "";
           return (
             <div key={a.id}>
-              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#7D848E", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
+              {showHeader && <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".07em", color: "#686E78", textTransform: "uppercase", padding: "14px 0 4px" }}>{day}</div>}
               <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "9px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
                 <span style={{ width: 34, height: 34, borderRadius: 12, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={17} color={meta.color} /></span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{meta.label}{a.action === "reminder" && a.detail?.level ? <span style={{ fontSize: 10, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>Stufe {a.detail.level}</span> : null}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{meta.label}{a.action === "reminder" && a.detail?.level ? <span style={{ fontSize: 10, fontWeight: 700, color: "#CD3800", background: "#FFF3E0", padding: "1px 7px", borderRadius: 999, marginLeft: 6 }}>Stufe {a.detail.level}</span> : null}</div>
                   <div style={{ fontSize: 11.5, color: colors.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.target_label || "—"}</div>
                 </div>
                 <div style={{ textAlign: "right", flexShrink: 0 }}><div style={{ fontSize: 11, color: colors.muted }}>{time}</div><div style={{ fontSize: 10, color: "#bbb" }}>{adminName}</div></div>

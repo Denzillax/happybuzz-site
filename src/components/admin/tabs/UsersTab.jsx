@@ -33,13 +33,13 @@ export function UsersTab({ admin }) {
             <div onClick={() => openUserProfile(u.id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", cursor: "pointer", background: rowTint }}
               onMouseEnter={e => { if (rowTint === "transparent") e.currentTarget.style.background = "#F5F6F8"; }}
               onMouseLeave={e => { if (rowTint === "transparent") e.currentTarget.style.background = "transparent"; }}>
-              <div style={{ width: 38, height: 38, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14, fontWeight: 700, color: u.is_banned ? "#7D848E" : colors.dark }}>
+              <div style={{ width: 38, height: 38, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 14, fontWeight: 700, color: u.is_banned ? "#686E78" : colors.dark }}>
                 {(u.display_name || "?")[0].toUpperCase()}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.display_name || "—"} <span style={{ fontWeight: 400, color: colors.muted, fontSize: 11 }}>@{u.username || "—"}</span>
                   {u.id_verified && <span style={{ marginLeft: 5, fontSize: 9, padding: "1px 6px", borderRadius: 999, background: "#E6F5F5", color: "#0B5E5C", fontWeight: 700 }}>ID</span>}
-                  {u.id_document_url && !u.id_verified && <span style={{ marginLeft: 5, fontSize: 9, padding: "1px 6px", borderRadius: 999, background: "#FFF8E1", color: "#E65100", fontWeight: 700 }}>ID?</span>}
+                  {u.id_document_url && !u.id_verified && <span style={{ marginLeft: 5, fontSize: 9, padding: "1px 6px", borderRadius: 999, background: "#FFF8E1", color: "#CD3800", fontWeight: 700 }}>ID?</span>}
                   {u.is_banned && <span style={{ marginLeft: 5, fontSize: 9, padding: "1px 6px", borderRadius: 999, background: "#C62828", color: "#fff", fontWeight: 700 }}>GESPERRT</span>}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>{u.city || "—"} · {u.created_at ? fmtDate(u.created_at) : ""}</p>

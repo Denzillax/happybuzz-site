@@ -25,6 +25,7 @@ export const REP_LOG = [
   {
     datum: "19. September 2026",
     punkte: [
+      { typ: "fix", bereich: "Design", text: "Farben auf Lesbarkeit geprüft (Kontrastmessung für jedes Paar aus Schrift und Fläche). Drei Schriftfarben waren für kleine Schrift zu hell und sind nachgedunkelt: der graue Hinweistext, die orange Statusschrift (etwa 'Warten auf Zahlung') und die Nektar-Zahl im Header. Symbole und Flächen behalten ihre Farbe", melder: "Denis" },
       { typ: "neu", bereich: "Startseite", text: "Die Icons der fünf Formate bewegen sich: Das Preisschild pendelt, der Auktionshammer schlägt zu, der Kalender tickt, das Geschenk hüpft, der Schraubenschlüssel dreht. Einmal gestaffelt, wenn die Reihe ins Bild kommt, und erneut beim Hovern. Kacheln und Pillen hovern in blassem Gelb, und der Inserieren-Knopf im Hero hat beim Hovern keinen grauen Schatten mehr", melder: "Denis" },
       { typ: "neu", bereich: "Design", text: "Kleiner Honig-Balken vor den Abschnittstiteln der Startseite (Fünf Formate, Neu eingestellt, Endet bald, Gerade beliebt). Er trägt die Markenfarbe durch die Seite", melder: "Denis" },
       { typ: "fix", bereich: "Chat", text: "Chat am Desktop: Das Nachrichtenfenster ist jetzt beim Öffnen ganz sichtbar, man muss nicht mehr nach unten scrollen, um zu schreiben. Es sitzt fest zwischen Header und unterem Rand, wie schon am Handy. Der graue Hintergrund ist weg, der gelbe Inserieren-Kreis ist im Chat ausgeblendet, damit er nicht über der Eingabezeile liegt", melder: "Denis" },

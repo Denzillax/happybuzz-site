@@ -7,7 +7,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 const MODI = [
   { key: "live",    label: "Live",    Icon: Globe,  desc: "Seite für alle offen",                        color: "#2E7D32", bg: "#E8F5E9" },
-  { key: "beta",    label: "Beta",    Icon: Lock,   desc: "Nur freigegebene Test-Konten (Benutzer-Tab)", color: "#C8860A", bg: "#FBF1D2" },
+  { key: "beta",    label: "Beta",    Icon: Lock,   desc: "Nur freigegebene Test-Konten (Benutzer-Tab)", color: "#A66700", bg: "#FBF1D2" },
   { key: "wartung", label: "Wartung", Icon: Wrench, desc: "Nur Staff, alle anderen sehen die Wartungsseite", color: "#c62828", bg: "#FFEBEE" },
 ];
 
@@ -95,7 +95,7 @@ export function OverviewTab({ admin }) {
                   </button>
                 ) : (
                   <button onClick={() => setBetaAccess(a.user_id, name, true)}
-                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBF1D2", color: "#C8860A", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#FBF1D2", color: "#A66700", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
                     Beta-Zugang erteilen
                   </button>
                 )}
@@ -194,8 +194,8 @@ export function OverviewTab({ admin }) {
               display: "flex", alignItems: "center", gap: 14, textAlign: "left", cursor: "pointer", fontFamily: fonts.body,
               background: "#fff", border: `1px solid ${a.n > 0 ? a.color + "55" : colors.border}`, borderRadius: radius.lg, padding: "16px 18px",
             }}>
-              <span style={{ width: 44, height: 44, borderRadius: 12, background: (a.n > 0 ? a.color : "#7D848E") + "18", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <a.Icon size={21} color={a.n > 0 ? a.color : "#7D848E"} />
+              <span style={{ width: 44, height: 44, borderRadius: 12, background: (a.n > 0 ? a.color : "#686E78") + "18", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <a.Icon size={21} color={a.n > 0 ? a.color : "#686E78"} />
               </span>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 23, fontWeight: 800, fontFamily: fonts.head, lineHeight: 1, color: a.n > 0 ? a.color : colors.dark }}>{a.n}</div>

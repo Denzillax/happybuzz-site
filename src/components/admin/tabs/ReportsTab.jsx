@@ -8,7 +8,7 @@ import { pill } from "@/components/admin/adminStyles";
 // Meldungs-Workflow: offen → in_pruefung → erledigt/abgelehnt
 const REPORT_STATUS = {
   offen:       { label: "Offen",      bg: "#FFEBEE", color: "#c62828" },
-  in_pruefung: { label: "In Prüfung", bg: "#FFF3E0", color: "#E65100" },
+  in_pruefung: { label: "In Prüfung", bg: "#FFF3E0", color: "#CD3800" },
   erledigt:    { label: "Erledigt",   bg: "#E8F5E9", color: "#2E7D32" },
   abgelehnt:   { label: "Abgelehnt",  bg: "#F5F6F8", color: "#5B626C" },
 };
@@ -51,7 +51,7 @@ export function ReportsTab({ admin }) {
               {/* Aktionen */}
               {!closed && (
                 <div style={{ display: "flex", gap: 4 }}>
-                  {r.listing_id && <button onClick={() => pauseReportedListing(r.id, r.listing_id)} style={{ padding: "4px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserat pausieren</button>}
+                  {r.listing_id && <button onClick={() => pauseReportedListing(r.id, r.listing_id)} style={{ padding: "4px 12px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#CD3800", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Inserat pausieren</button>}
                   {r.listing_id && <Link href={`/listing/${r.listing_id}`} style={{ padding: "4px 12px", borderRadius: 999, background: colors.warm, color: colors.muted, fontSize: 10, fontWeight: 700, textDecoration: "none" }}>Ansehen</Link>}
                 </div>
               )}

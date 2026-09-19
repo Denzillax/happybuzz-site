@@ -324,7 +324,7 @@ export default function HivePage() {
 
         {/* ── NEKTAR-BELOHNUNGEN (Katalog) ── */}
         <Card style={{ marginBottom: 16 }}>
-          <SectionTitle icon={Gift} right={<span style={{ fontSize: 12, fontWeight: 800, color: "#C8860A" }}>{nektar.toLocaleString("de-CH")} Nektar</span>}>Belohnungen einlösen</SectionTitle>
+          <SectionTitle icon={Gift} right={<span style={{ fontSize: 12, fontWeight: 800, color: "#A66700" }}>{nektar.toLocaleString("de-CH")} Nektar</span>}>Belohnungen einlösen</SectionTitle>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
             {NEKTAR_CATALOG.map(r => {
               const affordable = nektar >= r.cost;
@@ -335,7 +335,7 @@ export default function HivePage() {
                 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                     <span style={{ fontSize: 14, fontWeight: 800, color: colors.dark }}>{r.name}</span>
-                    <span style={{ fontSize: 12, fontWeight: 800, color: "#C8860A", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                    <span style={{ fontSize: 12, fontWeight: 800, color: "#A66700", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}>
                       <Droplets size={12} color="#C8860A" /> {r.cost}
                     </span>
                   </div>
@@ -473,7 +473,7 @@ export default function HivePage() {
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "24px 26px", maxWidth: 380, width: "100%", fontFamily: fonts.body }}>
             <h3 style={{ margin: "0 0 4px", fontSize: 17, fontWeight: 800, color: colors.dark }}>{redeemReward.name} einlösen</h3>
             <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
-              <b style={{ color: "#C8860A" }}>{redeemReward.cost} Nektar</b> ausgeben?{redeemReward.confirm ? ` ${redeemReward.confirm}` : ""}
+              <b style={{ color: "#A66700" }}>{redeemReward.cost} Nektar</b> ausgeben?{redeemReward.confirm ? ` ${redeemReward.confirm}` : ""}
             </p>
             {redeemReward.needsListing && (
               pickerListings === null ? (

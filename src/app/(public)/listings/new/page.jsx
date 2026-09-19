@@ -121,7 +121,7 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#7D848E" }}>
+    <div style={{ fontFamily: "'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#686E78" }}>
       Lade…
     </div>
   );
@@ -137,8 +137,8 @@ function NewListingPageInner() {
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
           <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 12, padding: "16px 20px" }}>
-            <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#E65100" }}>Profil unvollständig, bitte ergänzen:</p>
-            {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#E65100" }}>• {m}</p>)}
+            <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig, bitte ergänzen:</p>
+            {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#CD3800" }}>• {m}</p>)}
             <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
           </div>
         </div>

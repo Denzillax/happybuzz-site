@@ -2359,9 +2359,9 @@ export default function ListingForm({
           background: "#FFF3E0", border: `1.5px solid #F4A100`,
           borderRadius: radius.lg, padding: "14px 18px", marginBottom: 16,
         }}>
-          <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100", fontFamily: fonts.body }}>Bitte korrigiere folgende Felder:</p>
+          <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#CD3800", fontFamily: fonts.body }}>Bitte korrigiere folgende Felder:</p>
           {Object.values(errors).map((msg, i) => (
-            <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100", fontFamily: fonts.body }}>• {msg}</p>
+            <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#CD3800", fontFamily: fonts.body }}>• {msg}</p>
           ))}
         </div>
       )}

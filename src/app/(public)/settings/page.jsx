@@ -859,7 +859,7 @@ export default function SettingsPage() {
                     onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     <span style={{ fontWeight: 600 }}>{r.street}</span>
-                    <span style={{ color: "#7D848E", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                    <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
                   </div>
                 ))}
               </div>
@@ -952,7 +952,7 @@ export default function SettingsPage() {
                           onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <span style={{ fontWeight: 600 }}>{r.street}</span>
-                          <span style={{ color: "#7D848E", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                          <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
                         </div>
                       ))}
                     </div>
@@ -1033,7 +1033,7 @@ export default function SettingsPage() {
                       onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <span style={{ fontWeight: 600 }}>{r.street}</span>
-                      <span style={{ color: "#7D848E", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                      <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
                     </div>
                   ))}
                 </div>

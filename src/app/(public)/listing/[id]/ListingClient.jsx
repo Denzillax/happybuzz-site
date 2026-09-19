@@ -1097,7 +1097,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {l.status === "paused" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFF3E0", color: "#E65100", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFF3E0", color: "#CD3800", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   Vorübergehend pausiert
                 </div>
               )}
@@ -1729,8 +1729,8 @@ export default function ListingDetail() {
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
               <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
-                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#E65100" }}>Profil unvollständig:</p>
-                {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#E65100" }}>• {m}</p>)}
+                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig:</p>
+                {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#CD3800" }}>• {m}</p>)}
                 <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}

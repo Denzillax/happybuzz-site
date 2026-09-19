@@ -53,7 +53,7 @@ export function UserProfile({ admin }) {
       {/* Kopf */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, flexWrap: "wrap" }}>
         <button onClick={closeProfile} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: colors.cream, border: "none", borderRadius: 999, padding: "8px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}><ArrowLeft size={15} /> Zurück</button>
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#7D848E" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: u.is_banned ? "#EEF0F3" : colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700, color: u.is_banned ? "#686E78" : colors.dark }}>{(u.display_name || "?")[0].toUpperCase()}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 18, fontWeight: 800, fontFamily: fonts.head }}>{u.display_name || "—"} <span style={{ fontSize: 13, fontWeight: 400, color: colors.muted }}>@{u.username || "—"}</span></div>
           <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
@@ -65,7 +65,7 @@ export function UserProfile({ admin }) {
         </div>
         {/* Beta-Freigabe: steuert den Zutritt im SiteGate-Modus 'beta' */}
         <button onClick={() => setBetaAccess(u.id, u.display_name || u.username || "Konto", !u.beta_access)}
-          style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.beta_access ? "#E5C868" : "#C8860A55"}`, color: "#C8860A" }}>
+          style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.beta_access ? "#E5C868" : "#C8860A55"}`, color: "#A66700" }}>
           {u.beta_access ? "Beta-Zugang entziehen" : "Beta-Zugang erteilen"}
         </button>
         <button onClick={() => toggleBan(u)} style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, background: "#fff", border: `1px solid ${u.is_banned ? "#aed8b0" : "#e6a6a6"}`, color: u.is_banned ? "#2E7D32" : "#C62828" }}>{u.is_banned ? "Entsperren" : "Konto sperren"}</button>
@@ -75,7 +75,7 @@ export function UserProfile({ admin }) {
       {u.id_document_url && !u.id_verified && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", background: "#FFF8E1", borderRadius: radius.lg, marginBottom: 14, flexWrap: "wrap" }}>
           <Shield size={16} color="#F4A100" />
-          <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: "#E65100" }}>ID hochgeladen — Prüfung ausstehend</span>
+          <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: "#CD3800" }}>ID hochgeladen — Prüfung ausstehend</span>
           <a href={u.id_document_url} target="_blank" rel="noopener noreferrer" style={{ padding: "5px 12px", borderRadius: 999, background: "#fff", border: `1px solid ${colors.border}`, fontSize: 11, fontWeight: 700, color: colors.dark, textDecoration: "none" }}>Dokument ansehen</a>
           <button onClick={async () => {
             await supabase.from("profiles").update({ id_verified: true }).eq("id", u.id);
@@ -170,7 +170,7 @@ export function UserProfile({ admin }) {
                 <span style={{ fontSize: 11, fontWeight: 600, textAlign: "right" }}>{l.listing_type === "free" ? "Gratis" : `CHF ${fmtCHF(l.price)}`}</span>
                 <div style={{ textAlign: "center" }}>{statusPill(l.status)}</div>
                 <div style={{ textAlign: "center" }}>
-                  {l.status === "active" && <button onClick={() => toggleListingStatus(l.id, "paused")} style={{ padding: "3px 8px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>Pause</button>}
+                  {l.status === "active" && <button onClick={() => toggleListingStatus(l.id, "paused")} style={{ padding: "3px 8px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#CD3800", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>Pause</button>}
                   {(l.status === "paused" || l.status === "draft" || l.status === "pending_pause") && <button onClick={() => toggleListingStatus(l.id, "active")} style={{ padding: "3px 8px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>Aktiv</button>}
                 </div>
               </div>

@@ -28,7 +28,7 @@ export const colors = {
   dark:       "#191615",
   graphite:   "#34343B",
   muted:      "#5B626C",
-  mutedLt:    "#7D848E",
+  mutedLt:    "#686E78",
 
   // Surface
   cream:      "#F5F6F8",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche

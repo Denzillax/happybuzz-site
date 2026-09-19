@@ -18,7 +18,7 @@ const TYPE_META = {
 // wurden vom CHECK still abgelehnt — das Dropdown war wirkungslos.
 const STATUS_META = {
   new:         { label: "Neu",       bg: "#E3F2FD", color: "#1565C0" },
-  in_progress: { label: "In Arbeit", bg: "#FFF3E0", color: "#E65100" },
+  in_progress: { label: "In Arbeit", bg: "#FFF3E0", color: "#CD3800" },
   resolved:    { label: "Erledigt",  bg: "#E8F5E9", color: "#2E7D32" },
   wontfix:     { label: "Verworfen", bg: "#F5F6F8", color: "#5B626C" },
 };

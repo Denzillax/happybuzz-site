@@ -26,7 +26,7 @@ export function DunningTab({ admin }) {
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
         <span style={{ fontSize: 12, fontWeight: 700, color: overdueInvoices.length ? "#C62828" : colors.muted, background: overdueInvoices.length ? "#FFEBEE" : colors.cream, padding: "5px 12px", borderRadius: 999 }}>{overdueInvoices.length} überfällig · CHF {fmtCHF(overdueSum)} offen</span>
-        {dunningDue.length > 0 && <span style={{ fontSize: 12, fontWeight: 700, color: "#E65100", background: "#FFF3E0", padding: "5px 12px", borderRadius: 999 }}>{dunningDue.length} fällig</span>}
+        {dunningDue.length > 0 && <span style={{ fontSize: 12, fontWeight: 700, color: "#CD3800", background: "#FFF3E0", padding: "5px 12px", borderRadius: 999 }}>{dunningDue.length} fällig</span>}
         {dunningDue.length > 0 && <button onClick={bulkSendDue} style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#fff", background: colors.teal, border: "none", borderRadius: 999, padding: "8px 16px", cursor: "pointer", fontFamily: fonts.body }}>Alle fälligen senden ({dunningDue.length})</button>}
       </div>
       {overdueInvoices.length === 0 ? (

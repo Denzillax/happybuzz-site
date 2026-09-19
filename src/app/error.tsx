@@ -6,7 +6,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 480 }}>
         <div style={{ fontSize: 48, fontWeight: 900, fontFamily: "'General Sans', sans-serif", color: "#c62828", letterSpacing: ".05em", lineHeight: 1, marginBottom: 8 }}>OOPS</div>
         <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 8px", fontFamily: "'General Sans', sans-serif", letterSpacing: ".03em" }}>ETWAS IST SCHIEFGELAUFEN</h1>
-        <p style={{ fontSize: 14, color: "#7D848E", margin: "0 0 28px", lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: "#686E78", margin: "0 0 28px", lineHeight: 1.6 }}>
           Da ist etwas schiefgegangen. Versuch es nochmal oder geh zurück zur Startseite.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>

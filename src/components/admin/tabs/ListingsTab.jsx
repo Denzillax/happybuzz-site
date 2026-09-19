@@ -22,7 +22,7 @@ function KiBegruendung({ l }) {
   const hinweise = Array.isArray(ai?.hinweise) ? ai.hinweise : [];
   const art = !ai ? "ausstehend" : blocker.length ? "blocker" : hinweise.length ? "hinweis" : "ok";
   const chip = {
-    ausstehend: { text: "KI ausstehend", bg: "#F1F3F5", fg: "#7D848E" },
+    ausstehend: { text: "KI ausstehend", bg: "#F1F3F5", fg: "#686E78" },
     blocker: { text: `KI · ${blocker.length} Blocker`, bg: "#FFEBEE", fg: "#c62828" },
     hinweis: { text: `KI · ${hinweise.length} ${hinweise.length === 1 ? "Hinweis" : "Hinweise"}`, bg: "#F1F3F5", fg: "#5B626C" },
     ok: { text: "KI ✓ unauffällig", bg: "#E8F5E9", fg: "#2E7D32" },
@@ -59,7 +59,7 @@ function StatusActions({ l, approveListing, rejectListing, toggleListingStatus }
           <button onClick={() => { const r = window.prompt("Ablehngrund (wird dem Verkäufer angezeigt):"); if (r && r.trim()) rejectListing(l.id, r.trim()); }} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#FFEBEE", color: "#c62828", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><XCircle size={10} /> Ablehnen</button>
         </>
       )}
-      {l.status === "active" && <button onClick={() => toggleListingStatus(l.id, "paused")} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#E65100", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><Pause size={10} /> Pause</button>}
+      {l.status === "active" && <button onClick={() => toggleListingStatus(l.id, "paused")} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#FFF3E0", color: "#CD3800", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><Pause size={10} /> Pause</button>}
       {(l.status === "paused" || l.status === "draft") && <button onClick={() => toggleListingStatus(l.id, "active")} style={{ padding: "4px 10px", borderRadius: 999, border: "none", background: "#E8F5E9", color: "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}><Play size={10} /> Aktiv</button>}
     </>
   );

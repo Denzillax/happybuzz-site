@@ -62,11 +62,11 @@ export default function NektarBadge() {
           <BeeIcon size={13} color={level.color} /> <span className="nektar-level-name">{level.name}</span>
         </span>
         <span className="nektar-level-name" style={{ width: 1, height: 14, background: "#E5E8EC" }} />
-        <span style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#C8860A" }}>
+        <span style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 3, fontSize: 12, fontWeight: 800, color: "#A66700" }}>
           <Droplets size={12} color="#C8860A" /> <NektarZahl wert={data.nektar} />
           {plus && <span key={plus.k} className="bd-fx-plus">+{plus.n}</span>}
         </span>
-        <ChevronDown size={13} color="#7D848E" />
+        <ChevronDown size={13} color="#686E78" />
       </button>
 
       {open && (
@@ -93,7 +93,7 @@ export default function NektarBadge() {
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: 12, background: "#E8A82014", border: "1px solid #E8A82033", marginBottom: 12 }}>
             <span style={{ fontSize: 12, color: "#5B626C", fontWeight: 600 }}>Nektar</span>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#C8860A" }}><Droplets size={14} color="#C8860A" /> {data.nektar}</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#A66700" }}><Droplets size={14} color="#C8860A" /> {data.nektar}</span>
           </div>
           <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 12, background: "#0E9493", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
             <Gift size={15} /> Belohnungen ansehen

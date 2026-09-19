@@ -101,7 +101,7 @@ export default function BewerbenPage() {
     setBusy(null);
   };
 
-  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#7D848E" }}>Lade…</div>;
+  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#686E78" }}>Lade…</div>;
 
   return (
     <div style={{ background: K.paper, minHeight: "100vh" }}>

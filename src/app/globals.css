@@ -170,7 +170,7 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
 .listing-grid > div { display: flex; flex-direction: column; }
 .listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; border: none; }
 .raster-umschalter { display: inline-flex; gap: 2px; background: #F1F3F5; border-radius: 999px; padding: 3px; flex-shrink: 0; }
-.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #7D848E; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #686E78; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .raster-umschalter button.on { background: #fff; color: #191615; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 @media (max-width: 1024px) {
   .listing-grid, .search-results-grid,
@@ -335,7 +335,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
-  background: #F1F3F5 !important; color: #7D848E !important; border-color: #E5E8EC !important; cursor: not-allowed;
+  background: #F1F3F5 !important; color: #686E78 !important; border-color: #E5E8EC !important; cursor: not-allowed;
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
@@ -365,7 +365,7 @@ input:focus, textarea:focus, select:focus {
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
-.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#7D848E; transition:color .2s; }
+.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#686E78; transition:color .2s; }
 .tab.active { color:#191615; }
 .tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
 .link { color:#0B5E5C; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
@@ -473,7 +473,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 /* ── Richtext: Beschreibungs-Editor + Anzeige (gemeinsame Formate) ── */
 .rte-area:empty::before {
   content: attr(data-placeholder);
-  color: #7D848E;
+  color: #686E78;
   pointer-events: none;
 }
 .rte-area h3, .rich-desc h3 {
@@ -906,7 +906,10 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
    Neue Stellen nur noch diese Werte:
      Ink          #191615
      Nebentext    #5B626C   Kontrast 6.2 auf Weiss
-     Hinweistext  #7D848E   Kontrast 3.9, nur für Kleines
+     Hinweistext  #686E78   Kontrast 5.1 auf Weiss, 4.6 auf Chip (19.09.: nach Prüfung mit color-expert
+                            nachgedunkelt, #7D848E lag bei 3.8 und fiel für kleine Schrift durch)
+     Schrift in Orange #CD3800 (4.6 auf #FFF3E0), in Bernstein #A66700 (4.6 auf Weiss). Flächen und
+     Symbole behalten #E65100 und #C8860A.
      Rand         #E5E8EC   feiner Rand #EEF0F3   kräftiger Rand #D5D9DF
      Fläche       #F5F6F8   Chip / Pille #F1F3F5
      Hero-Band    #E9F6F5   (helles Teal, einziger Farbmoment oben)
