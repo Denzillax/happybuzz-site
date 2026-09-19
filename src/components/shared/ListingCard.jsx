@@ -154,13 +154,20 @@ export function ListingCard(props) {
           {hasFeatured && <span style={{ ...chip("#E8A820", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
-          {/* Mehr Infos beim Hovern (TEST, Denis 19.09.2026). Erste Fassung war eine gelbe Fläche über dem
-              ganzen Foto: sie wiederholte, was unter dem Bild schon steht, und verdeckte das Foto. Jetzt
-              erscheinen nur die zwei Angaben, die der Karte fehlen, als Chips im bestehenden Stapel.
-              Nur aktiv innerhalb von .lab-hoverinfo (Test-Route) und nur mit Maus. Styles: globals.css LC-MEHR */}
-          {!statusOverlay && listing.condition && <span className="lc-mehr" style={chip("rgba(255,255,255,.94)", INK)}>{conditionLabel(listing.condition)}</span>}
-          {!statusOverlay && <span className="lc-mehr lc-mehr-2" style={chip("rgba(255,255,255,.94)", INK)}>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>}
         </div>
+
+        {/* Mehr Infos beim Hovern (TEST, Denis 19.09.2026), dritte Fassung. Erst eine gelbe Fläche über dem
+            ganzen Foto (verdeckte es und wiederholte die Karte), dann zwei Chips (je nach Text verschieden
+            breit, wirkte unruhig). Jetzt eine Leiste über die ganze Bildbreite: bei jeder Karte gleich lang.
+            Sie zeigt nur, was der Karte fehlt: Zustand und Versand. Die Chips unten rücken beim Hovern hoch.
+            Nur aktiv innerhalb von .lab-hoverinfo (Test-Route) und nur mit Maus. Styles: globals.css LC-LEISTE */}
+        {!statusOverlay && (
+          <span className="lc-leiste" aria-hidden="true">
+            {listing.condition && <span>{conditionLabel(listing.condition)}</span>}
+            {listing.condition && <span className="lc-leiste-punkt" />}
+            <span>{listing.pickup_only ? "Nur Abholung" : listing.shipping_available ? (listing.free_shipping ? "Gratis Versand" : "Versand möglich") : "Abholung"}</span>
+          </span>
+        )}
 
         {/* Oben rechts: Merken-Herz */}
         <div style={{ position: "absolute", top: 8, right: 8 }}>
@@ -177,7 +184,7 @@ export function ListingCard(props) {
         )}
         {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
             KI-Bildersuche), daneben Endet bald / Hot */}
-        <div style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="lc-unten" style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
           {!statusOverlay && (
             <button type="button" aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/listing/${listing.id}?bild=1`); }}

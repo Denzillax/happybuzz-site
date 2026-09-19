@@ -1052,15 +1052,20 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
 .bh[data-farbe=dunkel] { --bh-feld: #191615; --bh-text: #FFFFFF; --bh-unter: #B3B9C1; }
 
 /* ═══════════════════════════════════════════
-   LC-MEHR: zwei zusätzliche Chips (Zustand, Versand) beim Hovern einer Inseratkarte
+   LC-LEISTE: Info-Leiste über die ganze Bildbreite beim Hovern einer Inseratkarte
    (TEST, Denis 19.09.2026). Nur aktiv innerhalb von .lab-hoverinfo und nur mit echter Maus.
-   Ohne diese Klasse bleiben sie ausgeblendet, die normalen Karten sind unverändert.
+   Ohne diese Klasse bleibt sie ausgeblendet, die normalen Karten sind unverändert.
    ═══════════════════════════════════════════ */
-.lc-mehr { display: none !important; }
+.lc-leiste { display: none; }
+.lc-unten, .sofort-chip { transition: transform .2s cubic-bezier(.2,.7,.2,1); }
 @media (hover: hover) and (pointer: fine) {
-  .lab-hoverinfo .lc-mehr { display: inline-block !important; opacity: 0; transform: translateY(-4px);
-    transition: opacity .16s ease, transform .2s cubic-bezier(.2,.7,.2,1); box-shadow: 0 1px 4px rgba(25,22,21,.14); }
-  .lab-hoverinfo .lc-mehr-2 { transition-delay: .05s; }
-  .lab-hoverinfo a:hover .lc-mehr { opacity: 1; transform: none; }
+  .lab-hoverinfo .lc-leiste { display: flex; align-items: center; gap: 8px; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 30px; padding: 0 11px; background: rgba(255,255,255,.95); color: #191615; font-size: 12px; font-weight: 700;
+    white-space: nowrap; overflow: hidden; opacity: 0; transform: translateY(100%);
+    transition: opacity .16s ease, transform .2s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
+  .lab-hoverinfo a:hover .lc-leiste { opacity: 1; transform: none; }
+  .lc-leiste-punkt { width: 3px; height: 3px; border-radius: 50%; background: rgba(25,22,21,.35); flex-shrink: 0; }
+  /* Die Chips am unteren Bildrand rücken über die Leiste */
+  .lab-hoverinfo a:hover .lc-unten, .lab-hoverinfo a:hover .sofort-chip { transform: translateY(-30px); }
 }
 
