@@ -29,9 +29,10 @@ export function Footer() {
   return (
     <footer className="ft">
       {/* Lookbook-Effekt in Kacheln (Denis 20.09.2026): B-Zeichen und Wortmarke aus kleinen Quadraten. Sie setzen sich
-          zusammen, während der Fuss ins Bild kommt, und weichen dem Mauszeiger aus. Reine Zier, der echte Name steht oben im Logo. */}
+          zusammen, während der Fuss ins Bild kommt, weichen dem Mauszeiger in einem grossen Kreis aus, und das Wort wechselt
+          alle paar Sekunden (beedaro, kaufen, bieten, mieten, verkaufen). Reine Zier, der echte Name steht oben im Logo. */}
       <div className="ft-kacheln" aria-hidden="true">
-        <PunktSchriftzug wort="beedaro" schrift="Sora" gewicht={700} farbe="#1D1D1D" maxBreite={1280} {...({ zerfall: "einlauf" } as any)} biene={false} kachel logo />
+        <PunktSchriftzug wort="beedaro" woerter={["beedaro", "kaufen", "bieten", "mieten", "verkaufen"]} wechsel={3200} mausRadius={16} mausKraft={1.5} schrift="Sora" gewicht={700} farbe="#1D1D1D" maxBreite={1280} {...({ zerfall: "einlauf" } as any)} biene={false} kachel logo />
       </div>
       <div className="ft-tafel">
         <div className="ft-aufruf">
