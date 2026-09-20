@@ -141,7 +141,7 @@ export function ListingCard(props) {
       className="bd-fx-reveal lc-karte"
       // Kartenstil (Denis 20.09.2026): Bild und Beschreibung stehen in EINER Karte mit Ink-Rand. Getrennt (Tafel oben, Text lose
       // darunter) wirkte die Beschreibung wie abgeschnitten. Die Pastelltafel füllt den Kartenkopf bis zum Rand.
-      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, background: "#fff", border: RAND, borderRadius: 20, overflow: "hidden" }}
+      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, border: RAND, borderRadius: 20, overflow: "hidden", "--lc-farbe": `var(--mk-${TYP_PASTELL[listing.listing_type] || "lavendel"})` }}
     >
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
       <div className={`lc-tafel mk-${TYP_PASTELL[listing.listing_type] || "lavendel"}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", borderBottom: RAND }}>
