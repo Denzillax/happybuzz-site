@@ -121,7 +121,27 @@ function P6() {
   );
 }
 
-const POSTS = [P1, P2, P3, P4, P5, P6];
+// 7 bis 12: der Tiger mit der Hypnobrille (Denis' Figur, in Brandfarben: public/tiger-beedaro.svg). Trockener Humor aus dem
+// Alltag eines Marktplatzes. Oben Schild und Satz, darunter gross der Tiger, unten die Marke.
+function Tiger({ bg, schild, satz, gr = 92, tiger = 900, unten = 96 }) {
+  return (
+    <div style={blatt(bg)}>
+      <span style={marke}>{schild}</span>
+      <h1 style={{ ...titel(gr), marginTop: 40, position: "relative", zIndex: 2 }}>{satz}</h1>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/tiger-beedaro.svg" alt="" style={{ position: "absolute", left: "50%", bottom: unten, width: tiger, height: tiger, marginLeft: -tiger / 2, zIndex: 1 }} />
+      <div style={{ marginTop: "auto", position: "relative", zIndex: 2 }}><Fuss /></div>
+    </div>
+  );
+}
+const P7 = () => <Tiger bg={F.mint} schild="Hypnose, Stufe 1" satz="Du wirst müde. Und du inserierst die Hantelbank." />;
+const P8 = () => <Tiger bg={F.lavendel} schild="Auktion" satz="Drei Sekunden vor Schluss. Jemand bietet." />;
+const P9 = () => <Tiger bg={F.rosa} schild="Kleine Sprachkunde" satz="«Verhandlungsbasis» heisst nicht «gratis»." />;
+const P10 = () => <Tiger bg={F.butter} schild="Keller, Inventur" satz="«Das brauch ich vielleicht noch.» Seit 2014." />;
+const P11 = () => <Tiger bg={F.himmel} schild="Klassiker im Chat" satz="«Noch da?» Ja. Seit zwei Minuten online." />;
+const P12 = () => <Tiger bg={F.rose} schild="Preisvorschlag" satz="CHF 5 für das Rennvelo. Mutig." />;
+
+const POSTS = [P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12];
 
 export default function Page() {
   const [nr, setNr] = useState(null);
