@@ -916,7 +916,7 @@ export default function SettingsPage() {
         {savedAddresses.map((addr, i) => (
           <div key={addr.id} style={{
             padding: 14, borderRadius: 20, border: "1px solid #1D1D1D",
-            marginBottom: 10, background: editAddrIdx === i ? "#FBF1D2" : "#fff",
+            marginBottom: 10, background: editAddrIdx === i ? "#DBF5F0" : "#fff",
           }}>
             {editAddrIdx === i ? (
               <>

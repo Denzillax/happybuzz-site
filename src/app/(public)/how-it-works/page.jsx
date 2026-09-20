@@ -168,7 +168,7 @@ export default function HowItWorksPage() {
               <div key={i} style={{
                 flex: "1 1 130px", padding: "16px 12px", textAlign: "center",
                 borderLeft: i ? `1px solid ${INK}1a` : "none",
-                background: r.isDefault ? "#FBF1D2" : "#fff",
+                background: r.isDefault ? "#DBF5F0" : "#fff",
               }}>
                 <div style={{ fontFamily: HEAD, fontSize: "clamp(24px, 3vw, 30px)", fontWeight: 700, color: INK, letterSpacing: "-0.01em" }}>{r.pct}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, fontFamily: HEAD, marginTop: 2, color: INK }}>{r.label}</div>

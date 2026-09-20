@@ -835,7 +835,7 @@ export default function ListingDetail() {
               {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
                   eigene Zeile statt die Infos zu quetschen */}
               <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                <div style={{ width: 64, height: 64, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={INK} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 200 }}>
@@ -1365,7 +1365,7 @@ export default function ListingDetail() {
                                   );
                                 })()}
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
-                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 20, background: colors.yellowSoft, border: `1px solid ${INK}`, fontSize: 12 }}>
+                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 20, background: "#DBF5F0", border: `1px solid ${INK}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
                                     <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: INK, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
                                   </div>
@@ -1412,7 +1412,7 @@ export default function ListingDetail() {
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
                                 padding: "8px 14px", borderRadius: 20, marginBottom: 6, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "shipping" ? INK : colors.border}`,
-                                background: bidShipping === "shipping" ? colors.yellowSoft : "transparent",
+                                background: bidShipping === "shipping" ? "#DBF5F0" : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                   <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "shipping" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1434,7 +1434,7 @@ export default function ListingDetail() {
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
                                 padding: "8px 14px", borderRadius: 20, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "pickup" ? INK : colors.border}`,
-                                background: bidShipping === "pickup" ? colors.yellowSoft : "transparent",
+                                background: bidShipping === "pickup" ? "#DBF5F0" : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                   <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "pickup" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1767,7 +1767,7 @@ export default function ListingDetail() {
             <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={INK} />}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>

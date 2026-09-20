@@ -97,7 +97,7 @@ body {
     bottom: calc(56px + env(safe-area-inset-bottom, 0px));
     z-index: 45; display: flex; align-items: center; justify-content: space-between;
     gap: 12px; padding: 10px 14px;
-    background: #FFFFFF; border-top: 1px solid #E5E8EC;
+    background: #FFFFFF; border-top: 1px solid #1D1D1D;
   }
   .map-desktop-only { display: none; }
   /* Besitzer-Leiste: mobil unten (mobile-cta-bar), oben ausblenden */
@@ -163,8 +163,10 @@ html.raster-gross .listing-grid, html.raster-gross .search-results-grid { grid-t
 html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 /* Karte mit abgerundetem Hairline-Rahmen (Denis, 15.09.) */
 .listing-grid > a, .search-results-grid > a, .listing-grid > div {
-  min-width: 0; background: #FFFFFF; padding: 10px; box-shadow: none;
-  border: 1px solid #E5E8EC; border-radius: 12px;
+  /* Meeko (20.09.2026): kein Rahmen um die Karte mehr. Die Pastelltafel mit ihrem Ink-Rand ist der Rahmen,
+     ein zweiter Haarlinien-Kasten darum ergab eine Schachtel in der Schachtel. */
+  min-width: 0; background: transparent; padding: 0; box-shadow: none;
+  border: none; border-radius: 0;
   transition: border-color .15s ease, box-shadow .2s ease, transform .2s ease;
 }
 .listing-grid > div { display: flex; flex-direction: column; }
@@ -335,7 +337,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
-  background: #F1F3F5 !important; color: #686E78 !important; border-color: #E5E8EC !important; cursor: not-allowed;
+  background: #F3F3FF !important; color: #686E78 !important; border-color: rgba(29,29,29,.3) !important; cursor: not-allowed;
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
@@ -591,8 +593,8 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 .cat-scroll-btn {
   /* kein transform hier: die globale button:active-Regel (translateY(1px)) wuerde es ueberschreiben und den Pfeil springen lassen (Denis 17.09.) */
   position: absolute; top: calc(50% - 20px); z-index: 2; width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid #E5E8EC; background: #fff; color: #191615; cursor: pointer; display: none; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(25,22,21,.12);
+  border: 1px solid #1D1D1D; background: #fff; color: #1D1D1D; cursor: pointer; display: none; align-items: center; justify-content: center;
+  box-shadow: none;
 }
 .cat-scroll-btn.right { right: 0; } .cat-scroll-btn.left { left: 0; }
 @media (min-width: 900px) { .cat-scroll-btn { display: inline-flex; } }
@@ -701,7 +703,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
 .type-tab:hover:not(.is-active) span { color: #191615 !important; }
 .type-tab:hover:not(.is-active) svg { stroke: #191615; }
 .type-free { transition: border-color .15s ease, background .15s ease; }
-.type-free:hover:not(.is-active) { border-color: #191615 !important; background: #F5F6F8 !important; }
+.type-free:hover:not(.is-active) { border-color: #1D1D1D !important; background: var(--mk-butter) !important; }
 
 .spin { animation: spin 1s linear infinite; }
 
@@ -709,7 +711,8 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
-.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { border-color: #D5D9DF; box-shadow: 0 8px 22px rgba(25,22,21,.12); transform: translateY(-2px); }
+/* Meeko: die Karte hebt sich beim Hovern nur leicht, ohne Schatten und ohne Rahmen */
+.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { transform: translateY(-4px); }
 
 /* "Warum wir"-Karten haben ihren eigenen farbigen Hover (Akzentrand + Schatten),
    das globale Abdunkeln machte sie grau (Denis, 15.09.) */
@@ -722,8 +725,8 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
   .swipe-nav {
     display: flex; align-items: center; justify-content: center;
     position: absolute; top: 40%; width: 36px; height: 36px; border-radius: 50%;
-    border: 1px solid #E5E8EC; background: rgba(255,255,255,.95); color: #191615;
-    box-shadow: 0 2px 8px rgba(25,22,21,.18); cursor: pointer; z-index: 2;
+    border: 1px solid #1D1D1D; background: #fff; color: #1D1D1D;
+    box-shadow: none; cursor: pointer; z-index: 2;
   }
   .swipe-prev { left: -6px; }
   .swipe-next { right: -6px; }
@@ -781,7 +784,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 .bd-fx-tick { display: inline-block; color: #c62828 !important; animation: bd-fx-tick .35s ease-out; }
 
 @keyframes bd-fx-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.bd-fx-skel { background: linear-gradient(90deg, #F1F3F5 25%, #FAFBFC 45%, #F1F3F5 65%) !important; background-size: 200% 100% !important; animation: bd-fx-shimmer 1.4s linear infinite; }
+.bd-fx-skel { background: linear-gradient(90deg, #EFEFFF 25%, #F8F8FF 45%, #EFEFFF 65%) !important; background-size: 200% 100% !important; animation: bd-fx-shimmer 1.4s linear infinite; }
 
 @keyframes bd-fx-page { from { opacity: 0; } to { opacity: 1; } }
 .bd-fx-page { animation: bd-fx-page .22s ease-out; }
@@ -837,7 +840,7 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
    gerenderte Knoepfe "background: rgb(255, 255, 255)". Ausnahmen: linksbuendige
    Zeilen, .eckig, .type-tab, .kein-akzent. Nur mit echter Maus.
    ═══════════════════════════════════════════ */
-.nektar-badge > button[aria-expanded="true"] { background: #F5F6F8 !important; }
+.nektar-badge > button[aria-expanded="true"] { background: var(--mk-lavendel) !important; }
 @media (hover: hover) and (pointer: fine) {
   button[style*="background:#fff"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
   button[style*="background:#FFF"][style*="solid"]:not(:disabled):not(.eckig):not(.kein-akzent):not(.type-tab):not([style*="text-align:left"]):not([style*="text-align: left"]):hover,
