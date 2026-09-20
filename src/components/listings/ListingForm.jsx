@@ -2227,14 +2227,15 @@ export default function ListingForm({
           {/* Meeko (Denis 20.09.2026): jede Stufe ist eine Kachel in ihrer eigenen Pastellfarbe, von kühl (wenig) nach warm
               (viel). Die gewählte trägt den Ink-Ring und den Haken. Das geförderte Projekt der gewählten Stufe steht darunter. */}
           <div className="lf-stufen" role="radiogroup" aria-label="Bee-Impact Stufe">
-          {BEE_STUFEN.map(({ tier, pct, impact, recommended, perks, farbe }) => {
+          {BEE_STUFEN.map(({ tier, pct, impact, recommended, perks, farbe, project }) => {
             const active = form.fee_tier === tier;
             return (
               <button key={tier} type="button" role="radio" aria-checked={active} onClick={() => selectFee(pct, tier)}
                 className={`bee-tier-card lf-stufe eckig kein-akzent mk-${farbe}` + (active ? " is-active" : "")}>
                 <span className="lf-stufe-kopf">
                   <span className="lf-stufe-prozent">{pct}<small>%</small></span>
-                  <span className="lf-stufe-haken" aria-hidden="true">{active && <Check size={14} strokeWidth={3} />}</span>
+                  {/* Haken als eigenes kleines SVG: "Check" ist in dieser Datei ein Kästchen-Bauteil, nicht das Symbol */}
+                  <span className="lf-stufe-haken" aria-hidden="true">{active && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12.5l5.2 5.2L20 6.8" /></svg>}</span>
                 </span>
                 <span className="lf-stufe-punkte" aria-hidden="true">
                   {[1, 2, 3, 4].map((i) => <span key={i} className={i <= impact ? "an" : undefined} />)}
@@ -2242,14 +2243,13 @@ export default function ListingForm({
                 <strong>{beeTexts[tier]}</strong>
                 <span className="lf-stufe-text">{BEE_FEE_SUBTITLES[tier]}</span>
                 <span className="lf-stufe-vorteil">{perks}</span>
+                {/* Das geförderte Projekt steht in der gewählten Zeile selbst (Denis 20.09.2026) */}
+                {active && <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span>Dein Beitrag geht an: <strong>{project}</strong></span></span>}
                 {recommended && <span className="lf-stufe-marke">Empfohlen</span>}
               </button>
             );
           })}
           </div>
-          {(() => { const s = BEE_STUFEN.find((x) => x.tier === form.fee_tier); return s ? (
-            <div className="lf-stufe-projekt"><BeeIcon size={15} color="#1D1D1D" /> <span>Dein Beitrag geht an: <strong>{s.project}</strong></span></div>
-          ) : null; })()}
           </div>
           {/* Cost breakdown */}
           {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
