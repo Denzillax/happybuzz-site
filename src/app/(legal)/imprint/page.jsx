@@ -16,7 +16,7 @@ export default function ImprintPage() {
   return (
     <div style={{ fontFamily: BODY, background: PAPER, minHeight: "100vh", color: INK }}>
       <div style={{
-        background: SAND, padding: "52px 24px 44px", borderBottom: "1px solid #E5E8EC",
+        background: SAND, padding: "52px 24px 44px", borderBottom: "1px solid rgba(29,29,29,.16)",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 740, margin: "0 auto" }}>
@@ -27,7 +27,7 @@ export default function ImprintPage() {
       </div>
 
       <div style={{ maxWidth: 740, margin: "0 auto", padding: "40px 24px 80px" }}>
-        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(18px, 4vw, 30px)" }}>
+        <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(18px, 4vw, 30px)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "8px 40px" }}>
             <div>
               <p style={L}>Betreiber</p>

@@ -166,7 +166,7 @@ export default function NotificationBell() {
         {unread > 0 && (
           <span style={{
             position: "absolute", top: 2, right: 2,
-            minWidth: 16, height: 16, borderRadius: 12,
+            minWidth: 16, height: 16, borderRadius: 20,
             background: "#c62828", color: "#fff",
             fontSize: 10, fontWeight: 800,
             display: "flex", alignItems: "center", justifyContent: "center",
@@ -185,7 +185,7 @@ export default function NotificationBell() {
             ? { position: "fixed", top: mobileTop, left: 12, right: 12, width: "auto" }
             : { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 380 }),
           maxWidth: "calc(100vw / var(--bd-zoom, 1) - 24px)", maxHeight: 480, background: "#fff",
-          borderRadius: 12, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
+          borderRadius: 20, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
           border: `1px solid ${colors.border}`,
           overflow: "hidden", zIndex: 1000,
           animation: "fadeIn .15s ease",
@@ -193,7 +193,7 @@ export default function NotificationBell() {
           {/* Header */}
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "14px 16px", borderBottom: `1px solid ${colors.border}`,
+            padding: "14px 16px", borderBottom: `1px solid ${colors.borderLt}`,
           }}>
             <h3 style={{
               margin: 0, fontSize: 16, fontWeight: 800,
@@ -203,7 +203,7 @@ export default function NotificationBell() {
               {unread > 0 && (
                 <button onClick={handleMarkAll} style={{
                   background: "none", border: "none", cursor: "pointer",
-                  fontSize: 12, fontWeight: 600, color: colors.yellow,
+                  fontSize: 12, fontWeight: 600, color: colors.dark,
                   fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4,
                 }}>
                   <CheckCheck size={14} /> Alle gelesen
@@ -238,17 +238,17 @@ export default function NotificationBell() {
                   style={{
                     display: "flex", gap: 12, padding: "12px 16px",
                     cursor: n.link ? "pointer" : "default",
-                    background: n.is_read ? "transparent" : `${colors.yellow}08`,
-                    borderBottom: `1px solid ${colors.border}`,
+                    background: n.is_read ? "transparent" : `${colors.butter}08`,
+                    borderBottom: `1px solid ${colors.borderLt}`,
                     transition: "background .15s",
                   }}
-                  onMouseEnter={e => { if (!n.is_read) e.currentTarget.style.background = `${colors.yellow}15`; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = n.is_read ? "transparent" : `${colors.yellow}08`; }}
+                  onMouseEnter={e => { if (!n.is_read) e.currentTarget.style.background = `${colors.butter}15`; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = n.is_read ? "transparent" : `${colors.butter}08`; }}
                 >
                   {/* Icon */}
                   <div style={{
                     width: 36, height: 36, borderRadius: "50%",
-                    background: n.is_read ? colors.cream : `${colors.yellow}20`,
+                    background: n.is_read ? colors.cream : `${colors.butter}20`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0,
                   }}>
@@ -292,7 +292,7 @@ export default function NotificationBell() {
                     {!n.is_read && (
                       <div style={{
                         width: 8, height: 8, borderRadius: "50%",
-                        background: colors.yellow,
+                        background: colors.butter,
                       }} />
                     )}
                     <button onClick={(e) => handleDelete(e, n.id)} style={{

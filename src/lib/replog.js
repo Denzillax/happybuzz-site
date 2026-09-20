@@ -26,6 +26,8 @@ export const REP_LOG = [
     datum: "20. September 2026",
     punkte: [
       { typ: "neu", bereich: "Design", text: "Neues Aussehen, erster Schritt. Das Logo ist ein kacheliges B mit der Wortmarke beedaro, die Schrift der ganzen Seite ist Instrument Sans. Der Kopf ist eine schwebende weisse Pille mit dünnem schwarzem Rand, die Suche sitzt jetzt darin statt in einer zweiten Zeile. Knöpfe und Links sind schwarz statt Teal. Alle Menüs und Wege sind dieselben wie vorher", melder: "Denis" },
+      { typ: "neu", bereich: "Startseite", text: "Neue Startseite: Hero über die volle Breite in Mint, links und rechts schweben echte Inserate, die der Maus leicht ausweichen. Jedes Inserat liegt auf einer Pastelltafel in der Farbe seines Formats, überall auf der Seite. Das Favoriten-Herz ist das gedrehte B. Der Fuss ist eine Lavendel-Tafel", melder: "Denis" },
+      { typ: "neu", bereich: "Design", text: "Inseratseite, Suche und alle Arbeitsseiten (Bestellung, Einstellungen, Inserieren, Meine Inserate, Käufe, Verkäufe, Chat, Gebühren) tragen das neue Aussehen: dünne schwarze Ränder, grössere Rundungen, keine Schlagschatten, Hauptknöpfe in Butter. Beim Hovern färbt sich die Schrift grün. Neues App-Icon: schwarzes B auf Mint", melder: "Denis" },
       { typ: "neu", bereich: "Navigation", text: "Die Leiste unten am Handy hat neue Symbole: Home ist das B, Favoriten dasselbe B gedreht als Herz, Inserieren ein dunkler Knopf. Der aktive Reiter liegt auf einer hellgelben Pille. Eingeloggt zeigt der Kopf am Handy nur das B, damit Nektar, Glocke und Menü Platz haben", melder: "Denis" },
     ],
   },

@@ -11,7 +11,7 @@ export default function OrderTimeline({ events, isFinished, finishedLabel, isBuy
   const visibleEvents = showFullTimeline ? sortedEvents : sortedEvents.slice(0, 2);
 
   return (
-    <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16 }}>
+    <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16 }}>
       {isFinished && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
           <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#50804F" }} />
@@ -24,7 +24,7 @@ export default function OrderTimeline({ events, isFinished, finishedLabel, isBuy
         return (
           <div key={ev.id} style={{ display: "flex", gap: 12 }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
-              <div style={{ width: 12, height: 12, borderRadius: "50%", background: i === 0 && !isFinished ? colors.yellow : "#50804F", marginTop: 4 }} />
+              <div style={{ width: 12, height: 12, borderRadius: "50%", background: i === 0 && !isFinished ? colors.butter : "#50804F", marginTop: 4 }} />
               {!isLast && <div style={{ width: 2, flex: 1, background: colors.borderLt, minHeight: 24 }} />}
             </div>
             <div style={{ paddingBottom: 20, flex: 1 }}>

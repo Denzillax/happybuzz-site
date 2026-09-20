@@ -8,14 +8,14 @@ import { Logo } from '@/components/shared/Logo'
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F5F6F8' }}>
-      <header style={{ background: '#fff', borderBottom: '1px solid #E5E8EC', padding: '14px 24px' }}>
+      <header style={{ background: '#fff', borderBottom: '1px solid rgba(29,29,29,.16)', padding: '14px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Logo width={140} />
           <Link href="/" style={{ fontSize: 13, fontWeight: 600, color: '#1D1D1D', textDecoration: 'none' }}>Zu beedaro.ch</Link>
         </div>
       </header>
       <main style={{ flex: 1 }}>{children}</main>
-      <footer style={{ background: '#fff', borderTop: '1px solid #E5E8EC', padding: '14px 24px' }}>
+      <footer style={{ background: '#fff', borderTop: '1px solid rgba(29,29,29,.16)', padding: '14px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
           <span style={{ fontSize: 12, color: '#686E78' }}>© 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784</span>
           <span style={{ display: 'flex', gap: 16 }}>

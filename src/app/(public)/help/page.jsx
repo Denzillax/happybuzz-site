@@ -54,7 +54,7 @@ const CATEGORIES = [
     icon: Tag,
     title: "Verkaufen",
     desc: "Inserate erstellen, Versand & Gebühren",
-    color: "#F4C03F",
+    color: "#1D1D1D",
     faqs: [
       { q: "Wie erstelle ich ein Inserat?", a: "Klicke auf «+ Inserieren» und fülle das Formular aus: Fotos, Titel, Beschreibung, Kategorie, Preis, Zustand und Versandoptionen. Du wählst zwischen Festpreis, Auktion, Miete, Service und Gratis. Vor der Veröffentlichung läuft eine kurze automatische Prüfung." },
       { q: "Wer prüft mein Inserat und wie schnell ist es online?", a: "Eine automatische Prüfung schaut sich Text und Bilder an. Unauffällige Inserate gehen sofort online, meist in unter einer Minute. Verbotenes, Betrugsmuster, Fälschungen und auffällige Inserate neuer Konten gehen an uns zur Prüfung von Hand. Automatisch abgelehnt wird nie." },
@@ -189,7 +189,7 @@ export default function HelpPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "60px 20px 56px", textAlign: "center",
-        borderBottom: "1px solid #E5E8EC",
+        borderBottom: "1px solid rgba(29,29,29,.16)",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
@@ -209,8 +209,8 @@ export default function HelpPage() {
               onChange={e => { setSearch(e.target.value); setOpenCat(null); setOpenFaq(null); }}
               placeholder="Suchbegriff eingeben..."
               style={{
-                width: "100%", padding: "13px 16px 13px 42px", borderRadius: 12,
-                border: "1px solid #E5E8EC", background: "#fff",
+                width: "100%", padding: "13px 16px 13px 42px", borderRadius: 20,
+                border: "1px solid #1D1D1D", background: "#fff",
                 fontSize: 15, fontFamily: fonts.body, color: INK, outline: "none",
                 boxSizing: "border-box",
               }}
@@ -240,7 +240,7 @@ export default function HelpPage() {
                 <h3 style={{ fontSize: 14, fontWeight: 700, color: colors.dark, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 6 }}>
                   <cat.icon size={16} color={cat.color} /> {cat.title}
                 </h3>
-                <div style={{ borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", background: "#fff" }}>
+                <div style={{ borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden", background: "#fff" }}>
                   {cat.faqs.map((f, i) => (
                     <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                       onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -264,8 +264,8 @@ export default function HelpPage() {
                     key={cat.id}
                     onClick={() => { setOpenCat(isOpen ? null : cat.id); setOpenFaq(null); }}
                     style={{
-                      padding: "20px", borderRadius: 12, cursor: "pointer",
-                      background: "#fff", border: "1px solid #E5E8EC",
+                      padding: "20px", borderRadius: 20, cursor: "pointer",
+                      background: "#fff", border: "1px solid #1D1D1D",
                       boxShadow: isOpen ? `0 10px 24px rgba(20,17,13,.12)` : "none",
                       transition: "all .2s",
                     }}
@@ -274,9 +274,9 @@ export default function HelpPage() {
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <div style={{
-                        width: 40, height: 40, borderRadius: 12, display: "flex",
+                        width: 40, height: 40, borderRadius: 20, display: "flex",
                         alignItems: "center", justifyContent: "center",
-                        background: SAND, border: "1px solid #E5E8EC",
+                        background: SAND, border: "1px solid #1D1D1D",
                       }}>
                         <Icon size={20} color={cat.color} />
                       </div>
@@ -305,7 +305,7 @@ export default function HelpPage() {
                     <h2 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: colors.dark }}>{cat.title}</h2>
                     <span style={{ fontSize: 12, color: colors.muted }}>· {cat.faqs.length} Artikel</span>
                   </div>
-                  <div style={{ borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", background: "#fff" }}>
+                  <div style={{ borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden", background: "#fff" }}>
                     {cat.faqs.map((f, i) => (
                       <FaqItem key={i} q={f.q} a={f.a} open={openFaq === `${cat.id}-${i}`}
                         onClick={() => setOpenFaq(openFaq === `${cat.id}-${i}` ? null : `${cat.id}-${i}`)} />
@@ -319,8 +319,8 @@ export default function HelpPage() {
 
         {/* ── Contact Box ── */}
         <div style={{
-          padding: 28, borderRadius: 12, background: "#fff",
-          border: "1px solid #E5E8EC", textAlign: "center",
+          padding: 28, borderRadius: 20, background: "#fff",
+          border: "1px solid #1D1D1D", textAlign: "center",
         }}>
           <Mail size={26} color={PETROL} style={{ marginBottom: 8 }} />
           <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>Nicht gefunden, was du suchst?</h3>
@@ -331,7 +331,7 @@ export default function HelpPage() {
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "12px 26px", borderRadius: 999, background: INK,
             color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none",
-            fontFamily: fonts.body, border: "1px solid #E5E8EC",
+            fontFamily: fonts.body, border: "1px solid #1D1D1D",
           }}>
             <Mail size={16} /> support@beedaro.ch
           </a>

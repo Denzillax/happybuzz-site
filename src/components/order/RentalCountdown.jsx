@@ -56,7 +56,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   ];
 
   return (
-    <div style={{ background: SAND, border: "1px solid #E5E8EC", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
+    <div style={{ background: SAND, border: "1px solid #1D1D1D", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
       <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: overdue ? ROT : "#6B727C", marginBottom: 10 }}>
         {overdue ? "Überfällig seit" : "Rückgabe in"}
       </div>
@@ -67,7 +67,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
           <div key={label} style={{ flex: "0 0 auto", textAlign: "center" }}>
             <div style={{
               minWidth: 52, padding: "8px 6px", background: "#fff",
-              border: "1px solid #E5E8EC", boxSizing: "border-box",
+              border: "1px solid #1D1D1D", boxSizing: "border-box",
               fontFamily: MONO, fontSize: 24, fontWeight: 700, lineHeight: 1,
               color: overdue ? ROT : INK, fontVariantNumeric: "tabular-nums",
             }}>
@@ -81,7 +81,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
       </div>
 
       {/* Fortschritt mit Start/Ende */}
-      <div style={{ height: 10, border: "1px solid #E5E8EC", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
+      <div style={{ height: 10, border: "1px solid #1D1D1D", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
         <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, transition: "width .5s linear" }} />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#6B727C" }}>

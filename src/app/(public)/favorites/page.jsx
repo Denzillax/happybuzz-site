@@ -119,7 +119,7 @@ export default function FavoritesPage() {
       <div className="mb-6">
         <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#1D1D1D] mb-1.5">Gemerkt</div>
         <h1 className="bd-seitentitel font-bold text-[#191615] font-['General_Sans','Instrument Sans', 'Manrope',sans-serif] flex items-center gap-3">
-          <Heart size={26} className="text-honey" fill="#F4C03F" />
+          <Heart size={26} className="text-honey" fill="#1D1D1D" />
           Meine Favoriten
         </h1>
       </div>

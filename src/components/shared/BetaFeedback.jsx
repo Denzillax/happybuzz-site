@@ -163,7 +163,7 @@ const MOBILE_TESTS = [
 
 const FEEDBACK_TYPES = [
   { value: "bug", label: "Bug", icon: Bug, color: "#c62828" },
-  { value: "feedback", label: "Feedback", icon: MessageCircle, color: "#F4C03F" },
+  { value: "feedback", label: "Feedback", icon: MessageCircle, color: "#1D1D1D" },
   { value: "idea", label: "Idee", icon: Lightbulb, color: "#50804F" },
   { value: "frage", label: "Frage", icon: HelpCircle, color: "#94B9C9" },
 ];
@@ -281,7 +281,7 @@ export default function BetaFeedback() {
         width: 40, height: 40, borderRadius: "50%",
         background: colors.teal, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 3px 10px rgba(0,124,124,.35)", transition: "transform .2s",
+        boxShadow: "none", transition: "transform .2s",
       }}
         onMouseEnter={e => e.currentTarget.style.transform = "scale(1.1)"}
         onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
@@ -318,7 +318,7 @@ export default function BetaFeedback() {
         {(s === 2 || s === 3) && (
           <input value={notes[item.id] || ""} onChange={e => setNotes(p => ({ ...p, [item.id]: e.target.value }))}
             placeholder="Was genau?" onClick={e => e.stopPropagation()}
-            style={{ width: "100%", padding: "4px 8px", fontSize: 11, border: `1px solid ${colors.border}`, borderRadius: 12, marginBottom: 6, boxSizing: "border-box", fontFamily: fonts.body, outline: "none" }} />
+            style={{ width: "100%", padding: "4px 8px", fontSize: 11, border: `1px solid ${colors.border}`, borderRadius: 20, marginBottom: 6, boxSizing: "border-box", fontFamily: fonts.body, outline: "none" }} />
         )}
       </div>
     );
@@ -327,7 +327,7 @@ export default function BetaFeedback() {
   return (
     <div style={{
       position: "fixed", bottom: 96, right: 14, zIndex: 9990,
-      width: "min(380px, calc(100vw / var(--bd-zoom, 1) - 28px))", maxHeight: "75vh", borderRadius: 12, overflow: "hidden",
+      width: "min(380px, calc(100vw / var(--bd-zoom, 1) - 28px))", maxHeight: "75vh", borderRadius: 20, overflow: "hidden",
       background: "#fff", border: `1px solid ${colors.border}`,
       boxShadow: "0 8px 32px rgba(0,0,0,.18)", fontFamily: fonts.body,
       display: "flex", flexDirection: "column",
@@ -335,29 +335,29 @@ export default function BetaFeedback() {
       {/* Header */}
       <div style={{ padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", background: colors.dark, color: "#fff", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <MessageSquarePlus size={16} color={colors.yellow} />
+          <MessageSquarePlus size={16} color={colors.dark} />
           <span style={{ fontSize: 13, fontWeight: 700 }}>Beta Cockpit</span>
-          <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 12, background: colors.yellow, color: colors.dark, fontWeight: 800 }}>BETA</span>
+          <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 20, background: colors.butter, color: colors.dark, fontWeight: 800 }}>BETA</span>
         </div>
         <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#fff" }}><X size={16} /></button>
       </div>
 
       {/* Tab Bar */}
-      <div style={{ display: "flex", borderBottom: `1px solid ${colors.border}`, flexShrink: 0 }}>
+      <div style={{ display: "flex", borderBottom: `1px solid ${colors.borderLt}`, flexShrink: 0 }}>
         <button onClick={() => setTab("checklist")} style={{
           flex: 1, padding: "10px", border: "none", cursor: "pointer",
           background: tab === "checklist" ? colors.yellowSoft : "transparent",
-          borderBottom: tab === "checklist" ? `2px solid ${colors.yellow}` : "2px solid transparent",
+          borderBottom: tab === "checklist" ? `2px solid ${colors.dark}` : "2px solid transparent",
           fontSize: 12, fontWeight: 700, fontFamily: fonts.body, color: colors.dark,
           display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
         }}>
           <ClipboardCheck size={14} /> Checkliste
-          {testedCount > 0 && <span style={{ fontSize: 10, background: colors.yellow, padding: "1px 5px", borderRadius: 12, fontWeight: 800 }}>{testedCount}/{totalCount}</span>}
+          {testedCount > 0 && <span style={{ fontSize: 10, background: colors.butter, padding: "1px 5px", borderRadius: 20, fontWeight: 800 }}>{testedCount}/{totalCount}</span>}
         </button>
         <button onClick={() => setTab("feedback")} style={{
           flex: 1, padding: "10px", border: "none", cursor: "pointer",
           background: tab === "feedback" ? colors.yellowSoft : "transparent",
-          borderBottom: tab === "feedback" ? `2px solid ${colors.yellow}` : "2px solid transparent",
+          borderBottom: tab === "feedback" ? `2px solid ${colors.dark}` : "2px solid transparent",
           fontSize: 12, fontWeight: 700, fontFamily: fonts.body, color: colors.dark,
           display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
         }}>
@@ -398,8 +398,8 @@ export default function BetaFeedback() {
             {/* Mobile Tests (auto-detected) */}
             {isMobile && (
               <>
-                <div style={{ fontSize: 11, fontWeight: 700, color: colors.dark, marginTop: 14, marginBottom: 6, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 4, background: colors.yellowSoft, padding: "6px 8px", borderRadius: 12 }}>
-                  <Smartphone size={12} color={colors.yellow} /> Mobile Tests ({MOBILE_TESTS.filter(t => checks[t.id] > 0).length}/{MOBILE_TESTS.length})
+                <div style={{ fontSize: 11, fontWeight: 700, color: colors.dark, marginTop: 14, marginBottom: 6, textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 4, background: colors.yellowSoft, padding: "6px 8px", borderRadius: 20 }}>
+                  <Smartphone size={12} color={colors.dark} /> Mobile Tests ({MOBILE_TESTS.filter(t => checks[t.id] > 0).length}/{MOBILE_TESTS.length})
                 </div>
                 {MOBILE_TESTS.map(renderCheckItem)}
               </>
@@ -407,8 +407,8 @@ export default function BetaFeedback() {
 
             {/* Submit */}
             <button onClick={submitChecks} disabled={testedCount === 0} style={{
-              width: "100%", padding: "10px", borderRadius: 12, border: "none", marginTop: 14,
-              background: testedCount > 0 ? colors.yellow : "#E5E8EC", color: colors.dark,
+              width: "100%", padding: "10px", borderRadius: 20, border: "none", marginTop: 14,
+              background: testedCount > 0 ? colors.butter : "rgba(29,29,29,.16)", color: colors.dark,
               fontSize: 13, fontWeight: 700, cursor: testedCount > 0 ? "pointer" : "default",
               fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
             }}>
@@ -425,7 +425,7 @@ export default function BetaFeedback() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 4, marginBottom: 12 }}>
               {FEEDBACK_TYPES.map(t => (
                 <button key={t.value} onClick={() => setForm(p => ({ ...p, type: t.value }))} style={{
-                  padding: "6px 2px", borderRadius: 12, border: `1.5px solid ${form.type === t.value ? t.color : colors.border}`,
+                  padding: "6px 2px", borderRadius: 20, border: `1.5px solid ${form.type === t.value ? t.color : colors.border}`,
                   background: form.type === t.value ? `${t.color}12` : "transparent",
                   cursor: "pointer", textAlign: "center", fontSize: 9, fontWeight: 700,
                   fontFamily: fonts.body, color: form.type === t.value ? t.color : colors.muted,
@@ -437,18 +437,18 @@ export default function BetaFeedback() {
             </div>
             <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
               placeholder="Kurzbeschreibung *" maxLength={100}
-              style={{ width: "100%", padding: "8px 10px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 8 }}
-              onFocus={e => e.target.style.borderColor = colors.yellow}
+              style={{ width: "100%", padding: "8px 10px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 8 }}
+              onFocus={e => e.target.style.borderColor = colors.dark}
               onBlur={e => e.target.style.borderColor = colors.border} />
             <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
               placeholder="Details (optional)" maxLength={1000}
-              style={{ width: "100%", padding: "8px 10px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 12, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", minHeight: 60, resize: "vertical", marginBottom: 8 }}
-              onFocus={e => e.target.style.borderColor = colors.yellow}
+              style={{ width: "100%", padding: "8px 10px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 12, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", minHeight: 60, resize: "vertical", marginBottom: 8 }}
+              onFocus={e => e.target.style.borderColor = colors.dark}
               onBlur={e => e.target.style.borderColor = colors.border} />
             <div style={{ fontSize: 10, color: colors.muted, marginBottom: 10 }}>Seite: {pagePath}</div>
             <button onClick={submitFeedback} disabled={!form.title.trim()} style={{
-              width: "100%", padding: "10px", borderRadius: 12, border: "none",
-              background: form.title.trim() ? colors.yellow : "#E5E8EC", color: colors.dark,
+              width: "100%", padding: "10px", borderRadius: 20, border: "none",
+              background: form.title.trim() ? colors.butter : "rgba(29,29,29,.16)", color: colors.dark,
               fontSize: 13, fontWeight: 700, cursor: form.title.trim() ? "pointer" : "default",
               fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
             }}>

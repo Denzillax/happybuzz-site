@@ -25,7 +25,7 @@ const PROJECTS = [
 
 const FUNNEL = [
   { icon: Flower2, color: MOSS, title: "Blüten", desc: "Jede Transaktion (Kauf und Verkauf) bringt Blüten. Dein Naturschutz-Beitrag in Punkten." },
-  { icon: null, color: HONEY, title: "Pollen", desc: "100 Blüten = 1 Pollen. Plus Pollen fürs Mitmachen. Pollen heben dein Bee-Level." },
+  { icon: null, color: "#1D1D1D", title: "Pollen", desc: "100 Blüten = 1 Pollen. Plus Pollen fürs Mitmachen. Pollen heben dein Bee-Level." },
   { icon: Droplets, color: "#A66700", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
 ];
 
@@ -60,7 +60,7 @@ export default function ImpactPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "64px 24px 88px", textAlign: "center",
-        borderBottom: "1px solid #E5E8EC",
+        borderBottom: "1px solid rgba(29,29,29,.16)",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
@@ -69,7 +69,7 @@ export default function ImpactPage() {
           </div>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             Handeln, das{" "}
-            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
+            <span style={{ background: "#FFE7A9", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
             Von jeder Gebühr auf BEEDARO gehen 20 Prozent an Schweizer Naturschutzprojekte. Das passiert automatisch bei jedem Verkauf.
@@ -80,7 +80,7 @@ export default function ImpactPage() {
       <div style={{ maxWidth: 940, margin: "0 auto", padding: "0 24px 88px" }}>
 
         {/* ── Ledger Counter ── */}
-        <div style={{ display: "flex", border: "1px solid #E5E8EC", borderRadius: 12, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap", boxShadow: "0 16px 38px rgba(20,17,13,.12)" }}>
+        <div style={{ display: "flex", border: "1px solid #1D1D1D", borderRadius: 20, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap", boxShadow: "0 16px 38px rgba(20,17,13,.12)" }}>
           {ledger.map((s, i) => (
             <div key={i} style={{ flex: "1 1 160px", padding: "20px 16px", borderLeft: i ? `1px solid ${INK}1a` : "none", display: "flex", flexDirection: "column", gap: 7 }}>
               <span style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase", color: MUTED }}>{s.label}</span>
@@ -97,7 +97,7 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {FLOW.map((s, i) => (
-              <div key={i} style={{ padding: "22px 20px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC" }}>
+              <div key={i} style={{ padding: "22px 20px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D" }}>
                 <div style={{ fontFamily: MONO, fontSize: 28, fontWeight: 700, color: INK, lineHeight: 1, marginBottom: 12 }}>{s.num}</div>
                 <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>{s.title}</h3>
                 <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
@@ -107,11 +107,11 @@ export default function ImpactPage() {
         </div>
 
         {/* ── Rechenbeispiel ── */}
-        <div style={{ padding: 28, borderRadius: 12, background: INK, color: PAPER, marginBottom: 52 }}>
-          <div style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: HONEY, marginBottom: 12 }}>Rechenbeispiel</div>
+        <div style={{ padding: 28, borderRadius: 20, background: INK, color: PAPER, marginBottom: 52 }}>
+          <div style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#1D1D1D", marginBottom: 12 }}>Rechenbeispiel</div>
           <div style={{ fontSize: 15, lineHeight: 1.9 }}>
             Du verkaufst einen Artikel für <strong>CHF 100.00</strong> mit der Bee-Rate <strong>Supporter (5%)</strong>.<br />
-            Gebühr: CHF 5.00. Davon <strong style={{ color: HONEY }}>CHF 1.00 Bee-Impact</strong> für den Naturschutz.<br />
+            Gebühr: CHF 5.00. Davon <strong style={{ color: "#1D1D1D" }}>CHF 1.00 Bee-Impact</strong> für den Naturschutz.<br />
             Du erhältst <strong>CHF 95.00</strong>. Käufer und Verkäufer sammeln dafür gleich viele Blüten fürs Bee-Level.
           </div>
         </div>
@@ -124,8 +124,8 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {PROJECTS.map((p, i) => (
-              <div key={i} style={{ borderRadius: 12, overflow: "hidden", background: "#fff", border: "1px solid #E5E8EC" }}>
-                <div style={{ height: 130, background: SAND, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid #E5E8EC" }}>
+              <div key={i} style={{ borderRadius: 20, overflow: "hidden", background: "#fff", border: "1px solid #1D1D1D" }}>
+                <div style={{ height: 130, background: SAND, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(29,29,29,.16)" }}>
                   <p.icon size={38} color={p.color} />
                 </div>
                 <div style={{ padding: 16 }}>
@@ -133,7 +133,7 @@ export default function ImpactPage() {
                     <h3 style={{ fontSize: 14.5, fontWeight: 700, fontFamily: HEAD, color: INK, margin: 0 }}>{p.title}</h3>
                     <span style={{
                       fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase",
-                      padding: "3px 7px", borderRadius: 12, whiteSpace: "nowrap",
+                      padding: "3px 7px", borderRadius: 20, whiteSpace: "nowrap",
                       background: p.status === "Aktiv" ? MOSS : "transparent",
                       color: p.status === "Aktiv" ? PAPER : MUTED,
                       border: p.status === "Aktiv" ? "none" : `1px solid ${INK}40`,
@@ -158,8 +158,8 @@ export default function ImpactPage() {
           </div>
           <div className="impact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {FUNNEL.map((s, i) => (
-              <div key={i} style={{ padding: "20px 18px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", textAlign: "center" }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+              <div key={i} style={{ padding: "20px 18px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", textAlign: "center" }}>
+                <div style={{ width: 44, height: 44, borderRadius: 20, background: SAND, border: "1px solid #1D1D1D", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
                   {s.icon ? <s.icon size={20} color={s.color} /> : <BeeIcon size={20} color={s.color} />}
                 </div>
                 <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: PETROL, marginBottom: 4, letterSpacing: ".1em" }}>SCHRITT {i + 1}</div>
@@ -171,7 +171,7 @@ export default function ImpactPage() {
         </div>
 
         {/* ── CTA ── */}
-        <div style={{ padding: 36, borderRadius: 12, textAlign: "center", background: SAND, border: "1px solid #E5E8EC" }}>
+        <div style={{ padding: 36, borderRadius: 20, textAlign: "center", background: SAND, border: "1px solid #1D1D1D" }}>
           <BeeIcon size={30} color={INK} />
           <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Mach mit</h2>
           <p style={{ fontSize: 14.5, color: MUTED, maxWidth: 460, margin: "0 auto 22px", lineHeight: 1.6 }}>
@@ -180,7 +180,7 @@ export default function ImpactPage() {
           <Link href="/listings/new" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "14px 28px", borderRadius: 999, background: INK, color: PAPER,
-            fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #E5E8EC",
+            fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #1D1D1D",
           }}>
             Jetzt inserieren <ArrowRight size={16} />
           </Link>

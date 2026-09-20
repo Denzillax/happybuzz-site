@@ -25,7 +25,7 @@ export function FloatingButton() {
       style={{
         position: 'fixed', bottom: 28, right: 28, zIndex: 40,
         width: hover ? 160 : 50, height: 50, borderRadius: 999,
-        background: YELLOW, border: 'none', cursor: 'pointer',
+        background: "#FFE7A9", border: 'none', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: hover ? 8 : 0, padding: 0, whiteSpace: 'nowrap',
         boxShadow: hover

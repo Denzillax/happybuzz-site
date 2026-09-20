@@ -49,7 +49,7 @@ export default function AuthCallback() {
     }}>
       <div style={{ textAlign: "center" }}>
         <div style={{
-          width: 48, height: 48, borderRadius: "50%", background: "#F4C03F",
+          width: 48, height: 48, borderRadius: "50%", background: "#FFE7A9",
           display: "inline-flex", alignItems: "center", justifyContent: "center",
           fontSize: 20, fontWeight: 800, color: "#191615", marginBottom: 16,
         }}>B</div>

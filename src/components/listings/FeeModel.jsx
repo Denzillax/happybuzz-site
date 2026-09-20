@@ -29,19 +29,19 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                 padding: "14px 16px", borderRadius: radius.sm,
                 cursor: "pointer",
                 background: isActive ? colors.yellowSoft : colors.surface,
-                border: `1.5px solid ${isActive ? colors.yellow : colors.border}`,
+                border: `1.5px solid ${isActive ? colors.dark : colors.border}`,
                 transition: "all .15s",
               }}
             >
               {/* Radio */}
               <div style={{
                 width: 20, height: 20, borderRadius: "50%",
-                border: `2px solid ${isActive ? colors.yellow : colors.border}`,
+                border: `2px solid ${isActive ? colors.dark : colors.border}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 flexShrink: 0,
               }}>
                 {isActive && (
-                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: colors.yellow }} />
+                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: colors.butter }} />
                 )}
               </div>
 
@@ -53,7 +53,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                   </span>
                   <span style={{
                     fontSize: 18, fontFamily: fonts.head,
-                    color: isActive ? colors.yellow : colors.muted, letterSpacing: ".02em",
+                    color: isActive ? colors.dark : colors.muted, letterSpacing: ".02em",
                   }}>
                     {t.pct}%
                   </span>
@@ -61,7 +61,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                     <span style={{
                       fontSize: 9, fontWeight: 800, fontFamily: fonts.body,
                       background: colors.green, color: "#fff",
-                      padding: "2px 6px", borderRadius: 12,
+                      padding: "2px 6px", borderRadius: 20,
                       textTransform: "uppercase", letterSpacing: ".04em",
                     }}>
                       Dein Standard
@@ -69,7 +69,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
                   )}
                 </div>
                 <div style={{ fontSize: 12, color: colors.muted, fontFamily: fonts.body, marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
-                  {platPct}% Plattform · {beePct}% Bee-Impact <BeeIcon size={13} color={colors.yellow} />
+                  {platPct}% Plattform · {beePct}% Bee-Impact <BeeIcon size={13} color={colors.dark} />
                 </div>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
 
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
               <span style={{ fontSize: 13, fontFamily: fonts.body, color: colors.muted, display: "inline-flex", alignItems: "center", gap: 4 }}>
-                Bee-Impact ({(activeTier.pct * BEE_IMPACT_RATE).toFixed(1)}%) <BeeIcon size={13} color={colors.yellow} />
+                Bee-Impact ({(activeTier.pct * BEE_IMPACT_RATE).toFixed(1)}%) <BeeIcon size={13} color={colors.dark} />
               </span>
               <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 600, color: colors.green }}>
                 − CHF {chf(beeFee)}
@@ -143,7 +143,7 @@ export default function FeeModel({ price, selected, onSelect, defaultTier }) {
             </div>
 
             <div style={{
-              borderTop: `1px solid ${colors.border}`, paddingTop: 8, marginTop: 4,
+              borderTop: `1px solid ${colors.borderLt}`, paddingTop: 8, marginTop: 4,
               display: "flex", justifyContent: "space-between", alignItems: "center",
             }}>
               <span style={{ fontSize: 14, fontFamily: fonts.body, fontWeight: 700, color: colors.dark }}>

@@ -663,7 +663,7 @@ export default function BetaTestPage() {
         background: `linear-gradient(135deg, ${colors.dark} 0%, #2a2520 100%)`,
         padding: "40px 20px 44px", textAlign: "center", color: "#fff",
       }}>
-        <div style={{ display: "inline-flex", padding: "4px 12px", borderRadius: 12, background: colors.yellow, color: colors.dark, fontSize: 11, fontWeight: 800, marginBottom: 12, letterSpacing: ".06em" }}>BETA TEST</div>
+        <div style={{ display: "inline-flex", padding: "4px 12px", borderRadius: 20, background: colors.butter, color: colors.dark, fontSize: 11, fontWeight: 800, marginBottom: 12, letterSpacing: ".06em" }}>BETA TEST</div>
         <h1 style={{ fontSize: 26, fontWeight: 900, fontFamily: fonts.head, margin: "0 0 8px" }}>BEEDARO Funktionstest</h1>
         <p style={{ fontSize: 14, color: "rgba(255,255,255,.5)", maxWidth: 500, margin: "0 auto" }}>
           Gehe jede Funktion durch und klicke zum Bewerten. Grau → Grün (OK) → Gelb (Teilweise) → Rot (Kaputt).
@@ -672,7 +672,7 @@ export default function BetaTestPage() {
 
       <div style={{ maxWidth: 700, margin: "0 auto", padding: "24px 20px 80px" }}>
         {/* Kurz erklaert: die Beta in menschlichen Worten (Tester = alle Konten) */}
-        <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+        <div style={{ background: "#fff", border: "1px solid #1D1D1D", boxShadow: "none", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={toggleIntro} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: introOpen ? 12 : 0 }}>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
               Kurz erklärt
@@ -725,7 +725,7 @@ export default function BetaTestPage() {
               Hier entsteht gerade etwas, das es in der Schweiz so noch nicht
               gibt. Kein Konzern, kein Investorengeld, nur eine Idee und Leute
               wie du. Jedes Inserat, jede Meldung, jeder Kollege zählt.{" "}
-              <strong style={{ background: "#F4C03F", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
+              <strong style={{ background: "#FFE7A9", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
             </p>
             <p style={{ margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(20,17,13,0.55)" }}>
               PS: Verchauf din Scheiss. ;)
@@ -735,7 +735,7 @@ export default function BetaTestPage() {
         </div>
 
         {/* ── REPARATUR-LOG: was seit Beta-Start gefixt wurde ── */}
-        <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
+        <div style={{ background: "#fff", border: "1px solid #1D1D1D", boxShadow: "none", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={() => setRepOpen(v => !v)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: repOpen ? 12 : 0 }}>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
               Reparatur-Log · {REP_LOG.reduce((s, t) => s + t.punkte.length, 0)} Einträge
@@ -751,7 +751,7 @@ export default function BetaTestPage() {
               {/* Top-Melder: zaehlt Log-Eintraege mit melder (= Meldungen, die
                   zu einem Fix/Feature gefuehrt haben), egal ueber welchen Kanal */}
               {topMelder.length > 0 && (
-                <div style={{ border: "1px solid #E5E8EC", padding: "12px 14px", marginBottom: 18, background: "#FFFFFF" }}>
+                <div style={{ border: "1px solid #1D1D1D", padding: "12px 14px", marginBottom: 18, background: "#FFFFFF" }}>
                   <p style={{ margin: "0 0 2px", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#1D1D1D" }}>
                     Top-Melder · wer meldet, steigt
                   </p>
@@ -763,7 +763,7 @@ export default function BetaTestPage() {
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
-                        background: i === 0 ? colors.yellow : i === 1 ? "#F5F6F8" : "transparent",
+                        background: i === 0 ? colors.butter : i === 1 ? "#F5F6F8" : "transparent",
                         border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>
@@ -778,7 +778,7 @@ export default function BetaTestPage() {
 
               {REP_LOG.map(tag => (
                 <div key={tag.datum} style={{ marginBottom: 18 }}>
-                  <p style={{ margin: "0 0 8px", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid #E5E8EC", paddingBottom: 5 }}>
+                  <p style={{ margin: "0 0 8px", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid rgba(29,29,29,.16)", paddingBottom: 5 }}>
                     {tag.datum} <span style={{ color: colors.muted, fontWeight: 400 }}>· {tag.punkte.length} Einträge</span>
                   </p>
                   {/* Festes Raster: Typ- und Bereichs-Spalte stehen ueber alle
@@ -790,7 +790,7 @@ export default function BetaTestPage() {
                           marginTop: 2, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 0",
                           textAlign: "center",
-                          background: p.typ === "neu" ? "#1D1D1D" : colors.yellow,
+                          background: p.typ === "neu" ? "#1D1D1D" : colors.butter,
                           color: p.typ === "neu" ? "#fff" : colors.dark,
                         }}>
                           {p.typ === "neu" ? "NEU" : "FIX"}
@@ -827,13 +827,13 @@ export default function BetaTestPage() {
         </div>
 
         {/* Progress */}
-        <div style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: `1px solid ${colors.border}`, marginBottom: 20 }}>
+        <div style={{ background: "#fff", borderRadius: 20, padding: "14px 16px", border: `1px solid ${colors.border}`, marginBottom: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>Fortschritt</span>
             <span style={{ fontSize: 12, color: colors.muted }}>{tested}/{totalItems}</span>
           </div>
-          <div style={{ height: 6, borderRadius: 12, background: colors.border }}>
-            <div style={{ height: "100%", borderRadius: 12, background: colors.yellow, width: `${(tested / totalItems) * 100}%`, transition: "width .3s" }} />
+          <div style={{ height: 6, borderRadius: 20, background: colors.borderLt }}>
+            <div style={{ height: "100%", borderRadius: 20, background: colors.butter, width: `${(tested / totalItems) * 100}%`, transition: "width .3s" }} />
           </div>
           <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 12 }}>
             <span style={{ color: "#50804F", fontWeight: 600 }}>{okCount} OK</span>
@@ -850,8 +850,8 @@ export default function BetaTestPage() {
           const sTotal = section.items.length;
           return (
             <div key={section.id} style={{
-              marginBottom: 10, borderRadius: 12, overflow: "hidden",
-              border: `1.5px solid ${section.highlight ? colors.yellow : colors.border}`,
+              marginBottom: 10, borderRadius: 20, overflow: "hidden",
+              border: `1.5px solid ${section.highlight ? colors.dark : colors.border}`,
               background: section.highlight ? colors.yellowSoft : "#fff",
             }}>
               <div onClick={() => setOpenSections(p => ({ ...p, [section.id]: !isOpen }))} style={{
@@ -864,7 +864,7 @@ export default function BetaTestPage() {
                 {isOpen ? <ChevronDown size={16} color={colors.muted} /> : <ChevronRight size={16} color={colors.muted} />}
               </div>
               {isOpen && (
-                <div style={{ borderTop: `1px solid ${section.highlight ? colors.yellow + "40" : colors.borderLt}` }}>
+                <div style={{ borderTop: `1px solid ${section.highlight ? colors.dark + "40" : colors.borderLt}` }}>
                   {section.items.map(item => {
                     if (isLocked(item)) {
                       return (
@@ -895,7 +895,7 @@ export default function BetaTestPage() {
                           <div style={{ padding: "0 16px 10px 44px" }}>
                             <input value={notes[item.id] || ""} onChange={e => setNotes(p => ({ ...p, [item.id]: e.target.value }))}
                               placeholder="Was genau ist das Problem?" onClick={e => e.stopPropagation()}
-                              style={{ width: "100%", padding: "6px 10px", borderRadius: 12, fontSize: 12, border: `1px solid ${colors.border}`, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "6px 10px", borderRadius: 20, fontSize: 12, border: `1px solid ${colors.border}`, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }} />
                           </div>
                         )}
                       </div>
@@ -908,8 +908,8 @@ export default function BetaTestPage() {
         })}
 
         <button onClick={submitAll} disabled={tested === 0} style={{
-          width: "100%", padding: "16px", borderRadius: 12, border: "none", marginTop: 20,
-          background: tested > 0 ? colors.yellow : "#E5E8EC", color: colors.dark,
+          width: "100%", padding: "16px", borderRadius: 20, border: "none", marginTop: 20,
+          background: tested > 0 ? colors.butter : "rgba(29,29,29,.16)", color: colors.dark,
           fontSize: 15, fontWeight: 800, cursor: tested > 0 ? "pointer" : "default",
           fontFamily: fonts.body, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
         }}>

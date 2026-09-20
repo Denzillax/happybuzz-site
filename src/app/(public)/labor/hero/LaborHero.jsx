@@ -52,14 +52,14 @@ export default function LaborHero() {
   }, [farbe, schrift]);
 
   const pille = (aktiv) => ({
-    padding: "6px 12px", border: `1px solid ${aktiv ? "#191615" : "#E5E8EC"}`, background: aktiv ? "#191615" : "#fff",
+    padding: "6px 12px", border: `1px solid ${aktiv ? "#191615" : "#1D1D1D"}`, background: aktiv ? "#191615" : "#fff",
     color: aktiv ? "#fff" : "#191615", fontSize: 12.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer", whiteSpace: "nowrap",
   });
 
   return (
     <>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "14px 24px 0" }}>
-        <div style={{ border: "1px dashed #D5D9DF", borderRadius: 12, padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ border: "1px dashed #D5D9DF", borderRadius: 20, padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 12, fontWeight: 800, color: "#5B626C", width: 58 }}>Farbe</span>
             {FARBEN.map((f) => <button key={f.key} type="button" className="kein-akzent" onClick={() => setFarbe(f.key)} style={pille(farbe === f.key)}>{f.label}</button>)}

@@ -75,9 +75,9 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
     <div>
       <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 12px" }}>Service-Rechnung</h3>
       {items.length > 0 ? (
-        <div style={{ background: "#F5F6F8", borderRadius: 12, padding: "14px 16px", marginBottom: 12 }}>
+        <div style={{ background: "#F5F6F8", borderRadius: 20, padding: "14px 16px", marginBottom: 12 }}>
           {items.map((item, i) => (
-            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid #E5E8EC" : "none" }}>
+            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid rgba(29,29,29,.16)" : "none" }}>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{item.label}</div>
                 {item.description && <div style={{ fontSize: 11, color: colors.muted }}>{item.description}</div>}
@@ -86,19 +86,19 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
               <div style={{ fontSize: 14, fontWeight: 700, color: colors.dark, whiteSpace: "nowrap" }}>CHF {parseFloat(item.total).toFixed(2)}</div>
             </div>
           ))}
-          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 10, marginTop: 4, borderTop: "2px solid #E5E8EC" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16, paddingTop: 10, marginTop: 4, borderTop: "2px solid rgba(29,29,29,.16)" }}>
             <span>Total</span><span>CHF {total.toFixed(2)}</span>
           </div>
         </div>
       ) : (
-        <div style={{ padding: "12px 14px", background: "#F5F6F8", borderRadius: 12, fontSize: 13, marginBottom: 12 }}>
+        <div style={{ padding: "12px 14px", background: "#F5F6F8", borderRadius: 20, fontSize: 13, marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16 }}>
             <span>Total</span><span>CHF {total.toFixed(2)}</span>
           </div>
         </div>
       )}
       {serviceQrPayload(purchaseId, total, sellerProfile) && (
-        <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 12, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
+        <div style={{ display: "flex", gap: 14, padding: "14px 16px", background: "#fff", borderRadius: 20, border: `1px solid ${colors.borderLt}`, marginBottom: 12 }}>
           <SwissQRImage payload={serviceQrPayload(purchaseId, total, sellerProfile)} size={200} style={{ width: 100, flexShrink: 0 }} />
           <div style={{ fontSize: 12, color: colors.muted }}>
             <div style={{ fontWeight: 700, color: colors.dark, marginBottom: 4 }}>QR-Zahlung</div>
@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -238,8 +238,8 @@ export default function OrderDetailPage() {
         <p style={{ fontSize: 17, fontWeight: 800, color: colors.dark, margin: "0 0 4px" }}>Bestellung nicht gefunden</p>
         <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Diese Bestellung existiert nicht mehr oder gehört nicht zu deinem Konto.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 12, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>Meine Käufe</Link>
-          <Link href="/sales" style={{ padding: "11px 20px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", color: K.ink, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
+          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 20, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", boxShadow: "none" }}>Meine Käufe</Link>
+          <Link href="/sales" style={{ padding: "11px 20px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", color: K.ink, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
         </div>
       </div>
     </div>
@@ -331,19 +331,19 @@ export default function OrderDetailPage() {
       {/* Verkaufs-Popup (Verkäufer, einmalig) */}
       {salePopup && (
         <div onClick={() => setSalePopup(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "28px 26px", maxWidth: 360, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 20, padding: "28px 26px", maxWidth: 360, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#E6F5F5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
               <Star size={28} color={colors.teal} fill={colors.teal} />
             </div>
             <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "0 0 14px", flexWrap: "wrap" }}>
-              {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#50804F", background: "#50804F14", padding: "6px 12px", borderRadius: 12 }}>+{salePopup.pollen} Pollen</span>}
-              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#A66700", background: "#E8A82014", padding: "6px 12px", borderRadius: 12 }}>+{salePopup.nektar} Nektar</span>}
+              {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#50804F", background: "#50804F14", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.pollen} Pollen</span>}
+              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#A66700", background: "#E8A82014", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.nektar} Nektar</span>}
             </div>
             <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#A66700" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
             <div style={{ display: "flex", gap: 10 }}>
-              <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 12, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
-              <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
+              <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 20, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
+              <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
             </div>
           </div>
         </div>
@@ -361,9 +361,9 @@ export default function OrderDetailPage() {
         </h1>
 
         {/* Produkt-Card */}
-        <div style={{ position: "relative", background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
+        <div style={{ position: "relative", background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16, display: "flex", gap: 16, alignItems: "center" }}>
           {stempel && <span className="bd-fx-stamp" style={{ position: "absolute", right: 18, top: 14 }}>{isRental ? "Gemietet" : "Gekauft"}</span>}
-          <div style={{ width: 80, height: 80, borderRadius: 12, overflow: "hidden", background: colors.cream, border: "1px solid #E5E8EC", flexShrink: 0 }}>
+          <div style={{ width: 80, height: 80, borderRadius: 20, overflow: "hidden", background: colors.cream, border: "1px solid #1D1D1D", flexShrink: 0 }}>
             {img ? <img src={img.startsWith("http") ? img : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${img}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={24} color={colors.muted} /></div>}
           </div>
           <div>
@@ -392,7 +392,7 @@ export default function OrderDetailPage() {
           <div>
             {/* Status-Banner */}
             {isFinished && (
-              <div style={{ background: "#E8F5E9", borderRadius: 12, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ background: "#E8F5E9", borderRadius: 20, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <CheckCircle size={20} color="#50804F" />
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: "#50804F" }}>{finishedLabel}</div>
@@ -403,7 +403,7 @@ export default function OrderDetailPage() {
 
             {/* Aktions-Box */}
             {!isFinished && (
-              <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16 }}>
 
                 {/* SERVICE: Anbieter erstellt Rechnung mit Positionen */}
                 {isService && isSeller && p.status === "confirmed" && (
@@ -416,7 +416,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Kunde wartet */}
                 {isService && isBuyer && p.status === "confirmed" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#F4C03F" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter erledigt den Auftrag und schickt dir danach die Rechnung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter erledigt den Auftrag und schickt dir danach die Rechnung.</p></div>
                 )}
                 {/* SERVICE: Rechnung erhalten — mit Positionen */}
                 {isService && isBuyer && p.status === "payment_pending" && (
@@ -432,14 +432,14 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Überweise den Betrag an den Verkäufer und bestätige die Zahlung.</p>
-                    <button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button>
+                    <button onClick={() => doAction(markAsPaid, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe bezahlt"}</button>
                   </div>
                 )}
                 {!isService && isBuyer && (p.status === "payment_pending" || p.status === "payment_marked") && (
@@ -453,7 +453,7 @@ export default function OrderDetailPage() {
                     ) : (
                       <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Sobald die Zahlung bei dir eingegangen ist, bestätige den Eingang, auch wenn der Käufer noch nicht markiert hat.</p>
                     )}
-                    <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
+                    <button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button>
                   </div>
                 )}
                 {!isService && isSeller && p.status === "paid" && (
@@ -462,22 +462,22 @@ export default function OrderDetailPage() {
                     {!wirdAbgeholt && (
                       <>
                         <p style={{ fontSize: 13, color: colors.muted, marginBottom: 8 }}>Lieferadresse:</p>
-                        <div style={{ padding: 12, background: K.sand, borderRadius: 12, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
+                        <div style={{ padding: 12, background: K.sand, borderRadius: 20, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13, lineHeight: 1.5 }}>
                           <strong>{deliveryAddr?.name}</strong>{deliveryAddr?.company && <><br />{deliveryAddr.company}</>}<br />{deliveryAddr?.street && <>{deliveryAddr.street}<br /></>}{(deliveryAddr?.postal_code || deliveryAddr?.city) && <>{deliveryAddr.postal_code} {deliveryAddr.city}</>}
                         </div>
                         {!showTracking ? (
-                          <button onClick={() => setShowTracking(true)} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Als versendet markieren</button>
+                          <button onClick={() => setShowTracking(true)} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Als versendet markieren</button>
                         ) : (
                           <div>
                             <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Sendungsnummer (optional)</label>
-                            <input value={trackingInput} onChange={e => setTrackingInput(e.target.value)} placeholder="z.B. 996000648206316303" style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "1px solid #E5E8EC", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
-                            <button onClick={() => doAction(markAsShipped, p.id, user.id, trackingInput)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Versand bestätigen"}</button>
+                            <input value={trackingInput} onChange={e => setTrackingInput(e.target.value)} placeholder="z.B. 996000648206316303" style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: "1px solid #1D1D1D", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
+                            <button onClick={() => doAction(markAsShipped, p.id, user.id, trackingInput)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Versand bestätigen"}</button>
                           </div>
                         )}
                       </>
                     )}
                     {wirdAbgeholt && (
-                      <button onClick={() => doAction(markAsPickedUp, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Als übergeben markieren"}</button>
+                      <button onClick={() => doAction(markAsPickedUp, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Als übergeben markieren"}</button>
                     )}
                   </div>
                 )}
@@ -489,7 +489,7 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Auftrag abschliessen</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Zahlung erhalten. Schliesse den Service-Auftrag ab.</p>
-                    <button onClick={() => doAction(completeTransaction, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Auftrag abschliessen"}</button>
+                    <button onClick={() => doAction(completeTransaction, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Auftrag abschliessen"}</button>
                   </div>
                 )}
                 {isService && isBuyer && p.status === "paid" && (
@@ -499,12 +499,12 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{p.status === "shipped" ? "Artikel unterwegs" : "Artikel übergeben"}</h3>
                     {trackingEvent && (
-                      <div style={{ padding: 12, background: K.sand, borderRadius: 12, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13 }}>
+                      <div style={{ padding: 12, background: K.sand, borderRadius: 20, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13 }}>
                         <span style={{ color: colors.muted }}>Sendungsnummer: </span>
                         <a href={`https://service.post.ch/ekp-web/ui/entry/search/${trackingEvent.tracking_number}?lang=de`} target="_blank" rel="noopener" style={{ color: K.petrol, fontWeight: 700, textDecoration: "none" }}>{trackingEvent.tracking_number} <ExternalLink size={12} /></a>
                       </div>
                     )}
-                    <button onClick={() => doAction(confirmDelivery, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Empfang bestätigen"}</button>
+                    <button onClick={() => doAction(confirmDelivery, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Empfang bestätigen"}</button>
                   </div>
                 )}
                 {isSeller && (p.status === "shipped" || p.status === "picked_up") && (
@@ -518,7 +518,7 @@ export default function OrderDetailPage() {
                     {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} handoverAt={handoverAt} />}
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Du hast den Artikel erhalten. Wenn du ihn zurückgibst, markiere die Rückgabe.</p>
                     {depositAmount > 0 && <p style={{ fontSize: 12, color: colors.muted, marginBottom: 14 }}>Kaution: CHF {fmtCHF(depositAmount)}, wird nach Rückgabe zurückerstattet.</p>}
-                    <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
+                    <button onClick={() => doAction(markAsReturned, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Ich habe zurückgegeben"}</button>
                   </div>
                 )}
                 {isRental && isSeller && p.status === "delivered" && (
@@ -537,21 +537,21 @@ export default function OrderDetailPage() {
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Mieter hat den Artikel zurückgegeben. Prüfe den Zustand.</p>
                     {!showDamageForm ? (
                       <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK, Kaution zurück"}</button>
-                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
+                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK, Kaution zurück"}</button>
+                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
                       </div>
                     ) : (
                       <div>
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Schadenshöhe (CHF)</label>
-                        <input type="number" value={damageAmount} onChange={e => setDamageAmount(e.target.value)} placeholder="z.B. 20" style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "1px solid #E5E8EC", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
+                        <input type="number" value={damageAmount} onChange={e => setDamageAmount(e.target.value)} placeholder="z.B. 20" style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: "1px solid #1D1D1D", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", marginBottom: 10 }} />
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Beschreibung</label>
-                        <textarea value={damageDesc} onChange={e => setDamageDesc(e.target.value)} placeholder="Was ist beschädigt?" rows={2} style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 10 }} />
+                        <textarea value={damageDesc} onChange={e => setDamageDesc(e.target.value)} placeholder="Was ist beschädigt?" rows={2} style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 10 }} />
                         <label style={{ fontSize: 12, fontWeight: 700, color: colors.muted, display: "block", marginBottom: 4 }}>Fotos (optional)</label>
                         <input type="file" accept="image/*" multiple onChange={e => setDamageFiles(Array.from(e.target.files || []))} style={{ fontSize: 12, fontFamily: fonts.body, marginBottom: 6 }} />
                         {damageFiles.length > 0 && (
                           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
                             {damageFiles.map((f, i) => (
-                              <div key={i} style={{ width: 56, height: 56, borderRadius: 12, overflow: "hidden", border: `1px solid ${colors.border}` }}>
+                              <div key={i} style={{ width: 56, height: 56, borderRadius: 20, overflow: "hidden", border: `1px solid ${colors.border}` }}>
                                 <img src={URL.createObjectURL(f)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                               </div>
                             ))}
@@ -572,8 +572,8 @@ export default function OrderDetailPage() {
                               setShowDamageForm(false); setDamageFiles([]);
                             } catch (err) { console.error(err); toast.error("Schadenmeldung fehlgeschlagen. Bitte erneut versuchen."); }
                             setActing(false);
-                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: 12, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
-                          <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: 20, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
+                          <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                         </div>
                       </div>
                     )}
@@ -591,14 +591,14 @@ export default function OrderDetailPage() {
                     {p.damage_photos && p.damage_photos.length > 0 && (
                       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
                         {p.damage_photos.map((url, i) => (
-                          <a key={i} href={url} target="_blank" rel="noopener" style={{ width: 80, height: 80, borderRadius: 12, overflow: "hidden", border: `1px solid ${colors.border}`, display: "block" }}>
+                          <a key={i} href={url} target="_blank" rel="noopener" style={{ width: 80, height: 80, borderRadius: 20, overflow: "hidden", border: `1px solid ${colors.border}`, display: "block" }}>
                             <img src={url} alt={`Schaden ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           </a>
                         ))}
                       </div>
                     )}
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
+                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
                     </div>
                   </div>
                 )}
@@ -610,7 +610,7 @@ export default function OrderDetailPage() {
                     {p.damage_photos && p.damage_photos.length > 0 && (
                       <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
                         {p.damage_photos.map((url, i) => (
-                          <a key={i} href={url} target="_blank" rel="noopener" style={{ width: 56, height: 56, borderRadius: 12, overflow: "hidden", border: `1px solid ${colors.border}`, display: "block" }}>
+                          <a key={i} href={url} target="_blank" rel="noopener" style={{ width: 56, height: 56, borderRadius: 20, overflow: "hidden", border: `1px solid ${colors.border}`, display: "block" }}>
                             <img src={url} alt={`Schaden ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           </a>
                         ))}
@@ -624,15 +624,15 @@ export default function OrderDetailPage() {
                   <div>
                     <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Kaution zurückerstatten</h3>
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Rückgabe bestätigt. Überweise die Kaution an den Mieter und bestätige.</p>
-                    <div style={{ padding: 12, background: K.sand, borderRadius: 12, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13 }}>
+                    <div style={{ padding: 12, background: K.sand, borderRadius: 20, border: `1px solid ${K.ink}22`, marginBottom: 14, fontSize: 13 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}><span>Kaution</span><span>CHF {fmtCHF(depositAmount)}</span></div>
                       {parseFloat(p.damage_amount || 0) > 0 && (
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, color: "#c62828" }}><span>Schaden</span><span>- CHF {fmtCHF(p.damage_amount)}</span></div>
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 12, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
-                    <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
                 {isRental && isBuyer && p.status === "returned" && (
@@ -643,14 +643,14 @@ export default function OrderDetailPage() {
                     {depositAmount > 0 && (
                       <>
                         {/* Gleiche Abrechnung wie beim Vermieter: Transparenz bei Schadenabzug */}
-                        <div style={{ padding: 12, background: K.sand, borderRadius: 12, border: `1px solid ${K.ink}22`, marginBottom: 12, fontSize: 13, textAlign: "left" }}>
+                        <div style={{ padding: 12, background: K.sand, borderRadius: 20, border: `1px solid ${K.ink}22`, marginBottom: 12, fontSize: 13, textAlign: "left" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}><span>Kaution</span><span>CHF {fmtCHF(depositAmount)}</span></div>
                           {parseFloat(p.damage_amount || 0) > 0 && (
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, color: "#c62828" }}><span>Schaden</span><span>- CHF {fmtCHF(p.damage_amount)}</span></div>
                           )}
                           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                         </div>
-                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 12, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
                       </>
                     )}
                   </div>
@@ -691,7 +691,7 @@ export default function OrderDetailPage() {
           {/* RECHTE SPALTE */}
           <div>
             {/* Kaufübersicht / Verkaufsübersicht */}
-            <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16 }}>
+            <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16 }}>
               <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 4px" }}>{isService ? "Service-Übersicht" : isRental ? (isSeller ? "Vermietungsübersicht" : "Mietübersicht") : (isSeller ? "Verkaufsübersicht" : "Kaufübersicht")}</h3>
               <SidebarSection icon={Tag} title="Preis">
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span style={{ fontWeight: 400, color: colors.muted, maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{listing?.title}</span><span>1 x {fmtCHF(p.price)}</span></div>
@@ -746,7 +746,7 @@ export default function OrderDetailPage() {
                             else { setPurchase(prev => ({ ...prev, delivery_address: opt.snap })); setAddrOpen(false); toast.success("Lieferadresse aktualisiert"); }
                             setAddrSaving(false);
                           }}
-                          style={{ textAlign: "left", padding: "8px 10px", fontSize: 12, lineHeight: 1.4, background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, cursor: "pointer", fontFamily: fonts.body }}>
+                          style={{ textAlign: "left", padding: "8px 10px", fontSize: 12, lineHeight: 1.4, background: "#fff", border: "1px solid #1D1D1D", borderRadius: 20, cursor: "pointer", fontFamily: fonts.body }}>
                           <strong>{opt.label}</strong>
                           {opt.snap ? <><br />{opt.snap.street}, {opt.snap.postal_code} {opt.snap.city}</> : <><br />{p.buyer?.street}, {p.buyer?.postal_code} {p.buyer?.city}</>}
                         </button>
@@ -804,7 +804,7 @@ export default function OrderDetailPage() {
 
             {/* Zahlungsinformationen (nur Käufer) */}
             {isBuyer && p.seller?.iban && (
-              <div id="payment-info" style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16 }}>
+              <div id="payment-info" style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16 }}>
                 <h3 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 14px", textTransform: "uppercase", letterSpacing: ".5px", color: colors.muted }}>Zahlungsinformationen</h3>
                 <div style={{ fontSize: 13, display: "flex", flexDirection: "column", gap: 12 }}>
                   <div>
@@ -827,21 +827,21 @@ export default function OrderDetailPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><span style={{ fontWeight: 700 }}>{beeRef}</span><CopyBtn text={beeRef} /></div>
                   </div>
                 </div>
-                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16, padding: "12px 16px", borderRadius: 12, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
+                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16, padding: "12px 16px", borderRadius: 20, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
               </div>
             )}
 
             {/* Rechnung fuer die Gegenseite: auch der Verkaeufer (bzw. Kaeufer
                 ohne Zahlungsbox) sieht die QR-Rechnung, bei jedem Kauf */}
             {!(isBuyer && p.seller?.iban) && (
-              <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 16 }}>
+              <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 16 }}>
                 <h3 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 10px", textTransform: "uppercase", letterSpacing: ".5px", color: colors.muted }}>Rechnung</h3>
-                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 16px", borderRadius: 12, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
+                <Link href={`/order/${p.id}/invoice`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 16px", borderRadius: 20, background: K.petrol, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}><FileText size={15} /> QR-Rechnung anzeigen</Link>
               </div>
             )}
 
             {/* Hilfe-Box */}
-            <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20 }}>
+            <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20 }}>
               <h4 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 6px" }}>{isRental ? (isBuyer ? "Vermieter reagiert nicht?" : "Mieter reagiert nicht?") : (isBuyer ? "Verkäufer reagiert nicht?" : "Käufer reagiert nicht?")}</h4>
               <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Schau in die <Link href="/help" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>Tipps</Link> oder <Link href="/contact" style={{ color: K.petrol, fontWeight: 600, textDecoration: "none" }}>schreib uns</Link>.</p>
             </div>

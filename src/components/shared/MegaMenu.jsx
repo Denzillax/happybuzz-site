@@ -67,14 +67,14 @@ export function MegaMenu({ open, onClose }) {
     // Hellbeige statt Sand, gelber Akzent statt Petrol (Feedback Denis)
     background: active ? "#F5F6F8" : "transparent",
     cursor: "pointer", transition: "all .1s", textDecoration: "none",
-    borderLeft: active ? "3px solid #F4C03F" : "3px solid transparent",
+    borderLeft: active ? "3px solid #1D1D1D" : "3px solid transparent",
   });
 
   return (
     <div ref={ref} style={{
       position: "absolute", top: "100%", left: 0, zIndex: 1000,
       background: colors.surface, borderRadius: "0 0 12px 12px",
-      border: "1px solid #E5E8EC", borderTop: "none",
+      border: "1px solid #1D1D1D", borderTop: "none",
       boxShadow: "0 16px 40px rgba(20,17,13,.16)",
       display: "flex", minHeight: 300,
     }}>

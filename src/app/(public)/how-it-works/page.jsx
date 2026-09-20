@@ -17,7 +17,7 @@ const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', s
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 
 const TYPES = [
-  { icon: Tag, title: "Festpreis", desc: "Fester Preis, sofort kaufen. Passt, wenn du weisst, was dein Artikel wert ist.", color: HONEY },
+  { icon: Tag, title: "Festpreis", desc: "Fester Preis, sofort kaufen. Passt, wenn du weisst, was dein Artikel wert ist.", color: "#1D1D1D" },
   { icon: Gavel, title: "Auktion", desc: "Du setzt einen Startpreis, die Bieter entscheiden. Lohnt sich bei Sammlerstücken und allem, dessen Wert schwer zu schätzen ist.", color: PETROL },
   { icon: Home, title: "Miete", desc: "Vermieten statt verkaufen. Gut für Werkzeug, Geräte und Sportsachen, die man selten braucht.", color: "#8B6DB0" },
   { icon: Wrench, title: "Service", desc: "Du bietest eine Dienstleistung an, Kunden fragen einen Termin an. Abgerechnet wird, wenn die Arbeit gemacht ist.", color: "#C2410C" },
@@ -66,7 +66,7 @@ function StepRow({ step, last }) {
     <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
         <div style={{
-          width: 46, height: 46, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC",
+          width: 46, height: 46, borderRadius: 20, background: SAND, border: "1px solid #1D1D1D",
           display: "flex", alignItems: "center", justifyContent: "center",
           fontFamily: MONO, fontSize: 15, fontWeight: 700, color: INK,
         }}>
@@ -92,14 +92,14 @@ export default function HowItWorksPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "64px 24px 68px", textAlign: "center",
-        borderBottom: "1px solid #E5E8EC",
+        borderBottom: "1px solid rgba(29,29,29,.16)",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <Eyebrow>№ 00 · Handbuch</Eyebrow>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             So funktioniert{" "}
-            <span style={{ background: HONEY, color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>BEEDARO</span>
+            <span style={{ background: "#FFE7A9", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>BEEDARO</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
             Kaufen, verkaufen, mieten, buchen, verschenken. Fünf Wege, ein Katalog.
@@ -118,13 +118,13 @@ export default function HowItWorksPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 14 }}>
             {TYPES.map((t, i) => (
               <div key={i} style={{
-                padding: "22px 18px", borderRadius: 12, background: "#fff",
-                border: "1px solid #E5E8EC", textAlign: "center",
+                padding: "22px 18px", borderRadius: 20, background: "#fff",
+                border: "1px solid #1D1D1D", textAlign: "center",
               }}>
                 <div style={{
-                  width: 46, height: 46, borderRadius: 12, margin: "0 auto 12px",
+                  width: 46, height: 46, borderRadius: 20, margin: "0 auto 12px",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: SAND, border: "1px solid #E5E8EC", color: t.color,
+                  background: SAND, border: "1px solid #1D1D1D", color: t.color,
                 }}>
                   <t.icon size={21} color={t.color} />
                 </div>
@@ -154,7 +154,7 @@ export default function HowItWorksPage() {
         </div>
 
         {/* ── Bee-Rate ── */}
-        <div style={{ padding: 30, borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", margin: "40px 0", position: "relative" }}>
+        <div style={{ padding: 30, borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", margin: "40px 0", position: "relative" }}>
           <img src="/badge-cutting-prices.png" alt="Cutting Prices, Saving Flowers" className="fee-stamp" />
           <Eyebrow>Gebührenmodell</Eyebrow>
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 12px", letterSpacing: "-0.01em" }}>Die Bee-Rate: deine Gebühr, deine Wahl</h2>
@@ -163,7 +163,7 @@ export default function HowItWorksPage() {
             Du entscheidest, wie viel du beiträgst. Das bestimmt auch, wie weit oben dein Inserat erscheint.
             Verkäufe unter CHF {FEE_FREE_BELOW}.00 sind komplett gebührenfrei, und nach oben ist bei CHF {FEE_CAP}.00 Schluss: mehr kostet kein Verkauf, egal wie teuer der Artikel.
           </p>
-          <div style={{ display: "flex", border: "1px solid #E5E8EC", borderRadius: 12, overflow: "hidden", background: "#fff", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", border: "1px solid #1D1D1D", borderRadius: 20, overflow: "hidden", background: "#fff", flexWrap: "wrap" }}>
             {TIERS.map((r, i) => (
               <div key={i} style={{
                 flex: "1 1 130px", padding: "16px 12px", textAlign: "center",
@@ -182,13 +182,13 @@ export default function HowItWorksPage() {
         </div>
 
         {/* ── Sicherheit ── */}
-        <div style={{ padding: 30, borderRadius: 12, margin: "40px 0", background: INK, color: PAPER }}>
-          <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: HONEY, marginBottom: 10 }}>Vertrauen</div>
+        <div style={{ padding: 30, borderRadius: 20, margin: "40px 0", background: INK, color: PAPER }}>
+          <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "#1D1D1D", marginBottom: 10 }}>Vertrauen</div>
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 20px", letterSpacing: "-0.01em" }}>Sicher handeln auf BEEDARO</h2>
           <div className="hiw-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {SAFETY.map((s, i) => (
-              <div key={i} style={{ padding: 18, borderRadius: 12, background: "rgba(251,248,242,0.06)", border: "1px solid rgba(251,248,242,0.14)" }}>
-                <div style={{ fontFamily: MONO, fontSize: 12, color: HONEY, marginBottom: 8 }}>0{i + 1}</div>
+              <div key={i} style={{ padding: 18, borderRadius: 20, background: "rgba(251,248,242,0.06)", border: "1px solid rgba(251,248,242,0.14)" }}>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: "#1D1D1D", marginBottom: 8 }}>0{i + 1}</div>
                 <h3 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 5px" }}>{s.title}</h3>
                 <p style={{ fontSize: 12.5, color: "rgba(251,248,242,0.6)", lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
               </div>
@@ -202,15 +202,15 @@ export default function HowItWorksPage() {
           <p style={{ fontSize: 15, color: MUTED, marginBottom: 24 }}>Dein Keller hat Inventar. Wir haben Käufer.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/listings/new" className="bd-btn" style={{
-              padding: "14px 28px", borderRadius: 12, background: INK, color: PAPER,
+              padding: "14px 28px", borderRadius: 20, background: INK, color: PAPER,
               fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
-              display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #E5E8EC",
+              display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #1D1D1D",
             }}>
               Gratis inserieren <ArrowRight size={16} />
             </Link>
             <Link href="/search" className="bd-btn" style={{
-              padding: "14px 28px", borderRadius: 12, background: "#fff",
-              border: "1px solid #E5E8EC", color: INK, fontSize: 15, fontWeight: 700,
+              padding: "14px 28px", borderRadius: 20, background: "#fff",
+              border: "1px solid #1D1D1D", color: INK, fontSize: 15, fontWeight: 700,
               fontFamily: BODY, textDecoration: "none",
             }}>
               Im Katalog stöbern

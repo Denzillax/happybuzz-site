@@ -61,11 +61,11 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
         >
           {/* Inserat-Thumbnail + Avatar-Overlay */}
           <div style={{ position: "relative", flexShrink: 0, opacity: grau ? 0.55 : 1 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 12, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 48, height: 48, borderRadius: 20, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
               {c.listingImage ? <img src={c.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: grau ? "grayscale(1)" : "none" }} /> : <Package size={18} color={colors.mutedLt} />}
             </div>
             <div style={{ position: "absolute", bottom: -4, right: -4, width: 22, height: 22, borderRadius: "50%", background: colors.yellowSoft, border: "2px solid #fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {c.otherUser?.avatar_url ? <img src={c.otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={12} color={colors.yellow} />}
+              {c.otherUser?.avatar_url ? <img src={c.otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={12} color={colors.dark} />}
             </div>
           </div>
 
@@ -83,7 +83,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
                 </span>
               )}
               {grau && (
-                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#E5E8EC", color: "#5B626C" }}>
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "rgba(29,29,29,.16)", color: "#5B626C" }}>
                   {c.listingStatus === "sold" ? "Verkauft" : "Nicht mehr aktiv"}
                 </span>
               )}
@@ -95,7 +95,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(); }}
                 title="Wiederherstellen"
-                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: "1px solid #E5E8EC", background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, border: "1px solid #1D1D1D", background: "#fff", padding: "4px 9px", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, color: colors.dark }}
               >
                 <RotateCcw size={11} /> Wiederherstellen
               </button>
@@ -275,7 +275,7 @@ export default function ChatLayout({ children }) {
 
   return (
     <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#fff", padding: "16px 24px", display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
-      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1232, height: "100%", overflow: "hidden", borderRadius: 12, border: `1px solid ${colors.border}` }}>
+      <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1232, height: "100%", overflow: "hidden", borderRadius: 20, border: `1px solid ${colors.border}` }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}
       <aside className={`chat-sidebar${onThread ? " is-hidden-mobile" : ""}`} style={{ width: 320, flexShrink: 0, borderRight: `1px solid ${colors.borderLt}`, display: "flex", flexDirection: "column", minWidth: 0 }}>
@@ -285,14 +285,14 @@ export default function ChatLayout({ children }) {
             <button
               onClick={() => { setSearchOpen(!searchOpen); if (searchOpen) setSearchQ(""); }}
               title="Nachrichten durchsuchen"
-              style={{ border: "none", background: searchOpen ? colors.yellow : "transparent", cursor: "pointer", padding: 6, display: "flex", color: colors.dark }}
+              style={{ border: "none", background: searchOpen ? colors.butter : "transparent", cursor: "pointer", padding: 6, display: "flex", color: colors.dark }}
             >
               <Search size={17} />
             </button>
           </div>
 
           {searchOpen && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #E5E8EC", background: "#fff", padding: "7px 10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, border: "1px solid #1D1D1D", background: "#fff", padding: "7px 10px" }}>
               <Search size={14} color={colors.muted} />
               <input className="pille-input"
                 autoFocus
@@ -313,7 +313,7 @@ export default function ChatLayout({ children }) {
             {PILLS.map((s) => (
               <button key={s.key} onClick={() => setFilter(s.key)} style={{
                 padding: "5px 11px", fontSize: 11, fontWeight: 700, border: "none", cursor: "pointer", borderRadius: 999,
-                fontFamily: fonts.body, background: filter === s.key ? colors.yellow : colors.cream, color: colors.dark,
+                fontFamily: fonts.body, background: filter === s.key ? colors.butter : colors.cream, color: colors.dark,
               }}>{s.label}</button>
             ))}
           </div>

@@ -74,7 +74,7 @@ export default function BookingsPage() {
       <div key={b.id} className="bk-row" style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
         {/* Kopf: Bild + Infos (auf dem Handy die volle Breite) */}
         <div className="bk-head">
-          <div style={{ width: 64, height: 64, borderRadius: 12, border: "1px solid #E5E8EC", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 64, height: 64, borderRadius: 20, border: "1px solid #1D1D1D", background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {cover ? <img src={cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={22} color={colors.mutedLt} />}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -107,12 +107,12 @@ export default function BookingsPage() {
           <div className="bk-actions">
             {isOwner && b.status === "pending" && (
               <>
-                <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "9px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
-                <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "9px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Absagen</button>
+                <button onClick={() => handleAction(b.id, "confirmed")} style={{ padding: "9px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.moss, color: "#fff", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>Bestätigen</button>
+                <button onClick={() => handleAction(b.id, "cancelled")} style={{ padding: "9px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Absagen</button>
               </>
             )}
             {b.purchase_id && (
-              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 12, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #E5E8EC", textAlign: "center" }}>
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 20, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", textAlign: "center" }}>
                 Zur Bestellung
               </Link>
             )}
@@ -129,7 +129,7 @@ export default function BookingsPage() {
         <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #E5E8EC", marginBottom: 24 }}>
+        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(29,29,29,.16)", marginBottom: 24 }}>
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               padding: "12px 24px", background: "none", border: "none",
@@ -143,7 +143,7 @@ export default function BookingsPage() {
         {loading && <div style={{ textAlign: "center", padding: 60, color: colors.mutedLt }}>Lade...</div>}
 
         {!loading && (
-          <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden" }}>
+          <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden" }}>
             {tab === "incoming" && (
               incoming.length === 0
                 ? <div style={{ textAlign: "center", padding: 60, color: colors.muted }}><CalendarDays size={32} color={colors.mutedLt} style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 600 }}>Keine Anfragen</p></div>

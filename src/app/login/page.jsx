@@ -16,7 +16,7 @@ const BODY = "Manrope, sans-serif";
 function Logo({ width = 220 }) {
   return (
     <svg width={width} viewBox="0 0 1076.41 169.1" fill="none">
-      <circle cx="84.54" cy="84.54" r="84.54" fill="#F4C03F"/>
+      <circle cx="84.54" cy="84.54" r="84.54" fill="#1D1D1D"/>
       <g fill="#191615">
         <path d="M145.76,80.77c-3.52-4.15-8.56-6.7-13.83-7-.06,0-.12,0-.19,0v-.06h-1.86c-.39,0-.79,0-1.22,0-.48,0-.96,0-1.42,0h-3.35c-.75,0-1.5,0-2.25,0-.76,0-1.51,0-2.27,0-1.33,0-2.42,0-3.44.01-.02,0-.04,0-.05,0-.2-.01-.5-.03-.85-.03-3.91,0-6.23,2.08-7.27,3.32l-1.83,2.19v1.61c-.41,1.82-.49,4.13-.28,7.23.08,1.13.23,2.81.52,4.41.38,2.08,1.05,4.46,3.06,6.32,2.93,2.72,5.59,4.72,8.36,6.3,3.55,2.02,7.28,3.29,11.11,3.78.92.12,1.86.18,2.77.18,4.46,0,8.75-1.42,12.06-3.99,3.65-2.84,5.94-6.89,6.43-11.39h0c.49-4.51-1.01-9.07-4.21-12.84ZM142.16,92.76c-.59,5.46-6.07,9.08-12.46,8.27-6.06-.77-10.81-4.04-15.13-8.05-1.04-.95-1.59-10.01-.79-10.95.68-.82,2.26-.48,3.21-.5,1.71-.02,3.42.02,5.14.03,4.76.02,10.3-.86,14.57,1.69,3.27,1.95,5.83,5.58,5.46,9.51Z"/>
         <path d="M63.15,80.79v-1.61l-1.83-2.19c-1.04-1.24-3.36-3.32-7.27-3.32-.35,0-.65.02-.85.03-.02,0-.04,0-.05,0-1.01,0-2.1-.01-3.44-.01-.76,0-1.51,0-2.27,0-.75,0-1.5,0-2.25,0h-3.35c-.47,0-.94,0-1.42,0-.43,0-.83,0-1.22,0h-1.86v.06c-.06,0-.12,0-.19,0-5.27.3-10.32,2.85-13.83,7-3.2,3.77-4.7,8.33-4.21,12.83h0c.49,4.52,2.78,8.56,6.43,11.4,3.31,2.57,7.59,3.99,12.06,3.99.92,0,1.85-.06,2.77-.18,3.82-.49,7.56-1.76,11.11-3.78,2.77-1.58,5.43-3.58,8.36-6.3,2.01-1.86,2.68-4.24,3.06-6.32.3-1.6.45-3.28.52-4.41.21-3.11.13-5.41-.28-7.23ZM54.51,92.98c-4.32,4.01-9.07,7.28-15.13,8.05-6.39.81-11.87-2.81-12.46-8.27-.37-3.94,2.2-7.56,5.46-9.51,4.27-2.55,9.8-1.66,14.57-1.69,1.71,0,3.42-.05,5.14-.03.95.01,2.52-.32,3.21.5.8.95.25,10-.79,10.95Z"/>
@@ -38,7 +38,7 @@ function Logo({ width = 220 }) {
         <path d="M888.26,59.61h69.95v15.79l-38.37,44.12h39.84v19.77h-72.75v-15.79l38.37-44.12h-37.04v-19.77Z"/>
         <path d="M970.16,59.61h69.95v15.79l-38.37,44.12h39.84v19.77h-72.75v-15.79l38.37-44.12h-37.04v-19.77Z"/>
       </g>
-      <circle cx="1063.71" cy="127.74" r="12.69" fill="#F4C03F"/>
+      <circle cx="1063.71" cy="127.74" r="12.69" fill="#1D1D1D"/>
     </svg>
   );
 }
@@ -63,7 +63,7 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
       <div style={{ position:"relative" }}>
         {icon && <span style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", color:f?K.petrol:C.muted, transition:"color .2s", display:"flex" }}>{icon}</span>}
         <input type={isPw && show ? "text" : type} value={value} onChange={onChange} placeholder={placeholder} onFocus={()=>setF(true)} onBlur={()=>setF(false)}
-          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 12, border:`1.5px solid ${error?C.red:f?"#F4C03F":"#E5E8EC"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s", boxShadow:"none", /* kein Schein nach aussen (Denis 18.09.): nur der Rand wird honiggelb, wie im Rest der Seite */ boxSizing:"border-box" }}/>
+          style={{ width:"100%", padding:icon?"12px 46px 12px 40px":"12px 16px", borderRadius: 20, border:`1.5px solid ${error?C.red:f?"#1D1D1D":"#1D1D1D"}`, background:"#fff", fontSize:15, fontFamily:BODY, color:K.ink, outline:"none", transition:"border-color .2s", boxShadow:"none", /* kein Schein nach aussen (Denis 18.09.): nur der Rand wird honiggelb, wie im Rest der Seite */ boxSizing:"border-box" }}/>
         {isPw && <button type="button" onClick={()=>setShow(!show)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:C.muted, display:"flex", padding:4 }}><EyeIcon open={show}/></button>}
       </div>
       {error && <p style={{ color:C.red, fontSize:13, marginTop:3, fontWeight:500 }}>{error}</p>}
@@ -78,7 +78,7 @@ function PasswordStrength({ password }) {
   if (!password) return null;
   return (
     <div style={{ marginTop:-10, marginBottom:16 }}>
-      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius: 12, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
+      <div style={{ display:"flex", gap:4, marginBottom:5 }}>{[0,1,2].map(i=><div key={i} style={{ flex:1, height:3, borderRadius: 20, background:i<score?barColors[score]:C.border, transition:"background .3s" }}/>)}</div>
       <div style={{ display:"flex", gap:10 }}>{checks.map((c,i)=><span key={i} style={{ display:"inline-flex", alignItems:"center", gap:3, fontSize:11, color:c.ok?C.green:C.muted, fontWeight:500 }}>{c.ok?<Check size={12}/>:<Circle size={12}/>} {c.l}</span>)}</div>
     </div>
   );
@@ -92,7 +92,7 @@ function SocialBtn({ icon, label, onClick, disabled }) {
     <button type="button" onClick={disabled ? undefined : onClick} disabled={disabled}
       title={disabled ? `Anmeldung mit ${label} folgt in Kürze` : undefined}
       onMouseEnter={()=>!disabled&&setH(true)} onMouseLeave={()=>setH(false)}
-      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(20,17,13,0.15)":"#E5E8EC"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
+      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(20,17,13,0.15)":"#1D1D1D"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
       {icon}{label}
     </button>
   );
@@ -101,7 +101,7 @@ function SocialBtn({ icon, label, onClick, disabled }) {
 function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
-      width:"100%", padding:"13px", border:secondary?"1px solid #E5E8EC":"none", borderRadius: 999,
+      width:"100%", padding:"13px", border:secondary?"1px solid #1D1D1D":"none", borderRadius: 999,
       background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":"0 2px 8px rgba(25,22,21,.15)",
@@ -247,7 +247,7 @@ export default function AuthPage() {
   );
 
   const renderError = () => error && (
-    <div style={{ padding:"10px 14px", borderRadius: 12, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:14, color:C.red, fontWeight:500 }}>{error}</div>
+    <div style={{ padding:"10px 14px", borderRadius: 20, background:"#FEF2F2", border:"1px solid #FECACA", marginBottom:16, fontSize:14, color:C.red, fontWeight:500 }}>{error}</div>
   );
 
   const renderBack = (target, label) => (
@@ -355,7 +355,7 @@ export default function AuthPage() {
               {view==="login"?"Anmelden":view==="register"?"Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 12, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #E5E8EC", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 20, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #1D1D1D", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:11.5, color:C.muted, marginTop:18, fontWeight:600, fontFamily:BODY }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>

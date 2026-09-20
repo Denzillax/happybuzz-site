@@ -100,7 +100,7 @@ export default function PublicProfilePage() {
 
         {/* ── SHOP-BANNER (nur Unternehmenskonten mit Banner) ── */}
         {profile.account_type === "business" && profile.shop_banner_url && (
-          <div style={{ border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 24, boxShadow: "0 2px 10px rgba(25,22,21,.08)" }}>
+          <div style={{ border: "1px solid #1D1D1D", overflow: "hidden", marginBottom: 24, boxShadow: "none" }}>
             <img
               src={profile.shop_banner_url}
               alt={`${profile.company_name || profile.display_name} Banner`}
@@ -113,15 +113,15 @@ export default function PublicProfilePage() {
 
         {/* ── PROFIL HEADER ─────────────────────────────── */}
         <div style={{
-          background: "#fff", borderRadius: 12,
-          border: "1px solid #E5E8EC", padding: "28px 30px",
-          marginBottom: 24, boxShadow: "0 2px 10px rgba(25,22,21,.08)",
+          background: "#fff", borderRadius: 20,
+          border: "1px solid #1D1D1D", padding: "28px 30px",
+          marginBottom: 24, boxShadow: "none",
         }}>
           <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
 
             {/* Avatar */}
             <div style={{
-              width: 88, height: 88, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", flexShrink: 0,
+              width: 88, height: 88, borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden", flexShrink: 0,
               background: profile.avatar_url
                 ? `url(${profile.avatar_url}) center/cover`
                 : K.honey,
@@ -194,8 +194,8 @@ export default function PublicProfilePage() {
                 setIsSellerFav(result);
               }} style={{
                 display: "flex", alignItems: "center", gap: 8,
-                padding: "10px 20px", borderRadius: 12,
-                border: "1px solid #E5E8EC",
+                padding: "10px 20px", borderRadius: 20,
+                border: "1px solid #1D1D1D",
                 background: isSellerFav ? K.honey : "transparent",
                 cursor: "pointer", fontFamily: fonts.body,
                 fontSize: 13, fontWeight: 700, color: K.ink,
@@ -225,7 +225,7 @@ export default function PublicProfilePage() {
 
           {/* Private Notiz (nur für eingeloggte Nutzer, nicht beim eigenen Profil) */}
           {currentUser && currentUser.id !== params.id && (
-            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 12, background: K.sand, border: "1px solid #E5E8EC" }}>
+            <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 20, background: K.sand, border: "1px solid #1D1D1D" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <StickyNote size={15} color={K.ink} />
                 <span style={{ ...monoLabel, color: K.ink }}>Private Notiz</span>
@@ -236,13 +236,13 @@ export default function PublicProfilePage() {
                 onChange={(e) => { setNote(e.target.value); setNoteSaved(false); }}
                 placeholder="z.B. Schnelle Antwort, faire Preise…"
                 rows={2}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", fontSize: 13, fontFamily: fonts.body, color: K.ink, resize: "vertical", outline: "none", boxSizing: "border-box" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", fontSize: 13, fontFamily: fonts.body, color: K.ink, resize: "vertical", outline: "none", boxSizing: "border-box" }}
               />
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
                 <button
                   onClick={async () => { setNoteSaving(true); try { await saveUserNote(currentUser.id, params.id, note); setNoteSaved(true); } catch {} finally { setNoteSaving(false); } }}
                   disabled={noteSaving}
-                  style={{ padding: "7px 16px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
+                  style={{ padding: "7px 16px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer", opacity: noteSaving ? 0.6 : 1 }}
                 >
                   {noteSaving ? "Speichern…" : "Notiz speichern"}
                 </button>
@@ -262,8 +262,8 @@ export default function PublicProfilePage() {
               <div style={{ display: "flex", gap: 3 }}>
                 {[1, 2, 3, 4, 5].map(s => (
                   <Star key={s} size={18}
-                    color={s <= Math.round(avgRating.avg) ? colors.yellow : colors.borderLt}
-                    fill={s <= Math.round(avgRating.avg) ? colors.yellow : "none"}
+                    color={s <= Math.round(avgRating.avg) ? colors.dark : colors.borderLt}
+                    fill={s <= Math.round(avgRating.avg) ? colors.dark : "none"}
                   />
                 ))}
               </div>
@@ -290,7 +290,7 @@ export default function PublicProfilePage() {
 
         {/* ── TABS ─────────────────────────────────────── */}
         <div style={{
-          display: "flex", gap: 0, borderBottom: "1px solid #E5E8EC",
+          display: "flex", gap: 0, borderBottom: "1px solid rgba(29,29,29,.16)",
           marginBottom: 24,
         }}>
           {TABS.map(t => {
@@ -346,7 +346,7 @@ export default function PublicProfilePage() {
               return (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
                   {sorted.map(([t, c]) => (
-                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 12, background: "#fff", border: "1px solid #E5E8EC", fontSize: 12.5, color: K.ink, fontFamily: fonts.body }}>
+                    <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", fontSize: 12.5, color: K.ink, fontFamily: fonts.body }}>
                       <b style={{ fontWeight: 800 }}>{c}×</b> {t}
                     </span>
                   ))}
@@ -365,20 +365,20 @@ export default function PublicProfilePage() {
                   const sentColor = r.rating >= 4 ? colors.green : r.rating === 3 ? colors.muted : colors.red;
                   return (
                     <div key={r.id} style={{
-                      background: "#fff", borderRadius: 12,
-                      border: "1px solid #E5E8EC", padding: "18px 22px",
+                      background: "#fff", borderRadius: 20,
+                      border: "1px solid #1D1D1D", padding: "18px 22px",
                       display: "flex", gap: 16, alignItems: "flex-start",
                     }}>
                       {/* Rater Avatar */}
                       <div style={{
-                        width: 44, height: 44, borderRadius: 12, border: "1px solid #E5E8EC", flexShrink: 0,
+                        width: 44, height: 44, borderRadius: 20, border: "1px solid #1D1D1D", flexShrink: 0,
                         background: r.raterAvatar
                           ? `url(${r.raterAvatar}) center/cover`
                           : colors.yellowSoft,
                         display: "flex", alignItems: "center", justifyContent: "center",
                         overflow: "hidden",
                       }}>
-                        {!r.raterAvatar && <BeeIcon size={20} color={colors.yellow} />}
+                        {!r.raterAvatar && <BeeIcon size={20} color={colors.dark} />}
                       </div>
 
                       {/* Content */}
@@ -391,8 +391,8 @@ export default function PublicProfilePage() {
                         <div style={{ display: "flex", gap: 3, marginBottom: 6 }}>
                           {[1, 2, 3, 4, 5].map(s => (
                             <Star key={s} size={15}
-                              color={s <= r.rating ? colors.yellow : colors.borderLt}
-                              fill={s <= r.rating ? colors.yellow : "none"}
+                              color={s <= r.rating ? colors.dark : colors.borderLt}
+                              fill={s <= r.rating ? colors.dark : "none"}
                             />
                           ))}
                         </div>

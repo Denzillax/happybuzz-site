@@ -6,7 +6,8 @@
 
 export const colors = {
   // Brand (Gold = nur Marke, Logo, Featured) — Werte gemäß Brand-Spec (CLAUDE.md)
-  yellow:     "#F4C03F",
+  yellow:     "#F4C03F",   // seit dem Meeko-Design nur noch für Sterne und Spiele. Flächen: butter, Schrift und Rahmen: dark
+  butter:     "#FFE7A9",
   yellowSoft: "#FFF5D8",
   yellowHover:"#D9A005",
   yellowLight:"#FFF5D8",
@@ -38,8 +39,8 @@ export const colors = {
   cloud:      "#F5F6F8",
 
   // Borders
-  border:     "#E5E8EC",
-  borderLt:   "#EEF0F3",
+  border:     "#1D1D1D",          // Rahmen rundum: 1 px Ink (Meeko)
+  borderLt:   "rgba(29,29,29,.16)", // Trennlinien und leise Flächen
 
   // Info
   sky:        "#6BA9FF",
@@ -62,9 +63,9 @@ export const fonts = {
 // full bleibt fuer Kreise (Avatare, Punkte) erhalten.
 export const radius = {
   sm: 8,
-  md: 12,   // Karten und Boxen einheitlich 12 (Denis 17.09.)
-  lg: 12,
-  xl: 12,
+  md: 20,   // Karten und Boxen einheitlich 20 (Meeko, 20.09.2026)
+  lg: 20,
+  xl: 20,
   full: 9999,
 };
 
@@ -78,11 +79,11 @@ export const spacing = {
 };
 
 export const shadows = {
-  sm:   "0 2px 8px rgba(0,0,0,.04)",
-  md:   "0 4px 16px rgba(0,0,0,.06)",
+  sm:   "none", // Meeko: Karten haben einen Rand statt eines Schattens
+  md:   "none",
   lg:   "0 8px 30px rgba(0,0,0,.1)",
-  card:      "0 4px 16px rgba(0,0,0,.05)",   // dezenter Dauer-Schatten (Karten-Ruhezustand)
-  cardHover: "0 10px 30px rgba(0,0,0,.10)",  // Hover-Lift
+  card:      "none",   // dezenter Dauer-Schatten (Karten-Ruhezustand)
+  cardHover: "none",  // Hover-Lift
 };
 
 export const T = { ...colors, ...fonts, ...radius, ...spacing };

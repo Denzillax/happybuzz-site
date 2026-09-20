@@ -136,7 +136,7 @@ function NewListingPageInner() {
       </div>
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
-          <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 12, padding: "16px 20px" }}>
+          <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 20, padding: "16px 20px" }}>
             <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig, bitte ergänzen:</p>
             {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#CD3800" }}>• {m}</p>)}
             <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
@@ -150,9 +150,9 @@ function NewListingPageInner() {
             onClick={useLastAsTemplate}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
-              borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff",
+              borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff",
               color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", cursor: "pointer",
-              boxShadow: "0 2px 8px rgba(25,22,21,.15)",
+              boxShadow: "none",
             }}
           >
             <Copy size={15} color="#1D1D1D" /> Letztes Inserat als Vorlage verwenden
@@ -160,7 +160,7 @@ function NewListingPageInner() {
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #1D1D1D33", fontSize: 13, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 20, background: "#E6F5F5", border: "1px solid #1D1D1D33", fontSize: 13, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

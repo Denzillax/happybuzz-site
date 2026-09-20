@@ -14,8 +14,8 @@ const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', s
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 
 const labelStyle = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", display: "block", marginBottom: 6 };
-const inputStyle = { width: "100%", padding: "11px 13px", borderRadius: 12, border: "1px solid #E5E8EC", fontSize: 14, fontFamily: BODY, outline: "none", boxSizing: "border-box", background: "#fff", color: INK };
-const sideCard = { background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 20, marginBottom: 14 };
+const inputStyle = { width: "100%", padding: "11px 13px", borderRadius: 20, border: "1px solid #1D1D1D", fontSize: 14, fontFamily: BODY, outline: "none", boxSizing: "border-box", background: "#fff", color: INK };
+const sideCard = { background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 20, marginBottom: 14 };
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -28,7 +28,7 @@ export default function ContactPage() {
       {/* ── Hero ── */}
       <div style={{
         background: SAND, padding: "56px 24px 52px", textAlign: "center",
-        borderBottom: "1px solid #E5E8EC",
+        borderBottom: "1px solid rgba(29,29,29,.16)",
         backgroundImage: `radial-gradient(${INK}0F 1px, transparent 1px)`, backgroundSize: "22px 22px",
       }}>
         <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: PETROL, marginBottom: 10 }}>Schreib uns</div>
@@ -40,7 +40,7 @@ export default function ContactPage() {
         <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 28 }}>
 
           {/* Form */}
-          <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC", padding: 28 }}>
+          <div style={{ background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D", padding: 28 }}>
             {sent ? (
               <div style={{ textAlign: "center", padding: "44px 0" }}>
                 <CheckCircle size={46} color={MOSS} style={{ marginBottom: 12 }} />
@@ -78,7 +78,7 @@ export default function ContactPage() {
                   <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))} placeholder="Beschreibe dein Anliegen..." style={{ ...inputStyle, minHeight: 140, resize: "vertical" }} />
                 </div>
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
-                  width: "100%", padding: "14px", borderRadius: 12, border: "1px solid #E5E8EC",
+                  width: "100%", padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D",
                   background: ready ? INK : "#D5D9DF",
                   color: ready ? PAPER : "#686E78", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,

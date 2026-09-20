@@ -75,8 +75,8 @@ const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const inputBase = {
   width: "100%",
   padding: "12px 14px",
-  borderRadius: 12,
-  border: "1px solid #E5E8EC",
+  borderRadius: 20,
+  border: "1px solid #1D1D1D",
   background: "#fff",
   fontSize: 14,
   fontFamily: fonts.body,
@@ -99,9 +99,9 @@ const labelBase = {
 
 const sectionBase = {
   background: "#fff",
-  borderRadius: 12,
+  borderRadius: 20,
   padding: "26px 24px",
-  border: "1px solid #E5E8EC",
+  border: "1px solid #1D1D1D",
   marginBottom: 18,
 };
 
@@ -117,8 +117,8 @@ const SectionHead = ({ icon: Icon, title, hint, right }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
     {Icon && (
       <div style={{
-        width: 34, height: 34, borderRadius: 12, flexShrink: 0,
-        background: colors.yellow, border: "1px solid #E5E8EC",
+        width: 34, height: 34, borderRadius: 20, flexShrink: 0,
+        background: colors.butter, border: "1px solid #1D1D1D",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
         <Icon size={17} color={INK} />
@@ -742,9 +742,9 @@ export default function ListingForm({
       onClick={onClick}
       style={{
         padding: "8px 16px",
-        borderRadius: 12,
+        borderRadius: 20,
         border: `1.5px solid ${active ? INK : "rgba(25,22,21,.3)"}`,
-        background: active ? colors.yellow : "#fff",
+        background: active ? colors.butter : "#fff",
         cursor: "pointer",
         fontSize: 13,
         fontFamily: fonts.body,
@@ -772,9 +772,9 @@ export default function ListingForm({
     >
       <div
         style={{
-          width: 20, height: 20, borderRadius: 12, flexShrink: 0,
-          border: `1.5px solid ${checked ? colors.yellow : colors.border}`,
-          background: checked ? colors.yellow : colors.surface,
+          width: 20, height: 20, borderRadius: 20, flexShrink: 0,
+          border: `1.5px solid ${checked ? colors.dark : colors.border}`,
+          background: checked ? colors.butter : colors.surface,
           display: "flex", alignItems: "center", justifyContent: "center",
           transition: "all .15s",
         }}
@@ -888,9 +888,9 @@ export default function ListingForm({
       title={images.length === 0 ? "Zuerst ein Foto hochladen" : target ? "KI erzeugt aus deinen Fotos eine neue Variante für dieses Feld" : "KI liest deine Fotos und füllt die Felder"}
       style={{
         display: "inline-flex", alignItems: "center", gap: 6,
-        padding: "6px 12px", borderRadius: 12,
+        padding: "6px 12px", borderRadius: 20,
         border: `1px solid ${images.length === 0 ? colors.border : colors.dark}`,
-        background: images.length === 0 ? colors.cream : colors.yellow,
+        background: images.length === 0 ? colors.cream : colors.butter,
         color: images.length === 0 ? colors.muted : colors.dark,
         fontSize: 12, fontWeight: 700, fontFamily: fonts.body,
         cursor: aiBusy || images.length === 0 ? "not-allowed" : "pointer",
@@ -940,7 +940,7 @@ export default function ListingForm({
 
       {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
       {draftRestored && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 12, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 20, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
           <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
           <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#1D1D1D", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
         </div>
@@ -950,7 +950,7 @@ export default function ListingForm({
       <div style={sectionBase} className="lf-section">
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
-          <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 12, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
+          <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
             <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand, Bee-Rate und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
           </div>
         )}
@@ -1016,7 +1016,7 @@ export default function ListingForm({
                 marginLeft: "auto", fontSize: 11, fontWeight: 700,
                 fontFamily: fonts.body, color: colors.green,
                 background: "rgba(80,128,79,.12)", padding: "2px 8px",
-                borderRadius: 12, textTransform: "uppercase",
+                borderRadius: 20, textTransform: "uppercase",
               }}>
                 Aktiv
               </span>
@@ -1051,7 +1051,7 @@ export default function ListingForm({
               style={{
                 position: "relative", borderRadius: radius.sm,
                 overflow: "hidden", aspectRatio: "1",
-                border: img.isCover ? `2px solid ${colors.yellow}` : `1px solid ${colors.border}`,
+                border: img.isCover ? `2px solid ${colors.dark}` : `1px solid ${colors.border}`,
                 opacity: dragIdx === idx ? 0.35 : 1,
                 cursor: "grab", transition: "opacity .15s",
               }}
@@ -1078,7 +1078,7 @@ export default function ListingForm({
                   position: "absolute", top: 4, left: 4,
                   background: colors.teal, color: "#fff",
                   fontSize: 8, fontWeight: 800, fontFamily: fonts.body,
-                  padding: "2px 5px", borderRadius: 12,
+                  padding: "2px 5px", borderRadius: 20,
                   textTransform: "uppercase", letterSpacing: ".04em",
                 }}>
                   Cover
@@ -1092,7 +1092,7 @@ export default function ListingForm({
                     onClick={() => setCover(idx)}
                     title="Als Cover setzen"
                     style={{
-                      width: 22, height: 22, borderRadius: 12, border: "none",
+                      width: 22, height: 22, borderRadius: 20, border: "none",
                       background: "rgba(0,0,0,.5)", color: "#fff", cursor: "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
                     }}
@@ -1105,7 +1105,7 @@ export default function ListingForm({
                   disabled={gesperrt}
                   title={gesperrt ? "Gesperrt: Auktion hat Gebote" : "Entfernen"}
                   style={{
-                    width: 22, height: 22, borderRadius: 12, border: "none",
+                    width: 22, height: 22, borderRadius: 20, border: "none",
                     background: "rgba(0,0,0,.5)", color: "#fff", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center", padding: 0,
                   }}
@@ -1151,7 +1151,7 @@ export default function ListingForm({
             onDrop={onDrop}
             onClick={() => fileRef.current?.click()}
             style={{
-              border: `2px dashed ${dragOver ? colors.yellow : colors.border}`,
+              border: `2px dashed ${dragOver ? colors.dark : colors.border}`,
               borderRadius: radius.md, padding: "28px 20px",
               textAlign: "center", cursor: "pointer",
               background: dragOver ? colors.yellowSoft : "transparent",
@@ -1181,7 +1181,7 @@ export default function ListingForm({
                 onChange={(e) => setAiNotiz(e.target.value)}
                 maxLength={300}
                 placeholder="z.B. Aktenschrank aus MDF, Marke Lista, Schublade klemmt"
-                style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", background: "#fff" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", background: "#fff" }}
               />
             </div>
             <button
@@ -1190,10 +1190,10 @@ export default function ListingForm({
               disabled={aiBusy}
               style={{
                 width: "100%", marginTop: 10, padding: "12px 16px",
-                border: "1px solid #E5E8EC", borderRadius: 12,
-                background: colors.yellow, color: colors.dark,
+                border: "1px solid #1D1D1D", borderRadius: 20,
+                background: colors.butter, color: colors.dark,
                 fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
-                cursor: aiBusy ? "wait" : "pointer", boxShadow: "0 1px 4px rgba(25,22,21,.18)",
+                cursor: aiBusy ? "wait" : "pointer", boxShadow: "none",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 opacity: aiBusy ? 0.7 : 1,
               }}
@@ -1219,10 +1219,10 @@ export default function ListingForm({
             onClick={() => cameraRef.current?.click()}
             style={{
               width: "100%", marginTop: 10, padding: "12px 16px",
-              border: "1px solid #E5E8EC", borderRadius: 12,
-              background: colors.yellow, color: colors.dark,
+              border: "1px solid #1D1D1D", borderRadius: 20,
+              background: colors.butter, color: colors.dark,
               fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
-              cursor: "pointer", boxShadow: "0 1px 4px rgba(25,22,21,.18)",
+              cursor: "pointer", boxShadow: "none",
               display: "none", alignItems: "center", justifyContent: "center", gap: 8,
             }}
           >
@@ -1326,9 +1326,9 @@ export default function ListingForm({
                 {/* Trigger Button */}
                 <div onClick={() => { if (!gesperrt) setCatModalOpen(true); }} style={{ ...gesperrtStyle,
                   display: "flex", alignItems: "center", justifyContent: "space-between",
-                  padding: "12px 14px", borderRadius: 12, cursor: "pointer",
-                  border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.yellow : colors.border}`,
-                  background: errors.category ? "#FFEBEE" : form.category_id ? `${colors.yellow}08` : "#fff",
+                  padding: "12px 14px", borderRadius: 20, cursor: "pointer",
+                  border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.dark : colors.border}`,
+                  background: errors.category ? "#FFEBEE" : form.category_id ? `${colors.butter}08` : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
@@ -1349,7 +1349,7 @@ export default function ListingForm({
                   <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
                     onClick={() => setCatModalOpen(false)}>
                     <div onClick={e => e.stopPropagation()} style={{
-                      background: "#fff", borderRadius: 12, width: "100%", maxWidth: 800,
+                      background: "#fff", borderRadius: 20, width: "100%", maxWidth: 800,
                       maxHeight: "80vh", display: "flex", flexDirection: "column",
                       fontFamily: fonts.body, boxShadow: "0 20px 60px rgba(0,0,0,.2)",
                     }}>
@@ -1366,8 +1366,8 @@ export default function ListingForm({
                         <div style={{ position: "relative" }}>
                           <input type="text" value={catSearch} onChange={e => setCatSearch(e.target.value)}
                             placeholder="Kategorie suchen..." autoFocus
-                            style={{ width: "100%", padding: "10px 14px 10px 36px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }}
-                            onFocus={e => e.target.style.borderColor = colors.yellow}
+                            style={{ width: "100%", padding: "10px 14px 10px 36px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box" }}
+                            onFocus={e => e.target.style.borderColor = colors.dark}
                             onBlur={e => e.target.style.borderColor = colors.border} />
                           <Search size={16} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: colors.muted, pointerEvents: "none" }} />
                         </div>
@@ -1391,7 +1391,7 @@ export default function ListingForm({
                                   setCatSearch("");
                                   setCatModalOpen(false);
                                 }} style={{
-                                  padding: "10px 12px", cursor: "pointer", borderRadius: 12, marginBottom: 2,
+                                  padding: "10px 12px", cursor: "pointer", borderRadius: 20, marginBottom: 2,
                                   display: "flex", flexDirection: "column",
                                 }}
                                   onMouseEnter={e => e.currentTarget.style.background = colors.cream}
@@ -1471,12 +1471,12 @@ export default function ListingForm({
                                     set("category_id", currentParentId);
                                     setCatModalOpen(false);
                                   }} style={{
-                                    padding: "12px 14px", borderRadius: 12, cursor: "pointer",
-                                    border: `1.5px solid ${colors.yellow}`,
+                                    padding: "12px 14px", borderRadius: 20, cursor: "pointer",
+                                    border: `1.5px solid ${colors.dark}`,
                                     background: colors.yellowSoft,
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
                                   }}
-                                    onMouseEnter={e => e.currentTarget.style.background = colors.yellow + "30"}
+                                    onMouseEnter={e => e.currentTarget.style.background = colors.butter + "30"}
                                     onMouseLeave={e => e.currentTarget.style.background = colors.yellowSoft}>
                                     <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>
                                       Alle in dieser Kategorie
@@ -1506,12 +1506,12 @@ export default function ListingForm({
                                         setCatModalOpen(false);
                                       }
                                     }} style={{
-                                      padding: "12px 14px", borderRadius: 12, cursor: "pointer",
+                                      padding: "12px 14px", borderRadius: 20, cursor: "pointer",
                                       border: `1.5px solid ${colors.borderLt}`,
                                       display: "flex", alignItems: "center", justifyContent: "space-between",
                                       transition: "all .1s",
                                     }}
-                                      onMouseEnter={e => { e.currentTarget.style.borderColor = colors.yellow; e.currentTarget.style.background = `${colors.yellow}08`; }}
+                                      onMouseEnter={e => { e.currentTarget.style.borderColor = colors.dark; e.currentTarget.style.background = `${colors.butter}08`; }}
                                       onMouseLeave={e => { e.currentTarget.style.borderColor = colors.borderLt; e.currentTarget.style.background = "transparent"; }}>
                                       <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{cat.name}</span>
                                       {hasChildren && <ChevronRight size={14} color={colors.muted} />}
@@ -1567,14 +1567,14 @@ export default function ListingForm({
                     {attr.is_required && <span style={{ color: colors.red, marginLeft: 2 }}>*</span>}
                   </label>
                   {istNeuware && attr.attribute_type === "select" && Array.isArray(attr.options) && attr.options.length > 0 && (
-                    <div style={{ display: "inline-flex", border: "1px solid #E5E8EC", flexShrink: 0 }}>
+                    <div style={{ display: "inline-flex", border: "1px solid #1D1D1D", flexShrink: 0 }}>
                       {[["fest", "Fester Wert"], ["wahl", "Käufer wählt"]].map(([k, lbl], i) => {
                         const aktiv = (k === "wahl") === istWaehlbar(attr.attribute_key);
                         return (
                           <button key={k} type="button" onClick={() => { if (!aktiv) umschalten(attr.attribute_key); }} style={{
                             fontSize: 10.5, fontWeight: 700, padding: "5px 10px", border: "none",
-                            borderLeft: i > 0 ? "1px solid #E5E8EC" : "none", cursor: "pointer",
-                            fontFamily: fonts.body, background: aktiv ? colors.yellow : "#fff",
+                            borderLeft: i > 0 ? "1px solid rgba(29,29,29,.16)" : "none", cursor: "pointer",
+                            fontFamily: fonts.body, background: aktiv ? colors.butter : "#fff",
                             color: aktiv ? INK : colors.muted, whiteSpace: "nowrap",
                           }}>{lbl}</button>
                         );
@@ -1727,7 +1727,7 @@ export default function ListingForm({
             {/* Auktionen sind der einzige Typ, bei dem der Preisvorteil wirklich
                 greift: Tutti hat gar kein Auktionsformat, Ricardo nimmt 8-12%. */}
             <div style={{
-              marginTop: 14, padding: "12px 14px", borderRadius: 12,
+              marginTop: 14, padding: "12px 14px", borderRadius: 20,
               background: colors.cream, border: `1px solid ${colors.borderLt}`,
             }}>
               <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: colors.dark, fontFamily: fonts.body }}>
@@ -1834,9 +1834,9 @@ export default function ListingForm({
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per TWINT</div>
             </div>
             <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
-              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-              background: form.pay_twint ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+              width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+              background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
           {/* Barzahlung Toggle */}
@@ -1846,9 +1846,9 @@ export default function ListingForm({
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung vor Ort in bar</div>
             </div>
             <button onClick={() => set("pay_cash", !form.pay_cash)} style={{
-              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-              background: form.pay_cash ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+              width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+              background: form.pay_cash ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
           {/* Banküberweisung Toggle */}
@@ -1858,9 +1858,9 @@ export default function ListingForm({
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per Banküberweisung</div>
             </div>
             <button onClick={() => set("pay_bank", !form.pay_bank)} style={{
-              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-              background: form.pay_bank ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+              width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+              background: form.pay_bank ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+            }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
           <Err field="payment" />
         </div>
@@ -1876,9 +1876,9 @@ export default function ListingForm({
             if (next) { set("pay_bank", true); if (!form.shipping_method) set("shipping_method", "paket"); }
             if (!next) { set("pay_bank", false); if (!form.pickup_only) set("pickup_only", true); }
           }} style={{
-            width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.shipping_available ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+            width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
+            background: form.shipping_available ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Versand</span>
         </div>
 
@@ -1899,7 +1899,7 @@ export default function ListingForm({
                   </div>
                 </div>
                 <button onClick={() => set("_shipModal", true)} style={{
-                  padding: "6px 14px", borderRadius: 12, border: `1.5px solid ${colors.yellow}`, background: "transparent",
+                  padding: "6px 14px", borderRadius: 20, border: `1.5px solid ${colors.dark}`, background: "transparent",
                   color: colors.dark, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body,
                   display: "flex", alignItems: "center", gap: 4,
                 }}>Bearbeiten</button>
@@ -1923,7 +1923,7 @@ export default function ListingForm({
                 <select
                   value={form.handling_days}
                   onChange={(e) => set("handling_days", parseInt(e.target.value, 10))}
-                  style={{ padding: "9px 12px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}
+                  style={{ padding: "9px 12px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, background: "#fff", cursor: "pointer", flexShrink: 0 }}
                 >
                   {HANDLING_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
@@ -1937,15 +1937,15 @@ export default function ListingForm({
                 <div style={{ fontSize: 11, color: colors.muted }}>Käufer kann auch mit TWINT bezahlen</div>
               </div>
               <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
-                width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-                background: form.pay_twint ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-              }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+                background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+              }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
             </div>
 
             {/* ── Versand Modal ── */}
             {form._shipModal && (
               <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => set("_shipModal", false)}>
-                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, width: 480, maxHeight: "80vh", overflow: "auto", padding: 24 }}>
+                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 20, width: 480, maxHeight: "80vh", overflow: "auto", padding: 24 }}>
 
                   {!form._shipStep ? (
                     <>
@@ -1975,11 +1975,11 @@ export default function ListingForm({
                           }
                         }} style={{
                           display: "flex", alignItems: "center", justifyContent: "space-between",
-                          padding: "16px", borderRadius: 12, border: `1.5px solid ${form.shipping_method === opt.value ? colors.yellow : colors.border}`,
+                          padding: "16px", borderRadius: 20, border: `1.5px solid ${form.shipping_method === opt.value ? colors.dark : colors.border}`,
                           marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? colors.yellowSoft : "#fff",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 12, background: colors.yellow, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
+                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: colors.butter, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 14 }}>{opt.label}</div>
                               {opt.desc && <div style={{ fontSize: 12, color: colors.muted }}>{opt.desc}</div>}
@@ -1989,7 +1989,7 @@ export default function ListingForm({
                         </div>
                       ))}
                       <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
-                        <button onClick={() => set("_shipModal", false)} style={{ padding: "8px 20px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                        <button onClick={() => set("_shipModal", false)} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                       </div>
                     </>
                   ) : form._shipStep === "andere" ? (
@@ -2008,7 +2008,7 @@ export default function ListingForm({
                       </select>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", background: form.free_shipping ? colors.yellow : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2018,8 +2018,8 @@ export default function ListingForm({
                         </div>
                       )}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
-                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   ) : (
@@ -2028,7 +2028,7 @@ export default function ListingForm({
                         <h3 style={{ margin: 0, fontSize: 18, fontFamily: fonts.body }}>{{ paket: "Paket", brief: "Brief", sperrgut: "Sperrgut" }[form._shipStep]}</h3>
                         <button onClick={() => set("_shipModal", false)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={20} /></button>
                       </div>
-                      <div style={{ padding: "10px 14px", background: colors.cream, borderRadius: 12, marginBottom: 16, fontSize: 13, color: colors.muted, textAlign: "center" }}>
+                      <div style={{ padding: "10px 14px", background: colors.cream, borderRadius: 20, marginBottom: 16, fontSize: 13, color: colors.muted, textAlign: "center" }}>
                         {{ paket: "Max. Grösse: 100 x 60 x 60 cm", brief: "Max. Grösse: 25 x 35.3 cm", sperrgut: "Max. Länge: 250 cm" }[form._shipStep]}
                       </div>
                       {form._shipStep === "paket" && (
@@ -2098,7 +2098,7 @@ export default function ListingForm({
                         <>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", background: form.free_shipping ? colors.yellow : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2122,8 +2122,8 @@ export default function ListingForm({
                         );
                       })()}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
-                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   )}
@@ -2140,9 +2140,9 @@ export default function ListingForm({
             set("pickup_only", next);
             if (!next && !form.shipping_available) set("shipping_available", true);
           }} style={{
-            width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.pickup_only ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+            width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
+            background: form.pickup_only ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+          }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Abholung</span>
         </div>
 
@@ -2166,11 +2166,11 @@ export default function ListingForm({
                 return (
                   <div key={opt.key} onClick={() => set("pickup_address", opt.snap)} style={{
                     display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", marginBottom: 6,
-                    border: `1.5px solid ${aktiv ? colors.yellow : colors.border}`, borderRadius: 12,
+                    border: `1.5px solid ${aktiv ? colors.dark : colors.border}`, borderRadius: 20,
                     background: aktiv ? colors.yellowSoft : "#fff", cursor: "pointer",
                   }}>
-                    <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                    <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.dark : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.butter }} />}
                     </div>
                     <div>
                       <span style={{ fontWeight: 700, color: colors.dark }}>{opt.label}</span>
@@ -2186,7 +2186,7 @@ export default function ListingForm({
                 <span style={{ fontWeight: 600 }}>Zahlung</span>
                 <span>{[form.pay_cash && "Barzahlung", form.pay_twint && "TWINT", form.pay_bank && "Überweisung"].filter(Boolean).join(", ") || "Bitte wählen"} bei Übergabe</span>
               </div>
-              {!profileAddr.street && !form.pickup_address && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.yellow, fontWeight: 700 }}>Einstellungen</a>.</p>}
+              {!profileAddr.street && !form.pickup_address && <p style={{ ...hintStyle, marginTop: 8, color: "#c62828" }}>Bitte hinterlege deine Adresse in den <a href="/settings" style={{ color: colors.dark, fontWeight: 700 }}>Einstellungen</a>.</p>}
             </div>
           </div>
         )}
@@ -2206,9 +2206,9 @@ export default function ListingForm({
                   <div style={{ fontSize: 11, color: colors.muted }}>{desc}</div>
                 </div>
                 <button onClick={() => set(key, !form[key])} style={{
-                  width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer",
-                  background: form[key] ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
-                }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+                  width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+                  background: form[key] ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+                }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
               </div>
             ))}
             <Err field="payment" />
@@ -2244,7 +2244,7 @@ export default function ListingForm({
             const active = form.fee_tier === tier;
             return (
               <div key={tier} onClick={() => selectFee(pct, tier)} className="bee-tier-card" style={{
-                position: "relative", padding: "18px 50px 18px 22px", marginBottom: 8, borderRadius: 12, cursor: "pointer",
+                position: "relative", padding: "18px 50px 18px 22px", marginBottom: 8, borderRadius: 20, cursor: "pointer",
                 border: `2px solid ${active ? colors.green : "transparent"}`,
                 background: active ? `linear-gradient(135deg, ${colors.surface}, ${colors.green}08)` : colors.surface,
                 boxShadow: active ? `0 2px 16px ${colors.green}18` : "0 1px 3px rgba(0,0,0,.04)",
@@ -2253,7 +2253,7 @@ export default function ListingForm({
                 {/* Left accent bar */}
                 <div style={{
                   position: "absolute", left: 0, top: 0, bottom: 0, width: 4, borderRadius: "0px",
-                  background: active ? `linear-gradient(180deg, ${colors.green}, ${colors.yellow})` : colors.borderLt,
+                  background: active ? `linear-gradient(180deg, ${colors.green}, ${colors.butter})` : colors.borderLt,
                   transition: "all .2s",
                 }} />
                 {/* Radio indicator — vertically centered */}
@@ -2273,7 +2273,7 @@ export default function ListingForm({
                         {[1, 2, 3, 4].map((i) => (
                           <div key={i} style={{
                             width: 8, height: 8, borderRadius: "50%",
-                            background: i <= impact ? (active ? colors.green : colors.yellow) : `${colors.muted}25`,
+                            background: i <= impact ? (active ? colors.green : colors.butter) : `${colors.muted}25`,
                             transition: "all .2s",
                           }} />
                         ))}
@@ -2282,7 +2282,7 @@ export default function ListingForm({
                       {recommended && (
                         <span style={{
                           fontSize: 9, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase",
-                          padding: "3px 8px", borderRadius: 12, background: colors.green, color: "#fff", flexShrink: 0,
+                          padding: "3px 8px", borderRadius: 20, background: colors.green, color: "#fff", flexShrink: 0,
                         }}>Empfohlen</span>
                       )}
                     </div>
@@ -2297,7 +2297,7 @@ export default function ListingForm({
                     {/* Project tag (only when selected) */}
                     {active && (
                       <div className="bee-tier-project" style={{
-                        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 12,
+                        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 20,
                         background: `${colors.green}12`, marginLeft: 44, fontSize: 11, fontWeight: 600, color: colors.green,
                       }}>
                         <BeeIcon size={12} color={colors.green} />
@@ -2321,7 +2321,7 @@ export default function ListingForm({
             const platform = fee * 0.8;
             const beeImpact = fee * 0.2;
             if (isFeeFree(price)) return (
-              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 12, border: `1px solid ${colors.borderLt}` }}>
+              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 20, border: `1px solid ${colors.borderLt}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: fonts.body }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: colors.green }}>Gebührenfrei</span>
                   <span style={{ fontSize: 14, fontWeight: 800, color: colors.green }}>CHF 0.00</span>
@@ -2332,7 +2332,7 @@ export default function ListingForm({
               </div>
             );
             return (
-              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 12, border: `1px solid ${colors.borderLt}` }}>
+              <div style={{ marginTop: 8, padding: "14px 20px", background: colors.cream, borderRadius: 20, border: `1px solid ${colors.borderLt}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
                   <span>Plattformgebühr ({(form.fee_percentage * 0.8).toFixed(1)}%)</span>
                   <span>CHF {chf(platform)}</span>
@@ -2382,7 +2382,7 @@ export default function ListingForm({
         <div style={{
           ...sectionBase,
           background: colors.cream,
-          border: `2px solid ${colors.yellow}`,
+          border: `2px solid ${colors.dark}`,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <span style={{ fontFamily: fonts.head, fontSize: 16, color: colors.dark }}>Vorschau</span>
@@ -2465,10 +2465,10 @@ export default function ListingForm({
               set("publish_at", new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16));
             }}
             style={{
-              width: 44, height: 24, borderRadius: 12, border: "none", cursor: "pointer", flexShrink: 0,
-              background: form.publish_at ? colors.yellow : "#ccc", position: "relative", transition: "background .2s",
+              width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
+              background: form.publish_at ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
             }}
-          ><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.publish_at ? 22 : 2, transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} /></button>
+          ><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.publish_at ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
         </div>
         {form.publish_at && (
           <div style={{ marginTop: 12 }}>
@@ -2487,7 +2487,7 @@ export default function ListingForm({
       <div className="lf-actionbar" style={{
         position: "sticky", bottom: 0, zIndex: 30,
         margin: "8px -16px 0", padding: "14px 16px",
-        background: "rgba(249,244,236,.94)", borderTop: "1px solid #E5E8EC",
+        background: "rgba(249,244,236,.94)", borderTop: "1px solid rgba(29,29,29,.16)",
       }}>
         <div className="lf-act-row" style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
@@ -2495,8 +2495,8 @@ export default function ListingForm({
             title="Vorschau"
             className="lf-act-preview"
             style={{
-              padding: "13px 16px", borderRadius: 12,
-              border: "1px solid #E5E8EC", background: "#fff",
+              padding: "13px 16px", borderRadius: 20,
+              border: "1px solid #1D1D1D", background: "#fff",
               color: colors.dark, fontSize: 14, fontFamily: fonts.body,
               cursor: "pointer", transition: "all .15s", display: "flex", alignItems: "center", gap: 6,
             }}
@@ -2509,8 +2509,8 @@ export default function ListingForm({
             disabled={saving}
             className="lf-act-draft"
             style={{
-              padding: "13px 18px", borderRadius: 12,
-              border: "1px solid #E5E8EC", background: "#fff",
+              padding: "13px 18px", borderRadius: 20,
+              border: "1px solid #1D1D1D", background: "#fff",
               color: colors.dark, fontSize: 14, fontWeight: 700,
               fontFamily: fonts.body, cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
@@ -2524,8 +2524,8 @@ export default function ListingForm({
             disabled={saving}
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
-              borderRadius: 12, border: "1px solid #E5E8EC",
-              background: colors.yellow, color: colors.dark,
+              borderRadius: 20, border: "1px solid #1D1D1D",
+              background: colors.butter, color: colors.dark,
               fontSize: 14.5, fontWeight: 800, fontFamily: fonts.body,
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",

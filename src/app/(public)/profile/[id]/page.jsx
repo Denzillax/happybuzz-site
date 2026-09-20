@@ -74,7 +74,7 @@ export default function ProfilePage() {
                     </div>
                     <div style={{ padding: "10px 12px" }}>
                       <p style={{ margin: 0, fontSize: 13, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.title}</p>
-                      <p style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 800, color: colors.yellow }}>{l.listing_type === "free" ? "Gratis" : `CHF ${fmtCHF(l.price)}`}</p>
+                      <p style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 800, color: colors.dark }}>{l.listing_type === "free" ? "Gratis" : `CHF ${fmtCHF(l.price)}`}</p>
                     </div>
                   </div>
                 </Link>
