@@ -2468,18 +2468,18 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 /* Farbig ist nur die gewählte Stufe (Denis 20.09.2026). Die übrigen sind weiss und zeigen ihre Farbe beim Hovern, wie die Format-Kacheln. */
 .lf-stufe:not(.is-active):not(:hover) { background: #fff !important; }
 .lf-stufe-kopf { display: contents; }
-.lf-stufe-prozent { grid-column: 1; grid-row: 1 / span 2; align-self: end; font-size: 34px; font-weight: 500; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+.lf-stufe-prozent { grid-column: 1; grid-row: 1 / span 2; align-self: center; font-size: 34px; font-weight: 500; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
 .lf-stufe-prozent small { font-size: 16px; margin-left: 1px; }
 .lf-stufe-punkte { grid-column: 1; grid-row: 3; align-self: start; display: inline-flex; gap: 4px; margin-top: 6px; }
 .lf-stufe-punkte span { width: 8px; height: 8px; border-radius: 999px; border: 1px solid #1D1D1D; background: transparent; }
 .lf-stufe-punkte span.an { background: #1D1D1D; }
-.lf-stufe strong { grid-column: 2; grid-row: 1; font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
-.lf-stufe-text { grid-column: 2; grid-row: 2; opacity: .75; }
-.lf-stufe-vorteil { grid-column: 2; grid-row: 3; font-size: 13px; font-weight: 600; }
+.lf-stufe strong { grid-column: 2; grid-row: 2; font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
+.lf-stufe-text { grid-column: 2; grid-row: 3; opacity: .75; }
+.lf-stufe-vorteil { grid-column: 2; grid-row: 4; font-size: 13px; font-weight: 600; }
 .lf-stufe-haken { grid-column: 3; grid-row: 1 / span 3; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; }
 .lf-stufe.is-active .lf-stufe-haken { background: #1D1D1D; color: #fff; }
 .lf-stufe-marke { position: absolute; top: -10px; left: 18px; padding: 2px 9px 3px; border-radius: 999px; background: #1D1D1D; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
-.lf-stufe-projekt { grid-column: 2; grid-row: 4; justify-self: start; margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; line-height: 1.3; }
+.lf-stufe-projekt { grid-column: 2; grid-row: 1; justify-self: start; margin-bottom: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; line-height: 1.3; }
 .lf-stufe .lf-stufe-projekt strong { grid-column: auto; grid-row: auto; font-size: inherit; font-weight: 600; letter-spacing: 0; }
 .lf-stufe .lf-stufe-haken { grid-row: 1 / span 4; }
 .lf-stufe:not(.is-active):not(:hover) .lf-stufe-projekt { background: #F5F6F8; }

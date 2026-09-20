@@ -2237,7 +2237,6 @@ export default function ListingForm({
           <div className="lf-stufen" role="radiogroup" aria-label="Bee-Impact Stufe">
           {BEE_STUFEN.map(({ tier, pct, impact, recommended, perks, farbe, project }) => {
             const active = form.fee_tier === tier;
-            const bienen = beeBetrag(pct);
             return (
               <button key={tier} type="button" role="radio" aria-checked={active} onClick={() => selectFee(pct, tier)}
                 className={`bee-tier-card lf-stufe eckig kein-akzent mk-${farbe}` + (active ? " is-active" : "")}>
@@ -2252,7 +2251,9 @@ export default function ListingForm({
                 <strong>{beeTexts[tier]}</strong>
                 <span className="lf-stufe-text">{BEE_FEE_SUBTITLES[tier]}</span>
                 <span className="lf-stufe-vorteil">{perks}</span>
-                <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span><strong>CHF {bienen.toFixed(2)}</strong>{beePreis > 0 ? "" : " pro CHF 100"} für den Bienenschutz: {project}</span></span>
+                {/* Zuerst liest man, was die Stufe bewirkt: das geförderte Projekt, im Wortlaut wie vorher (Denis 20.09.2026).
+                    Es steht in jeder Zeile, nicht nur in der gewählten. Darunter der Satz, der Untertitel und die Vorteile. */}
+                <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span>{project}</span></span>
                 {recommended && <span className="lf-stufe-marke">Empfohlen</span>}
               </button>
             );
