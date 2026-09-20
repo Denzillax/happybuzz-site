@@ -173,7 +173,7 @@ export default function ChatConversation() {
     if (other?.id) isBlockedByMe(other.id).then(setBlockiert).catch(() => {});
   }, [conv, user?.id]);
 
-  if (loading) return <div style={{ fontFamily: fonts.body, background: colors.cream, flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
+  if (loading) return <div style={{ fontFamily: fonts.body, background: "#fff", flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Loader2 size={24} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
 
   const otherUser = conv ? (conv.buyer_id === user?.id ? conv.seller : conv.buyer) : null;
   const isBuyer = conv?.buyer_id === user?.id;
@@ -184,7 +184,7 @@ export default function ChatConversation() {
 
   return (
     <div style={{ fontFamily: fonts.body, background: colors.surface, flex: 1, minHeight: 0, display: "flex", flexDirection: "row", color: colors.dark }}>
-      <div className="chat-thread-col" style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: colors.cream }}>
+      <div className="chat-thread-col" style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "#fff" }}>
 
       {/* Eine kompakte Leiste: Was (Inserat) + Wer (Gegenüber) */}
       <div style={{ background: colors.surface, borderBottom: `1px solid ${colors.borderLt}`, padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, position: "sticky", top: 0, zIndex: 10 }}>
@@ -192,7 +192,7 @@ export default function ChatConversation() {
 
         {/* Inserat (Anker) */}
         <Link href={conv?.listing ? `/listing/${conv.listing.id}` : "#"} style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-          <div style={{ width: 40, height: 40, borderRadius: 20, background: colors.warm, overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 40, height: 40, borderRadius: 20, background: "#fff", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
             {conv?.listing?.listing_images?.[0]?.url ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Package size={17} color={colors.mutedLt} />}
           </div>
           <div style={{ minWidth: 0 }}>
@@ -339,7 +339,7 @@ export default function ChatConversation() {
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: "none" }} />
           <EmojiPicker value={newMsg} onChange={setNewMsg} inputRef={msgInputRef} />
           <button onClick={() => fileRef.current?.click()} disabled={uploading} title="Bild senden"
-            style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: colors.cream, cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            style={{ width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${colors.border}`, background: "#fff", cursor: uploading ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {uploading ? <Loader2 size={18} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <ImagePlus size={18} color={colors.muted} />}
           </button>
           <input
@@ -348,7 +348,7 @@ export default function ChatConversation() {
             onChange={(e) => setNewMsg(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Nachricht schreiben..."
-            style={{ flex: 1, minWidth: 0, padding: "9px 16px", borderRadius: 999, border: `1.5px solid ${colors.border}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: colors.cream }}
+            style={{ flex: 1, minWidth: 0, padding: "9px 16px", borderRadius: 999, border: `1.5px solid ${colors.border}`, outline: "none", fontSize: 14, fontFamily: fonts.body, background: "#fff" }}
           />
           <button onClick={handleSend} disabled={!newMsg.trim() || sending}
             style={{ width: 38, height: 38, borderRadius: "50%", border: "none", background: newMsg.trim() ? colors.butter : colors.warm, cursor: newMsg.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .15s", flexShrink: 0 }}>
@@ -362,7 +362,7 @@ export default function ChatConversation() {
       {conv?.listing && (
         <aside className="chat-info" style={{ width: 280, flexShrink: 0, borderLeft: `1px solid ${colors.borderLt}`, background: colors.surface, padding: 18, overflowY: "auto", display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".5px", textTransform: "uppercase", color: colors.mutedLt }}>Inserat</div>
-          <Link href={`/listing/${conv.listing.id}`} style={{ display: "block", width: "100%", aspectRatio: "4 / 3", borderRadius: 20, overflow: "hidden", background: colors.warm }}>
+          <Link href={`/listing/${conv.listing.id}`} style={{ display: "block", width: "100%", aspectRatio: "4 / 3", borderRadius: 20, overflow: "hidden", background: "#fff" }}>
             {conv.listing.listing_images?.[0]?.url
               ? <img src={conv.listing.listing_images[0].url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={32} color={colors.mutedLt} /></div>}

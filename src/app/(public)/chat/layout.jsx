@@ -54,14 +54,14 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
             display: "flex", alignItems: "center", gap: 12, padding: "11px 14px",
             background: active ? "#E3E3FF" : "#fff",
             borderLeft: `3px solid ${active ? colors.teal : "transparent"}`,
-            borderBottom: `1px solid ${colors.cream}`,
+            borderBottom: `1px solid ${colors.borderLt}`,
             transform: `translateX(${dx}px)`,
             transition: dragRef.current?.aktiv ? "none" : "transform .18s",
           }}
         >
           {/* Inserat-Thumbnail + Avatar-Overlay */}
           <div style={{ position: "relative", flexShrink: 0, opacity: grau ? 0.55 : 1 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 20, background: colors.warm, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 48, height: 48, borderRadius: 20, background: "#fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
               {c.listingImage ? <img src={c.listingImage} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", filter: grau ? "grayscale(1)" : "none" }} /> : <Package size={18} color={colors.mutedLt} />}
             </div>
             <div style={{ position: "absolute", bottom: -4, right: -4, width: 22, height: 22, borderRadius: "50%", background: colors.yellowSoft, border: "2px solid #fff", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -313,7 +313,7 @@ export default function ChatLayout({ children }) {
             {PILLS.map((s) => (
               <button key={s.key} onClick={() => setFilter(s.key)} style={{
                 padding: "5px 11px", fontSize: 11, fontWeight: 700, border: "none", cursor: "pointer", borderRadius: 999,
-                fontFamily: fonts.body, background: filter === s.key ? colors.butter : colors.cream, color: colors.dark,
+                fontFamily: fonts.body, background: filter === s.key ? "#1D1D1D" : "#fff", color: filter === s.key ? "#fff" : colors.dark, boxShadow: "inset 0 0 0 1px #1D1D1D",
               }}>{s.label}</button>
             ))}
           </div>

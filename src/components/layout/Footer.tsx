@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
+import PunktSchriftzug from '@/components/home/PunktSchriftzug'
 
 // Meeko-Design (20.09.2026): der Fuss ist eine Lavendel-Tafel mit Ink-Rand. Oben der Aufruf zum Inserieren, darunter
 // Marke und die drei Linkspalten, unten die Rechtszeile. Inhalt und Links wie vorher.
@@ -27,6 +28,11 @@ const links = [
 export function Footer() {
   return (
     <footer className="ft">
+      {/* Lookbook-Effekt in Kacheln (Denis 20.09.2026): B-Zeichen und Wortmarke aus kleinen Quadraten. Sie setzen sich
+          zusammen, während der Fuss ins Bild kommt, und weichen dem Mauszeiger aus. Reine Zier, der echte Name steht oben im Logo. */}
+      <div className="ft-kacheln" aria-hidden="true">
+        <PunktSchriftzug wort="beedaro" schrift="Sora" gewicht={700} farbe="#1D1D1D" maxBreite={1280} {...({ zerfall: "einlauf" } as any)} biene={false} kachel logo />
+      </div>
       <div className="ft-tafel">
         <div className="ft-aufruf">
           <p className="ft-satz">Dein Keller hat Inventar.<br />Wir haben Käufer.</p>

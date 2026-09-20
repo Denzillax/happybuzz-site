@@ -142,10 +142,12 @@ export function ListingCard(props) {
       className="bd-fx-reveal"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
+      // Kartenstil (Denis 20.09.2026): Bild und Beschreibung stehen in EINER Karte mit Ink-Rand. Getrennt (Tafel oben, Text lose
+      // darunter) wirkte die Beschreibung wie abgeschnitten. Die Pastelltafel füllt den Kartenkopf bis zum Rand.
+      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, background: "#fff", border: RAND, borderRadius: 20, overflow: "hidden" }}
     >
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
-      <div className={`lc-tafel mk-${TYP_PASTELL[listing.listing_type] || "lavendel"}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", borderRadius: 20, border: RAND }}>
+      <div className={`lc-tafel mk-${TYP_PASTELL[listing.listing_type] || "lavendel"}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", borderBottom: RAND }}>
         {/* Das Foto liegt mit Abstand auf der Tafel und hat seinen eigenen Rand. Absolut gesetzt, damit Hochformate die Tafel nicht strecken. */}
         <div className="lc-foto" style={{ position: "absolute", inset: 10, borderRadius: 11, border: RAND, overflow: "hidden", background: "#fff" }}>
           {cover
@@ -212,7 +214,7 @@ export function ListingCard(props) {
       {/* Textblock "Zwei Bloecke" (Denis, 15.09.): oben Titel + Preis eng
           beieinander, unten das Kleingedruckte als eigener Block hinter einer
           feinen Linie, immer am Kartenboden (marginTop auto). */}
-      <div style={{ padding: "10px 4px 0", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+      <div className="lc-text" style={{ padding: "12px 14px 14px", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <p style={{
           fontSize: 15.5, fontWeight: 500, fontFamily: fonts.body, letterSpacing: "-.015em",
           lineHeight: 1.3, margin: 0, color: INK,

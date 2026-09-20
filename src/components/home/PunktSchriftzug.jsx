@@ -8,6 +8,7 @@
 //  - Die Schleife läuft nur, solange sich etwas bewegt und der Schriftzug im Bild ist.
 //  - Mit "Bewegung reduzieren" steht das Wort still, ohne Biene.
 import { useEffect, useRef } from "react";
+import { B_PFAD } from "@/components/shared/BLogo";
 
 const TEAL = "#1D1D1D";
 // Farben umgekehrt (Denis 19.09.): Figur in Honig, Streifen und Augen in Ink
@@ -40,7 +41,11 @@ const SPALTEN = 17;
 // biene: false = nur der Schriftzug, keine Biene fliegt hindurch.
 // woerter: Liste von Wörtern, zwischen denen der Schriftzug wechselt (alle `wechsel` ms). Die Punkte
 // ordnen sich dabei zum nächsten Wort um. Ohne Liste bleibt es bei `wort`.
-export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400 }) {
+// kachel: true = Quadrate statt Punkte (Denis 20.09.2026: "nicht rund, sondern kachelig"), passend zum kacheligen B.
+// logo: true = vor dem Wort steht das B-Zeichen, aus denselben Kacheln. gewicht: Schriftgewicht beim Rastern.
+// zerfall "einlauf": für den Seitenfuss. Das Wort setzt sich zusammen, während es von unten ins Bild kommt, und steht
+// ganz, sobald es vollständig sichtbar ist (die Bildmitte erreicht ein Fuss nie).
+export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400, kachel = false, logo = false, gewicht = 800 }) {
   const cvRef = useRef(null);
 
   useEffect(() => {
@@ -59,12 +64,19 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       const m = document.createElement("canvas"); m.width = B; m.height = H;
       const mx = m.getContext("2d");
       let grad = WH * 0.92;
-      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
-      const w = mx.measureText(text).width;
-      if (w > B - raster * 2) grad *= (B - raster * 2) / w;
-      mx.font = `800 ${grad}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
-      mx.textAlign = "center"; mx.textBaseline = "middle";
-      mx.fillText(text, B / 2, H / 2 + grad * 0.04);
+      const satz = (g) => `${gewicht} ${g}px "${schrift}", "General Sans", "Manrope", Arial, sans-serif`;
+      // Mit Logo: B-Zeichen links, dann eine Lücke, dann das Wort. Alles zusammen wird mittig gesetzt.
+      const masse = (g) => { mx.font = satz(g); const tw = mx.measureText(text).width; const lh = logo ? g * 0.74 : 0, lw = lh * (911.7 / 885.5), luecke = logo ? g * 0.2 : 0; return { tw, lh, lw, luecke, ganz: tw + lw + luecke }; };
+      let m0 = masse(grad);
+      if (m0.ganz > B - raster * 2) { grad *= (B - raster * 2) / m0.ganz; m0 = masse(grad); }
+      mx.font = satz(grad);
+      const links = (B - m0.ganz) / 2;
+      if (logo) {
+        const s = m0.lh / 885.5;
+        mx.save(); mx.translate(links, H / 2 - m0.lh / 2 + grad * 0.02); mx.scale(s, s); mx.fill(new Path2D(B_PFAD)); mx.restore();
+      }
+      mx.textAlign = "left"; mx.textBaseline = "middle";
+      mx.fillText(text, links + m0.lw + m0.luecke, H / 2 + grad * 0.04);
       const d = mx.getImageData(0, 0, B, H).data;
       const out = [];
       for (let y = raster / 2; y < H; y += raster) {
@@ -98,7 +110,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       // WH = Höhe des Worts. Mit Zerfall kommt oben und unten Luft dazu, sonst würden die Punkte abgeschnitten.
       WH = Math.round(breite * 0.2);
-      B = breite; H = WH + (zerfall ? Math.round(WH * 1.1) : 0);
+      B = breite; H = WH + (zerfall ? Math.round(WH * (zerfall === "einlauf" ? 0.45 : 1.1)) : 0);
       raster = breite > 900 ? 8 : breite > 480 ? 6 : 5;
       cv.width = Math.round(B * dpr); cv.height = Math.round(H * dpr);
       cv.style.width = B + "px"; cv.style.height = H + "px";
@@ -120,6 +132,11 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const lage = () => {
       if (!zerfall || ruhig) { streuung = 0; return; }
       const b = cv.getBoundingClientRect(), vh = window.innerHeight || 1;
+      if (zerfall === "einlauf") {
+        const t = Math.max(0, Math.min(1, (b.bottom - vh) / (b.height * 0.9)));
+        streuung = t * t * Math.min(B * 0.22, 260);
+        return;
+      }
       const ab = Math.abs(b.top + b.height / 2 - vh / 2) / (vh / 2);
       const t = Math.max(0, Math.min(1, (ab - 0.18) / 0.82));
       streuung = t * t * Math.min(B * 0.22, 260);
@@ -139,7 +156,8 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       const r = raster * 0.4;
       for (const p of punkte) {
         if (p.x < r || p.x > B - r || p.y < r || p.y > H - r) continue; // halbe Punkte an der Kante weglassen
-        ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill();
+        if (kachel) { const s = raster * 0.86; ctx.fillRect(p.x - s / 2, p.y - s / 2, s, s); }
+        else { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
       }
       if (biene.an) {
         // Eigenleben: Flügelschlag (Flügelrand), Blinzeln alle paar Sekunden, wippende Fühler
@@ -217,7 +235,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const weg = () => { maus.x = -9999; };
 
     const start = () => { if (!tot) { aufbauen(); } };
-    if (document.fonts && document.fonts.load) document.fonts.load(`800 80px "${schrift}"`).then(start, start); else start();
+    if (document.fonts && document.fonts.load) document.fonts.load(`${gewicht} 80px "${schrift}"`).then(start, start); else start();
 
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => aufbauen()) : null;
     ro?.observe(cv.parentElement);
@@ -237,7 +255,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       cv.removeEventListener("mousemove", bewegung); cv.removeEventListener("mouseleave", weg);
       window.removeEventListener("scroll", rollen); window.removeEventListener("resize", rollen);
     };
-  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, (woerter || []).join("|")]);
+  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, kachel, logo, gewicht, (woerter || []).join("|")]);
 
   return <canvas ref={cvRef} className="bh-wort" role="img" aria-label="Beedaro" />;
 }

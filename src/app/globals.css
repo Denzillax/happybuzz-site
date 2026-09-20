@@ -2252,7 +2252,7 @@ body:has(.mk) { background: #fff; }
 .hd-knopf-dunkel:hover { background: #000; }
 /* Suche */
 .hd-suche-wrap { flex: 1; min-width: 120px; position: relative; }
-.hd-suche { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 5px 0 14px; border: var(--mk-rand); border-radius: 10px; background: var(--mk-lavendel); transition: background .2s ease, box-shadow .15s ease; }
+.hd-suche { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 5px 0 14px; border: var(--mk-rand); border-radius: 10px; background: #fff; transition: background .2s ease, box-shadow .15s ease; } /* weiss (Denis 20.09.2026), nicht Lavendel */
 .hd-suche-ki { background: var(--mk-rosa); }
 .hd-suche:focus-within { background: #fff; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); }
 .hd-suche input { flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; font: inherit; font-size: 15px; color: var(--mk-ink); }
@@ -2310,7 +2310,7 @@ body:has(.mk) { background: #fff; }
   .hd-eingeloggt .bd-logo { width: auto !important; }
   .hd-eingeloggt .bd-logo span { display: none; }
   .hd-eingeloggt .bd-logo svg { width: 34px; height: auto; }
-  .hd-msuche { display: flex; align-items: center; gap: 8px; margin-top: 8px; height: 46px; padding: 0 16px; border: var(--mk-rand); border-radius: 23px; background: var(--mk-lavendel); color: var(--mk-ink) !important; font-size: 15px; font-weight: 500; text-decoration: none; }
+  .hd-msuche { display: flex; align-items: center; gap: 8px; margin-top: 8px; height: 46px; padding: 0 16px; border: var(--mk-rand); border-radius: 23px; background: #fff; color: var(--mk-ink) !important; font-size: 15px; font-weight: 500; text-decoration: none; }
 }
 @media print { .hd { display: none !important; } }
 
@@ -2372,7 +2372,7 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
   /* Am Handy steht die Marke über dem Satz, nebeneinander brach der Satz auf fünf Zeilen um */
   .mk-hero-beta { flex-direction: column; gap: 6px; padding: 12px 16px; font-size: 14px; text-align: center; border-radius: 18px; }
   .mk-hero-beta svg { display: none; }
-  .lc-tafel { border-radius: 16px !important; }
+  .lc-text { padding: 10px 10px 12px !important; }
   .lc-foto { inset: 7px !important; border-radius: 9px !important; }
   /* Zweispaltig am Handy ist die Karte schmal: Chip und Herz rücken in die Ecken und werden kleiner, sonst stossen sie zusammen */
   .lc-oben-l { top: 12px !important; left: 12px !important; }
@@ -2412,6 +2412,8 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
   .ft-aufruf { padding-bottom: 28px; margin-bottom: 28px; }
   .ft-knopf { width: 100%; justify-content: center; }
 }
+.ft-kacheln { max-width: 1280px; margin: 0 auto 36px; display: flex; justify-content: center; overflow: hidden; }
+.ft-kacheln canvas { display: block; max-width: 100%; }
 @media print { .ft { display: none !important; } }
 
 /* ── INSERATSEITE MEEKO, Schritt 3 (Denis 20.09.2026) ── */
@@ -2544,6 +2546,6 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 .fav-pille { min-height: 44px; padding: 0 20px 3px; border: 1px solid #1D1D1D; border-radius: 999px !important; background: #fff; color: #1D1D1D; font: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); transition: background .15s ease; }
 .fav-pille:hover { background: var(--mk-lavendel); filter: none !important; }
 .fav-pille.an { background: #1D1D1D; color: #fff; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); }
-.fav-suche { width: 100%; min-height: 52px; padding: 0 16px 0 42px !important; border: 1px solid #1D1D1D !important; border-radius: 12px !important; background: var(--mk-lavendel) !important; color: #1D1D1D; font: inherit; font-size: 16px; outline: none; box-shadow: none !important; transition: background .2s ease; }
+.fav-suche { width: 100%; min-height: 52px; padding: 0 16px 0 42px !important; border: 1px solid #1D1D1D !important; border-radius: 12px !important; background: #fff !important; color: #1D1D1D; font: inherit; font-size: 16px; outline: none; box-shadow: none !important; transition: background .2s ease; }
 .fav-suche:focus { background: #fff !important; }
 .fav-klapp { width: 100%; display: flex; align-items: center; gap: 8px; padding: 16px 0 6px; border: none; border-top: 1px solid rgba(29,29,29,.2); border-radius: 0 !important; background: transparent; color: #1D1D1D; font: inherit; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }

@@ -311,8 +311,8 @@ function SearchPageInner() {
       <div className="bd-seite-breit">
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
-        {/* Meeko-Design (20.09.2026): Lavendel-Feld mit Ink-Rand wie die Suche im Header, mit KI-Schalter an wird es Rosa */}
-        <div className="search-mobile-bar" style={{ background: kiModus ? "#FFE3FB" : "#E3E3FF", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
+        {/* Meeko-Design (20.09.2026): weisses Feld mit Ink-Rand wie die Suche im Header, mit KI-Schalter an wird es Rosa */}
+        <div className="search-mobile-bar" style={{ background: kiModus ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
           <Search size={16} style={{ marginLeft: 12, color: "#686E78", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
