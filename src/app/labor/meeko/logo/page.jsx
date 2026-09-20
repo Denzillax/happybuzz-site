@@ -72,6 +72,20 @@ const FARBIG = [
   { nr: "M", name: "Lavendel-B mit Mint und Rosa, auf Ink", bg: INK, b: "#C9C4FF", k: ["#8EE3CF", "#FFB3EE", "#FFE7A9", "#8EE3CF", "#FFB3EE", "#8EE3CF"] },
   { nr: "N", name: "Weisse Kacheln, Ink-B, auf kräftigem Butter", bg: "#FFCF5A", b: INK, k: ["#FFFFFF"] },
 ];
+// Einfarbiges Logo in Pastell-Kombinationen (Denis 20.09.2026). Drei Familien: Ink auf Pastell, Pastell auf Ink, und der
+// kräftige Ton auf seinem eigenen Pastell (Ton in Ton). Der Kontrast steht dabei, ab etwa 3 bleibt ein Zeichen bei 16 px lesbar.
+const TOENE = [["Butter", "#FFE7A9", "#B97A00"], ["Lavendel", "#E3E3FF", "#5B4BDB"], ["Rosa", "#FFE3FB", "#C2259B"], ["Himmel", "#E3F2FF", "#1F6FCC"], ["Mint", "#DBF5F0", "#0F7F6B"], ["Rosé", "#FBEBEA", "#C2453A"]];
+const lum = (hex) => { const v = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+const kontrast = (a, b) => { const [h, d] = [lum(a), lum(b)].sort((x, y) => y - x); return ((h + 0.05) / (d + 0.05)).toFixed(1); };
+const EINFARBIG = [
+  ...TOENE.map(([n, hell], i) => ({ nr: `P${i + 1}`, name: `Ink auf ${n}`, bg: hell, b: INK })),
+  ...TOENE.map(([n, hell], i) => ({ nr: `Q${i + 1}`, name: `${n} auf Ink`, bg: INK, b: hell })),
+  ...TOENE.map(([n, hell, kraft], i) => ({ nr: `R${i + 1}`, name: `Ton in Ton: kräftiges ${n} auf ${n}`, bg: hell, b: kraft })),
+  ...TOENE.map(([n, hell, kraft], i) => ({ nr: `S${i + 1}`, name: `${n} auf kräftigem ${n}`, bg: kraft, b: hell })),
+  { nr: "T1", name: "Lavendel auf Butter (Pastell auf Pastell)", bg: "#FFE7A9", b: "#E3E3FF" },
+  { nr: "T2", name: "Mint auf Rosa (Pastell auf Pastell)", bg: "#FFE3FB", b: "#DBF5F0" },
+].map((v) => ({ ...v, k: [v.b], rand: lum(v.bg) > 0.85 }));
+
 function FarbIcon({ v, gr, rund }) {
   return (
     <span style={{ width: gr, height: gr, flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", background: v.bg, borderRadius: rund ? "50%" : gr * 0.22, boxShadow: v.rand ? "inset 0 0 0 1px #1D1D1D" : "none" }}>
@@ -134,6 +148,20 @@ export default function Page() {
               <span style={{ fontFamily: "'Sora'", fontWeight: 700, fontSize: 24, letterSpacing: "-.05em", lineHeight: 1 }}>beedaro</span>
             </span>
             <span style={{ flexBasis: "100%", fontSize: 13, opacity: .65, paddingLeft: 56 }}>{v.name}</span>
+          </section>
+        ))}
+      </div>
+
+      <h2 style={{ fontSize: 28, fontWeight: 500, letterSpacing: "-.04em", margin: "56px 0 6px" }}>Einfarbiges Logo in Pastell-Kombinationen</h2>
+      <p style={{ opacity: .7, marginBottom: 24 }}>P: Ink auf Pastell. Q: Pastell auf Ink. R: Ton in Ton. S: Pastell auf seinem kräftigen Ton. T: Pastell auf Pastell. Die Zahl ist der Kontrast zwischen Zeichen und Fläche.</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 12 }}>
+        {EINFARBIG.map((v) => (
+          <section key={v.nr} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 14px", padding: "16px 18px", border: "1px solid #1D1D1D", borderRadius: 22, background: "#fff" }}>
+            <FarbIcon v={v} gr={96} />
+            <FarbIcon v={v} gr={96} rund />
+            <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 10 }}><FarbIcon v={v} gr={32} /><FarbIcon v={v} gr={16} /></span>
+            <span style={{ flexBasis: "100%", display: "inline-flex", flexDirection: "column", gap: 6 }}><FarbTab v={v} /><FarbTab v={v} dunkel /></span>
+            <span style={{ flexBasis: "100%", fontSize: 13 }}><strong>{v.nr}</strong> <span style={{ opacity: .7 }}>{v.name}. Kontrast {kontrast(v.bg, v.b)}</span></span>
           </section>
         ))}
       </div>
