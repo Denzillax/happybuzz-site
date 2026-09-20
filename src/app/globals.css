@@ -1715,7 +1715,7 @@ a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transf
 /* Header: schwebende weisse Pille */
 .mk-kopf { position: sticky; top: 0; z-index: 30; padding: 18px 24px 0; }
 .mk-kopf-pille { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 24px; min-height: 76px; padding: 10px 14px 10px 28px; background: #fff; border: var(--mk-rand); border-radius: 36px; }
-.mk-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 27px; font-weight: 600; letter-spacing: -.05em; }
+.mk-logo { display: inline-flex; align-items: center; gap: 10px; font-family: 'Sora', 'Instrument Sans', sans-serif; font-size: 25px; font-weight: 700; letter-spacing: -.05em; }
 .mk-logo svg { transition: transform .4s cubic-bezier(.2,.7,.1,1); }
 .mk-logo:hover svg { transform: rotate(-90deg); }
 .mk-nav { display: flex; gap: 26px; margin-left: 12px; font-size: 17px; font-weight: 500; letter-spacing: -.02em; white-space: nowrap; }
