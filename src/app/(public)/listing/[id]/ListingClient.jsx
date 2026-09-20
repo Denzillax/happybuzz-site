@@ -565,7 +565,7 @@ export default function ListingDetail() {
 
         {/* ── FREIGABE-LEISTE fuer Mitarbeiter bei wartenden Inseraten ── */}
         {istStaff && l.status === "pending_review" && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFF3E0", borderRadius: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFE7A9", borderRadius: 20 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: "#8a5a00", marginRight: "auto" }}>Wartet auf Freigabe</span>
             <button onClick={gebeFrei} disabled={reviewBusy} style={{ padding: "8px 18px", borderRadius: 999, border: "none", background: BUTTER, color: INK, fontSize: 13, fontWeight: 800, fontFamily: fonts.body, cursor: reviewBusy ? "default" : "pointer" }}>
               {reviewBusy ? "Einen Moment…" : "Freigeben"}
@@ -673,7 +673,7 @@ export default function ListingDetail() {
 
             {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
             {bildSuche.status !== "idle" && (
-              <div style={{ background: "#E8F4F3", border: "1px solid #1D1D1D33", borderRadius: 20, padding: "16px 18px", marginBottom: 20 }}>
+              <div style={{ background: "#DBF5F0", border: "1px solid #1D1D1D33", borderRadius: 20, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
                   <ScanSearch size={18} color="#1D1D1D" />
                   <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>
@@ -681,7 +681,7 @@ export default function ListingDetail() {
                 </div>
                 {bildSuche.status === "laedt" && <p style={{ margin: "8px 0 0", fontSize: 13, color: colors.muted }}>Vergleicht das Foto mit dem Sortiment...</p>}
                 {bildSuche.status === "fehler" && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#C62828", fontWeight: 700 }}>{bildSuche.fehler}</p>}
-                {bildSuche.status === "fertig" && bildSuche.treffer.length === 0 && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#8a6d00", fontWeight: 700 }}>{bildSuche.hinweis}</p>}
+                {bildSuche.status === "fertig" && bildSuche.treffer.length === 0 && <p style={{ margin: "8px 0 0", fontSize: 13, color: "#8A5A00", fontWeight: 700 }}>{bildSuche.hinweis}</p>}
                 {/* listing-grid: gleiche Karten-Rahmen wie ueberall; der Grund
                     steht als umbrechende Zeile unter der Karte im Rahmen */}
                 {bildSuche.status === "fertig" && bildSuche.treffer.length > 0 && (
@@ -690,7 +690,7 @@ export default function ListingDetail() {
                       <div key={item.id}>
                         <ListingCard listing={item} userId={user?.id} />
                         {item.grund && (
-                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#1D1D1D", background: "#E8F4F3", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#1D1D1D", background: "#DBF5F0", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                             {item.grund}
                           </p>
                         )}
@@ -1017,7 +1017,7 @@ export default function ListingDetail() {
                 {(() => { const g = preisGesenkt(l); return g && l.status === "active" ? (
                   <p style={{ margin: "2px 0 0", display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
                     <span style={{ color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(g.alt)}</span>
-                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#2E7D32", background: "#E8F5E9", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#50804F", background: "#DBF5F0", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
                   </p>
                 ) : null; })()}
               </div>
@@ -1089,11 +1089,11 @@ export default function ListingDetail() {
               {l.status === "sold" && (
                 <div style={{ padding: "14px", borderRadius: radius.sm, background: colors.greenSoft, color: colors.green, fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   {l.listing_type === "auction" ? "Auktion beendet. Verkauft" : "Verkauft"}
-                  {auctionResult && user && auctionResult.winner === user.id && <div style={{ fontSize: 12, marginTop: 4 }}>Du hast die Auktion gewonnen! CHF {fmtPrice(auctionResult.price)}</div>}
+                  {auctionResult && user && auctionResult.winner === user.id && <div style={{ fontSize: 12, marginTop: 4 }}>Du hast die Auktion gewonnen. CHF {fmtPrice(auctionResult.price)}</div>}
                 </div>
               )}
               {l.status === "rented" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#E3F2FD", color: "#1565C0", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#E3F2FF", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   Aktuell vermietet
                 </div>
               )}
@@ -1103,7 +1103,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {l.status === "paused" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFF3E0", color: "#CD3800", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFE7A9", color: "#8A5A00", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   Vorübergehend pausiert
                 </div>
               )}
@@ -1122,12 +1122,12 @@ export default function ListingDetail() {
                   {myBid && !isOwner && (
                     <div style={{
                       padding: "10px 14px", borderRadius: 20, marginBottom: 12,
-                      background: bids[0]?.bidder_id === user?.id ? "#E8F5E9" : "#FFF3E0",
+                      background: bids[0]?.bidder_id === user?.id ? "#DBF5F0" : "#FFE7A9",
                       border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
                       fontSize: 13,
                     }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: 14, color: bids[0]?.bidder_id === user?.id ? "#2E7D32" : "#E65100" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: 14, color: bids[0]?.bidder_id === user?.id ? "#50804F" : "#8A5A00" }}>
                           {bids[0]?.bidder_id === user?.id ? <CheckCircle size={17} /> : <AlertCircleBid size={17} />}
                           {bids[0]?.bidder_id === user?.id ? "Du führst" : "Du wurdest überboten"}
                         </span>
@@ -1639,7 +1639,7 @@ export default function ListingDetail() {
                       )}
                       {bookingSuccess && (
                         <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
-                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet!</p>
+                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet.</p>
                           <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>Der Vermieter wird benachrichtigt und kann bestätigen.</p>
                           <Link href="/bookings" style={{ fontSize: 12, color: colors.blue }}>Zu meinen Buchungen</Link>
                         </div>
@@ -1690,7 +1690,7 @@ export default function ListingDetail() {
                       </button>
                       {bookingSuccess && (
                         <div style={{ marginTop: 10, padding: 12, borderRadius: radius.sm, background: colors.greenSoft, textAlign: "center" }}>
-                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet!</p>
+                          <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: colors.green }}>Anfrage gesendet.</p>
                           <p style={{ margin: "4px 0 0", fontSize: 12, color: colors.muted }}>Der Anbieter wird benachrichtigt und bestätigt den Termin.</p>
                           <Link href="/bookings" style={{ fontSize: 12, color: colors.blue }}>Zu meinen Buchungen</Link>
                         </div>
@@ -1715,7 +1715,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {buyState === "error" && (
-                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#FFEBEE", textAlign: "center" }}>
+                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#FBEBEA", textAlign: "center" }}>
                   <p style={{ margin: 0, fontSize: 13, color: "#C62828" }}>{buyError}</p>
                   <button onClick={() => setBuyState("idle")} style={{ marginTop: 6, fontSize: 12, color: colors.blue, background: "none", border: "none", cursor: "pointer" }}>Nochmal versuchen</button>
                 </div>
@@ -1734,10 +1734,10 @@ export default function ListingDetail() {
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
-              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
-                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig:</p>
-                {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#CD3800" }}>• {m}</p>)}
-                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+              <div style={{ background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
+                <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#8A5A00" }}>Profil unvollständig:</p>
+                {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#8A5A00" }}>• {m}</p>)}
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#1D1D1D", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}
 
@@ -1808,10 +1808,10 @@ export default function ListingDetail() {
                 return (
                   <>
                     <div onClick={() => setShowShare(false)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 20, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
+                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
                       {item(<MessageCircle size={16} color="#25D366" />, "WhatsApp", () => { window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank"); setShowShare(false); })}
                       {item(<Mail size={16} color={colors.muted} />, "E-Mail", () => { window.location.href = `mailto:?subject=${encodeURIComponent(l?.title || "BEEDARO")}&body=${encodeURIComponent(txt)}`; setShowShare(false); })}
-                      {item(<Link2 size={16} color={colors.muted} />, shareCopied ? "Link kopiert!" : "Link kopieren", () => { navigator.clipboard.writeText(url); setShareCopied(true); setTimeout(() => setShareCopied(false), 1500); })}
+                      {item(<Link2 size={16} color={colors.muted} />, shareCopied ? "Link kopiert" : "Link kopieren", () => { navigator.clipboard.writeText(url); setShareCopied(true); setTimeout(() => setShareCopied(false), 1500); })}
                     </div>
                   </>
                 );
@@ -1880,7 +1880,7 @@ export default function ListingDetail() {
                       setShowReportModal(false); setReportReason(""); setReportText("");
                       alert("Danke für deine Meldung. Wir prüfen das Inserat.");
                     }} disabled={!reportReason}
-                      style={{ flex: 1, padding: "10px", borderRadius: 20, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
+                      style={{ flex: 1, padding: "10px", borderRadius: 20, border: "none", background: reportReason ? "#c62828" : "rgba(29,29,29,.3)", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
                   </div>
                 </div>
               </div>

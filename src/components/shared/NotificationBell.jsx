@@ -185,7 +185,7 @@ export default function NotificationBell() {
             ? { position: "fixed", top: mobileTop, left: 12, right: 12, width: "auto" }
             : { position: "absolute", top: "calc(100% + 8px)", right: 0, width: 380 }),
           maxWidth: "calc(100vw / var(--bd-zoom, 1) - 24px)", maxHeight: 480, background: "#fff",
-          borderRadius: 20, boxShadow: "0 12px 48px rgba(0,0,0,.15)",
+          borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
           border: `1px solid ${colors.border}`,
           overflow: "hidden", zIndex: 1000,
           animation: "fadeIn .15s ease",

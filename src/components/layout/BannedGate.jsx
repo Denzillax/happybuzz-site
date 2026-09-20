@@ -22,7 +22,7 @@ export function BannedGate() {
 
   if (!banned) return null;
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(25,22,21,.97)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Instrument Sans', 'Manrope', system-ui, sans-serif" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(29,29,29,.97)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Instrument Sans', 'Manrope', system-ui, sans-serif" }}>
       <div style={{ maxWidth: 420, textAlign: "center", color: "#fff" }}>
         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(235,94,85,.18)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
           <Ban size={30} color="#C62828" />
@@ -32,7 +32,7 @@ export function BannedGate() {
           Dein Konto wurde gesperrt. Wiederholtes Austauschen von Kontaktdaten, um Geschäfte ausserhalb von BEEDARO abzuschliessen, verstösst gegen die Nutzungsbedingungen. Bei Fragen: support@beedaro.ch
         </p>
         <button onClick={() => supabase.auth.signOut().then(() => { window.location.href = "/login"; })}
-          style={{ padding: "11px 24px", borderRadius: 999, border: "none", background: "#FFE7A9", color: "#191615", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          style={{ padding: "11px 24px", borderRadius: 999, border: "none", background: "#FFE7A9", color: "#1D1D1D", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
           Abmelden
         </button>
       </div>

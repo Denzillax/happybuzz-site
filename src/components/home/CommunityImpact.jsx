@@ -8,13 +8,13 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
-const MOSS = "#487848"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
+const MOSS = "#50804F"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
 const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
 const SAND = "#DBF5F0";
 const HONEY = "#FFE7A9";
 const PETROL = "#1D1D1D";
-const MUTED = "rgba(20,17,13,0.55)";
+const MUTED = "rgba(29,29,29,0.55)";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
@@ -96,19 +96,19 @@ export function CommunityImpact() {
             const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
             const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
             return (
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid rgba(25,22,21,.1)" }}>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid rgba(29,29,29,.1)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
                   <span style={{ fontFamily: HEAD, fontSize: 13.5, fontWeight: 700, color: INK }}>Nächstes Ziel: {ms.name}</span>
                   <span style={{ fontSize: 11.5, color: MUTED, fontVariantNumeric: "tabular-nums" }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
                 </div>
                 <div style={{ height: 10, borderRadius: 999, background: "#fff", marginTop: 10, overflow: "hidden", display: "flex" }}>
                   <div style={{ width: `${paidPct}%`, background: MOSS }} />
-                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#F7E3A8 5px,#F7E3A8 10px)" }} />
+                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#FFE7A9 5px,#FFE7A9 10px)" }} />
                 </div>
                 <p style={{ margin: "9px 0 0", fontSize: 12.5, color: MUTED }}>
                   {ms.reached
-                    ? <>Alle Ziele erreicht. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
-                    : <>Noch <b style={{ color: MOSS }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <>. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs.</b></> : "."}</>}
+                    ? <>Alle Ziele erreicht. <b style={{ color: "#8A5A00" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
+                    : <>Noch <b style={{ color: MOSS }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <>. <b style={{ color: "#8A5A00" }}>CHF {chf(stats.unterwegs)} schon unterwegs.</b></> : "."}</>}
                 </p>
               </div>
             );

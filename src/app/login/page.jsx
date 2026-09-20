@@ -17,7 +17,7 @@ function Logo({ width = 220 }) {
   return (
     <svg width={width} viewBox="0 0 1076.41 169.1" fill="none">
       <circle cx="84.54" cy="84.54" r="84.54" fill="#1D1D1D"/>
-      <g fill="#191615">
+      <g fill="#1D1D1D">
         <path d="M145.76,80.77c-3.52-4.15-8.56-6.7-13.83-7-.06,0-.12,0-.19,0v-.06h-1.86c-.39,0-.79,0-1.22,0-.48,0-.96,0-1.42,0h-3.35c-.75,0-1.5,0-2.25,0-.76,0-1.51,0-2.27,0-1.33,0-2.42,0-3.44.01-.02,0-.04,0-.05,0-.2-.01-.5-.03-.85-.03-3.91,0-6.23,2.08-7.27,3.32l-1.83,2.19v1.61c-.41,1.82-.49,4.13-.28,7.23.08,1.13.23,2.81.52,4.41.38,2.08,1.05,4.46,3.06,6.32,2.93,2.72,5.59,4.72,8.36,6.3,3.55,2.02,7.28,3.29,11.11,3.78.92.12,1.86.18,2.77.18,4.46,0,8.75-1.42,12.06-3.99,3.65-2.84,5.94-6.89,6.43-11.39h0c.49-4.51-1.01-9.07-4.21-12.84ZM142.16,92.76c-.59,5.46-6.07,9.08-12.46,8.27-6.06-.77-10.81-4.04-15.13-8.05-1.04-.95-1.59-10.01-.79-10.95.68-.82,2.26-.48,3.21-.5,1.71-.02,3.42.02,5.14.03,4.76.02,10.3-.86,14.57,1.69,3.27,1.95,5.83,5.58,5.46,9.51Z"/>
         <path d="M63.15,80.79v-1.61l-1.83-2.19c-1.04-1.24-3.36-3.32-7.27-3.32-.35,0-.65.02-.85.03-.02,0-.04,0-.05,0-1.01,0-2.1-.01-3.44-.01-.76,0-1.51,0-2.27,0-.75,0-1.5,0-2.25,0h-3.35c-.47,0-.94,0-1.42,0-.43,0-.83,0-1.22,0h-1.86v.06c-.06,0-.12,0-.19,0-5.27.3-10.32,2.85-13.83,7-3.2,3.77-4.7,8.33-4.21,12.83h0c.49,4.52,2.78,8.56,6.43,11.4,3.31,2.57,7.59,3.99,12.06,3.99.92,0,1.85-.06,2.77-.18,3.82-.49,7.56-1.76,11.11-3.78,2.77-1.58,5.43-3.58,8.36-6.3,2.01-1.86,2.68-4.24,3.06-6.32.3-1.6.45-3.28.52-4.41.21-3.11.13-5.41-.28-7.23ZM54.51,92.98c-4.32,4.01-9.07,7.28-15.13,8.05-6.39.81-11.87-2.81-12.46-8.27-.37-3.94,2.2-7.56,5.46-9.51,4.27-2.55,9.8-1.66,14.57-1.69,1.71,0,3.42-.05,5.14-.03.95.01,2.52-.32,3.21.5.8.95.25,10-.79,10.95Z"/>
         <path d="M74.72,46.94c-4.18-7.44-9.38-15.59-17.75-18.49-1.43-2.83-4.36-4.78-7.75-4.78-4.8,0-8.69,3.89-8.69,8.69s3.89,8.69,8.69,8.69c2.79,0,5.27-1.32,6.86-3.37.16.09.32.17.47.26.41.25.8.51,1.19.79.02.01.03.02.05.03-.04-.04-.09-.08-.13-.12.06.06.13.12.21.17.15.11.19.14.15.12.07.05.14.11.2.16.77.64,1.5,1.34,2.18,2.07.35.37.69.76,1.02,1.15.17.2.33.42.51.62,0,0,0,0,.01.01.63.86,1.24,1.72,1.81,2.61,1.22,1.89,2.32,3.85,3.42,5.81,1.12,2,4.03,2.84,6,1.57,2.02-1.3,2.78-3.86,1.57-6h0Z"/>
@@ -74,7 +74,7 @@ function Input({ label, type="text", value, onChange, placeholder, error, icon }
 function PasswordStrength({ password }) {
   const checks = [{ l:"8+ Zeichen", ok:password.length>=8 }, { l:"Grossbuchstabe", ok:/[A-Z]/.test(password) }, { l:"Zahl", ok:/\d/.test(password) }];
   const score = checks.filter(c=>c.ok).length;
-  const barColors = ["#ccc",C.red,C.yellow,C.green];
+  const barColors = ["rgba(29,29,29,.2)",C.red,C.yellow,C.green];
   if (!password) return null;
   return (
     <div style={{ marginTop:-10, marginBottom:16 }}>
@@ -92,7 +92,7 @@ function SocialBtn({ icon, label, onClick, disabled }) {
     <button type="button" onClick={disabled ? undefined : onClick} disabled={disabled}
       title={disabled ? `Anmeldung mit ${label} folgt in Kürze` : undefined}
       onMouseEnter={()=>!disabled&&setH(true)} onMouseLeave={()=>setH(false)}
-      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(20,17,13,0.15)":"#1D1D1D"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
+      style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, width:"100%", padding:"11px 16px", borderRadius: 999, border:`1px solid ${disabled?"rgba(29,29,29,0.15)":"#1D1D1D"}`, background:h?K.sand:"#fff", cursor:disabled?"not-allowed":"pointer", fontSize:14, fontWeight:700, color:K.ink, fontFamily:BODY, transition:"background .2s", opacity:disabled?0.45:1, filter:disabled?"grayscale(1)":"none" }}>
       {icon}{label}
     </button>
   );
@@ -104,7 +104,7 @@ function Btn({ children, onClick, loading, secondary, type="button" }) {
       width:"100%", padding:"13px", border:secondary?"1px solid #1D1D1D":"none", borderRadius: 999,
       background:secondary?"transparent":"#FFE7A9", color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
-      boxShadow:loading?"none":"0 2px 8px rgba(25,22,21,.15)",
+      boxShadow:loading?"none":"inset 0 -4px 0 rgba(29,29,29,.14)",
       transition:"all .15s", opacity:loading?.7:1,
     }}>
       {loading ? <span style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
@@ -321,7 +321,7 @@ export default function AuthPage() {
 
     "forgot-sent": () => <div style={{ textAlign:"center", padding:"16px 0" }}>
       <MailOpen/>
-      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet.</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben einen Link an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Prüfe dein Postfach.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
       <p style={{ fontSize:13, color:C.muted, marginTop:16 }}>Keine E-Mail? Prüfe deinen Spam-Ordner.</p>
@@ -351,11 +351,11 @@ export default function AuthPage() {
         <div style={{ position:"relative", zIndex:1, width:"100%", maxWidth:420, opacity:mounted?1:0, transition:"opacity .4s" }}>
           <div style={{ textAlign:"center", marginBottom:22 }}>
             <a href="/" style={{ display:"inline-block", marginBottom:8 }}><img src="/logo.svg" alt="BEEDARO" style={{ width: 'clamp(160px, 45vw, 210px)', height: 'auto' }} /></a>
-            <p style={{ fontSize:13, color:"rgba(25,22,21,.55)", fontWeight:600, fontFamily:BODY }}>
+            <p style={{ fontSize:13, color:"rgba(29,29,29,.55)", fontWeight:600, fontFamily:BODY }}>
               {view==="login"?"Anmelden":view==="register"?"Konto anlegen":view==="forgot"||view==="forgot-sent"?"Passwort zurücksetzen":view==="verify"?"Fast geschafft":"Neues Passwort"}
             </p>
           </div>
-          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 20, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #1D1D1D", boxShadow:"0 2px 12px rgba(25,22,21,.08)" }}>
+          <div className="card-enter" key={view} style={{ background:K.paper, borderRadius: 20, padding:"0 clamp(16px, 5vw, 28px) clamp(20px, 5vw, 28px)", border:"1px solid #1D1D1D", boxShadow:"none" }}>
             <div style={{ paddingTop:(view==="login"||view==="register")?0:24 }}>{views[view]?.()}</div>
           </div>
           <p style={{ textAlign:"center", fontSize:11.5, color:C.muted, marginTop:18, fontWeight:600, fontFamily:BODY }}>© 2026 beedaro.ch · Kaufen. Verkaufen. Gutes tun.</p>

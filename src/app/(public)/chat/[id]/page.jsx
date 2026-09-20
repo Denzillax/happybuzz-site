@@ -137,7 +137,7 @@ export default function ChatConversation() {
     const band = conv?.listing?.listing_type === "sell" && preis > 0
       ? { min: Math.round(preis * 70) / 100, max: Math.round(preis * 99) / 100 }
       : null;
-    const hinweis = band ? ` — erlaubt: ${band.min.toFixed(2)} bis ${band.max.toFixed(2)}` : "";
+    const hinweis = band ? `. Erlaubt: ${band.min.toFixed(2)} bis ${band.max.toFixed(2)}` : "";
     const raw = (window.prompt(`Dein Gegenvorschlag (CHF)${hinweis}:`) || "").replace(",", ".");
     const v = parseFloat(raw);
     if (!v || v <= 0 || sending) return;

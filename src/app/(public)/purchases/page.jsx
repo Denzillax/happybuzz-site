@@ -179,7 +179,7 @@ export default function PurchasesPage() {
 
         {/* Bee Impact */}
         {!loading && purchases.length > 0 && (
-          <div style={{ marginTop: 20, background: "#EEF4EC", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ marginTop: 20, background: "#DBF5F0", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Dein Bee-Impact</p>
               <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>

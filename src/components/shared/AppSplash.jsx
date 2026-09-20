@@ -44,7 +44,7 @@ export default function AppSplash() {
       <div className="bd-splash-bar" aria-hidden />
       <p className="bd-splash-claim" style={{
         margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
-        fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(20,17,13,0.5)",
+        fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(29,29,29,0.5)",
       }}>
         Kaufen. Verkaufen. Gutes tun.
       </p>

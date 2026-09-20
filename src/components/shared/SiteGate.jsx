@@ -79,7 +79,7 @@ export default function SiteGate({ children }) {
         <h1 style={{ fontFamily: HEAD, fontSize: 24, fontWeight: 700, color: K.ink, margin: "0 0 10px", letterSpacing: "-0.01em" }}>
           {wartung ? "Wir sind gleich zurück." : "BEEDARO startet bald."}
         </h1>
-        <p style={{ fontFamily: BODY, fontSize: 14, color: "rgba(20,17,13,0.65)", lineHeight: 1.7, margin: "0 0 22px" }}>
+        <p style={{ fontFamily: BODY, fontSize: 14, color: "rgba(29,29,29,0.65)", lineHeight: 1.7, margin: "0 0 22px" }}>
           {state.message
             || (wartung
               ? "Die Seite wird gerade gewartet. Danke für deine Geduld."
@@ -94,7 +94,7 @@ export default function SiteGate({ children }) {
         )}
         {wartung && !state.loggedIn && (
           // Dezent: der Weg rein fuer Owner/Staff, ohne Besucher zum Login einzuladen
-          <a href="/login" style={{ fontFamily: BODY, fontSize: 12, color: "rgba(20,17,13,0.5)", textDecoration: "underline" }}>
+          <a href="/login" style={{ fontFamily: BODY, fontSize: 12, color: "rgba(29,29,29,0.5)", textDecoration: "underline" }}>
             Team-Anmeldung
           </a>
         )}
@@ -104,7 +104,7 @@ export default function SiteGate({ children }) {
             Anderes Konto anmelden
           </button>
         )}
-        <p style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".1em", color: "rgba(20,17,13,0.45)", margin: "26px 0 0", textTransform: "uppercase" }}>
+        <p style={{ fontFamily: MONO, fontSize: 10, letterSpacing: ".1em", color: "rgba(29,29,29,0.45)", margin: "26px 0 0", textTransform: "uppercase" }}>
           Kaufen. Verkaufen. Gutes tun.
         </p>
       </div>

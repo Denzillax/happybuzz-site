@@ -70,14 +70,14 @@ export default function EditListingPage() {
   }
 
   if (loading) return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#686E78" }}>Lade…</div>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#5B626C" }}>Lade…</div>
   );
 
   return (
     <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F3F3FF", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
-        <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
+        <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#1D1D1D" }}>
           Inserat bearbeiten
         </h1>
       </div>

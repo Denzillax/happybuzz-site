@@ -9,9 +9,9 @@ export const colors = {
   yellow:     "#F4C03F",   // seit dem Meeko-Design nur noch für Sterne und Spiele. Flächen: butter, Schrift und Rahmen: dark
   butter:     "#FFE7A9",
   yellowSoft: "#DBF5F0",
-  yellowHover:"#D9A005",
+  yellowHover:"#8A5A00",
   yellowLight:"#FFE7A9",
-  yellowDark: "#D9A005",
+  yellowDark: "#8A5A00",
 
   // CTA (Teal = alles Klickbare)
   teal:       "#1D1D1D",
@@ -20,17 +20,17 @@ export const colors = {
   // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #50804F.
   // NICHT mit `green` verwechseln: das ist ein Legacy-Alias auf Teal (s.u.).
   nature:     "#50804F",
-  natureSoft: "#EAF1E9",
+  natureSoft: "#DBF5F0",
 
   // Signal (Red = Dringlichkeit, Badges, Alerts)
   red:        "#C62828",
-  redSoft:    "#FFEBEE",
+  redSoft:    "#FBEBEA",
 
   // Text
   dark:       "#1D1D1D",
   graphite:   "#34343B",
   muted:      "#5B626C",
-  mutedLt:    "#686E78",
+  mutedLt:    "#5B626C",
 
   // Surface
   cream:      "#F3F3FF",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
@@ -43,15 +43,15 @@ export const colors = {
   borderLt:   "rgba(29,29,29,.16)", // Trennlinien und leise Flächen
 
   // Info
-  sky:        "#6BA9FF",
-  skySoft:    "#EBF3FF",
+  sky:        "#1D1D1D",
+  skySoft:    "#E3F2FF",
 
   // Legacy aliases (backward compat) — ACHTUNG: green = Teal (für Verifiziert/
   // Erfolg). Für echtes Natur-Grün `nature`/`natureSoft` nutzen.
   green:      "#50804F",
   greenSoft:  "#DBF5F0",
-  blue:       "#6BA9FF",
-  blueSoft:   "#EBF3FF",
+  blue:       "#1D1D1D",
+  blueSoft:   "#E3F2FF",
 };
 
 export const fonts = {
@@ -81,7 +81,7 @@ export const spacing = {
 export const shadows = {
   sm:   "none", // Meeko: Karten haben einen Rand statt eines Schattens
   md:   "none",
-  lg:   "0 8px 30px rgba(0,0,0,.1)",
+  lg:   "0 18px 40px -18px rgba(29,29,29,.35)",
   card:      "none",   // dezenter Dauer-Schatten (Karten-Ruhezustand)
   cardHover: "none",  // Hover-Lift
 };

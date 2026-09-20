@@ -15,12 +15,12 @@ const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
-  expired:  { label: "Abgelaufen", color: "#CD3800", icon: Clock },
+  expired:  { label: "Abgelaufen", color: "#8A5A00", icon: Clock },
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
-  pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
-  pending_hold: { label: "Persönliche Prüfung", color: "#E5A100", icon: Clock },
+  pending_review: { label: "In Prüfung", color: "#8A5A00", icon: Clock },
+  pending_hold: { label: "Persönliche Prüfung", color: "#8A5A00", icon: Clock },
   scheduled: { label: "Geplant", color: "#1D1D1D", icon: Clock },
-  paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
+  paused:   { label: "Pausiert", color: "#8A5A00", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
   rented:   { label: "Vermietet", color: colors.blue, icon: CheckCircle },
   inactive: { label: "Inaktiv", color: colors.muted, icon: XCircle },
@@ -255,11 +255,11 @@ export default function ListingsPage() {
 
         {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}
         {losBetrag > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FBF0D2", border: "1px solid #F0E3BC", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
             <span style={{ fontSize: 22 }} aria-hidden><Rocket size={22} color={K.ink} /></span>
             <div style={{ flex: "1 1 220px", minWidth: 0 }}>
               <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>Willkommens-Los gezogen: +{losBetrag} Pollen</p>
-              <p style={{ margin: 0, fontSize: 12.5, color: "rgba(25,22,21,.65)" }}>Dein erstes Inserat ist eingereicht. Die Pollen zahlen auf dein Bee-Level ein.</p>
+              <p style={{ margin: 0, fontSize: 12.5, color: "rgba(29,29,29,.65)" }}>Dein erstes Inserat ist eingereicht. Die Pollen zahlen auf dein Bee-Level ein.</p>
             </div>
             <Link href="/hive" style={{ fontSize: 13, fontWeight: 700, color: K.petrol, textDecoration: "underline", whiteSpace: "nowrap" }}>Zum Hive</Link>
             <button onClick={() => setLosBetrag(0)} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={K.ink} /></button>
@@ -272,11 +272,11 @@ export default function ListingsPage() {
           if (!l) return null;
           const verlaengerbar = l.listing_type !== "auction" && (isExpired(l) || laeuftBaldAb(l) || l.status === "expired");
           return (
-            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
               <Clock size={20} color={K.ink} />
               <div style={{ flex: "1 1 220px", minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>{l.title}</p>
-                <p style={{ margin: 0, fontSize: 12.5, color: "rgba(25,22,21,.65)" }}>
+                <p style={{ margin: 0, fontSize: 12.5, color: "rgba(29,29,29,.65)" }}>
                   {verlaengerbar ? "Laufzeit endet bald. Verlängern gibt 60 Tage neue Laufzeit." : "Dieses Inserat läuft aktuell nicht ab oder ist eine Auktion."}
                 </p>
               </div>
@@ -291,7 +291,7 @@ export default function ListingsPage() {
         })()}
 
         {mahnPause && (
-          <div style={{ background: "#FFEBEE", border: "1px solid #F5C2C2", borderRadius: 20, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ background: "#FBEBEA", border: "1px solid #C62828", borderRadius: 20, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <span style={{ fontWeight: 800 }}>Inserate pausiert:</span>
             <span style={{ flex: "1 1 200px" }}>Eine Gebührenrechnung ist überfällig. Nach der Zahlung schalten wir deine Inserate wieder frei.</span>
             <Link href="/fees" style={{ fontWeight: 700, color: "#c62828", textDecoration: "underline", whiteSpace: "nowrap" }}>Zur Rechnung</Link>
@@ -346,15 +346,15 @@ export default function ListingsPage() {
           }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
             <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FFF3E0", color: "#CD3800", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FFE7A9", color: "#8A5A00", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#E8F5E9", color: "#2E7D32", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#DBF5F0", color: "#50804F", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Play size={12} /> Aktivieren
             </button>
             <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FFEBEE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FBEBEA", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Trash2 size={12} /> Löschen
             </button>
             <button onClick={() => setSelected(new Set())} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
@@ -474,7 +474,7 @@ export default function ListingsPage() {
                               )}
                             </div>
                           );
-                        })() : <span style={{ color: colors.borderLt, fontSize: 12 }}>—</span>}
+                        })() : <span style={{ color: colors.borderLt, fontSize: 12 }}>–</span>}
                       </td>
                       {/* Status */}
                       <td style={{ padding: "14px 10px", verticalAlign: "middle" }}>
@@ -486,7 +486,7 @@ export default function ListingsPage() {
                           const b = myBoosts[l.id][0];
                           const rem = b.expires_at ? Math.max(0, new Date(b.expires_at).getTime() - Date.now()) : null;
                           const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`;
-                          return <div style={{ marginTop: 4, fontSize: 10, fontWeight: 800, color: "#A66700", display: "flex", alignItems: "center", gap: 3 }}><Rocket size={10} /> {labels[b.reward_type] || b.reward_type}{remStr ? ` · ${remStr}` : ""}</div>;
+                          return <div style={{ marginTop: 4, fontSize: 10, fontWeight: 800, color: "#8A5A00", display: "flex", alignItems: "center", gap: 3 }}><Rocket size={10} /> {labels[b.reward_type] || b.reward_type}{remStr ? ` · ${remStr}` : ""}</div>;
                         })()}
                       </td>
                       {/* Actions — Icon-Only mit Hover-Tooltip */}
@@ -524,15 +524,15 @@ export default function ListingsPage() {
                             <div style={{ position: "relative" }}>
                               <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
                                 width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                color: "#A66700", background: "#E8A82014", border: "none", cursor: "pointer", transition: "all .15s",
+                                color: "#8A5A00", background: "#FFE7A9", border: "none", cursor: "pointer", transition: "all .15s",
                               }}>
                                 <Rocket size={14} />
                               </button>
                               {boostMenuFor === l.id && (
                                 <>
                                   <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                                  <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 20, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
-                                    <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#A66700" }}>{myNektar} Nektar</span></p>
+                                  <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", border: `1px solid ${colors.borderLt}`, padding: "6px", textAlign: "left" }}>
+                                    <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#8A5A00" }}>{myNektar} Nektar</span></p>
                                     {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                       const aff = myNektar >= r.cost;
                                       return (
@@ -544,7 +544,7 @@ export default function ListingsPage() {
                                           onMouseEnter={e => { if (aff) e.currentTarget.style.background = colors.cream; }}
                                           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
                                           <span style={{ fontWeight: 700 }}>{r.name}</span>
-                                          <span style={{ fontWeight: 800, color: aff ? "#C8860A" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
+                                          <span style={{ fontWeight: 800, color: aff ? "#8A5A00" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
                                         </button>
                                       );
                                     })}
@@ -571,8 +571,8 @@ export default function ListingsPage() {
                             <button onClick={() => togglePause(l)} title={l.status === "paused" ? "Aktivieren" : "Pausieren"} style={{
                               width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
                               border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
-                              color: l.status === "paused" ? "#2E7D32" : "#E65100",
-                              background: l.status === "paused" ? "#E8F5E910" : "#FFF3E0",
+                              color: l.status === "paused" ? "#50804F" : "#8A5A00",
+                              background: l.status === "paused" ? "#DBF5F0" : "#FFE7A9",
                             }}
                               onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
                               onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -600,12 +600,12 @@ export default function ListingsPage() {
                                   width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   border: "none", fontFamily: fonts.body, transition: "all .15s",
                                   color: hasBids ? colors.borderLt : "#c62828",
-                                  background: hasBids ? "transparent" : "#FFEBEE",
+                                  background: hasBids ? "transparent" : "#FBEBEA",
                                   cursor: hasBids ? "not-allowed" : "pointer",
                                   opacity: hasBids ? 0.5 : 1,
                                 }}
-                                onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FFCDD2"; }}
-                                onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FFEBEE"; }}>
+                                onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FBEBEA"; }}
+                                onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FBEBEA"; }}>
                                 <Trash2 size={14} />
                               </button>
                             )
@@ -651,7 +651,7 @@ export default function ListingsPage() {
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: colors.muted }}><Eye size={14} /> {l.view_count || 0}</span>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? colors.dark : colors.muted }}><Heart size={14} fill={l.favorite_count > 0 ? colors.dark : "none"} /> {l.favorite_count || 0}</span>
                       {l.listing_type === "auction" && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: bc.count > 0 ? colors.green : colors.muted, fontWeight: bc.count > 0 ? 700 : 400 }}><Gavel size={14} /> {bc.count}{bc.topBid > 0 ? ` · CHF ${fmtPrice(bc.topBid)}` : ""}</span>}
-                      {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#A66700", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
+                      {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#8A5A00", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
                     </div>
 
                     {l.status === "scheduled" && l.publish_at && (
@@ -676,18 +676,18 @@ export default function ListingsPage() {
                       )}
                       {l.status === "active" && (
                         <div style={{ position: "relative", width: "100%" }}>
-                          <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#A66700", borderColor: "#E8A82055" }}><Rocket size={14} /> Boosten</button>
+                          <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} style={{ ...actBtn, color: "#8A5A00", borderColor: "#1D1D1D" }}><Rocket size={14} /> Boosten</button>
                           {boostMenuFor === l.id && (
                             <>
                               <div onClick={() => setBoostMenuFor(null)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 20, boxShadow: "0 8px 28px rgba(0,0,0,.16)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
-                                <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#A66700" }}>{myNektar} Nektar</span></p>
+                              <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 0, zIndex: 201, width: 210, background: "#fff", borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", border: `1px solid ${colors.borderLt}`, padding: 6, textAlign: "left" }}>
+                                <p style={{ margin: "4px 8px 6px", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: colors.muted, display: "flex", justifyContent: "space-between" }}><span>Boosten</span><span style={{ color: "#8A5A00" }}>{myNektar} Nektar</span></p>
                                 {NEKTAR_CATALOG.filter(r => r.needsListing).map(r => {
                                   const aff = myNektar >= r.cost;
                                   return (
                                     <button key={r.key} onClick={() => doBoost(l.id, r)} disabled={!aff || boosting} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "9px 8px", borderRadius: 20, border: "none", background: "transparent", cursor: aff ? "pointer" : "default", fontFamily: fonts.body, fontSize: 12.5, color: aff ? colors.dark : colors.mutedLt }}>
                                       <span style={{ fontWeight: 700 }}>{r.name}</span>
-                                      <span style={{ fontWeight: 800, color: aff ? "#C8860A" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
+                                      <span style={{ fontWeight: 800, color: aff ? "#8A5A00" : colors.mutedLt, whiteSpace: "nowrap" }}>{r.cost} Nektar</span>
                                     </button>
                                   );
                                 })}
@@ -697,7 +697,7 @@ export default function ListingsPage() {
                         </div>
                       )}
                       {(l.status === "active" || l.status === "paused") && (
-                        <button onClick={() => togglePause(l)} style={{ ...actBtn, color: l.status === "paused" ? "#2E7D32" : "#E65100", borderColor: l.status === "paused" ? "#2E7D3240" : "#E6510040" }}>
+                        <button onClick={() => togglePause(l)} style={{ ...actBtn, color: l.status === "paused" ? "#50804F" : "#8A5A00", borderColor: l.status === "paused" ? "#1D1D1D" : "#1D1D1D" }}>
                           {l.status === "paused" ? <><Play size={14} /> Aktivieren</> : <><Pause size={14} /> Pausieren</>}
                         </button>
                       )}
@@ -807,5 +807,5 @@ export default function ListingsPage() {
 function daily0Note(statsData) {
   const total = (statsData.daily || []).reduce((s, d) => s + (d.count || 0), 0);
   if (total > 0) return null;
-  return <p style={{ fontSize: 11, color: "#686E78", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
+  return <p style={{ fontSize: 11, color: "#5B626C", margin: "0 0 6px" }}>Noch keine erfassten Aufrufe in den letzten 7 Tagen (Tracking ab jetzt aktiv).</p>;
 }

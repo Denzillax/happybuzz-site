@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Sun, Leaf, Snowflake, Flower2 } from "lucide-react";
 
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
-const MUTED = "#686E78";
+const MUTED = "#5B626C";
 const DARK = "#1D1D1D";
 const TEAL = "#1D1D1D";
 
@@ -51,7 +51,7 @@ export function SeasonalRecommendations() {
           .season-img { flex: none; height: 120px; width: 100%; }
         }
       `}</style>
-      <div className="season-band" style={{ overflow: "hidden", borderRadius: 20, background: "#E8F4F3" }}>
+      <div className="season-band" style={{ overflow: "hidden", borderRadius: 20, background: "#DBF5F0" }}>
         <div style={{ flex: "1 1 auto", padding: "clamp(18px, 3vw, 28px)", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
             <div style={{ width: 34, height: 34, borderRadius: 20, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -59,7 +59,7 @@ export function SeasonalRecommendations() {
             </div>
             <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: DARK, margin: 0, letterSpacing: "-0.01em" }}>{season.title}</h2>
           </div>
-          <p style={{ fontSize: 14, color: "rgba(25,22,21,.6)", margin: "0 0 14px" }}>{season.subtitle}</p>
+          <p style={{ fontSize: 14, color: "rgba(29,29,29,.6)", margin: "0 0 14px" }}>{season.subtitle}</p>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {season.items.map((it) => (
               <Link key={it.q} href={`/search?q=${encodeURIComponent(it.q)}`} style={{

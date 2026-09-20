@@ -90,7 +90,7 @@ export function UspGrid() {
               <h3 style={{ fontSize: 18, fontWeight: 600, margin: '0 0 8px', fontFamily: HEAD, letterSpacing: '-0.01em', color: INK }}>
                 {usp.title}
               </h3>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(20,17,13,0.6)', margin: 0 }}>
+              <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(29,29,29,0.6)', margin: 0 }}>
                 {usp.description}
               </p>
 

@@ -84,7 +84,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
 
     {showModal && (
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => setShowModal(false)}>
-        <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 20, border: "1px solid #1D1D1D", padding: "28px 24px", maxWidth: 420, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+        <div onClick={e => e.stopPropagation()} style={{ background: K.paper, borderRadius: 20, border: "1px solid #1D1D1D", padding: "28px 24px", maxWidth: 420, width: "100%", boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)" }}>
           <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, fontFamily: fonts.body }}>
             {isBuyer ? (isService ? "Dienstleister bewerten" : "Verkäufer bewerten") : (isService ? "Auftraggeber bewerten" : "Käufer bewerten")}
           </h3>
@@ -112,7 +112,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           </div>
           <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: 20, border: "1px solid #1D1D1D", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: rating ? "#FFE7A9" : "rgba(29,29,29,.16)", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(25,22,21,.15)" : "none" }}>Bewertung abgeben</button>
+            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: rating ? "#FFE7A9" : "rgba(29,29,29,.16)", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(29,29,29,.15)" : "none" }}>Bewertung abgeben</button>
             <button onClick={() => setShowModal(false)} style={{ padding: "14px 20px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: K.ink, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           </div>
         </div>

@@ -67,7 +67,7 @@ function FilterPill({ label, value, options, onChange, active }) {
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
           background: "#fff", borderRadius: 20,
-          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: "1px solid #1D1D1D",
+          boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", border: "1px solid #1D1D1D",
           minWidth: 180, maxHeight: 280, overflowY: "auto",
           padding: "6px 0",
         }}>
@@ -77,14 +77,14 @@ function FilterPill({ label, value, options, onChange, active }) {
               onClick={() => { onChange(opt.value); setOpen(false); }}
               style={{
                 display: "block", width: "100%", padding: "9px 16px",
-                background: value === opt.value ? "#F0FAFA" : "transparent",
+                background: value === opt.value ? "#DBF5F0" : "transparent",
                 border: "none", cursor: "pointer", textAlign: "left",
                 fontSize: 13, fontFamily: fonts.body, color: colors.dark,
                 fontWeight: value === opt.value ? 700 : 400,
                 transition: "background .1s",
               }}
               onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
-              onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#F0FAFA" : "transparent"}
+              onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#DBF5F0" : "transparent"}
             >
               {opt.label}
             </button>
@@ -313,7 +313,7 @@ function SearchPageInner() {
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
         {/* Meeko-Design (20.09.2026): weisses Feld mit Ink-Rand wie die Suche im Header, mit KI-Schalter an wird es Rosa */}
         <div className="search-mobile-bar" style={{ background: kiModus ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
-          <Search size={16} style={{ marginLeft: 12, color: "#686E78", flexShrink: 0, alignSelf: "center" }} />
+          <Search size={16} style={{ marginLeft: 12, color: "#5B626C", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
             className="pille-input"
@@ -326,7 +326,7 @@ function SearchPageInner() {
           {draft && (
             <button onClick={() => { setDraft(""); setQuery(""); setPage(1); }} aria-label="Suche leeren"
               style={{ background: "none", border: "none", cursor: "pointer", padding: "0 4px", display: "flex", alignItems: "center" }}>
-              <X size={16} color="#686E78" />
+              <X size={16} color="#5B626C" />
             </button>
           )}
           {/* KI-Schalter (wie im Header, gleicher Speicher) */}
@@ -404,7 +404,7 @@ function SearchPageInner() {
         {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
             Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
         {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#1D1D1D33"}`, borderRadius: 20, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FBEBEA" : "#DBF5F0", border: `1px solid ${kiFehler ? "#C62828" : "#1D1D1D33"}`, borderRadius: 20, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
             <Sparkles size={14} />
             <span style={{ flex: 1 }}>
               {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
@@ -465,7 +465,7 @@ function SearchPageInner() {
               {showPrice && (
                 <div style={{
                   position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 20, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
+                  background: "#fff", borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
                   border: "1px solid #1D1D1D", padding: 16, width: 220,
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
@@ -493,12 +493,12 @@ function SearchPageInner() {
                 display: "inline-flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 20, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
-                border: `1px solid ${verifiedOnly ? "#50804F" : "#191615"}`,
-                background: verifiedOnly ? "#EEF4EC" : "#fff",
-                color: verifiedOnly ? "#50804F" : "#191615",
+                border: `1px solid ${verifiedOnly ? "#50804F" : "#1D1D1D"}`,
+                background: verifiedOnly ? "#DBF5F0" : "#fff",
+                color: verifiedOnly ? "#50804F" : "#1D1D1D",
               }}
             >
-              <BadgeCheck size={15} color={verifiedOnly ? "#50804F" : "#191615"} strokeWidth={2.2} /> Verifiziert
+              <BadgeCheck size={15} color={verifiedOnly ? "#50804F" : "#1D1D1D"} strokeWidth={2.2} /> Verifiziert
             </button>
           </div>
 
@@ -619,7 +619,7 @@ function SearchPageInner() {
           </>
         ) : (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
-            <Search size={32} color="#ccc" style={{ marginBottom: 16 }} />
+            <Search size={32} color="#1D1D1D" style={{ marginBottom: 16 }} />
             <h3 style={{ fontSize: 22, fontFamily: fonts.head, fontWeight: 600, marginBottom: 4, color: colors.dark }}>Nichts gefunden</h3>
             <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>{query.trim() ? "Zu diesem Wortlaut ist nichts inseriert. Die KI kann nach der Bedeutung suchen." : "Andere Suchbegriffe probieren oder die Filter zurücksetzen."}</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>

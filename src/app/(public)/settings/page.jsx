@@ -278,7 +278,7 @@ export default function SettingsPage() {
 
     setSaving(false);
     if (error) {
-      showToast("Fehler beim Speichern ✗");
+      showToast("Speichern fehlgeschlagen. Versuch es nochmal.");
       console.error(error);
     } else {
       setProfile(prev => ({ ...prev, ...fields }));
@@ -319,7 +319,7 @@ export default function SettingsPage() {
       await saveProfile({ shop_banner_url: `${publicUrl}?v=${Date.now()}` });
     } catch (err) {
       console.error(err);
-      showToast("Upload fehlgeschlagen ✗");
+      showToast("Upload fehlgeschlagen. Versuch es nochmal.");
     }
   };
   const handleBannerRemove = async () => {
@@ -346,7 +346,7 @@ export default function SettingsPage() {
       .upload(path, file, { upsert: true });
 
     if (uploadError) {
-      showToast("Upload fehlgeschlagen ✗");
+      showToast("Upload fehlgeschlagen. Versuch es nochmal.");
       console.error(uploadError);
       return;
     }
@@ -429,12 +429,12 @@ export default function SettingsPage() {
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: 16, color: C.dark }}>
-                {form.display_name || profile?.username || "—"}
+                {form.display_name || profile?.username || "–"}
               </div>
               <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>
                 Mitglied seit {profile?.created_at
                   ? new Date(profile.created_at).toLocaleDateString("de-CH", { month: "long", year: "numeric" })
-                  : "—"}
+                  : "–"}
               </div>
               <button
                 onClick={() => router.push(`/user/${profile?.id || user?.id}`)}
@@ -589,7 +589,7 @@ export default function SettingsPage() {
   const VerifyTab = () => (
     <>
       {emailVerified && idVerified && (
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 20, background: "#EEF4EC", border: `1px solid ${K.moss}` }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 20, background: "#DBF5F0", border: `1px solid ${K.moss}` }}>
           <BadgeCheck size={26} color={K.moss} strokeWidth={2.2} />
           <div>
             <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
@@ -608,7 +608,7 @@ export default function SettingsPage() {
           {/* 1. E-Mail */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: emailVerified ? "#EEF4EC" : "#fff",
+            background: emailVerified ? "#DBF5F0" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:emailVerified ? C.green : K.sand, color: emailVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -635,7 +635,7 @@ export default function SettingsPage() {
           {/* 2. Telefon */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: phoneVerified ? "#EEF4EC" : "#fff",
+            background: phoneVerified ? "#DBF5F0" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:phoneVerified ? C.green : K.sand, color: phoneVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -657,7 +657,7 @@ export default function SettingsPage() {
           {/* 3. Postadresse */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: addressVerified ? "#EEF4EC" : "#fff",
+            background: addressVerified ? "#DBF5F0" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:addressVerified ? C.green : K.sand, color: addressVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -679,7 +679,7 @@ export default function SettingsPage() {
           {/* 4. Identität (ID) */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: idVerified ? "#EEF4EC" : profile?.id_document_url ? "#FBF1D2" : "#fff",
+            background: idVerified ? "#DBF5F0" : profile?.id_document_url ? "#FFE7A9" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? "#FFE7A9" : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -859,7 +859,7 @@ export default function SettingsPage() {
                     onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     <span style={{ fontWeight: 600 }}>{r.street}</span>
-                    <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                    <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
                   </div>
                 ))}
               </div>
@@ -952,7 +952,7 @@ export default function SettingsPage() {
                           onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <span style={{ fontWeight: 600 }}>{r.street}</span>
-                          <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                          <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
                         </div>
                       ))}
                     </div>
@@ -1000,7 +1000,7 @@ export default function SettingsPage() {
 
         {/* Inline Add Form */}
         {showAddAddr && editAddrIdx === null ? (
-          <div style={{ padding: 16, borderRadius: 20, border: "1px solid #1D1D1D", background: "#FBF1D2", marginBottom: 10 }}>
+          <div style={{ padding: 16, borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: C.dark }}>Neue Adresse</div>
             <Input label="Bezeichnung" value={newAddr.label} onChange={v => setNewAddr(p => ({ ...p, label: v }))} placeholder="z.B. Geschäft, Büro" />
             <Input label="Firma (optional)" value={newAddr.company} onChange={v => setNewAddr(p => ({ ...p, company: v }))} placeholder="Firma GmbH" />
@@ -1033,7 +1033,7 @@ export default function SettingsPage() {
                       onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <span style={{ fontWeight: 600 }}>{r.street}</span>
-                      <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
+                      <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
                     </div>
                   ))}
                 </div>
@@ -1054,7 +1054,7 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FFE7A9" : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FFE7A9" : "#F3F3FF", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (
@@ -1379,7 +1379,7 @@ export default function SettingsPage() {
         <style>{`
           @media (max-width: 700px) {
             .settings-layout { grid-template-columns: 1fr !important; }
-            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid #E5E8EC; margin-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .settings-layout nav { position: static !important; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid rgba(29,29,29,.16); margin-bottom: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
             .settings-layout nav::-webkit-scrollbar { display: none; }
             /* Sidebar-Buttons sind inline width:100%; als horizontale Tab-Zeile
                muessen sie auf Inhaltsbreite schrumpfen, sonst ist jeder Knopf
@@ -1395,7 +1395,7 @@ export default function SettingsPage() {
             position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)",
             background: K.ink, color: "#fff", padding: "12px 24px",
             borderRadius: 20, fontSize: 14, fontWeight: 600, zIndex: 2000,
-            boxShadow: "0 0 0 3px rgba(244,192,63,.35)",
+            boxShadow: "0 0 0 3px #E3E3FF",
             animation: "toastIn .25s ease",
             display: "flex", alignItems: "center", gap: 8,
           }}>

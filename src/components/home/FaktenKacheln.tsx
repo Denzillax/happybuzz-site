@@ -29,7 +29,7 @@ export function FaktenKacheln() {
       <style>{`
         .fakten-zeile { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; row-gap: 4px; }
         .fakten-punkt:hover { color: #1D1D1D !important; filter: none !important; }
-        .fakten-trenner { width: 3px; height: 3px; border-radius: 50%; background: rgba(25,22,21,.28); flex-shrink: 0; }
+        .fakten-trenner { width: 3px; height: 3px; border-radius: 50%; background: rgba(29,29,29,.28); flex-shrink: 0; }
         @media (max-width: 640px) {
           .fakten-zeile { gap: 10px; }
           .fakten-trenner { display: none; }
@@ -41,7 +41,7 @@ export function FaktenKacheln() {
             {i > 0 && <span className="fakten-trenner" aria-hidden="true" />}
             <Link href={f.href} className="fakten-punkt" style={{
               display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
-              textDecoration: 'none', color: 'rgba(25,22,21,.62)', fontFamily: BODY, fontSize: 12.5, fontWeight: 600,
+              textDecoration: 'none', color: 'rgba(29,29,29,.62)', fontFamily: BODY, fontSize: 12.5, fontWeight: 600,
             }}>
               <Symbol k={f.key} />
               {f.text}

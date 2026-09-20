@@ -105,9 +105,9 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
       )}
 
       {nektar != null && (
-        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 20, background: "#FBF1D2", border: "1px solid #1D1D1D", textDecoration: "none" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#854F0B" }}>
-            <Droplets size={15} color="#854F0B" /> {Number(nektar).toLocaleString("de-CH")} Nektar
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 20, background: "#FFE7A9", border: "1px solid #1D1D1D", textDecoration: "none" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#8A5A00" }}>
+            <Droplets size={15} color="#8A5A00" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#1D1D1D" }}>Einlösen →</span>
         </a>
@@ -128,7 +128,7 @@ export function CommunityImpactCounter({ total = 0, userImpact = 0, firstName = 
     <div style={{
       padding: "24px 28px", borderRadius: radius.lg,
       background: "#fff", color: colors.dark, position: "relative", overflow: "hidden",
-      border: `1.5px solid ${colors.yellow}33`, boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+      border: `1.5px solid ${colors.yellow}33`, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
     }}>
       <div style={{ position: "absolute", top: -20, right: -10, opacity: 0.06 }}>
         <BeeIcon size={120} color={colors.yellow} />

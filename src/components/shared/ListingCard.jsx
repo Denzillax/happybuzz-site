@@ -149,14 +149,14 @@ export function ListingCard(props) {
         <div className="lc-foto" style={{ position: "absolute", inset: 10, borderRadius: 11, border: RAND, overflow: "hidden", background: "#fff" }}>
           {cover
             ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
-            : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#bbb" /></div>
+            : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="rgba(29,29,29,.35)" /></div>
           }
         </div>
 
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
         <div className="lc-oben-l" style={{ position: "absolute", top: 18, left: 18, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
           {TYP_LABEL[listing.listing_type] && <span style={chip()}>{TYP_LABEL[listing.listing_type]}</span>}
-          {hasFeatured && <span style={{ ...chip("#E8A820", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
+          {hasFeatured && <span style={{ ...chip("#8A5A00", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
         </div>
@@ -200,8 +200,8 @@ export function ListingCard(props) {
           {(endetBald || istHot) && (<>
             {endetBald && <span style={chip("#C62828", "#fff")}>Endet bald</span>}
             {istHot && (
-              <span style={{ ...chip("#E8590C", "#fff"), display: "inline-flex", alignItems: "center", gap: 3 }}>
-                <Flame size={10} fill="#fff" /> Hot
+              <span style={{ ...chip("#FFE3FB", INK), display: "inline-flex", alignItems: "center", gap: 3 }}>
+                <Flame size={11} color="#C2255C" fill="#C2255C" /> Hot
               </span>
             )}
           </>)}
@@ -247,7 +247,7 @@ export function ListingCard(props) {
               {gesenkt ? (
                 <>
                   <span style={{ fontSize: 12, color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>{chf(gesenkt.alt)}</span>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: "#2E7D32", background: "#E8F5E9", padding: "1px 7px", borderRadius: 999 }}>-{gesenkt.prozent} %</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: "#50804F", background: "#DBF5F0", padding: "1px 7px", borderRadius: 999 }}>-{gesenkt.prozent} %</span>
                 </>
               ) : (
                 <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>

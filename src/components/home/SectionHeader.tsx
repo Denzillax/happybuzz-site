@@ -43,7 +43,7 @@ export function SectionHeader({
       {subtitle && (
         <p style={{
           fontFamily: "'Instrument Sans', 'Manrope', system-ui, sans-serif", fontSize: 13.5,
-          color: 'rgba(25,22,21,0.55)', margin: '4px 0 0',
+          color: 'rgba(29,29,29,0.55)', margin: '4px 0 0',
         }}>{subtitle}</p>
       )}
     </div>

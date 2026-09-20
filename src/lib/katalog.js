@@ -3,7 +3,7 @@
 // keine Schlagschatten, Hauptknopf dunkel. Werte unten sind umgestellt, die Namen (sand, honey) sind geblieben.
 // Frueherer Katalog-Look (eckig, Ink-Rahmen, Space Mono, Versatzschatten)
 // ist abgeloest. Vokabular:
-//   · Flaechen weiss, Panels #F5F6F8, Karten mit Hairline #E5E8EC
+//   · Flaechen weiss, Panels #F3F3FF, Karten mit Hairline rgba(29,29,29,.16)
 //   · Ecken weich (radius 10), Schatten weich und sparsam
 //   · Labels: Manrope, Grossbuchstaben, dezentes Letter-Spacing
 //   · Primaerbutton Honey, rund; Fokus: Teal-Rahmen + weicher Ring
@@ -17,7 +17,7 @@ export const K = {
   honey: "#FFE7A9", // Meeko: Butter. Das alte Gelb lebt nur noch in Sternen und Spielen
   petrol: "#1D1D1D",
   moss: "#50804F",
-  muted: "rgba(20,17,13,0.6)",
+  muted: "rgba(29,29,29,0.6)",
 };
 
 export const MONO = "'Instrument Sans', 'Manrope', sans-serif";

@@ -16,9 +16,9 @@ const SWISS_POST_TARIFE = {
 };
 
 const Toggle = ({ value, onChange }) => (
-  <button onClick={onChange} style={{
+  <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!value} onClick={onChange} style={{
     width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-    background: value ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+    background: value ? colors.butter : "#fff", position: "relative", transition: "background .2s",
   }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: value ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
 );
 

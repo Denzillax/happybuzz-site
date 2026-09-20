@@ -165,10 +165,10 @@ const FEEDBACK_TYPES = [
   { value: "bug", label: "Bug", icon: Bug, color: "#c62828" },
   { value: "feedback", label: "Feedback", icon: MessageCircle, color: "#1D1D1D" },
   { value: "idea", label: "Idee", icon: Lightbulb, color: "#50804F" },
-  { value: "frage", label: "Frage", icon: HelpCircle, color: "#94B9C9" },
+  { value: "frage", label: "Frage", icon: HelpCircle, color: "#1D1D1D" },
 ];
 
-const STATUS_COLORS = { 0: "#bbb", 1: "#50804F", 2: "#F4A100", 3: "#c62828" };
+const STATUS_COLORS = { 0: "#5B626C", 1: "#50804F", 2: "#8A5A00", 3: "#c62828" };
 const STATUS_ICONS = { 0: Circle, 1: CheckCircle, 2: AlertTriangle, 3: AlertTriangle };
 const STATUS_LABELS = { 0: "Nicht getestet", 1: "OK", 2: "Teilweise", 3: "Kaputt" };
 
@@ -329,7 +329,7 @@ export default function BetaFeedback() {
       position: "fixed", bottom: 96, right: 14, zIndex: 9990,
       width: "min(380px, calc(100vw / var(--bd-zoom, 1) - 28px))", maxHeight: "75vh", borderRadius: 20, overflow: "hidden",
       background: "#fff", border: `1px solid ${colors.border}`,
-      boxShadow: "0 8px 32px rgba(0,0,0,.18)", fontFamily: fonts.body,
+      boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", fontFamily: fonts.body,
       display: "flex", flexDirection: "column",
     }}>
       {/* Header */}
@@ -370,7 +370,7 @@ export default function BetaFeedback() {
         {sent ? (
           <div style={{ textAlign: "center", padding: "30px 0" }}>
             <CheckCircle size={36} color="#50804F" style={{ marginBottom: 8 }} />
-            <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>Danke!</p>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>Danke.</p>
             <p style={{ fontSize: 12, color: colors.muted }}>Gespeichert.</p>
           </div>
         ) : tab === "checklist" ? (

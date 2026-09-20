@@ -123,9 +123,9 @@ export function fmtDateTime(dateStr) {
 
 // Formeller Name für Rechnungen (first_name + last_name, Fallback display_name)
 export function fullName(profile) {
-  if (!profile) return "—";
+  if (!profile) return "–";
   const fn = [profile.first_name, profile.last_name].filter(Boolean).join(" ");
-  return fn || profile.display_name || "—";
+  return fn || profile.display_name || "–";
 }
 
 // ─── Zahlungsarten ───────────────────────────────────────────

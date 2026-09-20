@@ -12,7 +12,7 @@ const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";
-const MUTED = "rgba(20,17,13,0.6)";
+const MUTED = "rgba(29,29,29,0.6)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -20,13 +20,13 @@ const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const PROJECTS = [
   { icon: TreePine, title: "Waldschutz Schweiz", desc: "Aufforstung und Schutz einheimischer Wälder in den Voralpen. Über 2'000 Bäume gepflanzt.", status: "Aktiv", color: MOSS },
   { icon: Droplets, title: "Gewässerschutz Mittelland", desc: "Renaturierung von Bächen und Feuchtgebieten im Schweizer Mittelland.", status: "Geplant", color: PETROL },
-  { icon: Bird, title: "Biodiversität Alpenraum", desc: "Schutz bedrohter Tier- und Pflanzenarten in den Schweizer Alpen.", status: "Geplant", color: "#C2410C" },
+  { icon: Bird, title: "Biodiversität Alpenraum", desc: "Schutz bedrohter Tier- und Pflanzenarten in den Schweizer Alpen.", status: "Geplant", color: "#8A5A00" },
 ];
 
 const FUNNEL = [
   { icon: Flower2, color: MOSS, title: "Blüten", desc: "Jede Transaktion (Kauf und Verkauf) bringt Blüten. Dein Naturschutz-Beitrag in Punkten." },
   { icon: null, color: "#1D1D1D", title: "Pollen", desc: "100 Blüten = 1 Pollen. Plus Pollen fürs Mitmachen. Pollen heben dein Bee-Level." },
-  { icon: Droplets, color: "#A66700", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
+  { icon: Droplets, color: "#8A5A00", title: "Nektar", desc: "Level-Ups und Meilensteine schenken Nektar. Damit holst du dir Boosts und Belohnungen." },
 ];
 
 const FLOW = [
@@ -80,7 +80,7 @@ export default function ImpactPage() {
       <div style={{ maxWidth: 940, margin: "0 auto", padding: "0 24px 88px" }}>
 
         {/* ── Ledger Counter ── */}
-        <div style={{ display: "flex", border: "1px solid #1D1D1D", borderRadius: 20, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap", boxShadow: "0 16px 38px rgba(20,17,13,.12)" }}>
+        <div style={{ display: "flex", border: "1px solid #1D1D1D", borderRadius: 20, overflow: "hidden", background: "#fff", margin: "-44px 0 48px", position: "relative", zIndex: 1, flexWrap: "wrap" }}>
           {ledger.map((s, i) => (
             <div key={i} style={{ flex: "1 1 160px", padding: "20px 16px", borderLeft: i ? `1px solid ${INK}1a` : "none", display: "flex", flexDirection: "column", gap: 7 }}>
               <span style={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: ".1em", textTransform: "uppercase", color: MUTED }}>{s.label}</span>

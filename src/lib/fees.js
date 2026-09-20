@@ -104,28 +104,28 @@ export async function getInvoicesForSeller(sellerId) {
 
 // ─── Status-Konfiguration ────────────────────────────────────
 export const FEE_STATUS = {
-  open:            { color: "#CD3800", bg: "#FFF3E0", label: "Offen" },
-  pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" },
-  paid:            { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" },
-  overdue:         { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" },
+  open:            { color: "#8A5A00", bg: "#FFE7A9", label: "Offen" },
+  pending_payment: { color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" },
+  paid:            { color: "#50804F", bg: "#DBF5F0", label: "Bezahlt" },
+  overdue:         { color: "#c62828", bg: "#FBEBEA", label: "Überfällig" },
 };
 
 export const LISTING_STATUS = {
-  active:        { color: "#2E7D32", bg: "#E8F5E9", label: "Aktiv" },
-  draft:         { color: "#5B626C",    bg: "#F5F6F8", label: "Entwurf" },
-  paused:        { color: "#CD3800", bg: "#FFF3E0", label: "Pausiert" },
-  sold:          { color: "#1565C0", bg: "#E3F2FD", label: "Verkauft" },
-  rented:        { color: "#1565C0", bg: "#E3F2FD", label: "Vermietet" },
-  inactive:      { color: "#5B626C",    bg: "#F5F6F8", label: "Inaktiv" },
-  pending_pause: { color: "#c62828", bg: "#FFEBEE", label: "Wird pausiert" },
+  active:        { color: "#50804F", bg: "#DBF5F0", label: "Aktiv" },
+  draft:         { color: "#5B626C",    bg: "#F3F3FF", label: "Entwurf" },
+  paused:        { color: "#8A5A00", bg: "#FFE7A9", label: "Pausiert" },
+  sold:          { color: "#1D1D1D", bg: "#E3F2FF", label: "Verkauft" },
+  rented:        { color: "#1D1D1D", bg: "#E3F2FF", label: "Vermietet" },
+  inactive:      { color: "#5B626C",    bg: "#F3F3FF", label: "Inaktiv" },
+  pending_pause: { color: "#c62828", bg: "#FBEBEA", label: "Wird pausiert" },
 };
 
 export const ORDER_STATUS = {
-  confirmed:  { color: "#2E7D32", bg: "#E8F5E9", label: "Bestätigt" },
-  cancelled:  { color: "#c62828", bg: "#FFEBEE", label: "Storniert" },
-  completed:  { color: "#1565C0", bg: "#E3F2FD", label: "Abgeschlossen" },
-  disputed:   { color: "#CD3800", bg: "#FFF3E0", label: "Streitfall" },
-  refunded:   { color: "#5B626C",    bg: "#F5F6F8", label: "Erstattet" },
+  confirmed:  { color: "#50804F", bg: "#DBF5F0", label: "Bestätigt" },
+  cancelled:  { color: "#c62828", bg: "#FBEBEA", label: "Storniert" },
+  completed:  { color: "#1D1D1D", bg: "#E3F2FF", label: "Abgeschlossen" },
+  disputed:   { color: "#8A5A00", bg: "#FFE7A9", label: "Streitfall" },
+  refunded:   { color: "#5B626C",    bg: "#F3F3FF", label: "Erstattet" },
 };
 
 // Zahlungsinfos für QR-Rechnungen kommen aus der Tabelle company_settings

@@ -8,7 +8,7 @@ const SAND = "#FFE3FB";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";
-const MUTED = "rgba(20,17,13,0.6)";
+const MUTED = "rgba(29,29,29,0.6)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -80,7 +80,7 @@ export default function ContactPage() {
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
                   width: "100%", padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D",
                   background: ready ? INK : "#F3F3FF",
-                  color: ready ? PAPER : "#686E78", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
+                  color: ready ? PAPER : "#5B626C", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 }}>
                   <Send size={16} /> Nachricht senden

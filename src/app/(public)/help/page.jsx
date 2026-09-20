@@ -39,7 +39,7 @@ const CATEGORIES = [
     icon: ShoppingBag,
     title: "Kaufen",
     desc: "Suchen, bieten, kaufen & bezahlen",
-    color: "#94B9C9",
+    color: "#1D1D1D",
     faqs: [
       { q: "Wie kaufe ich einen Artikel?", a: "Finde einen Artikel über die Suche oder Kategorien. Bei Festpreis-Inseraten klickst du auf «Sofort kaufen». Bei Auktionen gibst du ein Gebot ab." },
       { q: "Wie bezahle ich?", a: "Nach dem Kauf erhältst du eine QR-Rechnung mit den Zahlungsinformationen des Verkäufers. Du überweist den Betrag per Banküberweisung oder TWINT." },
@@ -69,7 +69,7 @@ const CATEGORIES = [
     icon: Home,
     title: "Miete, Service & Gratis",
     desc: "Vermieten, Dienstleistungen anbieten oder gratis abgeben",
-    color: "#8B6DB0",
+    color: "#1D1D1D",
     faqs: [
       { q: "Wie vermiete ich einen Artikel?", a: "Beim Inserieren wählst du «Miete» als Inserattyp. Setze den Mietpreis pro Stunde, Tag, Woche oder Monat und optional eine Kaution." },
       { q: "Kann ich Neuware mit Grössen und Farben verkaufen?", a: "Ja. Wähle beim Inserieren Festpreis und Zustand «Neu»: dann kannst du eine Stückzahl setzen und markieren, welche Werte (z.B. Grössen S/M/L) der Käufer beim Kauf wählen kann. Jeder Kauf zieht ein Stück ab, das Inserat bleibt aktiv, bis alles verkauft ist." },
@@ -95,7 +95,7 @@ const CATEGORIES = [
     icon: Star,
     title: "Bewertungen",
     desc: "Bewertungen abgeben & verstehen",
-    color: "#F4A100",
+    color: "#8A5A00",
     faqs: [
       { q: "Wie bewerte ich einen Kauf?", a: "Nach Abschluss einer Bestellung (Empfang bestätigt) kannst du den Verkäufer mit 1-5 Sternen bewerten und einen Kommentar hinterlassen." },
       { q: "Kann ich eine Bewertung ändern?", a: "Eine abgeschickte Bewertung lässt sich nicht mehr ändern. Wenn etwas daran falsch ist, schreib uns." },
@@ -107,7 +107,7 @@ const CATEGORIES = [
     icon: CreditCard,
     title: "Gebühren & Zahlung",
     desc: "Bee-Rate, Rechnungen, IBAN & Auszahlung",
-    color: "#94B9C9",
+    color: "#1D1D1D",
     faqs: [
       { q: "Welche Gebühren fallen an?", a: "Inserieren kostet nichts. Wenn du verkaufst, fällt die Bee-Rate an, 3 bis 10 Prozent nach deiner Wahl. 20 Prozent davon gehen an den Bienenschutz." },
       { q: "Wie erhalte ich meine Gebührenrechnung?", a: "Unter «Gebühren» findest du alle offenen und bezahlten Gebühren. Monatlich wird eine Sammelrechnung erstellt mit QR-Zahlschein." },
@@ -197,7 +197,7 @@ export default function HelpPage() {
           <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 8px", letterSpacing: "-0.02em", lineHeight: 1.05 }}>
             Wie können wir helfen?
           </h1>
-          <p style={{ fontSize: 15, color: "rgba(20,17,13,0.6)", margin: "0 0 24px" }}>
+          <p style={{ fontSize: 15, color: "rgba(29,29,29,0.6)", margin: "0 0 24px" }}>
             Antworten zu Konto, Kaufen, Verkaufen und Gebühren.
           </p>
 
@@ -266,10 +266,10 @@ export default function HelpPage() {
                     style={{
                       padding: "20px", borderRadius: 20, cursor: "pointer",
                       background: "#fff", border: "1px solid #1D1D1D",
-                      boxShadow: isOpen ? `0 10px 24px rgba(20,17,13,.12)` : "none",
+                      boxShadow: isOpen ? `0 10px 24px rgba(29,29,29,.12)` : "none",
                       transition: "all .2s",
                     }}
-                    onMouseEnter={e => { if (!isOpen) e.currentTarget.style.boxShadow = "0 8px 20px rgba(20,17,13,.1)"; }}
+                    onMouseEnter={e => { if (!isOpen) e.currentTarget.style.boxShadow = "0 8px 20px rgba(29,29,29,.1)"; }}
                     onMouseLeave={e => { if (!isOpen) e.currentTarget.style.boxShadow = "none"; }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -324,7 +324,7 @@ export default function HelpPage() {
         }}>
           <Mail size={26} color={PETROL} style={{ marginBottom: 8 }} />
           <h3 style={{ fontSize: 16, fontWeight: 700, fontFamily: HEAD, color: INK, margin: "0 0 6px" }}>Nicht gefunden, was du suchst?</h3>
-          <p style={{ fontSize: 13.5, color: "rgba(20,17,13,0.6)", margin: "0 0 18px" }}>
+          <p style={{ fontSize: 13.5, color: "rgba(29,29,29,0.6)", margin: "0 0 18px" }}>
             Schreib uns, wir antworten meist innert 24 Stunden.
           </p>
           <a href="mailto:support@beedaro.ch" className="bd-btn" style={{

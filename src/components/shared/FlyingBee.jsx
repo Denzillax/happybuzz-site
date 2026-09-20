@@ -283,7 +283,7 @@ export default function FlyingBee() {
             position: "fixed", left: bubble.x, top: bubble.y,
             transform: "translate(-50%, -100%)", zIndex: 9001,
             background: "#fff", border: "1px solid #E5E8EC",
-            boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: "9px 13px",
+            boxShadow: "0 2px 8px rgba(29,29,29,.15)", padding: "9px 13px",
             fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 13, fontWeight: 600,
             color: "#191615", maxWidth: 250, pointerEvents: "none",
           }}

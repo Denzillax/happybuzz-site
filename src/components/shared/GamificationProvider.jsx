@@ -24,7 +24,7 @@ function showXpToast(row, uid) {
   // Achievement-Vergabe (reason = "achievement:<key>")
   if (typeof row.reason === "string" && row.reason.startsWith("achievement:")) {
     const key = row.reason.slice("achievement:".length);
-    toast("Achievement freigeschaltet", { description: ACHIEVEMENTS[key]?.name || key, icon: <Trophy size={16} color="#D9A005" />, duration: 4500 });
+    toast("Achievement freigeschaltet", { description: ACHIEVEMENTS[key]?.name || key, icon: <Trophy size={16} color="#8A5A00" />, duration: 4500 });
     return;
   }
   // Level-up-Erkennung (xp_total vor/nach dieser Vergabe)
@@ -41,14 +41,14 @@ function showXpToast(row, uid) {
       toast.custom(() => (
         <div style={{
           display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", borderRadius: 20,
-          background: "#fff", border: `1.5px solid ${newLevel.color}`, boxShadow: "0 10px 34px rgba(0,0,0,.16)", minWidth: 280,
+          background: "#fff", border: `1.5px solid ${newLevel.color}`, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", minWidth: 280,
         }}>
           <div style={{ width: 42, height: 42, borderRadius: "50%", background: `${newLevel.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <BeeIcon size={23} color={newLevel.color} />
           </div>
           <div>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", color: newLevel.color }}>Level aufgestiegen</p>
-            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#191615", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>{newLevel.name}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>{newLevel.name}</p>
             {newLevel.perk && <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Neu: {newLevel.perk}</p>}
           </div>
         </div>
@@ -63,7 +63,7 @@ function showNektarToast(row) {
   const positive = (row.amount || 0) >= 0;
   toast(`${positive ? "+" : "−"}${Math.abs(row.amount)} Nektar`, {
     description: positive ? nektarReasonLabel(row.reason) : "Belohnung eingelöst",
-    icon: <Droplets size={16} color="#C8860A" />,
+    icon: <Droplets size={16} color="#8A5A00" />,
     duration: 2800,
   });
 }

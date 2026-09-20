@@ -90,7 +90,7 @@ const TESTS = [
       { id: "lc_type_festpreis", label: "Festpreis: Preis eingeben" },
       { id: "lc_type_auktion", label: "Auktion: Startpreis + Dauer wählen" },
       { id: "lc_auktion_vergleich", label: "Auktion: Hinweisbox mit Gebührenvergleich (Ricardo 8-12% Basissatz) erscheint nur beim Typ Auktion, nicht bei Festpreis/Miete/Service/Gratis" },
-      { id: "lc_import_helfer_setup", label: "Import-Helfer: /import-helfer zeigt 3 Schritte; Button '🐝 BEEDARO Import' lässt sich in die Lesezeichenleiste ziehen (Klick tut nichts)" },
+      { id: "lc_import_helfer_setup", label: "Import-Helfer: /import-helfer zeigt 3 Schritte; Button 'BEEDARO Import' lässt sich in die Lesezeichenleiste ziehen (Klick tut nichts)" },
       { id: "lc_import_helfer_run", label: "Import-Helfer: Klick auf dem eigenen Inserat (Ricardo/Tutti/eBay/FB) öffnet BEEDARO mit gefülltem Titel, Beschreibung, Preis und den EIGENEN Bildern" },
       { id: "lc_import_hash", label: "Import: nach der Übernahme verschwindet #import aus der URL; ein Reload importiert NICHT erneut" },
       { id: "lc_import_guard", label: "Import-Hinweis nur beim Erstellen sichtbar, nicht beim Bearbeiten eines bestehenden Inserats" },
@@ -557,9 +557,9 @@ const TESTS = [
 ];
 
 const STATUS_ICON = {
-  0: { icon: Circle, color: "#aaa", label: "Nicht getestet" },
+  0: { icon: Circle, color: "#5B626C", label: "Nicht getestet" },
   1: { icon: CheckCircle, color: "#50804F", label: "OK" },
-  2: { icon: AlertTriangle, color: "#F4A100", label: "Teilweise" },
+  2: { icon: AlertTriangle, color: "#8A5A00", label: "Teilweise" },
   3: { icon: AlertTriangle, color: "#c62828", label: "Kaputt" },
 };
 
@@ -728,13 +728,13 @@ export default function BetaTestPage() {
               meldet sich persönlich.{" "}
               <a href="/bewerben" style={{ color: "#1D1D1D", fontWeight: 700, textDecoration: "none" }}>Mitarbeiter werden</a>
             </p>
-            <p style={{ margin: 0, paddingTop: 12, borderTop: "1px solid rgba(20,17,13,0.12)" }}>
+            <p style={{ margin: 0, paddingTop: 12, borderTop: "1px solid rgba(29,29,29,0.12)" }}>
               Hier entsteht gerade etwas, das es in der Schweiz so noch nicht
               gibt. Kein Konzern, kein Investorengeld, nur eine Idee und Leute
               wie du. Jedes Inserat, jede Meldung, jeder Kollege zählt.{" "}
               <strong style={{ background: "#FFE7A9", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
             </p>
-            <p style={{ margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(20,17,13,0.55)" }}>
+            <p style={{ margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(29,29,29,0.55)" }}>
               PS: Verchauf din Scheiss. ;)
             </p>
           </div>
@@ -766,12 +766,12 @@ export default function BetaTestPage() {
                     Zählt Meldungen, die zu einem Fix oder Feature geführt haben.
                   </p>
                   {topMelder.slice(0, 5).map((r, i) => (
-                    <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(topMelder.length, 5) - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                    <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(topMelder.length, 5) - 1 ? "1px solid rgba(29,29,29,.08)" : "none" }}>
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
                         background: i === 0 ? colors.butter : i === 1 ? "#F3F3FF" : "transparent",
-                        border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
+                        border: `1px solid ${i <= 1 ? colors.dark : "rgba(29,29,29,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>
                       <span style={{ fontSize: 13.5, fontWeight: i === 0 ? 700 : 600, color: colors.dark, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.melder}</span>
@@ -792,7 +792,7 @@ export default function BetaTestPage() {
                       Zeilen exakt untereinander, der Text beginnt auf einer Linie */}
                   <div>
                     {tag.punkte.map((p, i) => (
-                      <div key={i} style={{ display: "grid", gridTemplateColumns: "40px 92px 1fr", alignItems: "start", columnGap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
+                      <div key={i} style={{ display: "grid", gridTemplateColumns: "40px 92px 1fr", alignItems: "start", columnGap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(29,29,29,.08)" : "none" }}>
                         <span style={{
                           marginTop: 2, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 0",
@@ -805,7 +805,7 @@ export default function BetaTestPage() {
                         <span style={{
                           marginTop: 2, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".04em", padding: "2px 3px",
-                          border: "1px solid rgba(20,17,13,.35)", color: colors.muted, textTransform: "uppercase",
+                          border: "1px solid rgba(29,29,29,.35)", color: colors.muted, textTransform: "uppercase",
                           textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         }}>
                           {p.bereich}
@@ -844,7 +844,7 @@ export default function BetaTestPage() {
           </div>
           <div style={{ display: "flex", gap: 14, marginTop: 8, fontSize: 12 }}>
             <span style={{ color: "#50804F", fontWeight: 600 }}>{okCount} OK</span>
-            <span style={{ color: "#F4A100", fontWeight: 600 }}>{partialCount} teilweise</span>
+            <span style={{ color: "#8A5A00", fontWeight: 600 }}>{partialCount} teilweise</span>
             <span style={{ color: "#c62828", fontWeight: 600 }}>{brokenCount} kaputt</span>
           </div>
         </div>

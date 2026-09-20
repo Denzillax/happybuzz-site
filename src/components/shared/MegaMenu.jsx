@@ -75,7 +75,7 @@ export function MegaMenu({ open, onClose }) {
       position: "absolute", top: "100%", left: 0, zIndex: 1000,
       background: colors.surface, borderRadius: "0 0 12px 12px",
       border: "1px solid #1D1D1D", borderTop: "none",
-      boxShadow: "0 16px 40px rgba(20,17,13,.16)",
+      boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
       display: "flex", minHeight: 300,
     }}>
       {/* Column 1: Main Categories */}

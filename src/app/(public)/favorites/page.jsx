@@ -103,10 +103,10 @@ export default function FavoritesPage() {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-text/5 rounded-[14px] w-48" />
+          <div className="h-8 bg-bg-alt rounded-[14px] w-48" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-text/5 rounded-[14px] h-72" />
+              <div key={i} className="bg-bg-alt rounded-[14px] h-72" />
             ))}
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function FavoritesPage() {
       {/* Search */}
       {(favorites.length > 0 || sellers.length > 0) && (
         <div className="relative mb-6">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text/40" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-lt" />
           <input
             type="text"
             value={search}
@@ -174,7 +174,7 @@ export default function FavoritesPage() {
                     Nicht mehr verfügbar ({inactiveFavs.length})
                     <ChevronDown size={14} className={`transition-transform ${showInactive ? 'rotate-180' : ''}`} />
                   </button>
-                  <p className="text-text/40 text-xs mb-4">Verkauft oder beendet. Mit dem Herz kannst du sie aus den Favoriten entfernen.</p>
+                  <p className="text-text-lt text-xs mb-4">Verkauft oder beendet. Mit dem Herz kannst du sie aus den Favoriten entfernen.</p>
                   {showInactive && (
                     <div className="listing-grid">
                       {inactiveFavs.map(listing => (
@@ -191,7 +191,7 @@ export default function FavoritesPage() {
                 <span style={{ display: "inline-flex", color: "#C2255C" }}><BLogo herz size={34} title="" /></span>
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Favoriten'}</h2>
-              <p className="text-text/50 mb-8 max-w-md mx-auto">
+              <p className="text-text-lt mb-8 max-w-md mx-auto">
                 {q ? 'Versuch einen anderen Suchbegriff.' : 'Stöbere im Marktplatz und speichere Inserate die dich interessieren.'}
               </p>
               {!q && (
@@ -220,10 +220,10 @@ export default function FavoritesPage() {
                     </div>
                     <div className="min-w-0">
                       <p className="font-bold text-text text-sm truncate">{s.seller?.display_name || 'User'}</p>
-                      {s.seller?.city && <p className="text-text/40 text-xs flex items-center gap-1 mt-1"><MapPin size={11} /> {s.seller.city}</p>}
+                      {s.seller?.city && <p className="text-text-lt text-xs flex items-center gap-1 mt-1"><MapPin size={11} /> {s.seller.city}</p>}
                     </div>
                   </Link>
-                  <button onClick={() => handleRemoveSeller(s.seller_id)} className="p-2 rounded-[14px] hover:bg-red-50 transition-colors text-text/30 hover:text-red-500 flex-shrink-0">
+                  <button onClick={() => handleRemoveSeller(s.seller_id)} className="p-2 rounded-[14px] hover:bg-red-soft transition-colors text-text-lt hover:text-red flex-shrink-0">
                     <Trash2 size={16} />
                   </button>
                 </div>
@@ -235,7 +235,7 @@ export default function FavoritesPage() {
                 <User size={36} className="text-[#1D1D1D]" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Verkäufer gemerkt'}</h2>
-              <p className="text-text/50 mb-8 max-w-md mx-auto">
+              <p className="text-text-lt mb-8 max-w-md mx-auto">
                 {q ? 'Versuch einen anderen Suchbegriff.' : 'Merke dir Verkäufer auf deren Profilseite oder auf Inseraten.'}
               </p>
             </div>
@@ -258,13 +258,13 @@ export default function FavoritesPage() {
                     <Search size={16} className="text-[#1D1D1D] shrink-0" />
                     <Link href={href} className="flex-1 min-w-0 no-underline">
                       <div className="text-sm font-semibold text-[#1D1D1D] truncate">{label}</div>
-                      <div className="text-xs text-text/50">
+                      <div className="text-xs text-text-lt">
                         {s.query && s.category?.name ? `in ${s.category.name}` : s.query ? 'Alle Kategorien' : 'Ganze Kategorie'}
                         {' · Wir melden dir neue Treffer'}
                       </div>
                     </Link>
                     <button onClick={async () => { try { await deleteSavedSearch(s.id); setSearches(prev => prev.filter(x => x.id !== s.id)) } catch (e) { console.error(e) } }}
-                      className="p-2 text-text/40 hover:text-red-600 bg-transparent border-none cursor-pointer" aria-label="Suche löschen">
+                      className="p-2 text-text-lt hover:text-red bg-transparent border-none cursor-pointer" aria-label="Suche löschen">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -273,9 +273,9 @@ export default function FavoritesPage() {
             </div>
           ) : (
             <div className="text-center py-16">
-              <Search size={40} className="mx-auto mb-4 text-text/20" />
+              <Search size={40} className="mx-auto mb-4 text-text/40" />
               <h3 className="text-lg font-bold text-[#1D1D1D] mb-2">Keine gespeicherten Suchen</h3>
-              <p className="text-text/50 mb-8 max-w-md mx-auto">
+              <p className="text-text-lt mb-8 max-w-md mx-auto">
                 Speichere eine Suche auf der Suchseite ("Suche speichern"), dann melden wir dir neue Treffer per Glocke, Mail oder Push.
               </p>
             </div>

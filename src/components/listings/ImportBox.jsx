@@ -57,8 +57,8 @@ export default function ImportBox({ onImport }) {
 
   if (done) {
     return (
-      <div style={{ background: "#EEF4EC", border: "1px solid #50804F", borderRadius: 20, padding: "12px 18px", marginBottom: 20 }}>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#3F6B3E", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 7 }}>
+      <div style={{ background: "#DBF5F0", border: "1px solid #50804F", borderRadius: 20, padding: "12px 18px", marginBottom: 20 }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#50804F", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 7 }}>
           <CheckCircle2 size={15} />
           Übernommen: {done.fields.join(", ")}{done.imgCount ? `, ${done.imgCount} Bild${done.imgCount > 1 ? "er" : ""}` : ""}. Bitte prüfen und ergänzen.
         </p>

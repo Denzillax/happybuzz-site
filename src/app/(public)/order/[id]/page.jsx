@@ -338,9 +338,9 @@ export default function OrderDetailPage() {
             <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "0 0 14px", flexWrap: "wrap" }}>
               {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#50804F", background: "#50804F14", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.pollen} Pollen</span>}
-              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#A66700", background: "#E8A82014", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.nektar} Nektar</span>}
+              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#8A5A00", background: "#FFE7A9", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.nektar} Nektar</span>}
             </div>
-            <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#A66700" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
+            <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#8A5A00" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
             <div style={{ display: "flex", gap: 10 }}>
               <Link href="/hive" onClick={() => setSalePopup(null)} style={{ flex: 1, padding: "12px 0", borderRadius: 20, background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, textDecoration: "none" }}>Belohnungen einlösen</Link>
               <button onClick={() => setSalePopup(null)} style={{ padding: "12px 18px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Schliessen</button>
@@ -392,11 +392,11 @@ export default function OrderDetailPage() {
           <div>
             {/* Status-Banner */}
             {isFinished && (
-              <div style={{ background: "#E8F5E9", borderRadius: 20, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ background: "#DBF5F0", borderRadius: 20, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <CheckCircle size={20} color="#50804F" />
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: "#50804F" }}>{finishedLabel}</div>
-                  <div style={{ fontSize: 13, color: "#50804F" }}>Fertig!</div>
+                  <div style={{ fontSize: 13, color: "#50804F" }}>Fertig.</div>
                 </div>
               </div>
             )}
@@ -416,7 +416,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Kunde wartet */}
                 {isService && isBuyer && p.status === "confirmed" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter erledigt den Auftrag und schickt dir danach die Rechnung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Termin bestaetigt</p><p style={{ fontSize: 13, color: "#5B626C", margin: 0 }}>Der Anbieter erledigt den Auftrag und schickt dir danach die Rechnung.</p></div>
                 )}
                 {/* SERVICE: Rechnung erhalten — mit Positionen */}
                 {isService && isBuyer && p.status === "payment_pending" && (
@@ -424,11 +424,11 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Buyer hat bezahlt, wartet */}
                 {isService && isBuyer && p.status === "payment_marked" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#5B626C", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
                 )}
                 {/* SERVICE: Anbieter wartet auf Zahlung */}
                 {isService && isSeller && p.status === "payment_pending" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#686E78", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#5B626C", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
@@ -443,7 +443,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {!isService && isBuyer && (p.status === "payment_pending" || p.status === "payment_marked") && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#F4A100" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer prüft deine Zahlung.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#8A5A00" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer prüft deine Zahlung.</p></div>
                 )}
                 {!isService && isSeller && (p.status === "confirmed" || p.status === "pending_payment" || p.status === "payment_pending" || p.status === "payment_marked") && (
                   <div>
@@ -482,7 +482,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {!isService && isBuyer && p.status === "paid" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#94B9C9" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Bezahlt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer bereitet den Versand vor.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Bezahlt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer bereitet den Versand vor.</p></div>
                 )}
                 {/* SERVICE: Zahlung bestätigt -> Auftrag abschliessen */}
                 {isService && isSeller && p.status === "paid" && (
@@ -508,7 +508,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {isSeller && (p.status === "shipped" || p.status === "picked_up") && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#94B9C9" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>{p.status === "shipped" ? "Versendet" : "Übergeben"}</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Warte auf Empfangsbestätigung {isRental ? "des Mieters" : "des Käufers"}.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>{p.status === "shipped" ? "Versendet" : "Übergeben"}</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Warte auf Empfangsbestätigung {isRental ? "des Mieters" : "des Käufers"}.</p></div>
                 )}
 
                 {/* ── RENTAL: Mietzeit läuft ──────────────────── */}
@@ -523,7 +523,7 @@ export default function OrderDetailPage() {
                 )}
                 {isRental && isSeller && p.status === "delivered" && (
                   <div style={{ textAlign: "center", padding: 10 }}>
-                    <Package size={28} color="#94B9C9" style={{ marginBottom: 8 }} />
+                    <Package size={28} color="#1D1D1D" style={{ marginBottom: 8 }} />
                     <p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 10px" }}>Mietzeit läuft</p>
                     {booking && <RentalCountdown startDate={booking.start_date} endDate={booking.end_date} handoverAt={handoverAt} />}
                     <p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Mieter hat den Artikel erhalten.</p>
@@ -580,7 +580,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {isRental && isBuyer && p.status === "return_pending" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#F4A100" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Rückgabe markiert</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Vermieter prüft den Zustand des Artikels.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#8A5A00" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Rückgabe markiert</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Vermieter prüft den Zustand des Artikels.</p></div>
                 )}
 
                 {/* ── RENTAL: Schaden gemeldet ──────────────────── */}
@@ -631,7 +631,7 @@ export default function OrderDetailPage() {
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
                     <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
@@ -650,7 +650,7 @@ export default function OrderDetailPage() {
                           )}
                           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                         </div>
-                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#E8F5E9", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
                       </>
                     )}
                   </div>
@@ -777,7 +777,7 @@ export default function OrderDetailPage() {
                   <div style={{ lineHeight: 1.5 }}>
                     CHF {fmtCHF(depositAmount)}
                     {p.status === "completed" && <><br /><span style={{ fontSize: 12, color: "#50804F", fontWeight: 600 }}>Zurückerstattet</span></>}
-                    {p.status === "returned" && <><br /><span style={{ fontSize: 12, color: "#F4A100", fontWeight: 600 }}>Rückerstattung ausstehend</span></>}
+                    {p.status === "returned" && <><br /><span style={{ fontSize: 12, color: "#8A5A00", fontWeight: 600 }}>Rückerstattung ausstehend</span></>}
                     {p.status === "damage_reported" && <><br /><span style={{ fontSize: 12, color: "#c62828", fontWeight: 600 }}>Schaden gemeldet</span></>}
                   </div>
                 </SidebarSection>

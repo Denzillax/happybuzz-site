@@ -197,7 +197,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
           <div style={{
             position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 50,
             background: "#fff", borderRadius: 20,
-            boxShadow: "0 12px 40px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04)",
+            boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
             padding: 6, overflow: "hidden",
           }}>
             {INVOICE_TEMPLATES.map(t => {

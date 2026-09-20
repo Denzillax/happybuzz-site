@@ -11,7 +11,7 @@ const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const INK = "#1D1D1D";
 const SAND = "#F3F3FF";
 const MOSS = "#50804F";
-const HONIG = "#F4A100";
+const HONIG = "#8A5A00";
 const ROT = "#c62828";
 
 function endeDesTages(d) {

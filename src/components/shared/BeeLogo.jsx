@@ -9,7 +9,7 @@ export default function BeeLogo({ size = 40, title = "BEEDARO", style }) {
   // useId liefert auf Server und Browser dieselbe ID (kein Hydration-Fehler).
   const id = `bee-logo-${useId().replace(/:/g, "")}`;
   return (
-    <svg width={size} height={(size * 200) / 240} viewBox="0 0 240 200" role="img" aria-label={title} style={{ display: "block", color: "#191615", ...style }}>
+    <svg width={size} height={(size * 200) / 240} viewBox="0 0 240 200" role="img" aria-label={title} style={{ display: "block", color: "#1D1D1D", ...style }}>
       <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="240" height="200">
         <rect width="240" height="200" fill="#fff" />
         <circle cx="97" cy="66" r="10.5" fill="#000" />

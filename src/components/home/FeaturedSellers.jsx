@@ -6,7 +6,7 @@ import { getShowcaseSellers } from '@/lib/gamification'
 import { AccountBadge } from '@/components/shared/AccountBadge'
 import { SectionHeader } from './SectionHeader'
 
-const MUTED = '#686E78'
+const MUTED = '#5B626C'
 const YELLOW = '#F4C03F'
 const INK = '#1D1D1D'
 const SAND = '#E3F2FF'
@@ -68,7 +68,7 @@ export function FeaturedSellers() {
                     <Link key={l.id} href={`/listing/${l.id}`} title={l.title} style={{ position: 'relative', aspectRatio: '1 / 1', background: SAND, borderRadius: 20, overflow: 'hidden', textDecoration: 'none', display: 'flex', alignItems: 'flex-end' }}>
                       {l.cover
                         ? <img src={l.cover} alt={l.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                        : <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={20} color="#D5D9DF" /></div>}
+                        : <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={20} color="rgba(29,29,29,.16)" /></div>}
                       {pl && <span style={{ position: 'relative', width: '100%', padding: '12px 6px 5px', fontSize: 11, fontWeight: 800, color: '#fff', background: 'linear-gradient(transparent, rgba(0,0,0,.65))', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pl}</span>}
                     </Link>
                   )})}

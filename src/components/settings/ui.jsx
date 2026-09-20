@@ -20,7 +20,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
       padding: "14px 16px", borderRadius: 20,
-      background: verified ? "#EEF4EC" : pending ? "#FBF1D2" : "#fff",
+      background: verified ? "#DBF5F0" : pending ? "#FFE7A9" : "#fff",
       border: "1px solid #1D1D1D",
     }}>
       <div style={{
@@ -123,7 +123,7 @@ export function Btn({ children, variant = "primary", onClick, style: s, small, d
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: "#FFE7A9", color: K.ink, boxShadow: disabled ? "none" : "0 2px 8px rgba(25,22,21,.15)" },
+    primary:   { background: "#FFE7A9", color: K.ink, boxShadow: disabled ? "none" : "inset 0 -4px 0 rgba(29,29,29,.14)" },
     secondary: { background: "transparent", color: K.ink },
     danger:    { background: "#fff", color: C.red, borderColor: C.red },
     ghost:     { background: "transparent", color: C.muted, border: "none" },
@@ -162,7 +162,7 @@ export function TrustMeter({ level }) {
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Trust Level</div>
-        <div style={{ fontSize: 13, color: "#1D1D1D", fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "—"}</div>
+        <div style={{ fontSize: 13, color: "#1D1D1D", fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "–"}</div>
       </div>
       <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
         {Array.from({ length: segments }).map((_, i) => (

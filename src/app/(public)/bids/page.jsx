@@ -63,19 +63,19 @@ export default function MeinGebotePage() {
         let statusColor = colors.yellow;
 
         if (isSold && isTopBidder) {
-          status = "won"; statusLabel = "Gewonnen"; statusColor = "#2E7D32";
+          status = "won"; statusLabel = "Gewonnen"; statusColor = "#50804F";
         } else if (isSold && !isTopBidder) {
           status = "lost"; statusLabel = "Verloren"; statusColor = colors.muted;
         } else if (isExpired) {
           status = "expired"; statusLabel = "Abgelaufen"; statusColor = colors.muted;
         } else if (isEnded && isTopBidder) {
-          status = "won"; statusLabel = "Gewonnen"; statusColor = "#2E7D32";
+          status = "won"; statusLabel = "Gewonnen"; statusColor = "#50804F";
         } else if (isEnded && !isTopBidder) {
           status = "lost"; statusLabel = "Verloren"; statusColor = colors.muted;
         } else if (isActive && isTopBidder) {
-          status = "leading"; statusLabel = "Du führst"; statusColor = "#2E7D32";
+          status = "leading"; statusLabel = "Du führst"; statusColor = "#50804F";
         } else if (isActive && !isTopBidder) {
-          status = "outbid"; statusLabel = "Überboten"; statusColor = "#E65100";
+          status = "outbid"; statusLabel = "Überboten"; statusColor = "#8A5A00";
         }
 
         // Countdown
@@ -216,9 +216,9 @@ function BidCard({ bid, fmtPrice, ended }) {
             <span style={{
               flexShrink: 0, fontSize: 10, fontWeight: 800, letterSpacing: ".04em",
               padding: "3px 10px", borderRadius: 20,
-              background: bid.status === "won" ? "#E8F5E9"
-                : bid.status === "leading" ? "#E8F5E9"
-                : bid.status === "outbid" ? "#FFF3E0"
+              background: bid.status === "won" ? "#DBF5F0"
+                : bid.status === "leading" ? "#DBF5F0"
+                : bid.status === "outbid" ? "#FFE7A9"
                 : bid.status === "lost" ? colors.cream
                 : bid.status === "expired" ? colors.cream
                 : `${colors.yellow}20`,
@@ -250,7 +250,7 @@ function BidCard({ bid, fmtPrice, ended }) {
             </div>
             <div>
               <span style={{ fontSize: 11, color: colors.muted }}>Aktuell</span>
-              <p style={{ margin: "1px 0 0", fontSize: 15, fontWeight: 700, color: bid.isTopBidder ? "#2E7D32" : "#E65100" }}>
+              <p style={{ margin: "1px 0 0", fontSize: 15, fontWeight: 700, color: bid.isTopBidder ? "#50804F" : "#8A5A00" }}>
                 CHF {fmtPrice(bid.topBidAmount)}
               </p>
             </div>

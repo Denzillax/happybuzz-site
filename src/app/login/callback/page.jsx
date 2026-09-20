@@ -51,9 +51,9 @@ export default function AuthCallback() {
         <div style={{
           width: 48, height: 48, borderRadius: "50%", background: "#FFE7A9",
           display: "inline-flex", alignItems: "center", justifyContent: "center",
-          fontSize: 20, fontWeight: 800, color: "#191615", marginBottom: 16,
+          fontSize: 20, fontWeight: 800, color: "#1D1D1D", marginBottom: 16,
         }}>B</div>
-        <p style={{ fontSize: 16, color: "#191615", fontWeight: 600 }}>{status}</p>
+        <p style={{ fontSize: 16, color: "#1D1D1D", fontWeight: 600 }}>{status}</p>
       </div>
     </div>
   );

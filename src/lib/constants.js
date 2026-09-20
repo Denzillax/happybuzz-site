@@ -17,11 +17,11 @@ export const LISTING_TYPE_LABELS = Object.fromEntries(LISTING_TYPES.map(t => [t.
 // ─── Listing Status ──────────────────────────────────────────
 // DB ENUM listing_status: draft, active, paused, sold, rented, expired, deleted
 export const LISTING_STATUSES = [
-  { value: "draft",   label: "Entwurf",   color: "#686E78" },
+  { value: "draft",   label: "Entwurf",   color: "#5B626C" },
   { value: "active",  label: "Aktiv",     color: "#50804F" },
-  { value: "paused",  label: "Pausiert",  color: "#E5A100" },
-  { value: "sold",    label: "Verkauft",  color: "#94B9C9" },
-  { value: "rented",  label: "Vermietet", color: "#94B9C9" },
+  { value: "paused",  label: "Pausiert",  color: "#8A5A00" },
+  { value: "sold",    label: "Verkauft",  color: "#1D1D1D" },
+  { value: "rented",  label: "Vermietet", color: "#1D1D1D" },
   { value: "expired", label: "Abgelaufen",color: "#C62828" },
   { value: "deleted", label: "Gelöscht",  color: "#C62828" },
 ];
@@ -49,7 +49,7 @@ export const BEE_LEVELS = [
   { key: "busy_bee",     label: "Busy Bee",      min: 10,  max: 50,  color: "#F4C03F", maxListings: 10, benefits: ["10 aktive Inserate", "Bee-Badge im Profil"] },
   { key: "hive_builder", label: "Hive Builder",  min: 50,  max: 150, color: "#E5922E", maxListings: 25, benefits: ["25 aktive Inserate", "Verified-Badge", "Inserate werden höher angezeigt"] },
   { key: "queen",        label: "Queen Bee",     min: 150, max: 500, color: "#50804F", maxListings: 50, benefits: ["50 aktive Inserate", "Priority Support", "Profil-Highlight"] },
-  { key: "legend",       label: "Bee Legend",    min: 500, max: Infinity, color: "#94B9C9", maxListings: -1, benefits: ["Unbegrenzte Inserate", "Early Access", "Community-Legende"] },
+  { key: "legend",       label: "Bee Legend",    min: 500, max: Infinity, color: "#1D1D1D", maxListings: -1, benefits: ["Unbegrenzte Inserate", "Early Access", "Community-Legende"] },
 ];
 
 export function getBeeLevel(impactTotal) {
@@ -195,10 +195,11 @@ export const PAYMENT_METHODS = [
 export const TYP_PASTELL = { sell: "rose", auction: "lavendel", rent: "himmel", free: "butter", service: "rosa" };
 export const TYP_LABEL = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 
+// Chipfarben je Format: dieselben Pastelle wie TYP_PASTELL, Schrift immer Ink.
 export const TYP_FARBEN = {
-  sell: { bg: "#F4C03F", fg: "#191615" },
-  auction: { bg: "#94B9C9", fg: "#191615" },
-  rent: { bg: "#8B6DB0", fg: "#fff" },
-  free: { bg: "#50804F", fg: "#fff" },
-  service: { bg: "#E67E22", fg: "#fff" },
+  sell: { bg: "#FBEBEA", fg: "#1D1D1D" },
+  auction: { bg: "#E3E3FF", fg: "#1D1D1D" },
+  rent: { bg: "#E3F2FF", fg: "#1D1D1D" },
+  free: { bg: "#FFE7A9", fg: "#1D1D1D" },
+  service: { bg: "#FFE3FB", fg: "#1D1D1D" },
 };

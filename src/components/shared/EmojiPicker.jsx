@@ -39,7 +39,7 @@ export default function EmojiPicker({ value, onChange, inputRef, size = 38 }) {
         <Smile size={18} color={offen ? colors.teal : colors.muted} />
       </button>
       {offen && (
-        <div style={{ position: "absolute", bottom: size + 8, left: 0, zIndex: 60, width: 8 * 34 + 16, maxWidth: "calc(100vw / var(--bd-zoom, 1) - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 20, boxShadow: "0 8px 24px rgba(0,0,0,.12)", padding: 8 }}>
+        <div style={{ position: "absolute", bottom: size + 8, left: 0, zIndex: 60, width: 8 * 34 + 16, maxWidth: "calc(100vw / var(--bd-zoom, 1) - 28px)", maxHeight: 260, overflowY: "auto", background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 20, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)", padding: 8 }}>
           {EMOJI_GRUPPEN.map(g => (
             <div key={g.name} style={{ marginBottom: 6 }}>
               <p style={{ margin: "2px 0 2px 4px", fontSize: 10.5, fontWeight: 700, color: colors.mutedLt, textTransform: "uppercase", letterSpacing: ".04em" }}>{g.name}</p>

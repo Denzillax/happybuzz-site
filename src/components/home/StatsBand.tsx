@@ -40,7 +40,7 @@ export function StatsBand() {
 
   return (
     <div style={{
-      borderTop: "1px solid #E5E8EC", borderBottom: "1px solid #E5E8EC",
+      borderTop: "1px solid rgba(29,29,29,.16)", borderBottom: "1px solid rgba(29,29,29,.16)",
       background: '#fff', padding: '11px 16px',
       display: 'flex', justifyContent: 'center', alignItems: 'center',
       gap: 'clamp(14px, 4vw, 44px)', flexWrap: 'wrap',

@@ -10,7 +10,7 @@ const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";
-const MUTED = "rgba(20,17,13,0.6)";
+const MUTED = "rgba(29,29,29,0.6)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -79,14 +79,14 @@ export default function AboutPage() {
           <div style={{ position: "relative" }}>
             <div aria-hidden style={{ position: "absolute", inset: "16px -10px -10px 16px", border: "1px solid #1D1D1D", borderRadius: 20, transform: "rotate(2.5deg)", opacity: .25 }} />
             <div style={{ position: "relative", background: INK, color: PAPER, borderRadius: 20, padding: "30px 28px", transform: "rotate(-1.5deg)", border: "1px solid #1D1D1D" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: "rgba(251,248,242,0.7)", borderBottom: "1px solid rgba(251,248,242,0.2)", paddingBottom: 10, marginBottom: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: "rgba(255,255,255,0.7)", borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: 10, marginBottom: 16 }}>
                 <span>№ 0001</span>
                 <span style={{ background: "#FFE7A9", color: INK, padding: "3px 8px", borderRadius: 20, fontWeight: 700, fontSize: 10 }}>MANIFEST</span>
               </div>
               <p style={{ fontFamily: HEAD, fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 600, lineHeight: 1.25, margin: 0, letterSpacing: "-0.01em" }}>
                 Dein Keller hat Inventar. Wir haben Käufer.
               </p>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 18, fontFamily: MONO, fontSize: 11, color: "rgba(251,248,242,0.7)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 18, fontFamily: MONO, fontSize: 11, color: "rgba(255,255,255,0.7)" }}>
                 <BeeIcon size={16} color={"#1D1D1D"} /> Geprüft & katalogisiert
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function AboutPage() {
         <div style={{ padding: 34, borderRadius: 20, textAlign: "center", marginBottom: 56, background: INK, color: PAPER }}>
           <BeeIcon size={30} color={"#1D1D1D"} />
           <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: HEAD, margin: "12px 0 8px", letterSpacing: "-0.01em" }}>Bee-Impact: wohin ein Teil der Gebühr geht</h2>
-          <p style={{ fontSize: 14.5, color: "rgba(251,248,242,0.65)", maxWidth: 520, margin: "0 auto 22px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14.5, color: "rgba(255,255,255,0.65)", maxWidth: 520, margin: "0 auto 22px", lineHeight: 1.6 }}>
             Von jeder Gebühr gehen 20 Prozent an Schweizer Naturschutzprojekte. Das ist fest eingebaut und hängt nicht davon ab, wie das Jahr läuft.
           </p>
           <Link href="/impact" className="bd-btn" style={{

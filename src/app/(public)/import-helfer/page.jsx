@@ -9,7 +9,7 @@ import { IMPORT_SOURCES } from "@/lib/importListing";
 const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
-const MUTED = "rgba(20,17,13,0.6)";
+const MUTED = "rgba(29,29,29,0.6)";
 const HEAD = "'Instrument Sans', 'General Sans', sans-serif";
 const BODY = "'Instrument Sans', 'Manrope', sans-serif";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
@@ -69,11 +69,11 @@ export default function ImportHelferPage() {
               cursor: "grab", boxShadow: "none",
             }}
           >
-            🐝 BEEDARO Import
+            BEEDARO Import
           </a>
           <p style={{ fontFamily: BODY, fontSize: 11.5, color: MUTED, margin: "12px 0 0", lineHeight: 1.6 }}>
             Ziehen, nicht klicken. In der Lesezeichenleiste erscheint er dann als
-            <strong style={{ color: INK }}> 🐝 BEEDARO Import</strong>. Browser vergeben für solche
+            <strong style={{ color: INK }}> BEEDARO Import</strong>. Browser vergeben für solche
             Helfer kein eigenes Symbol, das Bienen-Zeichen im Namen macht ihn trotzdem sofort auffindbar.
             Du kannst ihn per Rechtsklick jederzeit umbenennen.
           </p>
@@ -87,7 +87,7 @@ export default function ImportHelferPage() {
           </p>
           <p style={{ fontFamily: BODY, fontSize: 13, color: MUTED, margin: "0 0 10px", lineHeight: 1.6 }}>
             Öffne dein Inserat auf einer dieser Plattformen und klicke in der Lesezeichenleiste
-            auf 🐝 BEEDARO Import.
+            auf BEEDARO Import.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {IMPORT_SOURCES.map((s) => (

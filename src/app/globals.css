@@ -13,7 +13,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--bd-grund);
-  color: #191615;
+  color: #1D1D1D;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -108,7 +108,7 @@ body {
   /* Attribut-Leiste (Zustand/Kategorie/Standort): mobil gestapelt statt
      drei gequetschte Spalten, Trennlinien unten statt rechts */
   .attr-strip { flex-direction: column; }
-  .attr-strip .attr-cell { border-right: none !important; border-bottom: 1px solid rgba(20, 17, 13, 0.12); }
+  .attr-strip .attr-cell { border-right: none !important; border-bottom: 1px solid rgba(29,29,29, 0.12); }
   .attr-strip .attr-cell:last-child { border-bottom: none; }
 }
 
@@ -172,7 +172,7 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
 .listing-grid > div { display: flex; flex-direction: column; }
 .listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; border: none; }
 .raster-umschalter { display: inline-flex; gap: 2px; background: #fff; border: 1px solid #1D1D1D; border-radius: 999px; padding: 3px; flex-shrink: 0; }
-.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #686E78; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #5B626C; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .raster-umschalter button.on { background: #1D1D1D; color: #fff; box-shadow: none; }
 @media (max-width: 1024px) {
   .listing-grid, .search-results-grid,
@@ -338,7 +338,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
-  background: #F3F3FF !important; color: #686E78 !important; border-color: rgba(29,29,29,.3) !important; cursor: not-allowed;
+  background: #F3F3FF !important; color: #5B626C !important; border-color: rgba(29,29,29,.3) !important; cursor: not-allowed;
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
@@ -362,17 +362,17 @@ input:focus, textarea:focus, select:focus {
   .impact-content > div:first-child { justify-content: center; }
 }
 /* Brand-Button (Tailwind-Utility, gespiegelt zu theme.js Werten) */
-.btn-honey { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; background:#F4C03F; color:#191615; font-weight:700; border-radius:9999px; border:none; cursor:pointer; text-decoration:none; transition:background .15s ease, transform .15s ease; }
-.btn-honey:hover { background:#D9A005; transform:translateY(-1px); }
+.btn-honey { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; background:#F4C03F; color:#1D1D1D; font-weight:700; border-radius:9999px; border:none; cursor:pointer; text-decoration:none; transition:background .15s ease, transform .15s ease; }
+.btn-honey:hover { background:#FFE7A9; transform:translateY(-1px); }
 /* Geteilter Button-Hover/-Active für Pill-Buttons (Btn-Komponente etc.) */
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
 .logo-p { animation: pulse 3s ease-in-out infinite; }
-.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Instrument Sans', 'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#686E78; transition:color .2s; }
-.tab.active { color:#191615; }
+.tab { position:relative; background:none; border:none; padding:12px 0; font-size:11px; font-weight:700; font-family:'Instrument Sans', 'Manrope',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; flex:1; text-align:center; color:#5B626C; transition:color .2s; }
+.tab.active { color:#1D1D1D; }
 .tab.active::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:3px; background:#F4C03F; }
 .link { color:#1D1D1D; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:3px; font-size:13px; }
-.link:hover { color:#191615; }
+.link:hover { color:#1D1D1D; }
 .bd-link { text-decoration: none; }
 .bd-link:hover { text-decoration: underline; }
 /* ── Chat: Zwei-Pane (Desktop) / eine Spalte (Mobile) ── */
@@ -395,11 +395,11 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
   .chat-thread-back { display: flex !important; }
 }
 /* Chat: duenner, dezenter Scrollbalken (Nachrichten) + Schnell-Antworten ohne Balken */
-.chat-scroll { scrollbar-width: thin; scrollbar-color: #D5D9DF transparent; }
+.chat-scroll { scrollbar-width: thin; scrollbar-color: rgba(29,29,29,.22) transparent; }
 .chat-scroll::-webkit-scrollbar { width: 8px; }
 .chat-scroll::-webkit-scrollbar-track { background: transparent; }
-.chat-scroll::-webkit-scrollbar-thumb { background-color: #D5D9DF; border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
-.chat-scroll::-webkit-scrollbar-thumb:hover { background-color: #B3B9C1; background-clip: content-box; }
+.chat-scroll::-webkit-scrollbar-thumb { background-color: rgba(29,29,29,.22); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+.chat-scroll::-webkit-scrollbar-thumb:hover { background-color: rgba(29,29,29,.4); background-clip: content-box; }
 .chat-quickreplies { scrollbar-width: none; -ms-overflow-style: none; }
 .chat-quickreplies::-webkit-scrollbar { display: none; }
 
@@ -422,7 +422,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
    Muss hier stehen (nicht inline) — Pseudoklassen gehen in style={} nicht.
    Kein !important: offene Zeilen setzen ihren Hintergrund inline und
    sollen ihn beim Hovern behalten. */
-.adm-row:hover { background: #FAFBFC; }
+.adm-row:hover { background: #F3F3FF; }
 
 /* ── Hero: Beta-Slide-Effekte ─────────────────────────────────
    Keyframes gehören hierher, nicht in inline <style>-Tags (Hydration).
@@ -476,7 +476,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 /* ── Richtext: Beschreibungs-Editor + Anzeige (gemeinsame Formate) ── */
 .rte-area:empty::before {
   content: attr(data-placeholder);
-  color: #686E78;
+  color: #5B626C;
   pointer-events: none;
 }
 .rte-area h3, .rich-desc h3 {
@@ -484,7 +484,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
   font-size: 16px;
   font-weight: 700;
   margin: 14px 0 6px;
-  color: #191615;
+  color: #1D1D1D;
 }
 .rte-area h3:first-child, .rich-desc h3:first-child { margin-top: 0; }
 .rte-area ul, .rich-desc ul {
@@ -599,7 +599,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 }
 .cat-scroll-btn.right { right: 0; } .cat-scroll-btn.left { left: 0; }
 @media (min-width: 900px) { .cat-scroll-btn { display: inline-flex; } }
-.cat-pill:hover { background: #FFF5D8 !important; filter: none !important; }
+.cat-pill:hover { background: #E3E3FF !important; filter: none !important; }
 @media (max-width: 640px) {
   /* Hero-Collage mobil: verkleinert und zentriert unter dem Text.
      scale() aendert die Layout-Box nicht, darum negative Raender. */
@@ -701,8 +701,8 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    weisse Flaeche + Ink-Schrift, der aktive Tab bleibt wie er ist. */
 .type-tab { filter: none !important; }
 .type-tab:hover:not(.is-active) { background: rgba(255,255,255,.75) !important; }
-.type-tab:hover:not(.is-active) span { color: #191615 !important; }
-.type-tab:hover:not(.is-active) svg { stroke: #191615; }
+.type-tab:hover:not(.is-active) span { color: #1D1D1D !important; }
+.type-tab:hover:not(.is-active) svg { stroke: #1D1D1D; }
 .type-free { transition: border-color .15s ease, background .15s ease; }
 .type-free:hover:not(.is-active) { border-color: #1D1D1D !important; background: var(--mk-butter) !important; }
 
@@ -783,7 +783,7 @@ textarea, select:not(.eckig) {
 .bd-fx-flash { animation: bd-fx-flash .9s ease-out; border-radius: 6px; }
 
 @keyframes bd-fx-plus { 0% { opacity: 0; transform: translate(-50%, 4px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -18px); } }
-.bd-fx-plus { position: absolute; left: 50%; top: -6px; font-size: 11px; font-weight: 800; color: #C8860A; pointer-events: none; white-space: nowrap; animation: bd-fx-plus 1.4s ease-out forwards; }
+.bd-fx-plus { position: absolute; left: 50%; top: -6px; font-size: 11px; font-weight: 800; color: #8A5A00; pointer-events: none; white-space: nowrap; animation: bd-fx-plus 1.4s ease-out forwards; }
 
 @keyframes bd-fx-stamp { 0% { opacity: 0; transform: rotate(-9deg) scale(1.9); } 55% { opacity: 1; transform: rotate(-9deg) scale(.94); } 100% { opacity: 1; transform: rotate(-9deg) scale(1); } }
 .bd-fx-stamp { display: inline-block; padding: 5px 14px; border: 2.5px solid #1D1D1D; color: #1D1D1D; font-weight: 800; font-size: 15px; letter-spacing: .16em; text-transform: uppercase; border-radius: 6px; transform: rotate(-9deg); animation: bd-fx-stamp .5s cubic-bezier(.2,.7,.2,1) both; background: rgba(255,255,255,.85); }
@@ -1081,7 +1081,7 @@ button[style*="background:rgb(244, 192, 63)"]:not(:disabled):hover, a[href][styl
     white-space: nowrap; overflow: hidden; opacity: 0; transform: translateY(100%);
     transition: opacity .16s ease, transform .2s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
   .lab-hoverinfo a:hover .lc-leiste { opacity: 1; transform: none; }
-  .lc-leiste-punkt { width: 3px; height: 3px; border-radius: 50%; background: rgba(25,22,21,.35); flex-shrink: 0; }
+  .lc-leiste-punkt { width: 3px; height: 3px; border-radius: 50%; background: rgba(29,29,29,.35); flex-shrink: 0; }
   /* Die Chips am unteren Bildrand rücken über die Leiste */
   .lab-hoverinfo a:hover .lc-unten, .lab-hoverinfo a:hover .sofort-chip { transform: translateY(-30px); }
 }
@@ -1721,7 +1721,7 @@ a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transf
 .mk-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 24px 4px; background: #fff; color: var(--mk-ink);
             border: var(--mk-rand); border-radius: 10px !important; box-shadow: inset 0 -5px 0 rgba(29,29,29,.15); font: inherit; font-size: 17px; font-weight: 600; letter-spacing: -.02em;
             cursor: pointer; transition: box-shadow .15s ease, padding .15s ease, background .2s ease; white-space: nowrap; }
-.mk-knopf:hover { background: var(--mk-butter); }
+.mk-knopf:hover { background: var(--mk-lavendel); }
 .mk-knopf:active { box-shadow: inset 0 -1px 0 rgba(29,29,29,.15); padding-bottom: 0; }
 /* Knopfschrift immer Ink: ".mk a { color: inherit }" ist spezifischer als ".mk-knopf" und liess einen weissen Knopf
    die Schriftfarbe seiner Umgebung erben (im Fuss war er dadurch unsichtbar) */
@@ -2335,7 +2335,13 @@ body:has(.mk) { background: #fff; }
 .bn-reihe { display: flex; align-items: center; justify-content: space-around; max-width: 480px; margin: 0 auto; height: 60px; }
 .bn .bn-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; padding: 4px 6px; border: none; background: none; color: var(--mk-ink); font: inherit; font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px !important; }
 .bn-icon { width: 44px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 999px; transition: background .2s ease, border-color .2s ease; }
-.bn-tab[aria-current=page] .bn-icon { background: var(--mk-mint); border-color: var(--mk-ink); }
+/* Aktiv (Denis 20.09.2026: die Mint-Pille um das Profilbild sah schlecht aus). Keine Fläche mehr hinter dem Symbol.
+   Der aktive Reiter ist voll deckend, fett beschriftet und trägt oben einen kurzen Ink-Strich, wie der Unterstrich der
+   Reiter (bd-reiter). Das Profilbild füllt sich mit Ink. */
+.bn-tab { position: relative; }
+.bn-tab[aria-current=page]::before { content: ""; position: absolute; top: -7px; left: 50%; width: 22px; height: 3px; margin-left: -11px; border-radius: 0 0 3px 3px; background: var(--mk-ink); }
+.bn-tab[aria-current=page] { font-weight: 700; }
+.bn-tab[aria-current=page] .bn-initialen { background: var(--mk-ink); color: #fff; }
 .bn-tab:not([aria-current=page]) { opacity: .72; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
 .bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-ink); color: #fff; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); transform: translateY(-10px); }

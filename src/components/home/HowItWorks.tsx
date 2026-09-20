@@ -73,7 +73,7 @@ export function HowItWorks() {
                   <h3 style={{ fontSize: 19, fontWeight: 600, margin: '0 0 7px', fontFamily: HEAD, letterSpacing: '-0.01em', color: INK }}>
                     {s.title}
                   </h3>
-                  <p style={{ fontSize: 14.5, lineHeight: 1.55, color: 'rgba(20,17,13,0.6)', margin: 0 }}>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.55, color: 'rgba(29,29,29,0.6)', margin: 0 }}>
                     {s.description}
                   </p>
                 </div>

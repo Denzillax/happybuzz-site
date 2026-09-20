@@ -44,10 +44,10 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
       style={{
         display: "block", textAlign: "left", padding: "20px 20px 18px",
         cursor: klickbar ? "pointer" : "default",
-        background: gruen ? "#EEF4EC" : zustand === "abgesagt" ? "#F3F3FF" : "#fff",
+        background: gruen ? "#DBF5F0" : zustand === "abgesagt" ? "#F3F3FF" : "#fff",
         opacity: zustand === "gesperrt" ? 0.55 : 1,
         border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 20,
-        boxShadow: zustand === "frei" ? "0 2px 8px rgba(25,22,21,.15)" : "none",
+        boxShadow: zustand === "frei" ? "inset 0 -4px 0 rgba(29,29,29,.14)" : "none",
         fontFamily: BODY, transition: "all .15s",
       }}>
       <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, background: gruen || zustand === "abgesagt" ? "#fff" : K.sand, border: "1px solid #1D1D1D", marginBottom: 12 }}>
@@ -56,7 +56,7 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
       <span style={{ display: "block", fontFamily: HEAD, fontSize: 17, fontWeight: 700, color: K.ink, marginBottom: 4 }}>
         {r.label}
       </span>
-      <span style={{ display: "block", fontSize: 13, color: "rgba(20,17,13,0.6)", lineHeight: 1.55 }}>
+      <span style={{ display: "block", fontSize: 13, color: "rgba(29,29,29,0.6)", lineHeight: 1.55 }}>
         {text}
       </span>
     </button>
@@ -101,7 +101,7 @@ export default function BewerbenPage() {
     setBusy(null);
   };
 
-  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#686E78" }}>Lade…</div>;
+  if (!ready) return <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: BODY, color: "#5B626C" }}>Lade…</div>;
 
   return (
     <div style={{ background: K.paper, minHeight: "100vh" }}>
@@ -112,7 +112,7 @@ export default function BewerbenPage() {
         <h1 style={{ fontFamily: HEAD, fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 700, color: K.ink, margin: "0 0 10px", letterSpacing: "-0.01em" }}>
           Mitarbeiter werden.
         </h1>
-        <p style={{ fontFamily: BODY, fontSize: 15, color: "rgba(20,17,13,0.65)", lineHeight: 1.7, margin: "0 0 22px", maxWidth: 560 }}>
+        <p style={{ fontFamily: BODY, fontSize: 15, color: "rgba(29,29,29,0.65)", lineHeight: 1.7, margin: "0 0 22px", maxWidth: 560 }}>
           Ein Klick genügt. Du bist angemeldet, wir wissen wer du bist: Denis
           bekommt deine Bewerbung direkt aufs Pult und meldet sich bei dir.
         </p>
@@ -147,7 +147,7 @@ export default function BewerbenPage() {
           })}
         </div>
 
-        <p style={{ fontFamily: BODY, fontSize: 12.5, color: "rgba(20,17,13,0.55)", lineHeight: 1.6, margin: "18px 0 0", maxWidth: 560 }}>
+        <p style={{ fontFamily: BODY, fontSize: 12.5, color: "rgba(29,29,29,0.55)", lineHeight: 1.6, margin: "18px 0 0", maxWidth: 560 }}>
           Deine Bewerbung geht direkt an Denis. Die Rolle wird persönlich vergeben,
           eine Bewerbung schaltet nichts frei. Eine Stelle pro Person: erst wenn
           eine Bewerbung entschieden ist, kannst du dich auf eine andere bewerben.

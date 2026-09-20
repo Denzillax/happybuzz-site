@@ -11,7 +11,7 @@ const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";
-const MUTED = "rgba(20,17,13,0.6)";
+const MUTED = "rgba(29,29,29,0.6)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -19,8 +19,8 @@ const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const TYPES = [
   { icon: Tag, title: "Festpreis", desc: "Fester Preis, sofort kaufen. Passt, wenn du weisst, was dein Artikel wert ist.", color: "#1D1D1D" },
   { icon: Gavel, title: "Auktion", desc: "Du setzt einen Startpreis, die Bieter entscheiden. Lohnt sich bei Sammlerstücken und allem, dessen Wert schwer zu schätzen ist.", color: PETROL },
-  { icon: Home, title: "Miete", desc: "Vermieten statt verkaufen. Gut für Werkzeug, Geräte und Sportsachen, die man selten braucht.", color: "#8B6DB0" },
-  { icon: Wrench, title: "Service", desc: "Du bietest eine Dienstleistung an, Kunden fragen einen Termin an. Abgerechnet wird, wenn die Arbeit gemacht ist.", color: "#C2410C" },
+  { icon: Home, title: "Miete", desc: "Vermieten statt verkaufen. Gut für Werkzeug, Geräte und Sportsachen, die man selten braucht.", color: "#1D1D1D" },
+  { icon: Wrench, title: "Service", desc: "Du bietest eine Dienstleistung an, Kunden fragen einen Termin an. Abgerechnet wird, wenn die Arbeit gemacht ist.", color: "#8A5A00" },
   { icon: Gift, title: "Gratis", desc: "Verschenken statt wegwerfen. Nur Abholung, keine Gebühren.", color: MOSS },
 ];
 
@@ -187,10 +187,10 @@ export default function HowItWorksPage() {
           <h2 style={{ fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 20px", letterSpacing: "-0.01em" }}>Sicher handeln auf BEEDARO</h2>
           <div className="hiw-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {SAFETY.map((s, i) => (
-              <div key={i} style={{ padding: 18, borderRadius: 20, background: "rgba(251,248,242,0.06)", border: "1px solid rgba(251,248,242,0.14)" }}>
+              <div key={i} style={{ padding: 18, borderRadius: 20, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)" }}>
                 <div style={{ fontFamily: MONO, fontSize: 12, color: "#1D1D1D", marginBottom: 8 }}>0{i + 1}</div>
                 <h3 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 5px" }}>{s.title}</h3>
-                <p style={{ fontSize: 12.5, color: "rgba(251,248,242,0.6)", lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
+                <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.6)", lineHeight: 1.55, margin: 0 }}>{s.desc}</p>
               </div>
             ))}
           </div>

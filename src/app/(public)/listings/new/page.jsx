@@ -121,7 +121,7 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#686E78" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#5B626C" }}>
       Lade…
     </div>
   );
@@ -130,16 +130,16 @@ function NewListingPageInner() {
     <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#fff", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
-        <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
+        <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#1D1D1D" }}>
           Inserat erstellen
         </h1>
       </div>
       {profileWarning && (
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "16px 20px 0" }}>
-          <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 20, padding: "16px 20px" }}>
-            <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig, bitte ergänzen:</p>
-            {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#CD3800" }}>• {m}</p>)}
-            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
+          <div style={{ background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 20px" }}>
+            <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#8A5A00" }}>Profil unvollständig, bitte ergänzen:</p>
+            {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#8A5A00" }}>• {m}</p>)}
+            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#1D1D1D", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
           </div>
         </div>
       )}
@@ -151,7 +151,7 @@ function NewListingPageInner() {
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
               borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff",
-              color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", cursor: "pointer",
+              color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", cursor: "pointer",
               boxShadow: "none",
             }}
           >

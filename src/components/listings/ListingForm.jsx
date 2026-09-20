@@ -754,7 +754,7 @@ export default function ListingForm({
       style={{
         padding: "8px 16px",
         borderRadius: 20,
-        border: `1.5px solid ${active ? INK : "rgba(25,22,21,.3)"}`,
+        border: `1.5px solid ${active ? INK : "rgba(29,29,29,.3)"}`,
         background: active ? AKZ : "#fff",
         cursor: "pointer",
         fontSize: 13,
@@ -763,7 +763,7 @@ export default function ListingForm({
         color: colors.dark,
         transition: "all .15s",
         userSelect: "none",
-        boxShadow: active ? "0 1px 4px rgba(25,22,21,.18)" : "none",
+        boxShadow: active ? "0 1px 4px rgba(29,29,29,.18)" : "none",
       }}
     >
       {children}
@@ -813,7 +813,7 @@ export default function ListingForm({
   const Err = ({ field }) => (
     <div data-field={field}>
       {errors[field] ? (
-        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FFEBEE", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
+        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FBEBEA", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
           {errors[field]}
         </div>
       ) : null}
@@ -821,7 +821,7 @@ export default function ListingForm({
   );
 
   // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
-  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFEBEE" } : {});
+  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FBEBEA" } : {});
 
   // KI-Erkennung: Fotos (max 5) verkleinern, /api/ai-listing fragen, Felder fuellen.
   // Ohne target: Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen),
@@ -963,7 +963,7 @@ export default function ListingForm({
       <div style={sectionBase} className="lf-section lf-section-format">
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
-          <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
+          <div style={{ background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#1D1D1D" }}>
             <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand, Bee-Rate und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
           </div>
         )}
@@ -1271,7 +1271,7 @@ export default function ListingForm({
         {!isFree && (
           <div style={{ marginTop: 18, opacity: form.listing_type === "service" ? 0.4 : 1, pointerEvents: form.listing_type === "service" ? "none" : "auto" }}>
             <label style={labelBase}>Zustand {form.listing_type === "service" && <span style={{ fontSize: 11, fontWeight: 400, color: colors.muted }}> (nicht relevant bei Service)</span>}</label>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFEBEE", padding: 8 } : {}), ...gesperrtStyle }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FBEBEA", padding: 8 } : {}), ...gesperrtStyle }}>
               {CONDITIONS.map((c) => (
                 <Chip key={c.value} active={form.condition === c.value} onClick={() => set("condition", c.value)}>{c.label}</Chip>
               ))}
@@ -1325,7 +1325,7 @@ export default function ListingForm({
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 20, cursor: "pointer",
                   border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.dark : colors.border}`,
-                  background: errors.category ? "#FFEBEE" : form.category_id ? AKZ : "#fff",
+                  background: errors.category ? "#FBEBEA" : form.category_id ? AKZ : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
@@ -1348,7 +1348,7 @@ export default function ListingForm({
                     <div onClick={e => e.stopPropagation()} style={{
                       background: "#fff", borderRadius: 20, width: "100%", maxWidth: 800,
                       maxHeight: "80vh", display: "flex", flexDirection: "column",
-                      fontFamily: fonts.body, boxShadow: "0 20px 60px rgba(0,0,0,.2)",
+                      fontFamily: fonts.body, boxShadow: "0 18px 40px -18px rgba(29,29,29,.35)",
                     }}>
                       {/* Modal Header */}
                       <div style={{ padding: "16px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -1832,7 +1832,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_twint ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_twint ? AKZ : "#fff", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
@@ -1844,7 +1844,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_cash)} onClick={() => set("pay_cash", !form.pay_cash)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_cash ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_cash ? AKZ : "#fff", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
@@ -1856,7 +1856,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_bank)} onClick={() => set("pay_bank", !form.pay_bank)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_bank ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_bank ? AKZ : "#fff", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
           <Err field="payment" />
@@ -1874,7 +1874,7 @@ export default function ListingForm({
             if (!next) { set("pay_bank", false); if (!form.pickup_only) set("pickup_only", true); }
           }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.shipping_available)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.shipping_available ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+            background: form.shipping_available ? AKZ : "#fff", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Versand</span>
         </div>
@@ -1935,7 +1935,7 @@ export default function ListingForm({
               </div>
               <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
                 width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-                background: form.pay_twint ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+                background: form.pay_twint ? AKZ : "#fff", position: "relative", transition: "background .2s",
               }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
             </div>
 
@@ -1976,7 +1976,7 @@ export default function ListingForm({
                           marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? AKZ : "#fff",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
+                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 6.5l2.6 2.6L10 3.4" /></svg></div>}
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 14 }}>{opt.label}</div>
                               {opt.desc && <div style={{ fontSize: 12, color: colors.muted }}>{opt.desc}</div>}
@@ -2005,7 +2005,7 @@ export default function ListingForm({
                       </select>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#fff", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2095,7 +2095,7 @@ export default function ListingForm({
                         <>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#fff", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2138,7 +2138,7 @@ export default function ListingForm({
             if (!next && !form.shipping_available) set("shipping_available", true);
           }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pickup_only)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.pickup_only ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+            background: form.pickup_only ? AKZ : "#fff", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Abholung</span>
         </div>
@@ -2205,7 +2205,7 @@ export default function ListingForm({
                 </div>
                 <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form[key])} onClick={() => set(key, !form[key])} style={{
                   width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-                  background: form[key] ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+                  background: form[key] ? AKZ : "#fff", position: "relative", transition: "background .2s",
                 }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
               </div>
             ))}
@@ -2231,7 +2231,7 @@ export default function ListingForm({
           <p style={{ ...hintStyle, marginTop: 0, marginBottom: 16, fontSize: 11 }}>
             Die Gebühr fällt nur bei erfolgreichem Verkauf an und wird vom Erlös abgezogen. 20 Prozent gehen an Schweizer Naturschutzprojekte. Eine höhere Stufe bringt dein Inserat in der Suche weiter nach oben.
           </p>
-          {gesperrt && <p style={{ ...hintStyle, marginTop: -8, marginBottom: 10, fontSize: 11.5, fontWeight: 700, color: "#8a6d00" }}>Gesperrt: die Bieter haben mit dieser Bee-Rate geboten.</p>}
+          {gesperrt && <p style={{ ...hintStyle, marginTop: -8, marginBottom: 10, fontSize: 11.5, fontWeight: 700, color: "#8A5A00" }}>Gesperrt: die Bieter haben mit dieser Bee-Rate geboten.</p>}
           <div style={gesperrtStyle}>
           {/* Meeko (Denis 20.09.2026): jede Stufe ist eine Kachel in ihrer eigenen Pastellfarbe, von kühl (wenig) nach warm
               (viel). Die gewählte trägt den Ink-Ring und den Haken. Das geförderte Projekt der gewählten Stufe steht darunter. */}
@@ -2314,12 +2314,12 @@ export default function ListingForm({
       {/* ── VALIDATION ERRORS ─────────────────────────────── */}
       {Object.keys(errors).length > 0 && !errors.submit && (
         <div style={{
-          background: "#FFF3E0", border: `1.5px solid #F4A100`,
+          background: "#FFE7A9", border: "1px solid #1D1D1D",
           borderRadius: radius.lg, padding: "14px 18px", marginBottom: 16,
         }}>
-          <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#CD3800", fontFamily: fonts.body }}>Bitte korrigiere folgende Felder:</p>
+          <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#8A5A00", fontFamily: fonts.body }}>Bitte korrigiere folgende Felder:</p>
           {Object.values(errors).map((msg, i) => (
-            <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#CD3800", fontFamily: fonts.body }}>• {msg}</p>
+            <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#8A5A00", fontFamily: fonts.body }}>• {msg}</p>
           ))}
         </div>
       )}
@@ -2414,7 +2414,7 @@ export default function ListingForm({
             }}
             className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.publish_at)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-              background: form.publish_at ? AKZ : "#ccc", position: "relative", transition: "background .2s",
+              background: form.publish_at ? AKZ : "#fff", position: "relative", transition: "background .2s",
             }}
           ><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.publish_at ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
         </div>

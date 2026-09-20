@@ -2,18 +2,18 @@
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#191615" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#FFFFFF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#1D1D1D" }}>
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 480 }}>
         <div style={{ fontSize: 48, fontWeight: 900, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", color: "#c62828", letterSpacing: ".05em", lineHeight: 1, marginBottom: 8 }}>OOPS</div>
         <h1 style={{ fontSize: 20, fontWeight: 800, margin: "0 0 8px", fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: ".03em" }}>ETWAS IST SCHIEFGELAUFEN</h1>
-        <p style={{ fontSize: 14, color: "#686E78", margin: "0 0 28px", lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: "#5B626C", margin: "0 0 28px", lineHeight: 1.6 }}>
           Da ist etwas schiefgegangen. Versuch es nochmal oder geh zurück zur Startseite.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={() => reset()} style={{ padding: "12px 28px", borderRadius: 20, background: "#FFE7A9", color: "#191615", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
+          <button onClick={() => reset()} style={{ padding: "12px 28px", borderRadius: 20, background: "#FFE7A9", color: "#1D1D1D", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             Nochmal versuchen
           </button>
-          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 999, border: "1.5px solid #1D1D1D", background: "#fff", color: "#191615", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
+          <a href="/" style={{ display: "inline-flex", padding: "12px 28px", borderRadius: 999, border: "1.5px solid #1D1D1D", background: "#fff", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             Zur Startseite
           </a>
         </div>

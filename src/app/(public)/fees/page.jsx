@@ -12,7 +12,7 @@ import { getCompanySettings, formatIban } from "@/lib/company";
 import { feeQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
-const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#686E78", textTransform: "uppercase", letterSpacing: ".05em" };
+const th = { padding: "10px 14px", fontSize: 10, fontWeight: 700, color: "#5B626C", textTransform: "uppercase", letterSpacing: ".05em" };
 const td = { padding: "10px 14px", fontSize: 12 };
 
 export default function FeesPage() {
@@ -79,7 +79,7 @@ export default function FeesPage() {
     setInvoices(prev => prev.map(i => i.id === invoiceId ? { ...i, status: "pending_payment" } : i));
   };
 
-  const sc = { open: { icon: Clock, color: "#CD3800", bg: "#FFF3E0", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
+  const sc = { open: { icon: Clock, color: "#8A5A00", bg: "#FFE7A9", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#50804F", bg: "#DBF5F0", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FBEBEA", label: "Überfällig" } };
   // Zahlungsdaten IMMER live aus den Firmendaten (Admin -> Firma), nie hartkodiert
   const beedaroIban = company?.iban ? formatIban(company.iban) : "Wird hinterlegt";
   const companyAddress = company
@@ -103,7 +103,7 @@ export default function FeesPage() {
       </thead>
       <tbody>
         {fees.map(f => {
-          const st = f.status === "paid" ? { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#CD3800", bg: "#FFF3E0", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
+          const st = f.status === "paid" ? { color: "#50804F", bg: "#DBF5F0", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#8A5A00", bg: "#FFE7A9", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
           return (
             <tr key={f.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
               <td style={{ ...td }}>{fmtDate(f.created_at)}</td>
@@ -131,7 +131,7 @@ export default function FeesPage() {
 
         {/* Warn-Banner für überfällige Rechnungen */}
         {invoices.some(i => i.status === "overdue" && i.reminder_level >= 3 && i.listings_paused) && (
-          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFEBEE", border: "1.5px solid #FFCDD2", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FBEBEA", border: "1.5px solid #FBEBEA", display: "flex", alignItems: "center", gap: 10 }}>
             <AlertCircle size={20} color="#c62828" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert: offene Rechnung begleichen</p>
@@ -141,18 +141,18 @@ export default function FeesPage() {
         )}
         {invoices.some(i => i.status === "overdue" && i.reminder_level === 2) && (
           <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF8E1", border: "1.5px solid #FFE082", display: "flex", alignItems: "center", gap: 10 }}>
-            <AlertCircle size={20} color="#E65100" />
+            <AlertCircle size={20} color="#8A5A00" />
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#CD3800" }}>Mahnung: Inserate werden bald pausiert</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#8A5A00" }}>Mahnung: Inserate werden bald pausiert</p>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Bitte begleiche deine offene Gebührenrechnung.</p>
             </div>
           </div>
         )}
         {invoices.some(i => i.status === "overdue" && i.reminder_level === 1) && (
-          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFF3E0", border: "1.5px solid #FFCC80", display: "flex", alignItems: "center", gap: 10 }}>
-            <Clock size={20} color="#E65100" />
+          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFE7A9", border: "1.5px solid #FFCC80", display: "flex", alignItems: "center", gap: 10 }}>
+            <Clock size={20} color="#8A5A00" />
             <div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#CD3800" }}>Erinnerung: Gebührenrechnung überfällig</p>
+              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#8A5A00" }}>Erinnerung: Gebührenrechnung überfällig</p>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Bitte überweise den offenen Betrag.</p>
             </div>
           </div>
@@ -294,8 +294,8 @@ export default function FeesPage() {
                         {inv.status === "open" && (
                           <button onClick={() => handleMarkPaid(inv.id)} style={{ width: "100%", padding: "11px 16px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: colors.surface, color: colors.dark, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Ich habe bezahlt</button>
                         )}
-                        {inv.status === "pending_payment" && <p style={{ margin: 0, fontSize: 12, color: "#1565C0", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Zahlung wird geprüft, danke!</p>}
-                        {inv.status === "paid" && <p style={{ margin: 0, fontSize: 12, color: "#2E7D32", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
+                        {inv.status === "pending_payment" && <p style={{ margin: 0, fontSize: 12, color: "#1D1D1D", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Zahlung wird geprüft.</p>}
+                        {inv.status === "paid" && <p style={{ margin: 0, fontSize: 12, color: "#50804F", fontWeight: 600, textAlign: "center", padding: "8px 0" }}>Bezahlt am {fmtDate(inv.paid_at)}</p>}
                       </div>
                     </div>
                   )}
@@ -309,7 +309,7 @@ export default function FeesPage() {
       </div>
 
       {/* Toast */}
-      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#191615", color: "#fff", padding: "8px 20px", borderRadius: 20, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
+      {toast && <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#1D1D1D", color: "#fff", padding: "8px 20px", borderRadius: 20, fontSize: 13, fontWeight: 600, zIndex: 9999 }}>{toast}</div>}
     </div>
   );
 }
