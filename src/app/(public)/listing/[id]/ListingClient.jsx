@@ -37,10 +37,15 @@ import { createNotification } from "@/lib/notifications";
 import { getListingAttributesDetailed, getCategoryAttributes } from "@/lib/api/attributes";
 import { handlingLabel } from "@/lib/formatters";
 import { makeArtRef, calcFee } from "@/lib/fees";
+import { TYP_PASTELL } from "@/lib/constants";
+import BLogo from "@/components/shared/BLogo";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
-const INK = "#191615";
-const SAND = "#F5F6F8";
+// Meeko-Design (20.09.2026), Schritt 3: nur das Aussehen. Flächen in Pastell, 1 px Ink-Rand, Rundung 20, keine Schlagschatten auf Karten.
+// Butter ist die Fläche der Hauptknöpfe (früher Gelb), Ink die Farbe für gewählte Zustände und Links.
+const INK = "#1D1D1D";
+const BUTTER = "#FFE7A9";
+const SAND = "#F3F3FF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
@@ -560,9 +565,9 @@ export default function ListingDetail() {
 
         {/* ── FREIGABE-LEISTE fuer Mitarbeiter bei wartenden Inseraten ── */}
         {istStaff && l.status === "pending_review" && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFF3E0", borderRadius: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFF3E0", borderRadius: 20 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: "#8a5a00", marginRight: "auto" }}>Wartet auf Freigabe</span>
-            <button onClick={gebeFrei} disabled={reviewBusy} style={{ padding: "8px 18px", borderRadius: 999, border: "none", background: colors.yellow, color: INK, fontSize: 13, fontWeight: 800, fontFamily: fonts.body, cursor: reviewBusy ? "default" : "pointer" }}>
+            <button onClick={gebeFrei} disabled={reviewBusy} style={{ padding: "8px 18px", borderRadius: 999, border: "none", background: BUTTER, color: INK, fontSize: 13, fontWeight: 800, fontFamily: fonts.body, cursor: reviewBusy ? "default" : "pointer" }}>
               {reviewBusy ? "Einen Moment…" : "Freigeben"}
             </button>
             <Link href="/admin" style={{ fontSize: 12.5, fontWeight: 700, color: "#8a5a00", textDecoration: "underline", textUnderlineOffset: 3 }}>Im Admin prüfen</Link>
@@ -572,13 +577,13 @@ export default function ListingDetail() {
         {/* ── EIGENTÜMER-LEISTE (Desktop oben; mobil klebt sie unten
                ueber der Bottom-Nav, siehe .mobile-cta-bar weiter unten) ── */}
         {isOwner && (
-          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${colors.yellow}18`, border: "1px solid #E5E8EC" }}>
+          <div className="owner-bar-desktop" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: `${BUTTER}18`, border: "1px solid #1D1D1D" }}>
             <BeeIcon size={16} />
             <span style={{ fontSize: 13, fontWeight: 700, color: INK, marginRight: "auto" }}>Das ist dein Inserat</span>
-            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: colors.yellow, border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
+            <Link href={`/listings/${l.id}`} style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: BUTTER, border: "1px solid #1D1D1D", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ display: "inline-flex", borderRadius: 999, alignItems: "center", gap: 6, padding: "7px 14px", background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -592,8 +597,9 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            <div className="lg-gallery" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
-              <div style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
+            {/* Meeko: die Galerie liegt auf der Pastelltafel des Formats, das Foto mit eigenem Rand darauf */}
+            <div className={`lg-gallery mk-${TYP_PASTELL[l.listing_type] || "lavendel"}`} style={{ borderRadius: 24, border: "1px solid #1D1D1D", overflow: "hidden", marginBottom: 20 }}>
+              <div className="lg-foto" style={{ position: "relative", aspectRatio: "4/3", background: "#fff", margin: 16, borderRadius: 14, border: "1px solid #1D1D1D", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
                 onTouchEnd={(e) => {
@@ -629,13 +635,13 @@ export default function ListingDetail() {
                   : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Camera size={60} color={colors.mutedLt} /></div>
                 }
                 {/* Favorite Heart */}
-                <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleFav(); }} style={{
-                  position: "absolute", top: 14, right: 14, width: 40, height: 40, borderRadius: "50%",
-                  background: "rgba(255,255,255,.85)", border: "none", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 2px 8px rgba(0,0,0,.1)", transition: "all .15s",
+                <button className="eckig kein-akzent" aria-pressed={!!isFav} aria-label={isFav ? "Aus den Favoriten entfernen" : "Zu den Favoriten"} onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleFav(); }} style={{
+                  position: "absolute", top: 14, right: 14, width: 44, height: 44, borderRadius: 999, padding: 0,
+                  background: isFav ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center", color: isFav ? "#C2255C" : INK,
+                  transition: "background .15s, color .15s",
                 }}>
-                  <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
+                  <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><BLogo herz size={20} title="" /></span>
                 </button>
                 {/* KI-Bildersuche: aehnliche Inserate zu diesem Foto */}
                 {imgs.length > 0 && (
@@ -644,7 +650,7 @@ export default function ListingDetail() {
                     style={{
                       position: "absolute", bottom: 14, right: 14, width: 40, height: 40, borderRadius: "50%",
                       background: "rgba(255,255,255,.85)", border: "none", cursor: bildSuche.status === "laedt" ? "default" : "pointer",
-                      display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(25,22,21,.15)",
+                      display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "none",
                     }}>
                     {bildSuche.status === "laedt" ? <Loader2 size={19} color="#1D1D1D" className="spin" /> : <ScanSearch size={20} color="#1D1D1D" />}
                   </button>
@@ -657,7 +663,7 @@ export default function ListingDetail() {
               {imgs.length > 1 && (
                 <div style={{ display: "flex", gap: 8, padding: "12px 16px", overflowX: "auto" }}>
                   {imgs.map((img, i) => (
-                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 12, overflow: "hidden", border: i === activeImg ? `2px solid ${colors.yellow}` : `2px solid transparent`, cursor: "pointer", flexShrink: 0 }}>
+                    <div key={i} onClick={() => setActiveImg(i)} style={{ width: 64, height: 64, borderRadius: 20, overflow: "hidden", border: i === activeImg ? `2px solid ${INK}` : `2px solid transparent`, cursor: "pointer", flexShrink: 0 }}>
                       <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                   ))}
@@ -667,7 +673,7 @@ export default function ListingDetail() {
 
             {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
             {bildSuche.status !== "idle" && (
-              <div style={{ background: "#E8F4F3", border: "1px solid #1D1D1D33", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
+              <div style={{ background: "#E8F4F3", border: "1px solid #1D1D1D33", borderRadius: 20, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
                   <ScanSearch size={18} color="#1D1D1D" />
                   <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>
@@ -696,7 +702,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── ATTRIBUTE BAR ──────────────────────── */}
-            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden" }}>
+            <div className="attr-strip" style={{ display: "flex", gap: 0, marginBottom: 20, background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden" }}>
               {l.condition && (
                 <div className="attr-cell" style={{ flex: 1, padding: "14px 18px", borderRight: `1px solid ${colors.borderLt}` }}>
                   <p style={{ margin: 0, fontSize: 10.5, color: colors.muted, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}>Zustand</p>
@@ -724,7 +730,7 @@ export default function ListingDetail() {
             </div>
 
             {/* ── BESCHREIBUNG ───────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700 }}>Beschreibung</p>
               {/* Formatierte Beschreibungen (Mini-HTML aus dem Editor) werden
                   IMMER frisch durch sanitizeDescription gefiltert — nie
@@ -756,7 +762,7 @@ export default function ListingDetail() {
                   <>
                     <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
                     {teile.filter(t => t.text).map((t, i) => (
-                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 12, background: "#F5F6F8", borderLeft: "3px solid #F4C03F" }}>
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F5F6F8", borderLeft: "3px solid #F4C03F" }}>
                         <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
                           Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
                         </p>
@@ -778,7 +784,7 @@ export default function ListingDetail() {
                 ...eigenschaften.filter(e => !variantNamen.has(e.name)).map(e => ({ ...e, waehlbar: false })),
               ];
               return (
-                <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+                <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
                   <p style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700 }}>Eigenschaften</p>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "12px 20px" }}>
                     {zeilen.map((e) => (
@@ -796,7 +802,7 @@ export default function ListingDetail() {
             })()}
 
             {/* ── LIEFERUNG & BEZAHLUNG ───────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Lieferung & Bezahlung</p>
               <div className="lief-grid" style={{ display: "grid", gridTemplateColumns: "minmax(84px, 110px) minmax(0, 1fr)", gap: "12px 14px", fontSize: 13 }}>
                 {/* Lieferung nur zeigen, wenn Versand wirklich aktiviert ist:
@@ -824,13 +830,13 @@ export default function ListingDetail() {
             </div>
 
             {/* ── VERKÄUFER ──────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 20 }}>
               <p style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700 }}>Verkäufer</p>
               {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
                   eigene Zeile statt die Infos zu quetschen */}
               <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
-                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={colors.yellow} />}
+                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={INK} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
@@ -856,7 +862,7 @@ export default function ListingDetail() {
 
             {/* ── STANDORT (KARTE) ──────────────────── */}
             {l.city && (
-              <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden", marginBottom: 20 }}>
                 <div style={{ padding: "16px 28px 12px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div>
                     <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Standort</p>
@@ -875,14 +881,14 @@ export default function ListingDetail() {
             )}
 
             {/* ── NACHRICHTEN (aufklappbar) ─────────────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", overflow: "hidden", marginBottom: 20 }}>
               {/* Header mit Toggle */}
               <div onClick={() => setMsgOpen(!msgOpen)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", userSelect: "none" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <MessageCircle size={16} color={colors.muted} />
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>Fragen zum Inserat</p>
                   {questions.length > 0 && (
-                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 12 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal, background: `${colors.teal}12`, padding: "2px 8px", borderRadius: 20 }}>
                       {questions.reduce((sum, q) => sum + (q.messages?.length || 0), 0)}
                     </span>
                   )}
@@ -895,7 +901,7 @@ export default function ListingDetail() {
               <div style={{ padding: "10px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 11, color: colors.muted }}>Öffentlich sichtbar. Andere sehen Frage und Antwort.</span>
                 {user && !isOwner && (
-                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                     <MessageCircle size={14} /> Nachricht an Verkäufer
                   </button>
                 )}
@@ -918,14 +924,14 @@ export default function ListingDetail() {
                           <div key={msg.id} style={{ display: "flex", justifyContent: isMe ? "flex-end" : "flex-start" }}>
                             {/* Gleiches Blasen-Design wie im Chat (Denis 18.09.): eigene in Teal, andere hell mit Schatten */}
                             <div style={{
-                              maxWidth: "78%", padding: nurEmoji ? "2px 6px" : "6px 11px", borderRadius: 12,
+                              maxWidth: "78%", padding: nurEmoji ? "2px 6px" : "6px 11px", borderRadius: 20,
                               background: nurEmoji ? "transparent" : (isMe ? colors.teal : colors.surface),
                               boxShadow: (isMe || nurEmoji) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
                             }}>
                               {/* Name IMMER zeigen, oeffentliche Fragen sieht jeder */}
                               <p style={{ margin: "0 0 1px", fontSize: 11, fontWeight: 700, color: nurEmoji ? colors.muted : (isMe ? "rgba(255,255,255,.85)" : (isSeller ? "#1D1D1D" : colors.dark)) }}>
                                 {isMe ? `Du · ${msg.sender?.display_name || ""}`.replace(/ · $/, "") : (msg.sender?.display_name || "Benutzer")}
-                                {isSeller && <span style={{ fontSize: 9, padding: "1px 6px", borderRadius: 999, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5 }}>Verkäufer</span>}
+                                {isSeller && <span style={{ fontSize: 9, padding: "1px 6px", borderRadius: 999, background: BUTTER, color: INK, fontWeight: 700, marginLeft: 5 }}>Verkäufer</span>}
                               </p>
                               <p style={{ margin: 0, fontSize: nurEmoji ? 30 : 13.5, lineHeight: nurEmoji ? 1.2 : 1.45, color: isMe && !nurEmoji ? "#fff" : colors.dark, whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
                                 {msg.content}
@@ -964,7 +970,7 @@ export default function ListingDetail() {
                     placeholder={isOwner ? "Öffentlich antworten..." : "Frage zum Inserat stellen..."}
                     style={{ flex: 1, minWidth: 0, padding: "9px 16px", borderRadius: 999, border: `1.5px solid ${colors.border}`, fontSize: 14, fontFamily: fonts.body, outline: "none", background: colors.cream }} />
                   <button onClick={handleSendMsg} disabled={!msgText.trim() || sendingMsg} aria-label="Senden" title="Senden"
-                    style={{ width: 38, height: 38, flexShrink: 0, borderRadius: "50%", border: "none", background: msgText.trim() ? colors.yellow : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    style={{ width: 38, height: 38, flexShrink: 0, borderRadius: "50%", border: "none", background: msgText.trim() ? BUTTER : colors.warm, cursor: msgText.trim() ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {sendingMsg ? <Loader2 size={17} color={colors.muted} style={{ animation: "spin 1s linear infinite" }} /> : <SendFrage size={18} color={msgText.trim() ? colors.dark : colors.mutedLt} />}
                   </button>
                 </div>
@@ -986,8 +992,8 @@ export default function ListingDetail() {
           <div style={{ position: "sticky", top: 84 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
-            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
-              <h1 style={{ fontSize: 23, fontWeight: 700, fontFamily: fonts.head, margin: "0 0 8px", lineHeight: 1.2, letterSpacing: "-0.01em", color: INK }}>{l.title}</h1>
+            <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
+              <h1 style={{ fontSize: "clamp(24px, 2.4vw, 32px)", fontWeight: 500, fontFamily: fonts.head, margin: "0 0 10px", lineHeight: 1.12, letterSpacing: "-0.035em", color: INK }}>{l.title}</h1>
               {/* Kaufbox aufgeraeumt (Denis, 16.09.): eine ruhige Meta-Zeile statt Chip + Symbolzeile */}
               <p style={{ margin: "0 0 16px", fontSize: 13, color: colors.muted }}>
                 {l.condition ? `${condLabel} · ` : ""}eingestellt {new Date(l.created_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}
@@ -1042,7 +1048,7 @@ export default function ListingDetail() {
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                       padding: "14px 10px", borderRadius: 999, border: "none", width: "100%", whiteSpace: "nowrap",
-                      background: isOwner ? colors.warm : colors.yellow,
+                      background: isOwner ? colors.warm : BUTTER,
                       color: isOwner ? colors.mutedLt : colors.dark,
                       fontSize: 15, fontWeight: 800, fontFamily: fonts.body, letterSpacing: ".03em",
                       cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1,
@@ -1115,7 +1121,7 @@ export default function ListingDetail() {
                   {/* Dein Preislimit */}
                   {myBid && !isOwner && (
                     <div style={{
-                      padding: "10px 14px", borderRadius: 12, marginBottom: 12,
+                      padding: "10px 14px", borderRadius: 20, marginBottom: 12,
                       background: bids[0]?.bidder_id === user?.id ? "#E8F5E9" : "#FFF3E0",
                       border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
                       fontSize: 13,
@@ -1154,7 +1160,7 @@ export default function ListingDetail() {
                   {l.buy_now_price > 0 && !isOwner && (
                     <button onClick={() => { if (isOwner) return; if (!user) { router.push("/login"); return; } setBidModal("buynow"); }}
                       disabled={isOwner}
-                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #E5E8EC", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "1.5px solid #1D1D1D", background: isOwner ? colors.warm : "#fff", color: isOwner ? colors.mutedLt : colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: isOwner ? "not-allowed" : "pointer", opacity: isOwner ? 0.6 : 1, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <ShoppingBag size={18} /> Sofort kaufen · CHF {fmtPrice(l.buy_now_price)}
                     </button>
                   )}
@@ -1168,7 +1174,7 @@ export default function ListingDetail() {
                       // sonst das naechste gueltige Gebot.
                       setBidAmount(myBid ? (Number(myBid.max_amount) + effInc).toFixed(2) : nextBid.toFixed(2));
                       setBidModal("bid");
-                    }} style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "none", background: colors.yellow, color: colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    }} style={{ width: "100%", padding: "13px 10px", borderRadius: 999, border: "none", background: BUTTER, color: colors.dark, whiteSpace: "nowrap", fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                       <Gavel size={18} /> Gebot abgeben
                     </button>
                   )}
@@ -1259,7 +1265,7 @@ export default function ListingDetail() {
                           display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
                           width: "100%", padding: "10px 0", marginTop: 4,
                           background: "none", border: "none", cursor: "pointer",
-                          fontSize: 12, fontWeight: 700, color: colors.yellow, fontFamily: fonts.body,
+                          fontSize: 12, fontWeight: 700, color: INK, fontFamily: fonts.body,
                         }}>
                           <ChevronDown size={14} style={{ transform: showAllBids ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
                           {showAllBids ? "Weniger anzeigen" : `Alle ${totalBids} Gebote anzeigen`}
@@ -1276,7 +1282,7 @@ export default function ListingDetail() {
               {bidModal && (
                 <Portal>
                     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,.6)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }} onClick={() => { setBidModal(null); setBidInfo(false); }}>
-                      <div onClick={e => e.stopPropagation()} className="bid-modal" style={{ background: "#fff", borderRadius: 12, width: "100%", maxWidth: 440, maxHeight: "min(88vh, 700px)", overflow: "auto", fontFamily: fonts.body }}>
+                      <div onClick={e => e.stopPropagation()} className="bid-modal" style={{ background: "#fff", borderRadius: 20, width: "100%", maxWidth: 440, maxHeight: "min(88vh, 700px)", overflow: "auto", fontFamily: fonts.body }}>
                         {/* Modal Header */}
                         <div style={{ padding: "14px 20px", borderBottom: `1px solid ${colors.border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                           <div>
@@ -1315,7 +1321,7 @@ export default function ListingDetail() {
                                   </button>
                                 </div>
                                 {bidInfo && (
-                                  <ul style={{ margin: "0 0 8px", padding: "8px 12px 8px 26px", background: colors.cream, borderRadius: 12, fontSize: 11.5, lineHeight: 1.45, color: colors.dark }}>
+                                  <ul style={{ margin: "0 0 8px", padding: "8px 12px 8px 26px", background: colors.cream, borderRadius: 20, fontSize: 11.5, lineHeight: 1.45, color: colors.dark }}>
                                     <li>Du gibst dein Preislimit ein. Das System bietet automatisch für dich, immer nur so viel wie nötig.</li>
                                     <li>Du zahlst nur so viel wie nötig: {bids.length === 0 ? "Als erster Bieter steht die Auktion auf dem Startpreis, " : ""}dein Maximum greift erst, wenn jemand mitbietet.</li>
                                     {myBid && <li>Dein Preislimit kannst du jederzeit erhöhen, senken nur bis auf dein aktuelles Gebot von CHF {fmtPrice(myBid.amount)}.</li>}
@@ -1336,7 +1342,7 @@ export default function ListingDetail() {
                                     if (obergrenze != null) neu = Math.min(obergrenze, neu);
                                     setBidAmount(neu.toFixed(2));
                                   };
-                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #E5E8EC", background: "#fff", cursor: "pointer", borderRadius: 12, color: colors.dark };
+                                  const stepBtn = { width: 46, height: 46, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid #1D1D1D", background: "#fff", cursor: "pointer", borderRadius: 20, color: colors.dark };
                                   return (
                                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                       <span style={{ fontSize: 14, color: colors.muted }}>CHF</span>
@@ -1351,17 +1357,17 @@ export default function ListingDetail() {
                                         min={untergrenze}
                                         max={obergrenze ?? undefined}
                                         step={effInc}
-                                        style={{ flex: 1, minWidth: 0, padding: "9px 14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
-                                        onFocus={e => e.target.style.borderColor = colors.yellow}
+                                        style={{ flex: 1, minWidth: 0, padding: "9px 14px", borderRadius: 20, border: `1.5px solid ${colors.border}`, fontSize: 18, fontWeight: 700, fontFamily: fonts.body, outline: "none", textAlign: "right" }}
+                                        onFocus={e => e.target.style.borderColor = INK}
                                         onBlur={e => e.target.style.borderColor = colors.border} />
-                                      <button type="button" aria-label="Gebot erhöhen" onClick={() => schrittSetzen(1)} style={{ ...stepBtn, background: colors.yellow }}><Plus size={18} /></button>
+                                      <button type="button" aria-label="Gebot erhöhen" onClick={() => schrittSetzen(1)} style={{ ...stepBtn, background: BUTTER }}><Plus size={18} /></button>
                                     </div>
                                   );
                                 })()}
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
-                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 12, background: colors.yellowSoft, border: `1px solid ${colors.yellow}`, fontSize: 12 }}>
+                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 20, background: colors.yellowSoft, border: `1px solid ${INK}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
-                                    <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: colors.yellow, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
+                                    <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: INK, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
                                   </div>
                                 )}
                               </div>
@@ -1386,7 +1392,7 @@ export default function ListingDetail() {
                                       <select
                                         value={variantWahl[d.key] || ""}
                                         onChange={(e) => setVariantWahl(prev => ({ ...prev, [d.key]: e.target.value }))}
-                                        style={{ width: "100%", padding: "11px 12px", borderRadius: 12, border: `1.5px solid ${variantWahl[d.key] ? colors.border : colors.yellow}`, fontSize: 14, fontFamily: fonts.body, background: "#fff", cursor: "pointer" }}
+                                        style={{ width: "100%", padding: "11px 12px", borderRadius: 20, border: `1.5px solid ${variantWahl[d.key] ? colors.border : INK}`, fontSize: 14, fontFamily: fonts.body, background: "#fff", cursor: "pointer" }}
                                       >
                                         <option value="">Bitte wählen…</option>
                                         {d.options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
@@ -1404,13 +1410,13 @@ export default function ListingDetail() {
                             {l.shipping_available && (
                               <div onClick={() => setBidShipping("shipping")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "8px 14px", borderRadius: 12, marginBottom: 6, cursor: "pointer",
-                                border: `1.5px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`,
+                                padding: "8px 14px", borderRadius: 20, marginBottom: 6, cursor: "pointer",
+                                border: `1.5px solid ${bidShipping === "shipping" ? INK : colors.border}`,
                                 background: bidShipping === "shipping" ? colors.yellowSoft : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "shipping" ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    {bidShipping === "shipping" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "shipping" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {bidShipping === "shipping" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: BUTTER }} />}
                                   </div>
                                   <span style={{ fontSize: 13 }}>{l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"} {l.ship_speed === "priority" ? "A-Post" : "B-Post"}</span>
                                 </div>
@@ -1426,13 +1432,13 @@ export default function ListingDetail() {
                             {l.pickup_only && (
                               <div onClick={() => setBidShipping("pickup")} style={{
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                                padding: "8px 14px", borderRadius: 12, cursor: "pointer",
-                                border: `1.5px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`,
+                                padding: "8px 14px", borderRadius: 20, cursor: "pointer",
+                                border: `1.5px solid ${bidShipping === "pickup" ? INK : colors.border}`,
                                 background: bidShipping === "pickup" ? colors.yellowSoft : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "pickup" ? colors.yellow : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    {bidShipping === "pickup" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.yellow }} />}
+                                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "pickup" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {bidShipping === "pickup" && <div style={{ width: 8, height: 8, borderRadius: "50%", background: BUTTER }} />}
                                   </div>
                                   <span style={{ fontSize: 13 }}>Abholung in {l.postal_code} {l.city}</span>
                                 </div>
@@ -1456,7 +1462,7 @@ export default function ListingDetail() {
                                   <span>{bidShipping === "pickup" ? "Abholung" : l.shipping_method === "brief" ? "Brief" : "Paket"}</span>
                                   <span>{shipCost === 0 ? "Gratis" : `CHF ${fmtPrice(shipCost)}`}</span>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: "1px solid #E5E8EC" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, color: colors.dark, paddingTop: 8, borderTop: "1px solid #1D1D1D" }}>
                                   <span>{bidModal === "bid" ? "Max. Total" : "Total"}</span>
                                   <span>CHF {fmtPrice(total)}</span>
                                 </div>
@@ -1467,8 +1473,8 @@ export default function ListingDetail() {
                           {/* AGB Text */}
                           <p style={{ fontSize: 11, color: colors.muted, lineHeight: 1.4, margin: "0 0 8px" }}>
                             {bidModal === "bid"
-                              ? <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB</a>. Dein Gebot ist verbindlich.</>
-                              : <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: colors.yellow }}>AGB</a>. Der Kauf ist verbindlich.</>
+                              ? <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: INK }}>AGB</a>. Dein Gebot ist verbindlich.</>
+                              : <>Mit «Bestätigen» akzeptierst du die <a href="/terms" style={{ color: INK }}>AGB</a>. Der Kauf ist verbindlich.</>
                             }
                           </p>
 
@@ -1476,7 +1482,7 @@ export default function ListingDetail() {
 
                           {/* Buttons: bleiben unten stehen, waehrend die Mitte scrollt */}
                           <div className="bid-modal-actions" style={{ display: "flex", gap: 10, position: "sticky", bottom: 0, background: "#fff", padding: "10px 0 14px", marginBottom: -16, borderTop: `1px solid ${colors.borderLt}` }}>
-                            <button onClick={() => { setBidModal(null); setBidInfo(false); }} style={{ flex: 1, padding: "14px", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                            <button onClick={() => { setBidModal(null); setBidInfo(false); }} style={{ flex: 1, padding: "14px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                             <button onClick={async () => {
                               setBidding(true); setBidError("");
                               try {
@@ -1535,7 +1541,7 @@ export default function ListingDetail() {
                               } catch (err) { setBidError(err.message); }
                               finally { setBidding(false); }
                             }} disabled={bidding || (bidModal === "bid" && !bidAmount)}
-                              style={{ flex: 1, padding: "14px", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
+                              style={{ flex: 1, padding: "14px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
                               {bidding ? "Wird verarbeitet..." : bidModal === "bid" ? "Gebot bestätigen" : "Kaufen"}
                             </button>
                           </div>
@@ -1623,7 +1629,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); setBookingError("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart || !bookEnd || new Date(bookEnd) <= new Date(bookStart)}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart && bookEnd ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart && bookEnd ? BUTTER : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart && bookEnd ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> Miete anfragen
                       </button>
                       {bookingError && (
@@ -1679,7 +1685,7 @@ export default function ListingDetail() {
                         } catch (err) { console.error(err); toast.error("Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."); }
                       }}
                         disabled={!bookStart}
-                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart ? colors.yellow : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "14px", borderRadius: 999, border: "none", width: "100%", background: bookStart ? BUTTER : colors.warm, color: colors.dark, fontSize: 15, fontWeight: 800, fontFamily: fonts.body, cursor: bookStart ? "pointer" : "default" }}>
                         <CalendarDays size={18} /> Service anfragen
                       </button>
                       {bookingSuccess && (
@@ -1719,7 +1725,7 @@ export default function ListingDetail() {
               {!isOwner && (
                 <div style={{ textAlign: "center", marginTop: 10 }}>
                   <button onClick={handleFav} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: "6px 10px", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: isFav ? colors.dark : colors.muted }}>
-                    <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={15} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
+                    <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><span style={{ display: "flex", color: isFav ? "#C2255C" : INK }}><BLogo herz size={14} title="" /></span></span>
                     {isFav ? "Gemerkt" : "Merken"}
                   </button>
                 </div>
@@ -1728,7 +1734,7 @@ export default function ListingDetail() {
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
-              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 12, padding: "16px 18px", marginBottom: 14 }}>
+              <div style={{ background: "#FFF3E0", border: "1.5px solid #F4A100", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#CD3800" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#CD3800" }}>• {m}</p>)}
                 <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#F4A100", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
@@ -1737,7 +1743,7 @@ export default function ListingDetail() {
 
             {/* ── BEE-IMPACT BOX ─────────────────────── */}
             {l.status === "active" && beeImpact > 0 && (
-              <div style={{ background: colors.greenSoft, borderRadius: 12, border: "1px solid #E5E8EC", padding: "18px 22px", marginBottom: 14 }}>
+              <div style={{ background: colors.greenSoft, borderRadius: 20, border: "1px solid #1D1D1D", padding: "18px 22px", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                   <BeeIcon size={20} color={colors.green} />
                   <span style={{ fontSize: 14, fontWeight: 700, color: colors.green }}>Bee-Impact</span>
@@ -1749,7 +1755,7 @@ export default function ListingDetail() {
             )}
 
             {/* ── LIEFERUNG SIDEBAR ──────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 22px", marginBottom: 14, fontSize: 13 }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Lieferung</p>
               <p style={{ margin: 0, fontWeight: 600 }}>
                 {l.shipping_method === "brief" ? "Brief" : l.shipping_method === "sperrgut" ? "Sperrgut" : "Paket"}{l.ship_speed === "priority" ? " A-Post" : l.ship_speed === "economy" ? " B-Post" : ""}{l.free_shipping ? ", Gratis" : l.shipping_cost ? `, CHF ${fmtPrice(l.shipping_cost)}` : ""}
@@ -1758,11 +1764,11 @@ export default function ListingDetail() {
             </div>
 
             {/* ── SELLER MINI-CARD ───────────────────── */}
-            <div style={{ background: colors.surface, borderRadius: 12, border: "1px solid #E5E8EC", padding: "16px 22px", marginBottom: 14 }}>
+            <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
-                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={colors.yellow} />}
+                  {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={INK} />}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>
                   {l.seller?.account_type === "business" && l.seller?.company_name ? l.seller.company_name : l.sellerName}
@@ -1770,7 +1776,7 @@ export default function ListingDetail() {
                 <AccountBadge accountType={l.seller?.account_type} />
                 <VerifiedSellerBadge profile={l.seller} size="sm" label={false} />
                 {sellerRating.count > 0 && (
-                  <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 12, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ marginLeft: "auto", padding: "3px 8px", borderRadius: 20, background: colors.greenSoft, color: colors.green, fontSize: 12, fontWeight: 700 }}>
                     {sellerRating.avg.toFixed(1)}
                   </span>
                 )}
@@ -1802,7 +1808,7 @@ export default function ListingDetail() {
                 return (
                   <>
                     <div onClick={() => setShowShare(false)} style={{ position: "fixed", inset: 0, zIndex: 200 }} />
-                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 12, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
+                    <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", zIndex: 201, marginTop: 4, background: "#fff", borderRadius: 20, boxShadow: "0 8px 30px rgba(0,0,0,.14)", border: `1px solid ${colors.borderLt}`, minWidth: 200, overflow: "hidden", padding: "4px 0" }}>
                       {item(<MessageCircle size={16} color="#25D366" />, "WhatsApp", () => { window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, "_blank"); setShowShare(false); })}
                       {item(<Mail size={16} color={colors.muted} />, "E-Mail", () => { window.location.href = `mailto:?subject=${encodeURIComponent(l?.title || "BEEDARO")}&body=${encodeURIComponent(txt)}`; setShowShare(false); })}
                       {item(<Link2 size={16} color={colors.muted} />, shareCopied ? "Link kopiert!" : "Link kopieren", () => { navigator.clipboard.writeText(url); setShareCopied(true); setTimeout(() => setShareCopied(false), 1500); })}
@@ -1827,16 +1833,16 @@ export default function ListingDetail() {
               return (
                 <Portal>
                 <div onClick={() => setShowQr(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-                  <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 12, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
+                  <div onClick={e => e.stopPropagation()} className="qr-print" style={{ background: "#fff", borderRadius: 20, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 320, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
                     <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 800, color: colors.dark }}>QR-Code</h3>
                     <p style={{ margin: "0 0 16px", fontSize: 12, color: colors.muted }}>Scannen führt direkt zu diesem Inserat.</p>
-                    <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 12 }} />
+                    <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 20 }} />
                     <p style={{ margin: "12px 0 0", fontSize: 13, fontWeight: 700, color: colors.dark, wordBreak: "break-word" }}>{l?.title}</p>
                     <div style={{ display: "flex", gap: 8, marginTop: 16 }} className="no-print">
-                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 12, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         <Printer size={15} /> Drucken
                       </button>
-                      <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 12, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         Schliessen
                       </button>
                     </div>
@@ -1850,11 +1856,11 @@ export default function ListingDetail() {
             {showReportModal && (<Portal>
               <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
                 onClick={() => setShowReportModal(false)}>
-                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
+                <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: 20, padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", maxWidth: 420, width: "90%", fontFamily: fonts.body }}>
                   <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 800 }}>Inserat melden</h3>
                   <p style={{ margin: "0 0 12px", fontSize: 12, color: colors.muted }}>Warum möchtest du dieses Inserat melden?</p>
                   <select value={reportReason} onChange={e => setReportReason(e.target.value)}
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, marginBottom: 10, outline: "none" }}>
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, marginBottom: 10, outline: "none" }}>
                     <option value="">Grund wählen...</option>
                     <option value="counterfeit">Gefälschtes Inserat</option>
                     <option value="inappropriate">Unangemessener Inhalt</option>
@@ -1863,10 +1869,10 @@ export default function ListingDetail() {
                     <option value="other">Sonstiges</option>
                   </select>
                   <textarea value={reportText} onChange={e => setReportText(e.target.value)} placeholder="Details (optional)..."
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, minHeight: 80, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
+                    style={{ width: "100%", padding: "10px 12px", borderRadius: 20, border: `1px solid ${colors.border}`, fontSize: 13, fontFamily: fonts.body, minHeight: 80, resize: "vertical", outline: "none", boxSizing: "border-box" }} />
                   <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                     <button onClick={() => setShowReportModal(false)}
-                      style={{ flex: 1, padding: "10px", borderRadius: 12, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
+                      style={{ flex: 1, padding: "10px", borderRadius: 20, border: `1px solid ${colors.border}`, background: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                     <button onClick={async () => {
                       if (!reportReason) return;
                       const { error: reportError } = await supabase.from("reports").insert({ reporter_id: user.id, listing_id: l.id, reason: reportReason, description: reportText || null, report_type: "listing" });
@@ -1874,7 +1880,7 @@ export default function ListingDetail() {
                       setShowReportModal(false); setReportReason(""); setReportText("");
                       alert("Danke für deine Meldung. Wir prüfen das Inserat.");
                     }} disabled={!reportReason}
-                      style={{ flex: 1, padding: "10px", borderRadius: 12, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
+                      style={{ flex: 1, padding: "10px", borderRadius: 20, border: "none", background: reportReason ? "#c62828" : "#ccc", color: "#fff", fontSize: 13, fontWeight: 700, cursor: reportReason ? "pointer" : "default", fontFamily: fonts.body }}>Melden</button>
                   </div>
                 </div>
               </div>
@@ -1885,7 +1891,7 @@ export default function ListingDetail() {
         {/* ── ÄHNLICHE ARTIKEL ─────────────────────────── */}
         {similar.length > 0 && (
           <div style={{ marginTop: 48 }}>
-            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: "1px solid #E5E8EC", letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
+            <h2 style={{ fontSize: "clamp(22px, 3vw, 28px)", fontWeight: 700, fontFamily: fonts.head, margin: "0 0 18px", paddingBottom: 12, borderBottom: "1px solid #1D1D1D", letterSpacing: "-0.01em", color: INK }}>Ähnliche Artikel</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
               {similar.map((item) => (
                 <ListingCard key={item.id} listing={item} userId={user?.id} />
@@ -1908,10 +1914,10 @@ export default function ListingDetail() {
             <BeeIcon size={15} /> Dein Inserat
           </span>
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: colors.yellow, border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: "0 1px 4px rgba(25,22,21,.18)" }}>
+            <Link href={`/listings/${l.id}`} style={{ padding: "9px 16px", background: BUTTER, border: "1px solid #1D1D1D", color: INK, fontSize: 12.5, fontWeight: 800, textDecoration: "none", boxShadow: "none" }}>
               Bearbeiten
             </Link>
-            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: "1px solid #E5E8EC", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
+            <Link href="/listings" style={{ padding: "9px 16px", background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 12.5, fontWeight: 700, textDecoration: "none" }}>
               Meine Inserate
             </Link>
           </div>
@@ -1929,7 +1935,7 @@ export default function ListingDetail() {
             </p>
           </div>
           <button onClick={() => buyBoxRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
-            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 12, border: "1px solid #E5E8EC", background: colors.yellow, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: "0 2px 8px rgba(25,22,21,.15)" }}>
+            style={{ flexShrink: 0, padding: "12px 22px", borderRadius: 20, border: "1px solid #1D1D1D", background: BUTTER, color: INK, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", boxShadow: "none" }}>
             {l.listing_type === "auction" ? "Jetzt bieten" : l.listing_type === "sell" ? "Jetzt kaufen" : "Anfragen"}
           </button>
         </div>
@@ -1959,7 +1965,7 @@ export default function ListingDetail() {
           </div>
           {/* Main Image */}
           <img src={imgs[activeImg]?.url} alt={l.title} onClick={e => e.stopPropagation()}
-            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 12, cursor: "default" }} />
+            style={{ maxWidth: "90vw", maxHeight: "85vh", objectFit: "contain", borderRadius: 20, cursor: "default" }} />
           {/* Arrows */}
           {imgs.length > 1 && <>
             <button onClick={(e) => { e.stopPropagation(); setActiveImg(i => i > 0 ? i - 1 : imgs.length - 1); }}
@@ -1973,9 +1979,9 @@ export default function ListingDetail() {
           </>}
           {/* Thumbnails */}
           {imgs.length > 1 && (
-            <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8, padding: "8px 12px", background: "rgba(0,0,0,0.5)", borderRadius: 12 }} onClick={e => e.stopPropagation()}>
+            <div style={{ position: "absolute", bottom: 20, display: "flex", gap: 8, padding: "8px 12px", background: "rgba(0,0,0,0.5)", borderRadius: 20 }} onClick={e => e.stopPropagation()}>
               {imgs.map((img, i) => (
-                <div key={i} onClick={() => setActiveImg(i)} style={{ width: 52, height: 52, borderRadius: 12, overflow: "hidden", border: i === activeImg ? "2px solid #F4C03F" : "2px solid transparent", cursor: "pointer", opacity: i === activeImg ? 1 : 0.5, transition: "opacity .15s" }}>
+                <div key={i} onClick={() => setActiveImg(i)} style={{ width: 52, height: 52, borderRadius: 20, overflow: "hidden", border: i === activeImg ? "2px solid #F4C03F" : "2px solid transparent", cursor: "pointer", opacity: i === activeImg ? 1 : 0.5, transition: "opacity .15s" }}>
                   <img src={img.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               ))}
