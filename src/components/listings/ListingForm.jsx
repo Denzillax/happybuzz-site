@@ -1976,7 +1976,7 @@ export default function ListingForm({
                           marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? AKZ : "#fff",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: AKZ, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
+                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: INK, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 14 }}>{opt.label}</div>
                               {opt.desc && <div style={{ fontSize: 12, color: colors.muted }}>{opt.desc}</div>}
@@ -2167,7 +2167,8 @@ export default function ListingForm({
                     background: aktiv ? AKZ : "#fff", cursor: "pointer",
                   }}>
                     <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.dark : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: AKZ }} />}
+                      {/* der Punkt ist Ink: in der Akzentfarbe verschwand er auf der gleichfarbigen Zeile (Denis 20.09.2026) */}
+                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: INK }} />}
                     </div>
                     <div>
                       <span style={{ fontWeight: 700, color: colors.dark }}>{opt.label}</span>
