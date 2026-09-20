@@ -285,7 +285,7 @@ export default function ChatConversation() {
                     <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 900, color: colors.dark, fontFamily: fonts.head }}>CHF {amount.toLocaleString("de-CH")}</p>
                     {showActions && (
                       <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-                        <button onClick={() => acceptOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Annehmen</button>
+                        <button onClick={() => acceptOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Annehmen</button>
                         {canCounter && <button onClick={counterOffer} disabled={sending} style={{ padding: "7px 14px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Gegenvorschlag</button>}
                         <button onClick={() => rejectOffer(amount)} disabled={sending} style={{ padding: "7px 14px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.red, fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>Ablehnen</button>
                       </div>
@@ -372,7 +372,7 @@ export default function ChatConversation() {
             <p style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{conv.listing.listing_type === "free" ? "Gratis" : `CHF ${Number(conv.listing.price || 0).toLocaleString("de-CH")}`}</p>
             <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted }}>{isBuyer ? "Du kaufst" : "Du verkaufst"}</p>
           </div>
-          <Link href={`/listing/${conv.listing.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 14px", borderRadius: radius.full, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>Zum Inserat</Link>
+          <Link href={`/listing/${conv.listing.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 14px", borderRadius: radius.full, background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>Zum Inserat</Link>
           {otherUser?.id && (
             <Link href={`/user/${otherUser.id}`} style={{ display: "flex", alignItems: "center", gap: 10, borderTop: `1px solid ${colors.borderLt}`, paddingTop: 14, textDecoration: "none", color: "inherit" }}>
               <div style={{ width: 38, height: 38, borderRadius: "50%", background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>

@@ -476,7 +476,7 @@ function SearchPageInner() {
                       style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #1D1D1D", borderRadius: 20, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
-                    width: "100%", padding: "8px", background: colors.teal, color: "#fff",
+                    width: "100%", padding: "8px", background: "#DBF5F0", color: "#1D1D1D",
                     border: "none", borderRadius: 20, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
@@ -628,7 +628,7 @@ function SearchPageInner() {
                   <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
                 </button>
               )}
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>

@@ -95,7 +95,7 @@ export default function NektarBadge() {
             <span style={{ fontSize: 12, color: "#5B626C", fontWeight: 600 }}>Nektar</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#8A5A00" }}><Droplets size={14} color="#8A5A00" /> {data.nektar}</span>
           </div>
-          <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, background: "#1D1D1D", color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+          <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
             <Gift size={15} /> Belohnungen ansehen
           </Link>
         </div>

@@ -200,8 +200,8 @@ export function ListingCard(props) {
           {(endetBald || istHot) && (<>
             {endetBald && <span style={chip("#C62828", "#fff")}>Endet bald</span>}
             {istHot && (
-              <span style={{ ...chip("#FFE3FB", INK), display: "inline-flex", alignItems: "center", gap: 3 }}>
-                <Flame size={11} color="#C2255C" fill="#C2255C" /> Hot
+              <span style={{ ...chip("#fff", INK), display: "inline-flex", alignItems: "center", gap: 3 }}>
+                <Flame size={11} color="#C62828" fill="#C62828" /> Hot
               </span>
             )}
           </>)}

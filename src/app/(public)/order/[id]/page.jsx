@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -432,7 +432,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (

@@ -73,13 +73,13 @@ export const btnPrimary = {
   padding: "13px 16px",
   borderRadius: 10,
   border: "1px solid #1D1D1D",
-  background: "#1D1D1D", // Meeko: der eine Hauptknopf ist dunkel
-  color: "#fff",
+  background: "#DBF5F0", // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026)
+  color: "#1D1D1D",
   fontSize: 16,
   fontWeight: 600,
   fontFamily: BODY,
   cursor: "pointer",
-  boxShadow: "inset 0 -4px 0 rgba(255,255,255,.22)",
+  boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)",
 };
 
 // Sekundaerbutton (Login: Google/Apple)

@@ -289,7 +289,8 @@ export function Header() {
                 )}
               </div>
             ) : (
-              <Link href="/login" className="hd-knopf hd-knopf-dunkel"><User size={16} /> Anmelden</Link>
+              /* Ausgeloggt (Denis 20.09.2026): nur das Symbol, im selben Kreis, in dem nach dem Anmelden das Profilbild sitzt */
+              <Link href="/login" className="hd-anmelden" aria-label="Anmelden" title="Anmelden"><span className="hd-avatar"><User size={17} strokeWidth={2.1} /></span></Link>
             )}
           </div>
         </div>

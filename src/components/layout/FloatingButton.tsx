@@ -25,19 +25,19 @@ export function FloatingButton() {
         position: 'fixed', bottom: 28, right: 28, zIndex: 40,
         width: hover ? 160 : 50, height: 50, borderRadius: 999,
         // Meeko (Denis 20.09.2026: nicht in Butter): dunkler Hauptknopf wie "Inserieren" in Header, Fuss und Bottom-Nav
-        background: '#1D1D1D', border: '1px solid #1D1D1D', cursor: 'pointer',
+        background: '#DBF5F0', border: '1px solid #1D1D1D', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: hover ? 8 : 0, padding: 0, whiteSpace: 'nowrap',
-        boxShadow: 'inset 0 -4px 0 rgba(255,255,255,.22)',
+        boxShadow: 'inset 0 -4px 0 rgba(29,29,29,.16)',
         transition: 'width 0.28s cubic-bezier(.34,1.56,.64,1), gap 0.28s ease, box-shadow 0.28s ease',
       }}
     >
       <Plus
-        size={22} color="#fff" strokeWidth={2.5}
+        size={22} color="#1D1D1D" strokeWidth={2.5}
         style={{ flexShrink: 0, transition: 'transform 0.28s ease', transform: hover ? 'rotate(90deg)' : 'none' }}
       />
       <span style={{
-        color: '#fff', fontWeight: 600, fontSize: 15,
+        color: '#1D1D1D', fontWeight: 600, fontSize: 15,
         fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
         maxWidth: hover ? 120 : 0, opacity: hover ? 1 : 0,
         overflow: 'hidden', transition: 'max-width 0.28s ease, opacity 0.2s ease',

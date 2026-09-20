@@ -2016,7 +2016,7 @@ export default function ListingForm({
                       )}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   ) : (
@@ -2120,7 +2120,7 @@ export default function ListingForm({
                       })()}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   )}
@@ -2473,12 +2473,12 @@ export default function ListingForm({
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
               borderRadius: 20, border: "1px solid #1D1D1D",
-              // Meeko: der eine Hauptknopf der Seite ist dunkel (wie "Inserieren" im Header und im Fuss)
-              background: "#1D1D1D", color: "#fff",
+              // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026, Art B aus /labor/meeko/knoepfe)
+              background: "#DBF5F0", color: "#1D1D1D",
               fontSize: 15.5, fontWeight: 600, fontFamily: fonts.body, letterSpacing: "-.01em",
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
-              boxShadow: "inset 0 -4px 0 rgba(255,255,255,.22)",
+              boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
             }}
           >
