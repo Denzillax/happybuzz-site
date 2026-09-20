@@ -2428,8 +2428,7 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
   .ft-aufruf { padding-bottom: 28px; margin-bottom: 28px; }
   .ft-knopf { width: 100%; justify-content: center; }
 }
-/* dunkle Tafel: nur darauf sind die echten Pastellfarben der Kacheln ohne Rand zu sehen (auf Weiss hätten sie Kontrast 1.2) */
-.ft-kacheln { max-width: 1280px; margin: 0 auto 28px; padding: 12px 20px; display: flex; justify-content: center; overflow: hidden; border: 1px solid #1D1D1D; border-radius: 28px; background: #1D1D1D; }
+.ft-kacheln { max-width: 1280px; margin: 0 auto 28px; display: flex; justify-content: center; overflow: hidden; }
 .ft-kacheln canvas { display: block; max-width: 100%; }
 /* Am Handy kommt der Kachel-Schriftzug nicht (Denis 20.09.2026). Ohne Breite baut die Zeichenfläche auch nichts auf. */
 @media (max-width: 767px) { .ft-kacheln { display: none; } }
@@ -2586,3 +2585,29 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
    krummen Bogen (derselbe Fehler wie auf der Favoriten-Seite). Solche Knöpfe bleiben eckig. :not(#_) hebt nur das Gewicht
    der Regel über die Pillen-Regel. */
 button[style*="border-bottom: 3px solid"]:not(#_):not(#__), button[style*="border-bottom:3px solid"]:not(#_):not(#__) { border-radius: 0 !important; }
+
+/* ── HOVER-LABOR (hv-*), Seite /labor/meeko/hover: sechs Arten, wie sich eine Inseratkarte erhebt (Denis 20.09.2026).
+   Jede Regel trägt denselben Vorspann wie die Einblend-Regel, sonst hält deren "transform: none" die Karte am Boden. ── */
+.hv-raster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 32px; }
+.hv-feld { min-width: 0; }
+.hv { perspective: 900px; }
+.hv-name { margin: 22px 0 2px; font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+.hv-name b { display: inline-block; min-width: 1.6em; font-weight: 700; }
+.hv-text { margin: 0; font-size: 14.5px; opacity: .7; line-height: 1.45; }
+@media (max-width: 900px) { .hv-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 16px; } }
+@media (hover: hover) and (pointer: fine) {
+  /* 2 Sockel: die Karte steigt, darunter bleibt ein Sockel in der Formatfarbe mit Ink-Kante stehen */
+  html.bd-fx-on .hv-2 .bd-fx-reveal.is-in.lc-karte:hover, .hv-2 .lc-karte.lc-karte.lc-karte:hover { transform: translateY(-12px); box-shadow: 0 12px 0 -1px var(--lc-farbe, #E3E3FF), 0 12px 0 0 #1D1D1D; }
+  /* 3 Federn: Sprung mit Nachpendeln */
+  html.bd-fx-on .hv-3 .bd-fx-reveal.is-in.lc-karte:hover, .hv-3 .lc-karte.lc-karte.lc-karte:hover { animation: hv-feder .62s cubic-bezier(.2,.7,.2,1) both; box-shadow: 0 20px 24px -18px rgba(29,29,29,.3); }
+  /* 4 Wachsen: grösser, vor die Nachbarn, keine Verschiebung */
+  html.bd-fx-on .hv-4 .bd-fx-reveal.is-in.lc-karte:hover, .hv-4 .lc-karte.lc-karte.lc-karte:hover { transform: scale(1.06); box-shadow: none; z-index: 3; position: relative; }
+  .hv-4 .lc-karte:hover .lc-foto { transform: none; }
+  /* 5 Kippen: räumliche Neigung zur Maus (--rx/--ry setzt die Seite) */
+  html.bd-fx-on .hv-5 .bd-fx-reveal.is-in.lc-karte:hover, .hv-5 .lc-karte.lc-karte.lc-karte:hover { transform: translateY(-6px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); box-shadow: 0 24px 30px -20px rgba(29,29,29,.35); transition: transform .12s ease-out, box-shadow .3s ease; }
+  .hv-5 .lc-karte:hover .lc-foto { transform: scale(.95); }
+  /* 6 Aufklappen: Karte steigt, das Foto wird kleiner und rückt nach oben, mehr Farbtafel wird sichtbar */
+  html.bd-fx-on .hv-6 .bd-fx-reveal.is-in.lc-karte:hover, .hv-6 .lc-karte.lc-karte.lc-karte:hover { transform: translateY(-10px); box-shadow: 0 18px 22px -18px rgba(29,29,29,.3); }
+  .hv-6 .lc-karte:hover .lc-foto { transform: translateY(-5%) scale(.84) rotate(0deg); }
+}
+@keyframes hv-feder { 0% { transform: translateY(0) rotate(0); } 38% { transform: translateY(-18px) rotate(-1.6deg); } 62% { transform: translateY(-7px) rotate(.6deg); } 82% { transform: translateY(-12px) rotate(-.9deg); } 100% { transform: translateY(-10px) rotate(-.8deg); } }
