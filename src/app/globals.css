@@ -184,7 +184,8 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
   html.raster-gross .listing-grid, html.raster-gross .search-results-grid,
   html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
   .raster-umschalter { display: none !important; }
-  .listing-grid > a, .search-results-grid > a, .listing-grid > div { padding: 8px; border-radius: 12px; }
+  /* Meeko: kein Innenrand mehr. Die 8 px legten am Handy einen weissen Rahmen um die Farbtafel (Denis 20.09.2026) */
+  .listing-grid > a, .search-results-grid > a, .listing-grid > div { padding: 0; }
 }
 
 /* Startseiten-Reihen auf Mobile: wischbar statt gestapelt (mehr Platz,
@@ -711,8 +712,17 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
-/* Meeko: die Karte hebt sich beim Hovern nur leicht, ohne Schatten und ohne Rahmen */
-.listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div:hover { transform: translateY(-4px); }
+/* Karten-Hover am Desktop (Denis 20.09.2026: anders als das blosse Anheben). Die Karte rückt nach links oben und wirft einen
+   harten Ink-Versatz wie ein aufgeklebter Sticker. Das Foto löst sich von der Tafel: es wird etwas kleiner und kippt leicht,
+   so tritt die Formatfarbe dahinter hervor. Nur mit echter Maus, nicht bei reduzierter Bewegung. Gilt für jede Inseratkarte. */
+.lc-karte { transition: transform .28s cubic-bezier(.2,.7,.1,1), box-shadow .28s cubic-bezier(.2,.7,.1,1); }
+.lc-karte .lc-foto { transition: transform .4s cubic-bezier(.2,.7,.1,1); }
+@media (hover: hover) and (pointer: fine) {
+  .lc-karte:hover { transform: translate(-4px, -4px); box-shadow: 6px 6px 0 #1D1D1D; filter: none !important; }
+  .lc-karte:hover .lc-foto { transform: scale(.93) rotate(-2.5deg); }
+  .lc-karte:active { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 #1D1D1D; }
+}
+@media (prefers-reduced-motion: reduce) { .lc-karte, .lc-karte .lc-foto { transition: none; } .lc-karte:hover .lc-foto { transform: none; } }
 
 /* "Warum wir"-Karten haben ihren eigenen farbigen Hover (Akzentrand + Schatten),
    das globale Abdunkeln machte sie grau (Denis, 15.09.) */
@@ -2255,6 +2265,8 @@ body:has(.mk) { background: #fff; }
 .hd-suche { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 5px 0 14px; border: var(--mk-rand); border-radius: 10px; background: #fff; transition: background .2s ease, box-shadow .15s ease; } /* weiss (Denis 20.09.2026), nicht Lavendel */
 .hd-suche-ki { background: var(--mk-rosa); }
 .hd-suche:focus-within { background: #fff; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); }
+/* KI an: das Feld bleibt Rosa, auch beim Tippen (Denis 20.09.2026). Vorher wurde es beim Fokus weiss. */
+.hd-suche.hd-suche-ki, .hd-suche.hd-suche-ki:focus-within { background: var(--mk-rosa); }
 .hd-suche input { flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; font: inherit; font-size: 15px; color: var(--mk-ink); }
 .hd-suche input::placeholder { color: rgba(29,29,29,.6); }
 .hd-ki { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 9px; flex-shrink: 0; border: var(--mk-rand); border-radius: 999px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }

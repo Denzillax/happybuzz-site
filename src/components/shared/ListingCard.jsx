@@ -100,7 +100,6 @@ export function ListingCard(props) {
   // und der Status ersetzt unten den Countdown.
   const { listing, userId = null, boost = null, onUnfavorite = null, statusOverlay: statusOverlayProp = null } = props;
   const statusOverlay = statusOverlayProp ?? listingInactiveLabel(listing);
-  const [hover, setHover] = useState(false);
   const { isFav, toggleFav } = useFavorite(userId, listing.id);
   const gesenkt = statusOverlay ? null : preisGesenkt(listing); // durchgestrichener früherer Preis
   const cover = getCoverUrl(listing);
@@ -139,9 +138,7 @@ export function ListingCard(props) {
   return (
     <Link
       href={`/listing/${listing.id}`}
-      className="bd-fx-reveal"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      className="bd-fx-reveal lc-karte"
       // Kartenstil (Denis 20.09.2026): Bild und Beschreibung stehen in EINER Karte mit Ink-Rand. Getrennt (Tafel oben, Text lose
       // darunter) wirkte die Beschreibung wie abgeschnitten. Die Pastelltafel füllt den Kartenkopf bis zum Rand.
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, background: "#fff", border: RAND, borderRadius: 20, overflow: "hidden" }}
@@ -151,7 +148,7 @@ export function ListingCard(props) {
         {/* Das Foto liegt mit Abstand auf der Tafel und hat seinen eigenen Rand. Absolut gesetzt, damit Hochformate die Tafel nicht strecken. */}
         <div className="lc-foto" style={{ position: "absolute", inset: 10, borderRadius: 11, border: RAND, overflow: "hidden", background: "#fff" }}>
           {cover
-            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transform: hover ? "scale(1.06)" : "scale(1)", transition: "transform .6s cubic-bezier(.2,.7,.2,1)", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
+            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#bbb" /></div>
           }
         </div>
