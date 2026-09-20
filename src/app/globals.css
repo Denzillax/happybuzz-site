@@ -2427,3 +2427,22 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
   .lf-format strong { font-size: 16px; }
   .lf-format svg { width: 22px; height: 22px; }
 }
+
+/* Inserieren: Schalterkarten (Zahlung, Versand, Abholung, Planen) im Meeko-Stil. Ein: Mint mit dunklem Schalter. */
+.lf-schalter { min-height: 64px; padding: 10px 16px 13px; margin-bottom: 10px; border: 1px solid #1D1D1D; border-radius: 14px; background: #fff; box-shadow: inset 0 -4px 0 rgba(29,29,29,.1); transition: background .2s ease; }
+.lf-schalter:has(.lf-kipp[aria-checked=true]) { background: var(--mk-mint); }
+.lf-schalter span { font-size: 16px !important; font-weight: 600 !important; letter-spacing: -.02em; }
+.lf-schalter span + div { font-size: 13.5px !important; color: #1D1D1D !important; opacity: .7; }
+.lf-kipp { flex-shrink: 0; width: 46px !important; height: 26px !important; border: 1px solid #1D1D1D !important; border-radius: 999px !important; background: #fff !important; }
+.lf-kipp div { top: 2px !important; width: 20px !important; height: 20px !important; background: #1D1D1D !important; }
+.lf-kipp[aria-checked=true] { background: #1D1D1D !important; }
+.lf-kipp[aria-checked=true] div { left: 22px !important; background: #fff !important; }
+/* Inserieren: Band und erste Karte tragen die Farbe des gewählten Formats */
+.lf-formatband { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 12px 18px; border: 1px solid #1D1D1D; border-radius: 18px; font-size: 14.5px; color: #1D1D1D; transition: background .35s ease; }
+.lf-formatband-marke { padding: 3px 12px 4px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 700; }
+.lf-section-format { transition: background .35s ease; }
+.lf-section.lf-section-format.mk-rose { background: var(--mk-rose) !important; } .lf-section.lf-section-format.mk-lavendel { background: var(--mk-lavendel) !important; }
+.lf-section.lf-section-format.mk-himmel { background: var(--mk-himmel) !important; } .lf-section.lf-section-format.mk-rosa { background: var(--mk-rosa) !important; }
+.lf-section.lf-section-format.mk-butter { background: var(--mk-butter) !important; }
+/* auf farbiger Karte sind die nicht gewählten Kacheln weiss, die gewählte behält ihre Farbe und den Ring */
+.lf-section-format .lf-format:not(.is-active) { background: #fff !important; }

@@ -942,7 +942,13 @@ export default function ListingForm({
       )}
 
       {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}
-      <div style={sectionBase} className="lf-section">
+      {/* Meeko (Denis 20.09.2026): die Wahl färbt die Seite. Ein Band über dem Formular und die Karte selbst tragen die
+          Pastellfarbe des gewählten Formats, dieselbe wie später die Tafel hinter dem Foto. Gratis ist Butter. */}
+      <div className={`lf-formatband mk-${TYP_PASTELL[isFree ? "free" : form.listing_type] || "rose"}`}>
+        <span className="lf-formatband-marke">{isFree ? "Gratis" : (TYPE_TABS.find((x) => x.value === form.listing_type)?.label || "Festpreis")}</span>
+        <span>So sieht die Tafel hinter deinem Foto aus.</span>
+      </div>
+      <div style={sectionBase} className={`lf-section lf-section-format mk-${TYP_PASTELL[isFree ? "free" : form.listing_type] || "rose"}`}>
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
           <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>
@@ -1807,36 +1813,36 @@ export default function ListingForm({
           <SectionHead icon={Tag} title="Zahlung" hint="Wie möchtest du bezahlt werden?" />
 
           {/* TWINT Toggle */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+          <div className="lf-schalter" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
             <div>
               <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>TWINT</span>
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per TWINT</div>
             </div>
-            <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
+            <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
               background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
           {/* Barzahlung Toggle */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+          <div className="lf-schalter" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
             <div>
               <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>Barzahlung</span>
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung vor Ort in bar</div>
             </div>
-            <button onClick={() => set("pay_cash", !form.pay_cash)} style={{
+            <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_cash)} onClick={() => set("pay_cash", !form.pay_cash)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
               background: form.pay_cash ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
           {/* Banküberweisung Toggle */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0" }}>
+          <div className="lf-schalter" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
             <div>
               <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>Überweisung / Rechnung</span>
               <div style={{ fontSize: 11, color: colors.muted }}>Zahlung per Banküberweisung</div>
             </div>
-            <button onClick={() => set("pay_bank", !form.pay_bank)} style={{
+            <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_bank)} onClick={() => set("pay_bank", !form.pay_bank)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
               background: form.pay_bank ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
@@ -1848,13 +1854,13 @@ export default function ListingForm({
         <SectionHead icon={Truck} title="Lieferung" hint="Versand- und Abholoptionen. Kosten trägt der Käufer." />
 
         {/* ─ Versand Toggle ─ */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+        <div className="lf-schalter lf-schalter-links" style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <button onClick={() => {
             const next = !form.shipping_available;
             set("shipping_available", next);
             if (next) { set("pay_bank", true); if (!form.shipping_method) set("shipping_method", "paket"); }
             if (!next) { set("pay_bank", false); if (!form.pickup_only) set("pickup_only", true); }
-          }} style={{
+          }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.shipping_available)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
             background: form.shipping_available ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
@@ -1910,12 +1916,12 @@ export default function ListingForm({
             )}
 
             {/* TWINT Toggle */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+            <div className="lf-schalter" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
               <div>
                 <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>TWINT akzeptieren</span>
                 <div style={{ fontSize: 11, color: colors.muted }}>Käufer kann auch mit TWINT bezahlen</div>
               </div>
-              <button onClick={() => set("pay_twint", !form.pay_twint)} style={{
+              <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
                 width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
                 background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
               }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
@@ -1987,7 +1993,7 @@ export default function ListingForm({
                       </select>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2077,7 +2083,7 @@ export default function ListingForm({
                         <>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2113,12 +2119,12 @@ export default function ListingForm({
         )}
 
         {/* ─ Abholung Toggle ─ */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 0" }}>
+        <div className="lf-schalter lf-schalter-links" style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <button onClick={() => {
             const next = !form.pickup_only;
             set("pickup_only", next);
             if (!next && !form.shipping_available) set("shipping_available", true);
-          }} style={{
+          }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pickup_only)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
             background: form.pickup_only ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
@@ -2179,12 +2185,12 @@ export default function ListingForm({
               ["pay_twint", "TWINT", "TWINT bei Übergabe"],
               ["pay_bank", "Überweisung", "Banküberweisung / QR-Rechnung"],
             ].map(([key, label, desc]) => (
-              <div key={key} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: `1px solid ${colors.borderLt}` }}>
+              <div key={key} className="lf-schalter" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14 }}>
                 <div>
                   <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{label}</span>
                   <div style={{ fontSize: 11, color: colors.muted }}>{desc}</div>
                 </div>
-                <button onClick={() => set(key, !form[key])} style={{
+                <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form[key])} onClick={() => set(key, !form[key])} style={{
                   width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
                   background: form[key] ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
                 }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
@@ -2286,7 +2292,7 @@ export default function ListingForm({
                   </div>
                   {/* Right: percentage only */}
                   <div style={{ textAlign: "right", flexShrink: 0, paddingRight: 12 }}>
-                    <p style={{ margin: 0, fontSize: 34, fontWeight: 500, letterSpacing: "-.05em", lineHeight: 1, color: INK, fontFamily: fonts.head, fontVariantNumeric: "tabular-nums" }}>{pct}<span style={{ fontSize: 17, marginLeft: 1 }}>%</span></p>
+                    <p style={{ margin: 0, fontSize: 20, fontWeight: 600, letterSpacing: "-.03em", lineHeight: 1, color: INK, fontFamily: fonts.head, fontVariantNumeric: "tabular-nums" }}>{pct}<span style={{ fontSize: 13, marginLeft: 1 }}>%</span></p>
                   </div>
                 </div>
               </div>
@@ -2443,7 +2449,7 @@ export default function ListingForm({
               const t = new Date(); t.setDate(t.getDate() + 1); t.setHours(9, 0, 0, 0);
               set("publish_at", new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16));
             }}
-            style={{
+            className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.publish_at)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
               background: form.publish_at ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
             }}
