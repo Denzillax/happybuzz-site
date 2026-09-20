@@ -43,10 +43,11 @@ const SPALTEN = 17;
 // ordnen sich dabei zum nächsten Wort um. Ohne Liste bleibt es bei `wort`.
 // kachel: true = Quadrate statt Punkte (Denis 20.09.2026: "nicht rund, sondern kachelig"), passend zum kacheligen B.
 // logo: true = vor dem Wort steht das B-Zeichen, aus denselben Kacheln. gewicht: Schriftgewicht beim Rastern.
-// farben: eine Farbe je Wort aus `woerter` (gleiche Reihenfolge). Das Wort trägt dann die Farbe dessen, wofür es steht.
+// kachelRand: Farbe eines 1 px Rands um jede Kachel. Damit lassen sich die echten Pastellfarben auf Weiss zeigen
+// (Pastellfläche mit Ink-Rand, wie alle Flächen der Seite). farben: eine Farbe je Wort aus `woerter` (gleiche Reihenfolge). Das Wort trägt dann die Farbe dessen, wofür es steht.
 // zerfall "einlauf": für den Seitenfuss. Das Wort setzt sich zusammen, während es von unten ins Bild kommt, und steht
 // ganz, sobald es vollständig sichtbar ist (die Bildmitte erreicht ein Fuss nie).
-export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400, kachel = false, logo = false, gewicht = 800, mausRadius = 6, mausKraft = 0.9, farben = null }) {
+export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400, kachel = false, logo = false, gewicht = 800, mausRadius = 6, mausKraft = 0.9, farben = null, kachelRand = null }) {
   const cvRef = useRef(null);
 
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       // WH = Höhe des Worts. Mit Zerfall kommt oben und unten Luft dazu, sonst würden die Punkte abgeschnitten.
       WH = Math.round(breite * 0.2);
       B = breite; H = WH + (zerfall ? Math.round(WH * (zerfall === "einlauf" ? 0.45 : 1.1)) : 0);
-      raster = breite > 900 ? 8 : breite > 480 ? 6 : 5;
+      raster = kachelRand ? (breite > 900 ? 11 : breite > 480 ? 8 : 6) : (breite > 900 ? 8 : breite > 480 ? 6 : 5);
       cv.width = Math.round(B * dpr); cv.height = Math.round(H * dpr);
       cv.style.width = B + "px"; cv.style.height = H + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -154,10 +155,11 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
     const malen = () => {
       ctx.clearRect(0, 0, B, H);
       ctx.fillStyle = (farben && farben[nr]) || farbe;
+      if (kachelRand) { ctx.strokeStyle = kachelRand; ctx.lineWidth = 1; }
       const r = raster * 0.4;
       for (const p of punkte) {
         if (p.x < r || p.x > B - r || p.y < r || p.y > H - r) continue; // halbe Punkte an der Kante weglassen
-        if (kachel) { const s = raster * 0.86; ctx.fillRect(p.x - s / 2, p.y - s / 2, s, s); }
+        if (kachel) { const s = raster * 0.86; ctx.fillRect(p.x - s / 2, p.y - s / 2, s, s); if (kachelRand) ctx.strokeRect(p.x - s / 2 + 0.5, p.y - s / 2 + 0.5, s - 1, s - 1); }
         else { ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.2832); ctx.fill(); }
       }
       if (biene.an) {
@@ -256,7 +258,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       cv.removeEventListener("mousemove", bewegung); cv.removeEventListener("mouseleave", weg);
       window.removeEventListener("scroll", rollen); window.removeEventListener("resize", rollen);
     };
-  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, kachel, logo, gewicht, mausRadius, mausKraft, (woerter || []).join("|"), (farben || []).join("|")]);
+  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, kachel, logo, gewicht, mausRadius, mausKraft, (woerter || []).join("|"), (farben || []).join("|"), kachelRand]);
 
   return <canvas ref={cvRef} className="bh-wort" role="img" aria-label="Beedaro" />;
 }
