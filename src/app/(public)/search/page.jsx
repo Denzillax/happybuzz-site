@@ -46,7 +46,7 @@ function FilterPill({ label, value, options, onChange, active }) {
         onClick={() => setOpen(!open)}
         style={{
           display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 14px", borderRadius: 12,
+          padding: "8px 14px", borderRadius: 20,
           border: active ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
           color: active ? "#1D1D1D" : INK,
@@ -66,8 +66,8 @@ function FilterPill({ label, value, options, onChange, active }) {
       {open && (
         <div style={{
           position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-          background: "#fff", borderRadius: 12,
-          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: "1px solid #E5E8EC",
+          background: "#fff", borderRadius: 20,
+          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: "1px solid #1D1D1D",
           minWidth: 180, maxHeight: 280, overflowY: "auto",
           padding: "6px 0",
         }}>
@@ -311,7 +311,8 @@ function SearchPageInner() {
       <div className="bd-seite-breit">
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
-        <div className="search-mobile-bar" style={{ background: "#F1F3F5", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
+        {/* Meeko-Design (20.09.2026): Lavendel-Feld mit Ink-Rand wie die Suche im Header, mit KI-Schalter an wird es Rosa */}
+        <div className="search-mobile-bar" style={{ background: kiModus ? "#FFE3FB" : "#E3E3FF", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
           <Search size={16} style={{ marginLeft: 12, color: "#686E78", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
@@ -330,11 +331,11 @@ function SearchPageInner() {
           )}
           {/* KI-Schalter (wie im Header, gleicher Speicher) */}
           <button type="button" onClick={toggleKi} aria-pressed={kiModus} title={kiModus ? "KI-Suche an" : "KI-Suche aus"}
-            style={{ display: "inline-flex", alignItems: "center", gap: 4, height: 30, padding: "0 9px", marginRight: 4, borderRadius: 999, border: `1.5px solid ${kiModus ? KI_FARBE : "#D5D9DF"}`, background: kiModus ? KI_FARBE : "#fff", color: kiModus ? "#fff" : "#5B626C", fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", flexShrink: 0 }}>
+            style={{ display: "inline-flex", alignItems: "center", gap: 4, height: 30, padding: "0 9px", marginRight: 4, borderRadius: 999, border: `1.5px solid ${kiModus ? KI_FARBE : "#1D1D1D"}`, background: kiModus ? KI_FARBE : "#fff", color: kiModus ? "#fff" : "#5B626C", fontSize: 12, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", flexShrink: 0 }}>
             <Sparkles size={13} /> KI
           </button>
           <button onClick={suchenStarten}
-            style={{ padding: "9px 18px", background: kiModus ? KI_FARBE : "#F4C03F", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: kiModus ? "#fff" : INK, fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "9px 18px", background: "#1D1D1D", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#fff", fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
@@ -349,7 +350,7 @@ function SearchPageInner() {
                 onClick={() => { setQuery(term); setPage(1); }}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "6px 12px", borderRadius: 12, cursor: "pointer",
+                  padding: "6px 12px", borderRadius: 20, cursor: "pointer",
                   border: `1.5px solid ${colors.border}`, background: "#fff",
                   fontSize: 13, fontFamily: fonts.body, color: colors.dark, whiteSpace: "nowrap",
                 }}
@@ -391,7 +392,7 @@ function SearchPageInner() {
           </h1>
           <button onClick={zeigeZufall} disabled={zufallLaedt} style={{
             display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 16px",
-            borderRadius: 999, border: "1px solid #E5E8EC", background: "#fff",
+            borderRadius: 999, border: "1px solid #1D1D1D", background: "#fff",
             fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: INK,
             cursor: zufallLaedt ? "default" : "pointer", opacity: zufallLaedt ? 0.6 : 1, whiteSpace: "nowrap",
           }}>
@@ -403,7 +404,7 @@ function SearchPageInner() {
         {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
             Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
         {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#1D1D1D33"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#1D1D1D33"}`, borderRadius: 20, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
             <Sparkles size={14} />
             <span style={{ flex: 1 }}>
               {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
@@ -414,7 +415,7 @@ function SearchPageInner() {
 
         {/* ── Filter Pills Row ── */}
         <div style={{
-          background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC",
+          background: "#fff", borderRadius: 20, border: "1px solid #1D1D1D",
           padding: "16px 18px", marginBottom: 20,
         }}>
           {/* Row 1: Main filters */}
@@ -449,7 +450,7 @@ function SearchPageInner() {
             <div ref={priceRef} style={{ position: "relative" }}>
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 12,
+                padding: "8px 14px", borderRadius: 20,
                 border: (minPrice || maxPrice) ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
                 color: (minPrice || maxPrice) ? "#1D1D1D" : INK,
@@ -464,19 +465,19 @@ function SearchPageInner() {
               {showPrice && (
                 <div style={{
                   position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
-                  border: "1px solid #E5E8EC", padding: 16, width: 220,
+                  background: "#fff", borderRadius: 20, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
+                  border: "1px solid #1D1D1D", padding: 16, width: 220,
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
                   <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                     <input type="number" placeholder="Von" value={minPrice} onChange={e => setMinPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E5E8EC", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #1D1D1D", borderRadius: 20, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                     <input type="number" placeholder="Bis" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E5E8EC", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
+                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #1D1D1D", borderRadius: 20, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
                     width: "100%", padding: "8px", background: colors.teal, color: "#fff",
-                    border: "none", borderRadius: 12, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
+                    border: "none", borderRadius: 20, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
               )}
@@ -490,7 +491,7 @@ function SearchPageInner() {
               title="Nur Verkäufer mit geprüftem Ausweis + E-Mail"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 12, cursor: "pointer",
+                padding: "8px 14px", borderRadius: 20, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
                 border: `1px solid ${verifiedOnly ? "#50804F" : "#191615"}`,
                 background: verifiedOnly ? "#EEF4EC" : "#fff",
@@ -553,7 +554,7 @@ function SearchPageInner() {
               }} style={{
                 fontSize: 13, fontWeight: 700, color: searchSaved ? "#50804F" : colors.teal,
                 background: "none", border: `1.5px solid ${searchSaved ? "#50804F" : colors.teal}`,
-                padding: "5px 10px", borderRadius: 12, cursor: searchSaved ? "default" : "pointer",
+                padding: "5px 10px", borderRadius: 20, cursor: searchSaved ? "default" : "pointer",
                 fontFamily: fonts.body, whiteSpace: "nowrap",
               }}>
                 {searchSaved ? "Gespeichert. Wir melden neue Treffer." : "Suche speichern"}
@@ -589,8 +590,8 @@ function SearchPageInner() {
               <div key={i} style={{ background: "#fff", borderRadius: radius.md, border: `1px solid ${colors.border}`, overflow: "hidden" }}>
                 <div className="bd-fx-skel" style={{ aspectRatio: "1/1", background: colors.warm }} />
                 <div style={{ padding: 14 }}>
-                  <div className="bd-fx-skel" style={{ height: 14, background: colors.warm, borderRadius: 12, width: "75%", marginBottom: 8 }} />
-                  <div className="bd-fx-skel" style={{ height: 18, background: colors.warm, borderRadius: 12, width: "40%" }} />
+                  <div className="bd-fx-skel" style={{ height: 14, background: colors.warm, borderRadius: 20, width: "75%", marginBottom: 8 }} />
+                  <div className="bd-fx-skel" style={{ height: 18, background: colors.warm, borderRadius: 20, width: "40%" }} />
                 </div>
               </div>
             ))}
@@ -605,7 +606,7 @@ function SearchPageInner() {
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button key={i} onClick={() => setPage(i + 1)}
                     style={{
-                      width: 36, height: 36, borderRadius: 12, fontSize: 14, fontWeight: 600,
+                      width: 36, height: 36, borderRadius: 20, fontSize: 14, fontWeight: 600,
                       fontFamily: fonts.body, border: "none", cursor: "pointer",
                       background: page === i + 1 ? colors.dark : "transparent",
                       color: page === i + 1 ? "#fff" : colors.muted,
@@ -623,12 +624,12 @@ function SearchPageInner() {
             <p style={{ fontSize: 14, color: colors.muted, marginBottom: 20 }}>{query.trim() ? "Zu diesem Wortlaut ist nichts inseriert. Die KI kann nach der Bedeutung suchen." : "Andere Suchbegriffe probieren oder die Filter zurücksetzen."}</p>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
               {query.trim() && (
-                <button onClick={kiNachfassen} disabled={kiLaedt} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 12, background: PETROL, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: fonts.body }}>
+                <button onClick={kiNachfassen} disabled={kiLaedt} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 20, background: PETROL, color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: fonts.body }}>
                   <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
                 </button>
               )}
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: INK, color: PAPER, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #E5E8EC", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>
         )}

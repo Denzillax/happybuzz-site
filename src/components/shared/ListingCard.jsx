@@ -155,7 +155,7 @@ export function ListingCard(props) {
         </div>
 
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
-        <div style={{ position: "absolute", top: 18, left: 18, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+        <div className="lc-oben-l" style={{ position: "absolute", top: 18, left: 18, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
           {TYP_LABEL[listing.listing_type] && <span style={chip()}>{TYP_LABEL[listing.listing_type]}</span>}
           {hasFeatured && <span style={{ ...chip("#E8A820", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
@@ -176,7 +176,7 @@ export function ListingCard(props) {
         )}
 
         {/* Oben rechts: Merken-Herz */}
-        <div style={{ position: "absolute", top: 18, right: 18 }}>
+        <div className="lc-oben-r" style={{ position: "absolute", top: 18, right: 18 }}>
           <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
         </div>
 
