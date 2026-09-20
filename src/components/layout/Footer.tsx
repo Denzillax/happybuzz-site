@@ -1,110 +1,61 @@
 'use client'
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
 import BieneSchalter from '@/components/shared/BieneSchalter'
 
-const MONO = "'Instrument Sans', 'Manrope', sans-serif"
-
-const links = {
-  marktplatz: [
+// Meeko-Design (20.09.2026): der Fuss ist eine Lavendel-Tafel mit Ink-Rand. Oben der Aufruf zum Inserieren, darunter
+// Marke und die drei Linkspalten, unten die Rechtszeile mit dem Bienen-Schalter. Inhalt und Links wie vorher.
+// Styles: globals.css, Block FUSS MEEKO (ft-*). Die Klassen ftr-grid und ftr-bottom bleiben für die Handy-Regeln.
+const links = [
+  { titel: 'Marktplatz', eintraege: [
     { label: 'Stöbern', href: '/search' },
     { label: 'Inserieren', href: '/listings/new' },
     { label: 'So funktionierts', href: '/how-it-works' },
-  ],
-  unternehmen: [
+  ] },
+  { titel: 'Über uns', eintraege: [
     { label: 'Über BEEDARO', href: '/about' },
     { label: 'Bee-Impact', href: '/impact' },
     { label: 'Jobs', href: '/about#jobs' },
-  ],
-  support: [
+  ] },
+  { titel: 'Support', eintraege: [
     { label: 'Hilfe & FAQ', href: '/help' },
     { label: 'Kontakt', href: '/contact' },
     { label: 'Datenschutz', href: '/privacy' },
-  ],
-}
+  ] },
+]
 
 export function Footer() {
   return (
-    <footer style={{ background: '#FFFFFF', color: '#191615', borderTop: '1px solid #E5E8EC' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 24px 24px' }}>
-        {/* Top Grid */}
-        <div className="ftr-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
-          {/* Brand */}
-          <div>
-            <Logo width={170} />
-            <p style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', lineHeight: 1.6, marginTop: 16, maxWidth: 280 }}>
-              Secondhand mit Haltung. Der Schweizer Marktplatz für Dinge mit Geschichte.
-            </p>
-            <p style={{ fontSize: 13, color: 'rgba(25,22,21,.45)', marginTop: 16, lineHeight: 1.5 }}>
-              Gemeindehausstrasse 11B<br />
-              6010 Kriens, Schweiz
-            </p>
-          </div>
-
-          {/* Marktplatz */}
-          <div>
-            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: '#191615', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
-              Marktplatz
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {links.marktplatz.map(l => (
-                <li key={l.href} style={{ marginBottom: 10 }}>
-                  <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#1D1D1D'}
-                    onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Unternehmen */}
-          <div>
-            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: '#191615', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
-              Über uns
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {links.unternehmen.map(l => (
-                <li key={l.href} style={{ marginBottom: 10 }}>
-                  <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#1D1D1D'}
-                    onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: '#191615', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 16 }}>
-              Support
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {links.support.map(l => (
-                <li key={l.href} style={{ marginBottom: 10 }}>
-                  <Link href={l.href} style={{ fontSize: 14, color: 'rgba(25,22,21,.6)', textDecoration: 'none', transition: 'color 0.15s' }}
-                    onMouseEnter={e => (e.target as HTMLElement).style.color = '#1D1D1D'}
-                    onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(25,22,21,.6)'}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+    <footer className="ft">
+      <div className="ft-tafel">
+        <div className="ft-aufruf">
+          <p className="ft-satz">Dein Keller hat Inventar.<br />Wir haben Käufer.</p>
+          <Link href="/listings/new" className="ft-knopf"><Plus size={17} strokeWidth={2.4} aria-hidden="true" /> Inserieren</Link>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="ftr-bottom" style={{ borderTop: '1px solid #E5E8EC', paddingTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <p style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', margin: 0 }}>
-            © 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784. Alle Rechte vorbehalten.
-          </p>
-          <div style={{ display: 'flex', gap: 20 }}>
-            <Link href="/terms" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>AGB</Link>
-            <Link href="/privacy" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>Datenschutz</Link>
-            <Link href="/imprint" style={{ fontSize: 12, color: 'rgba(25,22,21,.45)', textDecoration: 'none' }}>Impressum</Link>
+        <div className="ftr-grid ft-raster">
+          <div>
+            <Logo width={170} />
+            <p className="ft-text">Secondhand mit Haltung. Der Schweizer Marktplatz für Dinge mit Geschichte.</p>
+            <p className="ft-adresse">Gemeindehausstrasse 11B<br />6010 Kriens, Schweiz</p>
+          </div>
+          {links.map((spalte) => (
+            <div key={spalte.titel}>
+              <h4 className="ft-titel">{spalte.titel}</h4>
+              <ul className="ft-liste">
+                {spalte.eintraege.map((l) => <li key={l.href}><Link href={l.href}>{l.label}</Link></li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="ftr-bottom ft-unten">
+          <p>© 2026 BEEDARO, eine Marke von MOQRO by Denis Mihaljevic · CHE-237.380.784. Alle Rechte vorbehalten.</p>
+          <div className="ft-recht">
+            <Link href="/terms">AGB</Link>
+            <Link href="/privacy">Datenschutz</Link>
+            <Link href="/imprint">Impressum</Link>
             <BieneSchalter />
           </div>
         </div>
