@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Plus } from 'lucide-react'
 
 const YELLOW = '#F4C03F'
-const DARK = '#1D1D1D'
 
 export function FloatingButton() {
   const [hover, setHover] = useState(false)
@@ -25,21 +24,20 @@ export function FloatingButton() {
       style={{
         position: 'fixed', bottom: 28, right: 28, zIndex: 40,
         width: hover ? 160 : 50, height: 50, borderRadius: 999,
-        background: "#FFE7A9", border: 'none', cursor: 'pointer',
+        // Meeko (Denis 20.09.2026: nicht in Butter): dunkler Hauptknopf wie "Inserieren" in Header, Fuss und Bottom-Nav
+        background: '#1D1D1D', border: '1px solid #1D1D1D', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: hover ? 8 : 0, padding: 0, whiteSpace: 'nowrap',
-        boxShadow: hover
-          ? '0 8px 28px rgba(244,192,63,0.5)'
-          : '0 4px 16px rgba(244,192,63,0.35)',
+        boxShadow: 'inset 0 -4px 0 rgba(255,255,255,.22)',
         transition: 'width 0.28s cubic-bezier(.34,1.56,.64,1), gap 0.28s ease, box-shadow 0.28s ease',
       }}
     >
       <Plus
-        size={22} color={DARK} strokeWidth={2.5}
+        size={22} color="#fff" strokeWidth={2.5}
         style={{ flexShrink: 0, transition: 'transform 0.28s ease', transform: hover ? 'rotate(90deg)' : 'none' }}
       />
       <span style={{
-        color: DARK, fontWeight: 800, fontSize: 15,
+        color: '#fff', fontWeight: 600, fontSize: 15,
         fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
         maxWidth: hover ? 120 : 0, opacity: hover ? 1 : 0,
         overflow: 'hidden', transition: 'max-width 0.28s ease, opacity 0.2s ease',

@@ -2274,7 +2274,8 @@ body:has(.mk) { background: #fff; }
 .hd .hdr-icon-btn:hover, .hd .hdr-icon-btn[aria-expanded=true] { background: var(--mk-lavendel) !important; filter: none !important; }
 .hd-zahl { position: absolute; top: 3px; right: 3px; min-width: 17px; height: 17px; padding: 0 4px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #C62828; color: #fff; font-size: 10px; font-weight: 700; border: 2px solid #fff; }
 .hd-sep { width: 1px; height: 26px; background: rgba(29,29,29,.2); flex-shrink: 0; margin: 0 6px; }
-.hd-avatar { width: 34px; height: 34px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: var(--mk-butter); color: var(--mk-ink); font-size: 12.5px; font-weight: 700; }
+/* Avatar in Mint, nicht Butter (Denis 20.09.2026) */
+.hd-avatar { width: 34px; height: 34px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: var(--mk-mint); color: var(--mk-ink); font-size: 12.5px; font-weight: 700; }
 .hd-avatar-gross { width: 46px; height: 46px; font-size: 16px; }
 /* Aufklappmenüs: weiss, Ink-Rand, kein Schatten */
 .hd-klapp { position: absolute; right: 0; top: calc(100% + 12px); z-index: 100; padding: 8px; background: #fff; border: var(--mk-rand); border-radius: 18px; display: flex; flex-direction: column; }
@@ -2319,7 +2320,7 @@ body:has(.mk) { background: #fff; }
 .bn-reihe { display: flex; align-items: center; justify-content: space-around; max-width: 480px; margin: 0 auto; height: 60px; }
 .bn .bn-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; padding: 4px 6px; border: none; background: none; color: var(--mk-ink); font: inherit; font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px !important; }
 .bn-icon { width: 44px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 999px; transition: background .2s ease, border-color .2s ease; }
-.bn-tab[aria-current=page] .bn-icon { background: var(--mk-butter); border-color: var(--mk-ink); }
+.bn-tab[aria-current=page] .bn-icon { background: var(--mk-mint); border-color: var(--mk-ink); }
 .bn-tab:not([aria-current=page]) { opacity: .72; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
 .bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-ink); color: #fff; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); transform: translateY(-10px); }
@@ -2415,6 +2416,8 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
 /* dunkle Tafel: nur darauf sind die echten Pastellfarben der Kacheln ohne Rand zu sehen (auf Weiss hätten sie Kontrast 1.2) */
 .ft-kacheln { max-width: 1280px; margin: 0 auto 28px; padding: 12px 20px; display: flex; justify-content: center; overflow: hidden; border: 1px solid #1D1D1D; border-radius: 28px; background: #1D1D1D; }
 .ft-kacheln canvas { display: block; max-width: 100%; }
+/* Am Handy kommt der Kachel-Schriftzug nicht (Denis 20.09.2026). Ohne Breite baut die Zeichenfläche auch nichts auf. */
+@media (max-width: 767px) { .ft-kacheln { display: none; } }
 @media print { .ft { display: none !important; } }
 
 /* ── INSERATSEITE MEEKO, Schritt 3 (Denis 20.09.2026) ── */

@@ -8,7 +8,7 @@ export const colors = {
   // Brand (Gold = nur Marke, Logo, Featured) — Werte gemäß Brand-Spec (CLAUDE.md)
   yellow:     "#F4C03F",   // seit dem Meeko-Design nur noch für Sterne und Spiele. Flächen: butter, Schrift und Rahmen: dark
   butter:     "#FFE7A9",
-  yellowSoft: "#FFE7A9",
+  yellowSoft: "#DBF5F0",
   yellowHover:"#D9A005",
   yellowLight:"#FFE7A9",
   yellowDark: "#D9A005",
