@@ -66,7 +66,7 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
 - Knöpfe: 10 px Ecken oder Pille, eingedrückter Schatten unten (`inset 0 -4px 0 rgba(29,29,29,.16)`). Hauptknopf Mint mit Ink-Rand und Ink-Schrift
   (Denis 20.09.2026, schwarze Knöpfe abgelehnt), Hover Lavendel. Auf der Mint-Tafel des Hero ist der Hauptknopf Lavendel. Nebenknopf weiss.
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
-- Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: Lavendel-Kachel hinter Symbol und Wort, ohne Rand (Mint-Pille und Ink-Strich lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
+- Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich Himbeer `#C2255C`, keine Fläche (Mint-Pille, Ink-Strich und Lavendel-Kachel lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
 - Inseratkarte (`ListingCard`): Foto liegt mit eigenem Ink-Rand auf der Pastelltafel des Formats. Kein zweiter Rahmen darum.
 - Favoriten-Herz ist app-weit das um 90 Grad gedrehte B (`BLogo herz`), gesetzt: Himbeer `#C2255C` auf Rosa.
 - Abstände im Formular: 24 px zwischen Karten, 18 px zwischen den Teilen einer Karte (CSS `.lf-section`).

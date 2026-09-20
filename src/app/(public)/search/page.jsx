@@ -335,7 +335,7 @@ function SearchPageInner() {
             <Sparkles size={13} /> KI
           </button>
           <button onClick={suchenStarten}
-            style={{ padding: "9px 18px", background: "#1D1D1D", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#fff", fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "8px 18px 10px", background: "#DBF5F0", border: "1px solid #1D1D1D", boxShadow: "inset 0 -3px 0 rgba(29,29,29,.16)", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#1D1D1D", fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
