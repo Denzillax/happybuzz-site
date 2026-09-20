@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { colors, fonts, shadows } from "@/lib/theme";
 
-// Katalog-Stil: alles eckig. Das Theme-radius wird hier bewusst ueberall
-// mit 0 ersetzt, damit kein Element im Formular runde Ecken behaelt.
-const radius = { xs: 0, sm: 0, md: 0, lg: 0, xl: 0, full: 0 };
+// Meeko-Design (20.09.2026): das Formular ist rund wie der Rest der Seite. Früher (Katalog-Stil) stand hier alles auf 0,
+// darum blieben Foto-Plätze, Ablagefläche, Gratis-Zeile und Abholbox eckig. Kleine Kästen 14, Boxen 18, Kreise rund.
+const radius = { xs: 10, sm: 14, md: 18, lg: 18, xl: 18, full: 9999 };
 import {
   TYP_PASTELL,
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
@@ -942,13 +942,9 @@ export default function ListingForm({
       )}
 
       {/* ── WAS BIETEST DU AN? (Typ zuerst) ─────────────────── */}
-      {/* Meeko (Denis 20.09.2026): die Wahl färbt die Seite. Ein Band über dem Formular und die Karte selbst tragen die
-          Pastellfarbe des gewählten Formats, dieselbe wie später die Tafel hinter dem Foto. Gratis ist Butter. */}
-      <div className={`lf-formatband mk-${TYP_PASTELL[isFree ? "free" : form.listing_type] || "rose"}`}>
-        <span className="lf-formatband-marke">{isFree ? "Gratis" : (TYPE_TABS.find((x) => x.value === form.listing_type)?.label || "Festpreis")}</span>
-        <span>So sieht die Tafel hinter deinem Foto aus.</span>
-      </div>
-      <div style={sectionBase} className={`lf-section lf-section-format mk-${TYP_PASTELL[isFree ? "free" : form.listing_type] || "rose"}`}>
+      {/* Meeko: nur die gewählte Kachel trägt die Farbe ihres Formats, die übrigen sind weiss. Das farbige Band und die
+          eingefärbte Karte (erste Fassung) gefielen Denis nicht (20.09.2026). Die Farbe kehrt bei den Fotos wieder. */}
+      <div style={sectionBase} className="lf-section lf-section-format">
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
           <div style={{ background: "#FFF6DB", border: "1px solid #F0E3BC", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#191615" }}>

@@ -62,7 +62,7 @@ export const fonts = {
 // Klar-Look (Ricardo-inspiriert): weiche Rundungen statt eckigem Katalog.
 // full bleibt fuer Kreise (Avatare, Punkte) erhalten.
 export const radius = {
-  sm: 8,
+  sm: 12,  // kleine Kästen (Foto-Plätze, Hinweise), vorher 8
   md: 20,   // Karten und Boxen einheitlich 20 (Meeko, 20.09.2026)
   lg: 20,
   xl: 20,

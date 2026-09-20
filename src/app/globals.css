@@ -2437,12 +2437,18 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 .lf-kipp div { top: 2px !important; width: 20px !important; height: 20px !important; background: #1D1D1D !important; }
 .lf-kipp[aria-checked=true] { background: #1D1D1D !important; }
 .lf-kipp[aria-checked=true] div { left: 22px !important; background: #fff !important; }
-/* Inserieren: Band und erste Karte tragen die Farbe des gewählten Formats */
-.lf-formatband { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 12px 18px; border: 1px solid #1D1D1D; border-radius: 18px; font-size: 14.5px; color: #1D1D1D; transition: background .35s ease; }
-.lf-formatband-marke { padding: 3px 12px 4px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 700; }
-.lf-section-format { transition: background .35s ease; }
-.lf-section.lf-section-format.mk-rose { background: var(--mk-rose) !important; } .lf-section.lf-section-format.mk-lavendel { background: var(--mk-lavendel) !important; }
-.lf-section.lf-section-format.mk-himmel { background: var(--mk-himmel) !important; } .lf-section.lf-section-format.mk-rosa { background: var(--mk-rosa) !important; }
-.lf-section.lf-section-format.mk-butter { background: var(--mk-butter) !important; }
-/* auf farbiger Karte sind die nicht gewählten Kacheln weiss, die gewählte behält ihre Farbe und den Ring */
+/* nur die gewählte Format-Kachel trägt ihre Farbe (mit Ring), die übrigen sind weiss und zeigen sie beim Hovern */
 .lf-section-format .lf-format:not(.is-active) { background: #fff !important; }
+
+/* Inserieren: nichts bleibt eckig (Denis 20.09.2026). Kästen mit Rand, die im Code keine Rundung haben, bekommen hier eine.
+   Gilt nur innerhalb der Formular-Abschnitte; Trennlinien (border-bottom) sind nicht betroffen. */
+.lf-section [style*="border: "]:not([style*="border-radius"]), .lf-section [style*="border:1"]:not([style*="border-radius"]) { border-radius: 14px; }
+.lf-section[style*="border"]:not([style*="border-radius: 28px"]) { border-radius: 20px !important; }
+.lf-section { margin-bottom: 24px !important; }
+/* Gleichmässiger Rhythmus in jeder Karte: die direkten Kinder stehen mit festen 18 px untereinander. Ihre eigenen, überall
+   verschiedenen Aussenabstände (4 bis 22 px) sind abgeschaltet. Schalterkarten rücken enger zusammen, sie gehören zusammen. */
+.lf-section { display: flex; flex-direction: column; gap: 18px; }
+.lf-section > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+.lf-section > :empty { display: none; } /* leere Platzhalter würden sonst einen doppelten Abstand erzeugen */
+.lf-section > .lf-schalter + .lf-schalter { margin-top: -8px !important; }
+.lf-schalter { margin-bottom: 0; }
