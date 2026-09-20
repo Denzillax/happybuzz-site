@@ -1135,7 +1135,7 @@ export default function ListingForm({
               border: `2px dashed ${dragOver ? colors.dark : colors.border}`,
               borderRadius: radius.md, padding: "28px 20px",
               textAlign: "center", cursor: "pointer",
-              background: dragOver ? colors.yellowSoft : "transparent",
+              background: dragOver ? "#DBF5F0" : "transparent",
               transition: "all .15s", marginTop: 8,
             }}
           >
@@ -1957,7 +1957,7 @@ export default function ListingForm({
                         }} style={{
                           display: "flex", alignItems: "center", justifyContent: "space-between",
                           padding: "16px", borderRadius: 20, border: `1.5px solid ${form.shipping_method === opt.value ? colors.dark : colors.border}`,
-                          marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? colors.yellowSoft : "#fff",
+                          marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? "#DBF5F0" : "#fff",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                             {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: colors.butter, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
@@ -2148,7 +2148,7 @@ export default function ListingForm({
                   <div key={opt.key} onClick={() => set("pickup_address", opt.snap)} style={{
                     display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", marginBottom: 6,
                     border: `1.5px solid ${aktiv ? colors.dark : colors.border}`, borderRadius: 20,
-                    background: aktiv ? colors.yellowSoft : "#fff", cursor: "pointer",
+                    background: aktiv ? "#DBF5F0" : "#fff", cursor: "pointer",
                   }}>
                     <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.dark : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.butter }} />}

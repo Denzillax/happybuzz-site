@@ -2450,5 +2450,9 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 .lf-section { display: flex; flex-direction: column; gap: 18px; }
 .lf-section > * { margin-top: 0 !important; margin-bottom: 0 !important; }
 .lf-section > :empty { display: none; } /* leere Platzhalter würden sonst einen doppelten Abstand erzeugen */
-.lf-section > .lf-schalter + .lf-schalter { margin-top: -8px !important; }
+/* Schalterkarten stehen überall mit denselben 18 px untereinander (Denis 20.09.2026: Versand/Abholung hatten 10 px, die
+   Zahlungsarten 0, weil sie in einem eigenen Behälter liegen und der Abstand der Karte dort nicht greift). Jeder Behälter,
+   der Schalterkarten enthält, bekommt darum denselben Rhythmus wie die Karte selbst. */
+.lf-section div:has(> .lf-schalter) { display: flex; flex-direction: column; gap: 18px; }
+.lf-section div:has(> .lf-schalter) > * { margin-top: 0 !important; margin-bottom: 0 !important; }
 .lf-schalter { margin-bottom: 0; }
