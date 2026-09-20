@@ -712,16 +712,16 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
    Karte als eckiges graues Feld erscheinen. Karten nehmen sich davon aus und
    heben stattdessen das gerundete Bild mit weichem Schatten an. */
 .listing-grid > a:hover, .search-results-grid > a:hover, .listing-grid > div > a:hover { filter: none; }
-/* Karten-Hover am Desktop (Denis 20.09.2026: anders als das blosse Anheben). Die Karte rückt nach links oben und färbt sich
-   ganz in der Farbe ihres Formats. Das Foto löst sich von der Tafel: es wird etwas kleiner und kippt leicht,
+/* Karten-Hover am Desktop (Denis 20.09.2026: anders als das blosse Anheben). Die Karte erhebt sich mit weichem Schatten. Das Foto löst sich von der Tafel: es wird etwas kleiner und kippt leicht,
    so tritt die Formatfarbe dahinter hervor. Nur mit echter Maus, nicht bei reduzierter Bewegung. Gilt für jede Inseratkarte. */
-.lc-karte { background: #fff; transition: transform .28s cubic-bezier(.2,.7,.1,1), background .28s ease; }
+.lc-karte { background: #fff; transition: transform .32s cubic-bezier(.2,.7,.1,1), box-shadow .32s cubic-bezier(.2,.7,.1,1); }
 .lc-karte .lc-foto { transition: transform .4s cubic-bezier(.2,.7,.1,1); }
 @media (hover: hover) and (pointer: fine) {
-  /* statt des harten Schattens (gefiel Denis nicht): die ganze Karte nimmt die Farbe ihres Formats an */
-  .lc-karte:hover { transform: translate(-4px, -4px); background: var(--lc-farbe, var(--mk-lavendel)); filter: none !important; }
+  /* Dritte Fassung (Denis 20.09.2026): die Karte erhebt sich. Sie steigt gerade nach oben, darunter liegt ein weicher,
+     schmaler Schatten wie von etwas, das über der Seite schwebt. Kein harter Versatz, keine Einfärbung. */
+  .lc-karte:hover { transform: translateY(-10px); box-shadow: 0 22px 28px -18px rgba(29,29,29,.38); filter: none !important; }
   .lc-karte:hover .lc-foto { transform: scale(.93) rotate(-2.5deg); }
-  .lc-karte:active { transform: translate(-1px, -1px); }
+  .lc-karte:active { transform: translateY(-3px); box-shadow: 0 8px 12px -8px rgba(29,29,29,.35); }
 }
 @media (prefers-reduced-motion: reduce) { .lc-karte, .lc-karte .lc-foto { transition: none; } .lc-karte:hover .lc-foto { transform: none; } }
 
