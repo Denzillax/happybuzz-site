@@ -2218,10 +2218,12 @@ body:has(.mk) { background: #fff; }
    Formensprache: 1 px Ink-Rand, Knöpfe 10 px mit eingedrücktem Schatten unten, Flächen in Pastell, keine Schlagschatten.
    ═══════════════════════════════════════════ */
 :root { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #E3F2FF; --mk-rosa: #FFE3FB; --mk-mint: #DBF5F0; --mk-rose: #FBEBEA; --mk-butter: #FFE7A9;
-        --mk-rand: 1px solid #1D1D1D; --bd-akzent: #0B7A68; /* Hover-System der ganzen Seite: gleiche Farbe wie --mk-akzent */
-        /* Hover-Farbe für Schrift und Symbole: das kräftige Geschwister von Mint, nah am früheren Teal (Denis 20.09.2026:
+        --mk-rand: 1px solid #1D1D1D; --bd-akzent: #5B4BDB; /* Hover-System der ganzen Seite: gleiche Farbe wie --mk-akzent */
+        /* Hover-Farbe für Schrift und Symbole: kräftiges Lavendel (Denis 20.09.2026: Lavendel statt Grün). Das Pastell-Lavendel
+           selbst hätte als Schrift auf Weiss nur Kontrast 1.3, darum sein kräftiges Geschwister mit 6.0. Vorgabe war
+           (Denis 20.09.2026:
            beim Hovern soll sich das Innere färben, keine Butter-Kachel dahinter liegen) */
-        --mk-akzent: #0B7A68; }
+        --mk-akzent: #5B4BDB; }
 
 /* ── HEADER MEEKO (hd-*), Komponente components/layout/Header.tsx ── */
 .hd { position: sticky; top: 0; z-index: 50; padding: 12px 24px 0; pointer-events: none; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: var(--mk-ink); }
@@ -2430,7 +2432,7 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 
 /* Inserieren: Schalterkarten (Zahlung, Versand, Abholung, Planen) im Meeko-Stil. Ein: Mint mit dunklem Schalter. */
 .lf-schalter { min-height: 64px; padding: 10px 16px 13px; margin-bottom: 10px; border: 1px solid #1D1D1D; border-radius: 14px; background: #fff; box-shadow: inset 0 -4px 0 rgba(29,29,29,.1); transition: background .2s ease; }
-.lf-schalter:has(.lf-kipp[aria-checked=true]) { background: var(--mk-mint); }
+.lf-schalter:has(.lf-kipp[aria-checked=true]) { background: var(--lf-akzent, var(--mk-mint)); transition: background .3s ease; }
 .lf-schalter span { font-size: 16px !important; font-weight: 600 !important; letter-spacing: -.02em; }
 .lf-schalter span + div { font-size: 13.5px !important; color: #1D1D1D !important; opacity: .7; }
 .lf-kipp { flex-shrink: 0; width: 46px !important; height: 26px !important; border: 1px solid #1D1D1D !important; border-radius: 999px !important; background: #fff !important; }
@@ -2468,6 +2470,8 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 .lf-stufe.is-active { box-shadow: inset 0 0 0 2px #1D1D1D; }
 /* Farbig ist nur die gewählte Stufe (Denis 20.09.2026). Die übrigen sind weiss und zeigen ihre Farbe beim Hovern, wie die Format-Kacheln. */
 .lf-stufe:not(.is-active):not(:hover) { background: #fff !important; }
+/* die gewählte Stufe trägt die Akzentfarbe des Formulars (Farbe des gewählten Formats), nicht mehr eine eigene je Stufe */
+.listing-form .lf-stufe.is-active, .listing-form .lf-stufe:hover { background: var(--lf-akzent, var(--mk-mint)) !important; }
 .lf-stufe-kopf { display: contents; }
 .lf-stufe-prozent { grid-column: 2; grid-row: 1 / span 2; align-self: end; justify-self: end; font-size: 20px; font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
 .lf-stufe-prozent small { font-size: 12px; margin-left: 1px; }
@@ -2491,3 +2495,6 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
   .lf-stufe strong { font-size: 16px; } .lf-stufe-text, .lf-stufe-vorteil { font-size: 12.5px; }
   .lf-stufe-haken { width: 22px; height: 22px; }
 }
+/* Knöpfe in der Akzentfarbe des Formulars bekommen denselben Rand und Schatten wie die Butter-Knöpfe der übrigen Seite */
+.listing-form button[style*="--lf-akzent"], .listing-form a[style*="--lf-akzent"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
+.listing-form .lf-kipp[style*="--lf-akzent"] { box-shadow: none !important; }

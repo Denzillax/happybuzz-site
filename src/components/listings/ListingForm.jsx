@@ -79,6 +79,9 @@ const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Uploa
 
 // ─── Shared Styles (Katalog-Stil: Ink-Rahmen, eckig, Mono-Labels) ──
 const INK = colors.dark;
+// Akzentfarbe des Formulars (Denis 20.09.2026): alles Gewählte und die Knöpfe tragen die Pastellfarbe des gewählten Formats.
+// Die Variable --lf-akzent setzt das Formular an seiner Wurzel, je nach Format. Rückfall ist Mint.
+const AKZ = "var(--lf-akzent, #DBF5F0)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 // Meeko-Design (Denis 20.09.2026: beim Inserieren sollte mehr im Meeko-Stil sein): grosse Abschnittskarten mit leichtem
@@ -752,7 +755,7 @@ export default function ListingForm({
         padding: "8px 16px",
         borderRadius: 20,
         border: `1.5px solid ${active ? INK : "rgba(25,22,21,.3)"}`,
-        background: active ? colors.butter : "#fff",
+        background: active ? AKZ : "#fff",
         cursor: "pointer",
         fontSize: 13,
         fontFamily: fonts.body,
@@ -782,7 +785,7 @@ export default function ListingForm({
         style={{
           width: 20, height: 20, borderRadius: 20, flexShrink: 0,
           border: `1.5px solid ${checked ? colors.dark : colors.border}`,
-          background: checked ? colors.butter : colors.surface,
+          background: checked ? AKZ : colors.surface,
           display: "flex", alignItems: "center", justifyContent: "center",
           transition: "all .15s",
         }}
@@ -898,7 +901,7 @@ export default function ListingForm({
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "6px 12px", borderRadius: 20,
         border: `1px solid ${images.length === 0 ? colors.border : colors.dark}`,
-        background: images.length === 0 ? colors.cream : colors.butter,
+        background: images.length === 0 ? colors.cream : AKZ,
         color: images.length === 0 ? colors.muted : colors.dark,
         fontSize: 12, fontWeight: 700, fontFamily: fonts.body,
         cursor: aiBusy || images.length === 0 ? "not-allowed" : "pointer",
@@ -929,7 +932,7 @@ export default function ListingForm({
   // RENDER
   // ═══════════════════════════════════════════════════════════
   return (
-    <div className="listing-form" style={{ maxWidth: 680, margin: "0 auto", padding: "20px 16px 32px" }}>
+    <div className="listing-form" style={{ maxWidth: 680, margin: "0 auto", padding: "20px 16px 32px", "--lf-akzent": `var(--mk-${TYP_PASTELL[isFree ? "free" : form.listing_type] || "mint"})` }}>
 
       {/* Kopf liefert IMMER die Seite (Katalog-Kopf bei Erstellen UND Bearbeiten) */}
 
@@ -1148,7 +1151,7 @@ export default function ListingForm({
               border: `2px dashed ${dragOver ? colors.dark : colors.border}`,
               borderRadius: radius.md, padding: "28px 20px",
               textAlign: "center", cursor: "pointer",
-              background: dragOver ? "#DBF5F0" : "transparent",
+              background: dragOver ? AKZ : "transparent",
               transition: "all .15s", marginTop: 8,
             }}
           >
@@ -1185,7 +1188,7 @@ export default function ListingForm({
               style={{
                 width: "100%", marginTop: 10, padding: "12px 16px",
                 border: "1px solid #1D1D1D", borderRadius: 20,
-                background: colors.butter, color: colors.dark,
+                background: AKZ, color: colors.dark,
                 fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
                 cursor: aiBusy ? "wait" : "pointer", boxShadow: "none",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -1214,7 +1217,7 @@ export default function ListingForm({
             style={{
               width: "100%", marginTop: 10, padding: "12px 16px",
               border: "1px solid #1D1D1D", borderRadius: 20,
-              background: colors.butter, color: colors.dark,
+              background: AKZ, color: colors.dark,
               fontSize: 14, fontWeight: 800, fontFamily: fonts.body,
               cursor: "pointer", boxShadow: "none",
               display: "none", alignItems: "center", justifyContent: "center", gap: 8,
@@ -1322,7 +1325,7 @@ export default function ListingForm({
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 20, cursor: "pointer",
                   border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.dark : colors.border}`,
-                  background: errors.category ? "#FFEBEE" : form.category_id ? `${colors.butter}08` : "#fff",
+                  background: errors.category ? "#FFEBEE" : form.category_id ? AKZ : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
@@ -1470,7 +1473,7 @@ export default function ListingForm({
                                     background: colors.yellowSoft,
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
                                   }}
-                                    onMouseEnter={e => e.currentTarget.style.background = colors.butter + "30"}
+                                    onMouseEnter={e => e.currentTarget.style.background = AKZ}
                                     onMouseLeave={e => e.currentTarget.style.background = colors.yellowSoft}>
                                     <span style={{ fontSize: 13, fontWeight: 700, color: colors.dark }}>
                                       Alle in dieser Kategorie
@@ -1505,7 +1508,7 @@ export default function ListingForm({
                                       display: "flex", alignItems: "center", justifyContent: "space-between",
                                       transition: "all .1s",
                                     }}
-                                      onMouseEnter={e => { e.currentTarget.style.borderColor = colors.dark; e.currentTarget.style.background = `${colors.butter}08`; }}
+                                      onMouseEnter={e => { e.currentTarget.style.borderColor = colors.dark; e.currentTarget.style.background = AKZ; }}
                                       onMouseLeave={e => { e.currentTarget.style.borderColor = colors.borderLt; e.currentTarget.style.background = "transparent"; }}>
                                       <span style={{ fontSize: 13, fontWeight: 600, color: colors.dark }}>{cat.name}</span>
                                       {hasChildren && <ChevronRight size={14} color={colors.muted} />}
@@ -1568,7 +1571,7 @@ export default function ListingForm({
                           <button key={k} type="button" onClick={() => { if (!aktiv) umschalten(attr.attribute_key); }} style={{
                             fontSize: 10.5, fontWeight: 700, padding: "5px 10px", border: "none",
                             borderLeft: i > 0 ? "1px solid rgba(29,29,29,.16)" : "none", cursor: "pointer",
-                            fontFamily: fonts.body, background: aktiv ? colors.butter : "#fff",
+                            fontFamily: fonts.body, background: aktiv ? AKZ : "#fff",
                             color: aktiv ? INK : colors.muted, whiteSpace: "nowrap",
                           }}>{lbl}</button>
                         );
@@ -1829,7 +1832,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_twint ? AKZ : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
@@ -1841,7 +1844,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_cash)} onClick={() => set("pay_cash", !form.pay_cash)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_cash ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_cash ? AKZ : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_cash ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
 
@@ -1853,7 +1856,7 @@ export default function ListingForm({
             </div>
             <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_bank)} onClick={() => set("pay_bank", !form.pay_bank)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-              background: form.pay_bank ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+              background: form.pay_bank ? AKZ : "#ccc", position: "relative", transition: "background .2s",
             }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_bank ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           </div>
           <Err field="payment" />
@@ -1871,7 +1874,7 @@ export default function ListingForm({
             if (!next) { set("pay_bank", false); if (!form.pickup_only) set("pickup_only", true); }
           }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.shipping_available)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.shipping_available ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+            background: form.shipping_available ? AKZ : "#ccc", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.shipping_available ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Versand</span>
         </div>
@@ -1932,7 +1935,7 @@ export default function ListingForm({
               </div>
               <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pay_twint)} onClick={() => set("pay_twint", !form.pay_twint)} style={{
                 width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-                background: form.pay_twint ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+                background: form.pay_twint ? AKZ : "#ccc", position: "relative", transition: "background .2s",
               }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pay_twint ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
             </div>
 
@@ -1970,10 +1973,10 @@ export default function ListingForm({
                         }} style={{
                           display: "flex", alignItems: "center", justifyContent: "space-between",
                           padding: "16px", borderRadius: 20, border: `1.5px solid ${form.shipping_method === opt.value ? colors.dark : colors.border}`,
-                          marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? "#DBF5F0" : "#fff",
+                          marginBottom: 8, cursor: "pointer", background: form.shipping_method === opt.value ? AKZ : "#fff",
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: colors.butter, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
+                            {form.shipping_method === opt.value && <div style={{ width: 18, height: 18, borderRadius: 20, background: AKZ, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 900 }}>✓</span></div>}
                             <div>
                               <div style={{ fontWeight: 700, fontSize: 14 }}>{opt.label}</div>
                               {opt.desc && <div style={{ fontSize: 12, color: colors.muted }}>{opt.desc}</div>}
@@ -2002,7 +2005,7 @@ export default function ListingForm({
                       </select>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2092,7 +2095,7 @@ export default function ListingForm({
                         <>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                         <div><div style={{ fontWeight: 600, fontSize: 13 }}>Kostenloser Versand</div><div style={{ fontSize: 12, color: colors.muted }}>Die Lieferkosten sind für Käufer kostenlos.</div></div>
-                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? colors.butter : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
+                        <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.free_shipping)} onClick={() => set("free_shipping", !form.free_shipping)} style={{ width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", background: form.free_shipping ? AKZ : "#ccc", position: "relative" }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.free_shipping ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
                       </div>
                       {!form.free_shipping && (
                         <div style={{ marginBottom: 14 }}>
@@ -2135,7 +2138,7 @@ export default function ListingForm({
             if (!next && !form.shipping_available) set("shipping_available", true);
           }} className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.pickup_only)} style={{
             width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-            background: form.pickup_only ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+            background: form.pickup_only ? AKZ : "#ccc", position: "relative", transition: "background .2s",
           }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.pickup_only ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
           <span style={{ fontSize: 14, fontWeight: 700, color: colors.dark }}>Abholung</span>
         </div>
@@ -2161,10 +2164,10 @@ export default function ListingForm({
                   <div key={opt.key} onClick={() => set("pickup_address", opt.snap)} style={{
                     display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", marginBottom: 6,
                     border: `1.5px solid ${aktiv ? colors.dark : colors.border}`, borderRadius: 20,
-                    background: aktiv ? "#DBF5F0" : "#fff", cursor: "pointer",
+                    background: aktiv ? AKZ : "#fff", cursor: "pointer",
                   }}>
                     <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${aktiv ? colors.dark : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: colors.butter }} />}
+                      {aktiv && <div style={{ width: 8, height: 8, borderRadius: "50%", background: AKZ }} />}
                     </div>
                     <div>
                       <span style={{ fontWeight: 700, color: colors.dark }}>{opt.label}</span>
@@ -2201,7 +2204,7 @@ export default function ListingForm({
                 </div>
                 <button className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form[key])} onClick={() => set(key, !form[key])} style={{
                   width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
-                  background: form[key] ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+                  background: form[key] ? AKZ : "#ccc", position: "relative", transition: "background .2s",
                 }}><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form[key] ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
               </div>
             ))}
@@ -2410,7 +2413,7 @@ export default function ListingForm({
             }}
             className="lf-kipp eckig kein-akzent" role="switch" aria-checked={!!(form.publish_at)} style={{
               width: 44, height: 24, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0,
-              background: form.publish_at ? colors.butter : "#ccc", position: "relative", transition: "background .2s",
+              background: form.publish_at ? AKZ : "#ccc", position: "relative", transition: "background .2s",
             }}
           ><div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: form.publish_at ? 22 : 2, transition: "left .2s", boxShadow: "none" }} /></button>
         </div>
