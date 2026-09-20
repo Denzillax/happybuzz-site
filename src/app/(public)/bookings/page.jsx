@@ -129,14 +129,9 @@ export default function BookingsPage() {
         <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 24px", fontFamily: HEAD, letterSpacing: "-0.01em" }}>Buchungen</h1>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid rgba(29,29,29,.16)", marginBottom: 24 }}>
+        <div className="bd-reiter" role="tablist">
           {TABS.map(t => (
-            <button key={t.key} onClick={() => setTab(t.key)} style={{
-              padding: "12px 24px", background: "none", border: "none",
-              borderBottom: tab === t.key ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
-              marginBottom: -2, cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
-              color: tab === t.key ? K.ink : colors.muted,
-            }}>{t.label}</button>
+            <button key={t.key} role="tab" aria-selected={tab === t.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setTab(t.key)}>{t.label}</button>
           ))}
         </div>
 

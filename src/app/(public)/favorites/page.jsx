@@ -126,15 +126,15 @@ export default function FavoritesPage() {
       </div>
 
       {/* Tabs */}
-      {/* Meeko (20.09.2026): Reiter als Pillen. Die gewählte ist dunkel. */}
-      <div className="fav-reiter">
-        <button onClick={() => { setTab('listings'); setSearch('') }} className={`fav-pille eckig kein-akzent${tab === 'listings' ? ' an' : ''}`} aria-pressed={tab === 'listings'}>
+      {/* Reiter wie überall: schlichter Text, der gewählte mit geradem Unterstrich (bd-reiter in globals.css) */}
+      <div className="bd-reiter" role="tablist">
+        <button onClick={() => { setTab('listings'); setSearch('') }} role="tab" aria-selected={tab === 'listings'} className="bd-reiter-knopf eckig kein-akzent">
           Inserate ({favorites.length})
         </button>
-        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`fav-pille eckig kein-akzent${tab === 'sellers' ? ' an' : ''}`} aria-pressed={tab === 'sellers'}>
+        <button onClick={() => { setTab('sellers'); setSearch('') }} role="tab" aria-selected={tab === 'sellers'} className="bd-reiter-knopf eckig kein-akzent">
           Verkäufer ({sellers.length})
         </button>
-        <button onClick={() => { setTab('searches'); setSearch('') }} className={`fav-pille eckig kein-akzent${tab === 'searches' ? ' an' : ''}`} aria-pressed={tab === 'searches'}>
+        <button onClick={() => { setTab('searches'); setSearch('') }} role="tab" aria-selected={tab === 'searches'} className="bd-reiter-knopf eckig kein-akzent">
           Suchen ({searches.length})
         </button>
       </div>

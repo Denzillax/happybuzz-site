@@ -56,24 +56,24 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   ];
 
   return (
-    <div style={{ background: SAND, border: "1px solid #1D1D1D", padding: "14px 14px 16px", marginBottom: 14, textAlign: "left" }}>
-      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: overdue ? ROT : "#6B727C", marginBottom: 10 }}>
+    // Meeko (Denis 20.09.2026): Himmel-Tafel (Farbe des Formats Miete) mit Rundung, Ziffern auf weissen Kacheln mit
+    // eingedrücktem Schatten wie bei der Challenge der Woche, runder Fortschrittsbalken. Überfällig: Rosé-Tafel.
+    <div style={{ background: overdue ? "#FBEBEA" : "#E3F2FF", border: "1px solid #1D1D1D", borderRadius: 20, padding: "20px 22px 22px", marginBottom: 14, textAlign: "left" }}>
+      <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: overdue ? ROT : INK, marginBottom: 12 }}>
         {overdue ? "Überfällig seit" : "Rückgabe in"}
       </div>
 
       {/* Anzeigetafel */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 8, marginBottom: 18, maxWidth: 420 }}>
         {kaestchen.map(([wert, label]) => (
-          <div key={label} style={{ flex: "0 0 auto", textAlign: "center" }}>
+          <div key={label} style={{ textAlign: "center", padding: "12px 6px 10px", background: "#fff", border: "1px solid #1D1D1D", borderRadius: 14, boxShadow: "inset 0 -5px 0 rgba(29,29,29,.12)" }}>
             <div style={{
-              minWidth: 52, padding: "8px 6px", background: "#fff",
-              border: "1px solid #1D1D1D", boxSizing: "border-box",
-              fontFamily: MONO, fontSize: 24, fontWeight: 700, lineHeight: 1,
+              fontFamily: MONO, fontSize: 32, fontWeight: 500, letterSpacing: "-.04em", lineHeight: 1,
               color: overdue ? ROT : INK, fontVariantNumeric: "tabular-nums",
             }}>
               {String(wert).padStart(2, "0")}
             </div>
-            <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#6B727C", marginTop: 4 }}>
+            <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: INK, opacity: .6, marginTop: 3 }}>
               {label}
             </div>
           </div>
@@ -81,13 +81,13 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
       </div>
 
       {/* Fortschritt mit Start/Ende */}
-      <div style={{ height: 10, border: "1px solid #1D1D1D", background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, transition: "width .5s linear" }} />
+      <div style={{ height: 14, border: "1px solid #1D1D1D", borderRadius: 999, background: "#fff", boxSizing: "border-box", overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${Math.round(progress * 100)}%`, background: farbe, borderRadius: 999, transition: "width .5s linear" }} />
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: MONO, fontSize: 10.5, color: "#6B727C" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontFamily: MONO, fontSize: 13, color: INK, opacity: .75 }}>
         {/* Links steht der tatsaechliche Beginn des Balkens (Uebergabe oder Mietstart) */}
         <span>{fmtDatum(start)}</span>
-        <span style={{ fontFamily: fonts.body, fontWeight: 700, color: overdue ? ROT : INK, fontSize: 11.5 }}>
+        <span style={{ fontFamily: fonts.body, fontWeight: 600, color: overdue ? ROT : INK, fontSize: 13.5, opacity: 1 }}>
           {overdue ? `${tage} ${tage === 1 ? "Tag" : "Tage"} drüber` : `Mietdauer: ${mietTage} ${mietTage === 1 ? "Tag" : "Tage"}`}
         </span>
         <span>{fmtDatum(endDate)}</span>

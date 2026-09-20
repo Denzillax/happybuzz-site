@@ -289,23 +289,12 @@ export default function PublicProfilePage() {
         </div>
 
         {/* ── TABS ─────────────────────────────────────── */}
-        <div style={{
-          display: "flex", gap: 0, borderBottom: "1px solid rgba(29,29,29,.16)",
-          marginBottom: 24,
-        }}>
+        <div className="bd-reiter" role="tablist">
           {TABS.map(t => {
             const active = tab === t.key;
             const Icon = t.icon;
             return (
-              <button key={t.key} onClick={() => setTab(t.key)} style={{
-                padding: "12px 18px", background: "none", border: "none",
-                borderBottom: active ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
-                marginBottom: -2, cursor: "pointer",
-                fontSize: 11, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".06em", textTransform: "uppercase",
-                color: active ? K.ink : colors.muted,
-                display: "flex", alignItems: "center", gap: 6,
-                whiteSpace: "nowrap", transition: "all .15s",
-              }}>
+              <button key={t.key} role="tab" aria-selected={active} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setTab(t.key)}>
                 <Icon size={15} /> {t.label}
               </button>
             );

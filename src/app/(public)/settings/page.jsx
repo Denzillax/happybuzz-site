@@ -1350,15 +1350,16 @@ export default function SettingsPage() {
               const Icon = tab.icon;
               const active = activeTab === tab.id;
               return (
-                <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={active ? "set-tab set-tab-active" : "set-tab"} style={{
+                <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={active ? "set-tab set-tab-active eckig kein-akzent" : "set-tab eckig kein-akzent"} style={{
                   width: "100%", padding: "10px 14px", border: "none",
-                  background: active ? "#E3E3FF" : "transparent",
+                  background: "transparent",
                   display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
                   fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 13,
                   fontWeight: active ? 700 : 500,
                   color: active ? K.ink : C.muted,
-                  borderRadius: 999, marginBottom: 2,
-                  boxShadow: active ? "inset 0 0 0 1px #1D1D1D" : "none",
+                  borderRadius: 0, marginBottom: 2,
+                  // schlicht wie die Reiter: gewählt = Ink und fett mit einer kleinen Ink-Kachel davor, keine Pille
+                  boxShadow: active ? "inset 3px 0 0 #1D1D1D" : "none",
                   transition: "all .15s",
                 }}>
                   <Icon size={16} />

@@ -178,9 +178,9 @@ export default function FeesPage() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 4, marginBottom: 16, background: colors.surface, borderRadius: 20, border: `1px solid ${colors.border}`, overflow: "hidden", width: "fit-content" }}>
+        <div className="bd-reiter" role="tablist">
           {[{ key: "open", label: `Offen (${pendingFees.length})` }, { key: "invoices", label: `Rechnungen (${invoices.length})` }].map(t => (
-            <button key={t.key} onClick={() => setTab(t.key)} style={{ padding: "8px 16px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: fonts.body, background: tab === t.key ? colors.butter : "transparent", color: colors.dark }}>{t.label}</button>
+            <button key={t.key} role="tab" aria-selected={tab === t.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setTab(t.key)}>{t.label}</button>
           ))}
         </div>
 
