@@ -1345,7 +1345,7 @@ export default function SettingsPage() {
           display: "grid", gridTemplateColumns: "200px 1fr", gap: 32,
         }}>
           {/* Sidebar Navigation */}
-          <nav style={{ position: "sticky", top: 100, alignSelf: "start" }}>
+          <nav style={{ position: "sticky", top: 112, alignSelf: "start" }}>
             {TABS.map(tab => {
               const Icon = tab.icon;
               const active = activeTab === tab.id;

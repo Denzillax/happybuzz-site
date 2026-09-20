@@ -989,7 +989,7 @@ export default function ListingDetail() {
           </div>
 
           {/* ════ RIGHT COLUMN (STICKY SIDEBAR) ════ */}
-          <div style={{ position: "sticky", top: 100 }}>
+          <div style={{ position: "sticky", top: 112 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
             <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>

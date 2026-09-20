@@ -2229,7 +2229,9 @@ body:has(.mk) { background: #fff; }
         --mk-akzent: #5B4BDB; }
 
 /* ── HEADER MEEKO (hd-*), Komponente components/layout/Header.tsx ── */
-.hd { position: sticky; top: 0; z-index: 50; padding: 12px 24px 0; pointer-events: none; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: var(--mk-ink); }
+/* Der Kopf schwebt ohne gefüllte Fläche (Denis 20.09.2026: die Fläche dahinter soll nicht gefüllt sein), hat aber oben und
+   unten gleich viel Luft: die Pille sitzt mittig in ihrem Bereich und hält Abstand zum Inhalt darunter. */
+.hd { position: sticky; top: 0; z-index: 50; padding: 14px 24px; background: transparent; pointer-events: none; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: var(--mk-ink); }
 .hd-pille, .hd-unter { pointer-events: auto; }
 .hd a:hover, .hd button:hover { filter: none !important; }
 .hd-pille { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 8px 10px 8px 22px; background: #fff; border: var(--mk-rand); border-radius: 34px; }
@@ -2329,7 +2331,7 @@ body:has(.mk) { background: #fff; }
 .mk.mk-teil { min-height: 0; background: transparent; overflow: visible; }
 .mk.mk-teil.mk-hero { overflow: hidden; } /* die äusseren Kacheln ragen über den Rand und werden hier abgeschnitten */
 .mk-hero-echt .mk-hero-text { max-width: 24em; }
-.mk-hero-echt { margin-top: -80px; padding: 150px 24px 84px; background: var(--mk-hero) !important; border-bottom: var(--mk-rand); }
+.mk-hero-echt { margin-top: -97px; padding: 153px 24px 84px; background: var(--mk-hero) !important; border-bottom: var(--mk-rand); }
 .mk-hero-echt .mk-h1, .mk-hero-echt .mk-hero-text, .mk-hero-echt .mk-hero-hinweis, .mk-hero-echt .mk-hero-knoepfe, .mk-hero-echt .mk-hero-beta { position: relative; z-index: 2; }
 .mk-hero-hinweis { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 26px; padding: 7px 16px 8px; border: var(--mk-rand); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; letter-spacing: -.01em; transition: background .2s ease; }
 .mk-hero-hinweis:hover { background: var(--mk-lavendel); }
@@ -2340,12 +2342,12 @@ body:has(.mk) { background: #fff; }
 /* Kacheln: im Labor am Boden 176 px hoch verankert (dort überlappen Karten den Hero), hier nicht */
 /* Feste Höhen statt "Mitte des Heros": dieser Hero ist niedriger als der im Labor, dort rutschten die mittleren Kacheln
    in die oberen (Denis 20.09.2026). Reihenfolge je Seite: oben, Mitte, unten, mit Luft für Drehung, Preismarke und Mausweg. */
-.mk-hero-echt .mk-schweb-1 { top: 118px; }
-.mk-hero-echt .mk-schweb-2 { top: 340px; }
-.mk-hero-echt .mk-schweb-4 { top: 112px; }
-.mk-hero-echt .mk-schweb-5 { top: 304px; }
+.mk-hero-echt .mk-schweb-1 { top: 147px; }
+.mk-hero-echt .mk-schweb-2 { top: 367px; }
+.mk-hero-echt .mk-schweb-4 { top: 141px; }
+.mk-hero-echt .mk-schweb-5 { top: 331px; }
 .mk-hero-echt .mk-schweb-3, .mk-hero-echt .mk-schweb-6 { bottom: 44px; }
-.mk-hero-echt { min-height: 730px; }
+.mk-hero-echt { min-height: 767px; }
 .mk-link-knopf { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px 3px; border: var(--mk-rand); border-radius: 10px; background: #fff; color: var(--mk-ink) !important; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-shadow: inset 0 -3px 0 rgba(29,29,29,.13); transition: background .2s ease; }
 /* Kategorien-Pillen und Knöpfe der Startseite im Meeko-Look: Ink-Rand, eingedrückter Schatten, Butter beim Hovern */
 .cat-pill { border: var(--mk-rand) !important; background: #fff !important; box-shadow: inset 0 -3px 0 rgba(29,29,29,.12); padding-bottom: 9px !important; }
@@ -2536,3 +2538,12 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
   .ch-lohn-zahl { font-size: 32px; }
   .ch-knoepfe { width: 100%; }
 }
+
+/* ── FAVORITEN MEEKO (fav-*): die Seite ist mit Tailwind-Klassen gebaut und fiel darum durch alle Farb-Durchgänge ── */
+.fav-reiter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.fav-pille { min-height: 44px; padding: 0 20px 3px; border: 1px solid #1D1D1D; border-radius: 999px !important; background: #fff; color: #1D1D1D; font: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); transition: background .15s ease; }
+.fav-pille:hover { background: var(--mk-lavendel); filter: none !important; }
+.fav-pille.an { background: #1D1D1D; color: #fff; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); }
+.fav-suche { width: 100%; min-height: 52px; padding: 0 16px 0 42px !important; border: 1px solid #1D1D1D !important; border-radius: 12px !important; background: var(--mk-lavendel) !important; color: #1D1D1D; font: inherit; font-size: 16px; outline: none; box-shadow: none !important; transition: background .2s ease; }
+.fav-suche:focus { background: #fff !important; }
+.fav-klapp { width: 100%; display: flex; align-items: center; gap: 8px; padding: 16px 0 6px; border: none; border-top: 1px solid rgba(29,29,29,.2); border-radius: 0 !important; background: transparent; color: #1D1D1D; font: inherit; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
