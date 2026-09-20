@@ -71,7 +71,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
   if (saved) {
     return (
       <div style={{ textAlign: "center", padding: "32px 20px" }}>
-        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#E6F5F5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
+        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
           <Send size={20} color={K.petrol} />
         </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: colors.dark, fontFamily: fonts.head }}>Rechnung gesendet</div>
@@ -209,7 +209,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
                   cursor: "pointer", borderRadius: 20, transition: "background .1s",
                   fontFamily: fonts.body, fontSize: 13, color: colors.dark, textAlign: "left",
                 }}
-                  onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+                  onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
                   <div style={{ width: 28, height: 28, borderRadius: 20, background: colors.cream, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

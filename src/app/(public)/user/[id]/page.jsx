@@ -16,7 +16,7 @@ import { getPublicProfile, getUserPublicListings, getUserRatings, getUserAvgRati
 import { supabase } from "@/lib/supabase/supabase";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 const monoLabel = { fontSize: 10, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".07em", textTransform: "uppercase", color: "#686E78" };
@@ -196,12 +196,12 @@ export default function PublicProfilePage() {
                 display: "flex", alignItems: "center", gap: 8,
                 padding: "10px 20px", borderRadius: 20,
                 border: "1px solid #1D1D1D",
-                background: isSellerFav ? K.honey : "transparent",
+                background: isSellerFav ? "#FFE7A9" : "transparent",
                 cursor: "pointer", fontFamily: fonts.body,
                 fontSize: 13, fontWeight: 700, color: K.ink,
                 flexShrink: 0,
               }}>
-                <Heart size={16} fill={isSellerFav ? K.honey : "none"} color={isSellerFav ? K.honey : colors.muted} />
+                <Heart size={16} fill={isSellerFav ? "#1D1D1D" : "none"} color={isSellerFav ? "#1D1D1D" : colors.muted} />
                 {isSellerFav ? "Gemerkt" : "Verkäufer merken"}
               </button>
             )}
@@ -299,7 +299,7 @@ export default function PublicProfilePage() {
             return (
               <button key={t.key} onClick={() => setTab(t.key)} style={{
                 padding: "12px 18px", background: "none", border: "none",
-                borderBottom: active ? `3px solid ${K.honey}` : "3px solid transparent",
+                borderBottom: active ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
                 marginBottom: -2, cursor: "pointer",
                 fontSize: 11, fontWeight: 700, fontFamily: fonts.body, letterSpacing: ".06em", textTransform: "uppercase",
                 color: active ? K.ink : colors.muted,

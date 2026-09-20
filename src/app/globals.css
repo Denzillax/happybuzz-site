@@ -169,9 +169,9 @@ html.raster-kompakt .listing-grid, html.raster-kompakt .search-results-grid { gr
 }
 .listing-grid > div { display: flex; flex-direction: column; }
 .listing-grid > div > a { flex: 1; background: transparent; padding: 0; box-shadow: none; border: none; }
-.raster-umschalter { display: inline-flex; gap: 2px; background: #F1F3F5; border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.raster-umschalter { display: inline-flex; gap: 2px; background: #fff; border: 1px solid #1D1D1D; border-radius: 999px; padding: 3px; flex-shrink: 0; }
 .raster-umschalter button { width: 30px; height: 26px; border: none; border-radius: 999px; background: transparent; color: #686E78; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-.raster-umschalter button.on { background: #fff; color: #191615; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.raster-umschalter button.on { background: #1D1D1D; color: #fff; box-shadow: none; }
 @media (max-width: 1024px) {
   .listing-grid, .search-results-grid,
   html.raster-gross .listing-grid, html.raster-gross .search-results-grid,

@@ -235,7 +235,7 @@ export default function ChatConversation() {
           <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Kontakt- oder Zahlungsdaten vor dem Kauf auszutauschen verstösst gegen die AGB und kann zur Kontosperre führen.
         </div>
       ) : (
-        <div style={{ background: "#E6F5F5", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
+        <div style={{ background: "#DBF5F0", borderBottom: `1px solid ${colors.borderLt}`, padding: "8px 16px", fontSize: 12, fontWeight: 600, color: colors.tealDark, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, textAlign: "center" }}>
           <ShieldCheck size={14} style={{ flexShrink: 0 }} /> Über BEEDARO abwickeln: der Ablauf ist festgehalten und ihr könnt euch bewerten. Kontakt- und Zahlungsdaten (IBAN, Telefon, Mail) erscheinen erst nach Abschluss.
         </div>
       ))}

@@ -273,7 +273,7 @@ export default function FeesPage() {
                               const payload = feeQrPayload(inv, profile, company || {});
                               return payload ? (
                                 <>
-                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #EEF0F3" }} />
+                                  <SwissQRImage payload={payload} size={300} style={{ width: "80%", maxWidth: 220, border: "1px solid #1D1D1D" }} />
                                   <p style={{ margin: "6px 0 0", fontSize: 10, color: colors.muted, fontFamily: fonts.body }}>Mit Banking-App scannen</p>
                                 </>
                               ) : (

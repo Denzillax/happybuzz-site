@@ -30,7 +30,7 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
@@ -75,7 +75,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
     <div>
       <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 12px" }}>Service-Rechnung</h3>
       {items.length > 0 ? (
-        <div style={{ background: "#F5F6F8", borderRadius: 20, padding: "14px 16px", marginBottom: 12 }}>
+        <div style={{ background: "#F3F3FF", borderRadius: 20, padding: "14px 16px", marginBottom: 12 }}>
           {items.map((item, i) => (
             <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid rgba(29,29,29,.16)" : "none" }}>
               <div>
@@ -91,7 +91,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       ) : (
-        <div style={{ padding: "12px 14px", background: "#F5F6F8", borderRadius: 20, fontSize: 13, marginBottom: 12 }}>
+        <div style={{ padding: "12px 14px", background: "#F3F3FF", borderRadius: 20, fontSize: 13, marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16 }}>
             <span>Total</span><span>CHF {total.toFixed(2)}</span>
           </div>
@@ -238,7 +238,7 @@ export default function OrderDetailPage() {
         <p style={{ fontSize: 17, fontWeight: 800, color: colors.dark, margin: "0 0 4px" }}>Bestellung nicht gefunden</p>
         <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Diese Bestellung existiert nicht mehr oder gehört nicht zu deinem Konto.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 20, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", boxShadow: "none" }}>Meine Käufe</Link>
+          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 20, background: "#FFE7A9", color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", boxShadow: "none" }}>Meine Käufe</Link>
           <Link href="/sales" style={{ padding: "11px 20px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", color: K.ink, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
         </div>
       </div>
@@ -332,7 +332,7 @@ export default function OrderDetailPage() {
       {salePopup && (
         <div onClick={() => setSalePopup(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 20, padding: "28px 26px", maxWidth: 360, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#E6F5F5", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
               <Star size={28} color={colors.teal} fill={colors.teal} />
             </div>
             <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>

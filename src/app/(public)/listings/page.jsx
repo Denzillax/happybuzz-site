@@ -10,7 +10,7 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const STATUS_CONFIG = {
@@ -281,7 +281,7 @@ export default function ListingsPage() {
                 </p>
               </div>
               {verlaengerbar && (
-                <button onClick={() => { renew(l); setVerlaengernId(null); }} style={{ padding: "10px 18px", borderRadius: 999, border: "none", background: K.honey, color: K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                <button onClick={() => { renew(l); setVerlaengernId(null); }} style={{ padding: "10px 18px", borderRadius: 999, border: "none", background: "#FFE7A9", color: K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
                   <RefreshCw size={14} /> Jetzt verlängern
                 </button>
               )}
@@ -305,7 +305,7 @@ export default function ListingsPage() {
             <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{counts.all} Inserate · {counts.active} aktiv</p>
           </div>
-          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>
+          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>
             <Plus size={16} /> Neues Inserat
           </Link>
         </div>
@@ -316,7 +316,7 @@ export default function ListingsPage() {
             <button key={f.key} onClick={() => { setFilter(f.key); setVisibleCount(PAGE_SIZE); }} style={{
               padding: "8px 15px", borderRadius: 999, fontSize: 12.5, fontWeight: filter === f.key ? 800 : 600,
               cursor: "pointer", fontFamily: fonts.body, border: filter === f.key ? "1px solid transparent" : "1px solid #1D1D1D",
-              background: filter === f.key ? K.honey : "#fff", color: K.ink, whiteSpace: "nowrap",
+              background: filter === f.key ? "#FFE7A9" : "#fff", color: K.ink, whiteSpace: "nowrap",
             }}>{f.label}</button>
           ))}
         </div>
@@ -374,7 +374,7 @@ export default function ListingsPage() {
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Keine Inserate</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Erstelle dein erstes Inserat.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
               <Plus size={16} style={{ marginRight: 6 }} /> Inserat erstellen
             </Link>
           </div>

@@ -122,7 +122,7 @@ export function ChallengeBanner() {
           </div>
           {progress && (
             <div style={{ marginTop: 8, maxWidth: 340 }}>
-              <div style={{ height: 8, background: "#F1F3F5", borderRadius: 999, overflow: "hidden" }}>
+              <div style={{ height: 8, background: "#F3F3FF", borderRadius: 999, overflow: "hidden" }}>
                 <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#50804F" : INK, borderRadius: 999, transition: "width .5s" }} />
               </div>
               <p style={{ margin: "3px 0 0", fontSize: 11, color: "#5B626C" }}>

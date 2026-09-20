@@ -763,7 +763,7 @@ export default function BetaTestPage() {
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
                         fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
-                        background: i === 0 ? colors.butter : i === 1 ? "#F5F6F8" : "transparent",
+                        background: i === 0 ? colors.butter : i === 1 ? "#F3F3FF" : "transparent",
                         border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>
@@ -885,7 +885,7 @@ export default function BetaTestPage() {
                           padding: "10px 16px", cursor: "pointer",
                           display: "flex", alignItems: "center", gap: 10,
                         }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                         >
                           <SI size={18} color={color} style={{ flexShrink: 0 }} />

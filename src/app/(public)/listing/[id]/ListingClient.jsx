@@ -762,7 +762,7 @@ export default function ListingDetail() {
                   <>
                     <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
                     {teile.filter(t => t.text).map((t, i) => (
-                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F5F6F8", borderLeft: "3px solid #F4C03F" }}>
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F3F3FF", borderLeft: "3px solid #F4C03F" }}>
                         <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
                           Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
                         </p>
@@ -989,7 +989,7 @@ export default function ListingDetail() {
           </div>
 
           {/* ════ RIGHT COLUMN (STICKY SIDEBAR) ════ */}
-          <div style={{ position: "sticky", top: 84 }}>
+          <div style={{ position: "sticky", top: 100 }}>
 
             {/* ── TITLE + PRICE CARD ─────────────────── */}
             <div ref={buyBoxRef} className="lg-buybox" style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "clamp(16px, 3.5vw, 24px) clamp(14px, 4vw, 28px)", marginBottom: 14 }}>
@@ -1216,7 +1216,7 @@ export default function ListingDetail() {
                       const basis = { width: 36, height: 36, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
                       if (offen && b.bidder?.avatar_url) return <span className="bid-avatar" style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
                       if (offen) return <span className="bid-avatar" style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
-                      return <span className="bid-avatar" style={{ ...basis, background: "#F1F3F5", color: colors.muted }}>{kurz}</span>;
+                      return <span className="bid-avatar" style={{ ...basis, background: "#F3F3FF", color: colors.muted }}>{kurz}</span>;
                     };
                     return (
                     <div style={{ marginTop: 18 }}>
@@ -1233,7 +1233,7 @@ export default function ListingDetail() {
                         <div key={b.id || i} className="bid-row" style={{
                           display: "flex", alignItems: "center", gap: 10,
                           padding: "10px 12px", borderRadius: fuehrt ? 12 : 0,
-                          background: fuehrt ? "#E6F5F5" : "transparent",
+                          background: fuehrt ? "#DBF5F0" : "transparent",
                           borderBottom: fuehrt ? "none" : `1px solid ${colors.borderLt}`,
                           marginBottom: fuehrt ? 2 : 0,
                         }}>

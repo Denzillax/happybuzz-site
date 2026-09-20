@@ -245,7 +245,7 @@ export default function HivePage() {
 
           {/* So haengt alles zusammen - kompakt erklaert
               (Beta-Feedback Tacocat + Michael, 30.08.: Reihenfolge unklar) */}
-          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F5F6F8", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
+          <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F3F3FF", fontSize: 12.5, color: colors.muted, lineHeight: 1.7 }}>
             <b style={{ color: colors.dark }}>So funktioniert dein Hive, und was du davon hast:</b><br />
             <b style={{ color: colors.dark }}>Pollen</b> sammelst du durch Aktivität (Inserate, Käufe, Logins, Challenges). Sie bestimmen dein Level, und ein höheres Level bringt dir sichtbare Vorteile: das Abzeichen auf deinem Profil und ab Hive Builder einen Ranking-Boost für deine Inserate.<br />
             <b style={{ color: colors.dark }}>Blüten</b> sind dein Bienenschutz-Beitrag aus Verkäufen. Sie zahlen automatisch aufs Level ein (100 Blüten = 1 Pollen). Du musst nichts damit tun, und ohne Verkäufe ist 0 Blüten völlig normal.<br />
@@ -421,7 +421,7 @@ export default function HivePage() {
                 <div key={key} style={{
                   display: "flex", gap: 10, padding: "10px 12px", borderRadius: radius.md,
                   border: `1px solid ${unlocked ? colors.dark + "55" : colors.borderLt}`,
-                  background: unlocked ? colors.yellowSoft : "#F5F6F8", opacity: unlocked ? 1 : 0.7,
+                  background: unlocked ? colors.yellowSoft : "#F3F3FF", opacity: unlocked ? 1 : 0.7,
                 }}>
                   <div style={{ flexShrink: 0, marginTop: 1 }}>
                     {unlocked ? <Trophy size={18} color={colors.yellowDark} /> : <Lock size={16} color={colors.mutedLt} />}

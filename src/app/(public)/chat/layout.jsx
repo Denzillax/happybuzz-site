@@ -52,7 +52,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
           onTouchEnd={onTouchEnd}
           style={{
             display: "flex", alignItems: "center", gap: 12, padding: "11px 14px",
-            background: active ? "#E6F5F5" : "#fff",
+            background: active ? "#E3E3FF" : "#fff",
             borderLeft: `3px solid ${active ? colors.teal : "transparent"}`,
             borderBottom: `1px solid ${colors.cream}`,
             transform: `translateX(${dx}px)`,
@@ -74,7 +74,7 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
             {/* flexWrap: Chips brechen bei Platzmangel um, statt den Titel wegzudruecken */}
             <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1, flexWrap: "wrap" }}>
               <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 60, flex: "1 1 auto", maxWidth: "100%" }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
-              <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#E6F5F5" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
+              <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#DBF5F0" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#3F6B3E" }}>
                 {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
               </span>
               {c.is_public && (
@@ -274,7 +274,7 @@ export default function ChatLayout({ children }) {
   }, []);
 
   return (
-    <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 64px)", background: "#fff", padding: "16px 24px", display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
+    <div ref={backdropRef} className="chat-backdrop" style={{ height: "calc(100dvh - 84px)", background: "#fff", padding: "16px 24px", display: "flex", justifyContent: "center", fontFamily: fonts.body, color: colors.dark }}>
       <div className="chat-shell" style={{ display: "flex", background: colors.surface, width: "100%", maxWidth: 1232, height: "100%", overflow: "hidden", borderRadius: 20, border: `1px solid ${colors.border}` }}>
 
       {/* ── Sidebar: Gesprächsliste ── */}

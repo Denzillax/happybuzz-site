@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const BODY = "Manrope, sans-serif";
 
@@ -102,7 +102,7 @@ function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
       width:"100%", padding:"13px", border:secondary?"1px solid #1D1D1D":"none", borderRadius: 999,
-      background:secondary?"transparent":K.honey, color:K.ink, fontSize:14, fontWeight:800,
+      background:secondary?"transparent":"#FFE7A9", color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":"0 2px 8px rgba(25,22,21,.15)",
       transition:"all .15s", opacity:loading?.7:1,

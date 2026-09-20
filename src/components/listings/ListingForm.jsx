@@ -951,7 +951,7 @@ export default function ListingForm({
 
       {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
       {draftRestored && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 20, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#DBF5F0", borderRadius: 20, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
           <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
           <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#1D1D1D", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
         </div>
@@ -1291,7 +1291,7 @@ export default function ListingForm({
           </div>
           {gesperrt ? (
             <div>
-              <div style={{ ...inputBase, minHeight: 80, background: "#F5F6F8", color: "#5B626C", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
+              <div style={{ ...inputBase, minHeight: 80, background: "#F3F3FF", color: "#5B626C", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
               <label style={{ ...labelBase, marginTop: 12 }}>Nachtrag (wird unter den Text gehängt, mit Datum)</label>
               <textarea value={nachtrag} onChange={(e) => setNachtrag(e.target.value)} rows={3} maxLength={1000}
                 placeholder="z. B. Kabel ist doch dabei, Abholung auch am Wochenende möglich"

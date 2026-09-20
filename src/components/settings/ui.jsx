@@ -7,7 +7,7 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
@@ -39,7 +39,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
       <div style={{
         fontSize: 9.5, fontWeight: 700, fontFamily: MONO, textTransform: "uppercase", letterSpacing: ".1em",
         padding: "4px 9px", borderRadius: 20, whiteSpace: "nowrap",
-        background: verified ? K.moss : pending ? K.honey : "transparent",
+        background: verified ? K.moss : pending ? "#FFE7A9" : "transparent",
         color: verified ? "#fff" : K.ink,
         border: `1.5px solid ${verified ? K.moss : pending ? K.ink : C.border}`,
       }}>
@@ -123,7 +123,7 @@ export function Btn({ children, variant = "primary", onClick, style: s, small, d
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: K.honey, color: K.ink, boxShadow: disabled ? "none" : "0 2px 8px rgba(25,22,21,.15)" },
+    primary:   { background: "#FFE7A9", color: K.ink, boxShadow: disabled ? "none" : "0 2px 8px rgba(25,22,21,.15)" },
     secondary: { background: "transparent", color: K.ink },
     danger:    { background: "#fff", color: C.red, borderColor: C.red },
     ghost:     { background: "transparent", color: C.muted, border: "none" },
@@ -162,13 +162,13 @@ export function TrustMeter({ level }) {
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
         <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase" }}>Trust Level</div>
-        <div style={{ fontSize: 13, color: K.honey, fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "—"}</div>
+        <div style={{ fontSize: 13, color: "#1D1D1D", fontWeight: 700 }}>{labels[Math.min(level, segments) - 1] ?? "—"}</div>
       </div>
       <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
         {Array.from({ length: segments }).map((_, i) => (
           <div key={i} style={{
             flex: 1, height: 8, borderRadius: 20,
-            background: i < level ? K.honey : "rgba(255,255,255,.15)",
+            background: i < level ? "#FFE7A9" : "rgba(255,255,255,.15)",
             transition: "all .4s", transitionDelay: `${i * .08}s`,
           }} />
         ))}

@@ -160,7 +160,7 @@ function NewListingPageInner() {
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 20, background: "#E6F5F5", border: "1px solid #1D1D1D33", fontSize: 13, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 20, background: "#DBF5F0", border: "1px solid #1D1D1D33", fontSize: 13, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

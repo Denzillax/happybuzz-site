@@ -79,7 +79,7 @@ export default function ContactPage() {
                 </div>
                 <button onClick={() => { if (ready) setSent(true); }} className="bd-btn" style={{
                   width: "100%", padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D",
-                  background: ready ? INK : "#D5D9DF",
+                  background: ready ? INK : "#F3F3FF",
                   color: ready ? PAPER : "#686E78", fontSize: 14.5, fontWeight: 700, cursor: ready ? "pointer" : "default",
                   fontFamily: BODY, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 }}>

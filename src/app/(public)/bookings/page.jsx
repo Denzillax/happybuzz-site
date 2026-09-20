@@ -8,7 +8,7 @@ import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home 
 import { colors, fonts, radius } from "@/lib/theme";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
@@ -112,7 +112,7 @@ export default function BookingsPage() {
               </>
             )}
             {b.purchase_id && (
-              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 20, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", textAlign: "center" }}>
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 20, background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", textAlign: "center" }}>
                 Zur Bestellung
               </Link>
             )}
@@ -133,7 +133,7 @@ export default function BookingsPage() {
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               padding: "12px 24px", background: "none", border: "none",
-              borderBottom: tab === t.key ? `3px solid ${K.honey}` : "3px solid transparent",
+              borderBottom: tab === t.key ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
               marginBottom: -2, cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
               color: tab === t.key ? K.ink : colors.muted,
             }}>{t.label}</button>

@@ -144,7 +144,7 @@ export function CommunityImpactCounter({ total = 0, userImpact = 0, firstName = 
           Das sind über {sqm.toLocaleString("de-CH")} m² neue Blühflächen.
         </p>
         {u > 0 && firstName && (
-          <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid #EEF0F3` }}>
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid rgba(29,29,29,.16)` }}>
             <p style={{ margin: 0, fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>Dein Beitrag</p>
             <p style={{ margin: "2px 0 0", fontSize: 20, fontWeight: 700, fontFamily: fonts.head, color: colors.dark }}>
               CHF {u.toLocaleString("de-CH", { minimumFractionDigits: 2 })}

@@ -47,8 +47,8 @@ function FilterPill({ label, value, options, onChange, active }) {
         style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "8px 14px", borderRadius: 20,
-          border: active ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
-          background: active ? "#E6F5F5" : "#fff",
+          border: active ? "2px solid #1D1D1D" : "1px solid #1D1D1D",
+          background: active ? "#DBF5F0" : "#fff",
           color: active ? "#1D1D1D" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
           fontFamily: fonts.body, cursor: "pointer",
@@ -83,7 +83,7 @@ function FilterPill({ label, value, options, onChange, active }) {
                 fontWeight: value === opt.value ? 700 : 400,
                 transition: "background .1s",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+              onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
               onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#F0FAFA" : "transparent"}
             >
               {opt.label}
@@ -451,8 +451,8 @@ function SearchPageInner() {
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 20,
-                border: (minPrice || maxPrice) ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
-                background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
+                border: (minPrice || maxPrice) ? "2px solid #1D1D1D" : "1px solid #1D1D1D",
+                background: (minPrice || maxPrice) ? "#DBF5F0" : "#fff",
                 color: (minPrice || maxPrice) ? "#1D1D1D" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
                 fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",

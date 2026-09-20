@@ -296,7 +296,7 @@ export default function BetaFeedback() {
       return (
         <div key={item.id} style={{
           padding: "8px 0", display: "flex", alignItems: "center", gap: 8,
-          borderBottom: `1px solid ${colors.borderLt || "#EEF0F3"}`, opacity: 0.55,
+          borderBottom: `1px solid ${colors.borderLt || "rgba(29,29,29,.16)"}`, opacity: 0.55,
         }}>
           <CheckCircle size={16} color={colors.muted} style={{ flexShrink: 0 }} />
           <span style={{ flex: 1, fontSize: 12, color: colors.muted, textDecoration: "line-through" }}>{item.label}</span>
@@ -310,7 +310,7 @@ export default function BetaFeedback() {
       <div key={item.id}>
         <div onClick={() => toggleCheck(item.id)} style={{
           padding: "8px 0", cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
-          borderBottom: `1px solid ${colors.borderLt || "#EEF0F3"}`,
+          borderBottom: `1px solid ${colors.borderLt || "rgba(29,29,29,.16)"}`,
         }}>
           <Icon size={16} color={STATUS_COLORS[s]} style={{ flexShrink: 0 }} />
           <span style={{ flex: 1, fontSize: 12, color: s === 1 ? "#50804F" : colors.dark, textDecoration: s === 1 ? "line-through" : "none" }}>{item.label}</span>

@@ -12,7 +12,7 @@ import { makeBeeRef } from "@/lib/fees";
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
@@ -75,7 +75,7 @@ export default function PurchasesPage() {
             <button key={f.key} onClick={() => setFilter(f.key)} style={{
               padding: "7px 14px", borderRadius: 20, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
               cursor: "pointer", fontFamily: fonts.body, border: "1px solid #1D1D1D",
-              background: filter === f.key ? K.honey : "#fff", color: K.ink,
+              background: filter === f.key ? "#FFE7A9" : "#fff", color: K.ink,
             }}>{f.label}</button>
           ))}
         </div>
@@ -87,7 +87,7 @@ export default function PurchasesPage() {
             <ShoppingBag size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Käufe</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Finde Schätze auf dem Marktplatz.</p>
-            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>Zum Marktplatz</Link>
+            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>Zum Marktplatz</Link>
           </div>
         )}
 

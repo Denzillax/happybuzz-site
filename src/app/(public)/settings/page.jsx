@@ -14,7 +14,7 @@ import { BeeLevelCard } from "@/components/shared/BeeLevel";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 import FeeModel from "@/components/listings/FeeModel";
@@ -84,7 +84,7 @@ function PushDeviceBox({ showToast }) {
           Push auf diesem Gerät
         </span>
         {status === "on" && (
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: K.honey, border: "1px solid #1D1D1D", color: K.ink }}>AKTIV</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: "#FFE7A9", border: "1px solid #1D1D1D", color: K.ink }}>AKTIV</span>
         )}
       </div>
       <div style={{ fontSize: 12.5, color: C.muted || "#5B626C", lineHeight: 1.6, marginBottom: (status === "on" || status === "off") ? 10 : 0 }}>
@@ -416,7 +416,7 @@ export default function SettingsPage() {
               <div style={{
                 position: "absolute", bottom: -4, right: -4,
                 width: 26, height: 26, borderRadius: 20,
-                background: K.honey, border: "1px solid #1D1D1D",
+                background: "#FFE7A9", border: "1px solid #1D1D1D",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}><Camera size={13} /></div>
               <input
@@ -475,7 +475,7 @@ export default function SettingsPage() {
                     style={{
                       flex: 1, padding: "10px 12px", borderRadius: 20, cursor: "pointer",
                       border: "1px solid #1D1D1D",
-                      background: active ? K.honey : "#fff",
+                      background: active ? "#FFE7A9" : "#fff",
                       color: K.ink,
                       fontWeight: 700, fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                     }}
@@ -626,7 +626,7 @@ export default function SettingsPage() {
                 await supabase.auth.resend({ type: "signup", email: profile?.email });
                 setEmailSending(false);
                 showToast("Bestätigungsmail gesendet");
-              }} style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
+              }} style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
                 {emailSending ? "Sende..." : "Mail senden"}
               </button>
             )}
@@ -682,7 +682,7 @@ export default function SettingsPage() {
             background: idVerified ? "#EEF4EC" : profile?.id_document_url ? "#FBF1D2" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? K.honey : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? "#FFE7A9" : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {idVerified ? <Check size={18} /> : <Shield size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -694,9 +694,9 @@ export default function SettingsPage() {
             {idVerified ? (
               <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : profile?.id_document_url ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.honey, color: K.ink }}>Wird geprüft</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink }}>Wird geprüft</span>
             ) : (
-              <label style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
+              <label style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
                 {idUploading ? "Lädt..." : "ID hochladen"}
                 <input type="file" accept="image/*,.pdf" style={{ display: "none" }} onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -788,7 +788,7 @@ export default function SettingsPage() {
           ) : (
             <span style={{
               fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", color: K.ink,
-              background: K.honey, border: "1px solid #1D1D1D", padding: "4px 9px", borderRadius: 20,
+              background: "#FFE7A9", border: "1px solid #1D1D1D", padding: "4px 9px", borderRadius: 20,
               display: "inline-flex", alignItems: "center", gap: 4,
             }}><AlertTriangle size={10} /> Unvollständig</span>
           )
@@ -855,8 +855,8 @@ export default function SettingsPage() {
                     updateForm("postal_code", r.plz);
                     updateForm("city", r.city);
                     setAddrResults([]);
-                  }} style={{ padding: "10px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEF0F3" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+                  }} style={{ padding: "10px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     <span style={{ fontWeight: 600 }}>{r.street}</span>
                     <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -948,8 +948,8 @@ export default function SettingsPage() {
                         <div key={j} onClick={() => {
                           setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                           setExtraAddrHits([]);
-                        }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEF0F3" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+                        }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <span style={{ fontWeight: 600 }}>{r.street}</span>
                           <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -970,7 +970,7 @@ export default function SettingsPage() {
                     setSavedAddresses(prev => prev.map((a, idx) => idx === i ? { ...a, ...newAddr } : a));
                     setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]);
                     showToast("Adresse aktualisiert");
-                  }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Speichern</button>
+                  }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Speichern</button>
                 </div>
               </>
             ) : (
@@ -1029,8 +1029,8 @@ export default function SettingsPage() {
                     <div key={j} onClick={() => {
                       setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                       setExtraAddrHits([]);
-                    }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid #EEF0F3" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
+                    }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <span style={{ fontWeight: 600 }}>{r.street}</span>
                       <span style={{ color: "#686E78", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -1054,7 +1054,7 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? K.honey : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FFE7A9" : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (
@@ -1099,7 +1099,7 @@ export default function SettingsPage() {
       style={{
         width: 22, height: 22, borderRadius: 20, cursor: "pointer",
         border: "1px solid #1D1D1D",
-        background: checked ? (accent || K.honey) : "transparent",
+        background: checked ? (accent || "#FFE7A9") : "transparent",
         display: "flex", alignItems: "center", justifyContent: "center",
         transition: "all .15s",
       }}
@@ -1345,7 +1345,7 @@ export default function SettingsPage() {
           display: "grid", gridTemplateColumns: "200px 1fr", gap: 32,
         }}>
           {/* Sidebar Navigation */}
-          <nav style={{ position: "sticky", top: 88, alignSelf: "start" }}>
+          <nav style={{ position: "sticky", top: 100, alignSelf: "start" }}>
             {TABS.map(tab => {
               const Icon = tab.icon;
               const active = activeTab === tab.id;
@@ -1358,7 +1358,7 @@ export default function SettingsPage() {
                   fontWeight: active ? 700 : 500,
                   color: active ? K.ink : C.muted,
                   borderRadius: 20, marginBottom: 2,
-                  borderLeft: active ? `3px solid ${K.honey}` : "3px solid transparent",
+                  borderLeft: active ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
                   transition: "all .15s",
                 }}>
                   <Icon size={16} />

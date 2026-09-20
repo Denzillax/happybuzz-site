@@ -72,7 +72,7 @@ export const btnPrimary = {
   padding: "13px 16px",
   borderRadius: 10,
   border: "1px solid #E5E8EC",
-  background: K.honey,
+  background: "#FFE7A9",
   color: K.ink,
   fontSize: 15,
   fontWeight: 800,
