@@ -1,95 +1,97 @@
 'use client'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
 import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
+import { supabase } from '@/lib/supabase/supabase'
+import { getCoverUrl, getDisplayPrice } from '@/lib/formatters'
+import { TYP_LABEL, TYP_PASTELL } from '@/lib/constants'
 
-// Klar-Look: schmales Willkommensband + separate Beta-Karte daneben.
-// Gelb ist die CTA-Farbe, der Rest bleibt zurueckhaltend.
-const DISPLAY = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
-const INK = '#191615'
-const HONEY = '#F4C03F'
-const BAND = '#E9F6F5' // helles Teal: der eine Farbmoment oben, alles andere ist neutral (19.09.2026)
-const BETA_BG = '#FBF0D2'
+// Meeko-Design, Schritt 2 (Denis 20.09.2026): Hero über die volle Breite in der Hauptfarbe (--mk-hero), zentrierter
+// Hauptsatz, links und rechts schweben echte Inserate auf der Tafel ihrer Formatfarbe. Sie weichen dem Mauszeiger leicht
+// aus und sind bei jedem Laden zufällig gewählt. Inhalt wie vorher: Hinweis auf den Bienenschutz, Hauptsatz, Inserieren,
+// Stöbern, Einstieg für die Beta. Die Suche sitzt im Header, darum hier keine zweite.
+// Styles: globals.css, Block MEEKO-LABOR (mk-hero, mk-schweb-*) und MEEKO STARTSEITE (mk-hero-echt).
+const LABEL: Record<string, string> = TYP_LABEL
+const PASTELL: Record<string, string> = TYP_PASTELL
+const LISTE = 'id, title, listing_type, price, start_price, rent_price, rent_period, created_at, listing_images(url, sort_order)'
+
+function preis(l: any) {
+  if (l.listing_type === 'free') return 'Gratis'
+  const p = getDisplayPrice(l)
+  return `${p.prefix}${p.text}${p.suffix}`
+}
 
 export function Hero() {
+  const [inserate, setInserate] = useState<any[]>([])
+  const hero = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const jetzt = new Date().toISOString()
+    supabase.from('listings').select(LISTE).eq('status', 'active').or(`expires_at.is.null,expires_at.gt.${jetzt}`)
+      .order('created_at', { ascending: false }).limit(30)
+      .then(({ data }) => setInserate((data || []).filter((l: any) => getCoverUrl(l))))
+  }, [])
+
+  // Zufällige Auswahl, erst im Browser gemischt (kein Unterschied zwischen Server und Browser)
+  const schweb = useMemo(() => {
+    const topf = [...inserate]
+    for (let i = topf.length - 1; i > 0; i -= 1) { const j = Math.floor(Math.random() * (i + 1)); [topf[i], topf[j]] = [topf[j], topf[i]] }
+    return topf.slice(0, 6)
+  }, [inserate])
+
+  // Zeigerposition als --mx/--my (-1 bis 1), jede Kachel verschiebt sich um ihre Tiefe (--p). Nur mit Maus.
+  useEffect(() => {
+    const el = hero.current
+    if (!el || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let bild = 0
+    const setzen = (x: number, y: number) => { el.style.setProperty('--mx', x.toFixed(3)); el.style.setProperty('--my', y.toFixed(3)) }
+    const bewegt = (e: PointerEvent) => {
+      cancelAnimationFrame(bild)
+      bild = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect()
+        setzen(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1)
+      })
+    }
+    const weg = () => { cancelAnimationFrame(bild); setzen(0, 0) }
+    el.addEventListener('pointermove', bewegt)
+    el.addEventListener('pointerleave', weg)
+    return () => { cancelAnimationFrame(bild); el.removeEventListener('pointermove', bewegt); el.removeEventListener('pointerleave', weg) }
+  }, [])
+
   return (
-    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', margin: '14px 0 6px' }}>
-
-        {/* Hauptband: Slogan + CTAs + Karten-Collage */}
-        <section style={{ flex: '2 1 460px', minWidth: 0, background: BAND, borderRadius: 12, overflow: 'hidden' }}>
-          <div style={{ padding: 'clamp(22px, 4vw, 40px) clamp(18px, 4vw, 44px)', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', height: '100%', boxSizing: 'border-box' }}>
-            <div style={{ flex: '1 1 300px', minWidth: 0 }}>
-              {/* Beta-Feedback Tacocat 08.09.: der gute Zweck soll zuoberst stehen,
-                  nicht im Fliesstext untergehen - eigene Zeile ueber dem Titel. */}
-              <Link href="/impact" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '6px 13px', fontSize: 12, fontWeight: 700, letterSpacing: '.02em', color: '#3E6B3D', textDecoration: 'none', marginBottom: 12 }}>
-                <Flower2 size={14} color="#50804F" /> 20% jeder Gebühr fliessen in den Bienenschutz
-                <ArrowRight size={13} strokeWidth={2.4} />
-              </Link>
-              <h1 style={{ fontFamily: DISPLAY, fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.12, color: INK, margin: '0 0 10px' }}>
-                Was du suchst, hat schon jemand.
-              </h1>
-              <p style={{ fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'rgba(25,22,21,0.65)', lineHeight: 1.55, margin: '0 0 18px', maxWidth: 540 }}>
-                Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.
-              </p>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <Magnetic>
-                <Link href="/listings/new" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: HONEY, color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
-                  <Plus size={17} strokeWidth={2.4} /> Inserieren
-                </Link>
-                </Magnetic>
-                <Magnetic>
-                <Link href="/search" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', color: INK, fontWeight: 700, fontSize: 14.5, padding: '11px 20px', borderRadius: 999, textDecoration: 'none' }}>
-                  Stöbern <ArrowRight size={16} strokeWidth={2.4} />
-                </Link>
-                </Magnetic>
-              </div>
-            </div>
-            {/* Drei Hero-Karten (aus dem frueheren Karussell), jetzt als ruhige Collage */}
-            <div className="hero-bee-side" style={{ flex: '0 0 auto', position: 'relative', width: 300, height: 190, marginRight: 8 }}>
-              {[
-                { src: '/images/hero/camera.png', alt: 'Kamera, analog', rot: -7, x: 0, y: 18 },
-                { src: '/images/hero/gameboy.png', alt: 'Spielkonsole', rot: 3, x: 96, y: 0 },
-                { src: '/images/hero/vinyl.png', alt: 'Schallplatte', rot: 8, x: 190, y: 26 },
-              ].map((k) => (
-                <div key={k.src} style={{
-                  position: 'absolute', left: k.x, top: k.y,
-                  width: 110, padding: 8, background: '#fff', borderRadius: 12,
-                  boxShadow: '0 4px 14px rgba(25,22,21,.12)',
-                  transform: `rotate(${k.rot}deg)`,
-                }}>
-                  <img src={k.src} alt={k.alt} style={{ width: '100%', height: 92, objectFit: 'contain', display: 'block' }} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Separate Beta-Karte: Willkommen + Feedback-CTA */}
-        <section className="beta-card-full" style={{ flex: '1 1 260px', minWidth: 240, maxWidth: 420, background: BETA_BG, borderRadius: 12, padding: 'clamp(20px, 3vw, 28px)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', boxSizing: 'border-box' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: '#fff', borderRadius: 999, padding: '5px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: INK, marginBottom: 12 }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: HONEY }} />
-            Geschlossene Beta
-          </div>
-          <h2 style={{ fontFamily: DISPLAY, fontSize: 'clamp(19px, 2.2vw, 24px)', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.15, color: INK, margin: '0 0 8px' }}>
-            Willkommen, Beta-Crew.
-          </h2>
-          <p style={{ fontSize: 13.5, color: 'rgba(25,22,21,0.68)', lineHeight: 1.55, margin: '0 0 16px' }}>
-            Du gehörst zu den Ersten. Teste kaufen, verkaufen und mieten, und melde alles, was klemmt.
-          </p>
-          <Link href="/beta" className="cta-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: INK, color: '#fff', fontWeight: 700, fontSize: 13.5, padding: '10px 18px', borderRadius: 999, textDecoration: 'none', marginTop: 'auto' }}>
-            <MessageSquareHeart size={15} /> So testest du mit
+    <section className="mk mk-teil mk-hero mk-hero-echt" ref={hero}>
+      <div className="mk-schweb-feld">
+        {schweb.map((l, i) => (
+          <Link key={l.id} href={`/listing/${l.id}`} className={`mk-schweb mk-schweb-${i + 1}`} aria-label={`${l.title}, ${LABEL[l.listing_type] || ''}, ${preis(l)}`}>
+            <span className={`mk-schweb-tafel mk-${PASTELL[l.listing_type] || 'lavendel'}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={getCoverUrl(l)} alt="" />
+            </span>
+            <span className="mk-schweb-preis">{preis(l)}</span>
           </Link>
-        </section>
-
-        {/* Mobil: kompakte Beta-Leiste statt grosser Karte */}
-        <Link href="/beta" className="beta-mini" style={{ display: 'none', alignItems: 'center', gap: 9, background: BETA_BG, borderRadius: 999, padding: '11px 16px', textDecoration: 'none', color: INK, fontWeight: 700, fontSize: 13.5, flex: '1 1 100%' }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: HONEY, flexShrink: 0 }} />
-          Beta: So testest du mit
-          <ArrowRight size={15} style={{ marginLeft: 'auto', flexShrink: 0 }} />
-        </Link>
-
+        ))}
       </div>
-    </div>
+
+      {/* Beta-Feedback Tacocat 08.09.: der gute Zweck steht zuoberst, als eigene Zeile über dem Titel */}
+      <Link href="/impact" className="mk-hero-hinweis">
+        <Flower2 size={15} aria-hidden="true" /> 20% jeder Gebühr fliessen in den Bienenschutz <ArrowRight size={14} strokeWidth={2.4} aria-hidden="true" />
+      </Link>
+      <h1 className="mk-h1">
+        {/* fester Umbruch: einzeilig liefe der Satz unter die schwebenden Inserate */}
+        Was du suchst,<br />hat schon jemand.
+      </h1>
+      <p className="mk-hero-text">Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.</p>
+      <div className="mk-hero-knoepfe">
+        <Magnetic><Link href="/listings/new" className="mk-knopf mk-knopf-dunkel"><Plus size={17} strokeWidth={2.4} aria-hidden="true" /> Inserieren</Link></Magnetic>
+        <Magnetic><Link href="/search" className="mk-knopf">Stöbern <ArrowRight size={16} strokeWidth={2.4} aria-hidden="true" /></Link></Magnetic>
+      </div>
+      <Link href="/beta" className="mk-hero-beta">
+        <span className="mk-hero-beta-marke">Geschlossene Beta</span>
+        <span>Du gehörst zu den Ersten. So testest du mit</span>
+        <MessageSquareHeart size={16} aria-hidden="true" />
+      </Link>
+    </section>
   )
 }

@@ -9,10 +9,12 @@ import { FavoriteButton } from "./FavoriteButton";
 import { AccountBadge } from "./AccountBadge";
 import { VerifiedSellerBadge } from "./VerifiedSellerBadge";
 import { useFavorite } from "@/hooks/useFavorite";
-import { TYP_FARBEN } from "@/lib/constants";
+import { TYP_LABEL, TYP_PASTELL } from "@/lib/constants";
 
-// ── Klar-Look: flache Karte ohne Rahmen, grosses 3:4-Bild, ruhige Meta ──
-const INK = "#191615";
+// ── Meeko-Design (20.09.2026): das Bild liegt auf einer Pastelltafel in der Farbe seines Formats, mit 1 px Ink-Rand.
+// Chips sind weiss mit Ink-Rand statt Schatten. Alle Angaben und Funktionen der Karte sind unverändert. ──
+const INK = "#1D1D1D";
+const RAND = "1px solid #1D1D1D";
 
 // Zeitangabe für alle Inserattypen: > 24h -> Datum + Uhrzeit ("bis 14. Juni, 15:00"),
 // Lieferart als kurzer Text. ACHTUNG: pickup_only heisst in der Datenbank so, bedeutet aber
@@ -82,17 +84,14 @@ export function listingInactiveLabel(listing) {
   return null;
 }
 
-// Typ-Kennzeichnung: farbige Pille pro Inserattyp. Die Farben kommen aus TYP_FARBEN
-// (src/lib/constants.js), dieselben wie auf den fünf Format-Kacheln der Startseite.
-const TYP_LABEL = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
-const TYP_CHIP = Object.fromEntries(Object.entries(TYP_LABEL).map(([typ, label]) => [typ, { label, bg: TYP_FARBEN[typ].bg, color: TYP_FARBEN[typ].fg }]));
+// Typ-Kennzeichnung: weisse Pille mit dem Namen des Formats. Die Farbe trägt die Tafel dahinter (TYP_PASTELL).
 const PERIOD_LABEL = { hour: "Std", day: "Tag", week: "Woche", month: "Monat" };
 
 // Bild-Chip: weisse Pille auf dem Foto (Typ, Neu, Featured)
 const chip = (bg = "#FFFFFF", color = INK) => ({
   fontSize: 10.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999,
   background: bg, color, whiteSpace: "nowrap", lineHeight: 1.5,
-  boxShadow: "0 1px 4px rgba(25,22,21,.12)",
+  border: RAND,
 });
 
 export function ListingCard(props) {
@@ -146,19 +145,18 @@ export function ListingCard(props) {
       style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1 }}
     >
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
-      <div style={{ position: "relative", aspectRatio: "1/1", background: colors.cream, overflow: "hidden", borderRadius: 12 }}>
-        {cover
-          ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", transform: hover ? "scale(1.06)" : "scale(1)", transition: "transform .6s cubic-bezier(.2,.7,.2,1)", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
-          : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#ccc" /></div>
-        }
+      <div className={`lc-tafel mk-${TYP_PASTELL[listing.listing_type] || "lavendel"}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", borderRadius: 20, border: RAND }}>
+        {/* Das Foto liegt mit Abstand auf der Tafel und hat seinen eigenen Rand. Absolut gesetzt, damit Hochformate die Tafel nicht strecken. */}
+        <div className="lc-foto" style={{ position: "absolute", inset: 10, borderRadius: 11, border: RAND, overflow: "hidden", background: "#fff" }}>
+          {cover
+            ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transform: hover ? "scale(1.06)" : "scale(1)", transition: "transform .6s cubic-bezier(.2,.7,.2,1)", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
+            : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="#bbb" /></div>
+          }
+        </div>
 
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
-        <div style={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
-          {TYP_CHIP[listing.listing_type] && (
-            <span style={chip(TYP_CHIP[listing.listing_type].bg, TYP_CHIP[listing.listing_type].color)}>
-              {TYP_CHIP[listing.listing_type].label}
-            </span>
-          )}
+        <div style={{ position: "absolute", top: 18, left: 18, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+          {TYP_LABEL[listing.listing_type] && <span style={chip()}>{TYP_LABEL[listing.listing_type]}</span>}
           {hasFeatured && <span style={{ ...chip("#E8A820", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
@@ -178,25 +176,25 @@ export function ListingCard(props) {
         )}
 
         {/* Oben rechts: Merken-Herz */}
-        <div style={{ position: "absolute", top: 8, right: 8 }}>
+        <div style={{ position: "absolute", top: 18, right: 18 }}>
           <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
         </div>
 
         {/* Unten rechts: Sofortkauf-Chip (Denis 16.09.: der Textblock bleibt so bei
             allen Karten gleich, und der Preis ist nirgends abgeschnitten) */}
         {isAuction && listing.buy_now_price > 0 && !statusOverlay && (
-          <span className="sofort-chip" style={{ position: "absolute", bottom: 8, right: 8, fontSize: 11, fontWeight: 700, color: INK, background: "rgba(255,255,255,.92)", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums", boxShadow: "0 1px 4px rgba(25,22,21,.15)" }}>
+          <span className="sofort-chip" style={{ position: "absolute", bottom: 18, right: 18, fontSize: 11, fontWeight: 700, color: INK, background: "#fff", border: RAND, borderRadius: 999, padding: "3px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>
             {/* Ganze Beträge ohne .00, sonst wird der Chip am Handy zu breit (Denis 16.09.) */}
             Sofort CHF {Number.isInteger(listing.buy_now_price) ? listing.buy_now_price.toLocaleString("de-CH") : chf(listing.buy_now_price)}
           </span>
         )}
         {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
             KI-Bildersuche), daneben Endet bald / Hot */}
-        <div className="lc-unten" style={{ position: "absolute", bottom: 8, left: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="lc-unten" style={{ position: "absolute", bottom: 18, left: 18, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
           {!statusOverlay && (
             <button type="button" aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/listing/${listing.id}?bild=1`); }}
-              style={{ width: 28, height: 28, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.92)", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 4px rgba(25,22,21,.18)", flexShrink: 0 }}>
+              style={{ width: 28, height: 28, borderRadius: "50%", border: RAND, background: "#fff", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <ScanSearch size={15} color="#1D1D1D" />
             </button>
           )}
@@ -214,12 +212,12 @@ export function ListingCard(props) {
       {/* Textblock "Zwei Bloecke" (Denis, 15.09.): oben Titel + Preis eng
           beieinander, unten das Kleingedruckte als eigener Block hinter einer
           feinen Linie, immer am Kartenboden (marginTop auto). */}
-      <div style={{ padding: "8px 2px 0", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+      <div style={{ padding: "10px 4px 0", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <p style={{
-          fontSize: 14.5, fontWeight: 600, fontFamily: fonts.body,
-          lineHeight: 1.35, margin: 0, color: INK,
+          fontSize: 15.5, fontWeight: 500, fontFamily: fonts.body, letterSpacing: "-.015em",
+          lineHeight: 1.3, margin: 0, color: INK,
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-          overflow: "hidden", minHeight: "2.7em",
+          overflow: "hidden", minHeight: "2.6em",
         }}>
           {listing.title}
         </p>
@@ -228,23 +226,23 @@ export function ListingCard(props) {
         <div style={{ marginTop: 4, minHeight: 22, display: "flex", alignItems: "baseline", gap: 6, overflow: "hidden", whiteSpace: "nowrap" }}>
           {isAuction ? (
             <>
-              <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {chf(listing.price || listing.start_price || 0)}
               </span>
               <span style={{ fontSize: 12, color: colors.muted }}>({bidCount} {bidCount === 1 ? "Gebot" : "Gebote"})</span>
             </>
           ) : isRent || isService ? (
-            <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
               CHF {chf(listing.rent_price || listing.price || 0)}
               <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted }}> / {PERIOD_LABEL[listing.rent_period] || "Tag"}</span>
             </span>
           ) : isFree ? (
-            <span style={{ fontSize: 17, fontWeight: 800, color: colors.nature }}>Gratis</span>
+            <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK }}>Gratis</span>
           ) : (
             <>
               {/* Festpreis gleich gesetzt wie der Auktionspreis (Denis 16.09.: die
                   Kopfschrift wirkte dicker), daneben grau "(Festpreis)" wie "(n Gebote)" */}
-              <span style={{ fontSize: 17, fontWeight: 800, color: INK, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {chf(listing.price || 0)}
               </span>
               {gesenkt ? (
@@ -261,7 +259,7 @@ export function ListingCard(props) {
 
         {/* Kleingedrucktes: eigener Block mit Luft und Linie, am Kartenboden */}
         <div style={{ marginTop: "auto", paddingTop: 12 }}>
-          <div style={{ borderTop: "1px solid #EEF0F3", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
+          <div style={{ borderTop: "1px solid rgba(29,29,29,.16)", paddingTop: 8, fontSize: 12, lineHeight: 1.5, color: colors.muted }}>
             {/* Zeile 1: nur der Ort (Denis 16.09.: der Zustand "Gut" davor ist weg,
                 er steht im Inserat selbst) */}
             <div style={{ display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap", overflow: "hidden" }}>

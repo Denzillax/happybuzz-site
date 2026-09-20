@@ -20,8 +20,9 @@ export default function HomePage() {
     <>
       {/* Laufschrift direkt unter dem Header: laeuft Rand zu Rand und
           trennt so keine Inhalts-Kacheln (Beta-Feedback Tacocat, 30.08.) */}
-      <Ticker placement="home" />
       <Hero />
+      {/* Meeko-Design (20.09.2026): das Laufband schliesst den Hero unten ab. Oben läge es unter dem schwebenden Header. */}
+      <Ticker placement="home" />
       {/* Faktenzeile als Unterzeile des Heros, danach EINE Reihe mit Schnelleinstiegen und Kategorien (19.09.) */}
       <FaktenKacheln />
       <Categories />

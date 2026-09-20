@@ -189,6 +189,12 @@ export const PAYMENT_METHODS = [
 // Farbe pro Inserattyp: bg = Fläche, fg = Schrift oder Icon darauf. Einzige Quelle für den
 // Typ-Chip auf den Inseraten (ListingCard) und das Icon-Feld der fünf Format-Kacheln auf der
 // Startseite (FormatTiles). So erkennt man ein Format an derselben Farbe wieder (Denis 19.09.2026).
+// Meeko-Design (20.09.2026): jedes Format hat eine Pastelltafel, auf der sein Bild liegt (Inseratkarte, Hero, Format-Kacheln).
+// Der Wert ist der Name der CSS-Klasse mk-<name> und der Variable --mk-<name> in globals.css. Mint gehört dem Hero und dem
+// App-Icon, darum trägt Gratis Butter.
+export const TYP_PASTELL = { sell: "rose", auction: "lavendel", rent: "himmel", free: "butter", service: "rosa" };
+export const TYP_LABEL = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
+
 export const TYP_FARBEN = {
   sell: { bg: "#F4C03F", fg: "#191615" },
   auction: { bg: "#94B9C9", fg: "#191615" },

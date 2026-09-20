@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Heart } from "lucide-react";
-import { colors } from "@/lib/theme";
+import BLogo from "@/components/shared/BLogo";
 
 export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
   // Herz springt kurz an, wenn man es setzt (nicht beim Laden, nicht beim Entfernen)
@@ -9,17 +8,20 @@ export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
   return (
     <button
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!isFav) setPop((n) => n + 1); onToggle?.(); }}
+      aria-pressed={!!isFav}
+      aria-label={isFav ? "Aus den Favoriten entfernen" : "Zu den Favoriten"}
+      className="eckig kein-akzent"
       style={{
-        width: size, height: size, borderRadius: size / 4,
-        background: "rgba(255,255,255,.9)", border: "none",
+        // Meeko-Design (20.09.2026): Favoriten sind app-weit das um 90 Grad gedrehte B. Ruhig: Ink auf Weiss, gesetzt:
+        // Himbeer auf Rosa (Gelb auf Weiss war zu schwach). Gilt für Karte, Inserat, Meine Inserate und die Favoriten-Seite.
+        width: size, height: size, borderRadius: 999, padding: 0,
+        background: isFav ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D",
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-        // Favoriten sind app-weit HONEY (nicht rot): gleiche Farbe wie
-        // ListingClient, Meine Inserate und die Favoriten-Seite.
-        color: isFav ? colors.yellow : "#bbb", backdropFilter: "blur(4px)",
-        transition: "all .15s", ...style,
+        color: isFav ? "#C2255C" : "#1D1D1D",
+        transition: "background .15s, color .15s", ...style,
       }}
     >
-      <span key={pop} className={pop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={size * 0.5} fill={isFav ? "currentColor" : "none"} /></span>
+      <span key={pop} className={pop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><BLogo herz size={size * 0.5} title="" /></span>
     </button>
   );
 }

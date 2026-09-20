@@ -2279,7 +2279,8 @@ body:has(.mk) { background: #fff; }
 .hd-mschluss { padding: 12px 4px 4px; display: flex; flex-direction: column; }
 @media (max-width: 1180px) { .hd-lbl { display: none; } .hd-text { padding: 0 8px; } .hd-knopf { padding: 0 14px 4px; } }
 @media (max-width: 767px) {
-  .hd { padding: 10px 12px 0; }
+  /* Am Handy steht der Kopf auf weissem Grund mit Linie: schwebend lief der Inhalt zwischen Pille und Suchfeld durch */
+  .hd { padding: 10px 12px 10px; background: #fff; border-bottom: var(--mk-rand); pointer-events: auto; }
   .hd-pille { min-height: 60px; padding: 6px 6px 6px 16px; border-radius: 30px; gap: 8px; }
   .hd-desktop { display: none; }
   .hd-mobil { display: flex; }
@@ -2304,3 +2305,38 @@ body:has(.mk) { background: #fff; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
 .bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-ink); color: #fff; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); transform: translateY(-10px); }
 .bn .bn-plus:active { box-shadow: inset 0 -1px 0 rgba(255,255,255,.22); padding-bottom: 1px; }
+
+/* ── MEEKO STARTSEITE, Schritt 2 (Denis 20.09.2026) ── */
+:root { --mk-hero: var(--mk-mint); }
+/* .mk auf einem Teil der echten Seite: Bausteine aus dem Labor nutzen, ohne die Seite zu übernehmen */
+.mk.mk-teil { min-height: 0; background: transparent; overflow: visible; }
+.mk.mk-teil.mk-hero { overflow: hidden; } /* die äusseren Kacheln ragen über den Rand und werden hier abgeschnitten */
+.mk-hero-echt .mk-hero-text { max-width: 24em; }
+.mk-hero-echt { margin-top: -80px; padding: 150px 24px 84px; background: var(--mk-hero) !important; border-bottom: var(--mk-rand); }
+.mk-hero-echt .mk-h1, .mk-hero-echt .mk-hero-text, .mk-hero-echt .mk-hero-hinweis, .mk-hero-echt .mk-hero-knoepfe, .mk-hero-echt .mk-hero-beta { position: relative; z-index: 2; }
+.mk-hero-hinweis { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 26px; padding: 7px 16px 8px; border: var(--mk-rand); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; letter-spacing: -.01em; transition: background .2s ease; }
+.mk-hero-hinweis:hover { background: var(--mk-butter); }
+.mk-hero-knoepfe { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
+.mk-hero-beta { display: inline-flex; align-items: center; gap: 10px; margin-top: 34px; padding: 6px 14px 6px 6px; border: var(--mk-rand); border-radius: 999px; background: rgba(255,255,255,.6); font-size: 14px; transition: background .2s ease; }
+.mk-hero-beta:hover { background: #fff; }
+.mk-hero-beta-marke { padding: 3px 10px 4px; border-radius: 999px; background: var(--mk-ink); color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+/* Kacheln: im Labor am Boden 176 px hoch verankert (dort überlappen Karten den Hero), hier nicht */
+.mk-hero-echt .mk-schweb-3, .mk-hero-echt .mk-schweb-6 { bottom: 64px; }
+.mk-link-knopf { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px 3px; border: var(--mk-rand); border-radius: 10px; background: #fff; color: var(--mk-ink) !important; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-shadow: inset 0 -3px 0 rgba(29,29,29,.13); transition: background .2s ease; }
+.mk-link-knopf:hover { background: var(--mk-butter); filter: none !important; }
+/* Pastelltafeln auch ausserhalb von .mk */
+.mk-lavendel { background: var(--mk-lavendel); } .mk-himmel { background: var(--mk-himmel); } .mk-rosa { background: var(--mk-rosa); }
+.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); }
+@media (max-width: 1100px) { .mk-hero-echt .mk-schweb-3, .mk-hero-echt .mk-schweb-6 { bottom: auto; } }
+@media (max-width: 767px) {
+  .mk-hero-echt { margin-top: 0; padding: 30px 16px 44px; }
+  .mk-hero-echt .mk-h1 { font-size: 36px; }
+  .mk-hero-echt .mk-hero-text { font-size: 16px; margin-top: 16px; }
+  .mk-hero-echt .mk-schweb-feld { margin-bottom: 24px; }
+  .mk-hero-echt .mk-hero-knoepfe { margin-top: 22px; }
+  .mk-hero-echt .mk-hero-beta { margin-top: 22px; }
+  .mk-hero-hinweis { font-size: 12.5px; padding: 6px 12px 7px; margin-bottom: 20px; text-align: left; }
+  .mk-hero-beta { font-size: 13px; text-align: left; border-radius: 18px; }
+  .lc-tafel { border-radius: 16px !important; }
+  .lc-foto { inset: 7px !important; border-radius: 9px !important; }
+}
