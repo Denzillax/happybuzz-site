@@ -43,9 +43,10 @@ const SPALTEN = 17;
 // ordnen sich dabei zum nächsten Wort um. Ohne Liste bleibt es bei `wort`.
 // kachel: true = Quadrate statt Punkte (Denis 20.09.2026: "nicht rund, sondern kachelig"), passend zum kacheligen B.
 // logo: true = vor dem Wort steht das B-Zeichen, aus denselben Kacheln. gewicht: Schriftgewicht beim Rastern.
+// farben: eine Farbe je Wort aus `woerter` (gleiche Reihenfolge). Das Wort trägt dann die Farbe dessen, wofür es steht.
 // zerfall "einlauf": für den Seitenfuss. Das Wort setzt sich zusammen, während es von unten ins Bild kommt, und steht
 // ganz, sobald es vollständig sichtbar ist (die Bildmitte erreicht ein Fuss nie).
-export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400, kachel = false, logo = false, gewicht = 800, mausRadius = 6, mausKraft = 0.9 }) {
+export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe = TEAL, schrift = "General Sans", maxBreite = 620, zerfall = false, biene: mitBiene = true, woerter = null, wechsel = 3400, kachel = false, logo = false, gewicht = 800, mausRadius = 6, mausKraft = 0.9, farben = null }) {
   const cvRef = useRef(null);
 
   useEffect(() => {
@@ -152,7 +153,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
 
     const malen = () => {
       ctx.clearRect(0, 0, B, H);
-      ctx.fillStyle = farbe;
+      ctx.fillStyle = (farben && farben[nr]) || farbe;
       const r = raster * 0.4;
       for (const p of punkte) {
         if (p.x < r || p.x > B - r || p.y < r || p.y > H - r) continue; // halbe Punkte an der Kante weglassen
@@ -255,7 +256,7 @@ export default function PunktSchriftzug({ wort = "BEEDARO", pause = 7000, farbe 
       cv.removeEventListener("mousemove", bewegung); cv.removeEventListener("mouseleave", weg);
       window.removeEventListener("scroll", rollen); window.removeEventListener("resize", rollen);
     };
-  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, kachel, logo, gewicht, mausRadius, mausKraft, (woerter || []).join("|")]);
+  }, [wort, pause, farbe, schrift, maxBreite, zerfall, mitBiene, wechsel, kachel, logo, gewicht, mausRadius, mausKraft, (woerter || []).join("|"), (farben || []).join("|")]);
 
   return <canvas ref={cvRef} className="bh-wort" role="img" aria-label="Beedaro" />;
 }

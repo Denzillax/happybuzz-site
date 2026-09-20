@@ -10,25 +10,25 @@ const usps = [
     icon: Percent,
     title: 'Ab 3% Gebühr',
     description: 'Unter CHF 20 verkaufst du gebührenfrei. Darüber ab 3%, nur bei Erfolg. Kein Abo, keine versteckten Kosten.',
-    accent: '#C99A1E', tint: '#FBF1D2', href: '/how-it-works',
+    accent: '#1D1D1D', tint: '#FFE7A9', href: '/how-it-works',
   },
   {
     icon: SlidersHorizontal,
     title: 'Du bestimmst',
     description: 'Wähle deinen Beitrag selbst: von 3% bis 10%. Je mehr du gibst, desto mehr fliesst in die Natur.',
-    accent: '#1D1D1D', tint: '#DCEFEE', href: '/how-it-works',
+    accent: '#1D1D1D', tint: '#E3E3FF', href: '/how-it-works',
   },
   {
     icon: TreePine,
     title: 'Für die Natur',
     description: 'Ein Teil jedes Verkaufs unterstützt direkt Schweizer Bienen- und Naturschutzprojekte.',
-    accent: '#50804F', tint: '#E7EFE6', href: '/impact',
+    accent: '#50804F', tint: '#DBF5F0', href: '/impact',
   },
   {
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#191615', tint: '#F5F6F8', href: '/about',
+    accent: '#1D1D1D', tint: '#FBEBEA', href: '/about',
   },
 ]
 
@@ -60,7 +60,7 @@ export function UspGrid() {
               key={i}
               href={usp.href}
               style={{
-                background: '#fff', borderRadius: 12, border: "1px solid #E5E8EC",
+                background: '#fff', borderRadius: 20, border: "1px solid #1D1D1D",
                 padding: '28px 22px', transition: 'all 0.18s ease',
                 textDecoration: 'none', color: 'inherit', display: 'block',
               }}
@@ -72,14 +72,14 @@ export function UspGrid() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement
-                el.style.borderColor = '#E5E8EC'
+                el.style.borderColor = '#1D1D1D'
                 el.style.transform = 'none'
                 el.style.boxShadow = 'none'
               }}
             >
               {/* Icon-Tafel */}
               <div style={{
-                width: 52, height: 52, borderRadius: 12, background: usp.tint, border: "1px solid #E5E8EC",
+                width: 52, height: 52, borderRadius: 20, background: usp.tint, border: "1px solid #1D1D1D",
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: usp.accent, marginBottom: 18,
               }}>
@@ -105,7 +105,7 @@ export function UspGrid() {
 
       {/* Beta-Hinweis: Gruendungsmitglied statt generischem CTA */}
       <div style={{
-        marginTop: 26, border: "1px solid #E5E8EC", background: '#FBF1D2',
+        marginTop: 26, border: "1px solid #1D1D1D", background: '#FFE7A9',
         padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 12, flexWrap: 'wrap', textAlign: 'center',
       }}>

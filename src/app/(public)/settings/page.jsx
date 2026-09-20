@@ -1352,13 +1352,13 @@ export default function SettingsPage() {
               return (
                 <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={active ? "set-tab set-tab-active" : "set-tab"} style={{
                   width: "100%", padding: "10px 14px", border: "none",
-                  background: active ? K.sand : "transparent",
+                  background: active ? "#E3E3FF" : "transparent",
                   display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
                   fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 13,
                   fontWeight: active ? 700 : 500,
                   color: active ? K.ink : C.muted,
-                  borderRadius: 20, marginBottom: 2,
-                  borderLeft: active ? `3px solid ${"#1D1D1D"}` : "3px solid transparent",
+                  borderRadius: 999, marginBottom: 2,
+                  boxShadow: active ? "inset 0 0 0 1px #1D1D1D" : "none",
                   transition: "all .15s",
                 }}>
                   <Icon size={16} />
@@ -1384,7 +1384,7 @@ export default function SettingsPage() {
                muessen sie auf Inhaltsbreite schrumpfen, sonst ist jeder Knopf
                bildschirmbreit und die Zeile besteht fast nur aus Leerraum. */
             .settings-layout nav .set-tab { width: auto !important; white-space: nowrap; flex-shrink: 0; padding: 9px 12px !important; margin-bottom: 0 !important; border-left: none !important; border-bottom: 2.5px solid transparent !important; border-radius: 0 !important; }
-            .settings-layout nav .set-tab-active { border-bottom-color: #1D1D1D !important; }
+            .settings-layout nav .set-tab-active { border-bottom-color: transparent !important; }
           }
         `}</style>
 

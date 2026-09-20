@@ -25,14 +25,25 @@ const links = [
   ] },
 ]
 
+// Wörter des Kachel-Schriftzugs mit ihrer Farbe (Denis 20.09.2026: das Wort soll die Farbe annehmen, die es vertritt).
+// Es sind die kräftigen Geschwister der Pastelltafeln: die Pastelle selbst wären als Kacheln auf Weiss nicht zu sehen.
+const KACHEL_WORTE: [string, string][] = [
+  ['beedaro', '#1D1D1D'],     // Marke: Ink
+  ['kaufen', '#C2453A'],      // Festpreis: Rosé
+  ['bieten', '#5B4BDB'],      // Auktion: Lavendel
+  ['mieten', '#1F6FCC'],      // Miete: Himmel
+  ['buchen', '#C2259B'],      // Service: Rosa
+  ['verschenken', '#B97A00'], // Gratis: Butter
+]
+
 export function Footer() {
   return (
     <footer className="ft">
       {/* Lookbook-Effekt in Kacheln (Denis 20.09.2026): B-Zeichen und Wortmarke aus kleinen Quadraten. Sie setzen sich
           zusammen, während der Fuss ins Bild kommt, weichen dem Mauszeiger in einem grossen Kreis aus, und das Wort wechselt
-          alle paar Sekunden (beedaro, kaufen, bieten, mieten, verkaufen). Reine Zier, der echte Name steht oben im Logo. */}
+          alle paar Sekunden. Jedes Wort trägt die Farbe seines Formats. Reine Zier, der echte Name steht oben im Logo. */}
       <div className="ft-kacheln" aria-hidden="true">
-        <PunktSchriftzug wort="beedaro" woerter={["beedaro", "kaufen", "bieten", "mieten", "verkaufen"]} wechsel={3200} mausRadius={16} mausKraft={1.5} schrift="Sora" gewicht={700} farbe="#1D1D1D" maxBreite={1280} {...({ zerfall: "einlauf" } as any)} biene={false} kachel logo />
+        <PunktSchriftzug wort="beedaro" woerter={KACHEL_WORTE.map((w) => w[0])} farben={KACHEL_WORTE.map((w) => w[1])} wechsel={3200} mausRadius={16} mausKraft={1.5} schrift="Sora" gewicht={700} farbe="#1D1D1D" maxBreite={1280} {...({ zerfall: "einlauf" } as any)} biene={false} kachel logo />
       </div>
       <div className="ft-tafel">
         <div className="ft-aufruf">
