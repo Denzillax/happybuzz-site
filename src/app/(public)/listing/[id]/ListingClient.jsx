@@ -1017,7 +1017,7 @@ export default function ListingDetail() {
                 {(() => { const g = preisGesenkt(l); return g && l.status === "active" ? (
                   <p style={{ margin: "2px 0 0", display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
                     <span style={{ color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(g.alt)}</span>
-                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#50804F", background: "#DBF5F0", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#3D6B3C", background: "#DBF5F0", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
                   </p>
                 ) : null; })()}
               </div>

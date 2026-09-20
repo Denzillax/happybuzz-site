@@ -631,7 +631,7 @@ export default function OrderDetailPage() {
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#50804F", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#3D6B3C", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
                     <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
@@ -650,7 +650,7 @@ export default function OrderDetailPage() {
                           )}
                           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                         </div>
-                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#50804F", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#3D6B3C", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
                       </>
                     )}
                   </div>

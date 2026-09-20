@@ -79,7 +79,7 @@ export default function FeesPage() {
     setInvoices(prev => prev.map(i => i.id === invoiceId ? { ...i, status: "pending_payment" } : i));
   };
 
-  const sc = { open: { icon: Clock, color: "#8A5A00", bg: "#FFE7A9", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#50804F", bg: "#DBF5F0", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FBEBEA", label: "Überfällig" } };
+  const sc = { open: { icon: Clock, color: "#8A5A00", bg: "#FFE7A9", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#3D6B3C", bg: "#DBF5F0", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FBEBEA", label: "Überfällig" } };
   // Zahlungsdaten IMMER live aus den Firmendaten (Admin -> Firma), nie hartkodiert
   const beedaroIban = company?.iban ? formatIban(company.iban) : "Wird hinterlegt";
   const companyAddress = company
@@ -103,7 +103,7 @@ export default function FeesPage() {
       </thead>
       <tbody>
         {fees.map(f => {
-          const st = f.status === "paid" ? { color: "#50804F", bg: "#DBF5F0", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#8A5A00", bg: "#FFE7A9", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
+          const st = f.status === "paid" ? { color: "#3D6B3C", bg: "#DBF5F0", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#8A5A00", bg: "#FFE7A9", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
           return (
             <tr key={f.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
               <td style={{ ...td }}>{fmtDate(f.created_at)}</td>

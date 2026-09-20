@@ -29,7 +29,7 @@ export function TypeBadge({ type }) {
 
 export function StatusBadge({ status }) {
   const config = {
-    active:   { bg: "#DBF5F0", color: "#50804F", label: "Aktiv" },
+    active:   { bg: "#DBF5F0", color: "#3D6B3C", label: "Aktiv" },
     draft:    { bg: colors.warm, color: colors.muted, label: "Entwurf" },
     paused:   { bg: "#FFE7A9", color: "#8A5A00", label: "Pausiert" },
     sold:     { bg: "#E3F2FF", color: "#1D1D1D", label: "Verkauft" },

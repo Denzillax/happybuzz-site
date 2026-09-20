@@ -350,7 +350,7 @@ export default function ListingsPage() {
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#DBF5F0", color: "#50804F", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#DBF5F0", color: "#3D6B3C", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Play size={12} /> Aktivieren
             </button>
             <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
