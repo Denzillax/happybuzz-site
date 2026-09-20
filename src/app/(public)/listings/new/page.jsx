@@ -127,7 +127,7 @@ function NewListingPageInner() {
   );
 
   return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F5F6F8", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#fff", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
         <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>

@@ -13,6 +13,7 @@ import { colors, fonts, shadows } from "@/lib/theme";
 // mit 0 ersetzt, damit kein Element im Formular runde Ecken behaelt.
 const radius = { xs: 0, sm: 0, md: 0, lg: 0, xl: 0, full: 0 };
 import {
+  TYP_PASTELL,
   CONDITIONS, FEE_TIERS, CANTONS, RENT_PERIODS,
   SHIPPING_PAYERS, PAYMENT_METHODS, BEE_IMPACT_RATE,
   DEFAULT_FEE_PERCENT, DEFAULT_FEE_TIER, FEE_FREE_BELOW, isFeeFree,
@@ -72,13 +73,15 @@ const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Uploa
 const INK = colors.dark;
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
+// Meeko-Design (Denis 20.09.2026: beim Inserieren sollte mehr im Meeko-Stil sein): grosse Abschnittskarten mit leichtem
+// Titel, höhere Felder, Formate als Pastellkacheln, Bee-Rate mit grosser Prozentzahl. Vorbild: /labor/meeko/inserieren.
 const inputBase = {
   width: "100%",
-  padding: "12px 14px",
-  borderRadius: 20,
+  padding: "14px 16px",
+  borderRadius: 12,
   border: "1px solid #1D1D1D",
   background: "#fff",
-  fontSize: 14,
+  fontSize: 16,
   fontFamily: fonts.body,
   color: colors.dark,
   outline: "none",
@@ -88,21 +91,21 @@ const inputBase = {
 
 const labelBase = {
   display: "block",
-  fontSize: 11,
-  fontWeight: 700,
+  fontSize: 13,
+  fontWeight: 600,
   fontFamily: fonts.body,
   color: colors.dark,
-  marginBottom: 6,
-  letterSpacing: ".06em",
+  marginBottom: 7,
+  letterSpacing: ".03em",
   textTransform: "uppercase",
 };
 
 const sectionBase = {
   background: "#fff",
-  borderRadius: 20,
-  padding: "26px 24px",
+  borderRadius: 28,
+  padding: "clamp(22px, 3vw, 34px)",
   border: "1px solid #1D1D1D",
-  marginBottom: 18,
+  marginBottom: 24,
 };
 
 const hintStyle = {
@@ -114,19 +117,11 @@ const hintStyle = {
 
 // ─── Section header: Icon-Chip + Titel (+ Hint, rechter Slot) ──
 const SectionHead = ({ icon: Icon, title, hint, right }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-    {Icon && (
-      <div style={{
-        width: 34, height: 34, borderRadius: 20, flexShrink: 0,
-        background: colors.butter, border: "1px solid #1D1D1D",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}>
-        <Icon size={17} color={INK} />
-      </div>
-    )}
+  <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 22 }}>
+    {/* Meeko: kein Icon-Chip mehr, der Titel trägt den Abschnitt. Das icon-Prop bleibt für die Aufrufer bestehen. */}
     <div style={{ flex: 1, minWidth: 0 }}>
-      <div style={{ fontSize: 15.5, fontWeight: 800, color: colors.dark, fontFamily: fonts.body, letterSpacing: ".005em" }}>{title}</div>
-      {hint && <div style={{ fontSize: 12, color: colors.muted, fontFamily: fonts.body, marginTop: 2 }}>{hint}</div>}
+      <h2 style={{ margin: 0, fontSize: "clamp(22px, 2.4vw, 30px)", fontWeight: 500, color: colors.dark, fontFamily: fonts.head, letterSpacing: "-.035em", lineHeight: 1.15 }}>{title}</h2>
+      {hint && <div style={{ fontSize: 15, color: colors.dark, opacity: .7, fontFamily: fonts.body, marginTop: 6, lineHeight: 1.45 }}>{hint}</div>}
     </div>
     {right}
   </div>
@@ -954,36 +949,20 @@ export default function ListingForm({
             <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand, Bee-Rate und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
           </div>
         )}
-        <div style={{
-          display: "flex", gap: 0,
-          background: colors.cream, borderRadius: 999, padding: 4,
-          opacity: gesperrt ? .5 : 1, pointerEvents: gesperrt ? "none" : "auto",
-        }}>
+        <div className="lf-formate" style={{ opacity: gesperrt ? .5 : 1, pointerEvents: gesperrt ? "none" : "auto" }}>
           {TYPE_TABS.map((t) => {
             const active = form.listing_type === t.value && !isFree;
             const Icon = t.icon;
             return (
               <button
-                key={t.value}
-                className={"type-tab" + (active ? " is-active" : "")}
+                key={t.value} type="button"
+                className={`type-tab eckig kein-akzent lf-format mk-${TYP_PASTELL[t.value]}` + (active ? " is-active" : "")}
+                aria-pressed={active}
                 onClick={() => { set("listing_type", t.value); setIsFree(false); }}
-                style={{
-                  flex: 1, padding: "12px 8px",
-                  borderRadius: radius.sm, border: "none",
-                  background: active ? colors.surface : "transparent",
-                  boxShadow: active ? shadows.sm : "none",
-                  cursor: "pointer", transition: "all .15s",
-                  display: "flex", flexDirection: "column",
-                  alignItems: "center", gap: 5,
-                }}
               >
-                <Icon size={18} color={active ? colors.teal : colors.muted} />
-                <span style={{
-                  fontSize: 12.5, fontWeight: active ? 800 : 500,
-                  fontFamily: fonts.body, color: active ? colors.dark : colors.muted,
-                }}>
-                  {t.label}
-                </span>
+                <Icon size={28} strokeWidth={1.5} color={INK} />
+                <strong>{t.label}</strong>
+                <span>{t.desc}</span>
               </button>
             );
           })}
@@ -2226,7 +2205,7 @@ export default function ListingForm({
       {/* ── BEE-RATE (Ricardo-Style elegant) ─────────────────── */}
       {!isFree && effectiveType !== "free" && (
         <div style={sectionBase} className="lf-section">
-          <label style={{ ...labelBase, fontFamily: fonts.head, fontSize: 20, letterSpacing: ".04em" }}>DEIN BEE-IMPACT</label>
+          <h2 style={{ margin: "0 0 10px", fontSize: "clamp(22px, 2.4vw, 30px)", fontWeight: 500, color: colors.dark, fontFamily: fonts.head, letterSpacing: "-.035em", lineHeight: 1.15 }}>Dein Bee-Impact</h2>
           <p style={{ margin: "0 0 6px", fontSize: 14, color: colors.dark, fontFamily: fonts.body, lineHeight: 1.5 }}>
             Ein Teil jeder Gebühr geht an Bienen- und Naturschutz in der Schweiz. Je höher die Stufe, desto mehr.
           </p>
@@ -2244,26 +2223,26 @@ export default function ListingForm({
             const active = form.fee_tier === tier;
             return (
               <div key={tier} onClick={() => selectFee(pct, tier)} className="bee-tier-card" style={{
-                position: "relative", padding: "18px 50px 18px 22px", marginBottom: 8, borderRadius: 20, cursor: "pointer",
-                border: `2px solid ${active ? colors.green : "transparent"}`,
-                background: active ? `linear-gradient(135deg, ${colors.surface}, ${colors.green}08)` : colors.surface,
-                boxShadow: active ? `0 2px 16px ${colors.green}18` : "0 1px 3px rgba(0,0,0,.04)",
-                transition: "all .2s ease", overflow: "hidden",
+                position: "relative", padding: "18px 50px 18px 18px", marginBottom: 10, borderRadius: 18, cursor: "pointer",
+                border: "1px solid #1D1D1D",
+                background: active ? "#DBF5F0" : colors.surface,
+                boxShadow: active ? "inset 0 0 0 2px #1D1D1D" : "inset 0 -4px 0 rgba(29,29,29,.1)",
+                transition: "background .2s ease, box-shadow .15s ease", overflow: "hidden",
               }}>
                 {/* Left accent bar */}
                 <div style={{
-                  position: "absolute", left: 0, top: 0, bottom: 0, width: 4, borderRadius: "0px",
-                  background: active ? `linear-gradient(180deg, ${colors.green}, ${colors.butter})` : colors.borderLt,
+                  position: "absolute", left: 0, top: 0, bottom: 0, width: 0, borderRadius: "0px",
+                  background: "transparent",
                   transition: "all .2s",
                 }} />
                 {/* Radio indicator — vertically centered */}
                 <div style={{
                   position: "absolute", right: 18, top: "50%", transform: "translateY(-50%)",
                   width: 20, height: 20, borderRadius: "50%",
-                  border: `2px solid ${active ? colors.green : colors.borderLt}`,
+                  border: "1px solid #1D1D1D", background: "#fff",
                   display: "flex", alignItems: "center", justifyContent: "center", transition: "all .2s",
                 }}>
-                  {active && <div style={{ width: 10, height: 10, borderRadius: "50%", background: colors.green }} />}
+                  {active && <div style={{ width: 10, height: 10, borderRadius: "50%", background: INK }} />}
                 </div>
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
                   <div style={{ flex: 1, paddingLeft: 8 }}>
@@ -2273,7 +2252,7 @@ export default function ListingForm({
                         {[1, 2, 3, 4].map((i) => (
                           <div key={i} style={{
                             width: 8, height: 8, borderRadius: "50%",
-                            background: i <= impact ? (active ? colors.green : colors.butter) : `${colors.muted}25`,
+                            background: i <= impact ? INK : "rgba(29,29,29,.18)",
                             transition: "all .2s",
                           }} />
                         ))}
@@ -2282,7 +2261,7 @@ export default function ListingForm({
                       {recommended && (
                         <span style={{
                           fontSize: 9, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase",
-                          padding: "3px 8px", borderRadius: 20, background: colors.green, color: "#fff", flexShrink: 0,
+                          padding: "3px 8px", borderRadius: 20, background: INK, color: "#fff", flexShrink: 0,
                         }}>Empfohlen</span>
                       )}
                     </div>
@@ -2307,7 +2286,7 @@ export default function ListingForm({
                   </div>
                   {/* Right: percentage only */}
                   <div style={{ textAlign: "right", flexShrink: 0, paddingRight: 12 }}>
-                    <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: active ? colors.green : colors.muted, fontFamily: fonts.body }}>{pct}%</p>
+                    <p style={{ margin: 0, fontSize: 34, fontWeight: 500, letterSpacing: "-.05em", lineHeight: 1, color: INK, fontFamily: fonts.head, fontVariantNumeric: "tabular-nums" }}>{pct}<span style={{ fontSize: 17, marginLeft: 1 }}>%</span></p>
                   </div>
                 </div>
               </div>
@@ -2487,7 +2466,7 @@ export default function ListingForm({
       <div className="lf-actionbar" style={{
         position: "sticky", bottom: 0, zIndex: 30,
         margin: "8px -16px 0", padding: "14px 16px",
-        background: "rgba(249,244,236,.94)", borderTop: "1px solid rgba(29,29,29,.16)",
+        background: "#fff", borderTop: "1px solid #1D1D1D",
       }}>
         <div className="lf-act-row" style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
           <button
@@ -2525,11 +2504,12 @@ export default function ListingForm({
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
               borderRadius: 20, border: "1px solid #1D1D1D",
-              background: colors.butter, color: colors.dark,
-              fontSize: 14.5, fontWeight: 800, fontFamily: fonts.body,
+              // Meeko: der eine Hauptknopf der Seite ist dunkel (wie "Inserieren" im Header und im Fuss)
+              background: "#1D1D1D", color: "#fff",
+              fontSize: 15.5, fontWeight: 600, fontFamily: fonts.body, letterSpacing: "-.01em",
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",
-              boxShadow: saving ? "none" : "0 2px 8px rgba(25,22,21,.2)",
+              boxShadow: "inset 0 -4px 0 rgba(255,255,255,.22)",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
             }}
           >
