@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import {
   Camera, X, Star, ChevronDown, ChevronRight, Sparkles, Eye, Search,
   Package, Gavel, Home, Truck, MapPin, Gift, Wrench,
-  Type, Tag, Clock, SlidersHorizontal, Rocket,
+  Type, Tag, Clock, SlidersHorizontal, Rocket, Check,
 } from "lucide-react";
 import { colors, fonts, shadows } from "@/lib/theme";
 
@@ -21,6 +21,7 @@ import {
 } from "@/lib/constants";
 import { calcFee } from "@/lib/fees";
 import { getRandomBeeTexts, BEE_FEE_SUBTITLES } from "@/lib/bee-fee-texts";
+import { ListingCard } from "@/components/shared/ListingCard";
 import ImportBox from "@/components/listings/ImportBox";
 import BeeIcon from "@/components/shared/BeeIcon";
 import RichTextEditor from "@/components/shared/RichTextEditor";
@@ -66,6 +67,13 @@ const POST_TARIFE = {
     priority: { "bis 30kg": 35.00, "bis 60kg": 45.00 },
   },
 };
+// Bee-Impact Stufen. farbe = Pastelltafel der Kachel (mk-<name>), von kühl nach warm.
+const BEE_STUFEN = [
+  { tier: "fair", pct: 3, impact: 1, farbe: "himmel", project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× Pollen · Standard-Platzierung" },
+  { tier: "supporter", pct: 5, impact: 2, farbe: "lavendel", project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× Pollen · bessere Platzierung" },
+  { tier: "impact", pct: 7, impact: 3, farbe: "mint", project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true, perks: "1,8× Pollen · Top-Platzierung" },
+  { tier: "hero", pct: 10, impact: 4, farbe: "butter", project: "Bee-Finder App: Meldeplattform für Wildbienen", perks: "2,5× Pollen · Top-Platzierung · grösster Bienen-Beitrag" },
+];
 const MAX_MARKUP = 5; // Max CHF 5 über Post-Tarif
 const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Upload-Check in listings.js)
 
@@ -2216,84 +2224,32 @@ export default function ListingForm({
           </p>
           {gesperrt && <p style={{ ...hintStyle, marginTop: -8, marginBottom: 10, fontSize: 11.5, fontWeight: 700, color: "#8a6d00" }}>Gesperrt: die Bieter haben mit dieser Bee-Rate geboten.</p>}
           <div style={gesperrtStyle}>
-          {[
-            { tier: "fair", pct: 3, impact: 1, project: "Pocket Parks: Wildblumeninseln in deiner Gemeinde", perks: "1× Pollen · Standard-Platzierung" },
-            { tier: "supporter", pct: 5, impact: 2, project: "Reussspitz: Habitatvernetzung im Mittelland", perks: "1,4× Pollen · bessere Platzierung" },
-            { tier: "impact", pct: 7, impact: 3, project: "IG Wilde Biene: Artenkartierung Zentralschweiz", recommended: true, perks: "1,8× Pollen · Top-Platzierung" },
-            { tier: "hero", pct: 10, impact: 4, project: "Bee-Finder App: Meldeplattform für Wildbienen", perks: "2,5× Pollen · Top-Platzierung · grösster Bienen-Beitrag" },
-          ].map(({ tier, pct, impact, project, recommended, perks }) => {
+          {/* Meeko (Denis 20.09.2026): jede Stufe ist eine Kachel in ihrer eigenen Pastellfarbe, von kühl (wenig) nach warm
+              (viel). Die gewählte trägt den Ink-Ring und den Haken. Das geförderte Projekt der gewählten Stufe steht darunter. */}
+          <div className="lf-stufen" role="radiogroup" aria-label="Bee-Impact Stufe">
+          {BEE_STUFEN.map(({ tier, pct, impact, recommended, perks, farbe }) => {
             const active = form.fee_tier === tier;
             return (
-              <div key={tier} onClick={() => selectFee(pct, tier)} className="bee-tier-card" style={{
-                position: "relative", padding: "18px 50px 18px 18px", marginBottom: 10, borderRadius: 18, cursor: "pointer",
-                border: "1px solid #1D1D1D",
-                background: active ? "#DBF5F0" : colors.surface,
-                boxShadow: active ? "inset 0 0 0 2px #1D1D1D" : "inset 0 -4px 0 rgba(29,29,29,.1)",
-                transition: "background .2s ease, box-shadow .15s ease", overflow: "hidden",
-              }}>
-                {/* Left accent bar */}
-                <div style={{
-                  position: "absolute", left: 0, top: 0, bottom: 0, width: 0, borderRadius: "0px",
-                  background: "transparent",
-                  transition: "all .2s",
-                }} />
-                {/* Radio indicator — vertically centered */}
-                <div style={{
-                  position: "absolute", right: 18, top: "50%", transform: "translateY(-50%)",
-                  width: 20, height: 20, borderRadius: "50%",
-                  border: "1px solid #1D1D1D", background: "#fff",
-                  display: "flex", alignItems: "center", justifyContent: "center", transition: "all .2s",
-                }}>
-                  {active && <div style={{ width: 10, height: 10, borderRadius: "50%", background: INK }} />}
-                </div>
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
-                  <div style={{ flex: 1, paddingLeft: 8 }}>
-                    {/* Title row with impact dots */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4, flexWrap: "wrap" }}>
-                      <div style={{ display: "flex", gap: 3 }}>
-                        {[1, 2, 3, 4].map((i) => (
-                          <div key={i} style={{
-                            width: 8, height: 8, borderRadius: "50%",
-                            background: i <= impact ? INK : "rgba(29,29,29,.18)",
-                            transition: "all .2s",
-                          }} />
-                        ))}
-                      </div>
-                      <span style={{ fontSize: 16, fontWeight: 800, color: colors.dark, fontFamily: fonts.body }}>{beeTexts[tier]}</span>
-                      {recommended && (
-                        <span style={{
-                          fontSize: 9, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase",
-                          padding: "3px 8px", borderRadius: 20, background: INK, color: "#fff", flexShrink: 0,
-                        }}>Empfohlen</span>
-                      )}
-                    </div>
-                    {/* Subtitle */}
-                    <p className="bee-tier-indent" style={{ margin: "0 0 4px", paddingLeft: 44, fontSize: 13, color: colors.muted, fontFamily: fonts.body, fontStyle: "italic", lineHeight: 1.4 }}>
-                      {BEE_FEE_SUBTITLES[tier]}
-                    </p>
-                    {/* Perks — was du dafür bekommst */}
-                    <p className="bee-tier-indent" style={{ margin: "0 0 6px", paddingLeft: 44, fontSize: 11.5, fontWeight: 700, color: colors.teal, fontFamily: fonts.body, lineHeight: 1.4 }}>
-                      {perks}
-                    </p>
-                    {/* Project tag (only when selected) */}
-                    {active && (
-                      <div className="bee-tier-project" style={{
-                        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 20,
-                        background: `${colors.green}12`, marginLeft: 44, fontSize: 11, fontWeight: 600, color: colors.green,
-                      }}>
-                        <BeeIcon size={12} color={colors.green} />
-                        {project}
-                      </div>
-                    )}
-                  </div>
-                  {/* Right: percentage only */}
-                  <div style={{ textAlign: "right", flexShrink: 0, paddingRight: 12 }}>
-                    <p style={{ margin: 0, fontSize: 20, fontWeight: 600, letterSpacing: "-.03em", lineHeight: 1, color: INK, fontFamily: fonts.head, fontVariantNumeric: "tabular-nums" }}>{pct}<span style={{ fontSize: 13, marginLeft: 1 }}>%</span></p>
-                  </div>
-                </div>
-              </div>
+              <button key={tier} type="button" role="radio" aria-checked={active} onClick={() => selectFee(pct, tier)}
+                className={`bee-tier-card lf-stufe eckig kein-akzent mk-${farbe}` + (active ? " is-active" : "")}>
+                <span className="lf-stufe-kopf">
+                  <span className="lf-stufe-prozent">{pct}<small>%</small></span>
+                  <span className="lf-stufe-haken" aria-hidden="true">{active && <Check size={14} strokeWidth={3} />}</span>
+                </span>
+                <span className="lf-stufe-punkte" aria-hidden="true">
+                  {[1, 2, 3, 4].map((i) => <span key={i} className={i <= impact ? "an" : undefined} />)}
+                </span>
+                <strong>{beeTexts[tier]}</strong>
+                <span className="lf-stufe-text">{BEE_FEE_SUBTITLES[tier]}</span>
+                <span className="lf-stufe-vorteil">{perks}</span>
+                {recommended && <span className="lf-stufe-marke">Empfohlen</span>}
+              </button>
             );
           })}
+          </div>
+          {(() => { const s = BEE_STUFEN.find((x) => x.tier === form.fee_tier); return s ? (
+            <div className="lf-stufe-projekt"><BeeIcon size={15} color="#1D1D1D" /> <span>Dein Beitrag geht an: <strong>{s.project}</strong></span></div>
+          ) : null; })()}
           </div>
           {/* Cost breakdown */}
           {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
@@ -2360,49 +2316,39 @@ export default function ListingForm({
 
       {/* ── VORSCHAU ────────────────────────────────────────── */}
       {showPreview && (
-        <div style={{
-          ...sectionBase,
-          background: colors.cream,
-          border: `2px solid ${colors.dark}`,
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <span style={{ fontFamily: fonts.head, fontSize: 16, color: colors.dark }}>Vorschau</span>
-            <button
-              onClick={() => setShowPreview(false)}
-              style={{ background: "none", border: "none", cursor: "pointer", color: colors.muted, padding: 4 }}
-            >
+        <div style={sectionBase} className="lf-section">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+            <div>
+              <h2 style={{ margin: 0, fontSize: "clamp(22px, 2.4vw, 30px)", fontWeight: 500, color: colors.dark, fontFamily: fonts.head, letterSpacing: "-.035em", lineHeight: 1.15 }}>Vorschau</h2>
+              <div style={{ fontSize: 15, color: colors.dark, opacity: .7, marginTop: 6 }}>So steht dein Inserat in der Suche, auf der Tafel in der Farbe seines Formats.</div>
+            </div>
+            <button type="button" className="eckig kein-akzent" aria-label="Vorschau schliessen" onClick={() => setShowPreview(false)}
+              style={{ width: 40, height: 40, flexShrink: 0, borderRadius: 999, border: "1px solid #1D1D1D", background: "#fff", cursor: "pointer", color: colors.dark, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
               <X size={18} />
             </button>
           </div>
-
-          <div style={{
-            background: colors.surface, borderRadius: radius.sm,
-            overflow: "hidden", border: `1px solid ${colors.border}`,
-            maxWidth: 260,
-          }}>
-            <div style={{ aspectRatio: "4/3", background: colors.warm, overflow: "hidden" }}>
-              {images[0]?.preview ? (
-                <img src={images[0].preview} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              ) : (
-                <div style={{
-                  width: "100%", height: "100%",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: colors.mutedLt,
-                }}>
-                  <Camera size={32} />
-                </div>
-              )}
-            </div>
-            <div style={{ padding: "12px 14px" }}>
-              <p style={{ fontSize: 14, fontWeight: 600, fontFamily: fonts.body, margin: "0 0 4px", color: colors.dark }}>
-                {form.title || "Titel…"}
-              </p>
-              <p style={{ fontSize: 18, fontWeight: 700, fontFamily: fonts.head, margin: 0, color: colors.dark }}>
-                {isFree ? "GRATIS" : `CHF ${form.price || form.start_price || form.rent_price || "0"}`}
-              </p>
-            </div>
+          {/* Dieselbe Komponente wie in Suche und Startseite (ListingCard), gefüttert mit den Angaben aus dem Formular.
+              Nicht klickbar: das Inserat gibt es noch nicht. */}
+          <div style={{ maxWidth: 300, pointerEvents: "none" }} aria-hidden="true">
+            <ListingCard listing={{
+              title: form.title || "Dein Titel",
+              listing_type: isFree ? "free" : form.listing_type,
+              price: parseFloat(form.listing_type === "auction" ? form.start_price : form.price) || 0,
+              start_price: parseFloat(form.start_price) || 0,
+              buy_now_price: parseFloat(form.buy_now_price) || 0,
+              rent_price: parseFloat(form.rent_price) || 0,
+              rent_period: form.rent_period,
+              is_negotiable: !!form.is_negotiable,
+              bid_count: 0,
+              city: form.city || "",
+              condition: form.condition,
+              shipping_available: !!form.shipping_available,
+              pickup_only: !!form.pickup_only,
+              free_shipping: !!form.free_shipping,
+              status: "active",
+              listing_images: images[0]?.preview || images[0]?.url ? [{ url: images[0].preview || images[0].url, sort_order: 0 }] : [],
+            }} />
           </div>
-          <p style={{ ...hintStyle, marginTop: 12 }}>So sieht dein Inserat in der Suche aus.</p>
         </div>
       )}
 
