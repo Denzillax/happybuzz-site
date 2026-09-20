@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#F4C03F',
+  themeColor: '#DBF5F0', // Mint, wie das App-Icon (20.09.2026)
 }
 
 // Organisations- und Website-Daten fuer Google und KI-Assistenten:
