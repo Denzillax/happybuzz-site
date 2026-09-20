@@ -5,7 +5,7 @@ import { useInView } from '@/components/shared/effects'
 import { Tag, Gavel, CalendarClock, Gift, Wrench } from 'lucide-react'
 import { TYP_FARBEN } from '@/lib/constants'
 
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
 const CHIP = '#F1F3F5'
 

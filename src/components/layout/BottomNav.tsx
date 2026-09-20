@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/supabase'
 import { Home, Search, Plus, Heart, User } from 'lucide-react'
+import BLogo from '@/components/shared/BLogo'
 
-const YELLOW = '#F4C03F'
-const DARK = '#191615'
 
 export function BottomNav() {
   const pathname = usePathname()
@@ -44,67 +43,29 @@ export function BottomNav() {
     { href: user ? '/settings' : '/login', icon: User, label: 'Profil', isProfile: true },
   ]
 
+  // Meeko-Design (20.09.2026): weisse Leiste mit Ink-Linie, aktiver Reiter auf einer Butter-Pille. Home ist das kachelige B,
+  // Favoriten dasselbe B um 90 Grad gedreht als Herz, Inserieren ein dunkler Knopf. Styles: globals.css, BOTTOM-NAV MEEKO (bn-*).
   return (
-    <nav className="bottom-nav" style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
-      background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)',
-      borderTop: '1px solid #E5E8EC',
-      paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-    }}>
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-        maxWidth: 480, margin: '0 auto', height: 56,
-      }}>
+    <nav className="bn" aria-label="Hauptnavigation">
+      <div className="bn-reihe">
         {tabs.map(tab => {
           const active = isActive(tab.href)
-
           if (tab.isCenter) {
             return (
-              <button key={tab.href} onClick={() => router.push(tab.href)} aria-label="Inserieren" style={{
-                width: 50, height: 50, borderRadius: '50%',
-                background: YELLOW, border: '3px solid #fff', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 16px rgba(244,192,63,0.45)',
-                transform: 'translateY(-8px)',
-                transition: 'transform 0.15s, box-shadow 0.15s',
-              }}>
-                <Plus size={26} color={DARK} strokeWidth={2.5} />
+              <button key={tab.href} className="bn-plus eckig kein-akzent" onClick={() => router.push(tab.href)} aria-label="Inserieren">
+                <Plus size={24} strokeWidth={2.4} />
               </button>
             )
           }
-
-          if (tab.isProfile && user) {
-            return (
-              <button key={tab.href} onClick={() => router.push(tab.href)} style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-                background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px',
-              }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: '50%',
-                  background: active ? YELLOW : '#E5E8EC',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: active ? DARK : '#686E78',
-                  transition: 'all 0.15s',
-                }}>
-                  {getInitials()}
-                </div>
-                <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#686E78', fontFamily: 'inherit' }}>
-                  {tab.label}
-                </span>
-              </button>
-            )
-          }
-
           return (
-            <button key={tab.href} onClick={() => router.push(tab.href)} style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-              background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px',
-              transition: 'all 0.15s',
-            }}>
-              <tab.icon size={22} color={active ? DARK : '#686E78'} strokeWidth={active ? 2.2 : 1.8} />
-              <span style={{ fontSize: 10, fontWeight: 600, color: active ? DARK : '#686E78', fontFamily: 'inherit' }}>
-                {tab.label}
+            <button key={tab.href} className="bn-tab eckig kein-akzent" aria-current={active ? 'page' : undefined} onClick={() => router.push(tab.href)}>
+              <span className="bn-icon">
+                {tab.isProfile && user ? <span className="bn-initialen">{getInitials()}</span>
+                  : tab.href === '/' ? <BLogo size={19} title="" />
+                  : tab.href === '/favorites' ? <BLogo herz size={18} title="" />
+                  : <tab.icon size={21} strokeWidth={active ? 2.2 : 1.9} />}
               </span>
+              {tab.label}
             </button>
           )
         })}

@@ -8,9 +8,9 @@ import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home 
 import { colors, fonts, radius } from "@/lib/theme";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
-const MONO = "'Manrope', sans-serif";
-const HEAD = "'General Sans','Manrope',sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
 const STATUS_CONFIG = {
   pending:   { label: "Angefragt", color: "#8a6d0a", icon: Clock },

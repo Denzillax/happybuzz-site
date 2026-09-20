@@ -14,14 +14,14 @@ export const K = {
   sand: "#F5F6F8",
   paper: "#FFFFFF",
   honey: "#F4C03F",
-  petrol: "#0B5E5C",
+  petrol: "#1D1D1D",
   moss: "#50804F",
   muted: "rgba(20,17,13,0.6)",
 };
 
-export const MONO = "'Manrope', sans-serif";
-export const HEAD = "'General Sans', sans-serif";
-export const BODY = "'Manrope', sans-serif";
+export const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+export const HEAD = "'Instrument Sans', 'General Sans', sans-serif";
+export const BODY = "'Instrument Sans', 'Manrope', sans-serif";
 
 // Karten (Login: Formular-Panel)
 export const card = {
@@ -62,7 +62,7 @@ export const input = {
   boxSizing: "border-box",
 };
 export const inputFocus = {
-  border: "1.5px solid #007C7C",
+  border: "1.5px solid #1D1D1D",
   boxShadow: "0 0 0 3px rgba(0,124,124,.15)",
 };
 

@@ -49,7 +49,7 @@ export function TickerBar({ message, bgColor, textColor, speed = "normal", disab
   const haelfte = einheit.repeat(lauf.repeat);
   // Klar-Look: schlankes Band, normale Gross-/Kleinschreibung, moderates Gewicht
   const schrift = {
-    fontFamily: "'Manrope', 'General Sans', sans-serif",
+    fontFamily: "'Instrument Sans', 'Manrope', 'Instrument Sans', 'General Sans', sans-serif",
     fontWeight: 700, letterSpacing: ".01em",
     fontSize: "clamp(13px, 1.4vw, 15px)", lineHeight: 1,
   };

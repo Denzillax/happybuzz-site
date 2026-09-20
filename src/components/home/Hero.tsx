@@ -5,7 +5,7 @@ import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Klar-Look: schmales Willkommensband + separate Beta-Karte daneben.
 // Gelb ist die CTA-Farbe, der Rest bleibt zurueckhaltend.
-const DISPLAY = "'General Sans', 'Manrope', system-ui, sans-serif"
+const DISPLAY = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
 const HONEY = '#F4C03F'
 const BAND = '#E9F6F5' // helles Teal: der eine Farbmoment oben, alles andere ist neutral (19.09.2026)

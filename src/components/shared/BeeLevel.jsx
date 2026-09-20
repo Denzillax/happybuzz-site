@@ -109,7 +109,7 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#854F0B" }}>
             <Droplets size={15} color="#854F0B" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#0B5E5C" }}>Einlösen →</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#1D1D1D" }}>Einlösen →</span>
         </a>
       )}
     </div>

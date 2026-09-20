@@ -14,9 +14,9 @@ import BeeIcon from "@/components/shared/BeeIcon";
 const INK = "#191615";
 const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
-const PETROL = "#0B5E5C";
-const MONO = "'Manrope', sans-serif";
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+const PETROL = "#1D1D1D";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 
 // ─── Help Categories ──────────────────────────────────────────
 const CATEGORIES = [

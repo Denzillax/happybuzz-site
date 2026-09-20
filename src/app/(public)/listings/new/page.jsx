@@ -121,16 +121,16 @@ function NewListingPageInner() {
   }
 
   if (!user || !ready) return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#686E78" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "var(--bd-grund)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#686E78" }}>
       Lade…
     </div>
   );
 
   return (
-    <div style={{ fontFamily: "'Manrope', sans-serif", background: "#F5F6F8", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F5F6F8", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
-        <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
+        <h1 className="bd-seitentitel" style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#191615" }}>
           Inserat erstellen
         </h1>
       </div>
@@ -151,16 +151,16 @@ function NewListingPageInner() {
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 16px",
               borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff",
-              color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Manrope', sans-serif", cursor: "pointer",
+              color: "#191615", fontSize: 13, fontWeight: 700, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", cursor: "pointer",
               boxShadow: "0 2px 8px rgba(25,22,21,.15)",
             }}
           >
-            <Copy size={15} color="#007C7C" /> Letztes Inserat als Vorlage verwenden
+            <Copy size={15} color="#1D1D1D" /> Letztes Inserat als Vorlage verwenden
           </button>
         </div>
       ) : (
         <div style={{ maxWidth: 680, margin: "0 auto", padding: "24px 16px 0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #007C7C33", fontSize: 13, color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 12, background: "#E6F5F5", border: "1px solid #1D1D1D33", fontSize: 13, color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             <Copy size={15} /> Felder aus einem bestehenden Inserat übernommen. Titel und Fotos bitte neu setzen.
           </div>
         </div>

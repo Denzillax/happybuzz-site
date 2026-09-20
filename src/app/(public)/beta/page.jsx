@@ -674,7 +674,7 @@ export default function BetaTestPage() {
         {/* Kurz erklaert: die Beta in menschlichen Worten (Tester = alle Konten) */}
         <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: introOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={toggleIntro} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: introOpen ? 12 : 0 }}>
-            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
               Kurz erklärt
             </p>
             <ChevronDown size={16} color={colors.muted} style={{ transform: introOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
@@ -719,7 +719,7 @@ export default function BetaTestPage() {
               <strong>Lust auf mehr?</strong> Wir suchen Mitarbeiter für Support,
               Moderation, Finanzen und Manager. Eine Stelle pro Person, Denis
               meldet sich persönlich.{" "}
-              <a href="/bewerben" style={{ color: "#0B5E5C", fontWeight: 700, textDecoration: "none" }}>Mitarbeiter werden</a>
+              <a href="/bewerben" style={{ color: "#1D1D1D", fontWeight: 700, textDecoration: "none" }}>Mitarbeiter werden</a>
             </p>
             <p style={{ margin: 0, paddingTop: 12, borderTop: "1px solid rgba(20,17,13,0.12)" }}>
               Hier entsteht gerade etwas, das es in der Schweiz so noch nicht
@@ -727,7 +727,7 @@ export default function BetaTestPage() {
               wie du. Jedes Inserat, jede Meldung, jeder Kollege zählt.{" "}
               <strong style={{ background: "#F4C03F", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
             </p>
-            <p style={{ margin: 0, fontFamily: "'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(20,17,13,0.55)" }}>
+            <p style={{ margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(20,17,13,0.55)" }}>
               PS: Verchauf din Scheiss. ;)
             </p>
           </div>
@@ -737,7 +737,7 @@ export default function BetaTestPage() {
         {/* ── REPARATUR-LOG: was seit Beta-Start gefixt wurde ── */}
         <div style={{ background: "#fff", border: "1px solid #E5E8EC", boxShadow: "0 2px 8px rgba(25,22,21,.15)", padding: repOpen ? "20px 22px 18px" : "14px 22px", marginBottom: 20 }}>
           <div onClick={() => setRepOpen(v => !v)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", marginBottom: repOpen ? 12 : 0 }}>
-            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#0B5E5C", fontFamily: "'Manrope', sans-serif" }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: "#1D1D1D", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
               Reparatur-Log · {REP_LOG.reduce((s, t) => s + t.punkte.length, 0)} Einträge
             </p>
             <ChevronDown size={16} color={colors.muted} style={{ transform: repOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
@@ -752,7 +752,7 @@ export default function BetaTestPage() {
                   zu einem Fix/Feature gefuehrt haben), egal ueber welchen Kanal */}
               {topMelder.length > 0 && (
                 <div style={{ border: "1px solid #E5E8EC", padding: "12px 14px", marginBottom: 18, background: "#FFFFFF" }}>
-                  <p style={{ margin: "0 0 2px", fontFamily: "'Manrope', sans-serif", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#0B5E5C" }}>
+                  <p style={{ margin: "0 0 2px", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: "#1D1D1D" }}>
                     Top-Melder · wer meldet, steigt
                   </p>
                   <p style={{ margin: "0 0 8px", fontSize: 11.5, color: colors.muted }}>
@@ -762,13 +762,13 @@ export default function BetaTestPage() {
                     <div key={r.melder} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderBottom: i < Math.min(topMelder.length, 5) - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
                       <span style={{
                         flexShrink: 0, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center",
-                        fontFamily: "'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
+                        fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700,
                         background: i === 0 ? colors.yellow : i === 1 ? "#F5F6F8" : "transparent",
                         border: `1px solid ${i <= 1 ? colors.dark : "rgba(20,17,13,.3)"}`,
                         color: colors.dark,
                       }}>{i + 1}</span>
                       <span style={{ fontSize: 13.5, fontWeight: i === 0 ? 700 : 600, color: colors.dark, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.melder}</span>
-                      <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: 11.5, color: colors.muted, flexShrink: 0 }}>
+                      <span style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11.5, color: colors.muted, flexShrink: 0 }}>
                         {r.meldungen} {Number(r.meldungen) === 1 ? "Meldung" : "Meldungen"}
                       </span>
                     </div>
@@ -778,7 +778,7 @@ export default function BetaTestPage() {
 
               {REP_LOG.map(tag => (
                 <div key={tag.datum} style={{ marginBottom: 18 }}>
-                  <p style={{ margin: "0 0 8px", fontFamily: "'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid #E5E8EC", paddingBottom: 5 }}>
+                  <p style={{ margin: "0 0 8px", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: colors.dark, borderBottom: "1px solid #E5E8EC", paddingBottom: 5 }}>
                     {tag.datum} <span style={{ color: colors.muted, fontWeight: 400 }}>· {tag.punkte.length} Einträge</span>
                   </p>
                   {/* Festes Raster: Typ- und Bereichs-Spalte stehen ueber alle
@@ -787,16 +787,16 @@ export default function BetaTestPage() {
                     {tag.punkte.map((p, i) => (
                       <div key={i} style={{ display: "grid", gridTemplateColumns: "40px 92px 1fr", alignItems: "start", columnGap: 8, padding: "6px 0", borderBottom: i < tag.punkte.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none" }}>
                         <span style={{
-                          marginTop: 2, fontFamily: "'Manrope', sans-serif",
+                          marginTop: 2, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".08em", padding: "2px 0",
                           textAlign: "center",
-                          background: p.typ === "neu" ? "#007C7C" : colors.yellow,
+                          background: p.typ === "neu" ? "#1D1D1D" : colors.yellow,
                           color: p.typ === "neu" ? "#fff" : colors.dark,
                         }}>
                           {p.typ === "neu" ? "NEU" : "FIX"}
                         </span>
                         <span style={{
-                          marginTop: 2, fontFamily: "'Manrope', sans-serif",
+                          marginTop: 2, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                           fontSize: 9.5, fontWeight: 700, letterSpacing: ".04em", padding: "2px 3px",
                           border: "1px solid rgba(20,17,13,.35)", color: colors.muted, textTransform: "uppercase",
                           textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
@@ -806,7 +806,7 @@ export default function BetaTestPage() {
                         <span style={{ minWidth: 0 }}>
                           {p.text}
                           {p.melder && (
-                            <span style={{ fontFamily: "'Manrope', sans-serif", fontSize: 10.5, color: "#0B5E5C" }}> · gemeldet von {p.melder}</span>
+                            <span style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 10.5, color: "#1D1D1D" }}> · gemeldet von {p.melder}</span>
                           )}
                         </span>
                       </div>

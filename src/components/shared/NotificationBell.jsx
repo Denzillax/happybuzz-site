@@ -276,7 +276,7 @@ export default function NotificationBell() {
                       </div>
                     )}
                     {n.link && (
-                      <div style={{ fontSize: 12, fontWeight: 700, color: "#007C7C", marginTop: 4, fontFamily: fonts.body }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#1D1D1D", marginTop: 4, fontFamily: fonts.body }}>
                         Öffnen →
                       </div>
                     )}

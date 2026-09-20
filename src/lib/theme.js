@@ -1,6 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // BEEDARO Design Tokens — Single Source of Truth
-// Regel: Gold = nur Marke/Logo, Teal = alles Klickbare, Red = Dringlichkeit
+// Regel seit dem Meeko-Design (20.09.2026): Ink = alles Klickbare (frueher Teal), Pastell = Flaechen, Red = Dringlichkeit.
+// Die Schluessel teal/tealDark heissen weiter so, damit kein Aufrufer bricht, tragen aber Ink.
 // ═══════════════════════════════════════════════════════════════
 
 export const colors = {
@@ -12,8 +13,8 @@ export const colors = {
   yellowDark: "#D9A005",
 
   // CTA (Teal = alles Klickbare)
-  teal:       "#007C7C",
-  tealDark:   "#0B5E5C",
+  teal:       "#1D1D1D",
+  tealDark:   "#1D1D1D",
 
   // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #50804F.
   // NICHT mit `green` verwechseln: das ist ein Legacy-Alias auf Teal (s.u.).
@@ -25,7 +26,7 @@ export const colors = {
   redSoft:    "#FFEBEE",
 
   // Text
-  dark:       "#191615",
+  dark:       "#1D1D1D",
   graphite:   "#34343B",
   muted:      "#5B626C",
   mutedLt:    "#686E78",
@@ -46,15 +47,15 @@ export const colors = {
 
   // Legacy aliases (backward compat) — ACHTUNG: green = Teal (für Verifiziert/
   // Erfolg). Für echtes Natur-Grün `nature`/`natureSoft` nutzen.
-  green:      "#007C7C",
-  greenSoft:  "#E6F5F5",
+  green:      "#50804F",
+  greenSoft:  "#DBF5F0",
   blue:       "#6BA9FF",
   blueSoft:   "#EBF3FF",
 };
 
 export const fonts = {
-  head: "'General Sans', 'Inter', system-ui, sans-serif",
-  body: "'Manrope', system-ui, sans-serif",
+  head: "'Instrument Sans', 'General Sans', 'Inter', system-ui, sans-serif",
+  body: "'Instrument Sans', 'Manrope', system-ui, sans-serif",
 };
 
 // Klar-Look (Ricardo-inspiriert): weiche Rundungen statt eckigem Katalog.

@@ -28,7 +28,7 @@ const config: Config = {
         'red-soft':    '#FDE8E8',
       },
       fontFamily: {
-        sans: ['Manrope', 'system-ui', 'sans-serif'],
+        sans: ['Instrument Sans', 'Manrope', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         'buzz': '6px',

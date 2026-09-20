@@ -63,7 +63,7 @@ function Band({ richtung, achse, inhalt }) {
 // hat und sich die zwei Felder sonst doppeln. Für Seiten ohne Header-Suche einschaltbar.
 // farbe / schrift: Varianten zum Testen auf /labor/hero. farbe wählt ein Schema (siehe
 // BAENDER-HERO in globals.css), schrift die Familie für Schriftzug, Hauptsatz und Textkacheln.
-const PUNKTFARBE = { teal: "#007C7C", weiss: "#191615", honig: "#191615", dunkel: "#F4C03F", grau: "#007C7C" };
+const PUNKTFARBE = { teal: "#1D1D1D", weiss: "#191615", honig: "#191615", dunkel: "#F4C03F", grau: "#1D1D1D" };
 export default function BandHero({ mitSuche = false, farbe = "teal", schrift = "General Sans" }) {
   const router = useRouter();
   const [inserate, setInserate] = useState([]);

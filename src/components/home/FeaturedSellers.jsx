@@ -10,7 +10,7 @@ const MUTED = '#686E78'
 const YELLOW = '#F4C03F'
 const INK = '#191615'
 const SAND = '#F5F6F8'
-const PETROL = '#0B5E5C'
+const PETROL = '#1D1D1D'
 
 const PERIOD = { hour: 'Std', day: 'Tag', week: 'Wo', month: 'Mt' }
 function priceLabel(l) {

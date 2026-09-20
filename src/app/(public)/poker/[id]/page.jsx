@@ -10,8 +10,8 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import { karte, PHASEN, aktionText, restzeit } from "@/lib/poker";
 
-const K = { ink: "#191615", sand: "#F5F6F8", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5", filz: "#0B5E5C" };
-const HEAD = "'General Sans','Manrope',sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", honey: "#F4C03F", petrol: "#1D1D1D", hairline: "#E5E8EC", chip: "#F1F3F5", filz: "#1D1D1D" };
+const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
 function Karte({ c, gross, verdeckt }) {
   const k = karte(c);

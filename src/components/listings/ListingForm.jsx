@@ -70,7 +70,7 @@ const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Uploa
 
 // ─── Shared Styles (Katalog-Stil: Ink-Rahmen, eckig, Mono-Labels) ──
 const INK = colors.dark;
-const MONO = "'Manrope', sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const inputBase = {
   width: "100%",
@@ -940,9 +940,9 @@ export default function ListingForm({
 
       {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
       {draftRestored && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 12, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#0B5E5C", fontFamily: fonts.body }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#E6F5F5", borderRadius: 12, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
           <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
-          <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#0B5E5C", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
+          <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#1D1D1D", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
         </div>
       )}
 

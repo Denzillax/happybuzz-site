@@ -55,7 +55,7 @@ export function InvoicesTab({ admin }) {
 
   const feeProps = { feeLedger, dunningTimeline, mahnButton, confirmAndReactivate };
   const statusOf = (r) => sc[r.status] || (r.status === "cancelled" ? { bg: "#FFEBEE", color: "#c62828", label: "Storniert" } : { bg: "#E3F2FD", color: "#1565C0", label: "Offen" });
-  const badgeOf = (r) => r.kind === "bee" ? pill("#E6F5F5", "#0B5E5C", "BEE") : pill("#FFF5D8", "#5c4708", "FEE");
+  const badgeOf = (r) => r.kind === "bee" ? pill("#E6F5F5", "#1D1D1D", "BEE") : pill("#FFF5D8", "#5c4708", "FEE");
 
   return (
     <div>
@@ -87,7 +87,7 @@ export function InvoicesTab({ admin }) {
               return [
                 <tr key={key} onClick={() => toggleInvoiceRow(r.kind, r.kind === "bee" ? r.id : r.inv)} className="adm-row"
                   style={{ borderBottom: `1px solid ${colors.borderLt}`, cursor: "pointer", background: isOpen ? "#F3FAFA" : undefined }}>
-                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0B5E5C" : colors.muted, whiteSpace: "nowrap" }}>{r.ref}</td>
+                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#1D1D1D" : colors.muted, whiteSpace: "nowrap" }}>{r.ref}</td>
                   <td style={td}>{badgeOf(r)}</td>
                   <td style={{ ...td, color: colors.muted, maxWidth: 260, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.payer} → {r.payee}</td>
                   <td style={{ ...td, textAlign: "right", fontWeight: 600, whiteSpace: "nowrap" }}>CHF {fmtCHF(r.amount)}</td>

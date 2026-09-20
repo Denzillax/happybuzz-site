@@ -5,9 +5,9 @@ import { RasterUmschalter } from '@/components/shared/RasterUmschalter'
 
 // Klar-Look Sektionskopf: ruhige einzeilige Ueberschrift, Link rechts
 // auf derselben Zeile. Kein Eyebrow-Geschrei, keine Trennlinie.
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
 const INK = '#191615'
-const TEAL = '#007C7C'
+const TEAL = '#1D1D1D'
 
 export function SectionHeader({
   title,
@@ -47,7 +47,7 @@ export function SectionHeader({
       </div>
       {subtitle && (
         <p style={{
-          fontFamily: "'Manrope', system-ui, sans-serif", fontSize: 13.5,
+          fontFamily: "'Instrument Sans', 'Manrope', system-ui, sans-serif", fontSize: 13.5,
           color: 'rgba(25,22,21,0.55)', margin: '4px 0 0',
         }}>{subtitle}</p>
       )}

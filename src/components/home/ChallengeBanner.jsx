@@ -14,8 +14,8 @@ const INK = "#191615";
 const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
-const PETROL = "#0B5E5C";
-const MONO = "'Manrope', sans-serif";
+const PETROL = "#1D1D1D";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 function restzeit(endsAt) {
   const diff = new Date(endsAt).getTime() - Date.now();
@@ -107,7 +107,7 @@ export function ChallengeBanner() {
           <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: PETROL }}>
             Challenge der Woche
           </p>
-          <p style={{ margin: "3px 0 0", fontSize: 17, fontWeight: 800, fontFamily: "'General Sans', 'Manrope', sans-serif", color: INK }}>
+          <p style={{ margin: "3px 0 0", fontSize: 17, fontWeight: 800, fontFamily: "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', sans-serif", color: INK }}>
             {challenge.title}
             {challenge.category?.name && <span style={{ fontWeight: 600, color: "#5B626C" }}> · {challenge.category.name}</span>}
           </p>

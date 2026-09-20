@@ -8,8 +8,8 @@ import { useState, useEffect } from "react";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C" };
-const MONO = "'Manrope', sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const BODY = "Manrope, sans-serif";
 
 // ─── Logo SVG ───────────────────────────────────────────────────────────
@@ -251,7 +251,7 @@ export default function AuthPage() {
   );
 
   const renderBack = (target, label) => (
-    <button onClick={()=>switchView(target)} style={{ display:"flex", alignItems:"center", gap:6, background:"none", border:"none", color:C.muted, fontSize:13, fontWeight:600, cursor:"pointer", padding:0, marginBottom:16, fontFamily:"'Manrope',sans-serif" }}>
+    <button onClick={()=>switchView(target)} style={{ display:"flex", alignItems:"center", gap:6, background:"none", border:"none", color:C.muted, fontSize:13, fontWeight:600, cursor:"pointer", padding:0, marginBottom:16, fontFamily:"'Instrument Sans', 'Manrope',sans-serif" }}>
       <ArrowLeft/> {label}
     </button>
   );
@@ -312,7 +312,7 @@ export default function AuthPage() {
 
     forgot: () => <>
       {renderBack("login", "Zurück zum Login")}
-      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Passwort vergessen?</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Passwort vergessen?</h2>
       <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Gib deine E-Mail ein und wir senden dir einen Link zum Zurücksetzen.</p>
       {renderError()}
       <Input label="E-Mail" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="hallo@beispiel.ch" icon={<MailIcon/>} error={fieldErrors.email}/>
@@ -321,7 +321,7 @@ export default function AuthPage() {
 
     "forgot-sent": () => <div style={{ textAlign:"center", padding:"16px 0" }}>
       <MailOpen/>
-      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>E-Mail gesendet!</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben einen Link an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Prüfe dein Postfach.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
       <p style={{ fontSize:13, color:C.muted, marginTop:16 }}>Keine E-Mail? Prüfe deinen Spam-Ordner.</p>
@@ -329,13 +329,13 @@ export default function AuthPage() {
 
     verify: () => <div style={{ textAlign:"center", padding:"16px 0" }}>
       <MailOpen/>
-      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>Bestätige deine E-Mail</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginTop:12, marginBottom:8 }}>Bestätige deine E-Mail</h2>
       <p style={{ fontSize:14, color:C.muted, lineHeight:1.6, marginBottom:24 }}>Wir haben eine Bestätigung an <strong style={{ color:C.dark }}>{email}</strong> gesendet. Klicke auf den Link um deinen Account zu aktivieren.</p>
       <Btn onClick={()=>switchView("login")} secondary>Zurück zum Login</Btn>
     </div>,
 
     reset: () => <>
-      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'General Sans','Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Neues Passwort wählen</h2>
+      <h2 style={{ fontSize:21, fontWeight:700, fontFamily:"'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", color:K.ink, marginBottom:6 }}>Neues Passwort wählen</h2>
       <p style={{ fontSize:14, color:C.muted, marginBottom:22, lineHeight:1.5 }}>Wähle ein neues Passwort.</p>
       {renderError()}
       <Input label="Neues Passwort" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mind. 8 Zeichen" icon={<LockIcon/>} error={fieldErrors.password}/>

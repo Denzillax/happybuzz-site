@@ -9,8 +9,8 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import { restzeit } from "@/lib/poker";
 
-const K = { ink: "#191615", sand: "#F5F6F8", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5" };
-const HEAD = "'General Sans','Manrope',sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", honey: "#F4C03F", petrol: "#1D1D1D", hairline: "#E5E8EC", chip: "#F1F3F5" };
+const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
 export default function PokerLobby() {
   const router = useRouter();

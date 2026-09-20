@@ -28,7 +28,7 @@ export function AnnouncementBar() {
   const barClass = a.effect === "slide" ? "ann-slide" : "";
 
   return (
-    <div className={barClass} style={{ background: a.bg_color, color: a.text_color, fontSize: 15, fontWeight: 700, position: "relative", fontFamily: "'Manrope', sans-serif", lineHeight: 1.4, overflow: "hidden" }}>
+    <div className={barClass} style={{ background: a.bg_color, color: a.text_color, fontSize: 15, fontWeight: 700, position: "relative", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", lineHeight: 1.4, overflow: "hidden" }}>
       {isMarquee ? (
         <div style={{ padding: "11px 0" }}>
           <span className="ann-marquee-track">{a.message}</span>

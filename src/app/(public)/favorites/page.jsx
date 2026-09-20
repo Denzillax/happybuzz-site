@@ -117,8 +117,8 @@ export default function FavoritesPage() {
     <div className="bd-seite-breit">
       {/* Header */}
       <div className="mb-6">
-        <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkt</div>
-        <h1 className="bd-seitentitel font-bold text-[#191615] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
+        <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#1D1D1D] mb-1.5">Gemerkt</div>
+        <h1 className="bd-seitentitel font-bold text-[#191615] font-['General_Sans','Instrument Sans', 'Manrope',sans-serif] flex items-center gap-3">
           <Heart size={26} className="text-honey" fill="#F4C03F" />
           Meine Favoriten
         </h1>
@@ -146,7 +146,7 @@ export default function FavoritesPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder={tab === 'listings' ? 'Favoriten durchsuchen...' : 'Verkäufer suchen...'}
-            className="w-full pl-10 pr-4 py-3 rounded-none border border-[#191615] bg-white text-sm focus:outline-none focus:border-[#0B5E5C] transition-colors"
+            className="w-full pl-10 pr-4 py-3 rounded-none border border-[#191615] bg-white text-sm focus:outline-none focus:border-[#1D1D1D] transition-colors"
           />
         </div>
       )}
@@ -253,7 +253,7 @@ export default function FavoritesPage() {
                   : `/search?category=${s.category?.slug || ''}`
                 return (
                   <div key={s.id} className={`flex items-center gap-3 px-4 py-3 ${i < searches.length - 1 ? 'border-b border-[#191615]/15' : ''}`}>
-                    <Search size={16} className="text-[#0B5E5C] shrink-0" />
+                    <Search size={16} className="text-[#1D1D1D] shrink-0" />
                     <Link href={href} className="flex-1 min-w-0 no-underline">
                       <div className="text-sm font-semibold text-[#191615] truncate">{label}</div>
                       <div className="text-xs text-text/50">

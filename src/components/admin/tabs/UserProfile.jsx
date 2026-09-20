@@ -59,7 +59,7 @@ export function UserProfile({ admin }) {
           <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
             {u.is_banned ? pill("#C62828", "#fff", "Gesperrt") : pill("#E8F5E9", "#2E7D32", "Aktiv")}
             {u.beta_access ? pill("#FBF1D2", "#C8860A", "Beta-Zugang") : null}
-            {u.id_verified ? pill("#E6F5F5", "#0B5E5C", "ID verifiziert") : u.id_document_url ? pill("#FFF8E1", "#E65100", "ID ausstehend") : null}
+            {u.id_verified ? pill("#E6F5F5", "#1D1D1D", "ID verifiziert") : u.id_document_url ? pill("#FFF8E1", "#E65100", "ID ausstehend") : null}
             {pill(colors.cream, colors.dark, u.account_type === "business" ? "Unternehmen" : "Privat")}
           </div>
         </div>

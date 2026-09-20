@@ -22,12 +22,12 @@ export function BannedGate() {
 
   if (!banned) return null;
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(25,22,21,.97)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Manrope', system-ui, sans-serif" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(25,22,21,.97)", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "'Instrument Sans', 'Manrope', system-ui, sans-serif" }}>
       <div style={{ maxWidth: 420, textAlign: "center", color: "#fff" }}>
         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(235,94,85,.18)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px" }}>
           <Ban size={30} color="#C62828" />
         </div>
-        <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 10px", fontFamily: "'General Sans', system-ui, sans-serif" }}>Konto gesperrt</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 10px", fontFamily: "'Instrument Sans', 'General Sans', system-ui, sans-serif" }}>Konto gesperrt</h1>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,.8)", margin: "0 0 22px" }}>
           Dein Konto wurde gesperrt. Wiederholtes Austauschen von Kontaktdaten, um Geschäfte ausserhalb von BEEDARO abzuschliessen, verstösst gegen die Nutzungsbedingungen. Bei Fragen: support@beedaro.ch
         </p>

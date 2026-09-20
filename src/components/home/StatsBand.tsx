@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase/supabase'
 import { getCommunityImpactStats } from '@/lib/listings'
 import { CountUp } from '@/components/shared/effects'
 
-const MONO = "'Manrope', sans-serif"
+const MONO = "'Instrument Sans', 'Manrope', sans-serif"
 const INK = '#191615'
 
 // Der Katalog in Zahlen: lebende Kennzahlen direkt unter dem Hero.

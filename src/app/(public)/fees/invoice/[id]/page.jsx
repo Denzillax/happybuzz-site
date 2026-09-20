@@ -13,7 +13,7 @@ import { getCompanySettings, formatIban } from "@/lib/company";
 import { makeBeeRef, makeArtRef } from "@/lib/fees";
 
 
-const f = "'Manrope', sans-serif";
+const f = "'Instrument Sans', 'Manrope', sans-serif";
 const g = "#686E78";
 const cp = { padding: "8px 10px", fontFamily: f };
 const Betrag = ({ v, dim }) => (

@@ -42,8 +42,8 @@ import { makeArtRef, calcFee } from "@/lib/fees";
 const INK = "#191615";
 const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
-const PETROL = "#0B5E5C";
-const MONO = "'Manrope', sans-serif";
+const PETROL = "#1D1D1D";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 // ── LocationMap: interaktive Leaflet-Karte mit Gemeindegrenze ──
 // - rote Gemeindegrenze (Polygon via Nominatim polygon_geojson)
@@ -646,7 +646,7 @@ export default function ListingDetail() {
                       background: "rgba(255,255,255,.85)", border: "none", cursor: bildSuche.status === "laedt" ? "default" : "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(25,22,21,.15)",
                     }}>
-                    {bildSuche.status === "laedt" ? <Loader2 size={19} color="#0B5E5C" className="spin" /> : <ScanSearch size={20} color="#0B5E5C" />}
+                    {bildSuche.status === "laedt" ? <Loader2 size={19} color="#1D1D1D" className="spin" /> : <ScanSearch size={20} color="#1D1D1D" />}
                   </button>
                 )}
                 {imgs.length > 1 && <>
@@ -667,9 +667,9 @@ export default function ListingDetail() {
 
             {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
             {bildSuche.status !== "idle" && (
-              <div style={{ background: "#E8F4F3", border: "1px solid #007C7C33", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
+              <div style={{ background: "#E8F4F3", border: "1px solid #1D1D1D33", borderRadius: 12, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
-                  <ScanSearch size={18} color="#0B5E5C" />
+                  <ScanSearch size={18} color="#1D1D1D" />
                   <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>
                   <button onClick={() => setBildSuche({ status: "idle", treffer: [], hinweis: null, fehler: "" })} aria-label="Schliessen" style={{ background: "none", border: "none", cursor: "pointer", padding: 4, display: "flex" }}><X size={16} color={INK} /></button>
                 </div>
@@ -684,7 +684,7 @@ export default function ListingDetail() {
                       <div key={item.id}>
                         <ListingCard listing={item} userId={user?.id} />
                         {item.grund && (
-                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#0B5E5C", background: "#E8F4F3", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#1D1D1D", background: "#E8F4F3", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                             {item.grund}
                           </p>
                         )}
@@ -923,7 +923,7 @@ export default function ListingDetail() {
                               boxShadow: (isMe || nurEmoji) ? "none" : "0 1px 2px rgba(0,0,0,.08)",
                             }}>
                               {/* Name IMMER zeigen, oeffentliche Fragen sieht jeder */}
-                              <p style={{ margin: "0 0 1px", fontSize: 11, fontWeight: 700, color: nurEmoji ? colors.muted : (isMe ? "rgba(255,255,255,.85)" : (isSeller ? "#0B5E5C" : colors.dark)) }}>
+                              <p style={{ margin: "0 0 1px", fontSize: 11, fontWeight: 700, color: nurEmoji ? colors.muted : (isMe ? "rgba(255,255,255,.85)" : (isSeller ? "#1D1D1D" : colors.dark)) }}>
                                 {isMe ? `Du · ${msg.sender?.display_name || ""}`.replace(/ · $/, "") : (msg.sender?.display_name || "Benutzer")}
                                 {isSeller && <span style={{ fontSize: 9, padding: "1px 6px", borderRadius: 999, background: colors.yellow, color: INK, fontWeight: 700, marginLeft: 5 }}>Verkäufer</span>}
                               </p>
@@ -1954,7 +1954,7 @@ export default function ListingDetail() {
             <X size={24} color="#fff" />
           </button>
           {/* Counter */}
-          <div style={{ position: "absolute", top: 24, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: 600, fontFamily: "'Manrope', sans-serif" }}>
+          <div style={{ position: "absolute", top: 24, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.6)", fontSize: 14, fontWeight: 600, fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
             {activeImg + 1} / {imgs.length}
           </div>
           {/* Main Image */}

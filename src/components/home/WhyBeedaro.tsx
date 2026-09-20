@@ -16,7 +16,7 @@ const usps = [
     icon: SlidersHorizontal,
     title: 'Du bestimmst',
     description: 'Wähle deinen Beitrag selbst: von 3% bis 10%. Je mehr du gibst, desto mehr fliesst in die Natur.',
-    accent: '#0B5E5C', tint: '#DCEFEE', href: '/how-it-works',
+    accent: '#1D1D1D', tint: '#DCEFEE', href: '/how-it-works',
   },
   {
     icon: TreePine,
@@ -32,10 +32,10 @@ const usps = [
   },
 ]
 
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif"
-const MONO = "'Manrope', sans-serif"
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
+const MONO = "'Instrument Sans', 'Manrope', sans-serif"
 const INK = '#191615'
-const PETROL = '#0B5E5C'
+const PETROL = '#1D1D1D'
 
 // Wird als Unterblock in "So funktioniert Beedaro" gerendert (HowItWorks),
 // nicht mehr als eigene Sektion: ein Kopf weniger, weniger ueberladen.

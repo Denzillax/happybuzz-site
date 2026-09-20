@@ -10,8 +10,8 @@ export function MahnPreviewModal({ admin }) {
     <div onClick={() => setMahnModal(null)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(25,22,21,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div onClick={e => e.stopPropagation()} style={{ width: 440, maxWidth: "100%", background: "#fff", borderRadius: 12, overflow: "hidden", boxShadow: "0 10px 40px rgba(0,0,0,.2)" }}>
         <div style={{ background: "#F3FAFA", padding: "13px 18px", borderBottom: "1px solid #E6F0F0", display: "flex", alignItems: "center", gap: 8 }}>
-          <Mail size={16} color="#0B5E5C" />
-          <span style={{ fontSize: 13, fontWeight: 700, color: "#0B5E5C" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
+          <Mail size={16} color="#1D1D1D" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: "#1D1D1D" }}>{mahnModal.mode === "view" ? `Gesendet${mahnModal.sentAt ? ` am ${fmtDate(mahnModal.sentAt)}` : ""} an ${mahnModal.inv.sellerName || "Verkäufer"}` : `Vorschau · wird gesendet an ${mahnModal.inv.sellerName || "Verkäufer"}`}</span>
         </div>
         <div style={{ padding: "16px 18px", maxHeight: "60vh", overflowY: "auto" }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "#686E78", textTransform: "uppercase", letterSpacing: ".05em" }}>Betreff</div>

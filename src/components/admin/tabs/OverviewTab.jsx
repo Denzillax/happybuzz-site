@@ -34,7 +34,7 @@ export function OverviewTab({ admin }) {
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12, padding: "8px 12px", background: "#F5F6F8", borderRadius: 12 }}>
           <span style={{ fontSize: 12.5, fontWeight: 700 }}>Automatische Freigabe</span>
           <span style={{ fontSize: 11.5, color: colors.muted, flex: 1, minWidth: 200 }}>KI prüft neue Inserate. Unauffällige gehen sofort live, Blocker und auffällige Inserate neuer Konten warten auf dich.</span>
-          <button type="button" onClick={toggleAutoReview} style={{ padding: "6px 14px", borderRadius: 999, border: "none", background: autoReview ? "#0B5E5C" : "#E5E8EC", color: autoReview ? "#fff" : colors.dark, fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
+          <button type="button" onClick={toggleAutoReview} style={{ padding: "6px 14px", borderRadius: 999, border: "none", background: autoReview ? "#1D1D1D" : "#E5E8EC", color: autoReview ? "#fff" : colors.dark, fontSize: 12, fontWeight: 800, cursor: "pointer" }}>
             {autoReview ? "An" : "Aus"}
           </button>
         </div>
@@ -90,7 +90,7 @@ export function OverviewTab({ admin }) {
                   // Bewusst KEIN Auto-Grant: der Sprung fuehrt in den
                   // Mitarbeiter-Tab, wo die Rolle manuell vergeben wird.
                   <button onClick={() => setTab("mitarbeiter")}
-                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E6F5F5", color: "#0B5E5C", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
+                    style={{ padding: "5px 12px", borderRadius: 999, border: "none", background: "#E6F5F5", color: "#1D1D1D", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>
                     Rolle vergeben
                   </button>
                 ) : (

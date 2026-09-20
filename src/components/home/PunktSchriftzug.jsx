@@ -9,7 +9,7 @@
 //  - Mit "Bewegung reduzieren" steht das Wort still, ohne Biene.
 import { useEffect, useRef } from "react";
 
-const TEAL = "#007C7C";
+const TEAL = "#1D1D1D";
 // Farben umgekehrt (Denis 19.09.): Figur in Honig, Streifen und Augen in Ink
 const BIENENFARBE = { H: "#191615", K: "#F4C03F", W: "#F4C03F", w: "#F4C03F", E: "#191615", A: "#F4C03F" };
 // Biene als Punktbild, von vorn (dritte Fassung, 17 x 13, nach Denis' Vorlage vom 19.09.2026):

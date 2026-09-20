@@ -23,6 +23,13 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "20. September 2026",
+    punkte: [
+      { typ: "neu", bereich: "Design", text: "Neues Aussehen, erster Schritt. Das Logo ist ein kacheliges B mit der Wortmarke beedaro, die Schrift der ganzen Seite ist Instrument Sans. Der Kopf ist eine schwebende weisse Pille mit dünnem schwarzem Rand, die Suche sitzt jetzt darin statt in einer zweiten Zeile. Knöpfe und Links sind schwarz statt Teal. Alle Menüs und Wege sind dieselben wie vorher", melder: "Denis" },
+      { typ: "neu", bereich: "Navigation", text: "Die Leiste unten am Handy hat neue Symbole: Home ist das B, Favoriten dasselbe B gedreht als Herz, Inserieren ein dunkler Knopf. Der aktive Reiter liegt auf einer hellgelben Pille. Eingeloggt zeigt der Kopf am Handy nur das B, damit Nektar, Glocke und Menü Platz haben", melder: "Denis" },
+    ],
+  },
+  {
     datum: "19. September 2026",
     punkte: [
       { typ: "neu", bereich: "Startseite", text: "Die fünf Format-Kacheln tragen im Icon-Feld dieselbe Farbe wie die Beschriftung auf den Inseraten: Festpreis Gelb, Auktion Blaugrau, Miete Violett, Gratis Grün, Service Orange. So erkennt man ein Format überall an seiner Farbe.", melder: "Denis" },

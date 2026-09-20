@@ -6,12 +6,12 @@ import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 const INK = "#191615";
 const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
-const PETROL = "#0B5E5C";
+const PETROL = "#1D1D1D";
 const MOSS = "#50804F";
 const MUTED = "rgba(20,17,13,0.6)";
-const MONO = "'Manrope', sans-serif";
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const BODY = "'Manrope', system-ui, sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
+const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 
 const labelStyle = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", display: "block", marginBottom: 6 };
 const inputStyle = { width: "100%", padding: "11px 13px", borderRadius: 12, border: "1px solid #E5E8EC", fontSize: 14, fontFamily: BODY, outline: "none", boxSizing: "border-box", background: "#fff", color: INK };

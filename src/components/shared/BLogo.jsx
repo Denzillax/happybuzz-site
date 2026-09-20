@@ -17,7 +17,7 @@ const QUADRATE = [[177, 177.5, 177], [354, 354.5, 180], [177, 531.5, 177], [0, 3
 // hinauf). Bei entgegengesetzter Richtung höbe sich die Überlappung mit der Füllregel "nonzero" auf und es entstünde ein Loch.
 const PFAD = B + QUADRATE.map(([x, y, b]) => `M${x},${y}v177h${b}v-177Z`).join("");
 
-export default function BLogo({ size = 40, herz = false, title = "BEEDARO", style, className }) {
+export default function BLogo({ size = 40, herz = false, title = "BEEDARO", style = undefined, className = undefined }) {
   return (
     <svg
       width={size} height={herz ? (size * 911.7) / 885.5 : (size * 885.5) / 911.7} viewBox={herz ? "0 0 885.5 911.7" : "0 0 911.7 885.5"}

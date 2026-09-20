@@ -7,8 +7,8 @@ const C = colors;
 
 // Katalog-Tokens (wie öffentliche Seiten): quadratische Ecken, Ink-Rahmen,
 // Mono-Labels, Petrol/Honey-Akzente statt Teal-Glow.
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
-const MONO = "'Manrope', sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const monoLabel = {
   display: "block", fontSize: 10, fontWeight: 700, fontFamily: MONO,
   letterSpacing: ".12em", textTransform: "uppercase", color: K.ink, marginBottom: 6,
@@ -66,11 +66,11 @@ export function Input({ label, value, onChange, type = "text", disabled, placeho
             paddingRight: suffix ? 44 : 14,
             borderRadius: 12, border: "1px solid #E5E8EC",
             background: disabled ? K.sand : "#fff",
-            fontSize: 14, fontFamily: "'Manrope', sans-serif",
+            fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
             color: K.ink, outline: "none", boxSizing: "border-box",
             transition: "border-color .2s, box-shadow .2s",
           }}
-          onFocus={e => { e.target.style.borderColor = "#007C7C"; e.target.style.boxShadow = "0 0 0 3px rgba(0,124,124,.15)"; }}
+          onFocus={e => { e.target.style.borderColor = "#1D1D1D"; e.target.style.boxShadow = "0 0 0 3px rgba(0,124,124,.15)"; }}
           onBlur={e => { e.target.style.borderColor = "#E5E8EC"; e.target.style.boxShadow = "none"; }}
         />
         {suffix && (
@@ -117,7 +117,7 @@ export function Btn({ children, variant = "primary", onClick, style: s, small, d
   const base = {
     padding: small ? "10px 20px" : "13px 26px",
     borderRadius: 12, border: "1px solid #E5E8EC", cursor: disabled ? "not-allowed" : "pointer",
-    fontFamily: "'Manrope', sans-serif", fontWeight: 800,
+    fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontWeight: 800,
     fontSize: small ? 12 : 14, transition: "all .15s",
     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
     opacity: disabled ? 0.5 : 1,
@@ -141,7 +141,7 @@ export function Section({ title, description, children, badge }) {
     <div style={{ marginBottom: 28 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6, flexWrap: "wrap", gap: 8 }}>
         <h3 style={{
-          fontFamily: "'General Sans', sans-serif", fontSize: 17, fontWeight: 700,
+          fontFamily: "'Instrument Sans', 'General Sans', sans-serif", fontSize: 17, fontWeight: 700,
           letterSpacing: "-0.01em", color: K.ink, margin: 0,
         }}>{title}</h3>
         {badge}

@@ -9,7 +9,7 @@ import { FEE_FREE_BELOW, BEE_IMPACT_RATE } from '@/lib/constants'
 // leer, schlecht verteilt). Jetzt mittig mit Trennpunkten, so liest sie sich als
 // Bildunterschrift zum Hero. Der vierte Fakt ("fünf Formate") ist gestrichen: das
 // sagt schon der Hero und die Überschrift darunter. Zahlen kommen aus constants.js.
-const BODY = "'Manrope', system-ui, sans-serif"
+const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif"
 
 const FAKTEN = [
   { key: 'gratis', text: `Unter CHF ${FEE_FREE_BELOW} gebührenfrei`, href: '/search?max=' + FEE_FREE_BELOW },
@@ -28,7 +28,7 @@ export function FaktenKacheln() {
     <section style={{ padding: '14px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .fakten-zeile { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; row-gap: 4px; }
-        .fakten-punkt:hover { color: #007C7C !important; filter: none !important; }
+        .fakten-punkt:hover { color: #1D1D1D !important; filter: none !important; }
         .fakten-trenner { width: 3px; height: 3px; border-radius: 50%; background: rgba(25,22,21,.28); flex-shrink: 0; }
         @media (max-width: 640px) {
           .fakten-zeile { gap: 10px; }

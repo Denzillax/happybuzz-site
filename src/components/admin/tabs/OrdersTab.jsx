@@ -82,7 +82,7 @@ export function OrdersTab({ admin }) {
               return [
                 <tr key={o.id} onClick={() => toggleOrder(o.id)} className="adm-row"
                   style={{ borderBottom: `1px solid ${colors.borderLt}`, cursor: "pointer", background: isOpen ? "#F3FAFA" : undefined, opacity: o.status === "cancelled" ? 0.65 : 1 }}>
-                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#0B5E5C" : colors.muted, whiteSpace: "nowrap" }}>{ref}</td>
+                  <td style={{ ...td, fontFamily: "monospace", fontSize: 11, fontWeight: 600, color: isOpen ? "#1D1D1D" : colors.muted, whiteSpace: "nowrap" }}>{ref}</td>
                   <td style={{ ...td, fontWeight: 600, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.listingTitle}</td>
                   <td style={{ ...td, color: colors.muted, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{o.buyerName} → {o.sellerName}</td>
                   <td style={{ ...td, color: colors.muted, whiteSpace: "nowrap" }}>{o.created_at ? fmtDate(o.created_at) : "…"}</td>

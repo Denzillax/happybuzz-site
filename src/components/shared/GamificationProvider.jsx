@@ -48,13 +48,13 @@ function showXpToast(row, uid) {
           </div>
           <div>
             <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", color: newLevel.color }}>Level aufgestiegen</p>
-            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#191615", fontFamily: "'General Sans','Manrope',sans-serif" }}>{newLevel.name}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 16, fontWeight: 900, color: "#191615", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>{newLevel.name}</p>
             {newLevel.perk && <p style={{ margin: "2px 0 0", fontSize: 12, color: "#5B626C" }}>Neu: {newLevel.perk}</p>}
           </div>
         </div>
       ), { duration: 6000 });
     } else {
-      toast(`+${row.amount} Pollen`, { description: reasonLabel(row.reason), icon: <Zap size={16} color="#007C7C" />, duration: 2600 });
+      toast(`+${row.amount} Pollen`, { description: reasonLabel(row.reason), icon: <Zap size={16} color="#1D1D1D" />, duration: 2600 });
     }
   })();
 }
@@ -121,5 +121,5 @@ export default function GamificationProvider() {
     };
   }, [uid]);
 
-  return <Toaster position="top-center" toastOptions={{ style: { fontFamily: "'Manrope', sans-serif" } }} />;
+  return <Toaster position="top-center" toastOptions={{ style: { fontFamily: "'Instrument Sans', 'Manrope', sans-serif" } }} />;
 }

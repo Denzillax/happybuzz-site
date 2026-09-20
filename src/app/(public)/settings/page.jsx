@@ -14,8 +14,8 @@ import { BeeLevelCard } from "@/components/shared/BeeLevel";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
-const MONO = "'Manrope', sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 import FeeModel from "@/components/listings/FeeModel";
 import { FEE_TIERS } from "@/lib/constants";
@@ -80,7 +80,7 @@ function PushDeviceBox({ showToast }) {
     <div style={{ padding: "14px", background: K.paper, border: "1px solid #E5E8EC", marginBottom: 16 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
         <Bell size={15} color={K.ink} />
-        <span style={{ fontFamily: "'General Sans', sans-serif", fontSize: 14, fontWeight: 600, color: K.ink }}>
+        <span style={{ fontFamily: "'Instrument Sans', 'General Sans', sans-serif", fontSize: 14, fontWeight: 600, color: K.ink }}>
           Push auf diesem Gerät
         </span>
         {status === "on" && (
@@ -375,7 +375,7 @@ export default function SettingsPage() {
       <div style={{
         minHeight: "100vh", display: "flex", alignItems: "center",
         justifyContent: "center", background: C.cream,
-        fontFamily: "'Manrope', sans-serif",
+        fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
       }}>
         <Loader2 size={32} color={C.yellow} style={{ animation: "spin 1s linear infinite" }} />
       </div>
@@ -409,7 +409,7 @@ export default function SettingsPage() {
                   : K.honey,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 28, fontWeight: 800, color: K.ink,
-                fontFamily: "'General Sans', sans-serif",
+                fontFamily: "'Instrument Sans', 'General Sans', sans-serif",
               }}>
                 {!profile?.avatar_url && initial}
               </div>
@@ -441,7 +441,7 @@ export default function SettingsPage() {
                 style={{
                   marginTop: 6, padding: "4px 0", fontSize: 12,
                   color: K.petrol, background: "none", border: "none",
-                  cursor: "pointer", fontFamily: "'Manrope', sans-serif",
+                  cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                   fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3,
                   display: "flex", alignItems: "center", gap: 4,
                 }}
@@ -477,7 +477,7 @@ export default function SettingsPage() {
                       border: "1px solid #E5E8EC",
                       background: active ? K.honey : "#fff",
                       color: K.ink,
-                      fontWeight: 700, fontSize: 14, fontFamily: "'Manrope', sans-serif",
+                      fontWeight: 700, fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                     }}
                   >
                     {o.l}
@@ -515,12 +515,12 @@ export default function SettingsPage() {
                       <img src={profile.shop_banner_url} alt="Shop-Banner" style={{ display: "block", width: "100%", aspectRatio: "4 / 1", objectFit: "cover" }} />
                     </div>
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => bannerInputRef.current?.click()} style={{ padding: "8px 16px", border: "1px solid #E5E8EC", background: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Ersetzen</button>
-                      <button onClick={handleBannerRemove} style={{ padding: "8px 16px", border: `1px solid ${C.border}`, background: "#fff", color: C.muted, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Entfernen</button>
+                      <button onClick={() => bannerInputRef.current?.click()} style={{ padding: "8px 16px", border: "1px solid #E5E8EC", background: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Ersetzen</button>
+                      <button onClick={handleBannerRemove} style={{ padding: "8px 16px", border: `1px solid ${C.border}`, background: "#fff", color: C.muted, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Entfernen</button>
                     </div>
                   </div>
                 ) : (
-                  <button onClick={() => bannerInputRef.current?.click()} style={{ width: "100%", padding: "22px 14px", border: `1.5px dashed ${C.border}`, background: "#fff", color: C.muted, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+                  <button onClick={() => bannerInputRef.current?.click()} style={{ width: "100%", padding: "22px 14px", border: `1.5px dashed ${C.border}`, background: "#fff", color: C.muted, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
                     Banner hochladen (JPG/PNG, max. 4 MB)
                   </button>
                 )}
@@ -544,7 +544,7 @@ export default function SettingsPage() {
               style={{
                 width: "100%", padding: "12px 14px", borderRadius: 12,
                 border: `1.5px solid ${C.border}`, background: "#fff",
-                fontSize: 14, fontFamily: "'Manrope', sans-serif",
+                fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                 color: C.dark, resize: "vertical", outline: "none",
                 boxSizing: "border-box",
               }}
@@ -592,7 +592,7 @@ export default function SettingsPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 12, background: "#EEF4EC", border: `1px solid ${K.moss}` }}>
           <BadgeCheck size={26} color={K.moss} strokeWidth={2.2} />
           <div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'General Sans','Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
             <div style={{ fontSize: 12.5, color: C.muted, marginTop: 1 }}>Dein Ausweis und deine E-Mail sind bestätigt. Käufer sehen bei deinen Inseraten und deinem Profil das grüne „Verifiziert"-Abzeichen.</div>
           </div>
         </div>
@@ -626,7 +626,7 @@ export default function SettingsPage() {
                 await supabase.auth.resend({ type: "signup", email: profile?.email });
                 setEmailSending(false);
                 showToast("Bestätigungsmail gesendet");
-              }} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
+              }} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
                 {emailSending ? "Sende..." : "Mail senden"}
               </button>
             )}
@@ -648,7 +648,7 @@ export default function SettingsPage() {
             {phoneVerified ? (
               <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : (
-              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
                 Hinterlegen
               </button>
             )}
@@ -670,7 +670,7 @@ export default function SettingsPage() {
             {addressVerified ? (
               <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : (
-              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>
+              <button onClick={() => setActiveTab("address")} style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>
                 Ausfüllen
               </button>
             )}
@@ -696,7 +696,7 @@ export default function SettingsPage() {
             ) : profile?.id_document_url ? (
               <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink }}>Wird geprüft</span>
             ) : (
-              <label style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
+              <label style={{ padding: "7px 14px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
                 {idUploading ? "Lädt..." : "ID hochladen"}
                 <input type="file" accept="image/*,.pdf" style={{ display: "none" }} onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -841,7 +841,7 @@ export default function SettingsPage() {
               placeholder="Gemeindehausstrasse 11B"
               style={{
                 width: "100%", padding: "10px 12px", borderRadius: 12,
-                border: "1px solid #E5E8EC", fontSize: 14, fontFamily: "'Manrope', sans-serif",
+                border: "1px solid #E5E8EC", fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                 color: K.ink, outline: "none", boxSizing: "border-box",
               }}
               onFocus={e => { e.target.style.borderColor = C.yellow; }}
@@ -964,13 +964,13 @@ export default function SettingsPage() {
                 </div>
                 <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                   <button onClick={() => { setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]); }}
-                    style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
+                    style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Abbrechen</button>
                   <button onClick={async () => {
                     await supabase.from("user_addresses").update({ label: newAddr.label, company: newAddr.company, first_name: newAddr.first_name, last_name: newAddr.last_name, street: newAddr.street, postal_code: newAddr.postal_code, city: newAddr.city }).eq("id", addr.id);
                     setSavedAddresses(prev => prev.map((a, idx) => idx === i ? { ...a, ...newAddr } : a));
                     setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]);
                     showToast("Adresse aktualisiert");
-                  }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Speichern</button>
+                  }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.honey, color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Speichern</button>
                 </div>
               </>
             ) : (
@@ -1045,7 +1045,7 @@ export default function SettingsPage() {
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               <button onClick={() => { setShowAddAddr(false); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]); }}
-                style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Manrope', sans-serif" }}>Abbrechen</button>
+                style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Abbrechen</button>
               <button onClick={async () => {
                 if (!newAddr.label) return;
                 const { data: { user } } = await supabase.auth.getUser();
@@ -1054,7 +1054,7 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: newAddr.label ? K.honey : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 12, border: "1px solid #E5E8EC", background: newAddr.label ? K.honey : "#ccc", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (
@@ -1062,7 +1062,7 @@ export default function SettingsPage() {
             width: "100%", padding: "12px", borderRadius: 12,
             border: "1px dashed #E5E8EC", background: "transparent",
             color: K.ink, fontSize: 13, fontWeight: 700, cursor: "pointer",
-            fontFamily: "'Manrope', sans-serif",
+            fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
           }}>
             + Weitere Adresse hinzufügen
           </button>
@@ -1122,7 +1122,7 @@ export default function SettingsPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <CatIcon size={16} color={C.dark} />
             <span style={{
-              fontFamily: "'General Sans', sans-serif", fontSize: 15,
+              fontFamily: "'Instrument Sans', 'General Sans', sans-serif", fontSize: 15,
               letterSpacing: ".5px", color: C.dark,
             }}>{title}</span>
           </div>
@@ -1302,7 +1302,7 @@ export default function SettingsPage() {
                   try { await unblockUser(b.blocked_id); setBlocks(prev => (prev || []).filter(x => x.blocked_id !== b.blocked_id)); showToast("Sperre aufgehoben"); }
                   catch (e) { console.error(e); showToast("Entsperren fehlgeschlagen"); }
                 }}
-                style={{ padding: "7px 14px", border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", borderRadius: 12, fontFamily: "'Manrope', sans-serif" }}
+                style={{ padding: "7px 14px", border: "1px solid #E5E8EC", background: "#fff", color: K.ink, fontSize: 12, fontWeight: 700, cursor: "pointer", borderRadius: 12, fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}
               >
                 Entsperren
               </button>
@@ -1336,7 +1336,7 @@ export default function SettingsPage() {
       `}</style>
 
       <div style={{
-        fontFamily: "'Manrope', sans-serif",
+        fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
         background: "var(--bd-grund)", minHeight: "100vh", color: K.ink,
       }}>
 
@@ -1354,7 +1354,7 @@ export default function SettingsPage() {
                   width: "100%", padding: "10px 14px", border: "none",
                   background: active ? K.sand : "transparent",
                   display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
-                  fontFamily: "'Manrope', sans-serif", fontSize: 13,
+                  fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 13,
                   fontWeight: active ? 700 : 500,
                   color: active ? K.ink : C.muted,
                   borderRadius: 12, marginBottom: 2,

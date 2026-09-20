@@ -40,7 +40,7 @@ export function FloatingButton() {
       />
       <span style={{
         color: DARK, fontWeight: 800, fontSize: 15,
-        fontFamily: "'Manrope', sans-serif",
+        fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
         maxWidth: hover ? 120 : 0, opacity: hover ? 1 : 0,
         overflow: 'hidden', transition: 'max-width 0.28s ease, opacity 0.2s ease',
       }}>Inserieren</span>

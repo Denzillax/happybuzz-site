@@ -15,8 +15,8 @@ import { getActiveBoosts } from "@/lib/gamification";
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
 const INK = "#191615";
 const PAPER = "#FFFFFF";
-const PETROL = "#0B5E5C";
-const MONO = "'Manrope', sans-serif";
+const PETROL = "#1D1D1D";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const SORT_OPTS = [
   { value: "relevanz", label: "Relevanz" },
@@ -47,9 +47,9 @@ function FilterPill({ label, value, options, onChange, active }) {
         style={{
           display: "flex", alignItems: "center", gap: 6,
           padding: "8px 14px", borderRadius: 12,
-          border: active ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
+          border: active ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
           background: active ? "#E6F5F5" : "#fff",
-          color: active ? "#0B5E5C" : INK,
+          color: active ? "#1D1D1D" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
           fontFamily: fonts.body, cursor: "pointer",
           transition: "all .15s", whiteSpace: "nowrap",
@@ -240,7 +240,7 @@ function SearchPageInner() {
   // Text, fuer den er schon lief, damit die KI nicht in Schleife sucht.
   // KI-Schalter (gleicher Speicher wie im Header)
   const [kiModus, setKiModus] = useState(false);
-  const KI_FARBE = "#007C7C"; // helleres Teal fuer den KI-Modus
+  const KI_FARBE = "#1D1D1D"; // helleres Teal fuer den KI-Modus
   useEffect(() => { try { setKiModus(localStorage.getItem("beedaro_ki_suche") === "1"); } catch {} }, []);
   const toggleKi = () => setKiModus(v => { const n = !v; try { localStorage.setItem("beedaro_ki_suche", n ? "1" : "0"); } catch {} return n; });
   const kiFallbackRef = useRef("");
@@ -403,7 +403,7 @@ function SearchPageInner() {
         {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
             Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
         {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#007C7C33"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFEBEE" : "#E8F4F3", border: `1px solid ${kiFehler ? "#F5C2C2" : "#1D1D1D33"}`, borderRadius: 12, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
             <Sparkles size={14} />
             <span style={{ flex: 1 }}>
               {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
@@ -450,9 +450,9 @@ function SearchPageInner() {
               <button onClick={() => setShowPrice(!showPrice)} style={{
                 display: "flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 12,
-                border: (minPrice || maxPrice) ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
+                border: (minPrice || maxPrice) ? "1.5px solid #1D1D1D" : "1.5px solid #d8d4cd",
                 background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
-                color: (minPrice || maxPrice) ? "#0B5E5C" : INK,
+                color: (minPrice || maxPrice) ? "#1D1D1D" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
                 fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",
               }}>

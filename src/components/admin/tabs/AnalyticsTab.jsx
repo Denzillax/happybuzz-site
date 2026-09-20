@@ -25,7 +25,7 @@ export function AnalyticsTab({ admin }) {
           <div style={chartCard}>
             <div style={chartHead}><span style={chartLabel}>Neue Nutzer</span><span style={{ fontSize: 11, color: "#2E7D32", fontWeight: 700 }}>+{sumSeries(analytics.users)}</span></div>
             <div style={chartBig}>{sumSeries(analytics.users)} <span style={chartSub}>in {analyticsRange} Tagen</span></div>
-            <TrendChart data={analytics.users} color="#007C7C" type="area" />
+            <TrendChart data={analytics.users} color="#1D1D1D" type="area" />
             {axisLabels(analytics.users)}
           </div>
           <div style={chartCard}>

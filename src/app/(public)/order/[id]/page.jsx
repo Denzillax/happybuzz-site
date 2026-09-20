@@ -30,9 +30,9 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
-const MONO = "'Manrope', sans-serif";
-const HEAD = "'General Sans','Manrope',sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
 const EVENT_ICONS = {
   purchased: ShoppingBag, payment_marked: CreditCard, payment_confirmed: CheckCircle,
@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#007C7C", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -372,7 +372,7 @@ export default function OrderDetailPage() {
             {!isService && <div style={{ fontSize: 13, color: colors.muted }}>Lieferart: {shippingLabel}</div>}
             {/* Lieferfrist: nur wenn laenger als Standard und noch nicht verschickt */}
             {!isService && !isRental && (listing?.handling_days || 2) > 2 && ["confirmed", "payment_pending", "payment_marked", "paid"].includes(p.status) && (
-              <div style={{ fontSize: 13, color: "#0B5E5C", fontWeight: 600 }}>
+              <div style={{ fontSize: 13, color: "#1D1D1D", fontWeight: 600 }}>
                 Versand innert {handlingLabel(listing.handling_days)} nach Zahlungseingang angekündigt
               </div>
             )}
@@ -424,15 +424,15 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Buyer hat bezahlt, wartet */}
                 {isService && isBuyer && p.status === "payment_marked" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><Clock size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Zahlung markiert</p><p style={{ fontSize: 13, color: "#686E78", margin: 0 }}>Der Anbieter prüft deine Zahlung.</p></div>
                 )}
                 {/* SERVICE: Anbieter wartet auf Zahlung */}
                 {isService && isSeller && p.status === "payment_pending" && (
-                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#686E78", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
+                  <div style={{ textAlign: "center", padding: 16 }}><FileText size={32} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 15, fontWeight: 700, margin: "0 0 4px" }}>Rechnung gesendet</p><p style={{ fontSize: 13, color: "#686E78", margin: "0 0 4px" }}>{p.notes}</p><p style={{ fontSize: 15, fontWeight: 800, margin: 0 }}>CHF {parseFloat(p.price || 0).toFixed(2)}</p></div>
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#007C7C", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 12, border: "none", background: "#1D1D1D", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (
@@ -493,7 +493,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {isService && isBuyer && p.status === "paid" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#007C7C" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Anbieter schliesst den Auftrag ab.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Clock size={28} color="#1D1D1D" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Zahlung bestätigt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Anbieter schliesst den Auftrag ab.</p></div>
                 )}
                 {isBuyer && (p.status === "shipped" || p.status === "picked_up") && (
                   <div>

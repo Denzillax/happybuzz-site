@@ -197,7 +197,7 @@ export function ListingCard(props) {
             <button type="button" aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/listing/${listing.id}?bild=1`); }}
               style={{ width: 28, height: 28, borderRadius: "50%", border: "none", background: "rgba(255,255,255,.92)", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 4px rgba(25,22,21,.18)", flexShrink: 0 }}>
-              <ScanSearch size={15} color="#0B5E5C" />
+              <ScanSearch size={15} color="#1D1D1D" />
             </button>
           )}
           {(endetBald || istHot) && (<>

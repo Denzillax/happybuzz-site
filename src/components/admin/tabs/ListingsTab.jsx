@@ -125,7 +125,7 @@ export function ListingsTab({ admin }) {
                   <Link href={`/listing/${l.id}`} style={{ color: colors.dark, textDecoration: "none" }}>{l.title}</Link>
                   <span style={{ display: "block", fontFamily: "monospace", fontSize: 10, color: colors.muted, fontWeight: 500 }}>{makeArtRef(l.id)}{l.status === "pending_review" && l.submitted_at ? ` · seit ${new Date(l.submitted_at).toLocaleDateString("de-CH")}` : ""}{(l.status === "pending_review" || l.review_source === "auto") && <KiBegruendung l={l} />}</span>
                   {l.publish_at && ["pending_review", "scheduled"].includes(l.status) && (
-                    <span style={{ display: "block", fontSize: 10, color: "#0B5E5C", fontWeight: 700 }}>
+                    <span style={{ display: "block", fontSize: 10, color: "#1D1D1D", fontWeight: 700 }}>
                       Geplant für {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
                     </span>
                   )}
@@ -158,7 +158,7 @@ export function ListingsTab({ admin }) {
                   <Link href={`/listing/${l.id}`} style={{ fontSize: 13.5, fontWeight: 700, color: colors.dark, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.title}</Link>
                   <span style={{ fontFamily: "monospace", fontSize: 10, color: colors.muted }}>{makeArtRef(l.id)} · {fmtDate(l.created_at)}</span>
                   {l.publish_at && ["pending_review", "scheduled"].includes(l.status) && (
-                    <span style={{ display: "block", fontSize: 10, color: "#0B5E5C", fontWeight: 700 }}>
+                    <span style={{ display: "block", fontSize: 10, color: "#1D1D1D", fontWeight: 700 }}>
                       Geplant für {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
                     </span>
                   )}

@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import { fonts } from "@/lib/theme";
 
-const MONO = "'Manrope', sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const INK = "#191615";
 const SAND = "#F5F6F8";
 const MOSS = "#50804F";

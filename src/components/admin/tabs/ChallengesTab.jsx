@@ -164,7 +164,7 @@ export function ChallengesTab({ admin }) {
                   <div style={{ display: "flex", gap: 4, justifyContent: "center" }}>
                     {c.is_template && (
                       <button onClick={() => startEdit(c)} title="Vorlage bearbeiten (gilt ab nächster Woche)"
-                        style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0B5E5C", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+                        style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#1D1D1D", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
                         Bearbeiten
                       </button>
                     )}
@@ -204,7 +204,7 @@ export function ChallengesTab({ admin }) {
               </div>
               <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
                 {c.is_template && (
-                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#0B5E5C", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
+                  <button onClick={() => startEdit(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: "#E6F5F5", color: "#1D1D1D", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>Bearbeiten</button>
                 )}
                 <button onClick={() => toggleChallenge(c)} style={{ padding: "4px 10px", borderRadius: 12, border: "none", background: c.active ? "#FFF3E0" : "#E8F5E9", color: c.active ? "#E65100" : "#2E7D32", fontSize: 10, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 3 }}>
                   <Power size={10} /> {c.active ? "Aus" : "An"}

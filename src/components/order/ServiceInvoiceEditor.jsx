@@ -7,7 +7,7 @@ import { calcFeeFromPrice } from "@/lib/fees";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { chf } from "@/lib/formatters";
 
-const K = { ink: "#191615", petrol: "#0B5E5C", honey: "#F4C03F" };
+const K = { ink: "#191615", petrol: "#1D1D1D", honey: "#F4C03F" };
 const ICONS = { Car, Clock, Package, Trash2, Pencil };
 
 function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitted }) {

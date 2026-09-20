@@ -10,8 +10,8 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#0B5E5C", moss: "#50804F" };
-const MONO = "'Manrope', sans-serif";
+const K = { ink: "#191615", sand: "#F5F6F8", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const STATUS_CONFIG = {
   active:   { label: "Aktiv", color: colors.green, icon: CheckCircle },
@@ -19,7 +19,7 @@ const STATUS_CONFIG = {
   draft:    { label: "Entwurf", color: colors.muted, icon: Clock },
   pending_review: { label: "In Prüfung", color: "#E5A100", icon: Clock },
   pending_hold: { label: "Persönliche Prüfung", color: "#E5A100", icon: Clock },
-  scheduled: { label: "Geplant", color: "#0B5E5C", icon: Clock },
+  scheduled: { label: "Geplant", color: "#1D1D1D", icon: Clock },
   paused:   { label: "Pausiert", color: "#E5A100", icon: Pause },
   sold:     { label: "Verkauft", color: colors.blue, icon: CheckCircle },
   rented:   { label: "Vermietet", color: colors.blue, icon: CheckCircle },
@@ -302,7 +302,7 @@ export default function ListingsPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div>
             <div style={{ fontSize: 10, fontWeight: 700, fontFamily: MONO, letterSpacing: ".18em", textTransform: "uppercase", color: K.petrol, marginBottom: 6 }}>Verkäuferpult</div>
-            <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'General Sans','Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
+            <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{counts.all} Inserate · {counts.active} aktiv</p>
           </div>
           <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: K.honey, color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>
@@ -427,7 +427,7 @@ export default function ListingsPage() {
                             <div style={{ fontSize: 11, color: colors.muted }}><TypeBadge type={l.listing_type} /></div>
                             {l.status === "draft" && l.review_reason && <div style={{ fontSize: 11, color: "#c62828", marginTop: 3, maxWidth: 220, whiteSpace: "normal", lineHeight: 1.3 }}>Abgelehnt: {l.review_reason}</div>}
                             {l.status === "scheduled" && l.publish_at && (
-                              <div style={{ fontSize: 11, color: "#0B5E5C", marginTop: 3, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                              <div style={{ fontSize: 11, color: "#1D1D1D", marginTop: 3, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                                 <span>Geht live am {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr</span>
                                 <button
                                   onClick={async () => { try { await publishScheduledNow(l); setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: "active", publish_at: null } : x)); } catch (e) { console.error(e); } }}
@@ -659,7 +659,7 @@ export default function ListingsPage() {
                     </div>
 
                     {l.status === "scheduled" && l.publish_at && (
-                      <div style={{ fontSize: 12, color: "#0B5E5C", fontWeight: 700, marginTop: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                      <div style={{ fontSize: 12, color: "#1D1D1D", fontWeight: 700, marginTop: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                         <span>Geht live am {new Date(l.publish_at).toLocaleDateString("de-CH", { day: "numeric", month: "short" })}, {new Date(l.publish_at).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr</span>
                         <button
                           onClick={async () => { try { await publishScheduledNow(l); setListings(prev => prev.map(x => x.id === l.id ? { ...x, status: "active", publish_at: null } : x)); } catch (e) { console.error(e); } }}

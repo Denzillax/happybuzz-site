@@ -4,11 +4,11 @@
 const INK = "#191615";
 const SAND = "#F5F6F8";
 const PAPER = "#FFFFFF";
-const PETROL = "#0B5E5C";
+const PETROL = "#1D1D1D";
 const MUTED = "rgba(20,17,13,0.62)";
-const MONO = "'Manrope', sans-serif";
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const BODY = "'Manrope', system-ui, sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
+const BODY = "'Instrument Sans', 'Manrope', system-ui, sans-serif";
 
 export default function ImprintPage() {
   const L = { fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 6 };

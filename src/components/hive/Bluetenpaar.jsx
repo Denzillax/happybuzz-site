@@ -9,10 +9,10 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts } from "@/lib/theme";
 import EinsatzWahl from "./EinsatzWahl";
 
-const K = { ink: "#191615", honey: "#F4C03F", petrol: "#0B5E5C", hairline: "#E5E8EC", chip: "#F1F3F5" };
+const K = { ink: "#191615", honey: "#F4C03F", petrol: "#1D1D1D", hairline: "#E5E8EC", chip: "#F1F3F5" };
 const MOTIVE = [
   { Icon: Flower, farbe: "#C8860A" }, { Icon: Flower2, farbe: "#B23A48" }, { Icon: Leaf, farbe: "#50804F" },
-  { Icon: Sprout, farbe: "#007C7C" }, { Icon: TreeDeciduous, farbe: "#0B5E5C" }, { Icon: Clover, farbe: "#7A5C9E" },
+  { Icon: Sprout, farbe: "#1D1D1D" }, { Icon: TreeDeciduous, farbe: "#1D1D1D" }, { Icon: Clover, farbe: "#7A5C9E" },
 ];
 const STUFEN = { 2: 0.7, 3: 1, 4: 1.5, 5: 2, 6: 3 };
 

@@ -24,7 +24,7 @@ export default function PublicLayout({
       {/* Suspense: Header nutzt useSearchParams — nötig für statisches Prerendering */}
       {/* display:contents (hdr-sticky-fix): der Wrapper darf keine eigene Box
           bilden, sonst klebt der sticky Header nur innerhalb seiner 65px. */}
-      <div className="no-print hdr-sticky-fix"><Suspense fallback={<div style={{ height: 64 }} />}><Header /></Suspense></div>
+      <div className="no-print hdr-sticky-fix"><Suspense fallback={<div style={{ height: 80 }} />}><Header /></Suspense></div>
       {/* Grosse Laufschrift, wenn Platzierung "alle Seiten" gewaehlt ist */}
       <Ticker placement="global" />
       <main className="min-h-screen">{children}</main>

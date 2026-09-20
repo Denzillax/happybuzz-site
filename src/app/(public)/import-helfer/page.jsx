@@ -10,9 +10,9 @@ const INK = "#191615";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const MUTED = "rgba(20,17,13,0.6)";
-const HEAD = "'General Sans', sans-serif";
-const BODY = "'Manrope', sans-serif";
-const MONO = "'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', sans-serif";
+const BODY = "'Instrument Sans', 'Manrope', sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const card = { background: "#fff", border: "1px solid #E5E8EC", borderRadius: 12, padding: "24px 26px" };
 
@@ -144,7 +144,7 @@ export default function ImportHelferPage() {
           </div>
         </div>
 
-        <Link href="/listings/new" style={{ fontFamily: BODY, fontSize: 13.5, fontWeight: 700, color: "#0B5E5C", textDecoration: "underline" }}>
+        <Link href="/listings/new" style={{ fontFamily: BODY, fontSize: 13.5, fontWeight: 700, color: "#1D1D1D", textDecoration: "underline" }}>
           Zurück zum Inserieren
         </Link>
       </div>

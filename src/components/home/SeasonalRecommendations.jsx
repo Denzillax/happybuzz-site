@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { Sun, Leaf, Snowflake, Flower2 } from "lucide-react";
 
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const MUTED = "#686E78";
 const DARK = "#191615";
-const TEAL = "#007C7C";
+const TEAL = "#1D1D1D";
 
 // Jahreszeit aus Monat (0-11) ableiten.
 function getSeason(month) {
@@ -65,7 +65,7 @@ export function SeasonalRecommendations() {
               <Link key={it.q} href={`/search?q=${encodeURIComponent(it.q)}`} style={{
                 padding: "8px 16px", borderRadius: 999, background: "#fff",
                 fontSize: 13, fontWeight: 600,
-                color: DARK, textDecoration: "none", fontFamily: "'Manrope', sans-serif",
+                color: DARK, textDecoration: "none", fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
               }}>
                 {it.label}
               </Link>

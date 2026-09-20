@@ -11,7 +11,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       <header style={{ background: '#fff', borderBottom: '1px solid #E5E8EC', padding: '14px 24px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Logo width={140} />
-          <Link href="/" style={{ fontSize: 13, fontWeight: 600, color: '#0B5E5C', textDecoration: 'none' }}>Zu beedaro.ch</Link>
+          <Link href="/" style={{ fontSize: 13, fontWeight: 600, color: '#1D1D1D', textDecoration: 'none' }}>Zu beedaro.ch</Link>
         </div>
       </header>
       <main style={{ flex: 1 }}>{children}</main>

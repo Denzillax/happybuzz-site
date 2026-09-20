@@ -54,7 +54,7 @@ export function useAdminData() {
   const [feeSeller, setFeeSeller] = useState({});
   const [refListings, setRefListings] = useState([]);
   const [annOpen, setAnnOpen] = useState(false);
-  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#007C7C", text_color: "#FFFFFF", effect: "none" });
+  const [ann, setAnn] = useState({ enabled: false, message: "", bg_color: "#1D1D1D", text_color: "#FFFFFF", effect: "none" });
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [openOrder, setOpenOrder] = useState(null);
   const [orderDetail, setOrderDetail] = useState({});
@@ -541,7 +541,7 @@ export function useAdminData() {
 
   const openAnnouncement = async () => {
     const row = await getAnnouncement();
-    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#007C7C", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
+    if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#1D1D1D", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
     setAnnOpen(true);
   };
   const saveAnnouncement = async () => {
@@ -886,7 +886,7 @@ export function useAdminData() {
 
   const sc = { open: { color: "#CD3800", bg: "#FFF3E0", label: "Offen" }, pending_payment: { color: "#1565C0", bg: "#E3F2FD", label: "Gemeldet" }, paid: { color: "#2E7D32", bg: "#E8F5E9", label: "Bezahlt" }, overdue: { color: "#c62828", bg: "#FFEBEE", label: "Überfällig" } };
   const statusPill = (status) => {
-    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#F5F6F8", "#5B626C", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#0B5E5C", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#F5F6F8", "#5B626C", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#F5F6F8", "#5B626C", "Abgelaufen"] };
+    const map = { active: ["#E8F5E9", "#2E7D32", "Aktiv"], draft: ["#F5F6F8", "#5B626C", "Entwurf"], pending_review: ["#FFF8E1", "#E65100", "Wartet auf Freigabe"], scheduled: ["#DCEFEE", "#1D1D1D", "Geplant"], paused: ["#FFF3E0", "#E65100", "Pausiert"], sold: ["#E3F2FD", "#1565C0", "Verkauft"], rented: ["#E3F2FD", "#1565C0", "Vermietet"], inactive: ["#F5F6F8", "#5B626C", "Inaktiv"], pending_pause: ["#FFEBEE", "#c62828", "Wird pausiert"], deleted: ["#FFEBEE", "#c62828", "Gelöscht"], expired: ["#F5F6F8", "#5B626C", "Abgelaufen"] };
     const [bg, col, lbl] = map[status] || map.draft;
     return pill(bg, col, lbl);
   };
@@ -1065,9 +1065,9 @@ export function useAdminData() {
 
   // Übersicht-Karten
   const STAT_CARDS = [
-    { label: "Benutzer", value: (stats.users ?? 0).toLocaleString("de-CH"), Icon: Users, tint: "#007C7C" },
-    { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#007C7C" },
-    { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#007C7C" },
+    { label: "Benutzer", value: (stats.users ?? 0).toLocaleString("de-CH"), Icon: Users, tint: "#1D1D1D" },
+    { label: "Aktive Inserate", value: `${stats.active ?? 0}`, sub: `von ${stats.listings ?? 0}`, Icon: Package, tint: "#1D1D1D" },
+    { label: "Verkäufe", value: (stats.purchases ?? 0).toLocaleString("de-CH"), Icon: TrendingUp, tint: "#1D1D1D" },
     { feeToggle: true, label: "Gebühren", Icon: Receipt, tint: "#D9A005" },
     { label: "Meldungen", value: stats.reports ?? 0, Icon: Flag, tint: stats.reports > 0 ? "#C62828" : "#686E78", danger: stats.reports > 0 },
   ];

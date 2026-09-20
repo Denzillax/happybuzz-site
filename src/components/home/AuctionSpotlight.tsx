@@ -5,7 +5,7 @@ import { ListingCard } from '@/components/shared/ListingCard'
 import { SwipeRow } from '@/components/shared/SwipeRow'
 import { SectionHeader } from './SectionHeader'
 
-const MONO = "'Manrope', sans-serif"
+const MONO = "'Instrument Sans', 'Manrope', sans-serif"
 const INK = '#191615'
 const HONEY = '#F4C03F'
 

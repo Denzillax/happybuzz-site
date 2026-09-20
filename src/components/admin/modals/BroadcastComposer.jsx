@@ -18,7 +18,7 @@ export function BroadcastForm({ admin, embedded = false }) {
               <button key={k} onClick={() => setBcSegment(k)} style={{ fontSize: 11, fontWeight: bcSegment === k ? 700 : 500, padding: "5px 13px", borderRadius: 999, border: "none", cursor: "pointer", fontFamily: fonts.body, background: bcSegment === k ? colors.dark : "transparent", color: bcSegment === k ? "#fff" : colors.muted }}>{l}</button>
             ))}
           </div>
-          <span style={{ fontSize: 11, color: "#0B5E5C", fontWeight: 600 }}>geht an {bcEffectiveTargets.length} Nutzer{bcMode === "newsletter" && bcEffectiveTargets.length < bcTargets.length ? ` (${bcTargets.length - bcEffectiveTargets.length} ohne Newsletter-Erlaubnis übersprungen)` : ""}</span>
+          <span style={{ fontSize: 11, color: "#1D1D1D", fontWeight: 600 }}>geht an {bcEffectiveTargets.length} Nutzer{bcMode === "newsletter" && bcEffectiveTargets.length < bcTargets.length ? ` (${bcTargets.length - bcEffectiveTargets.length} ohne Newsletter-Erlaubnis übersprungen)` : ""}</span>
         </div>
         {bcSegment === "selected" && (
           <div style={{ marginTop: 8 }}>
@@ -75,7 +75,7 @@ export function BroadcastForm({ admin, embedded = false }) {
         <input value={bcLink} onChange={e => setBcLink(e.target.value)} placeholder="/listings/new" style={bcInput} />
       </div>
       <div style={{ border: "1px dashed #cfd8d8", borderRadius: 12, padding: "11px 12px", background: "#F7FBFB" }}>
-        <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#0B5E5C", marginBottom: 7 }}>Vorschau in der Glocke</div>
+        <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: "#1D1D1D", marginBottom: 7 }}>Vorschau in der Glocke</div>
         <div style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
           <div style={{ width: 30, height: 30, borderRadius: 12, background: colors.yellowSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Megaphone size={15} color={colors.dark} /></div>
           <div>

@@ -13,10 +13,10 @@ const INK = "#191615";
 const PAPER = "#FFFFFF";
 const SAND = "#F5F6F8";
 const HONEY = "#F4C03F";
-const PETROL = "#0B5E5C";
+const PETROL = "#1D1D1D";
 const MUTED = "rgba(20,17,13,0.55)";
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const MONO = "'Manrope', sans-serif";
+const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 const chf = (n) => Math.round(Number(n || 0)).toLocaleString("de-CH");
 

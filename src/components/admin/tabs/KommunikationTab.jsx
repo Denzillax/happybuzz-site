@@ -13,7 +13,7 @@ import { bcInput } from "@/components/admin/adminStyles";
 import { BroadcastForm } from "@/components/admin/modals/BroadcastComposer";
 import { TickerBar } from "@/components/layout/Ticker";
 
-const MONO = "'Manrope', sans-serif";
+const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const INK = "#191615";
 
 // Mono-Label ueber dem Feld — gleiche Optik wie im Inserat-Formular (Katalog-Stil)
@@ -122,7 +122,7 @@ export function KommunikationTab({ admin }) {
   // Aktuelle Zustaende laden (sonst zeigen die Formulare nur Defaults)
   useEffect(() => {
     getAnnouncement().then(row => {
-      if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#007C7C", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
+      if (row) setAnn({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#1D1D1D", text_color: row.text_color || "#FFFFFF", effect: row.effect || "none" });
     });
     getTicker().then(row => {
       if (row) setTicker({ enabled: !!row.enabled, message: row.message || "", bg_color: row.bg_color || "#191615", text_color: row.text_color || "#F4C03F", placement: row.placement || "home", speed: row.speed || "normal" });
@@ -171,7 +171,7 @@ export function KommunikationTab({ admin }) {
             <Field label="Status">
               <div style={{ display: "flex", alignItems: "center", gap: 10, height: 38 }}>
                 <Toggle on={ann.enabled} onChange={() => setAnn({ ...ann, enabled: !ann.enabled })} />
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: ann.enabled ? "#0B5E5C" : colors.muted }}>{ann.enabled ? "Für alle sichtbar" : "Aus"}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: ann.enabled ? "#1D1D1D" : colors.muted }}>{ann.enabled ? "Für alle sichtbar" : "Aus"}</span>
               </div>
             </Field>
             <Field label="Text" grow>
@@ -206,7 +206,7 @@ export function KommunikationTab({ admin }) {
             <Field label="Status">
               <div style={{ display: "flex", alignItems: "center", gap: 10, height: 38 }}>
                 <Toggle on={ticker.enabled} onChange={() => setTicker({ ...ticker, enabled: !ticker.enabled })} />
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: ticker.enabled ? "#0B5E5C" : colors.muted }}>{ticker.enabled ? "Für alle sichtbar" : "Aus"}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: ticker.enabled ? "#1D1D1D" : colors.muted }}>{ticker.enabled ? "Für alle sichtbar" : "Aus"}</span>
               </div>
             </Field>
             <Field label="Text" grow>
@@ -278,7 +278,7 @@ export function KommunikationTab({ admin }) {
                     ].filter(Boolean).join(" · ");
                 return (
                   <div key={i} style={{ display: "grid", gridTemplateColumns: "58px 130px 1fr", columnGap: 10, alignItems: "start", padding: "8px 0", borderBottom: i < histRows.length - 1 ? "1px solid rgba(20,17,13,.08)" : "none", fontSize: 12.5 }}>
-                    <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 0", textAlign: "center", background: art === "RUF" ? "#007C7C" : colors.yellow, color: art === "RUF" ? "#fff" : colors.dark }}>{art}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: ".06em", padding: "2px 0", textAlign: "center", background: art === "RUF" ? "#1D1D1D" : colors.yellow, color: art === "RUF" ? "#fff" : colors.dark }}>{art}</span>
                     <span style={{ color: colors.muted, fontFamily: MONO, fontSize: 11 }}>{new Date(h.created_at).toLocaleString("de-CH", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })}</span>
                     <span style={{ minWidth: 0 }}>
                       <b>{h.action === "broadcast" ? h.target_label : h.action === "ticker" ? "Laufschrift geändert" : "Balken geändert"}</b>
