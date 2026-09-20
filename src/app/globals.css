@@ -2344,12 +2344,10 @@ body:has(.mk) { background: #fff; }
 .bn-reihe { display: flex; align-items: center; justify-content: space-around; max-width: 480px; margin: 0 auto; height: 60px; }
 .bn .bn-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; padding: 4px 6px; border: none; background: none; color: var(--mk-ink); font: inherit; font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px !important; }
 .bn-icon { width: 44px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 999px; transition: background .2s ease, border-color .2s ease; }
-/* Aktiv (Denis 20.09.2026: die Mint-Pille um das Profilbild sah schlecht aus). Keine Fläche mehr hinter dem Symbol.
-   Der aktive Reiter ist voll deckend, fett beschriftet und trägt oben einen kurzen Ink-Strich, wie der Unterstrich der
-   Reiter (bd-reiter). Das Profilbild füllt sich mit Ink. */
-.bn-tab { position: relative; }
-.bn-tab[aria-current=page]::before { content: ""; position: absolute; top: -7px; left: 50%; width: 22px; height: 3px; margin-left: -11px; border-radius: 0 0 3px 3px; background: var(--mk-ink); }
-.bn-tab[aria-current=page] { font-weight: 700; }
+/* Aktiv (Denis 20.09.2026): erst fiel die Mint-Pille um das Symbol durch, dann der Ink-Strich oben. Jetzt trägt der ganze
+   Reiter, Symbol und Wort zusammen, eine weiche Lavendel-Kachel ohne Rand. Lavendel ist auch die Farbe für Hover und
+   für den gewählten Punkt im Header. Das Profilbild füllt sich mit Ink. */
+.bn .bn-tab[aria-current=page] { background: var(--mk-lavendel); font-weight: 700; }
 .bn-tab[aria-current=page] .bn-initialen { background: var(--mk-ink); color: #fff; }
 .bn-tab:not([aria-current=page]) { opacity: .72; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
