@@ -2481,7 +2481,9 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 .lf-stufe-marke { position: absolute; top: -10px; left: 18px; padding: 2px 9px 3px; border-radius: 999px; background: #1D1D1D; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 .lf-stufe-projekt { grid-column: 2; grid-row: 4; justify-self: start; margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; line-height: 1.3; }
 .lf-stufe .lf-stufe-projekt strong { grid-column: auto; grid-row: auto; font-size: inherit; font-weight: 600; letter-spacing: 0; }
-.lf-stufe.is-active .lf-stufe-haken { grid-row: 1 / span 4; }
+.lf-stufe .lf-stufe-haken { grid-row: 1 / span 4; }
+.lf-stufe:not(.is-active):not(:hover) .lf-stufe-projekt { background: #F5F6F8; }
+.lf-stufe-hinweis { margin: 14px 0 0; padding: 12px 16px; border: 1px solid #1D1D1D; border-radius: 14px; background: var(--mk-rose); font-size: 14.5px; line-height: 1.45; }
 @media (max-width: 768px) {
   .lf-stufe.bee-tier-card { grid-template-columns: 62px minmax(0, 1fr) 24px; column-gap: 12px; padding: 14px 14px 17px !important; }
   .lf-stufe-prozent { font-size: 26px; } .lf-stufe-prozent small { font-size: 13px; }

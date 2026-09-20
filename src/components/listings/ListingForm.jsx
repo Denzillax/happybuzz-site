@@ -558,6 +558,11 @@ export default function ListingForm({
   };
 
   // ── Fee select ─────────────────────────────────────────────
+  // Bee-Impact-Anzeige: Preis dieses Inserats (bei Auktion der Startpreis, bei Miete und Service der Mietpreis), 0 = noch leer
+  const beePreis = parseFloat((form.listing_type === "auction" ? form.start_price : (form.listing_type === "rent" || form.listing_type === "service") ? form.rent_price : form.price) || 0) || 0;
+  // Betrag für den Bienenschutz bei pct Prozent: mit Preis für dieses Inserat, sonst für einen Verkauf von CHF 100
+  const beeBetrag = (pct) => calcFee(beePreis > 0 ? beePreis : 100, pct) * BEE_IMPACT_RATE;
+
   const selectFee = (pct, tierName) => {
     const tier = tierName || FEE_TIERS.find((t) => t.pct === parseInt(pct))?.tier || DEFAULT_FEE_TIER;
     set("fee_percentage", parseInt(pct));
@@ -2226,9 +2231,13 @@ export default function ListingForm({
           <div style={gesperrtStyle}>
           {/* Meeko (Denis 20.09.2026): jede Stufe ist eine Kachel in ihrer eigenen Pastellfarbe, von kühl (wenig) nach warm
               (viel). Die gewählte trägt den Ink-Ring und den Haken. Das geförderte Projekt der gewählten Stufe steht darunter. */}
+          {/* Was jede Stufe bewirkt, steht von Anfang an in jeder Zeile (Denis 20.09.2026): der Betrag für den Bienenschutz
+              und das geförderte Projekt. Mit Preis als Frankenbetrag für dieses Inserat, ohne Preis pro CHF 100. Wer unter den
+              Standard geht, sieht darunter den Unterschied in Franken. Die Zahlen rechnen calcFee und BEE_IMPACT_RATE. */}
           <div className="lf-stufen" role="radiogroup" aria-label="Bee-Impact Stufe">
           {BEE_STUFEN.map(({ tier, pct, impact, recommended, perks, farbe, project }) => {
             const active = form.fee_tier === tier;
+            const bienen = beeBetrag(pct);
             return (
               <button key={tier} type="button" role="radio" aria-checked={active} onClick={() => selectFee(pct, tier)}
                 className={`bee-tier-card lf-stufe eckig kein-akzent mk-${farbe}` + (active ? " is-active" : "")}>
@@ -2243,13 +2252,21 @@ export default function ListingForm({
                 <strong>{beeTexts[tier]}</strong>
                 <span className="lf-stufe-text">{BEE_FEE_SUBTITLES[tier]}</span>
                 <span className="lf-stufe-vorteil">{perks}</span>
-                {/* Das geförderte Projekt steht in der gewählten Zeile selbst (Denis 20.09.2026) */}
-                {active && <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span>Dein Beitrag geht an: <strong>{project}</strong></span></span>}
+                <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span><strong>CHF {bienen.toFixed(2)}</strong>{beePreis > 0 ? "" : " pro CHF 100"} für den Bienenschutz: {project}</span></span>
                 {recommended && <span className="lf-stufe-marke">Empfohlen</span>}
               </button>
             );
           })}
           </div>
+          {(() => {
+            const gewaehlt = BEE_STUFEN.find((x) => x.tier === form.fee_tier);
+            if (!gewaehlt || gewaehlt.pct >= DEFAULT_FEE_PERCENT || (beePreis > 0 && isFeeFree(beePreis))) return null;
+            return (
+              <p className="lf-stufe-hinweis" role="status">
+                Mit {gewaehlt.pct} % gehen <strong>CHF {beeBetrag(gewaehlt.pct).toFixed(2)}</strong>{beePreis > 0 ? "" : " pro CHF 100"} an den Bienenschutz. Beim Standard von {DEFAULT_FEE_PERCENT} % wären es <strong>CHF {beeBetrag(DEFAULT_FEE_PERCENT).toFixed(2)}</strong>.
+              </p>
+            );
+          })()}
           </div>
           {/* Cost breakdown */}
           {form.fee_percentage > 0 && parseFloat(form.price || 0) > 0 && (() => {
