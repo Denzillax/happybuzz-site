@@ -44,17 +44,42 @@ plus Miete/Service in einem Produkt abdeckt. Siehe auch Fee-Model unter Architek
 
 ## Brand & Design
 
+### Design: Meeko (seit 20.09.2026)
+Vorbild ist die Framer-Vorlage Meeko. Formensprache: 1 px Ink-Rand statt Schatten, Pastellflächen, grosse Rundungen,
+leichte grosse Titel. Rückweg zum alten Klar-Look: Git-Tag `design-alt-2026-09`.
+Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht selbst).
+
 ### Farben
-- Yellow: `#F4C03F`
-- Dark: `#191615`
-- Flächen: `#F5F6F8` (neutral hell), Chips `#F1F3F5`, Rand `#E5E8EC`, Nebentext `#5B626C`. Seit 19.09.2026 KEIN Cream, Sand oder Beige mehr (war Denis zu grau und sandig). Hero-Band `#E9F6F5`. Vollständige Liste: Kommentar FARBFAMILIE in `src/app/globals.css`
-- Teal: `#007C7C` (Buttons, aktive States). Seit 19.09.2026 dunkler: `#0E9493` hatte als Schrift und mit weisser Schrift darauf nur Kontrast 3.7
-- Green: `#50804F` (seit 19.09.2026, vorher `#5B8C5A` mit Kontrast 3.9)
+- Ink `#1D1D1D`: Schrift, Ränder (`1px solid`), dunkler Hauptknopf. Ersetzt Teal (`#007C7C`) und das alte Dark `#191615`.
+- Pastelle (Variablen `--mk-*` auf `:root` in `globals.css`): Lavendel `#E3E3FF`, Himmel `#E3F2FF`, Rosa `#FFE3FB`,
+  Mint `#DBF5F0`, Rosé `#FBEBEA`, Butter `#FFE7A9`. Helles Lavendel `#F3F3FF` ersetzt die grauen Flächen.
+- Jedes Format hat seine Pastelltafel (`TYP_PASTELL` in `src/lib/constants.js`): Festpreis Rosé, Auktion Lavendel,
+  Miete Himmel, Gratis Butter, Service Rosa. Mint gehört dem Hero (`--mk-hero`) und dem App-Icon.
+- Gewählt/eingeschaltet = Mint, im Inserieren-Formular die Farbe des gewählten Formats (`--lf-akzent`).
+- Hover: Schrift bleibt Ink, dahinter eine Lavendel-Fläche. KEINE Butter-Kachel als Hover (Denis lehnte sie ab).
+- Das alte Gelb `#F4C03F` lebt nur noch in Bewertungssternen, Status "wartet" und den Hive-Spielen. Als Fläche: Butter.
+- KEIN Grau, KEIN Cream/Sand/Beige, KEIN Teal, keine Schlagschatten auf Karten.
+- Green `#50804F` bleibt für Bienenschutz und Erfolg.
+
+### Formen
+- Karten und Boxen: Rundung 20 (grosse Abschnittskarten 28), `1px solid #1D1D1D`.
+- Knöpfe: 10 px Ecken oder Pille, eingedrückter Schatten unten (`inset 0 -4px 0 rgba(29,29,29,.14)`), Hauptknopf dunkel.
+- Inseratkarte (`ListingCard`): Foto liegt mit eigenem Ink-Rand auf der Pastelltafel des Formats. Kein zweiter Rahmen darum.
+- Favoriten-Herz ist app-weit das um 90 Grad gedrehte B (`BLogo herz`), gesetzt: Himbeer `#C2255C` auf Rosa.
+- Abstände im Formular: 24 px zwischen Karten, 18 px zwischen den Teilen einer Karte (CSS `.lf-section`).
+- Logo: `BLogo` (kacheliges B, ein einziger Pfad) plus Wortmarke "beedaro" in Sora 700, Komponente `Logo.tsx`.
+  Favicon und App-Icon: Ink-B auf Mint.
 
 ### Fonts
-- Headlines: General Sans (Fontshare, via `<link>` in layout.tsx)
-- Body: Manrope (Google Fonts, via `<link>` in layout.tsx)
+- Ganze Seite: Instrument Sans (Google Fonts, via `<link>` in layout.tsx). Wortmarke im Logo: Sora 700.
+- General Sans und Manrope sind nur noch Rückfall in den Schriftstapeln.
 - NICHT `@import` in CSS verwenden (PostCSS/Tailwind strippt es)
+
+### Gemeinsame Stilquellen (dort ändern, nie lokal kopieren)
+- `src/lib/theme.js` (colors, radius, shadows), `src/lib/katalog.js` (K, card, input, btnPrimary), `src/lib/constants.js`
+  (TYP_PASTELL, TYP_LABEL). Viele Seiten haben zusätzlich eine lokale Palette `K` oder Konstanten `SAND`/`INK`/`HONEY`.
+- Header `hd-*`, Fuss `ft-*`, Bottom-Nav `bn-*`, Formular `lf-*`, Meeko-Bausteine `mk-*` stehen in `globals.css`.
+- Achtung: `ListingForm.jsx` hat ein lokales `Check` (Kästchen-Bauteil), nicht das Lucide-Symbol.
 
 ### Tonalität
 Modern, direkt, trockener Humor, Swiss-clean. NICHT süss/honig-lastig/öko-romantisch.
@@ -84,7 +109,7 @@ src/
 │       └── favorites/page.jsx
 ├── components/
 │   ├── layout/Header.tsx, Footer.tsx, BottomNav.tsx, FloatingButton.tsx
-│   ├── shared/Logo.tsx, ListingCard.jsx, BeeIcon.jsx
+│   ├── shared/Logo.tsx, BLogo.jsx, ListingCard.jsx, BeeIcon.jsx
 │   ├── listings/ListingForm.jsx, FeeModel.jsx
 │   ├── home/Hero.tsx, Categories.tsx, NewListings.tsx, PopularListings.tsx
 │   └── order/ServiceInvoiceEditor.jsx, OrderTimeline.jsx, RatingSection.jsx
