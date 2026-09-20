@@ -247,7 +247,7 @@ export function ListingCard(props) {
               {gesenkt ? (
                 <>
                   <span style={{ fontSize: 12, color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>{chf(gesenkt.alt)}</span>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: "#3D6B3C", background: "#DBF5F0", padding: "1px 7px", borderRadius: 999 }}>-{gesenkt.prozent} %</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: "#3D6B3C", background: "#CEF6E8", padding: "1px 7px", borderRadius: 999 }}>-{gesenkt.prozent} %</span>
                 </>
               ) : (
                 <span style={{ fontSize: 12, color: colors.muted }}>({listing.is_negotiable ? "Verhandelbar" : "Festpreis"})</span>

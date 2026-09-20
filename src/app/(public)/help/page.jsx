@@ -12,7 +12,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#1D1D1D";
-const SAND = "#E3F2FF";
+const SAND = "#D3F0FF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";

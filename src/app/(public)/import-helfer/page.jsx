@@ -64,7 +64,7 @@ export default function ImportHelferPage() {
             title="In die Lesezeichenleiste ziehen, nicht klicken"
             style={{
               display: "inline-block", padding: "12px 22px", borderRadius: 20,
-              border: "1px solid #1D1D1D", background: "#FFE7A9", color: INK,
+              border: "1px solid #1D1D1D", background: "#FEE8B0", color: INK,
               fontFamily: BODY, fontSize: 14, fontWeight: 800, textDecoration: "none",
               cursor: "grab", boxShadow: "none",
             }}

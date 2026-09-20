@@ -32,7 +32,7 @@ export function BannedGate() {
           Dein Konto wurde gesperrt. Wiederholtes Austauschen von Kontaktdaten, um Geschäfte ausserhalb von BEEDARO abzuschliessen, verstösst gegen die Nutzungsbedingungen. Bei Fragen: support@beedaro.ch
         </p>
         <button onClick={() => supabase.auth.signOut().then(() => { window.location.href = "/login"; })}
-          style={{ padding: "11px 24px", borderRadius: 999, border: "none", background: "#FFE7A9", color: "#1D1D1D", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          style={{ padding: "11px 24px", borderRadius: 999, border: "none", background: "#FEE8B0", color: "#1D1D1D", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
           Abmelden
         </button>
       </div>

@@ -79,7 +79,7 @@ export default function SalesPage() {
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Verkäufe</p>
             <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Stell dein erstes Inserat ein. Gebühr ab 3%, ein Teil geht in den Naturschutz.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#FEE8B0", color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
               Erstes Inserat erstellen
             </Link>
           </div>
@@ -180,7 +180,7 @@ export default function SalesPage() {
               <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: colors.muted, fontWeight: 700 }}>Umsatz (nach Gebühren)</p>
               <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.ink }}>CHF {fmtCHF(totalRevenue)}</p>
             </div>
-            <div style={{ flex: 1, minWidth: 200, background: "#DBF5F0", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ flex: 1, minWidth: 200, background: "#CEF6E8", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
                 <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Bee-Impact</p>
                 <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>

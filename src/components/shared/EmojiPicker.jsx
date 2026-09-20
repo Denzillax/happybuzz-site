@@ -35,7 +35,7 @@ export default function EmojiPicker({ value, onChange, inputRef, size = 38 }) {
   return (
     <div ref={ref} style={{ position: "relative", flexShrink: 0 }}>
       <button type="button" onClick={() => setOffen(o => !o)} title="Emoji einfügen" aria-label="Emoji einfügen" aria-expanded={offen}
-        style={{ width: size, height: size, borderRadius: "50%", border: `1.5px solid ${offen ? colors.teal : colors.border}`, background: offen ? "#DBF5F0" : colors.cream, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        style={{ width: size, height: size, borderRadius: "50%", border: `1.5px solid ${offen ? colors.teal : colors.border}`, background: offen ? "#CEF6E8" : colors.cream, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <Smile size={18} color={offen ? colors.teal : colors.muted} />
       </button>
       {offen && (

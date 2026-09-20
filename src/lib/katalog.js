@@ -14,7 +14,7 @@ export const K = {
   ink: "#1D1D1D",
   sand: "#F3F3FF",
   paper: "#FFFFFF",
-  honey: "#FFE7A9", // Meeko: Butter. Das alte Gelb lebt nur noch in Sternen und Spielen
+  honey: "#FEE8B0", // Meeko: Butter. Das alte Gelb lebt nur noch in Sternen und Spielen
   petrol: "#1D1D1D",
   moss: "#50804F",
   muted: "rgba(29,29,29,0.6)",
@@ -73,7 +73,7 @@ export const btnPrimary = {
   padding: "13px 16px",
   borderRadius: 10,
   border: "1px solid #1D1D1D",
-  background: "#DBF5F0", // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026)
+  background: "#CEF6E8", // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026)
   color: "#1D1D1D",
   fontSize: 16,
   fontWeight: 600,

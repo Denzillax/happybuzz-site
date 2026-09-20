@@ -187,7 +187,7 @@ export default function FavoritesPage() {
             </>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#1D1D1D] bg-[#FFE3FB] mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#1D1D1D] bg-[#FFDFF9] mb-6">
                 <span style={{ display: "inline-flex", color: "#C2255C" }}><BLogo herz size={34} title="" /></span>
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Favoriten'}</h2>
@@ -212,7 +212,7 @@ export default function FavoritesPage() {
               {filteredSellers.map(s => (
                 <div key={s.seller_id} className="bg-white rounded-[20px] border border-[#1D1D1D] p-6 flex items-center gap-4">
                   <Link href={`/user/${s.seller_id}`} className="flex items-center gap-4 flex-1 min-w-0 no-underline">
-                    <div className="w-14 h-14 rounded-full border border-[#1D1D1D] bg-[#FFE7A9] flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-14 h-14 rounded-full border border-[#1D1D1D] bg-[#FEE8B0] flex items-center justify-center overflow-hidden flex-shrink-0">
                       {s.seller?.avatar_url
                         ? <img src={s.seller.avatar_url} alt="" className="w-full h-full object-cover" />
                         : <User size={24} className="text-[#1D1D1D]" />
@@ -231,7 +231,7 @@ export default function FavoritesPage() {
             </div>
           ) : (
             <div className="text-center py-20">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#1D1D1D] bg-[#FFE3FB] mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[#1D1D1D] bg-[#FFDFF9] mb-6">
                 <User size={36} className="text-[#1D1D1D]" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Verkäufer gemerkt'}</h2>

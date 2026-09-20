@@ -51,8 +51,8 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
 
 ### Farben
 - Ink `#1D1D1D`: Schrift, Ränder (`1px solid`), dunkler Hauptknopf. Ersetzt Teal (`#007C7C`) und das alte Dark `#191615`.
-- Pastelle (Variablen `--mk-*` auf `:root` in `globals.css`): Lavendel `#E3E3FF`, Himmel `#E3F2FF`, Rosa `#FFE3FB`,
-  Mint `#DBF5F0`, Rosé `#FBEBEA`, Butter `#FFE7A9`. Helles Lavendel `#F3F3FF` ersetzt die grauen Flächen.
+- Pastelle (Variablen `--mk-*` auf `:root` in `globals.css`): Lavendel `#E3E3FF`, Himmel `#D3F0FF`, Rosa `#FFDFF9`,
+  Mint `#CEF6E8`, Rosé `#FFE2DE`, Butter `#FEE8B0`. Helles Lavendel `#F3F3FF` ersetzt die grauen Flächen.
 - Jedes Format hat seine Pastelltafel (`TYP_PASTELL` in `src/lib/constants.js`): Festpreis Rosé, Auktion Lavendel,
   Miete Himmel, Gratis Butter, Service Rosa. Mint gehört dem Hero (`--mk-hero`) und dem App-Icon.
 - Gewählt/eingeschaltet = Mint, im Inserieren-Formular die Farbe des gewählten Formats (`--lf-akzent`).

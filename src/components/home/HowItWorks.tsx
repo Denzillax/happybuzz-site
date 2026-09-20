@@ -28,7 +28,7 @@ const MONO = "'Instrument Sans', 'Manrope', sans-serif"
 const INK = '#1D1D1D'
 const SAND = '#E3E3FF'
 const PAPER = '#FFFFFF'
-const HONEY = '#FFE7A9'
+const HONEY = '#FEE8B0'
 const PETROL = '#1D1D1D'
 
 export function HowItWorks() {

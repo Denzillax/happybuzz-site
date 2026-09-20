@@ -3,7 +3,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 import { fonts } from "@/lib/theme";
 
 const HONEY = "#F4C03F";
-const HONEY_SOFT = "#FFE7A9";
+const HONEY_SOFT = "#FEE8B0";
 const INK = "#1D1D1D";
 
 // Öffentliches "Gründungsmitglied"-Abzeichen.

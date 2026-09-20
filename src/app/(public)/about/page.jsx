@@ -5,7 +5,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#1D1D1D";
-const SAND = "#FBEBEA";
+const SAND = "#FFE2DE";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#1D1D1D";
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <Eyebrow>Über uns</Eyebrow>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             Der Katalog der{" "}
-            <span style={{ background: "#FFE7A9", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>zweiten Leben</span>
+            <span style={{ background: "#FEE8B0", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>zweiten Leben</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, lineHeight: 1.6 }}>
             Der Schweizer Marktplatz für Dinge mit Geschichte. Kaufen, verkaufen, mieten, buchen, verschenken. Und dabei Gutes tun.
@@ -81,7 +81,7 @@ export default function AboutPage() {
             <div style={{ position: "relative", background: INK, color: PAPER, borderRadius: 20, padding: "30px 28px", transform: "rotate(-1.5deg)", border: "1px solid #1D1D1D" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: MONO, fontSize: 11, letterSpacing: ".08em", color: "rgba(255,255,255,0.7)", borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: 10, marginBottom: 16 }}>
                 <span>№ 0001</span>
-                <span style={{ background: "#FFE7A9", color: INK, padding: "3px 8px", borderRadius: 20, fontWeight: 700, fontSize: 10 }}>MANIFEST</span>
+                <span style={{ background: "#FEE8B0", color: INK, padding: "3px 8px", borderRadius: 20, fontWeight: 700, fontSize: 10 }}>MANIFEST</span>
               </div>
               <p style={{ fontFamily: HEAD, fontSize: "clamp(20px, 2.6vw, 26px)", fontWeight: 600, lineHeight: 1.25, margin: 0, letterSpacing: "-0.01em" }}>
                 Dein Keller hat Inventar. Wir haben Käufer.
@@ -147,7 +147,7 @@ export default function AboutPage() {
           </p>
           <Link href="/impact" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "13px 26px", borderRadius: 999, background: "#FFE7A9",
+            padding: "13px 26px", borderRadius: 999, background: "#FEE8B0",
             color: INK, fontSize: 14.5, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
           }}>
             Mehr erfahren <ArrowRight size={16} />
@@ -162,7 +162,7 @@ export default function AboutPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, maxWidth: 640, margin: "0 auto" }}>
             <div style={{ textAlign: "center", padding: "24px 18px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D" }}>
-              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: "#FFE7A9", border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 22, fontWeight: 700, color: INK }}>DM</div>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", margin: "0 auto 12px", background: "#FEE8B0", border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: HEAD, fontSize: 22, fontWeight: 700, color: INK }}>DM</div>
               <h4 style={{ fontSize: 15, fontWeight: 700, fontFamily: HEAD, margin: "0 0 2px", color: INK }}>Denis Mihaljevic</h4>
               <p style={{ fontFamily: MONO, fontSize: 11, color: MUTED, margin: 0, letterSpacing: ".04em" }}>GRÜNDER & DESIGN</p>
             </div>

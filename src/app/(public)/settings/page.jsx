@@ -84,7 +84,7 @@ function PushDeviceBox({ showToast }) {
           Push auf diesem Gerät
         </span>
         {status === "on" && (
-          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: "#FFE7A9", border: "1px solid #1D1D1D", color: K.ink }}>AKTIV</span>
+          <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 1, padding: "2px 8px", background: "#FEE8B0", border: "1px solid #1D1D1D", color: K.ink }}>AKTIV</span>
         )}
       </div>
       <div style={{ fontSize: 12.5, color: C.muted || "#5B626C", lineHeight: 1.6, marginBottom: (status === "on" || status === "off") ? 10 : 0 }}>
@@ -416,7 +416,7 @@ export default function SettingsPage() {
               <div style={{
                 position: "absolute", bottom: -4, right: -4,
                 width: 26, height: 26, borderRadius: 20,
-                background: "#FFE7A9", border: "1px solid #1D1D1D",
+                background: "#FEE8B0", border: "1px solid #1D1D1D",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}><Camera size={13} /></div>
               <input
@@ -475,7 +475,7 @@ export default function SettingsPage() {
                     style={{
                       flex: 1, padding: "10px 12px", borderRadius: 20, cursor: "pointer",
                       border: "1px solid #1D1D1D",
-                      background: active ? "#FFE7A9" : "#fff",
+                      background: active ? "#FEE8B0" : "#fff",
                       color: K.ink,
                       fontWeight: 700, fontSize: 14, fontFamily: "'Instrument Sans', 'Manrope', sans-serif",
                     }}
@@ -589,7 +589,7 @@ export default function SettingsPage() {
   const VerifyTab = () => (
     <>
       {emailVerified && idVerified && (
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 20, background: "#DBF5F0", border: `1px solid ${K.moss}` }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 18px", marginBottom: 16, borderRadius: 20, background: "#CEF6E8", border: `1px solid ${K.moss}` }}>
           <BadgeCheck size={26} color={K.moss} strokeWidth={2.2} />
           <div>
             <div style={{ fontSize: 14, fontWeight: 800, color: K.moss, fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif" }}>Du bist verifizierter Verkäufer</div>
@@ -608,7 +608,7 @@ export default function SettingsPage() {
           {/* 1. E-Mail */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: emailVerified ? "#DBF5F0" : "#fff",
+            background: emailVerified ? "#CEF6E8" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:emailVerified ? C.green : K.sand, color: emailVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -626,7 +626,7 @@ export default function SettingsPage() {
                 await supabase.auth.resend({ type: "signup", email: profile?.email });
                 setEmailSending(false);
                 showToast("Bestätigungsmail gesendet");
-              }} style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
+              }} style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FEE8B0", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: emailSending ? 0.5 : 1 }}>
                 {emailSending ? "Sende..." : "Mail senden"}
               </button>
             )}
@@ -635,7 +635,7 @@ export default function SettingsPage() {
           {/* 2. Telefon */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: phoneVerified ? "#DBF5F0" : "#fff",
+            background: phoneVerified ? "#CEF6E8" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:phoneVerified ? C.green : K.sand, color: phoneVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -657,7 +657,7 @@ export default function SettingsPage() {
           {/* 3. Postadresse */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: addressVerified ? "#DBF5F0" : "#fff",
+            background: addressVerified ? "#CEF6E8" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
             <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background:addressVerified ? C.green : K.sand, color: addressVerified ? "#fff" : K.ink, flexShrink: 0 }}>
@@ -679,10 +679,10 @@ export default function SettingsPage() {
           {/* 4. Identität (ID) */}
           <div style={{
             display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 20,
-            background: idVerified ? "#DBF5F0" : profile?.id_document_url ? "#FFE7A9" : "#fff",
+            background: idVerified ? "#CEF6E8" : profile?.id_document_url ? "#FEE8B0" : "#fff",
             border: "1px solid #1D1D1D",
           }}>
-            <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? "#FFE7A9" : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 20, border: "1px solid #1D1D1D", display: "flex", alignItems: "center", justifyContent: "center", background: idVerified ? C.green : profile?.id_document_url ? "#FEE8B0" : K.sand, color: idVerified ? "#fff" : K.ink, flexShrink: 0 }}>
               {idVerified ? <Check size={18} /> : <Shield size={18} />}
             </div>
             <div style={{ flex: 1 }}>
@@ -694,9 +694,9 @@ export default function SettingsPage() {
             {idVerified ? (
               <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, background: K.moss, color: "#fff" }}>Verifiziert</span>
             ) : profile?.id_document_url ? (
-              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink }}>Wird geprüft</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", padding: "4px 9px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FEE8B0", color: K.ink }}>Wird geprüft</span>
             ) : (
-              <label style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
+              <label style={{ padding: "7px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FEE8B0", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif", opacity: idUploading ? 0.5 : 1 }}>
                 {idUploading ? "Lädt..." : "ID hochladen"}
                 <input type="file" accept="image/*,.pdf" style={{ display: "none" }} onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -788,7 +788,7 @@ export default function SettingsPage() {
           ) : (
             <span style={{
               fontSize: 9.5, fontWeight: 700, fontFamily: MONO, letterSpacing: ".08em", textTransform: "uppercase", color: K.ink,
-              background: "#FFE7A9", border: "1px solid #1D1D1D", padding: "4px 9px", borderRadius: 20,
+              background: "#FEE8B0", border: "1px solid #1D1D1D", padding: "4px 9px", borderRadius: 20,
               display: "inline-flex", alignItems: "center", gap: 4,
             }}><AlertTriangle size={10} /> Unvollständig</span>
           )
@@ -916,7 +916,7 @@ export default function SettingsPage() {
         {savedAddresses.map((addr, i) => (
           <div key={addr.id} style={{
             padding: 14, borderRadius: 20, border: "1px solid #1D1D1D",
-            marginBottom: 10, background: editAddrIdx === i ? "#DBF5F0" : "#fff",
+            marginBottom: 10, background: editAddrIdx === i ? "#CEF6E8" : "#fff",
           }}>
             {editAddrIdx === i ? (
               <>
@@ -970,7 +970,7 @@ export default function SettingsPage() {
                     setSavedAddresses(prev => prev.map((a, idx) => idx === i ? { ...a, ...newAddr } : a));
                     setEditAddrIdx(null); setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" }); setExtraAddrHits([]);
                     showToast("Adresse aktualisiert");
-                  }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Speichern</button>
+                  }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#FEE8B0", color: K.ink, fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Speichern</button>
                 </div>
               </>
             ) : (
@@ -1000,7 +1000,7 @@ export default function SettingsPage() {
 
         {/* Inline Add Form */}
         {showAddAddr && editAddrIdx === null ? (
-          <div style={{ padding: 16, borderRadius: 20, border: "1px solid #1D1D1D", background: "#FFE7A9", marginBottom: 10 }}>
+          <div style={{ padding: 16, borderRadius: 20, border: "1px solid #1D1D1D", background: "#FEE8B0", marginBottom: 10 }}>
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: C.dark }}>Neue Adresse</div>
             <Input label="Bezeichnung" value={newAddr.label} onChange={v => setNewAddr(p => ({ ...p, label: v }))} placeholder="z.B. Geschäft, Büro" />
             <Input label="Firma (optional)" value={newAddr.company} onChange={v => setNewAddr(p => ({ ...p, company: v }))} placeholder="Firma GmbH" />
@@ -1054,7 +1054,7 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FFE7A9" : "#F3F3FF", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FEE8B0" : "#F3F3FF", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (
@@ -1099,7 +1099,7 @@ export default function SettingsPage() {
       style={{
         width: 22, height: 22, borderRadius: 20, cursor: "pointer",
         border: "1px solid #1D1D1D",
-        background: checked ? (accent || "#FFE7A9") : "transparent",
+        background: checked ? (accent || "#FEE8B0") : "transparent",
         display: "flex", alignItems: "center", justifyContent: "center",
         transition: "all .15s",
       }}

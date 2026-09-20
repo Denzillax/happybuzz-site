@@ -71,7 +71,7 @@ function ServiceInvoiceEditor({ purchaseId, sellerId, feePercent = 5, onSubmitte
   if (saved) {
     return (
       <div style={{ textAlign: "center", padding: "32px 20px" }}>
-        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
+        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#CEF6E8", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
           <Send size={20} color={K.petrol} />
         </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: colors.dark, fontFamily: fonts.head }}>Rechnung gesendet</div>

@@ -9,7 +9,7 @@ import { SectionHeader } from './SectionHeader'
 const MUTED = '#5B626C'
 const YELLOW = '#F4C03F'
 const INK = '#1D1D1D'
-const SAND = '#E3F2FF'
+const SAND = '#D3F0FF'
 const PETROL = '#1D1D1D'
 
 const PERIOD = { hour: 'Std', day: 'Tag', week: 'Wo', month: 'Mt' }

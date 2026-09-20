@@ -10,7 +10,7 @@ import { FEE_FREE_BELOW } from '@/lib/constants'
 const BODY = fonts.body
 const INK = '#1D1D1D'
 const CHIP = '#FFFFFF'
-const HONEY = '#FFE7A9'
+const HONEY = '#FEE8B0'
 
 // Schnelleinstiege nach Preis und Anlass (19.09.2026, Anregung marko.ch). Sie stehen IN
 // der Kategorie-Reihe, nicht als eigene Reihe: eine zweite, kurze Reihe liess die rechte

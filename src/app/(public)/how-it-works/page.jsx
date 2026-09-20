@@ -99,7 +99,7 @@ export default function HowItWorksPage() {
           <Eyebrow>№ 00 · Handbuch</Eyebrow>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             So funktioniert{" "}
-            <span style={{ background: "#FFE7A9", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>BEEDARO</span>
+            <span style={{ background: "#FEE8B0", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>BEEDARO</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 520, margin: "0 auto", lineHeight: 1.6 }}>
             Kaufen, verkaufen, mieten, buchen, verschenken. Fünf Wege, ein Katalog.
@@ -168,7 +168,7 @@ export default function HowItWorksPage() {
               <div key={i} style={{
                 flex: "1 1 130px", padding: "16px 12px", textAlign: "center",
                 borderLeft: i ? `1px solid ${INK}1a` : "none",
-                background: r.isDefault ? "#DBF5F0" : "#fff",
+                background: r.isDefault ? "#CEF6E8" : "#fff",
               }}>
                 <div style={{ fontFamily: HEAD, fontSize: "clamp(24px, 3vw, 30px)", fontWeight: 700, color: INK, letterSpacing: "-0.01em" }}>{r.pct}</div>
                 <div style={{ fontSize: 13, fontWeight: 700, fontFamily: HEAD, marginTop: 2, color: INK }}>{r.label}</div>
@@ -202,7 +202,7 @@ export default function HowItWorksPage() {
           <p style={{ fontSize: 15, color: MUTED, marginBottom: 24 }}>Dein Keller hat Inventar. Wir haben Käufer.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/listings/new" className="bd-btn" style={{
-              padding: "14px 28px", borderRadius: 20, background: "#DBF5F0", color: "#1D1D1D",
+              padding: "14px 28px", borderRadius: 20, background: "#CEF6E8", color: "#1D1D1D",
               fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
               display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #1D1D1D",
             }}>

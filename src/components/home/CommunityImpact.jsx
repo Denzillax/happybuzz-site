@@ -11,8 +11,8 @@ import { nextMilestone } from "@/lib/impact";
 const MOSS = "#50804F"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
 const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
-const SAND = "#DBF5F0";
-const HONEY = "#FFE7A9";
+const SAND = "#CEF6E8";
+const HONEY = "#FEE8B0";
 const PETROL = "#1D1D1D";
 const MUTED = "rgba(29,29,29,0.55)";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -57,7 +57,7 @@ export function CommunityImpact() {
   return (
     <section style={{ maxWidth: 1280, margin: "0 auto", padding: "48px 24px 0" }}>
       {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
-      <div style={{ background: "#DBF5F0", borderRadius: 20, padding: "clamp(22px, 3.5vw, 36px)" }}>
+      <div style={{ background: "#CEF6E8", borderRadius: 20, padding: "clamp(22px, 3.5vw, 36px)" }}>
       <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
@@ -103,7 +103,7 @@ export function CommunityImpact() {
                 </div>
                 <div style={{ height: 10, borderRadius: 999, background: "#fff", marginTop: 10, overflow: "hidden", display: "flex" }}>
                   <div style={{ width: `${paidPct}%`, background: MOSS }} />
-                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#FFE7A9 5px,#FFE7A9 10px)" }} />
+                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#FEE8B0 5px,#FEE8B0 10px)" }} />
                 </div>
                 <p style={{ margin: "9px 0 0", fontSize: 12.5, color: MUTED }}>
                   {ms.reached

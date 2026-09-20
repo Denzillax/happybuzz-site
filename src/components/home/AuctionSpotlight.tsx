@@ -7,7 +7,7 @@ import { SectionHeader } from './SectionHeader'
 
 const MONO = "'Instrument Sans', 'Manrope', sans-serif"
 const INK = '#1D1D1D'
-const HONEY = '#FFE7A9'
+const HONEY = '#FEE8B0'
 
 // Laufende Auktionen mit tickendem Countdown: der Grund, heute wiederzukommen.
 // Erscheint nur, wenn tatsaechlich Auktionen laufen.

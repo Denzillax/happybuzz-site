@@ -104,27 +104,27 @@ export async function getInvoicesForSeller(sellerId) {
 
 // ─── Status-Konfiguration ────────────────────────────────────
 export const FEE_STATUS = {
-  open:            { color: "#8A5A00", bg: "#FFE7A9", label: "Offen" },
-  pending_payment: { color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" },
-  paid:            { color: "#3D6B3C", bg: "#DBF5F0", label: "Bezahlt" },
-  overdue:         { color: "#c62828", bg: "#FBEBEA", label: "Überfällig" },
+  open:            { color: "#8A5A00", bg: "#FEE8B0", label: "Offen" },
+  pending_payment: { color: "#1D1D1D", bg: "#D3F0FF", label: "Gemeldet" },
+  paid:            { color: "#3D6B3C", bg: "#CEF6E8", label: "Bezahlt" },
+  overdue:         { color: "#c62828", bg: "#FFE2DE", label: "Überfällig" },
 };
 
 export const LISTING_STATUS = {
-  active:        { color: "#3D6B3C", bg: "#DBF5F0", label: "Aktiv" },
+  active:        { color: "#3D6B3C", bg: "#CEF6E8", label: "Aktiv" },
   draft:         { color: "#5B626C",    bg: "#F3F3FF", label: "Entwurf" },
-  paused:        { color: "#8A5A00", bg: "#FFE7A9", label: "Pausiert" },
-  sold:          { color: "#1D1D1D", bg: "#E3F2FF", label: "Verkauft" },
-  rented:        { color: "#1D1D1D", bg: "#E3F2FF", label: "Vermietet" },
+  paused:        { color: "#8A5A00", bg: "#FEE8B0", label: "Pausiert" },
+  sold:          { color: "#1D1D1D", bg: "#D3F0FF", label: "Verkauft" },
+  rented:        { color: "#1D1D1D", bg: "#D3F0FF", label: "Vermietet" },
   inactive:      { color: "#5B626C",    bg: "#F3F3FF", label: "Inaktiv" },
-  pending_pause: { color: "#c62828", bg: "#FBEBEA", label: "Wird pausiert" },
+  pending_pause: { color: "#c62828", bg: "#FFE2DE", label: "Wird pausiert" },
 };
 
 export const ORDER_STATUS = {
-  confirmed:  { color: "#3D6B3C", bg: "#DBF5F0", label: "Bestätigt" },
-  cancelled:  { color: "#c62828", bg: "#FBEBEA", label: "Storniert" },
-  completed:  { color: "#1D1D1D", bg: "#E3F2FF", label: "Abgeschlossen" },
-  disputed:   { color: "#8A5A00", bg: "#FFE7A9", label: "Streitfall" },
+  confirmed:  { color: "#3D6B3C", bg: "#CEF6E8", label: "Bestätigt" },
+  cancelled:  { color: "#c62828", bg: "#FFE2DE", label: "Storniert" },
+  completed:  { color: "#1D1D1D", bg: "#D3F0FF", label: "Abgeschlossen" },
+  disputed:   { color: "#8A5A00", bg: "#FEE8B0", label: "Streitfall" },
   refunded:   { color: "#5B626C",    bg: "#F3F3FF", label: "Erstattet" },
 };
 

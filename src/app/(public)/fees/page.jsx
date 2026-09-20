@@ -79,7 +79,7 @@ export default function FeesPage() {
     setInvoices(prev => prev.map(i => i.id === invoiceId ? { ...i, status: "pending_payment" } : i));
   };
 
-  const sc = { open: { icon: Clock, color: "#8A5A00", bg: "#FFE7A9", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1D1D1D", bg: "#E3F2FF", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#3D6B3C", bg: "#DBF5F0", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FBEBEA", label: "Überfällig" } };
+  const sc = { open: { icon: Clock, color: "#8A5A00", bg: "#FEE8B0", label: "Offen" }, pending_payment: { icon: AlertCircle, color: "#1D1D1D", bg: "#D3F0FF", label: "Gemeldet" }, paid: { icon: CheckCircle, color: "#3D6B3C", bg: "#CEF6E8", label: "Bezahlt" }, overdue: { icon: AlertCircle, color: "#c62828", bg: "#FFE2DE", label: "Überfällig" } };
   // Zahlungsdaten IMMER live aus den Firmendaten (Admin -> Firma), nie hartkodiert
   const beedaroIban = company?.iban ? formatIban(company.iban) : "Wird hinterlegt";
   const companyAddress = company
@@ -103,7 +103,7 @@ export default function FeesPage() {
       </thead>
       <tbody>
         {fees.map(f => {
-          const st = f.status === "paid" ? { color: "#3D6B3C", bg: "#DBF5F0", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#8A5A00", bg: "#FFE7A9", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
+          const st = f.status === "paid" ? { color: "#3D6B3C", bg: "#CEF6E8", label: "Bezahlt" } : f.status === "invoiced" ? { color: "#8A5A00", bg: "#FEE8B0", label: "Rechnung" } : { color: colors.muted, bg: colors.warm, label: "Offen" };
           return (
             <tr key={f.id} style={{ borderBottom: `1px solid ${colors.borderLt}` }}>
               <td style={{ ...td }}>{fmtDate(f.created_at)}</td>
@@ -131,7 +131,7 @@ export default function FeesPage() {
 
         {/* Warn-Banner für überfällige Rechnungen */}
         {invoices.some(i => i.status === "overdue" && i.reminder_level >= 3 && i.listings_paused) && (
-          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FBEBEA", border: "1.5px solid #FBEBEA", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFE2DE", border: "1.5px solid #FFE2DE", display: "flex", alignItems: "center", gap: 10 }}>
             <AlertCircle size={20} color="#c62828" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#c62828" }}>Inserate pausiert: offene Rechnung begleichen</p>
@@ -149,7 +149,7 @@ export default function FeesPage() {
           </div>
         )}
         {invoices.some(i => i.status === "overdue" && i.reminder_level === 1) && (
-          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FFE7A9", border: "1.5px solid #FFCC80", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ padding: "14px 20px", marginBottom: 16, borderRadius: radius.lg, background: "#FEE8B0", border: "1.5px solid #FFCC80", display: "flex", alignItems: "center", gap: 10 }}>
             <Clock size={20} color="#8A5A00" />
             <div>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#8A5A00" }}>Erinnerung: Gebührenrechnung überfällig</p>

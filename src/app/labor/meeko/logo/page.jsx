@@ -21,8 +21,8 @@ const VARIANTEN = [
 // Icon-Vorschläge für Favicon und App-Icon: Fläche plus B. Das B füllt 58 % der Kachel, damit es auch im Kreis-Zuschnitt
 // von Android ganz bleibt (sichere Zone 80 %).
 const ICONS = [
-  { nr: "A", name: "Ink auf Butter", bg: "#FFE7A9", fg: "#1D1D1D" },
-  { nr: "B", name: "Butter auf Ink", bg: "#1D1D1D", fg: "#FFE7A9" },
+  { nr: "A", name: "Ink auf Butter", bg: "#FEE8B0", fg: "#1D1D1D" },
+  { nr: "B", name: "Butter auf Ink", bg: "#1D1D1D", fg: "#FEE8B0" },
   { nr: "C", name: "Weiss auf Ink", bg: "#1D1D1D", fg: "#FFFFFF" },
   { nr: "D", name: "Zitrone auf Ink (Farbe aus deiner Logo-Datei)", bg: "#1D1D1D", fg: "#FBF062" },
   { nr: "E", name: "Ink auf Lavendel", bg: "#E3E3FF", fg: "#1D1D1D" },
@@ -58,10 +58,10 @@ function FarbB({ size, b, k }) {
     </svg>
   );
 }
-const INK = "#1D1D1D", BUTTER = "#FFE7A9";
+const INK = "#1D1D1D", BUTTER = "#FEE8B0";
 // kräftige Geschwister der Meeko-Pastelltöne: die Pastelle selbst sind auf Weiss zu blass für ein Zeichen
 const KRAFT = ["#FFC94D", "#9B8CFF", "#FF8FD8", "#5DB8FF", "#4FD1B5", "#FF8A7A"];
-const PASTELL6 = ["#FFE7A9", "#E3E3FF", "#FFE3FB", "#E3F2FF", "#DBF5F0", "#FBEBEA"];
+const PASTELL6 = ["#FEE8B0", "#E3E3FF", "#FFDFF9", "#D3F0FF", "#CEF6E8", "#FFE2DE"];
 const FARBIG = [
   { nr: "G", name: "Bunte Kacheln, Ink-B, auf Weiss: jede Kachel eine kräftige Formatfarbe", bg: "#FFFFFF", b: INK, k: KRAFT, rand: true },
   { nr: "H", name: "Bunte Kacheln, weisses B, auf Ink", bg: INK, b: "#FFFFFF", k: KRAFT },
@@ -69,12 +69,12 @@ const FARBIG = [
   { nr: "J", name: "Verlauf Butter nach Rosa in den Kacheln, Ink-B, auf Butter", bg: BUTTER, b: INK, k: ["#1D1D1D", "#5A3A1E", "#8C4A2E", "#B5473F", "#C2255C", "#C2255C"] },
   { nr: "K", name: "Eine einzige Akzent-Kachel in Himbeer, Rest Ink, auf Butter", bg: BUTTER, b: INK, k: [INK, INK, "#C2255C", INK, INK, INK] },
   { nr: "L", name: "Kacheln lösen sich auf: Ink in drei Stufen, auf Butter", bg: BUTTER, b: INK, k: [INK, "rgba(29,29,29,.7)", "rgba(29,29,29,.4)", INK, "rgba(29,29,29,.7)", INK] },
-  { nr: "M", name: "Lavendel-B mit Mint und Rosa, auf Ink", bg: INK, b: "#C9C4FF", k: ["#8EE3CF", "#FFB3EE", "#FFE7A9", "#8EE3CF", "#FFB3EE", "#8EE3CF"] },
+  { nr: "M", name: "Lavendel-B mit Mint und Rosa, auf Ink", bg: INK, b: "#C9C4FF", k: ["#8EE3CF", "#FFB3EE", "#FEE8B0", "#8EE3CF", "#FFB3EE", "#8EE3CF"] },
   { nr: "N", name: "Weisse Kacheln, Ink-B, auf kräftigem Butter", bg: "#FFCF5A", b: INK, k: ["#FFFFFF"] },
 ];
 // Einfarbiges Logo in Pastell-Kombinationen (Denis 20.09.2026). Drei Familien: Ink auf Pastell, Pastell auf Ink, und der
 // kräftige Ton auf seinem eigenen Pastell (Ton in Ton). Der Kontrast steht dabei, ab etwa 3 bleibt ein Zeichen bei 16 px lesbar.
-const TOENE = [["Butter", "#FFE7A9", "#B97A00"], ["Lavendel", "#E3E3FF", "#5B4BDB"], ["Rosa", "#FFE3FB", "#C2259B"], ["Himmel", "#E3F2FF", "#1F6FCC"], ["Mint", "#DBF5F0", "#0F7F6B"], ["Rosé", "#FBEBEA", "#C2453A"]];
+const TOENE = [["Butter", "#FEE8B0", "#B97A00"], ["Lavendel", "#E3E3FF", "#5B4BDB"], ["Rosa", "#FFDFF9", "#C2259B"], ["Himmel", "#D3F0FF", "#1F6FCC"], ["Mint", "#CEF6E8", "#0F7F6B"], ["Rosé", "#FFE2DE", "#C2453A"]];
 const lum = (hex) => { const v = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
 const kontrast = (a, b) => { const [h, d] = [lum(a), lum(b)].sort((x, y) => y - x); return ((h + 0.05) / (d + 0.05)).toFixed(1); };
 const EINFARBIG = [
@@ -82,8 +82,8 @@ const EINFARBIG = [
   ...TOENE.map(([n, hell], i) => ({ nr: `Q${i + 1}`, name: `${n} auf Ink`, bg: INK, b: hell })),
   ...TOENE.map(([n, hell, kraft], i) => ({ nr: `R${i + 1}`, name: `Ton in Ton: kräftiges ${n} auf ${n}`, bg: hell, b: kraft })),
   ...TOENE.map(([n, hell, kraft], i) => ({ nr: `S${i + 1}`, name: `${n} auf kräftigem ${n}`, bg: kraft, b: hell })),
-  { nr: "T1", name: "Lavendel auf Butter (Pastell auf Pastell)", bg: "#FFE7A9", b: "#E3E3FF" },
-  { nr: "T2", name: "Mint auf Rosa (Pastell auf Pastell)", bg: "#FFE3FB", b: "#DBF5F0" },
+  { nr: "T1", name: "Lavendel auf Butter (Pastell auf Pastell)", bg: "#FEE8B0", b: "#E3E3FF" },
+  { nr: "T2", name: "Mint auf Rosa (Pastell auf Pastell)", bg: "#FFDFF9", b: "#CEF6E8" },
 ].map((v) => ({ ...v, k: [v.b], rand: lum(v.bg) > 0.85 }));
 
 function FarbIcon({ v, gr, rund }) {
@@ -127,7 +127,7 @@ export default function Page() {
             <span style={{ width: 34, fontSize: 15, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{v.nr}</span>
             <span style={{ flex: "1 1 300px", minWidth: 0 }}><Marke {...v} gr={56} farbe="#1D1D1D" /></span>
             <span style={{ flex: "0 0 150px" }}><Marke {...v} gr={26} farbe="#1D1D1D" /></span>
-            <span style={{ flex: "0 0 auto", padding: "14px 20px", borderRadius: 14, background: "#1D1D1D" }}><Marke {...v} gr={26} farbe="#FFE7A9" /></span>
+            <span style={{ flex: "0 0 auto", padding: "14px 20px", borderRadius: 14, background: "#1D1D1D" }}><Marke {...v} gr={26} farbe="#FEE8B0" /></span>
             <span style={{ flexBasis: "100%", fontSize: 13, opacity: .65, paddingLeft: 62 }}>{v.name}</span>
           </section>
         ))}

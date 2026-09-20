@@ -104,7 +104,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
               return (
                 <button key={t} type="button" onClick={() => setSelectedTags(prev => on ? prev.filter(x => x !== t) : [...prev, t])}
                   style={{ padding: "6px 12px", borderRadius: 20, cursor: "pointer", fontFamily: fonts.body, fontSize: 12, fontWeight: on ? 700 : 500,
-                    border: "1px solid #1D1D1D", background: on ? "#FFE7A9" : "#fff", color: K.ink }}>
+                    border: "1px solid #1D1D1D", background: on ? "#FEE8B0" : "#fff", color: K.ink }}>
                   {t}
                 </button>
               );
@@ -112,7 +112,7 @@ export default function RatingSection({ purchase, user, listing, isService, isBu
           </div>
           <textarea value={ratingComment} onChange={e => setRatingComment(e.target.value)} placeholder="Kommentar (optional)" rows={3} style={{ width: "100%", padding: "12px 14px", borderRadius: 20, border: "1px solid #1D1D1D", fontSize: 14, fontFamily: fonts.body, outline: "none", boxSizing: "border-box", resize: "vertical", marginBottom: 14 }} />
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: rating ? "#FFE7A9" : "rgba(29,29,29,.16)", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(29,29,29,.15)" : "none" }}>Bewertung abgeben</button>
+            <button onClick={submitRating} disabled={!rating} style={{ flex: 1, padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: rating ? "#FEE8B0" : "rgba(29,29,29,.16)", color: K.ink, fontSize: 14, fontWeight: 800, cursor: rating ? "pointer" : "default", fontFamily: fonts.body, boxShadow: rating ? "0 2px 8px rgba(29,29,29,.15)" : "none" }}>Bewertung abgeben</button>
             <button onClick={() => setShowModal(false)} style={{ padding: "14px 20px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: K.ink, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
           </div>
         </div>

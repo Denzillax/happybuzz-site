@@ -10,7 +10,7 @@ const usps = [
     icon: Percent,
     title: 'Ab 3% Gebühr',
     description: 'Unter CHF 20 verkaufst du gebührenfrei. Darüber ab 3%, nur bei Erfolg. Kein Abo, keine versteckten Kosten.',
-    accent: '#1D1D1D', tint: '#FFE7A9', href: '/how-it-works',
+    accent: '#1D1D1D', tint: '#FEE8B0', href: '/how-it-works',
   },
   {
     icon: SlidersHorizontal,
@@ -22,13 +22,13 @@ const usps = [
     icon: TreePine,
     title: 'Für die Natur',
     description: 'Ein Teil jedes Verkaufs unterstützt direkt Schweizer Bienen- und Naturschutzprojekte.',
-    accent: '#50804F', tint: '#DBF5F0', href: '/impact',
+    accent: '#50804F', tint: '#CEF6E8', href: '/impact',
   },
   {
     icon: ShieldCheck,
     title: 'Sicher & Lokal',
     description: 'Schweizer Plattform, Schweizer Daten. Sichere Kommunikation direkt über BEEDARO.',
-    accent: '#1D1D1D', tint: '#FBEBEA', href: '/about',
+    accent: '#1D1D1D', tint: '#FFE2DE', href: '/about',
   },
 ]
 
@@ -105,7 +105,7 @@ export function UspGrid() {
 
       {/* Beta-Hinweis: Gruendungsmitglied statt generischem CTA */}
       <div style={{
-        marginTop: 26, border: "1px solid #1D1D1D", background: '#FFE7A9',
+        marginTop: 26, border: "1px solid #1D1D1D", background: '#FEE8B0',
         padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 12, flexWrap: 'wrap', textAlign: 'center',
       }}>

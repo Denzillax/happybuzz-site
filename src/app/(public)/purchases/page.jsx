@@ -83,7 +83,7 @@ export default function PurchasesPage() {
             <ShoppingBag size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Noch keine Käufe</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Finde Schätze auf dem Marktplatz.</p>
-            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>Zum Marktplatz</Link>
+            <Link href="/search" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FEE8B0", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>Zum Marktplatz</Link>
           </div>
         )}
 
@@ -179,7 +179,7 @@ export default function PurchasesPage() {
 
         {/* Bee Impact */}
         {!loading && purchases.length > 0 && (
-          <div style={{ marginTop: 20, background: "#DBF5F0", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ marginTop: 20, background: "#CEF6E8", borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <p style={{ margin: 0, fontSize: 10, fontFamily: MONO, letterSpacing: ".12em", textTransform: "uppercase", color: K.moss, fontWeight: 700 }}>Dein Bee-Impact</p>
               <p style={{ margin: "4px 0 0", fontSize: 22, fontWeight: 700, fontFamily: HEAD, color: K.moss }}>CHF {fmtCHF(totalBee)}</p>

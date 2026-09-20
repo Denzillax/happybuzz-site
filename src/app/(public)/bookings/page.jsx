@@ -112,7 +112,7 @@ export default function BookingsPage() {
               </>
             )}
             {b.purchase_id && (
-              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 20, background: "#FFE7A9", color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", textAlign: "center" }}>
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: 20, background: "#FEE8B0", color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", textAlign: "center" }}>
                 Zur Bestellung
               </Link>
             )}
@@ -145,7 +145,7 @@ export default function BookingsPage() {
                 : <>
                   {incoming.filter(b => b.listing?.listing_type === "service").length > 0 && (
                     <>
-                      <div style={{ padding: "12px 20px", background: "#FFE7A9", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ padding: "12px 20px", background: "#FEE8B0", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
                         <Wrench size={14} color="#8A5A00" /><span style={{ fontSize: 12, fontWeight: 700, color: "#8A5A00", textTransform: "uppercase", letterSpacing: ".05em" }}>Service-Anfragen</span>
                       </div>
                       {incoming.filter(b => b.listing?.listing_type === "service").map(b => renderBooking(b, true))}
@@ -153,7 +153,7 @@ export default function BookingsPage() {
                   )}
                   {incoming.filter(b => b.listing?.listing_type !== "service").length > 0 && (
                     <>
-                      <div style={{ padding: "12px 20px", background: "#E3F2FF", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ padding: "12px 20px", background: "#D3F0FF", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
                         <Home size={14} color="#1D1D1D" /><span style={{ fontSize: 12, fontWeight: 700, color: "#1D1D1D", textTransform: "uppercase", letterSpacing: ".05em" }}>Miet-Anfragen</span>
                       </div>
                       {incoming.filter(b => b.listing?.listing_type !== "service").map(b => renderBooking(b, true))}
@@ -167,7 +167,7 @@ export default function BookingsPage() {
                 : <>
                   {outgoing.filter(b => b.listing?.listing_type === "service").length > 0 && (
                     <>
-                      <div style={{ padding: "12px 20px", background: "#FFE7A9", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ padding: "12px 20px", background: "#FEE8B0", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
                         <Wrench size={14} color="#8A5A00" /><span style={{ fontSize: 12, fontWeight: 700, color: "#8A5A00", textTransform: "uppercase", letterSpacing: ".05em" }}>Meine Service-Buchungen</span>
                       </div>
                       {outgoing.filter(b => b.listing?.listing_type === "service").map(b => renderBooking(b, false))}
@@ -175,7 +175,7 @@ export default function BookingsPage() {
                   )}
                   {outgoing.filter(b => b.listing?.listing_type !== "service").length > 0 && (
                     <>
-                      <div style={{ padding: "12px 20px", background: "#E3F2FF", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ padding: "12px 20px", background: "#D3F0FF", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", gap: 8 }}>
                         <Home size={14} color="#1D1D1D" /><span style={{ fontSize: 12, fontWeight: 700, color: "#1D1D1D", textTransform: "uppercase", letterSpacing: ".05em" }}>Meine Mieten</span>
                       </div>
                       {outgoing.filter(b => b.listing?.listing_type !== "service").map(b => renderBooking(b, false))}

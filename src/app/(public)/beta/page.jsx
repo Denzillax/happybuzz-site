@@ -732,7 +732,7 @@ export default function BetaTestPage() {
               Hier entsteht gerade etwas, das es in der Schweiz so noch nicht
               gibt. Kein Konzern, kein Investorengeld, nur eine Idee und Leute
               wie du. Jedes Inserat, jede Meldung, jeder Kollege zählt.{" "}
-              <strong style={{ background: "#FFE7A9", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
+              <strong style={{ background: "#FEE8B0", padding: "0 4px" }}>Machen wir BEEDARO gross.</strong>
             </p>
             <p style={{ margin: 0, fontFamily: "'Instrument Sans', 'Manrope', sans-serif", fontSize: 12, letterSpacing: ".04em", color: "rgba(29,29,29,0.55)" }}>
               PS: Verchauf din Scheiss. ;)

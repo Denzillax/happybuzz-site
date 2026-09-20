@@ -7,10 +7,10 @@
 export const colors = {
   // Brand (Gold = nur Marke, Logo, Featured) — Werte gemäß Brand-Spec (CLAUDE.md)
   yellow:     "#F4C03F",   // seit dem Meeko-Design nur noch für Sterne und Spiele. Flächen: butter, Schrift und Rahmen: dark
-  butter:     "#FFE7A9",
-  yellowSoft: "#DBF5F0",
+  butter:     "#FEE8B0",
+  yellowSoft: "#CEF6E8",
   yellowHover:"#8A5A00",
-  yellowLight:"#FFE7A9",
+  yellowLight:"#FEE8B0",
   yellowDark: "#8A5A00",
 
   // CTA (Teal = alles Klickbare)
@@ -20,11 +20,11 @@ export const colors = {
   // Natur-Grün (Bee-Impact, Gratis, Naturschutz) — Brand-Spec #50804F.
   // NICHT mit `green` verwechseln: das ist ein Legacy-Alias auf Teal (s.u.).
   nature:     "#50804F",
-  natureSoft: "#DBF5F0",
+  natureSoft: "#CEF6E8",
 
   // Signal (Red = Dringlichkeit, Badges, Alerts)
   red:        "#C62828",
-  redSoft:    "#FBEBEA",
+  redSoft:    "#FFE2DE",
 
   // Text
   dark:       "#1D1D1D",
@@ -44,14 +44,14 @@ export const colors = {
 
   // Info
   sky:        "#1D1D1D",
-  skySoft:    "#E3F2FF",
+  skySoft:    "#D3F0FF",
 
   // Legacy aliases (backward compat) — ACHTUNG: green = Teal (für Verifiziert/
   // Erfolg). Für echtes Natur-Grün `nature`/`natureSoft` nutzen.
   green:      "#50804F",
-  greenSoft:  "#DBF5F0",
+  greenSoft:  "#CEF6E8",
   blue:       "#1D1D1D",
-  blueSoft:   "#E3F2FF",
+  blueSoft:   "#D3F0FF",
 };
 
 export const fonts = {

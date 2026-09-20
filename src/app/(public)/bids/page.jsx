@@ -216,9 +216,9 @@ function BidCard({ bid, fmtPrice, ended }) {
             <span style={{
               flexShrink: 0, fontSize: 10, fontWeight: 800, letterSpacing: ".04em",
               padding: "3px 10px", borderRadius: 20,
-              background: bid.status === "won" ? "#DBF5F0"
-                : bid.status === "leading" ? "#DBF5F0"
-                : bid.status === "outbid" ? "#FFE7A9"
+              background: bid.status === "won" ? "#CEF6E8"
+                : bid.status === "leading" ? "#CEF6E8"
+                : bid.status === "outbid" ? "#FEE8B0"
                 : bid.status === "lost" ? colors.cream
                 : bid.status === "expired" ? colors.cream
                 : `${colors.yellow}20`,

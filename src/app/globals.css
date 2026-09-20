@@ -363,7 +363,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* Brand-Button (Tailwind-Utility, gespiegelt zu theme.js Werten) */
 .btn-honey { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; background:#F4C03F; color:#1D1D1D; font-weight:700; border-radius:9999px; border:none; cursor:pointer; text-decoration:none; transition:background .15s ease, transform .15s ease; }
-.btn-honey:hover { background:#FFE7A9; transform:translateY(-1px); }
+.btn-honey:hover { background:#FEE8B0; transform:translateY(-1px); }
 /* Geteilter Button-Hover/-Active für Pill-Buttons (Btn-Komponente etc.) */
 .bd-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
 .bd-btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
@@ -1693,15 +1693,15 @@ body:has(.wl) { background: #0A0A0A; }
 /* ═══════════════════════════════════════════
    MEEKO-LABOR (Denis 19.09.2026). Test-Route /labor/meeko, Komponente src/app/labor/meeko/MeekoLabor.jsx.
    Formensprache der Framer-Vorlage "Meeko", Farben von dort, Logo ist das kachelige BEEDARO-B.
-   FARBEN  Ink #1D1D1D · Weiss · Lavendel #E3E3FF · Himmel #E3F2FF · Rosa #FFE3FB · Mint #DBF5F0 · Rosé #FBEBEA ·
-           Butter #FFE7A9. Pastell nur als Fläche, Schrift ist immer Ink (Kontrast auf jedem Pastell über 12).
+   FARBEN  Ink #1D1D1D · Weiss · Lavendel #E3E3FF · Himmel #D3F0FF · Rosa #FFDFF9 · Mint #CEF6E8 · Rosé #FFE2DE ·
+           Butter #FEE8B0. Pastell nur als Fläche, Schrift ist immer Ink (Kontrast auf jedem Pastell über 12).
    SCHRIFT Instrument Sans (die Vorlage nutzt Uncut Sans, die es bei Google Fonts nicht gibt). Titel 500 mit enger
            Laufweite (-0.04 bis -0.05em), Text 400 in 18 px, Tags in Versalien 14 px.
    FORM    Rand immer 1 px Ink. Karten 28 px Rundung, Header-Pille 36 px, Knöpfe 10 px mit eingedrücktem unterem
            Schatten, Pfeil-Pillen ganz rund. Bilder liegen auf einer Pastelltafel in der Farbe ihres Formats.
    Alles unter .mk gekapselt. MEEKO-LABOR ENDE markiert den Schluss.
    ═══════════════════════════════════════════ */
-.mk { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #E3F2FF; --mk-rosa: #FFE3FB; --mk-mint: #DBF5F0; --mk-rose: #FBEBEA; --mk-butter: #FFE7A9;
+.mk { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0;
       --mk-rand: 1px solid var(--mk-ink); background: #fff; color: var(--mk-ink); min-height: 100vh; overflow-x: clip;
       font-family: 'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', sans-serif; font-size: 18px; line-height: 1.5; }
 .mk a { color: inherit; text-decoration: none; }
@@ -2237,7 +2237,7 @@ body:has(.mk) { background: #fff; }
    Rückweg: Git-Tag design-alt-2026-09. Farben als Variablen auf :root, damit auch Seiten ausserhalb des Labors sie lesen.
    Formensprache: 1 px Ink-Rand, Knöpfe 10 px mit eingedrücktem Schatten unten, Flächen in Pastell, keine Schlagschatten.
    ═══════════════════════════════════════════ */
-:root { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #E3F2FF; --mk-rosa: #FFE3FB; --mk-mint: #DBF5F0; --mk-rose: #FBEBEA; --mk-butter: #FFE7A9;
+:root { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0;
         --mk-rand: 1px solid #1D1D1D; --bd-akzent: #1D1D1D; /* Hover-System der ganzen Seite: gleiche Farbe wie --mk-akzent */
         /* Hover-Farbe für Schrift und Symbole: kräftiges Lavendel (Denis 20.09.2026: Lavendel statt Grün). Das Pastell-Lavendel
            selbst hätte als Schrift auf Weiss nur Kontrast 1.3, darum sein kräftiges Geschwister mit 6.0. Vorgabe war
@@ -2345,7 +2345,7 @@ body:has(.mk) { background: #fff; }
 .bn .bn-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; padding: 4px 6px; border: none; background: none; color: var(--mk-ink); font: inherit; font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px !important; }
 .bn-icon { width: 44px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 999px; transition: background .2s ease, border-color .2s ease; }
 /* Aktiv (Denis 20.09.2026): keine Fläche, kein Strich, keine Kontur. Das Symbol selbst färbt sich im Rosa des Formats
-   Service. Das Pastell #FFE3FB hätte auf Weiss Kontrast 1.2 und wäre nicht zu sehen, darum der kräftige Ton derselben
+   Service. Das Pastell #FFDFF9 hätte auf Weiss Kontrast 1.2 und wäre nicht zu sehen, darum der kräftige Ton derselben
    Farbfamilie (--bn-aktiv, Kontrast rund 5 auf Weiss). Das Wort bleibt Ink und wird fett. */
 .bn { --bn-aktiv: #C2259B; }
 .bn .bn-tab[aria-current=page] { font-weight: 700; }
@@ -2450,11 +2450,11 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
 @media print { .ft { display: none !important; } }
 
 /* ── INSERATSEITE MEEKO, Schritt 3 (Denis 20.09.2026) ── */
-/* Hauptknöpfe in Butter (früher Gelb) bekommen Ink-Rand und den eingedrückten Schatten. React schreibt #FFE7A9 als rgb(). */
+/* Hauptknöpfe in Butter (früher Gelb) bekommen Ink-Rand und den eingedrückten Schatten. React schreibt #FEE8B0 als rgb(). */
 /* gilt seit Schritt 4 auf allen Seiten */
-main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
-.listing-page button[style*="rgb(255, 231, 169)"], .listing-page a[style*="rgb(255, 231, 169)"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
-.listing-page button[style*="rgb(255, 231, 169)"]:hover { background: #FFDD85 !important; filter: none !important; }
+main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
+.listing-page button[style*="rgb(254, 232, 176)"], .listing-page a[style*="rgb(254, 232, 176)"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
+.listing-page button[style*="rgb(254, 232, 176)"]:hover { background: #FFDD85 !important; filter: none !important; }
 @media (max-width: 767px) { .lg-foto { margin: 9px !important; border-radius: 11px !important; } .lg-gallery { border-radius: 18px !important; } }
 
 /* ── INSERIEREN MEEKO (Denis 20.09.2026): Formate als Pastellkacheln, Vorbild /labor/meeko/inserieren ── */

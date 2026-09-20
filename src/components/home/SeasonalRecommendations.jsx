@@ -51,7 +51,7 @@ export function SeasonalRecommendations() {
           .season-img { flex: none; height: 120px; width: 100%; }
         }
       `}</style>
-      <div className="season-band" style={{ overflow: "hidden", borderRadius: 20, background: "#DBF5F0" }}>
+      <div className="season-band" style={{ overflow: "hidden", borderRadius: 20, background: "#CEF6E8" }}>
         <div style={{ flex: "1 1 auto", padding: "clamp(18px, 3vw, 28px)", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
             <div style={{ width: 34, height: 34, borderRadius: 20, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

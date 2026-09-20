@@ -74,11 +74,11 @@ function ConvRow({ c, isBuyer, active, timeLabel, onHide, onRestore, hiddenView,
             {/* flexWrap: Chips brechen bei Platzmangel um, statt den Titel wegzudruecken */}
             <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 1, flexWrap: "wrap" }}>
               <p style={{ margin: 0, fontSize: 14, fontWeight: c.hasUnread ? 800 : 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 60, flex: "1 1 auto", maxWidth: "100%" }}>{c.listingTitle || "Gelöschtes Inserat"}</p>
-              <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#DBF5F0" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#50804F" }}>
+              <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: isBuyer ? "#CEF6E8" : colors.natureSoft, color: isBuyer ? colors.tealDark : "#50804F" }}>
                 {isBuyer ? <><ShoppingBag size={9} /> Kaufen</> : <><Tag size={9} /> Verkaufen</>}
               </span>
               {c.is_public && (
-                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#FFE7A9", color: "#1D1D1D" }}>
+                <span style={{ flexShrink: 0, fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".03em", padding: "1px 6px", borderRadius: 999, background: "#FEE8B0", color: "#1D1D1D" }}>
                   Öffentlich
                 </span>
               )}

@@ -58,7 +58,7 @@ export function RentalCountdown({ startDate, endDate, handoverAt }) {
   return (
     // Meeko (Denis 20.09.2026): Himmel-Tafel (Farbe des Formats Miete) mit Rundung, Ziffern auf weissen Kacheln mit
     // eingedrücktem Schatten wie bei der Challenge der Woche, runder Fortschrittsbalken. Überfällig: Rosé-Tafel.
-    <div style={{ background: overdue ? "#FBEBEA" : "#E3F2FF", border: "1px solid #1D1D1D", borderRadius: 20, padding: "20px 22px 22px", marginBottom: 14, textAlign: "left" }}>
+    <div style={{ background: overdue ? "#FFE2DE" : "#D3F0FF", border: "1px solid #1D1D1D", borderRadius: 20, padding: "20px 22px 22px", marginBottom: 14, textAlign: "left" }}>
       <div style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: overdue ? ROT : INK, marginBottom: 12 }}>
         {overdue ? "Überfällig seit" : "Rückgabe in"}
       </div>

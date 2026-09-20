@@ -4,7 +4,7 @@ import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#1D1D1D";
-const SAND = "#FFE3FB";
+const SAND = "#FFDFF9";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";

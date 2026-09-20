@@ -3,7 +3,7 @@ import { BadgeCheck } from "lucide-react";
 import { fonts } from "@/lib/theme";
 
 const MOSS = "#50804F";
-const MOSS_SOFT = "#DBF5F0";
+const MOSS_SOFT = "#CEF6E8";
 const INK = "#1D1D1D";
 
 // Öffentliches "Verifiziert"-Abzeichen für Verkäufer.

@@ -81,7 +81,7 @@ const MAX_IMG_BYTES = 5 * 1024 * 1024; // 5 MB pro Bild (gleicher Wert wie Uploa
 const INK = colors.dark;
 // Akzentfarbe des Formulars (Denis 20.09.2026): alles Gewählte und die Knöpfe tragen die Pastellfarbe des gewählten Formats.
 // Die Variable --lf-akzent setzt das Formular an seiner Wurzel, je nach Format. Rückfall ist Mint.
-const AKZ = "var(--lf-akzent, #DBF5F0)";
+const AKZ = "var(--lf-akzent, #CEF6E8)";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 // Meeko-Design (Denis 20.09.2026: beim Inserieren sollte mehr im Meeko-Stil sein): grosse Abschnittskarten mit leichtem
@@ -813,7 +813,7 @@ export default function ListingForm({
   const Err = ({ field }) => (
     <div data-field={field}>
       {errors[field] ? (
-        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FBEBEA", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
+        <div style={{ color: colors.red, fontSize: 12, marginTop: 4, padding: "6px 10px", background: "#FFE2DE", border: `1px solid ${colors.red}40`, fontFamily: fonts.body }}>
           {errors[field]}
         </div>
       ) : null}
@@ -821,7 +821,7 @@ export default function ListingForm({
   );
 
   // Rote Markierung direkt am Feld, verschwindet beim Korrigieren (set/toggle)
-  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FBEBEA" } : {});
+  const errStyle = (field) => (errors[field] ? { border: `1.5px solid ${colors.red}`, background: "#FFE2DE" } : {});
 
   // KI-Erkennung: Fotos (max 5) verkleinern, /api/ai-listing fragen, Felder fuellen.
   // Ohne target: Titel/Beschreibung nur wenn leer (Eigenarbeit bleibt stehen),
@@ -951,7 +951,7 @@ export default function ListingForm({
 
       {/* Entwurf-Hinweis: Eingaben eines frueheren Besuchs wiederhergestellt */}
       {draftRestored && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#DBF5F0", borderRadius: 20, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "#CEF6E8", borderRadius: 20, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "#1D1D1D", fontFamily: fonts.body }}>
           <span style={{ flex: "1 1 auto" }}>Dein angefangenes Inserat wurde wiederhergestellt (Fotos bitte neu anhängen).</span>
           <button type="button" onClick={verwerfeDraft} style={{ background: "none", border: "none", color: "#1D1D1D", fontWeight: 700, fontSize: 12.5, cursor: "pointer", textDecoration: "underline", fontFamily: fonts.body }}>Entwurf verwerfen</button>
         </div>
@@ -963,7 +963,7 @@ export default function ListingForm({
       <div style={sectionBase} className="lf-section lf-section-format">
         <SectionHead icon={Rocket} title="Was bietest du an?" hint="Wähle die Art deines Inserats." />
         {gesperrt && (
-          <div style={{ background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#1D1D1D" }}>
+          <div style={{ background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "12px 16px", marginBottom: 14, fontSize: 13.5, lineHeight: 1.5, color: "#1D1D1D" }}>
             <b>Diese Auktion hat Gebote.</b> Titel, Preise, Auktionsdauer, Typ, Kategorie, Zustand, Bee-Rate und die bestehenden Fotos sind gesperrt, weil die Bieter auf genau dieses Angebot geboten haben. Du kannst die Beschreibung ergänzen, Fotos hinzufügen sowie Versand und Zahlung anpassen.
           </div>
         )}
@@ -1271,7 +1271,7 @@ export default function ListingForm({
         {!isFree && (
           <div style={{ marginTop: 18, opacity: form.listing_type === "service" ? 0.4 : 1, pointerEvents: form.listing_type === "service" ? "none" : "auto" }}>
             <label style={labelBase}>Zustand {form.listing_type === "service" && <span style={{ fontSize: 11, fontWeight: 400, color: colors.muted }}> (nicht relevant bei Service)</span>}</label>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FBEBEA", padding: 8 } : {}), ...gesperrtStyle }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, ...(errors.condition ? { border: `1.5px solid ${colors.red}`, background: "#FFE2DE", padding: 8 } : {}), ...gesperrtStyle }}>
               {CONDITIONS.map((c) => (
                 <Chip key={c.value} active={form.condition === c.value} onClick={() => set("condition", c.value)}>{c.label}</Chip>
               ))}
@@ -1325,7 +1325,7 @@ export default function ListingForm({
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "12px 14px", borderRadius: 20, cursor: "pointer",
                   border: `1.5px solid ${errors.category ? colors.red : form.category_id ? colors.dark : colors.border}`,
-                  background: errors.category ? "#FBEBEA" : form.category_id ? AKZ : "#fff",
+                  background: errors.category ? "#FFE2DE" : form.category_id ? AKZ : "#fff",
                   transition: "all .15s",
                 }}>
                   <span style={{ fontSize: 14, color: form.category_id ? colors.dark : colors.muted, fontWeight: form.category_id ? 600 : 400 }}>
@@ -2016,7 +2016,7 @@ export default function ListingForm({
                       )}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   ) : (
@@ -2120,7 +2120,7 @@ export default function ListingForm({
                       })()}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   )}
@@ -2314,7 +2314,7 @@ export default function ListingForm({
       {/* ── VALIDATION ERRORS ─────────────────────────────── */}
       {Object.keys(errors).length > 0 && !errors.submit && (
         <div style={{
-          background: "#FFE7A9", border: "1px solid #1D1D1D",
+          background: "#FEE8B0", border: "1px solid #1D1D1D",
           borderRadius: radius.lg, padding: "14px 18px", marginBottom: 16,
         }}>
           <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#8A5A00", fontFamily: fonts.body }}>Bitte korrigiere folgende Felder:</p>
@@ -2474,7 +2474,7 @@ export default function ListingForm({
               flex: 1, minWidth: 150, padding: "13px 18px",
               borderRadius: 20, border: "1px solid #1D1D1D",
               // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026, Art B aus /labor/meeko/knoepfe)
-              background: "#DBF5F0", color: "#1D1D1D",
+              background: "#CEF6E8", color: "#1D1D1D",
               fontSize: 15.5, fontWeight: 600, fontFamily: fonts.body, letterSpacing: "-.01em",
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",

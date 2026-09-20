@@ -7,7 +7,7 @@ import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#1D1D1D";
-const SAND = "#DBF5F0";
+const SAND = "#CEF6E8";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const PETROL = "#1D1D1D";
@@ -69,7 +69,7 @@ export default function ImpactPage() {
           </div>
           <h1 style={{ fontSize: "clamp(34px, 5vw, 52px)", fontWeight: 700, fontFamily: HEAD, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.02, position: "relative", zIndex: 0 }}>
             Handeln, das{" "}
-            <span style={{ background: "#FFE7A9", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
+            <span style={{ background: "#FEE8B0", color: INK, padding: "0 .1em", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone", position: "relative", zIndex: -1 }}>etwas zurückgibt</span>
           </h1>
           <p style={{ fontSize: "clamp(15px, 1.8vw, 18px)", color: MUTED, maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
             Von jeder Gebühr auf BEEDARO gehen 20 Prozent an Schweizer Naturschutzprojekte. Das passiert automatisch bei jedem Verkauf.
@@ -179,7 +179,7 @@ export default function ImpactPage() {
           </p>
           <Link href="/listings/new" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "14px 28px", borderRadius: 999, background: "#DBF5F0", color: "#1D1D1D",
+            padding: "14px 28px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D",
             fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #1D1D1D",
           }}>
             Jetzt inserieren <ArrowRight size={16} />

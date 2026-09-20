@@ -44,7 +44,7 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
       style={{
         display: "block", textAlign: "left", padding: "20px 20px 18px",
         cursor: klickbar ? "pointer" : "default",
-        background: gruen ? "#DBF5F0" : zustand === "abgesagt" ? "#F3F3FF" : "#fff",
+        background: gruen ? "#CEF6E8" : zustand === "abgesagt" ? "#F3F3FF" : "#fff",
         opacity: zustand === "gesperrt" ? 0.55 : 1,
         border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 20,
         boxShadow: zustand === "frei" ? "inset 0 -4px 0 rgba(29,29,29,.14)" : "none",
@@ -119,7 +119,7 @@ export default function BewerbenPage() {
 
         {/* ── Hinweis: Tester bewerben sich nicht, die sind es schon ── */}
         <div style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "16px 18px", background: "#FDF6E3", border: "1px solid #1D1D1D", marginBottom: 30 }}>
-          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, background: "#FFE7A9", border: "1px solid #1D1D1D", flexShrink: 0 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, background: "#FEE8B0", border: "1px solid #1D1D1D", flexShrink: 0 }}>
             <Sparkles size={17} color={K.ink} />
           </span>
           <div style={{ fontFamily: BODY, fontSize: 13.5, color: K.ink, lineHeight: 1.6 }}>

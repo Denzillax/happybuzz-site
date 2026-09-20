@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import BLogo from "@/components/shared/BLogo";
 
 const INK = "#1D1D1D";
-const F = { lavendel: "#E3E3FF", himmel: "#E3F2FF", rosa: "#FFE3FB", mint: "#DBF5F0", rose: "#FBEBEA", butter: "#FFE7A9" };
+const F = { lavendel: "#E3E3FF", himmel: "#D3F0FF", rosa: "#FFDFF9", mint: "#CEF6E8", rose: "#FFE2DE", butter: "#FEE8B0" };
 const B = 1080, H = 1350;
 const rand = `3px solid ${INK}`;
 const blatt = (bg, mehr = {}) => ({ position: "relative", width: B, height: H, overflow: "hidden", background: bg, color: INK, fontFamily: "'Instrument Sans', sans-serif", display: "flex", flexDirection: "column", padding: 84, boxSizing: "border-box", ...mehr });

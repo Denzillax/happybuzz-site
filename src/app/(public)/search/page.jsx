@@ -48,7 +48,7 @@ function FilterPill({ label, value, options, onChange, active }) {
           display: "flex", alignItems: "center", gap: 6,
           padding: "8px 14px", borderRadius: 20,
           border: active ? "2px solid #1D1D1D" : "1px solid #1D1D1D",
-          background: active ? "#DBF5F0" : "#fff",
+          background: active ? "#CEF6E8" : "#fff",
           color: active ? "#1D1D1D" : INK,
           fontSize: 13, fontWeight: active ? 700 : 500,
           fontFamily: fonts.body, cursor: "pointer",
@@ -77,14 +77,14 @@ function FilterPill({ label, value, options, onChange, active }) {
               onClick={() => { onChange(opt.value); setOpen(false); }}
               style={{
                 display: "block", width: "100%", padding: "9px 16px",
-                background: value === opt.value ? "#DBF5F0" : "transparent",
+                background: value === opt.value ? "#CEF6E8" : "transparent",
                 border: "none", cursor: "pointer", textAlign: "left",
                 fontSize: 13, fontFamily: fonts.body, color: colors.dark,
                 fontWeight: value === opt.value ? 700 : 400,
                 transition: "background .1s",
               }}
               onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
-              onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#DBF5F0" : "transparent"}
+              onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#CEF6E8" : "transparent"}
             >
               {opt.label}
             </button>
@@ -312,7 +312,7 @@ function SearchPageInner() {
 
         {/* ── Mobile Suchzeile (Desktop sucht im Header, Klasse blendet ein/aus) ── */}
         {/* Meeko-Design (20.09.2026): weisses Feld mit Ink-Rand wie die Suche im Header, mit KI-Schalter an wird es Rosa */}
-        <div className="search-mobile-bar" style={{ background: kiModus ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
+        <div className="search-mobile-bar" style={{ background: kiModus ? "#FFDFF9" : "#fff", border: "1px solid #1D1D1D", borderRadius: 999, padding: 4, alignItems: "center", marginBottom: 14 }}>
           <Search size={16} style={{ marginLeft: 12, color: "#5B626C", flexShrink: 0, alignSelf: "center" }} />
           {/* pille-input: das Feld sitzt in einer Pille, der globale gelbe Fokus-Schein waere innen ein Viereck */}
           <input
@@ -335,7 +335,7 @@ function SearchPageInner() {
             <Sparkles size={13} /> KI
           </button>
           <button onClick={suchenStarten}
-            style={{ padding: "8px 18px 10px", background: "#DBF5F0", border: "1px solid #1D1D1D", boxShadow: "inset 0 -3px 0 rgba(29,29,29,.16)", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#1D1D1D", fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "8px 18px 10px", background: "#CEF6E8", border: "1px solid #1D1D1D", boxShadow: "inset 0 -3px 0 rgba(29,29,29,.16)", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#1D1D1D", fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
@@ -404,7 +404,7 @@ function SearchPageInner() {
         {/* KI-Status (Denis 16.09.: Panel weg, der Schalter im Suchfeld ersetzt es).
             Nur sichtbar, wenn die KI gerade sucht oder etwas zu sagen hat. */}
         {(kiLaedt || kiFehler || kiHinweis || kiAuto) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FBEBEA" : "#DBF5F0", border: `1px solid ${kiFehler ? "#C62828" : "#1D1D1D33"}`, borderRadius: 20, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: kiFehler ? "#FFE2DE" : "#CEF6E8", border: `1px solid ${kiFehler ? "#C62828" : "#1D1D1D33"}`, borderRadius: 20, padding: "10px 14px", marginBottom: 16, fontSize: 13, fontFamily: fonts.body, color: kiFehler ? "#C62828" : PETROL }}>
             <Sparkles size={14} />
             <span style={{ flex: 1 }}>
               {kiLaedt ? "Die KI sucht nach der Bedeutung…" : (kiFehler || kiHinweis || (kiAuto ? `Zu „${kiAuto}“ gab es keine wörtlichen Treffer. Die KI hat nach der Bedeutung gesucht.` : ""))}
@@ -452,7 +452,7 @@ function SearchPageInner() {
                 display: "flex", alignItems: "center", gap: 6,
                 padding: "8px 14px", borderRadius: 20,
                 border: (minPrice || maxPrice) ? "2px solid #1D1D1D" : "1px solid #1D1D1D",
-                background: (minPrice || maxPrice) ? "#DBF5F0" : "#fff",
+                background: (minPrice || maxPrice) ? "#CEF6E8" : "#fff",
                 color: (minPrice || maxPrice) ? "#1D1D1D" : INK,
                 fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
                 fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",
@@ -476,7 +476,7 @@ function SearchPageInner() {
                       style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #1D1D1D", borderRadius: 20, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
-                    width: "100%", padding: "8px", background: "#DBF5F0", color: "#1D1D1D",
+                    width: "100%", padding: "8px", background: "#CEF6E8", color: "#1D1D1D",
                     border: "none", borderRadius: 20, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
@@ -494,7 +494,7 @@ function SearchPageInner() {
                 padding: "8px 14px", borderRadius: 20, cursor: "pointer",
                 fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
                 border: `1px solid ${verifiedOnly ? "#50804F" : "#1D1D1D"}`,
-                background: verifiedOnly ? "#DBF5F0" : "#fff",
+                background: verifiedOnly ? "#CEF6E8" : "#fff",
                 color: verifiedOnly ? "#50804F" : "#1D1D1D",
               }}
             >
@@ -628,7 +628,7 @@ function SearchPageInner() {
                   <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
                 </button>
               )}
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>

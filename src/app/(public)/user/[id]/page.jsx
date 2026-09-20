@@ -196,7 +196,7 @@ export default function PublicProfilePage() {
                 display: "flex", alignItems: "center", gap: 8,
                 padding: "10px 20px", borderRadius: 20,
                 border: "1px solid #1D1D1D",
-                background: isSellerFav ? "#FFE7A9" : "transparent",
+                background: isSellerFav ? "#FEE8B0" : "transparent",
                 cursor: "pointer", fontFamily: fonts.body,
                 fontSize: 13, fontWeight: 700, color: K.ink,
                 flexShrink: 0,

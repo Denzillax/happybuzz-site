@@ -102,7 +102,7 @@ function Btn({ children, onClick, loading, secondary, type="button" }) {
   return (
     <button type={type} onClick={onClick} disabled={loading} style={{
       width:"100%", padding:"13px", border:secondary?"1px solid #1D1D1D":"none", borderRadius: 999,
-      background:secondary?"transparent":"#FFE7A9", color:K.ink, fontSize:14, fontWeight:800,
+      background:secondary?"transparent":"#FEE8B0", color:K.ink, fontSize:14, fontWeight:800,
       fontFamily:BODY, letterSpacing:".02em", cursor:loading?"default":"pointer",
       boxShadow:loading?"none":"inset 0 -4px 0 rgba(29,29,29,.14)",
       transition:"all .15s", opacity:loading?.7:1,

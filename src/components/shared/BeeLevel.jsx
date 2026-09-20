@@ -105,7 +105,7 @@ export function BeeLevelCard({ xp = 0, nektar = null }) {
       )}
 
       {nektar != null && (
-        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 20, background: "#FFE7A9", border: "1px solid #1D1D1D", textDecoration: "none" }}>
+        <a href="/hive" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 14px", borderRadius: 20, background: "#FEE8B0", border: "1px solid #1D1D1D", textDecoration: "none" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#8A5A00" }}>
             <Droplets size={15} color="#8A5A00" /> {Number(nektar).toLocaleString("de-CH")} Nektar
           </span>

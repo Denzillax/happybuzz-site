@@ -17,11 +17,11 @@ export function Badge({ children, bg = colors.warm, color = colors.muted, style 
 export function TypeBadge({ type }) {
   // Formatfarben wie auf der Inseratkarte (TYP_PASTELL), Schrift Ink
   const config = {
-    sell:    { bg: "#FBEBEA", color: "#1D1D1D", label: "Festpreis" },
+    sell:    { bg: "#FFE2DE", color: "#1D1D1D", label: "Festpreis" },
     auction: { bg: "#E3E3FF", color: "#1D1D1D", label: "Auktion" },
-    rent:    { bg: "#E3F2FF", color: "#1D1D1D", label: "Miete" },
-    service: { bg: "#FFE3FB", color: "#1D1D1D", label: "Service" },
-    free:    { bg: "#FFE7A9", color: "#1D1D1D", label: "Gratis" },
+    rent:    { bg: "#D3F0FF", color: "#1D1D1D", label: "Miete" },
+    service: { bg: "#FFDFF9", color: "#1D1D1D", label: "Service" },
+    free:    { bg: "#FEE8B0", color: "#1D1D1D", label: "Gratis" },
   };
   const c = config[type] || config.sell;
   return <Badge bg={c.bg} color={c.color}>{c.label}</Badge>;
@@ -29,11 +29,11 @@ export function TypeBadge({ type }) {
 
 export function StatusBadge({ status }) {
   const config = {
-    active:   { bg: "#DBF5F0", color: "#3D6B3C", label: "Aktiv" },
+    active:   { bg: "#CEF6E8", color: "#3D6B3C", label: "Aktiv" },
     draft:    { bg: colors.warm, color: colors.muted, label: "Entwurf" },
-    paused:   { bg: "#FFE7A9", color: "#8A5A00", label: "Pausiert" },
-    sold:     { bg: "#E3F2FF", color: "#1D1D1D", label: "Verkauft" },
-    rented:   { bg: "#E3F2FF", color: "#1D1D1D", label: "Vermietet" },
+    paused:   { bg: "#FEE8B0", color: "#8A5A00", label: "Pausiert" },
+    sold:     { bg: "#D3F0FF", color: "#1D1D1D", label: "Verkauft" },
+    rented:   { bg: "#D3F0FF", color: "#1D1D1D", label: "Vermietet" },
     inactive: { bg: colors.warm, color: colors.muted, label: "Inaktiv" },
   };
   const c = config[status] || config.draft;

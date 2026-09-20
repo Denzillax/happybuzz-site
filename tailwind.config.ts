@@ -9,9 +9,9 @@ const config: Config = {
       colors: {
         // Spiegelt src/lib/theme.js (Meeko, 20.09.2026): Ink, Pastelle, kein Cream, kein Grau
         honey:         '#F4C03F',
-        'honey-light': '#FFE7A9',
+        'honey-light': '#FEE8B0',
         'honey-dark':  '#8A5A00',
-        'honey-soft':  '#FFE7A9',
+        'honey-soft':  '#FEE8B0',
         text:          '#1D1D1D',
         'text-md':     '#34343B',
         'text-lt':     '#5B626C',
@@ -21,11 +21,11 @@ const config: Config = {
         border:        '#1D1D1D',
         'border-lt':   'rgba(29,29,29,.16)',
         green:         '#50804F',
-        'green-soft':  '#DBF5F0',
+        'green-soft':  '#CEF6E8',
         blue:          '#1D1D1D',
-        'blue-soft':   '#E3F2FF',
+        'blue-soft':   '#D3F0FF',
         red:           '#C62828',
-        'red-soft':    '#FBEBEA',
+        'red-soft':    '#FFE2DE',
       },
       fontFamily: {
         sans: ['Instrument Sans', 'Manrope', 'system-ui', 'sans-serif'],

@@ -15,7 +15,7 @@ export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
         // Meeko-Design (20.09.2026): Favoriten sind app-weit das um 90 Grad gedrehte B. Ruhig: Ink auf Weiss, gesetzt:
         // Himbeer auf Rosa (Gelb auf Weiss war zu schwach). Gilt für Karte, Inserat, Meine Inserate und die Favoriten-Seite.
         width: size, height: size, borderRadius: 999, padding: 0,
-        background: isFav ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D",
+        background: isFav ? "#FFDFF9" : "#fff", border: "1px solid #1D1D1D",
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
         color: isFav ? "#C2255C" : "#1D1D1D",
         transition: "background .15s, color .15s", ...style,

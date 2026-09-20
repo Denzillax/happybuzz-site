@@ -44,7 +44,7 @@ import BLogo from "@/components/shared/BLogo";
 // Meeko-Design (20.09.2026), Schritt 3: nur das Aussehen. Flächen in Pastell, 1 px Ink-Rand, Rundung 20, keine Schlagschatten auf Karten.
 // Butter ist die Fläche der Hauptknöpfe (früher Gelb), Ink die Farbe für gewählte Zustände und Links.
 const INK = "#1D1D1D";
-const BUTTER = "#FFE7A9";
+const BUTTER = "#FEE8B0";
 const SAND = "#F3F3FF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
@@ -565,7 +565,7 @@ export default function ListingDetail() {
 
         {/* ── FREIGABE-LEISTE fuer Mitarbeiter bei wartenden Inseraten ── */}
         {istStaff && l.status === "pending_review" && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FFE7A9", borderRadius: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "10px 14px", marginBottom: 16, background: "#FEE8B0", borderRadius: 20 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: "#8a5a00", marginRight: "auto" }}>Wartet auf Freigabe</span>
             <button onClick={gebeFrei} disabled={reviewBusy} style={{ padding: "8px 18px", borderRadius: 999, border: "none", background: BUTTER, color: INK, fontSize: 13, fontWeight: 800, fontFamily: fonts.body, cursor: reviewBusy ? "default" : "pointer" }}>
               {reviewBusy ? "Einen Moment…" : "Freigeben"}
@@ -637,7 +637,7 @@ export default function ListingDetail() {
                 {/* Favorite Heart */}
                 <button className="eckig kein-akzent" aria-pressed={!!isFav} aria-label={isFav ? "Aus den Favoriten entfernen" : "Zu den Favoriten"} onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleFav(); }} style={{
                   position: "absolute", top: 14, right: 14, width: 44, height: 44, borderRadius: 999, padding: 0,
-                  background: isFav ? "#FFE3FB" : "#fff", border: "1px solid #1D1D1D", cursor: "pointer",
+                  background: isFav ? "#FFDFF9" : "#fff", border: "1px solid #1D1D1D", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center", color: isFav ? "#C2255C" : INK,
                   transition: "background .15s, color .15s",
                 }}>
@@ -673,7 +673,7 @@ export default function ListingDetail() {
 
             {/* ── ÄHNLICH PER BILD (KI) ─────────────── */}
             {bildSuche.status !== "idle" && (
-              <div style={{ background: "#DBF5F0", border: "1px solid #1D1D1D33", borderRadius: 20, padding: "16px 18px", marginBottom: 20 }}>
+              <div style={{ background: "#CEF6E8", border: "1px solid #1D1D1D33", borderRadius: 20, padding: "16px 18px", marginBottom: 20 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: bildSuche.status === "fertig" && bildSuche.treffer.length ? 14 : 0 }}>
                   <ScanSearch size={18} color="#1D1D1D" />
                   <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, fontFamily: fonts.head, color: INK, flex: 1 }}>Ähnlich per Bild</h3>
@@ -690,7 +690,7 @@ export default function ListingDetail() {
                       <div key={item.id}>
                         <ListingCard listing={item} userId={user?.id} />
                         {item.grund && (
-                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#1D1D1D", background: "#DBF5F0", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                          <p style={{ margin: "8px 0 0", fontSize: 11.5, lineHeight: 1.4, fontWeight: 600, color: "#1D1D1D", background: "#CEF6E8", borderRadius: 8, padding: "5px 8px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                             {item.grund}
                           </p>
                         )}
@@ -835,7 +835,7 @@ export default function ListingDetail() {
               {/* flexWrap: auf schmalen Screens rutscht ALLE ARTIKEL auf eine
                   eigene Zeile statt die Infos zu quetschen */}
               <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#CEF6E8", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={28} color={INK} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 200 }}>
@@ -871,7 +871,7 @@ export default function ListingDetail() {
                     </p>
                   </div>
                   <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 999, background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
@@ -901,7 +901,7 @@ export default function ListingDetail() {
               <div style={{ padding: "10px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 11, color: colors.muted }}>Öffentlich sichtbar. Andere sehen Frage und Antwort.</span>
                 {user && !isOwner && (
-                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                     <MessageCircle size={14} /> Nachricht an Verkäufer
                   </button>
                 )}
@@ -1017,7 +1017,7 @@ export default function ListingDetail() {
                 {(() => { const g = preisGesenkt(l); return g && l.status === "active" ? (
                   <p style={{ margin: "2px 0 0", display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
                     <span style={{ color: colors.muted, textDecoration: "line-through", fontVariantNumeric: "tabular-nums" }}>CHF {fmtPrice(g.alt)}</span>
-                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#3D6B3C", background: "#DBF5F0", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 800, color: "#3D6B3C", background: "#CEF6E8", padding: "2px 8px", borderRadius: 999 }}>Preis gesenkt, -{g.prozent} %</span>
                   </p>
                 ) : null; })()}
               </div>
@@ -1093,7 +1093,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {l.status === "rented" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#E3F2FF", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#D3F0FF", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   Aktuell vermietet
                 </div>
               )}
@@ -1103,7 +1103,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {l.status === "paused" && (
-                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FFE7A9", color: "#8A5A00", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
+                <div style={{ padding: "14px", borderRadius: radius.sm, background: "#FEE8B0", color: "#8A5A00", fontSize: 14, fontWeight: 700, textAlign: "center" }}>
                   Vorübergehend pausiert
                 </div>
               )}
@@ -1122,7 +1122,7 @@ export default function ListingDetail() {
                   {myBid && !isOwner && (
                     <div style={{
                       padding: "10px 14px", borderRadius: 20, marginBottom: 12,
-                      background: bids[0]?.bidder_id === user?.id ? "#DBF5F0" : "#FFE7A9",
+                      background: bids[0]?.bidder_id === user?.id ? "#CEF6E8" : "#FEE8B0",
                       border: `1px solid ${bids[0]?.bidder_id === user?.id ? "#B8D8B8" : "#FFD0A0"}`,
                       fontSize: 13,
                     }}>
@@ -1233,7 +1233,7 @@ export default function ListingDetail() {
                         <div key={b.id || i} className="bid-row" style={{
                           display: "flex", alignItems: "center", gap: 10,
                           padding: "10px 12px", borderRadius: fuehrt ? 12 : 0,
-                          background: fuehrt ? "#DBF5F0" : "transparent",
+                          background: fuehrt ? "#CEF6E8" : "transparent",
                           borderBottom: fuehrt ? "none" : `1px solid ${colors.borderLt}`,
                           marginBottom: fuehrt ? 2 : 0,
                         }}>
@@ -1365,7 +1365,7 @@ export default function ListingDetail() {
                                   );
                                 })()}
                                 {l.buy_now_price > 0 && parseFloat(bidAmount) >= l.buy_now_price - 2 && parseFloat(bidAmount) > 0 && (
-                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 20, background: "#DBF5F0", border: `1px solid ${INK}`, fontSize: 12 }}>
+                                  <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 20, background: "#CEF6E8", border: `1px solid ${INK}`, fontSize: 12 }}>
                                     Dein Gebot ist nahe am Sofortkauf-Preis von <strong>CHF {fmtPrice(l.buy_now_price)}</strong>. 
                                     <button onClick={() => { setBidModal("buynow"); }} style={{ background: "none", border: "none", color: INK, fontWeight: 800, cursor: "pointer", fontSize: 12, textDecoration: "underline", marginLeft: 4, fontFamily: fonts.body }}>Jetzt sofort kaufen?</button>
                                   </div>
@@ -1412,7 +1412,7 @@ export default function ListingDetail() {
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
                                 padding: "8px 14px", borderRadius: 20, marginBottom: 6, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "shipping" ? INK : colors.border}`,
-                                background: bidShipping === "shipping" ? "#DBF5F0" : "transparent",
+                                background: bidShipping === "shipping" ? "#CEF6E8" : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                   <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "shipping" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1434,7 +1434,7 @@ export default function ListingDetail() {
                                 display: "flex", justifyContent: "space-between", alignItems: "center",
                                 padding: "8px 14px", borderRadius: 20, cursor: "pointer",
                                 border: `1.5px solid ${bidShipping === "pickup" ? INK : colors.border}`,
-                                background: bidShipping === "pickup" ? "#DBF5F0" : "transparent",
+                                background: bidShipping === "pickup" ? "#CEF6E8" : "transparent",
                               }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                   <div style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${bidShipping === "pickup" ? INK : colors.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1541,7 +1541,7 @@ export default function ListingDetail() {
                               } catch (err) { setBidError(err.message); }
                               finally { setBidding(false); }
                             }} disabled={bidding || (bidModal === "bid" && !bidAmount)}
-                              style={{ flex: 1, padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#DBF5F0", color: "#1D1D1D", boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
+                              style={{ flex: 1, padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#CEF6E8", color: "#1D1D1D", boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
                               {bidding ? "Wird verarbeitet..." : bidModal === "bid" ? "Gebot bestätigen" : "Kaufen"}
                             </button>
                           </div>
@@ -1715,7 +1715,7 @@ export default function ListingDetail() {
                 </div>
               )}
               {buyState === "error" && (
-                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#FBEBEA", textAlign: "center" }}>
+                <div style={{ marginTop: 12, padding: 14, borderRadius: radius.sm, background: "#FFE2DE", textAlign: "center" }}>
                   <p style={{ margin: 0, fontSize: 13, color: "#C62828" }}>{buyError}</p>
                   <button onClick={() => setBuyState("idle")} style={{ marginTop: 6, fontSize: 12, color: colors.blue, background: "none", border: "none", cursor: "pointer" }}>Nochmal versuchen</button>
                 </div>
@@ -1734,10 +1734,10 @@ export default function ListingDetail() {
 
             {/* ── PROFIL-WARNUNG ──────────────────────── */}
             {profileWarning && (
-              <div style={{ background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
+              <div style={{ background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#8A5A00" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#8A5A00" }}>• {m}</p>)}
-                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#DBF5F0", color: "#1D1D1D", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}
 
@@ -1767,7 +1767,7 @@ export default function ListingDetail() {
             <div style={{ background: colors.surface, borderRadius: 20, border: "1px solid #1D1D1D", padding: "16px 22px", marginBottom: 14 }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: colors.muted }}>Verkäufer</p>
               <Link href={`/user/${l.user_id}`} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#CEF6E8", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
                   {l.sellerAvatar ? <img src={l.sellerAvatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <User size={18} color={INK} />}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: colors.blue }}>
@@ -1839,7 +1839,7 @@ export default function ListingDetail() {
                     <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 20 }} />
                     <p style={{ margin: "12px 0 0", fontSize: 13, fontWeight: 700, color: colors.dark, wordBreak: "break-word" }}>{l?.title}</p>
                     <div style={{ display: "flex", gap: 8, marginTop: 16 }} className="no-print">
-                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         <Printer size={15} /> Drucken
                       </button>
                       <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>

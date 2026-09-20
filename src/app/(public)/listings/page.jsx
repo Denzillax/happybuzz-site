@@ -255,7 +255,7 @@ export default function ListingsPage() {
 
         {/* Willkommens-Los: Feier-Banner nach dem ersten Inserat */}
         {losBetrag > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
             <span style={{ fontSize: 22 }} aria-hidden><Rocket size={22} color={K.ink} /></span>
             <div style={{ flex: "1 1 220px", minWidth: 0 }}>
               <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>Willkommens-Los gezogen: +{losBetrag} Pollen</p>
@@ -272,7 +272,7 @@ export default function ListingsPage() {
           if (!l) return null;
           const verlaengerbar = l.listing_type !== "auction" && (isExpired(l) || laeuftBaldAb(l) || l.status === "expired");
           return (
-            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FFE7A9", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "14px 18px", marginBottom: 18, flexWrap: "wrap" }}>
               <Clock size={20} color={K.ink} />
               <div style={{ flex: "1 1 220px", minWidth: 0 }}>
                 <p style={{ margin: 0, fontSize: 14.5, fontWeight: 800, color: K.ink }}>{l.title}</p>
@@ -281,7 +281,7 @@ export default function ListingsPage() {
                 </p>
               </div>
               {verlaengerbar && (
-                <button onClick={() => { renew(l); setVerlaengernId(null); }} style={{ padding: "10px 18px", borderRadius: 999, border: "none", background: "#FFE7A9", color: K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
+                <button onClick={() => { renew(l); setVerlaengernId(null); }} style={{ padding: "10px 18px", borderRadius: 999, border: "none", background: "#FEE8B0", color: K.ink, fontSize: 13.5, fontWeight: 800, fontFamily: fonts.body, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}>
                   <RefreshCw size={14} /> Jetzt verlängern
                 </button>
               )}
@@ -291,7 +291,7 @@ export default function ListingsPage() {
         })()}
 
         {mahnPause && (
-          <div style={{ background: "#FBEBEA", border: "1px solid #C62828", borderRadius: 20, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ background: "#FFE2DE", border: "1px solid #C62828", borderRadius: 20, padding: "12px 16px", marginBottom: 18, fontSize: 13.5, color: "#c62828", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <span style={{ fontWeight: 800 }}>Inserate pausiert:</span>
             <span style={{ flex: "1 1 200px" }}>Eine Gebührenrechnung ist überfällig. Nach der Zahlung schalten wir deine Inserate wieder frei.</span>
             <Link href="/fees" style={{ fontWeight: 700, color: "#c62828", textDecoration: "underline", whiteSpace: "nowrap" }}>Zur Rechnung</Link>
@@ -305,7 +305,7 @@ export default function ListingsPage() {
             <h1 className="bd-seitentitel" style={{ fontSize: 26, fontWeight: 700, margin: "0 0 4px", fontFamily: "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif", letterSpacing: "-0.01em" }}>Meine Inserate</h1>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: 0 }}>{counts.all} Inserate · {counts.active} aktiv</p>
           </div>
-          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>
+          <Link href="/listings/new" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "11px 20px", borderRadius: 999, background: "#FEE8B0", color: K.ink, fontSize: 14, fontWeight: 800, fontFamily: fonts.body, textDecoration: "none", border: "none" }}>
             <Plus size={16} /> Neues Inserat
           </Link>
         </div>
@@ -346,15 +346,15 @@ export default function ListingsPage() {
           }}>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{selected.size} ausgewählt</span>
             <button onClick={() => handleBatchAction("pause")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FFE7A9", color: "#8A5A00", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FEE8B0", color: "#8A5A00", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Pause size={12} /> Pausieren
             </button>
             <button onClick={() => handleBatchAction("activate")} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#DBF5F0", color: "#3D6B3C", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#CEF6E8", color: "#3D6B3C", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Play size={12} /> Aktivieren
             </button>
             <button onClick={() => { if (confirm(`${selected.size} Inserate löschen?`)) handleBatchAction("delete"); }} disabled={!!batchAction}
-              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FBEBEA", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid #1D1D1D", background:"#FFE2DE", color: "#c62828", cursor: "pointer", fontFamily: fonts.body, display: "flex", alignItems: "center", gap: 4 }}>
               <Trash2 size={12} /> Löschen
             </button>
             <button onClick={() => setSelected(new Set())} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 12, color: colors.muted, fontFamily: fonts.body }}>
@@ -370,7 +370,7 @@ export default function ListingsPage() {
             <Package size={40} color={colors.mutedLt} style={{ marginBottom: 8 }} />
             <p style={{ fontSize: 16, fontWeight: 700, margin: "0 0 4px" }}>Keine Inserate</p>
             <p style={{ fontSize: 13, color: colors.mutedLt, margin: "0 0 20px" }}>Erstelle dein erstes Inserat.</p>
-            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FFE7A9", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
+            <Link href="/listings/new" style={{ display: "inline-flex", padding: "11px 24px", borderRadius: 999, background: "#FEE8B0", color: K.ink, fontSize: 13, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D" }}>
               <Plus size={16} style={{ marginRight: 6 }} /> Inserat erstellen
             </Link>
           </div>
@@ -524,7 +524,7 @@ export default function ListingsPage() {
                             <div style={{ position: "relative" }}>
                               <button onClick={() => setBoostMenuFor(boostMenuFor === l.id ? null : l.id)} title="Boosten" style={{
                                 width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                color: "#8A5A00", background: "#FFE7A9", border: "none", cursor: "pointer", transition: "all .15s",
+                                color: "#8A5A00", background: "#FEE8B0", border: "none", cursor: "pointer", transition: "all .15s",
                               }}>
                                 <Rocket size={14} />
                               </button>
@@ -572,7 +572,7 @@ export default function ListingsPage() {
                               width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
                               border: "none", cursor: "pointer", fontFamily: fonts.body, transition: "all .15s",
                               color: l.status === "paused" ? "#50804F" : "#8A5A00",
-                              background: l.status === "paused" ? "#DBF5F0" : "#FFE7A9",
+                              background: l.status === "paused" ? "#CEF6E8" : "#FEE8B0",
                             }}
                               onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
                               onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -600,12 +600,12 @@ export default function ListingsPage() {
                                   width: 32, height: 32, borderRadius: 20, display: "inline-flex", alignItems: "center", justifyContent: "center",
                                   border: "none", fontFamily: fonts.body, transition: "all .15s",
                                   color: hasBids ? colors.borderLt : "#c62828",
-                                  background: hasBids ? "transparent" : "#FBEBEA",
+                                  background: hasBids ? "transparent" : "#FFE2DE",
                                   cursor: hasBids ? "not-allowed" : "pointer",
                                   opacity: hasBids ? 0.5 : 1,
                                 }}
-                                onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FBEBEA"; }}
-                                onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FBEBEA"; }}>
+                                onMouseEnter={e => { if (!hasBids) e.currentTarget.style.background = "#FFE2DE"; }}
+                                onMouseLeave={e => { if (!hasBids) e.currentTarget.style.background = "#FFE2DE"; }}>
                                 <Trash2 size={14} />
                               </button>
                             )

@@ -9,17 +9,17 @@ const neben = { ...basis, background: "#fff", color: INK, boxShadow: "inset 0 -4
 
 const ARTEN = [
   ["A", "Ink, wie jetzt", "Dunkel mit weisser Schrift. Stärkster Kontrast, wirkt aber schwer, wenn mehrere auf einer Seite stehen.", { ...basis, background: INK, color: "#fff", boxShadow: "inset 0 -5px 0 rgba(255,255,255,.22)" }],
-  ["B", "Mint", "Die Farbe für gewählt und eingeschaltet wird auch die Farbe für Tun. Ink-Rand, eingedrückter Schatten.", { ...basis, background: "#DBF5F0", color: INK, boxShadow: "inset 0 -5px 0 rgba(29,29,29,.16)" }],
+  ["B", "Mint", "Die Farbe für gewählt und eingeschaltet wird auch die Farbe für Tun. Ink-Rand, eingedrückter Schatten.", { ...basis, background: "#CEF6E8", color: INK, boxShadow: "inset 0 -5px 0 rgba(29,29,29,.16)" }],
   ["C", "Lavendel", "Wie B, in der Farbe des Fusses und der Hover-Flächen.", { ...basis, background: "#E3E3FF", color: INK, boxShadow: "inset 0 -5px 0 rgba(29,29,29,.16)" }],
   ["D", "Weiss auf Ink-Sockel", "Weisser Knopf, der auf einer festen Ink-Kante steht. Beim Drücken sinkt er auf die Kante.", { ...basis, background: "#fff", color: INK, boxShadow: `0 4px 0 ${INK}`, marginBottom: 4 }],
-  ["E", "Ink mit Mint-Kante", "Dunkel wie jetzt, aber die untere Kante leuchtet in Mint. Behält den Kontrast, nimmt die Schwere.", { ...basis, background: INK, color: "#fff", boxShadow: "inset 0 -5px 0 #DBF5F0" }],
+  ["E", "Ink mit Mint-Kante", "Dunkel wie jetzt, aber die untere Kante leuchtet in Mint. Behält den Kontrast, nimmt die Schwere.", { ...basis, background: INK, color: "#fff", boxShadow: "inset 0 -5px 0 #CEF6E8" }],
 ];
 
 const chip = { display: "inline-flex", alignItems: "center", gap: 3, fontSize: 10.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999, border: `1px solid ${INK}`, lineHeight: 1.5 };
 const HOT = [
-  ["1", "Rosa, Flamme Himbeer (jetzt)", { ...chip, background: "#FFE3FB", color: INK }, "#C2255C"],
+  ["1", "Rosa, Flamme Himbeer (jetzt)", { ...chip, background: "#FFDFF9", color: INK }, "#C2255C"],
   ["2", "Weiss, Flamme rot", { ...chip, background: "#fff", color: INK }, "#C62828"],
-  ["3", "Butter, Flamme Ink", { ...chip, background: "#FFE7A9", color: INK }, INK],
+  ["3", "Butter, Flamme Ink", { ...chip, background: "#FEE8B0", color: INK }, INK],
   ["4", "Himbeer gefüllt", { ...chip, background: "#C2255C", color: "#fff" }, "#fff"],
 ];
 
@@ -39,7 +39,7 @@ export default function Page() {
               <button className="eckig kein-akzent" style={stil}><Plus size={17} strokeWidth={2.4} aria-hidden="true" /> Inserat veröffentlichen</button>
               <button className="eckig kein-akzent" style={neben}>Entwurf speichern</button>
             </div>
-            <div style={{ flex: "1 1 100%", display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", padding: "14px 18px", borderRadius: 20, border: `1px solid ${INK}`, background: "#FFE7A9" }}>
+            <div style={{ flex: "1 1 100%", display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", padding: "14px 18px", borderRadius: 20, border: `1px solid ${INK}`, background: "#FEE8B0" }}>
               <span style={{ flex: "1 1 200px", fontSize: 14 }}>Für Auktionen brauchst du eine Adresse im Profil.</span>
               <button className="eckig kein-akzent" style={{ ...stil, minHeight: 38, padding: "0 16px 3px", fontSize: 13.5, marginBottom: 0, boxShadow: String(stil.boxShadow).replace("-5px", "-3px").replace("0 4px 0", "0 3px 0") }}>Zu den Einstellungen</button>
             </div>
@@ -53,7 +53,7 @@ export default function Page() {
         {HOT.map(([nr, name, stil, flamme]) => (
           <div key={nr} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
             <p style={{ margin: 0, flex: "0 0 250px", fontSize: 14.5 }}><b style={{ display: "inline-block", minWidth: 22 }}>{nr}</b>{name}</p>
-            {["#FBEBEA", "#E3E3FF", "#E3F2FF", "#FFE7A9", "#FFE3FB"].map((bg) => (
+            {["#FFE2DE", "#E3E3FF", "#D3F0FF", "#FEE8B0", "#FFDFF9"].map((bg) => (
               <span key={bg} style={{ display: "inline-flex", gap: 5, padding: "12px 12px", borderRadius: 14, border: `1px solid ${INK}`, background: bg }}>
                 <span style={stil}><Flame size={11} color={flamme} fill={flamme} /> Hot</span>
                 <span style={{ ...chip, background: "#C62828", color: "#fff" }}>Endet bald</span>

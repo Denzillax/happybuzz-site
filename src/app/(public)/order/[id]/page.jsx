@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -238,7 +238,7 @@ export default function OrderDetailPage() {
         <p style={{ fontSize: 17, fontWeight: 800, color: colors.dark, margin: "0 0 4px" }}>Bestellung nicht gefunden</p>
         <p style={{ fontSize: 14, color: colors.muted, margin: "0 0 18px" }}>Diese Bestellung existiert nicht mehr oder gehört nicht zu deinem Konto.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 20, background: "#FFE7A9", color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", boxShadow: "none" }}>Meine Käufe</Link>
+          <Link href="/purchases" style={{ padding: "11px 20px", borderRadius: 20, background: "#FEE8B0", color: K.ink, fontSize: 14, fontWeight: 800, textDecoration: "none", border: "1px solid #1D1D1D", boxShadow: "none" }}>Meine Käufe</Link>
           <Link href="/sales" style={{ padding: "11px 20px", borderRadius: 20, background: "#fff", border: "1px solid #1D1D1D", color: K.ink, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Meine Verkäufe</Link>
         </div>
       </div>
@@ -332,13 +332,13 @@ export default function OrderDetailPage() {
       {salePopup && (
         <div onClick={() => setSalePopup(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 10000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 20, padding: "28px 26px", maxWidth: 360, width: "100%", textAlign: "center", fontFamily: fonts.body }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#DBF5F0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#CEF6E8", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
               <Star size={28} color={colors.teal} fill={colors.teal} />
             </div>
             <h3 style={{ margin: "0 0 6px", fontSize: 19, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{finishedLabel}!</h3>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "0 0 14px", flexWrap: "wrap" }}>
               {salePopup.pollen > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#50804F", background: "#50804F14", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.pollen} Pollen</span>}
-              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#8A5A00", background: "#FFE7A9", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.nektar} Nektar</span>}
+              {salePopup.nektar > 0 && <span style={{ fontSize: 13, fontWeight: 800, color: "#8A5A00", background: "#FEE8B0", padding: "6px 12px", borderRadius: 20 }}>+{salePopup.nektar} Nektar</span>}
             </div>
             <p style={{ margin: "0 0 16px", fontSize: 14, color: colors.muted }}>Du hast jetzt <b style={{ color: "#8A5A00" }}>{salePopup.balance} Nektar</b>. Einlösen?</p>
             <div style={{ display: "flex", gap: 10 }}>
@@ -392,7 +392,7 @@ export default function OrderDetailPage() {
           <div>
             {/* Status-Banner */}
             {isFinished && (
-              <div style={{ background: "#DBF5F0", borderRadius: 20, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ background: "#CEF6E8", borderRadius: 20, padding: "16px 20px", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
                 <CheckCircle size={20} color="#50804F" />
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: "#50804F" }}>{finishedLabel}</div>
@@ -432,7 +432,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#DBF5F0", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (
@@ -631,7 +631,7 @@ export default function OrderDetailPage() {
                       )}
                       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                     </div>
-                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#3D6B3C", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
+                    <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 14, borderRadius: 20, border: `1.5px solid #50804F`, background: "#CEF6E8", color: "#3D6B3C", fontSize: 14, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body, marginBottom: 10 }}>Kautions-Rechnung (QR) ansehen</a>
                     <button onClick={() => doAction(confirmDepositReturned, p.id, user.id, Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "1px solid #1D1D1D", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird gespeichert..." : "Kaution zurückerstattet"}</button>
                   </div>
                 )}
@@ -650,7 +650,7 @@ export default function OrderDetailPage() {
                           )}
                           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, paddingTop: 6, borderTop: `1px solid ${colors.borderLt}` }}><span>Rückerstattung</span><span>CHF {fmtCHF(Math.max(0, depositAmount - parseFloat(p.damage_amount || 0)))}</span></div>
                         </div>
-                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#DBF5F0", color: "#3D6B3C", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
+                        <a href={`/order/${p.id}/invoice?type=deposit`} target="_blank" rel="noopener" style={{ display: "block", textAlign: "center", padding: 12, borderRadius: 20, border: `1.5px solid #50804F`, background: "#CEF6E8", color: "#3D6B3C", fontSize: 13.5, fontWeight: 700, textDecoration: "none", fontFamily: fonts.body }}>Kautions-Rechnung (QR) ansehen</a>
                       </>
                     )}
                   </div>

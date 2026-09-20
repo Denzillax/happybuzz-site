@@ -20,7 +20,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
       padding: "14px 16px", borderRadius: 20,
-      background: verified ? "#DBF5F0" : pending ? "#FFE7A9" : "#fff",
+      background: verified ? "#CEF6E8" : pending ? "#FEE8B0" : "#fff",
       border: "1px solid #1D1D1D",
     }}>
       <div style={{
@@ -39,7 +39,7 @@ export function Badge({ verified, label, sublabel, icon: Icon, pending }) {
       <div style={{
         fontSize: 9.5, fontWeight: 700, fontFamily: MONO, textTransform: "uppercase", letterSpacing: ".1em",
         padding: "4px 9px", borderRadius: 20, whiteSpace: "nowrap",
-        background: verified ? K.moss : pending ? "#FFE7A9" : "transparent",
+        background: verified ? K.moss : pending ? "#FEE8B0" : "transparent",
         color: verified ? "#fff" : K.ink,
         border: `1.5px solid ${verified ? K.moss : pending ? K.ink : C.border}`,
       }}>
@@ -123,7 +123,7 @@ export function Btn({ children, variant = "primary", onClick, style: s, small, d
     opacity: disabled ? 0.5 : 1,
   };
   const variants = {
-    primary:   { background: "#FFE7A9", color: K.ink, boxShadow: disabled ? "none" : "inset 0 -4px 0 rgba(29,29,29,.14)" },
+    primary:   { background: "#FEE8B0", color: K.ink, boxShadow: disabled ? "none" : "inset 0 -4px 0 rgba(29,29,29,.14)" },
     secondary: { background: "transparent", color: K.ink },
     danger:    { background: "#fff", color: C.red, borderColor: C.red },
     ghost:     { background: "transparent", color: C.muted, border: "none" },
@@ -168,7 +168,7 @@ export function TrustMeter({ level }) {
         {Array.from({ length: segments }).map((_, i) => (
           <div key={i} style={{
             flex: 1, height: 8, borderRadius: 20,
-            background: i < level ? "#FFE7A9" : "rgba(255,255,255,.15)",
+            background: i < level ? "#FEE8B0" : "rgba(255,255,255,.15)",
             transition: "all .4s", transitionDelay: `${i * .08}s`,
           }} />
         ))}
