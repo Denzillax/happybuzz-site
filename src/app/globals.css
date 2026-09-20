@@ -2460,7 +2460,8 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 /* Inserieren: Bee-Impact als vier farbige Zeilen untereinander (Denis 20.09.2026: farbig ja, aber quer statt als Kacheln
    nebeneinander). Jede Zeile: links Prozent und Punkte, in der Mitte Satz, Untertitel und Vorteile, rechts der Haken. */
 .lf-stufen { display: flex; flex-direction: column; gap: 12px; }
-.lf-stufe { position: relative; display: grid; grid-template-columns: 92px minmax(0, 1fr) 28px; column-gap: 20px; row-gap: 3px; align-items: center; width: 100%; padding: 18px 20px 21px !important; margin: 0 !important; text-align: left;
+/* Spalten (Denis 20.09.2026): links der Text mit dem Spruch zuoberst, rechts die kleine Prozentzahl mit den Punkten, ganz rechts der Haken */
+.lf-stufe { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 28px; column-gap: 18px; row-gap: 3px; align-items: center; width: 100%; padding: 18px 20px 21px !important; margin: 0 !important; text-align: left;
             border: 1px solid #1D1D1D; border-radius: 18px !important; color: #1D1D1D; font: inherit; font-size: 14px; line-height: 1.4; cursor: pointer; box-shadow: inset 0 -5px 0 rgba(29,29,29,.12);
             transition: transform .25s cubic-bezier(.2,.7,.1,1), box-shadow .15s ease; }
 .lf-stufe:hover:not(.is-active) { transform: translateX(4px); filter: none !important; }
@@ -2468,25 +2469,25 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 /* Farbig ist nur die gewählte Stufe (Denis 20.09.2026). Die übrigen sind weiss und zeigen ihre Farbe beim Hovern, wie die Format-Kacheln. */
 .lf-stufe:not(.is-active):not(:hover) { background: #fff !important; }
 .lf-stufe-kopf { display: contents; }
-.lf-stufe-prozent { grid-column: 1; grid-row: 1 / span 2; align-self: center; font-size: 34px; font-weight: 500; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
-.lf-stufe-prozent small { font-size: 16px; margin-left: 1px; }
-.lf-stufe-punkte { grid-column: 1; grid-row: 3; align-self: start; display: inline-flex; gap: 4px; margin-top: 6px; }
+.lf-stufe-prozent { grid-column: 2; grid-row: 1 / span 2; align-self: end; justify-self: end; font-size: 20px; font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.lf-stufe-prozent small { font-size: 12px; margin-left: 1px; }
+.lf-stufe-punkte { grid-column: 2; grid-row: 3; align-self: start; justify-self: end; display: inline-flex; gap: 4px; margin-top: 6px; }
 .lf-stufe-punkte span { width: 8px; height: 8px; border-radius: 999px; border: 1px solid #1D1D1D; background: transparent; }
 .lf-stufe-punkte span.an { background: #1D1D1D; }
-.lf-stufe strong { grid-column: 2; grid-row: 2; font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
-.lf-stufe-text { grid-column: 2; grid-row: 3; opacity: .75; }
-.lf-stufe-vorteil { grid-column: 2; grid-row: 4; font-size: 13px; font-weight: 600; }
+.lf-stufe strong { grid-column: 1; grid-row: 1; font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
+.lf-stufe-text { grid-column: 1; grid-row: 2; font-style: italic; opacity: .75; }
+.lf-stufe-vorteil { grid-column: 1; grid-row: 3; font-size: 13px; font-weight: 600; }
 .lf-stufe-haken { grid-column: 3; grid-row: 1 / span 3; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; }
 .lf-stufe.is-active .lf-stufe-haken { background: #1D1D1D; color: #fff; }
 .lf-stufe-marke { position: absolute; top: -10px; left: 18px; padding: 2px 9px 3px; border-radius: 999px; background: #1D1D1D; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
-.lf-stufe-projekt { grid-column: 2; grid-row: 1; justify-self: start; margin-bottom: 6px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; line-height: 1.3; }
+.lf-stufe-projekt { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; font-size: 13px; line-height: 1.3; }
 .lf-stufe .lf-stufe-projekt strong { grid-column: auto; grid-row: auto; font-size: inherit; font-weight: 600; letter-spacing: 0; }
 .lf-stufe .lf-stufe-haken { grid-row: 1 / span 4; }
 .lf-stufe:not(.is-active):not(:hover) .lf-stufe-projekt { background: #F5F6F8; }
 .lf-stufe-hinweis { margin: 14px 0 0; padding: 12px 16px; border: 1px solid #1D1D1D; border-radius: 14px; background: var(--mk-rose); font-size: 14.5px; line-height: 1.45; }
 @media (max-width: 768px) {
-  .lf-stufe.bee-tier-card { grid-template-columns: 62px minmax(0, 1fr) 24px; column-gap: 12px; padding: 14px 14px 17px !important; }
-  .lf-stufe-prozent { font-size: 26px; } .lf-stufe-prozent small { font-size: 13px; }
+  .lf-stufe.bee-tier-card { grid-template-columns: minmax(0, 1fr) auto 24px; column-gap: 10px; padding: 14px 14px 17px !important; }
+  .lf-stufe-prozent { font-size: 18px; } .lf-stufe-prozent small { font-size: 11px; }
   .lf-stufe strong { font-size: 16px; } .lf-stufe-text, .lf-stufe-vorteil { font-size: 12.5px; }
   .lf-stufe-haken { width: 22px; height: 22px; }
 }

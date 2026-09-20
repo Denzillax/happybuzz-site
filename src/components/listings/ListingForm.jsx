@@ -2251,8 +2251,7 @@ export default function ListingForm({
                 <strong>{beeTexts[tier]}</strong>
                 <span className="lf-stufe-text">{BEE_FEE_SUBTITLES[tier]}</span>
                 <span className="lf-stufe-vorteil">{perks}</span>
-                {/* Zuerst liest man, was die Stufe bewirkt: das geförderte Projekt, im Wortlaut wie vorher (Denis 20.09.2026).
-                    Es steht in jeder Zeile, nicht nur in der gewählten. Darunter der Satz, der Untertitel und die Vorteile. */}
+                {/* Der wechselnde Spruch steht zuoberst, das geförderte Projekt zuunterst, aber in jeder Zeile (Denis 20.09.2026) */}
                 <span className="lf-stufe-projekt"><BeeIcon size={14} color="#1D1D1D" /> <span>{project}</span></span>
                 {recommended && <span className="lf-stufe-marke">Empfohlen</span>}
               </button>
