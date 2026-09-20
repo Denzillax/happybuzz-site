@@ -2344,13 +2344,13 @@ body:has(.mk) { background: #fff; }
 .bn-reihe { display: flex; align-items: center; justify-content: space-around; max-width: 480px; margin: 0 auto; height: 60px; }
 .bn .bn-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; padding: 4px 6px; border: none; background: none; color: var(--mk-ink); font: inherit; font-size: 10.5px; font-weight: 600; cursor: pointer; border-radius: 12px !important; }
 .bn-icon { width: 44px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid transparent; border-radius: 999px; transition: background .2s ease, border-color .2s ease; }
-/* Aktiv (Denis 20.09.2026): keine Fläche, kein Strich, das Symbol selbst färbt sich, und zwar im Service-Rosa (Himbeer
-   war ihm zu rot). Rosa allein wäre auf Weiss nicht zu sehen, darum füllt es das Symbol und eine Ink-Kontur hält die Form.
-   Das B hat ein Koordinatenfeld von rund 900 Einheiten, daher die breite Kontur. Das Wort bleibt Ink und wird fett. */
+/* Aktiv (Denis 20.09.2026): keine Fläche, kein Strich, keine Kontur. Das Symbol selbst färbt sich im Rosa des Formats
+   Service. Das Pastell #FFE3FB hätte auf Weiss Kontrast 1.2 und wäre nicht zu sehen, darum der kräftige Ton derselben
+   Farbfamilie (--bn-aktiv, Kontrast rund 5 auf Weiss). Das Wort bleibt Ink und wird fett. */
+.bn { --bn-aktiv: #C2259B; }
 .bn .bn-tab[aria-current=page] { font-weight: 700; }
-.bn-tab[aria-current=page] .bn-icon svg { fill: var(--mk-rosa); stroke: var(--mk-ink); overflow: visible; }
-.bn-tab[aria-current=page] .bn-icon svg[viewBox$="885.5"] path, .bn-tab[aria-current=page] .bn-icon svg[viewBox$="911.7"] path { fill: var(--mk-rosa); stroke: var(--mk-ink); stroke-width: 46; stroke-linejoin: round; paint-order: stroke fill; }
-.bn-tab[aria-current=page] .bn-initialen { background: var(--mk-rosa); color: var(--mk-ink); }
+.bn-tab[aria-current=page] .bn-icon { color: var(--bn-aktiv); }
+.bn-tab[aria-current=page] .bn-initialen { background: var(--bn-aktiv); border-color: var(--bn-aktiv); color: #fff; }
 .bn-tab:not([aria-current=page]) { opacity: .72; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
 .bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-mint); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.16); transform: translateY(-10px); }
