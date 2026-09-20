@@ -10,10 +10,10 @@ import { supabase } from "@/lib/supabase/supabase";
 import { getFeaturedChallenge, getChallengesWithProgress } from "@/lib/gamification";
 import BeeIcon from "@/components/shared/BeeIcon";
 
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#FBEBEA";
 const PAPER = "#FFFFFF";
-const HONEY = "#F4C03F";
+const HONEY = "#FFE7A9";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
@@ -97,7 +97,7 @@ export function ChallengeBanner() {
         }
       `}</style>
       {/* Gleiche Breite wie die Bee-Impact-Box (1080) */}
-      <div className="chal-box home-band-box" style={{ position: "relative", maxWidth: 1080, margin: "0 auto", background: "#FFFCF3", border: "1px solid #F0E3BC", borderRadius: 12, boxShadow: "0 2px 10px rgba(25,22,21,.05)", padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
+      <div className="chal-box home-band-box" style={{ position: "relative", maxWidth: 1080, margin: "0 auto", background: "#FFFCF3", border: "1px solid #F0E3BC", borderRadius: 20, boxShadow: 'none', padding: "18px 20px", display: "flex", gap: 18, alignItems: "center", flexWrap: "wrap" }}>
         {/* Lichtstreif laeuft in einer eigenen, gerundeten Clip-Ebene,
             damit die ueberstehende Biene nicht mitbeschnitten wird */}
         <div className="chal-sheen-clip"><div className="chal-sheen" /></div>
@@ -123,7 +123,7 @@ export function ChallengeBanner() {
           {progress && (
             <div style={{ marginTop: 8, maxWidth: 340 }}>
               <div style={{ height: 8, background: "#F1F3F5", borderRadius: 999, overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#50804F" : HONEY, borderRadius: 999, transition: "width .5s" }} />
+                <div style={{ height: "100%", width: `${pct}%`, background: isDone ? "#50804F" : INK, borderRadius: 999, transition: "width .5s" }} />
               </div>
               <p style={{ margin: "3px 0 0", fontSize: 11, color: "#5B626C" }}>
                 {isDone ? (progress.claimed ? "Geschafft, Pollen gutgeschrieben." : "Geschafft. Hol dir deine Pollen.") : `${progress.progress} von ${challenge.target_value}`}

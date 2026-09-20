@@ -919,7 +919,8 @@ html.bd-fx-on .bd-fx-reveal.is-in { opacity: 1; transform: none; }
 
 /* Honig-Balken vor Abschnittstiteln (Denis 19.09.2026): trägt die Markenfarbe durch die Seite */
 .bd-abschnittstitel { display: flex; align-items: center; gap: 10px; }
-.bd-abschnittstitel::before { content: ""; width: 4px; height: 18px; border-radius: 2px; background: #F4C03F; flex-shrink: 0; }
+/* Meeko-Design (20.09.2026): statt des gelben Balkens eine kleine Ink-Kachel, das Motiv aus dem B */
+.bd-abschnittstitel::before { content: ""; width: 10px; height: 10px; border-radius: 0; background: #1D1D1D; flex-shrink: 0; }
 
 /* ═══════════════════════════════════════════
    FORMAT-ICONS (Denis 19.09.2026): jedes der fünf Formate hat eine eigene kleine Bewegung.
@@ -2323,6 +2324,10 @@ body:has(.mk) { background: #fff; }
 /* Kacheln: im Labor am Boden 176 px hoch verankert (dort überlappen Karten den Hero), hier nicht */
 .mk-hero-echt .mk-schweb-3, .mk-hero-echt .mk-schweb-6 { bottom: 64px; }
 .mk-link-knopf { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px 3px; border: var(--mk-rand); border-radius: 10px; background: #fff; color: var(--mk-ink) !important; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-shadow: inset 0 -3px 0 rgba(29,29,29,.13); transition: background .2s ease; }
+/* Kategorien-Pillen und Knöpfe der Startseite im Meeko-Look: Ink-Rand, eingedrückter Schatten, Butter beim Hovern */
+.cat-pill { border: var(--mk-rand) !important; background: #fff !important; box-shadow: inset 0 -3px 0 rgba(29,29,29,.12); padding-bottom: 9px !important; }
+.cat-pill:hover { background: var(--mk-butter) !important; }
+main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
 .mk-link-knopf:hover { background: var(--mk-butter); filter: none !important; }
 /* Pastelltafeln auch ausserhalb von .mk */
 .mk-lavendel { background: var(--mk-lavendel); } .mk-himmel { background: var(--mk-himmel); } .mk-rosa { background: var(--mk-rosa); }
@@ -2330,13 +2335,18 @@ body:has(.mk) { background: #fff; }
 @media (max-width: 1100px) { .mk-hero-echt .mk-schweb-3, .mk-hero-echt .mk-schweb-6 { bottom: auto; } }
 @media (max-width: 767px) {
   .mk-hero-echt { margin-top: 0; padding: 30px 16px 44px; }
+  /* Abschnittsköpfe: am Handy kleiner, sonst schneidet der Knopf daneben den Titel ab */
+  .bd-abschnittstitel { font-size: 20px !important; }
+  .mk-link-knopf { min-height: 32px; padding: 0 10px 3px; font-size: 12.5px; }
   .mk-hero-echt .mk-h1 { font-size: 36px; }
   .mk-hero-echt .mk-hero-text { font-size: 16px; margin-top: 16px; }
   .mk-hero-echt .mk-schweb-feld { margin-bottom: 24px; }
   .mk-hero-echt .mk-hero-knoepfe { margin-top: 22px; }
   .mk-hero-echt .mk-hero-beta { margin-top: 22px; }
   .mk-hero-hinweis { font-size: 12.5px; padding: 6px 12px 7px; margin-bottom: 20px; text-align: left; }
-  .mk-hero-beta { font-size: 13px; text-align: left; border-radius: 18px; }
+  /* Am Handy steht die Marke über dem Satz, nebeneinander brach der Satz auf fünf Zeilen um */
+  .mk-hero-beta { flex-direction: column; gap: 6px; padding: 12px 16px; font-size: 14px; text-align: center; border-radius: 18px; }
+  .mk-hero-beta svg { display: none; }
   .lc-tafel { border-radius: 16px !important; }
   .lc-foto { inset: 7px !important; border-radius: 9px !important; }
 }

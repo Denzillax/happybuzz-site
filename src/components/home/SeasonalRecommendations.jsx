@@ -4,7 +4,7 @@ import { Sun, Leaf, Snowflake, Flower2 } from "lucide-react";
 
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
 const MUTED = "#686E78";
-const DARK = "#191615";
+const DARK = "#1D1D1D";
 const TEAL = "#1D1D1D";
 
 // Jahreszeit aus Monat (0-11) ableiten.
@@ -51,10 +51,10 @@ export function SeasonalRecommendations() {
           .season-img { flex: none; height: 120px; width: 100%; }
         }
       `}</style>
-      <div className="season-band" style={{ overflow: "hidden", borderRadius: 12, background: "#E8F4F3" }}>
+      <div className="season-band" style={{ overflow: "hidden", borderRadius: 20, background: "#E8F4F3" }}>
         <div style={{ flex: "1 1 auto", padding: "clamp(18px, 3vw, 28px)", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 12, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 20, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Icon size={18} color={TEAL} />
             </div>
             <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: DARK, margin: 0, letterSpacing: "-0.01em" }}>{season.title}</h2>

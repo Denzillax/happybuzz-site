@@ -6,8 +6,8 @@ import { SwipeRow } from '@/components/shared/SwipeRow'
 import { SectionHeader } from './SectionHeader'
 
 const MONO = "'Instrument Sans', 'Manrope', sans-serif"
-const INK = '#191615'
-const HONEY = '#F4C03F'
+const INK = '#1D1D1D'
+const HONEY = '#FFE7A9'
 
 // Laufende Auktionen mit tickendem Countdown: der Grund, heute wiederzukommen.
 // Erscheint nur, wenn tatsaechlich Auktionen laufen.
@@ -79,7 +79,7 @@ export function AuctionSpotlight() {
                 <span style={{
                   fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: '.06em',
                   background: dringend ? HONEY : '#fff', color: INK,
-                  border: "1px solid #E5E8EC", padding: '4px 10px',
+                  border: "1px solid #1D1D1D", padding: '4px 10px',
                   display: 'inline-block', fontVariantNumeric: 'tabular-nums',
                 }}>
                   {rest(listing.auction_end)}

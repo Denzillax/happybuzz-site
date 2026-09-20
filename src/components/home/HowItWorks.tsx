@@ -25,15 +25,15 @@ const steps = [
 
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
 const MONO = "'Instrument Sans', 'Manrope', sans-serif"
-const INK = '#191615'
-const SAND = '#F5F6F8'
+const INK = '#1D1D1D'
+const SAND = '#E3E3FF'
 const PAPER = '#FFFFFF'
-const HONEY = '#F4C03F'
+const HONEY = '#FFE7A9'
 const PETROL = '#1D1D1D'
 
 export function HowItWorks() {
   return (
-    <section style={{ padding: '64px 0', marginTop: 64, background: PAPER, borderTop: "1px solid #E5E8EC", borderBottom: "1px solid #E5E8EC" }}>
+    <section style={{ padding: '64px 0', marginTop: 64, background: PAPER, borderTop: "1px solid #1D1D1D", borderBottom: "1px solid #1D1D1D" }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -52,7 +52,7 @@ export function HowItWorks() {
             const Icon = s.icon
             return (
               <div key={i} style={{
-                background: '#fff', border: "1px solid #E5E8EC", borderRadius: 12,
+                background: '#fff', border: "1px solid #1D1D1D", borderRadius: 20,
                 padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16,
               }}>
                 {/* Schrittnummer + Icon-Tafel */}
@@ -61,7 +61,7 @@ export function HowItWorks() {
                     {s.step}
                   </span>
                   <div style={{
-                    width: 48, height: 48, borderRadius: 12, background: SAND, border: "1px solid #E5E8EC",
+                    width: 48, height: 48, borderRadius: 20, background: SAND, border: "1px solid #1D1D1D",
                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: PETROL,
                   }}>
                     <Icon size={23} strokeWidth={1.8} />

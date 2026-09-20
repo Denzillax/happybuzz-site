@@ -9,10 +9,10 @@ import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
 const MOSS = "#487848"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
-const INK = "#191615";
+const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
-const SAND = "#F5F6F8";
-const HONEY = "#F4C03F";
+const SAND = "#DBF5F0";
+const HONEY = "#FFE7A9";
 const PETROL = "#1D1D1D";
 const MUTED = "rgba(20,17,13,0.55)";
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif";
@@ -57,11 +57,11 @@ export function CommunityImpact() {
   return (
     <section style={{ maxWidth: 1280, margin: "0 auto", padding: "48px 24px 0" }}>
       {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
-      <div style={{ background: "#EEF3EC", borderRadius: 12, padding: "clamp(22px, 3.5vw, 36px)" }}>
+      <div style={{ background: "#DBF5F0", borderRadius: 20, padding: "clamp(22px, 3.5vw, 36px)" }}>
       <div className="impact-layout">
         {/* ── Foto-Karussell ── */}
         <div className="impact-photo" style={{
-          position: "relative", borderRadius: 12, overflow: "hidden",
+          position: "relative", borderRadius: 20, overflow: "hidden",
           background: "#fff",
           aspectRatio: "3 / 2",
         }}>

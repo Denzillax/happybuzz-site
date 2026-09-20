@@ -8,9 +8,9 @@ import { fonts } from '@/lib/theme'
 import { FEE_FREE_BELOW } from '@/lib/constants'
 
 const BODY = fonts.body
-const INK = '#191615'
-const CHIP = '#F1F3F5'
-const HONEY = '#F4C03F'
+const INK = '#1D1D1D'
+const CHIP = '#FFFFFF'
+const HONEY = '#FFE7A9'
 
 // Schnelleinstiege nach Preis und Anlass (19.09.2026, Anregung marko.ch). Sie stehen IN
 // der Kategorie-Reihe, nicht als eigene Reihe: eine zweite, kurze Reihe liess die rechte
@@ -90,7 +90,7 @@ export function Categories() {
           return (
             <Link key={c.href} href={c.href} className="cat-pill" style={{
               display: 'inline-flex', alignItems: 'center', gap: 7,
-              background: '#fff', color: INK, textDecoration: 'none', border: '1px solid #E5E8EC',
+              background: '#fff', color: INK, textDecoration: 'none', border: '1px solid #1D1D1D',
               fontFamily: BODY, fontSize: 13, fontWeight: 600,
               padding: '7px 13px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0,
               transition: 'background .15s ease',
@@ -100,7 +100,7 @@ export function Categories() {
             </Link>
           )
         })}
-        <span aria-hidden="true" style={{ width: 1, alignSelf: 'stretch', margin: '6px 4px', background: '#E5E8EC', flexShrink: 0 }} />
+        <span aria-hidden="true" style={{ width: 1, alignSelf: 'stretch', margin: '6px 4px', background: '#1D1D1D', flexShrink: 0 }} />
         {shown.map((cat) => (
           <Link key={cat.id} href={`/search?category=${cat.slug}`} className="cat-pill" style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
@@ -118,7 +118,7 @@ export function Categories() {
           background: '#fff', color: INK, textDecoration: 'none',
           fontFamily: BODY, fontSize: 13, fontWeight: 600,
           padding: '8px 14px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0,
-          border: '1px solid #E5E8EC',
+          border: '1px solid #1D1D1D',
         }}>
           Alle Kategorien
         </Link>
