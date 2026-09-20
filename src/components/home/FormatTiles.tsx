@@ -40,10 +40,10 @@ export function FormatTiles() {
       <style>{`
         .fmt-tile { transition: transform .3s cubic-bezier(.2,.7,.1,1); }
         .fmt-tile:hover { transform: translateY(-5px); filter: none !important; }
-        .fmt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .fmt-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
         /* Mobile: wischbare Zeile, gleiches Muster wie Kategorien-Pills.
            Keine Kind-Selektoren in Inline-Styles (Hydration-Error). */
-        @media (max-width: 860px) {
+        @media (max-width: 1100px) {
           .fmt-grid { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 4px; scroll-snap-type: x proximity; }
           .fmt-grid::-webkit-scrollbar { display: none; }
           .fmt-tile { flex: 0 0 58vw; max-width: 240px; scroll-snap-align: start; }

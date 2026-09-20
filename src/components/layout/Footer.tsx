@@ -2,10 +2,9 @@
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
-import BieneSchalter from '@/components/shared/BieneSchalter'
 
 // Meeko-Design (20.09.2026): der Fuss ist eine Lavendel-Tafel mit Ink-Rand. Oben der Aufruf zum Inserieren, darunter
-// Marke und die drei Linkspalten, unten die Rechtszeile mit dem Bienen-Schalter. Inhalt und Links wie vorher.
+// Marke und die drei Linkspalten, unten die Rechtszeile. Inhalt und Links wie vorher.
 // Styles: globals.css, Block FUSS MEEKO (ft-*). Die Klassen ftr-grid und ftr-bottom bleiben für die Handy-Regeln.
 const links = [
   { titel: 'Marktplatz', eintraege: [
@@ -56,7 +55,6 @@ export function Footer() {
             <Link href="/terms">AGB</Link>
             <Link href="/privacy">Datenschutz</Link>
             <Link href="/imprint">Impressum</Link>
-            <BieneSchalter />
           </div>
         </div>
       </div>

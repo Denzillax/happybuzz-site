@@ -2507,3 +2507,32 @@ main button[style*="rgb(255, 231, 169)"], main a[style*="rgb(255, 231, 169)"],
 /* Knöpfe in der Akzentfarbe des Formulars bekommen denselben Rand und Schatten wie die Butter-Knöpfe der übrigen Seite */
 .listing-form button[style*="--lf-akzent"], .listing-form a[style*="--lf-akzent"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
 .listing-form .lf-kipp[style*="--lf-akzent"] { box-shadow: none !important; }
+
+/* ── CHALLENGE MEEKO (ch-*), Komponente components/home/ChallengeBanner.jsx. Ohne Biene (Denis 20.09.2026). ── */
+.ch { padding: 64px 24px 0; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: #1D1D1D; }
+.ch-tafel { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; padding: 28px 32px; border: 1px solid #1D1D1D; border-radius: 28px; background: var(--mk-butter); }
+.ch-lohn { flex-shrink: 0; width: 132px; height: 132px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 1px solid #1D1D1D; border-radius: 22px; background: #fff; transform: rotate(-4deg); box-shadow: inset 0 -5px 0 rgba(29,29,29,.12); }
+.ch-lohn-zahl { font-size: 44px; font-weight: 500; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ch-lohn-wort { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.ch-text { flex: 1; min-width: 240px; }
+.ch-marke { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.ch-titel { margin: 0; font-size: clamp(22px, 2.4vw, 30px); font-weight: 500; letter-spacing: -.035em; line-height: 1.15; }
+.ch-titel span { opacity: .65; }
+.ch-beschrieb { margin: 6px 0 0; max-width: 46em; font-size: 15.5px; line-height: 1.45; opacity: .8; }
+.ch-zeile { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; font-weight: 600; }
+.ch-zeile span { display: inline-flex; align-items: center; gap: 5px; }
+.ch-fortschritt { margin-top: 14px; max-width: 380px; }
+.ch-balken { height: 12px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; overflow: hidden; }
+.ch-balken div { height: 100%; border-radius: 999px; transition: width .5s ease; }
+.ch-fortschritt p { margin: 5px 0 0; font-size: 13px; opacity: .75; }
+.ch-knoepfe { flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.ch-knopf { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px 4px; border: 1px solid #1D1D1D; border-radius: 10px; background: #1D1D1D; color: #fff !important; font-size: 16px; font-weight: 600; letter-spacing: -.02em; text-decoration: none; box-shadow: inset 0 -5px 0 rgba(255,255,255,.22); transition: background .2s ease; }
+.ch-knopf:hover { background: #000; filter: none !important; }
+.ch-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 13.5px; font-weight: 600; color: #1D1D1D !important; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 767px) {
+  .ch { padding: 40px 16px 0; }
+  .ch-tafel { padding: 22px 18px; border-radius: 22px; gap: 18px; }
+  .ch-lohn { width: 96px; height: 96px; border-radius: 18px; }
+  .ch-lohn-zahl { font-size: 32px; }
+  .ch-knoepfe { width: 100%; }
+}
