@@ -6,7 +6,7 @@ import { Bookmark, MousePointerClick, ArrowRight, ShieldCheck, Smartphone } from
 import { bookmarkletHref } from "@/lib/importBookmarklet";
 import { IMPORT_SOURCES } from "@/lib/importListing";
 
-const INK = "#191615";
+const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
 const HONEY = "#F4C03F";
 const MUTED = "rgba(20,17,13,0.6)";

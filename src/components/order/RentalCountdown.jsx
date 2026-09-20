@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import { fonts } from "@/lib/theme";
 
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#F3F3FF";
 const MOSS = "#50804F";
 const HONIG = "#F4A100";
 const ROT = "#c62828";

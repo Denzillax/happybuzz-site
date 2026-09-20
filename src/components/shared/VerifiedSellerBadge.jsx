@@ -4,7 +4,7 @@ import { fonts } from "@/lib/theme";
 
 const MOSS = "#50804F";
 const MOSS_SOFT = "#EEF4EC";
-const INK = "#191615";
+const INK = "#1D1D1D";
 
 // Öffentliches "Verifiziert"-Abzeichen für Verkäufer.
 // Kriterium (bewusst): E-Mail bestätigt UND Ausweis vom Admin geprüft

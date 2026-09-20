@@ -5,7 +5,7 @@ import { getCommunityImpactStats } from '@/lib/listings'
 import { CountUp } from '@/components/shared/effects'
 
 const MONO = "'Instrument Sans', 'Manrope', sans-serif"
-const INK = '#191615'
+const INK = '#1D1D1D'
 
 // Der Katalog in Zahlen: lebende Kennzahlen direkt unter dem Hero.
 // Ehrliche kleine Zahlen sind besser als gar keine.

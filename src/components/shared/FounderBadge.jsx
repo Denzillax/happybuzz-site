@@ -4,7 +4,7 @@ import { fonts } from "@/lib/theme";
 
 const HONEY = "#F4C03F";
 const HONEY_SOFT = "#FBF1D2";
-const INK = "#191615";
+const INK = "#1D1D1D";
 
 // Öffentliches "Gründungsmitglied"-Abzeichen.
 // Kriterium: profiles.founder_number ist gesetzt. Die Nummer vergibt der

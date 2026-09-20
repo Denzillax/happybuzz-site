@@ -2,8 +2,8 @@
 import Link from "next/link";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#F3F3FF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MUTED = "rgba(20,17,13,0.62)";

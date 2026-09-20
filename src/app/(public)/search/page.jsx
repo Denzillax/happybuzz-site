@@ -13,7 +13,7 @@ import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/rece
 import { getActiveBoosts } from "@/lib/gamification";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
-const INK = "#191615";
+const INK = "#1D1D1D";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";

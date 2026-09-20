@@ -34,7 +34,7 @@ const usps = [
 
 const HEAD = "'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', system-ui, sans-serif"
 const MONO = "'Instrument Sans', 'Manrope', sans-serif"
-const INK = '#191615'
+const INK = '#1D1D1D'
 const PETROL = '#1D1D1D'
 
 // Wird als Unterblock in "So funktioniert Beedaro" gerendert (HowItWorks),

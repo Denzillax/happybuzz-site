@@ -11,8 +11,8 @@ import { colors, fonts, radius } from "@/lib/theme";
 import BeeIcon from "@/components/shared/BeeIcon";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#E3F2FF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";

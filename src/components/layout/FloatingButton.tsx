@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Plus } from 'lucide-react'
 
 const YELLOW = '#F4C03F'
-const DARK = '#191615'
+const DARK = '#1D1D1D'
 
 export function FloatingButton() {
   const [hover, setHover] = useState(false)

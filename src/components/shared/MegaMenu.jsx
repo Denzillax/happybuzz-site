@@ -7,8 +7,8 @@ import { colors, fonts } from "@/lib/theme";
 import { getAllCategories } from "@/lib/listings";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#F3F3FF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 

@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 
 // ── Katalog-Design-Tokens ──
-const INK = "#191615";
-const SAND = "#F5F6F8";
+const INK = "#1D1D1D";
+const SAND = "#FFE3FB";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MOSS = "#50804F";

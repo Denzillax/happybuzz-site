@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
-// KLAR-Designsystem (Ricardo-inspiriert, seit 24.08.2026).
+// MEEKO-Designsystem (seit 20.09.2026, vorher KLAR seit 24.08.2026): 1 px Ink-Rand, Rundung 20, Pastellflaechen,
+// keine Schlagschatten, Hauptknopf dunkel. Werte unten sind umgestellt, die Namen (sand, honey) sind geblieben.
 // Frueherer Katalog-Look (eckig, Ink-Rahmen, Space Mono, Versatzschatten)
 // ist abgeloest. Vokabular:
 //   · Flaechen weiss, Panels #F5F6F8, Karten mit Hairline #E5E8EC
@@ -10,10 +11,10 @@
 // ═══════════════════════════════════════════════════════════════
 
 export const K = {
-  ink: "#191615",
-  sand: "#F5F6F8",
+  ink: "#1D1D1D",
+  sand: "#F3F3FF",
   paper: "#FFFFFF",
-  honey: "#F4C03F",
+  honey: "#FFE7A9", // Meeko: Butter. Das alte Gelb lebt nur noch in Sternen und Spielen
   petrol: "#1D1D1D",
   moss: "#50804F",
   muted: "rgba(20,17,13,0.6)",
@@ -26,16 +27,16 @@ export const BODY = "'Instrument Sans', 'Manrope', sans-serif";
 // Karten (Login: Formular-Panel)
 export const card = {
   background: K.paper,
-  border: "1px solid #E5E8EC",
-  borderRadius: 10,
-  boxShadow: "0 2px 10px rgba(25,22,21,.08)",
+  border: "1px solid #1D1D1D",
+  borderRadius: 20,
+  boxShadow: "none",
 };
 
 // Karten ohne Schatten (Listenzeilen, verschachtelte Flaechen)
 export const cardFlat = {
   background: "#fff",
-  border: "1px solid #E5E8EC",
-  borderRadius: 10,
+  border: "1px solid #1D1D1D",
+  borderRadius: 20,
 };
 
 // Mono-Grossbuchstaben (Labels "E-MAIL", Eyebrows, Tab-Beschriftungen)
@@ -52,10 +53,10 @@ export const monoLabel = {
 export const input = {
   width: "100%",
   padding: "12px 16px",
-  borderRadius: 10,
-  border: "1px solid #E5E8EC",
+  borderRadius: 12,
+  border: "1px solid #1D1D1D",
   background: "#fff",
-  fontSize: 15,
+  fontSize: 16,
   fontFamily: BODY,
   color: K.ink,
   outline: "none",
@@ -63,7 +64,7 @@ export const input = {
 };
 export const inputFocus = {
   border: "1.5px solid #1D1D1D",
-  boxShadow: "0 0 0 3px rgba(0,124,124,.15)",
+  boxShadow: "0 0 0 3px rgba(29,29,29,.16)",
 };
 
 // Primaerbutton (Login: "Anmelden")
@@ -71,21 +72,21 @@ export const btnPrimary = {
   width: "100%",
   padding: "13px 16px",
   borderRadius: 10,
-  border: "1px solid #E5E8EC",
-  background: "#FFE7A9",
-  color: K.ink,
-  fontSize: 15,
-  fontWeight: 800,
+  border: "1px solid #1D1D1D",
+  background: "#1D1D1D", // Meeko: der eine Hauptknopf ist dunkel
+  color: "#fff",
+  fontSize: 16,
+  fontWeight: 600,
   fontFamily: BODY,
   cursor: "pointer",
-  boxShadow: "0 2px 8px rgba(25,22,21,.15)",
+  boxShadow: "inset 0 -4px 0 rgba(255,255,255,.22)",
 };
 
 // Sekundaerbutton (Login: Google/Apple)
 export const btnSecondary = {
   padding: "11px 16px",
   borderRadius: 10,
-  border: "1px solid #E5E8EC",
+  border: "1px solid #1D1D1D",
   background: "#fff",
   color: K.ink,
   fontSize: 14,
