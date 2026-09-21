@@ -2552,6 +2552,10 @@ main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
 .ch-sticker { position: absolute; top: -22px; right: 56px; display: inline-flex; align-items: baseline; gap: 6px; padding: 9px 16px 11px; border: 1px solid #1D1D1D; border-radius: 12px; background: var(--mk-lavendel); color: #1D1D1D; font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transform: rotate(5deg); box-shadow: inset 0 -4px 0 rgba(29,29,29,.14); animation: ch-wippen 5s ease-in-out infinite; }
 .ch-sticker b { font-size: 26px; font-weight: 600; letter-spacing: -.04em; }
 @keyframes ch-wippen { 0%, 84%, 100% { transform: rotate(5deg); } 88% { transform: rotate(-3deg) scale(1.05); } 93% { transform: rotate(8deg) scale(1.05); } }
+.ch-biene { position: relative; flex-shrink: 0; width: 210px; height: 210px; border-radius: 28px; background: var(--mk-mint); }
+.ch-biene img { position: absolute; left: -8%; top: -10%; width: 124%; height: auto; max-width: none; transform-origin: 40% 60%; animation: ch-biene 5s ease-in-out infinite; }
+@keyframes ch-biene { 0%, 84%, 100% { transform: rotate(-4deg); } 88% { transform: rotate(-11deg) scale(1.04); } 92% { transform: rotate(2deg) scale(1.04); } 96% { transform: rotate(-7deg); } }
+@media (prefers-reduced-motion: reduce) { .ch-biene img { animation: none; transform: rotate(-4deg); } }
 .ch-text { flex: 1; min-width: 260px; }
 .ch-marke { display: inline-block; margin: 0 0 16px; padding: 4px 12px 5px; border-radius: 999px; background: var(--mk-mint); color: #1D1D1D; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .ch-titel { margin: 0; font-size: clamp(30px, 3.8vw, 52px); font-weight: 500; letter-spacing: -.045em; line-height: 1.05; color: #fff; }
@@ -2583,6 +2587,7 @@ main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
   .ch-sticker { right: 22px; top: -18px; font-size: 12px; padding: 7px 12px 9px; }
   .ch-sticker b { font-size: 21px; }
   .ch-kacheln span { width: 22px; height: 22px; }
+  .ch-biene { width: 132px; height: 132px; border-radius: 22px; }
   .ch-seite { width: 100%; min-width: 0; }
   .ch-ziffer b { font-size: 28px; }
 }

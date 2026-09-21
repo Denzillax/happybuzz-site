@@ -59,6 +59,9 @@ export function ChallengeBanner() {
     <section className="ch">
       <div className="ch-tafel">
         <span className="ch-sticker" aria-hidden="true"><b>+{challenge.xp_reward}</b> Pollen</span>
+        {/* Biene mit Megafon (Denis 21.09.2026): echtes Foto, freigestellt. Auf der dunklen Tafel wären Beine und Fühler nicht zu
+            sehen, darum liegt sie auf einer Mint-Kachel und ragt rechts mit dem Megafon darüber hinaus. */}
+        <span className="ch-biene" aria-hidden="true"><img src="/bee-megafon-foto.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></span>
         <div className="ch-text">
           <p className="ch-marke">Challenge der Woche</p>
           <h2 className="ch-titel">
