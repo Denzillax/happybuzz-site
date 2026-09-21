@@ -31,7 +31,6 @@ export default function PublicLayout({
       <div className="no-print fab-desktop-only"><FloatingButton /></div>
       <div className="no-print bottom-nav-mobile"><BottomNav /></div>
       <BannedGate />
-      {/* Die fliegende Biene ist seit dem Meeko-Design raus (Denis 20.09.2026). Bauteil: components/shared/FlyingBee.jsx */}
       <RevealObserver />
       {/* Live-Praesenz fuers Admin-Dashboard (Analytik -> Gerade online) */}
       <PresenceTracker />
