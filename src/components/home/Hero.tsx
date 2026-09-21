@@ -14,7 +14,8 @@ import { ArrowRight, Plus, MessageSquareHeart, Flower2, CircleCheck } from 'luci
 // Platz 0 liegt vorn, 1 und 2 schauen dahinter hervor, der letzte Platz ist die Karte, die gerade nach links weggewischt wurde.
 // Jede Karte trägt ein Format als Schild: der Stapel zeigt so, was man hier alles tun kann (Denis 21.09.2026: dem Hero fehlte etwas).
 const FUNDE = ['/images/hero/camera.png', '/images/hero/gameboy.png', '/images/hero/boombox.png', '/images/hero/vinyl.png']
-const FORMAT = [['Auktion', '#EDE7F6'], ['Festpreis', '#FFF3D6'], ['Miete', '#E3F2FD'], ['Gratis', '#EEF3EC']]
+// gleiche Formatfarben wie die Kacheln darunter (FormatTiles)
+const FORMAT = [['Auktion', '#E3E3FF'], ['Festpreis', '#FFE2DE'], ['Miete', '#D3F0FF'], ['Gratis', '#FEE8B0']]
 const PLATZ = [
   { transform: 'translate(-50%, -50%) rotate(-4deg) scale(1)', opacity: 1, zIndex: 4 },
   { transform: 'translate(-20%, -56%) rotate(9deg) scale(.86)', opacity: 1, zIndex: 3 },
