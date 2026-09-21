@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
 import { supabase } from '@/lib/supabase/supabase'
-import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
+import { ArrowRight, Plus, MessageSquareHeart, Flower2, CircleCheck } from 'lucide-react'
 
 // Neu gestaltet (Denis 21.09.2026), gleiche Sprache wie Challenge und Bee-Impact: eine weisse Karte mit feinem Rand und
 // weichem Schatten. Rechts der Satz, grösser und fetter als bisher, mit EINEM dunklen Hauptknopf. Links ein Honig-Feld,
-// auf dem die Fundstücke als grosser Kartenstapel liegen, der von allein weiterblättert, mit dunklem Aufkleber. Daneben die Beta-Karte als dunkler
-// Gegenpol mit Honig-Knopf. Am Handy stehen Satz und Honig-Feld untereinander, die Beta-Karte wird zur schmalen Leiste.
+// auf dem die Fundstücke als grosser Kartenstapel liegen, der von allein weiterblättert, mit dunklem Aufkleber. Daneben die Beta-Karte, hell wie die
+// anderen Karten (die dunkle Fassung wirkte daneben fremd), mit drei Test-Punkten und Honig-Knopf. Am Handy stehen Satz und Honig-Feld untereinander, die Beta-Karte wird zur schmalen Leiste.
 // Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
 // Fundstücke als Kartenstapel, der von allein weiterblättert (Denis 21.09.2026: Karten grösser, swipen von selbst).
 // Platz 0 liegt vorn, 1 und 2 schauen dahinter hervor, der letzte Platz ist die Karte, die gerade nach links weggewischt wurde.
@@ -59,13 +59,15 @@ export function Hero() {
         .hw-marke { position: absolute; left: 16px; top: 18px; z-index: 3; padding: 7px 13px 8px; border-radius: 10px; background: #191615; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-5deg); box-shadow: 0 6px 14px rgba(25,22,21,.22); white-space: nowrap; }
         .hw-fund { position: absolute; left: 38%; top: 60%; width: 60%; max-width: 250px; padding: 14px; background: #fff; border-radius: 22px; box-shadow: 0 16px 32px rgba(25,22,21,.2); transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
         .hw-fund img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
-        .hw-beta { flex: 1 1 260px; min-width: 240px; max-width: 420px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(22px, 3vw, 30px); border-radius: 18px; background: #191615; color: #fff; box-shadow: 0 10px 30px rgba(25,22,21,.12); }
-        .hw-beta-marke { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        .hw-beta { flex: 1 1 260px; min-width: 240px; max-width: 420px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(22px, 3vw, 30px); border-radius: 18px; background: #fff; color: #191615; border: 1px solid #E5E8EC; box-shadow: 0 10px 30px rgba(25,22,21,.07); }
+        .hw-beta-marke { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; padding: 5px 12px; border-radius: 999px; background: #F5F6F8; border: 1px solid #E5E8EC; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
         .hw-punkt { width: 7px; height: 7px; border-radius: 50%; background: #F4C03F; flex-shrink: 0; }
-        .hw-beta-titel { margin: 0 0 8px; font-size: clamp(20px, 2.2vw, 26px); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; color: #fff; }
-        .hw-beta-text { margin: 0 0 18px; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,.72); }
+        .hw-beta-titel { margin: 0 0 8px; font-size: clamp(20px, 2.2vw, 26px); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; color: #191615; }
+        .hw-beta-text { margin: 0 0 16px; font-size: 14px; line-height: 1.55; color: #5B626C; }
+        .hw-beta-liste { display: flex; flex-direction: column; gap: 6px; width: 100%; margin: 0 0 18px; padding: 0; list-style: none; }
+        .hw-beta-liste li { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 10px; background: #F5F6F8; border: 1px solid #E5E8EC; font-size: 13.5px; font-weight: 700; color: #191615; }
         .hw-beta-knopf { margin-top: auto; display: inline-flex; align-items: center; gap: 7px; padding: 12px 20px; border-radius: 999px; background: #F4C03F; color: #191615; font-size: 14px; font-weight: 800; text-decoration: none; }
-        .hw-mini { align-items: center; gap: 9px; flex: 1 1 100%; padding: 12px 16px; border-radius: 999px; background: #191615; color: #fff; font-size: 13.5px; font-weight: 800; text-decoration: none; }
+        .hw-mini { align-items: center; gap: 9px; flex: 1 1 100%; padding: 12px 16px; border-radius: 999px; background: #fff; border: 1px solid #E5E8EC; box-shadow: 0 6px 18px rgba(25,22,21,.06); color: #191615; font-size: 13.5px; font-weight: 800; text-decoration: none; }
         @media (max-width: 860px) {
           .hw { flex-direction: column; }
           .hw-feld { order: 0; flex: 0 0 auto; min-width: 0; min-height: 0; height: 250px; }
@@ -110,11 +112,16 @@ export function Hero() {
           </div>
         </section>
 
-        {/* Beta-Karte: dunkler Gegenpol mit Honig-Knopf */}
+        {/* Beta-Karte: hell wie die übrigen Karten, mit den drei Dingen zum Testen und Honig-Knopf */}
         <section className="hw-beta beta-card-full">
           <div className="hw-beta-marke"><span className="hw-punkt" /> Geschlossene Beta</div>
           <h2 className="hw-beta-titel">Willkommen, Beta-Crew.</h2>
-          <p className="hw-beta-text">Du gehörst zu den Ersten. Teste kaufen, verkaufen und mieten, und melde alles, was klemmt.</p>
+          <p className="hw-beta-text">Du gehörst zu den Ersten. Melde alles, was klemmt.</p>
+          <ul className="hw-beta-liste">
+            {['Kaufen und bieten', 'Inserieren und verkaufen', 'Mieten und buchen'].map((s) => (
+              <li key={s}><CircleCheck size={16} color="#50804F" /> {s}</li>
+            ))}
+          </ul>
           <Link href="/beta" className="hw-beta-knopf cta-pill"><MessageSquareHeart size={15} /> So testest du mit</Link>
         </section>
 
