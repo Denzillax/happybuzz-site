@@ -9,14 +9,6 @@ import { getCommunityImpactStats } from "@/lib/listings";
 import { nextMilestone } from "@/lib/impact";
 
 const MOSS = "#487848"; // auf der hellgrünen Box (#EEF3EC) braucht es die dunklere Stufe: #50804F läge bei 4.1, das hier bei 4.6
-const INK = "#191615";
-const PAPER = "#FFFFFF";
-const SAND = "#F5F6F8";
-const HONEY = "#F4C03F";
-const PETROL = "#0B5E5C";
-const MUTED = "rgba(20,17,13,0.55)";
-const HEAD = "'General Sans', 'Manrope', system-ui, sans-serif";
-const MONO = "'Manrope', sans-serif";
 
 const chf = (n) => Math.round(Number(n || 0)).toLocaleString("de-CH");
 
@@ -54,81 +46,89 @@ export function CommunityImpact() {
     { value: `CHF ${chf(stats.impact)}`, label: "an Projekte" },
   ];
 
+  // Neu gestaltet (Denis 21.09.2026), gleiche Sprache wie die Challenge der Woche: eine weisse Karte mit feinem Rand. Links
+  // das Foto über die ganze Höhe mit dem Bee-Impact-Aufkleber, rechts die drei Zahlen als Kacheln (der Betrag an Projekte
+  // grün hervorgehoben), darunter das nächste Ziel mit kräftigerem Balken und ein dunkler Knopf.
+  // Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
+  const ms = nextMilestone(stats.impact);
+  const span = Math.max(1, ms.target - ms.prev);
+  const paidPct = Math.max(0, Math.min(100, ((Number(stats.impact || 0) - ms.prev) / span) * 100));
+  const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
+  const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "48px 24px 0" }}>
-      {/* Weiches, gruen getoentes Band im Stil von Hero und Beta-Karte */}
-      <div style={{ background: "#EEF3EC", borderRadius: 12, padding: "clamp(22px, 3.5vw, 36px)" }}>
-      <div className="impact-layout">
-        {/* ── Foto-Karussell ── */}
-        <div className="impact-photo" style={{
-          position: "relative", borderRadius: 12, overflow: "hidden",
-          background: "#fff",
-          aspectRatio: "3 / 2",
-        }}>
-          <Image src={PHOTO.src} alt={PHOTO.alt} fill
-            sizes="(max-width: 768px) 320px, 300px"
-            style={{ objectFit: "cover" }} />
+    <section className="home-band" style={{ padding: "48px 24px 0" }}>
+      <style>{`
+        .ciw { display: flex; align-items: stretch; background: #fff; border: 1px solid #E5E8EC; border-radius: 18px; box-shadow: 0 10px 30px rgba(25,22,21,.07); overflow: hidden; }
+        .ciw-foto { position: relative; flex: 0 0 320px; min-height: 300px; background: #EEF3EC; }
+        .ciw-marke { position: absolute; left: 14px; top: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px 8px; border-radius: 10px; background: #2F5A2F; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-4deg); box-shadow: 0 6px 14px rgba(25,22,21,.22); }
+        .ciw-inhalt { flex: 1; min-width: 0; padding: 30px 32px; }
+        .ciw-auge { margin: 0; font-size: 10.5px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #487848; }
+        .ciw-titel { margin: 6px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; color: #191615; }
+        .ciw-zahlen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+        .ciw-zahl { display: flex; flex-direction: column; gap: 5px; padding: 14px 14px 12px; border-radius: 12px; background: #F5F6F8; border: 1px solid #E5E8EC; min-width: 0; }
+        .ciw-zahl b { font-size: clamp(19px, 2.4vw, 27px); font-weight: 800; letter-spacing: -.02em; line-height: 1; color: #191615; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .ciw-zahl em { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #5B626C; }
+        .ciw-zahl.gruen { background: #EEF3EC; border-color: #D5E2D2; }
+        .ciw-zahl.gruen b { color: #2F5A2F; }
+        .ciw-ziel { margin-top: 22px; }
+        .ciw-ziel-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+        .ciw-ziel-kopf b { font-size: 14.5px; font-weight: 800; color: #191615; }
+        .ciw-ziel-kopf span { font-size: 12px; color: #5B626C; font-variant-numeric: tabular-nums; }
+        .ciw-balken { display: flex; height: 14px; margin-top: 10px; border-radius: 999px; background: #F1F3F5; border: 1px solid #E5E8EC; overflow: hidden; }
+        .ciw-text { margin: 9px 0 0; font-size: 13px; color: #5B626C; }
+        .ciw-fuss { display: flex; align-items: center; justify-content: space-between; gap: 14px 20px; flex-wrap: wrap; margin-top: 22px; }
+        .ciw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px; background: #191615; color: #fff; font-size: 14px; font-weight: 800; text-decoration: none; }
+        @media (max-width: 860px) {
+          .ciw { flex-direction: column; }
+          .ciw-foto { flex: 0 0 auto; min-height: 0; aspect-ratio: 16 / 9; }
+          .ciw-inhalt { padding: 24px 20px 24px; }
+          .ciw-titel { font-size: 22px; }
+          .ciw-zahl { padding: 12px 10px 10px; }
+        }
+      `}</style>
+      <div className="ciw home-band-box" style={{ maxWidth: 1080, margin: "0 auto" }}>
+        <div className="ciw-foto">
+          <span className="ciw-marke"><Leaf size={13} /> Bee-Impact</span>
+          <Image src={PHOTO.src} alt={PHOTO.alt} fill sizes="(max-width: 860px) 100vw, 320px" style={{ objectFit: "cover" }} />
         </div>
+        <div className="ciw-inhalt">
+          <p className="ciw-auge">20 % jeder Gebühr</p>
+          <h2 className="ciw-titel">Was bisher zusammengekommen ist</h2>
 
-        {/* ── Inhalt ── */}
-        <div className="impact-content">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
-            <Leaf size={14} color={MOSS} />
-            <span style={{ fontSize: 12.5, fontWeight: 700, color: MOSS }}>Bee-Impact</span>
-          </div>
-          <h2 style={{ margin: "0 0 16px", fontSize: 20, fontWeight: 700, fontFamily: HEAD, color: INK, letterSpacing: "-0.01em", lineHeight: 1.15 }}>
-            Was bisher zusammengekommen ist
-          </h2>
-
-          <div style={{ display: "flex", gap: "clamp(14px, 3vw, 34px)", flexWrap: "wrap" }}>
-            {cards.map((c) => (
-              <div key={c.label} style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
-                <span style={{ fontFamily: HEAD, fontWeight: 700, color: INK, lineHeight: 1, fontSize: "clamp(20px, 3.6vw, 27px)", letterSpacing: "-0.01em", fontVariantNumeric: "tabular-nums" }}>{c.value}</span>
-                <span style={{ fontSize: 12, color: MUTED, whiteSpace: "nowrap" }}>{c.label}</span>
+          <div className="ciw-zahlen">
+            {cards.map((c, i) => (
+              <div key={c.label} className={i === 2 ? "ciw-zahl gruen" : "ciw-zahl"}>
+                <b>{c.value}</b>
+                <em>{c.label}</em>
               </div>
             ))}
           </div>
 
-          {(() => {
-            const ms = nextMilestone(stats.impact);
-            const span = Math.max(1, ms.target - ms.prev);
-            const paidPct = Math.max(0, Math.min(100, ((Number(stats.impact || 0) - ms.prev) / span) * 100));
-            const wegPct = Math.max(0, Math.min(100 - paidPct, (Number(stats.unterwegs || 0) / span) * 100));
-            const remaining = Math.max(0, ms.target - Number(stats.impact || 0));
-            return (
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid rgba(25,22,21,.1)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
-                  <span style={{ fontFamily: HEAD, fontSize: 13.5, fontWeight: 700, color: INK }}>Nächstes Ziel: {ms.name}</span>
-                  <span style={{ fontSize: 11.5, color: MUTED, fontVariantNumeric: "tabular-nums" }}>CHF {chf(stats.impact)} / {chf(ms.target)}</span>
-                </div>
-                <div style={{ height: 10, borderRadius: 999, background: "#fff", marginTop: 10, overflow: "hidden", display: "flex" }}>
-                  <div style={{ width: `${paidPct}%`, background: MOSS }} />
-                  <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#F7E3A8 5px,#F7E3A8 10px)" }} />
-                </div>
-                <p style={{ margin: "9px 0 0", fontSize: 12.5, color: MUTED }}>
-                  {ms.reached
-                    ? <>Alle Ziele erreicht. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
-                    : <>Noch <b style={{ color: MOSS }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <>. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs.</b></> : "."}</>}
-                </p>
-              </div>
-            );
-          })()}
-
-          {userImpact > 0 && (
-            <p style={{ margin: "16px 0 0", fontSize: 13, color: MUTED }}>
-              Von dir beigetragen: <b style={{ color: MOSS }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+          <div className="ciw-ziel">
+            <div className="ciw-ziel-kopf">
+              <b>Nächstes Ziel: {ms.name}</b>
+              <span>CHF {chf(stats.impact)} von {chf(ms.target)}</span>
+            </div>
+            <div className="ciw-balken" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(paidPct)}>
+              <div style={{ width: `${paidPct}%`, background: MOSS }} />
+              <div style={{ width: `${wegPct}%`, background: "repeating-linear-gradient(45deg,#F4C03F,#F4C03F 5px,#F7E3A8 5px,#F7E3A8 10px)" }} />
+            </div>
+            <p className="ciw-text">
+              {ms.reached
+                ? <>Alle Ziele erreicht. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} unterwegs.</b></>
+                : <>Noch <b style={{ color: MOSS }}>CHF {chf(remaining)}</b>{Number(stats.unterwegs || 0) > 0 ? <>. <b style={{ color: "#854F0B" }}>CHF {chf(stats.unterwegs)} schon unterwegs.</b></> : "."}</>}
             </p>
-          )}
+          </div>
 
-          <Link href="/impact" className="bd-btn" style={{
-            display: "inline-flex", alignItems: "center", gap: 8, marginTop: 20,
-            padding: "11px 22px", borderRadius: 999, background: HONEY, color: INK,
-            fontSize: 14, fontWeight: 700, fontFamily: HEAD, textDecoration: "none",
-          }}>
-            Mehr über Bee-Impact <ArrowRight size={16} />
-          </Link>
+          <div className="ciw-fuss">
+            <Link href="/impact" className="ciw-knopf bd-btn">Mehr über Bee-Impact <ArrowRight size={16} /></Link>
+            {userImpact > 0 && (
+              <p style={{ margin: 0, fontSize: 13, color: "#5B626C" }}>
+                Von dir beigetragen: <b style={{ color: MOSS }}>CHF {Number(userImpact).toLocaleString("de-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>{firstName ? `. Danke, ${firstName}.` : "."}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
       </div>
     </section>
   );
