@@ -19,6 +19,18 @@ const FORMATE = [
   { verb: 'verschenken', format: 'Gratis', farbe: '#FEE8B0', bild: '/images/hero/vinyl.png' },
 ]
 
+// Waben, die an der Kante aus der Honigfläche brechen: x ist der Abstand zur Kante (negativ = noch auf Gelb),
+// y die Höhe im Feld, g die Grösse, o die Deckkraft, s die Dauer des Schwebens.
+const WABEN = [
+  { x: -30, y: 6, g: 76, o: 1, s: 9 },
+  { x: 6, y: 28, g: 44, o: .9, s: 7.5 },
+  { x: -22, y: 60, g: 60, o: 1, s: 8.5 },
+  { x: 30, y: 48, g: 24, o: .62, s: 6.5 },
+  { x: 10, y: 80, g: 32, o: .8, s: 7 },
+  { x: 40, y: 16, g: 16, o: .45, s: 6 },
+  { x: 44, y: 88, g: 13, o: .38, s: 8 },
+]
+
 // Platz 0 liegt vorn, 1 und 2 schauen dahinter hervor, 3 wartet unsichtbar dahinter, 4 ist gerade nach links weggewischt.
 const PLATZ = [
   { transform: 'translate(-50%, -50%) rotate(-4deg) scale(1)', opacity: 1, zIndex: 5 },
@@ -47,10 +59,10 @@ export function Hero() {
   return (
     <div className="hw-band">
       <style>{`
-        .hw-band { --hw-feld: 500px; --hw-kante: calc(max(24px, 50% - 616px) + var(--hw-feld)); background: linear-gradient(90deg, #F4C03F var(--hw-kante), #fff var(--hw-kante)); border-bottom: 1px solid #E5E8EC; }
+        .hw-band { position: relative; --hw-feld: 500px; --hw-kante: calc(max(24px, 50% - 616px) + var(--hw-feld)); background: linear-gradient(90deg, #F4C03F var(--hw-kante), #fff var(--hw-kante)); border-bottom: 1px solid #E5E8EC; }
         .hw-reihe { max-width: 1280px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; align-items: stretch; min-height: 440px; }
         .hw { flex: 1 1 0; min-width: 0; display: flex; align-items: stretch; }
-        .hw-text { flex: 1 1 340px; min-width: 0; padding: clamp(30px, 4vw, 56px) 0 clamp(30px, 4vw, 56px) clamp(28px, 5vw, 80px); display: flex; flex-direction: column; justify-content: center; }
+        .hw-text { flex: 1 1 340px; min-width: 0; padding: clamp(30px, 4vw, 56px) 0 clamp(30px, 4vw, 56px) clamp(46px, 5.5vw, 92px); display: flex; flex-direction: column; justify-content: center; }
         .hw-zweck { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 16px; padding: 6px 13px; border-radius: 999px; background: #EEF3EC; border: 1px solid #D5E2D2; color: #2F5A2F; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
         .hw-titel { margin: 0 0 16px; font-size: clamp(30px, 4.4vw, 60px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: #191615; }
         .hw-marker { background: linear-gradient(transparent 62%, #F4C03F 62%, #F4C03F 92%, transparent 92%); padding: 0 .08em; margin: 0 -.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
@@ -63,11 +75,17 @@ export function Hero() {
         .hw-betalink { display: inline-flex; align-items: center; gap: 6px; color: #5B626C; text-decoration: underline; text-underline-offset: 3px; }
         .hw-live-punkt { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hwPuls 2.2s ease-out infinite; }
         @keyframes hwPuls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
+        @keyframes hwSchweb { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-11px) rotate(6deg); } }
         .hw-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
         .hw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 800; text-decoration: none; }
         .hw-knopf.dunkel { background: #191615; color: #fff; }
         .hw-knopf.hell { background: #fff; color: #191615; border: 1px solid #D5D9DF; }
         .hw-feld { position: relative; order: -1; overflow: hidden; cursor: pointer; flex: 0 0 var(--hw-feld); min-height: 300px; }
+        /* Hinter dem Stapel leuchtet die Farbe des gerade gezeigten Formats durch. Sie wandert mit, die Fläche bleibt Honig. */
+        .hw-glanz { position: absolute; left: 42%; top: 54%; width: 150%; height: 150%; transform: translate(-50%, -50%); background-color: var(--akzent, #FFE2DE); opacity: .5; mix-blend-mode: soft-light; transition: background-color .7s ease; -webkit-mask-image: radial-gradient(closest-side, #000 10%, transparent 72%); mask-image: radial-gradient(closest-side, #000 10%, transparent 72%); pointer-events: none; }
+        /* Die Kante zerfällt in Waben statt hart zu schneiden. Sie liegen genau auf der Farbkante des Bandes. */
+        .hw-kante { position: absolute; left: var(--hw-kante); top: 0; bottom: 0; width: 0; pointer-events: none; }
+        .hw-wabe { position: absolute; background: #F4C03F; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); animation: hwSchweb 8s ease-in-out infinite; }
         .hw-fund { position: absolute; left: 40%; top: 54%; width: 56%; max-width: 270px; padding: 14px; text-align: center; background: #fff; border-radius: 22px; box-shadow: 0 16px 32px rgba(25,22,21,.2); transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
         .hw-fund img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
         .hw-format { display: inline-block; margin-bottom: 10px; padding: 5px 12px 6px; border-radius: 999px; border: 1px solid rgba(25,22,21,.14); font-size: 12.5px; font-weight: 800; color: #191615; text-align: center; }
@@ -76,6 +94,7 @@ export function Hero() {
         @media (max-width: 1100px) { .hw-band { --hw-feld: 380px; } }
         @media (max-width: 860px) {
           .hw-band { background: #fff; }
+          .hw-kante { display: none; }
           .hw-reihe { flex-direction: column; gap: 14px; min-height: 0; }
           .hw { flex-direction: column; }
           .hw-text { padding: 26px 0 24px; }
@@ -86,8 +105,13 @@ export function Hero() {
           .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
           .hw-knoepfe { gap: 8px; }
         }
-        @media (prefers-reduced-motion: reduce) { .hw-fund { transition: none; } .hw-live-punkt { animation: none; } .hw-verb { transition: none; } }
+        @media (prefers-reduced-motion: reduce) { .hw-fund { transition: none; } .hw-live-punkt, .hw-wabe { animation: none; } .hw-verb { transition: none; } }
       `}</style>
+      <span className="hw-kante" aria-hidden="true">
+        {WABEN.map((w) => (
+          <span key={`${w.x}-${w.y}`} className="hw-wabe" style={{ left: w.x, top: `${w.y}%`, width: w.g, height: w.g * 1.1547, opacity: w.o, animationDuration: `${w.s}s`, animationDelay: `-${w.s / 2}s` }} />
+        ))}
+      </span>
       <div className="hw-reihe">
 
         <section className="hw">
@@ -119,7 +143,8 @@ export function Hero() {
               <Link href="/beta" className="hw-betalink"><MessageSquareHeart size={14} /> Geschlossene Beta: so testest du mit</Link>
             </p>
           </div>
-          <div className="hw-feld" aria-hidden="true" onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={weiter}>
+          <div className="hw-feld" aria-hidden="true" style={{ ['--akzent' as any]: FORMATE[vorn].farbe }} onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={weiter}>
+            <span className="hw-glanz" />
             {FORMATE.map((f, i) => (
               <div key={f.format} className="hw-fund" style={PLATZ[(i - vorn + FORMATE.length) % FORMATE.length]}>
                 <span className="hw-format" style={{ background: f.farbe }}>{f.format}</span>
