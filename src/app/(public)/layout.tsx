@@ -7,7 +7,6 @@ import { BottomNav } from '@/components/layout/BottomNav'
 import { FloatingButton } from '@/components/layout/FloatingButton'
 import { BannedGate } from '@/components/layout/BannedGate'
 import SiteGate from '@/components/shared/SiteGate'
-import FlyingBee from '@/components/shared/FlyingBee'
 import { RevealObserver } from '@/components/shared/effects'
 import PresenceTracker from '@/components/shared/PresenceTracker'
 
@@ -33,7 +32,6 @@ export default function PublicLayout({
       <div className="no-print bottom-nav-mobile"><BottomNav /></div>
       <BannedGate />
       {/* Easter Egg: fliegt selten durchs Bild; Alt+B oder "bee" tippen ruft sie */}
-      <div className="no-print"><FlyingBee /></div>
       <RevealObserver />
       {/* Live-Praesenz fuers Admin-Dashboard (Analytik -> Gerade online) */}
       <PresenceTracker />
