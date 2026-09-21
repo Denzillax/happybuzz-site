@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
+import { supabase } from '@/lib/supabase/supabase'
 import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Neu gestaltet (Denis 21.09.2026), gleiche Sprache wie Challenge und Bee-Impact: eine weisse Karte mit feinem Rand und
@@ -11,7 +12,9 @@ import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 // Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
 // Fundstücke als Kartenstapel, der von allein weiterblättert (Denis 21.09.2026: Karten grösser, swipen von selbst).
 // Platz 0 liegt vorn, 1 und 2 schauen dahinter hervor, der letzte Platz ist die Karte, die gerade nach links weggewischt wurde.
+// Jede Karte trägt ein Format als Schild: der Stapel zeigt so, was man hier alles tun kann (Denis 21.09.2026: dem Hero fehlte etwas).
 const FUNDE = ['/images/hero/camera.png', '/images/hero/gameboy.png', '/images/hero/boombox.png', '/images/hero/vinyl.png']
+const FORMAT = [['Auktion', '#EDE7F6'], ['Festpreis', '#FFF3D6'], ['Miete', '#E3F2FD'], ['Gratis', '#EEF3EC']]
 const PLATZ = [
   { transform: 'translate(-50%, -50%) rotate(-4deg) scale(1)', opacity: 1, zIndex: 4 },
   { transform: 'translate(-20%, -56%) rotate(9deg) scale(.86)', opacity: 1, zIndex: 3 },
@@ -22,6 +25,13 @@ const PLATZ = [
 export function Hero() {
   const [vorn, setVorn] = useState(0)
   const [halt, setHalt] = useState(false)
+  // Lebenszeichen: wie viele Inserate gerade online sind (echte Zahl, gleiche Bedingung wie die Inseratlisten). Ohne Zahl bleibt die Zeile weg.
+  const [online, setOnline] = useState(0)
+  useEffect(() => {
+    supabase.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'active')
+      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+      .then(({ count }) => { if (count && count > 0) setOnline(count) })
+  }, [])
   useEffect(() => {
     if (halt || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const t = setInterval(() => setVorn((v) => (v + 1) % FUNDE.length), 2600)
@@ -36,6 +46,11 @@ export function Hero() {
         .hw-zweck { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 16px; padding: 6px 13px; border-radius: 999px; background: #EEF3EC; border: 1px solid #D5E2D2; color: #2F5A2F; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
         .hw-titel { margin: 0 0 12px; font-size: clamp(30px, 4.2vw, 50px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: #191615; }
         .hw-unter { margin: 0 0 24px; max-width: 30em; font-size: clamp(14.5px, 1.5vw, 17px); line-height: 1.5; color: #5B626C; }
+        .hw-marker { background: linear-gradient(transparent 62%, #F4C03F 62%, #F4C03F 92%, transparent 92%); padding: 0 .08em; margin: 0 -.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+        .hw-live { display: inline-flex; align-items: center; gap: 8px; margin: 18px 0 0; font-size: 13px; font-weight: 700; color: #5B626C; }
+        .hw-live-punkt { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hwPuls 2.2s ease-out infinite; }
+        @keyframes hwPuls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
+        .hw-format { position: absolute; left: 12px; top: 12px; z-index: 1; padding: 4px 10px 5px; border-radius: 999px; border: 1px solid rgba(25,22,21,.14); font-size: 11.5px; font-weight: 800; color: #191615; }
         .hw-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
         .hw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 800; text-decoration: none; }
         .hw-knopf.dunkel { background: #191615; color: #fff; }
@@ -58,7 +73,7 @@ export function Hero() {
           .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
           .hw-knoepfe { gap: 8px; }
         }
-        @media (prefers-reduced-motion: reduce) { .hw-fund { transition: none; } }
+        @media (prefers-reduced-motion: reduce) { .hw-fund { transition: none; } .hw-live-punkt { animation: none; } }
       `}</style>
       <div className="hw-reihe">
 
@@ -70,7 +85,7 @@ export function Hero() {
               <Flower2 size={14} color="#487848" /> 20% jeder Gebühr fliessen in den Bienenschutz
               <ArrowRight size={13} strokeWidth={2.4} />
             </Link>
-            <h1 className="hw-titel">Was du suchst, hat schon jemand.</h1>
+            <h1 className="hw-titel">Was du suchst, <span className="hw-marker">hat schon jemand.</span></h1>
             <p className="hw-unter">Kaufen, bieten, mieten, buchen oder verschenken. Ein Marktplatz, fünf Formate.</p>
             <div className="hw-knoepfe">
               <Magnetic>
@@ -80,11 +95,15 @@ export function Hero() {
                 <Link href="/search" className="hw-knopf hell cta-pill">Stöbern <ArrowRight size={16} strokeWidth={2.4} /></Link>
               </Magnetic>
             </div>
+            {online > 0 && (
+              <p className="hw-live"><span className="hw-live-punkt" /> {online.toLocaleString('de-CH')} Inserate gerade online</p>
+            )}
           </div>
           <div className="hw-feld" aria-hidden="true" onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={() => setVorn((v) => (v + 1) % FUNDE.length)}>
             <span className="hw-marke">Secondhand aus der Schweiz</span>
             {FUNDE.map((src, i) => (
               <div key={src} className="hw-fund" style={PLATZ[(i - vorn + FUNDE.length) % FUNDE.length]}>
+                <span className="hw-format" style={{ background: FORMAT[i][1] }}>{FORMAT[i][0]}</span>
                 <img src={src} alt="" />
               </div>
             ))}
