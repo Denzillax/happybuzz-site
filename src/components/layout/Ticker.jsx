@@ -13,7 +13,7 @@ import { getTicker } from "@/lib/announcement";
 // Stufen aus site_ticker.speed -> Pixel pro Sekunde
 const TEMPO = { slow: 45, normal: 90, fast: 150 };
 
-export function TickerBar({ message, bgColor, textColor, speed = "normal", disabled = false, ruhig = false }) {
+export function TickerBar({ message, bgColor, textColor, speed = "normal", disabled = false }) {
   const boxRef = useRef(null);
   const messRef = useRef(null);
   // repeat: Wiederholungen pro Haelfte; dur: Sekunden fuer eine halbe Runde
@@ -50,15 +50,14 @@ export function TickerBar({ message, bgColor, textColor, speed = "normal", disab
   // Klar-Look: schlankes Band, normale Gross-/Kleinschreibung, moderates Gewicht
   const schrift = {
     fontFamily: "'Instrument Sans', 'Manrope', 'Instrument Sans', 'General Sans', sans-serif",
-    fontWeight: ruhig ? 500 : 700, letterSpacing: ".01em",
-    fontSize: ruhig ? "13px" : "clamp(13px, 1.4vw, 15px)", lineHeight: 1,
+    fontWeight: 700, letterSpacing: ".01em",
+    fontSize: "clamp(13px, 1.4vw, 15px)", lineHeight: 1,
   };
 
   return (
     <div ref={boxRef} className="no-print" style={{
       background: bgColor, color: textColor, overflow: "hidden", position: "relative",
       opacity: disabled ? 0.45 : 1,
-      borderTop: ruhig ? "1px solid rgba(29,29,29,.12)" : undefined, borderBottom: ruhig ? "1px solid rgba(29,29,29,.12)" : undefined,
     }}>
       {/* Unsichtbare Mess-Einheit in identischer Schrift */}
       <span ref={messRef} aria-hidden="true" style={{ ...schrift, position: "absolute", visibility: "hidden", whiteSpace: "pre" }}>{einheit}</span>
@@ -83,7 +82,5 @@ export function Ticker({ placement }) {
   }, []);
 
   if (!t || !t.enabled || !(t.message || "").trim() || t.placement !== placement) return null;
-  // Meeko (21.09.2026): auf der Seite läuft das Band ruhig in warmem Neutral mit Ink-Schrift, damit es nicht mit Hero, Beta-Schild
-  // und Faktenzeile konkurriert. Die im Admin gewählten Farben gelten weiter für die Vorschau dort.
-  return <TickerBar message={t.message} bgColor="#F6F4EF" textColor="#1D1D1D" speed={t.speed} ruhig />;
+  return <TickerBar message={t.message} bgColor={t.bg_color} textColor={t.text_color} speed={t.speed} />;
 }

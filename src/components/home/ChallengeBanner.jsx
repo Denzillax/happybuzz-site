@@ -48,20 +48,18 @@ export function ChallengeBanner() {
       ? { href: "/hive", label: "Im Hive einlösen" }
       : { href: "/listings/new", label: "Jetzt inserieren" };
 
-  // Dritte Fassung (Denis 20.09.2026: anders und spannender, nicht in Butter). Eine dunkle Tafel als Gegenpol zu den
-  // hellen Pastellflächen der Seite. Die Spannung kommt aus zwei lebenden Teilen: die Restzeit tickt sekundengenau in
-  // Kacheln herunter, und der Fortschritt ist eine Reihe von Kacheln, eine pro Schritt, gefüllte in Mint. Das Kachelmotiv
-  // stammt aus dem B. Die Belohnung klebt als gedrehter Lavendel-Sticker an der Ecke. Styles: globals.css, CHALLENGE MEEKO (ch-*).
+  // Vierte Fassung (Denis 21.09.2026): weisse Karte mit Mint-Feld und Biene, so ähnlich wie im alten Design. Styles: globals.css, CHALLENGE MEEKO (ch-*).
   const ziel = Math.max(1, challenge.target_value || 1);
   const stand = Math.min(ziel, progress?.progress || 0);
   const alsKacheln = ziel <= 24;
   return (
     <section className="ch">
       <div className="ch-tafel">
-        <span className="ch-sticker" aria-hidden="true"><b>+{challenge.xp_reward}</b> Pollen</span>
-        {/* Biene mit Megafon (Denis 21.09.2026): echtes Foto, freigestellt. Auf der dunklen Tafel wären Beine und Fühler nicht zu
-            sehen, darum liegt sie auf einer Mint-Kachel und ragt rechts mit dem Megafon darüber hinaus. */}
-        <span className="ch-biene" aria-hidden="true"><img src="/bee-megafon-foto.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></span>
+        {/* Mint-Feld mit der Foto-Biene und dem Belohnungs-Aufkleber, wie das Honig-Feld im alten Design */}
+        <div className="ch-feld" aria-hidden="true">
+          <span className="ch-sticker"><b>+{challenge.xp_reward}</b> Pollen</span>
+          <img className="ch-biene" src="/bee-megafon-foto.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async" />
+        </div>
         <div className="ch-text">
           <p className="ch-marke">Challenge der Woche</p>
           <h2 className="ch-titel">
