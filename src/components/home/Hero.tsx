@@ -1,21 +1,32 @@
 'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
 import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Neu gestaltet (Denis 21.09.2026), gleiche Sprache wie Challenge und Bee-Impact: eine weisse Karte mit feinem Rand und
 // weichem Schatten. Rechts der Satz, grösser und fetter als bisher, mit EINEM dunklen Hauptknopf. Links ein Honig-Feld,
-// auf dem vier Fundstücke als gekippte Karten liegen, mit dunklem Aufkleber. Daneben die Beta-Karte als dunkler
+// auf dem die Fundstücke als grosser Kartenstapel liegen, der von allein weiterblättert, mit dunklem Aufkleber. Daneben die Beta-Karte als dunkler
 // Gegenpol mit Honig-Knopf. Am Handy stehen Satz und Honig-Feld untereinander, die Beta-Karte wird zur schmalen Leiste.
 // Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
-const FUNDE = [
-  { src: '/images/hero/camera.png', rot: -8, links: '7%', oben: '24%' },
-  { src: '/images/hero/gameboy.png', rot: 5, links: '42%', oben: '19%' },
-  { src: '/images/hero/boombox.png', rot: 6, links: '15%', oben: '58%' },
-  { src: '/images/hero/vinyl.png', rot: -5, links: '56%', oben: '52%' },
+// Fundstücke als Kartenstapel, der von allein weiterblättert (Denis 21.09.2026: Karten grösser, swipen von selbst).
+// Platz 0 liegt vorn, 1 und 2 schauen dahinter hervor, der letzte Platz ist die Karte, die gerade nach links weggewischt wurde.
+const FUNDE = ['/images/hero/camera.png', '/images/hero/gameboy.png', '/images/hero/boombox.png', '/images/hero/vinyl.png']
+const PLATZ = [
+  { transform: 'translate(-50%, -50%) rotate(-4deg) scale(1)', opacity: 1, zIndex: 4 },
+  { transform: 'translate(-20%, -56%) rotate(9deg) scale(.86)', opacity: 1, zIndex: 3 },
+  { transform: 'translate(2%, -60%) rotate(16deg) scale(.72)', opacity: .92, zIndex: 2, transition: 'opacity .45s ease .3s' },
+  { transform: 'translate(-175%, -46%) rotate(-24deg) scale(1)', opacity: 0, zIndex: 5 },
 ]
 
 export function Hero() {
+  const [vorn, setVorn] = useState(0)
+  const [halt, setHalt] = useState(false)
+  useEffect(() => {
+    if (halt || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setInterval(() => setVorn((v) => (v + 1) % FUNDE.length), 2600)
+    return () => clearInterval(t)
+  }, [halt])
   return (
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
       <style>{`
@@ -29,9 +40,9 @@ export function Hero() {
         .hw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 800; text-decoration: none; }
         .hw-knopf.dunkel { background: #191615; color: #fff; }
         .hw-knopf.hell { background: #fff; color: #191615; border: 1px solid #D5D9DF; }
-        .hw-feld { position: relative; order: -1; flex: 0 0 38%; min-width: 300px; min-height: 270px; background: #F4C03F; }
+        .hw-feld { position: relative; order: -1; overflow: hidden; cursor: pointer; flex: 0 0 38%; min-width: 300px; min-height: 270px; background: #F4C03F; }
         .hw-marke { position: absolute; left: 16px; top: 18px; z-index: 3; padding: 7px 13px 8px; border-radius: 10px; background: #191615; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-5deg); box-shadow: 0 6px 14px rgba(25,22,21,.22); white-space: nowrap; }
-        .hw-fund { position: absolute; width: 31%; max-width: 140px; padding: 9px; background: #fff; border-radius: 14px; box-shadow: 0 10px 22px rgba(25,22,21,.18); transition: margin-top .25s ease; }
+        .hw-fund { position: absolute; left: 38%; top: 60%; width: 60%; max-width: 250px; padding: 14px; background: #fff; border-radius: 22px; box-shadow: 0 16px 32px rgba(25,22,21,.2); transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
         .hw-fund img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
         .hw-beta { flex: 1 1 260px; min-width: 240px; max-width: 420px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(22px, 3vw, 30px); border-radius: 18px; background: #191615; color: #fff; box-shadow: 0 10px 30px rgba(25,22,21,.12); }
         .hw-beta-marke { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
@@ -40,11 +51,10 @@ export function Hero() {
         .hw-beta-text { margin: 0 0 18px; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,.72); }
         .hw-beta-knopf { margin-top: auto; display: inline-flex; align-items: center; gap: 7px; padding: 12px 20px; border-radius: 999px; background: #F4C03F; color: #191615; font-size: 14px; font-weight: 800; text-decoration: none; }
         .hw-mini { align-items: center; gap: 9px; flex: 1 1 100%; padding: 12px 16px; border-radius: 999px; background: #191615; color: #fff; font-size: 13.5px; font-weight: 800; text-decoration: none; }
-        @media (hover: hover) and (pointer: fine) { .hw-feld:hover .hw-fund { margin-top: -8px; } }
         @media (max-width: 860px) {
           .hw { flex-direction: column; }
           .hw-feld { order: 0; flex: 0 0 auto; min-width: 0; min-height: 0; height: 250px; }
-          .hw-fund { width: 25%; max-width: 104px; }
+          .hw-fund { width: 42%; max-width: 160px; padding: 10px; border-radius: 18px; top: 58%; }
           .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
           .hw-knoepfe { gap: 8px; }
         }
@@ -71,11 +81,11 @@ export function Hero() {
               </Magnetic>
             </div>
           </div>
-          <div className="hw-feld" aria-hidden="true">
+          <div className="hw-feld" aria-hidden="true" onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={() => setVorn((v) => (v + 1) % FUNDE.length)}>
             <span className="hw-marke">Secondhand aus der Schweiz</span>
-            {FUNDE.map((k) => (
-              <div key={k.src} className="hw-fund" style={{ left: k.links, top: k.oben, transform: `rotate(${k.rot}deg)` }}>
-                <img src={k.src} alt="" />
+            {FUNDE.map((src, i) => (
+              <div key={src} className="hw-fund" style={PLATZ[(i - vorn + FUNDE.length) % FUNDE.length]}>
+                <img src={src} alt="" />
               </div>
             ))}
           </div>
