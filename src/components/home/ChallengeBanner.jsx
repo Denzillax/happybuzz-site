@@ -102,7 +102,7 @@ export function ChallengeBanner() {
             damit die ueberstehende Biene nicht mitbeschnitten wird */}
         <div className="chal-sheen-clip"><div className="chal-sheen" /></div>
         {/* Bee-Loud-Marke: ragt oben/unten leicht aus der Box (Sticker-Effekt) */}
-        <img src="/bee-flach-megafon.svg" alt="" aria-hidden="true" className="chal-bee" />
+        <img src="/bee-megafon-foto.webp" alt="" aria-hidden="true" className="chal-bee" width="1254" height="1254" loading="lazy" decoding="async" />
         <div style={{ flex: 1, minWidth: 220 }}>
           <p style={{ margin: 0, fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: PETROL }}>
             Challenge der Woche
