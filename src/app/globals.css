@@ -2644,53 +2644,48 @@ button[style*="border-bottom: 3px solid"]:not(#_):not(#__), button[style*="borde
 .bd-reiter-knopf svg { vertical-align: -2px; margin-right: 6px; }
 @media (max-width: 767px) { .bd-reiter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .bd-reiter::-webkit-scrollbar { display: none; } .bd-reiter-knopf { padding: 11px 12px 12px; font-size: 14.5px; } }
 
-/* ── HERO NEU (hn-*), Komponente components/home/Hero.tsx (Denis 21.09.2026). Karte mit Ink-Rand: links Mint-Feld mit einem Stapel
-   echter Inserate, der von allein blättert, rechts der Satz mit gelbem Marker und EINEM gelben Hauptknopf. Daneben die helle
-   Beta-Karte. Am Handy: Satz zuerst, Feld darunter, Beta als schmale Leiste. ── */
-.hn { max-width: 1280px; margin: 0 auto; padding: 6px 24px 0; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: #1D1D1D; }
-.hn-reihe { display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch; }
-.hn-karte { flex: 2 1 600px; min-width: 0; display: flex; align-items: stretch; border: 1px solid #1D1D1D; border-radius: 28px; background: #fff; overflow: hidden; }
-.hn-feld { position: relative; flex: 0 0 40%; min-width: 320px; min-height: 440px; overflow: hidden; border-right: 1px solid #1D1D1D; background: var(--mk-mint); }
-.hn-marke { position: absolute; left: 18px; top: 20px; z-index: 6; padding: 7px 13px 8px; border-radius: 10px; background: #1D1D1D; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-5deg); white-space: nowrap; }
-.hn-fund { position: absolute; left: 40%; top: 56%; width: 58%; max-width: 260px; display: flex; flex-direction: column; border: 1px solid #1D1D1D; border-radius: 20px; background: #fff; color: #1D1D1D !important; text-decoration: none; overflow: hidden; transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
-.hn-fund:hover { filter: none !important; }
-.hn-fund-bild { position: relative; display: block; aspect-ratio: 1 / 1; background: var(--mk-neutral); border-bottom: 1px solid #1D1D1D; }
-.hn-fund-bild img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.hn-fund-format { position: absolute; left: 10px; top: 10px; padding: 3px 10px 4px; border: 1px solid #1D1D1D; border-radius: 999px; font-size: 11px; font-weight: 700; }
-.hn-fund-fuss { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 12px 11px; font-size: 13px; }
-.hn-fund-titel { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hn-fund-fuss b { flex-shrink: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -.02em; }
-.hn-text { flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: clamp(28px, 3.6vw, 52px) clamp(22px, 3.4vw, 48px); }
-.hn-zweck { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; padding: 7px 14px 8px; border: 1px solid #1D1D1D; border-radius: 999px; background: var(--mk-mint); color: #1D1D1D !important; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .2s ease; }
-.hn-zweck:hover { background: #fff; filter: none !important; }
-.hn-titel { margin: 0 0 16px; font-size: clamp(36px, 4.6vw, 64px); font-weight: 500; letter-spacing: -.05em; line-height: 1.02; }
-.hn-marker { background: linear-gradient(transparent 60%, var(--mk-gelb) 60%, var(--mk-gelb) 92%, transparent 92%); padding: 0 .06em; margin: 0 -.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.hn-unter { margin: 0 0 28px; max-width: 28em; font-size: clamp(15.5px, 1.5vw, 18px); line-height: 1.5; color: #5B626C; }
-.hn-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
-.hn-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 24px 4px; border: 1px solid #1D1D1D; border-radius: 10px; background: #fff; color: #1D1D1D !important; font-size: 16px; font-weight: 600; letter-spacing: -.02em; text-decoration: none; box-shadow: inset 0 -5px 0 rgba(29,29,29,.13); transition: background .2s ease; }
-.hn-knopf:hover { background: var(--mk-neutral-2); filter: none !important; }
-.hn-knopf-haupt { background: var(--mk-gelb); box-shadow: inset 0 -5px 0 rgba(29,29,29,.16); }
-.hn-knopf-haupt:hover { background: #EBB42E; }
-.hn-live { display: inline-flex; align-items: center; gap: 9px; margin: 20px 0 0; font-size: 13.5px; font-weight: 600; color: #5B626C; }
-.hn-live-punkt { width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hn-puls 2.2s ease-out infinite; }
-@keyframes hn-puls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
-.hn-beta { flex: 1 1 270px; min-width: 250px; max-width: 420px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(24px, 3vw, 32px); border: 1px solid #1D1D1D; border-radius: 28px; background: #fff; }
-.hn-beta-marke { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 5px 12px 6px; border: 1px solid #1D1D1D; border-radius: 999px; background: var(--mk-neutral); font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.hn-punkt { width: 8px; height: 8px; border-radius: 50%; background: var(--mk-gelb); border: 1px solid #1D1D1D; flex-shrink: 0; }
-.hn-beta-titel { margin: 0 0 8px; font-size: clamp(22px, 2.3vw, 30px); font-weight: 500; letter-spacing: -.04em; line-height: 1.1; }
-.hn-beta-text { margin: 0 0 18px; font-size: 15px; line-height: 1.5; color: #5B626C; }
-.hn-beta-liste { display: flex; flex-direction: column; gap: 7px; width: 100%; margin: 0 0 20px; padding: 0; list-style: none; }
-.hn-beta-liste li { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border: 1px solid rgba(29,29,29,.16); border-radius: 12px; background: var(--mk-neutral); font-size: 14.5px; font-weight: 600; }
-.hn-beta-knopf { margin-top: auto; min-height: 48px; font-size: 15px; }
-.hn-mini { display: none; align-items: center; gap: 10px; flex: 1 1 100%; padding: 13px 16px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; color: #1D1D1D !important; font-size: 14px; font-weight: 600; text-decoration: none; }
-@media (max-width: 900px) {
-  .hn { padding: 4px 16px 0; }
-  .hn-karte { flex-direction: column; border-radius: 22px; }
-  .hn-feld { order: 1; flex: 0 0 auto; min-width: 0; min-height: 0; height: 300px; border-right: none; border-top: 1px solid #1D1D1D; }
-  .hn-fund { width: 44%; max-width: 180px; top: 57%; border-radius: 16px; }
-  .hn-fund-fuss { padding: 8px 10px 9px; font-size: 12px; }
-  .hn-knopf { min-height: 48px; padding: 0 18px 4px; font-size: 15px; }
+/* ── HERO FLÄCHE (hf-*), Komponente components/home/Hero.tsx (Denis 21.09.2026: über die ganze Fläche, keine Inserate, etwas
+   Lustiges mit dem Tiger). Mint von Rand zu Rand, der schwebende Header liegt darauf (darum der negative Rand oben, wie vorher
+   bei mk-hero-echt). Links der Satz, rechts ragt der Hypno-Tiger von unten ins Bild, hinter ihm dreht sich ein Strahlenkranz. ── */
+.hf { position: relative; margin-top: -97px; padding: 97px 0 0; overflow: hidden; border-bottom: 1px solid #1D1D1D; background: var(--mk-mint); font-family: 'Instrument Sans', 'Manrope', sans-serif; color: #1D1D1D; }
+.hf-strahlen { position: absolute; left: 74%; top: 66%; width: 2600px; height: 2600px; margin: -1300px 0 0 -1300px; background: repeating-conic-gradient(rgba(255,255,255,0) 0 9deg, rgba(255,255,255,.5) 9deg 18deg); animation: hf-dreh 80s linear infinite; pointer-events: none; }
+@keyframes hf-dreh { to { transform: rotate(360deg); } }
+.hf-innen { position: relative; max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: flex-end; gap: 24px; min-height: 600px; }
+.hf-text { flex: 1 1 560px; min-width: 0; align-self: center; padding: 56px 0 64px; }
+.hf-zweck { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 7px 15px 8px; border: 1px solid #1D1D1D; border-radius: 999px; background: #fff; color: #1D1D1D !important; font-size: 13.5px; font-weight: 600; text-decoration: none; transition: background .2s ease; }
+.hf-zweck:hover { background: var(--mk-neutral); filter: none !important; }
+.hf-titel { margin: 0 0 22px; font-size: clamp(38px, 5.3vw, 78px); font-weight: 500; letter-spacing: -.055em; line-height: .98; }
+.hf-marker { background: linear-gradient(transparent 58%, var(--mk-gelb) 58%, var(--mk-gelb) 90%, transparent 90%); padding: 0 .07em; margin: 0 -.07em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hf-unter { margin: 0 0 30px; max-width: 26em; font-size: clamp(16px, 1.6vw, 20px); line-height: 1.45; color: rgba(29,29,29,.76); }
+.hf-knoepfe { display: flex; gap: 12px; flex-wrap: wrap; }
+.hf-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 58px; padding: 0 30px 5px; border: 1px solid #1D1D1D; border-radius: 12px; background: #fff; color: #1D1D1D !important; font-size: 17.5px; font-weight: 600; letter-spacing: -.02em; text-decoration: none; box-shadow: inset 0 -6px 0 rgba(29,29,29,.13); transition: background .2s ease; }
+.hf-knopf:hover { background: var(--mk-neutral-2); filter: none !important; }
+.hf-knopf-haupt { background: var(--mk-gelb); box-shadow: inset 0 -6px 0 rgba(29,29,29,.16); }
+.hf-knopf-haupt:hover { background: #EBB42E; }
+.hf-zeile { display: flex; align-items: center; gap: 10px 22px; flex-wrap: wrap; margin: 26px 0 0; font-size: 14px; font-weight: 600; color: rgba(29,29,29,.74); }
+.hf-live { display: inline-flex; align-items: center; gap: 9px; }
+.hf-live-punkt { width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hf-puls 2.2s ease-out infinite; }
+@keyframes hf-puls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
+.hf-beta { display: inline-flex; align-items: center; gap: 7px; color: #1D1D1D !important; text-decoration: underline; text-underline-offset: 3px; }
+.hf-beta:hover { filter: none !important; }
+.hf-tiger { position: relative; flex: 0 1 500px; min-width: 300px; align-self: flex-end; margin-top: 40px; line-height: 0; }
+.hf-tiger img { display: block; width: 100%; height: auto; margin: 0 0 -5%; animation: hf-wippen 5s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes hf-wippen { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-8px); } }
+.hf-blase { position: absolute; left: -16%; top: -2%; z-index: 2; max-width: 250px; padding: 14px 20px 17px; border: 1px solid #1D1D1D; border-radius: 22px 22px 22px 5px; background: #fff; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; animation: hf-blase .45s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes hf-blase { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: none; } }
+.hf-sticker { position: absolute; right: -3%; bottom: 9%; z-index: 2; padding: 9px 15px 11px; border: 1px solid #1D1D1D; border-radius: 12px; background: var(--mk-gelb); font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.1; transform: rotate(7deg); box-shadow: inset 0 -4px 0 rgba(29,29,29,.14); }
+@media (max-width: 960px) {
+  .hf-innen { flex-direction: column; align-items: stretch; gap: 0; min-height: 0; }
+  .hf-text { flex: 0 0 auto; padding: 44px 0 8px; }
+  .hf-tiger { flex: 0 0 auto; align-self: center; width: min(86%, 400px); min-width: 0; margin-top: 92px; }
+  .hf-strahlen { left: 50%; top: 78%; }
+  .hf-blase { left: -6%; top: -74px; font-size: 16.5px; }
 }
-@media (max-width: 767px) { .hn-beta { display: none; } .hn-mini { display: flex; } }
-@media (prefers-reduced-motion: reduce) { .hn-fund { transition: none; } .hn-live-punkt { animation: none; } }
-
+@media (max-width: 767px) {
+  .hf { margin-top: 0; padding-top: 0; }
+  .hf-innen { padding: 0 18px; }
+  .hf-text { padding-top: 30px; }
+  .hf-knopf { min-height: 52px; padding: 0 22px 5px; font-size: 16px; }
+  .hf-sticker { right: -6%; bottom: 6%; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .hf-strahlen, .hf-tiger img, .hf-blase, .hf-live-punkt { animation: none; } }

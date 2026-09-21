@@ -70,8 +70,10 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
   (Denis 21.09.2026; schwarze Knöpfe am 20.09. abgelehnt, Mint war die Zwischenlösung), Hover `#EBB42E`. Nebenknopf weiss.
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
 - Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich kräftig Rosa `#C2259B` (Service-Familie), ohne Fläche und ohne Kontur (Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer und Kontur lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
-- Hero (seit 21.09.2026, `hn-*` in `globals.css`): Karte mit Ink-Rand, links Mint-Feld mit einem Stapel echter Inserate, der von allein blättert,
-  rechts der Satz mit gelbem Marker, EIN gelber Hauptknopf und die echte Zahl der Inserate online. Daneben die helle Beta-Karte.
+- Hero (seit 21.09.2026, `hf-*` in `globals.css`): Mint über die ganze Fläche, der schwebende Header liegt darauf. Links der Satz mit gelbem Marker,
+  EIN gelber Hauptknopf, die echte Zahl der Inserate online. Rechts der Hypno-Tiger (`public/tiger-hypno.svg`, Spiralen drehen im SVG selbst),
+  dahinter ein drehender Strahlenkranz, in der Sprechblase wechseln trockene Sprüche. KEINE Inserate im Hero und KEIN Karten-Layout wie im alten
+  Design (beides lehnte Denis am 21.09. ab).
 - Challenge der Woche (`ch-*`): weisse Karte mit Mint-Feld und Foto-Biene, Belohnung als dunkler Aufkleber, gelber Knopf. Keine dunkle Tafel.
 - Laufschrift: Farben kommen weiter aus dem Admin (`site_ticker`), nicht im Code übersteuern (Denis 21.09.2026).
 - Inseratkarte (`ListingCard`, seit 21.09.2026): überwiegend weiss, feiner heller Rand, Foto randlos oben. Das Format zeigt nur das getönte
