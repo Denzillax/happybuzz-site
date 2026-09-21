@@ -15,7 +15,7 @@ const FORMATE = [
   { type: 'auction', label: 'Auktion', sub: 'Bieten und gewinnen', icon: Gavel },
   { type: 'rent', label: 'Mieten', sub: 'Nutzen statt besitzen', icon: CalendarClock },
   { type: 'free', label: 'Gratis', sub: 'Verschenken, abholen', icon: Gift },
-  { type: 'service', label: 'Service', sub: 'Handwerk und Hilfe buchen', icon: Wrench },
+  { type: 'service', label: 'Service', sub: 'Hilfe & Services buchen', icon: Wrench },
 ]
 
 // Meeko-Design (20.09.2026): jede Kachel ist ganz in der Pastellfarbe ihres Formats, dieselbe wie die Tafel hinter den Inseratbildern
@@ -38,15 +38,20 @@ export function FormatTiles() {
   return (
     <section style={{ padding: '48px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
-        .fmt-tile { transition: transform .3s cubic-bezier(.2,.7,.1,1); }
+        /* Überarbeitet (Denis 21.09.2026): fünf gleichwertige Kacheln, Icon oben, Name und Untertitel darunter. So hat jeder
+           Untertitel die volle Kachelbreite und darf umbrechen, nichts wird abgeschnitten. Masse überall gleich. */
+        .fmt-tile { display: flex; flex-direction: column; gap: 16px; min-height: 148px; padding: 18px; border: 1px solid #1D1D1D; border-radius: 20px; color: #1D1D1D; text-decoration: none; transition: transform .3s cubic-bezier(.2,.7,.1,1); }
         .fmt-tile:hover { transform: translateY(-5px); filter: none !important; }
-        .fmt-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+        .fmt-feld { width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #1D1D1D; border-radius: 12px; background: #fff; }
+        .fmt-name { font-size: 18px; font-weight: 600; letter-spacing: -.025em; line-height: 1.15; }
+        .fmt-sub { margin-top: 4px; font-size: 13px; line-height: 1.35; color: rgba(29,29,29,.72); }
+        .fmt-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
         /* Mobile: wischbare Zeile, gleiches Muster wie Kategorien-Pills.
            Keine Kind-Selektoren in Inline-Styles (Hydration-Error). */
         @media (max-width: 1100px) {
           .fmt-grid { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 4px; scroll-snap-type: x proximity; }
           .fmt-grid::-webkit-scrollbar { display: none; }
-          .fmt-tile { flex: 0 0 58vw; max-width: 240px; scroll-snap-align: start; }
+          .fmt-tile { flex: 0 0 44vw; max-width: 200px; min-height: 140px; scroll-snap-align: start; }
         }
       `}</style>
       <h2 className="bd-abschnittstitel" style={{ fontFamily: HEAD, fontSize: 'clamp(22px, 2.4vw, 30px)', fontWeight: 500, letterSpacing: '-0.035em', color: INK, margin: '0 0 20px' }}>
@@ -56,20 +61,15 @@ export function FormatTiles() {
         {FORMATE.map((f, i) => {
           const Icon = f.icon
           return (
-            <Link key={f.type} href={`/search?type=${f.type}`} className={`fmt-tile fmt-tile-${f.type} mk-${pastell[f.type]}`} style={{
-              border: '1px solid #1D1D1D', borderRadius: 20,
-              padding: '18px 16px', textDecoration: 'none', color: INK,
-              display: 'flex', alignItems: 'center', gap: 12,
-            }}>
-              {/* Icon-Feld in der Typfarbe des Formats, dieselbe wie der Chip auf den Inseraten */}
-              <div style={{ width: 42, height: 42, flexShrink: 0, background: '#fff', color: INK, border: '1px solid #1D1D1D', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Link key={f.type} href={`/search?type=${f.type}`} className={`fmt-tile fmt-tile-${f.type} mk-${pastell[f.type]}`}>
+              <div className="fmt-feld">
                 <span className={`fmt-icon fmt-icon-${f.type}`} style={{ display: 'inline-flex', animationDelay: `${i * 140}ms` }}>
-                  <Icon size={19} strokeWidth={1.9} />
+                  <Icon size={20} strokeWidth={1.9} />
                 </span>
               </div>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontFamily: HEAD, fontSize: 17, fontWeight: 600, letterSpacing: '-0.025em' }}>{f.label}</div>
-                <div style={{ fontSize: 12.5, color: 'rgba(29,29,29,0.7)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{f.sub}</div>
+              <div style={{ marginTop: 'auto', minWidth: 0 }}>
+                <div className="fmt-name" style={{ fontFamily: HEAD }}>{f.label}</div>
+                <div className="fmt-sub">{f.sub}</div>
               </div>
             </Link>
           )

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 // ── Katalog-Design-Tokens ──
 const INK = "#1D1D1D";
-const SAND = "#F3F3FF";
+const SAND = "#F6F4EF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MUTED = "rgba(29,29,29,0.62)";

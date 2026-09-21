@@ -14,7 +14,7 @@ import { BeeLevelCard } from "@/components/shared/BeeLevel";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F6F4EF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 
 import FeeModel from "@/components/listings/FeeModel";
@@ -856,7 +856,7 @@ export default function SettingsPage() {
                     updateForm("city", r.city);
                     setAddrResults([]);
                   }} style={{ padding: "10px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
+                    onMouseEnter={e => e.currentTarget.style.background = "#F6F4EF"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     <span style={{ fontWeight: 600 }}>{r.street}</span>
                     <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -949,7 +949,7 @@ export default function SettingsPage() {
                           setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                           setExtraAddrHits([]);
                         }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
+                          onMouseEnter={e => e.currentTarget.style.background = "#F6F4EF"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           <span style={{ fontWeight: 600 }}>{r.street}</span>
                           <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -1030,7 +1030,7 @@ export default function SettingsPage() {
                       setNewAddr(p => ({ ...p, street: r.street, postal_code: r.plz, city: r.city }));
                       setExtraAddrHits([]);
                     }} style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderBottom: "1px solid rgba(29,29,29,.16)" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
+                      onMouseEnter={e => e.currentTarget.style.background = "#F6F4EF"}
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                       <span style={{ fontWeight: 600 }}>{r.street}</span>
                       <span style={{ color: "#5B626C", marginLeft: 6 }}>{r.plz} {r.city}</span>
@@ -1054,7 +1054,7 @@ export default function SettingsPage() {
                 setNewAddr({ label: "", company: "", first_name: "", last_name: "", street: "", postal_code: "", city: "" });
                 setShowAddAddr(false); setExtraAddrHits([]);
                 showToast("Adresse hinzugefügt");
-              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FEE8B0" : "#F3F3FF", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
+              }} style={{ flex: 1, padding: "10px", borderRadius: 20, border: "1px solid #1D1D1D", background: newAddr.label ? "#FEE8B0" : "#F6F4EF", color: K.ink, fontSize: 13, fontWeight: 800, cursor: newAddr.label ? "pointer" : "default", fontFamily: "'Instrument Sans', 'Manrope', sans-serif" }}>Hinzufügen</button>
             </div>
           </div>
         ) : editAddrIdx === null && (

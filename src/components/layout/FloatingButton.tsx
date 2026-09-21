@@ -25,7 +25,7 @@ export function FloatingButton() {
         position: 'fixed', bottom: 28, right: 28, zIndex: 40,
         width: hover ? 160 : 50, height: 50, borderRadius: 999,
         // Meeko (Denis 20.09.2026: nicht in Butter): dunkler Hauptknopf wie "Inserieren" in Header, Fuss und Bottom-Nav
-        background: '#CEF6E8', border: '1px solid #1D1D1D', cursor: 'pointer',
+        background: '#F4C03F', border: '1px solid #1D1D1D', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: hover ? 8 : 0, padding: 0, whiteSpace: 'nowrap',
         boxShadow: 'inset 0 -4px 0 rgba(29,29,29,.16)',

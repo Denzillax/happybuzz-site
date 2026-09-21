@@ -50,27 +50,32 @@ leichte grosse Titel. Rückweg zum alten Klar-Look: Git-Tag `design-alt-2026-09`
 Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht selbst).
 
 ### Farben
+- Überarbeitung 21.09.2026 (Denis): Hauptfarbe der Marke bleibt Gelb `#F4C03F`, gezielt für primäre Aktionen (Hauptknopf), Brand-Akzente
+  und Highlights. Basis sind Schwarz, Weiss und warme Neutraltöne (`--mk-neutral` `#F6F4EF`, `--mk-neutral-2` `#ECE8E0`). Mint bleibt die
+  sekundäre Beedaro-/Community-Farbe (Hero, gewählt/eingeschaltet). Freundlich und charaktervoll, nicht verspielt oder kindlich.
 - Ink `#1D1D1D`: Schrift, Ränder (`1px solid`), dunkler Hauptknopf. Ersetzt Teal (`#007C7C`) und das alte Dark `#191615`.
 - Pastelle (Variablen `--mk-*` auf `:root` in `globals.css`): Lavendel `#E3E3FF`, Himmel `#D3F0FF`, Rosa `#FFDFF9`,
-  Mint `#CEF6E8`, Rosé `#FFE2DE`, Butter `#FEE8B0`. Helles Lavendel `#F3F3FF` ersetzt die grauen Flächen.
+  Mint `#CEF6E8`, Rosé `#FFE2DE`, Butter `#FEE8B0`. Das warme Neutral `#F6F4EF` ersetzt die grauen Flächen (vorher helles Lavendel `#F3F3FF`).
 - Jedes Format hat seine Pastelltafel (`TYP_PASTELL` in `src/lib/constants.js`): Festpreis Rosé, Auktion Lavendel,
-  Miete Himmel, Gratis Butter, Service Rosa. Mint gehört dem Hero (`--mk-hero`) und dem App-Icon.
+  Miete Himmel, Gratis sanftes Grün `#E1F2D8` (`--mk-gruen`, nicht mehr Butter), Service Rosa. Flächen mit niedriger Sättigung, Schrift immer Ink. Mint gehört dem Hero (`--mk-hero`) und dem App-Icon.
 - Gewählt/eingeschaltet = Mint, im Inserieren-Formular die Farbe des gewählten Formats (`--lf-akzent`).
-- Hover: Schrift bleibt Ink, dahinter eine Lavendel-Fläche. KEINE Butter-Kachel als Hover (Denis lehnte sie ab).
+- Hover: Schrift bleibt Ink, dahinter eine warme Neutral-Fläche (`--mk-neutral-2`). KEINE Butter-Kachel als Hover (Denis lehnte sie ab).
 - Das alte Gelb `#F4C03F` lebt nur noch in Bewertungssternen, Status "wartet" und den Hive-Spielen. Als Fläche: Butter.
-- KEIN Grau, KEIN Cream/Sand/Beige, KEIN Teal, keine Schlagschatten auf Karten.
+- KEIN kaltes Grau, KEIN Teal, keine Schlagschatten auf Karten. Warme Neutraltöne sind seit 21.09.2026 erwünscht.
 - Green `#50804F` bleibt für Bienenschutz und Erfolg.
 
 ### Formen
 - Karten und Boxen: Rundung 20 (grosse Abschnittskarten 28), `1px solid #1D1D1D`.
-- Knöpfe: 10 px Ecken oder Pille, eingedrückter Schatten unten (`inset 0 -4px 0 rgba(29,29,29,.16)`). Hauptknopf Mint mit Ink-Rand und Ink-Schrift
-  (Denis 20.09.2026, schwarze Knöpfe abgelehnt), Hover Lavendel. Auf der Mint-Tafel des Hero ist der Hauptknopf Lavendel. Nebenknopf weiss.
+- Knöpfe: 10 px Ecken oder Pille, eingedrückter Schatten unten (`inset 0 -4px 0 rgba(29,29,29,.16)`). Hauptknopf Gelb `#F4C03F` mit Ink-Rand und Ink-Schrift
+  (Denis 21.09.2026; schwarze Knöpfe am 20.09. abgelehnt, Mint war die Zwischenlösung), Hover `#EBB42E`. Nebenknopf weiss.
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
 - Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich kräftig Rosa `#C2259B` (Service-Familie), ohne Fläche und ohne Kontur (Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer und Kontur lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
-- Inseratkarte (`ListingCard`): Foto liegt mit eigenem Ink-Rand auf der Pastelltafel des Formats. Kein zweiter Rahmen darum.
+- Inseratkarte (`ListingCard`, seit 21.09.2026): überwiegend weiss, feiner heller Rand, Foto randlos oben. Das Format zeigt nur das getönte
+  Schild und eine 3 px dünne Linie in der Formatfarbe unter dem Foto. Foto und Preis (19 px, fett) führen. KEINE grossen Pastellflächen um Karten.
 - Favoriten-Herz ist app-weit das um 90 Grad gedrehte B (`BLogo herz`), gesetzt: Himbeer `#C2255C` auf Rosa.
 - Abstände im Formular: 24 px zwischen Karten, 18 px zwischen den Teilen einer Karte (CSS `.lf-section`).
-- Logo: `BLogo` (kacheliges B, ein einziger Pfad) plus Wortmarke "beedaro" in Sora 700, Komponente `Logo.tsx`.
+- Logo: `BLogo` (kacheliges B, ein einziger Pfad) plus Wortmarke "beedaro" in Sora 700, Komponente `Logo.tsx`. Vollständig schwarz, kein Gelb
+  im Logo. Das Symbol ist seit 21.09.2026 etwas kleiner (18.5 % der Breite) und der Abstand zur Wortmarke enger (4.2 %).
   Favicon und App-Icon: Ink-B auf Mint.
 
 ### Fonts

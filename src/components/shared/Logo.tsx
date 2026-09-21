@@ -7,8 +7,8 @@ import BLogo from '@/components/shared/BLogo'
 export function Logo({ width = 400, white = false }: { width?: number, white?: boolean }) {
   return (
     <Link href="/" aria-label="BEEDARO, zur Startseite" className="bd-logo flex items-center shrink-0"
-      style={{ width, gap: width * 0.06, color: white ? '#fff' : '#1D1D1D', textDecoration: 'none' }}>
-      <BLogo size={width * 0.21} title="" />
+      style={{ width, gap: width * 0.042, color: white ? '#fff' : '#1D1D1D', textDecoration: 'none' }}>
+      <BLogo size={width * 0.185} title="" />
       <span style={{ fontFamily: "'Sora', 'Instrument Sans', sans-serif", fontSize: width * 0.178, fontWeight: 700, letterSpacing: '-.05em', lineHeight: 1 }}>beedaro</span>
     </Link>
   )

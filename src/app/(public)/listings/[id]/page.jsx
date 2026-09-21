@@ -74,7 +74,7 @@ export default function EditListingPage() {
   );
 
   return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F3F3FF", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F6F4EF", minHeight: "100vh" }}>
       {/* Seitenkopf */}
       <div className="bd-seite-schmal" style={{ paddingBottom: 0 }}>
         <h1 style={{ margin: 0, fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, fontFamily: "'Instrument Sans', 'General Sans', sans-serif", letterSpacing: "-0.01em", color: "#1D1D1D" }}>

@@ -153,7 +153,7 @@ function FaqItem({ q, a, open, onClick }) {
         borderBottom: `1px solid ${colors.borderLt}`,
         transition: "background .15s",
       }}
-      onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
+      onMouseEnter={e => e.currentTarget.style.background = "#F6F4EF"}
       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

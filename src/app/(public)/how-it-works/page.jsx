@@ -202,7 +202,7 @@ export default function HowItWorksPage() {
           <p style={{ fontSize: 15, color: MUTED, marginBottom: 24 }}>Dein Keller hat Inventar. Wir haben Käufer.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/listings/new" className="bd-btn" style={{
-              padding: "14px 28px", borderRadius: 20, background: "#CEF6E8", color: "#1D1D1D",
+              padding: "14px 28px", borderRadius: 20, background: "#F4C03F", color: "#1D1D1D",
               fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none",
               display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid #1D1D1D",
             }}>

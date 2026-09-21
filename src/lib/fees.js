@@ -112,11 +112,11 @@ export const FEE_STATUS = {
 
 export const LISTING_STATUS = {
   active:        { color: "#3D6B3C", bg: "#CEF6E8", label: "Aktiv" },
-  draft:         { color: "#5B626C",    bg: "#F3F3FF", label: "Entwurf" },
+  draft:         { color: "#5B626C",    bg: "#F6F4EF", label: "Entwurf" },
   paused:        { color: "#8A5A00", bg: "#FEE8B0", label: "Pausiert" },
   sold:          { color: "#1D1D1D", bg: "#D3F0FF", label: "Verkauft" },
   rented:        { color: "#1D1D1D", bg: "#D3F0FF", label: "Vermietet" },
-  inactive:      { color: "#5B626C",    bg: "#F3F3FF", label: "Inaktiv" },
+  inactive:      { color: "#5B626C",    bg: "#F6F4EF", label: "Inaktiv" },
   pending_pause: { color: "#c62828", bg: "#FFE2DE", label: "Wird pausiert" },
 };
 
@@ -125,7 +125,7 @@ export const ORDER_STATUS = {
   cancelled:  { color: "#c62828", bg: "#FFE2DE", label: "Storniert" },
   completed:  { color: "#1D1D1D", bg: "#D3F0FF", label: "Abgeschlossen" },
   disputed:   { color: "#8A5A00", bg: "#FEE8B0", label: "Streitfall" },
-  refunded:   { color: "#5B626C",    bg: "#F3F3FF", label: "Erstattet" },
+  refunded:   { color: "#5B626C",    bg: "#F6F4EF", label: "Erstattet" },
 };
 
 // Zahlungsinfos für QR-Rechnungen kommen aus der Tabelle company_settings

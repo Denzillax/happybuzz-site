@@ -44,7 +44,7 @@ function Karte({ r, zustand, sperrtext, busy, onClick }) {
       style={{
         display: "block", textAlign: "left", padding: "20px 20px 18px",
         cursor: klickbar ? "pointer" : "default",
-        background: gruen ? "#CEF6E8" : zustand === "abgesagt" ? "#F3F3FF" : "#fff",
+        background: gruen ? "#CEF6E8" : zustand === "abgesagt" ? "#F6F4EF" : "#fff",
         opacity: zustand === "gesperrt" ? 0.55 : 1,
         border: `1px solid ${gruen ? K.moss : K.ink}`, borderRadius: 20,
         boxShadow: zustand === "frei" ? "inset 0 -4px 0 rgba(29,29,29,.14)" : "none",

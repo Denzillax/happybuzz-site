@@ -12,7 +12,7 @@ import { makeBeeRef } from "@/lib/fees";
 import { PURCHASE_STATUS as STATUS_CONFIG } from "@/lib/orderStatus";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F6F4EF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 

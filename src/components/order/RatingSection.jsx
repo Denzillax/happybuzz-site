@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { colors, fonts, radius } from "@/lib/theme";
 import { createNotification } from "@/lib/notifications";
 
-const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
+const K = { ink: "#1D1D1D", sand: "#F6F4EF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
 
 // Beta-Feedback xmelbel 30.08.: Kaeufer und Verkaeufer bekamen dieselbe
 // Standard-Maske - "Schneller Versand" ergibt fuer einen Kaeufer keinen Sinn.

@@ -30,7 +30,7 @@ import { serviceQrPayload } from "@/lib/swissQR";
 import SwissQRImage from "@/components/shared/SwissQRImage";
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
+const K = { ink: "#1D1D1D", sand: "#F6F4EF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D", moss: "#50804F" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const HEAD = "'Instrument Sans', 'General Sans','Instrument Sans', 'Manrope',sans-serif";
 
@@ -75,7 +75,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
     <div>
       <h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 12px" }}>Service-Rechnung</h3>
       {items.length > 0 ? (
-        <div style={{ background: "#F3F3FF", borderRadius: 20, padding: "14px 16px", marginBottom: 12 }}>
+        <div style={{ background: "#F6F4EF", borderRadius: 20, padding: "14px 16px", marginBottom: 12 }}>
           {items.map((item, i) => (
             <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < items.length - 1 ? "1px solid rgba(29,29,29,.16)" : "none" }}>
               <div>
@@ -91,7 +91,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       ) : (
-        <div style={{ padding: "12px 14px", background: "#F3F3FF", borderRadius: 20, fontSize: 13, marginBottom: 12 }}>
+        <div style={{ padding: "12px 14px", background: "#F6F4EF", borderRadius: 20, fontSize: 13, marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 16 }}>
             <span>Total</span><span>CHF {total.toFixed(2)}</span>
           </div>
@@ -108,7 +108,7 @@ function ServiceInvoiceView({ purchaseId, totalPrice, sellerProfile, onPay, acti
           </div>
         </div>
       )}
-      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
+      <button onClick={onPay} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>
         {acting ? "Wird gespeichert..." : "Ich habe bezahlt"}
       </button>
     </div>
@@ -432,7 +432,7 @@ export default function OrderDetailPage() {
                 )}
                 {/* SERVICE: Seller sieht Zahlung markiert */}
                 {isService && isSeller && p.status === "payment_marked" && (
-                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
+                  <div><h3 style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>Zahlung pruefen</h3><p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Kunde hat CHF {parseFloat(p.price || 0).toFixed(2)} als bezahlt markiert.</p><button onClick={() => doAction(confirmPayment, p.id, user.id)} disabled={acting} style={{ width: "100%", padding: 14, borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 14, fontWeight: 800, cursor: "pointer" }}>{acting ? "Wird gespeichert..." : "Zahlung erhalten"}</button></div>
                 )}
 
                 {!isService && isBuyer && (p.status === "confirmed" || p.status === "pending_payment") && (

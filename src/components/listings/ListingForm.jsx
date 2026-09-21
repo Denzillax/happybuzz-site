@@ -1291,7 +1291,7 @@ export default function ListingForm({
           </div>
           {gesperrt ? (
             <div>
-              <div style={{ ...inputBase, minHeight: 80, background: "#F3F3FF", color: "#5B626C", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
+              <div style={{ ...inputBase, minHeight: 80, background: "#F6F4EF", color: "#5B626C", fontSize: 14, lineHeight: 1.55 }} dangerouslySetInnerHTML={{ __html: form.description || "<i>Keine Beschreibung</i>" }} />
               <label style={{ ...labelBase, marginTop: 12 }}>Nachtrag (wird unter den Text gehängt, mit Datum)</label>
               <textarea value={nachtrag} onChange={(e) => setNachtrag(e.target.value)} rows={3} maxLength={1000}
                 placeholder="z. B. Kabel ist doch dabei, Abholung auch am Wochenende möglich"
@@ -2016,7 +2016,7 @@ export default function ListingForm({
                       )}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   ) : (
@@ -2120,7 +2120,7 @@ export default function ListingForm({
                       })()}
                       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
                         <button onClick={() => set("_shipStep", "")} style={{ padding: "8px 20px", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "transparent", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Zurück</button>
-                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
+                        <button onClick={() => { set("_shipStep", ""); set("_shipModal", false); }} style={{ padding: "8px 20px", borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Speichern</button>
                       </div>
                     </>
                   )}
@@ -2473,8 +2473,8 @@ export default function ListingForm({
             style={{
               flex: 1, minWidth: 150, padding: "13px 18px",
               borderRadius: 20, border: "1px solid #1D1D1D",
-              // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026, Art B aus /labor/meeko/knoepfe)
-              background: "#CEF6E8", color: "#1D1D1D",
+              // Hauptknopf im Beedaro-Gelb mit Ink-Rand (Denis 21.09.2026: Gelb für primäre Aktionen)
+              background: "#F4C03F", color: "#1D1D1D",
               fontSize: 15.5, fontWeight: 600, fontFamily: fonts.body, letterSpacing: "-.01em",
               cursor: saving ? "not-allowed" : "pointer",
               opacity: saving ? 0.6 : 1, transition: "all .15s",

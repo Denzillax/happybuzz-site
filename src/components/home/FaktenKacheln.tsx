@@ -25,7 +25,7 @@ function Symbol({ k }: { k: string }) {
 
 export function FaktenKacheln() {
   return (
-    <section style={{ padding: '14px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '26px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <style>{`
         .fakten-zeile { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; row-gap: 4px; }
         .fakten-punkt:hover { color: #1D1D1D !important; filter: none !important; }

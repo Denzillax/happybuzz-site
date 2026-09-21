@@ -9,7 +9,7 @@ import { fonts } from "@/lib/theme";
 
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const INK = "#1D1D1D";
-const SAND = "#F3F3FF";
+const SAND = "#F6F4EF";
 const MOSS = "#50804F";
 const HONIG = "#8A5A00";
 const ROT = "#c62828";

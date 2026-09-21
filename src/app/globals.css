@@ -338,7 +338,7 @@ input:focus, textarea:focus, select:focus {
 }
 /* ── Inserieren-Formular: Fokus-Glow + Sticky-Bar ── */
 .listing-form input:disabled, .listing-form textarea:disabled, .listing-form select:disabled {
-  background: #F3F3FF !important; color: #5B626C !important; border-color: rgba(29,29,29,.3) !important; cursor: not-allowed;
+  background: #F6F4EF !important; color: #5B626C !important; border-color: rgba(29,29,29,.3) !important; cursor: not-allowed;
 }
 .listing-form input:not([type=file]):focus,
 .listing-form textarea:focus,
@@ -422,7 +422,7 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
    Muss hier stehen (nicht inline) — Pseudoklassen gehen in style={} nicht.
    Kein !important: offene Zeilen setzen ihren Hintergrund inline und
    sollen ihn beim Hovern behalten. */
-.adm-row:hover { background: #F3F3FF; }
+.adm-row:hover { background: #F6F4EF; }
 
 /* ── Hero: Beta-Slide-Effekte ─────────────────────────────────
    Keyframes gehören hierher, nicht in inline <style>-Tags (Hydration).
@@ -720,7 +720,7 @@ button[style*="background:rgb(11, 94, 92)"]:not(:disabled):hover, button[style*=
      schmaler Schatten wie von etwas, das über der Seite schwebt. Kein harter Versatz, keine Einfärbung. */
   /* Die Einblend-Regel (html.bd-fx-on .bd-fx-reveal.is-in { transform: none }) wiegt schwerer als .lc-karte:hover und hielt
      die Karte am Boden: man sah nur den Schatten (Denis 20.09.2026). Darum hier mit demselben Vorspann. */
-  .lc-karte:hover, html.bd-fx-on .bd-fx-reveal.is-in.lc-karte:hover { transform: translateY(-10px); box-shadow: 0 22px 28px -18px rgba(29,29,29,.38); filter: none !important; }
+  .lc-karte:hover, html.bd-fx-on .bd-fx-reveal.is-in.lc-karte:hover { transform: translateY(-6px); box-shadow: 0 18px 26px -18px rgba(29,29,29,.32); border-color: rgba(29,29,29,.5) !important; filter: none !important; }
   /* das Bild zoomt in seinem Rahmen hinein, es kippt nicht mehr (Denis 20.09.2026). Der Rahmen schneidet es ab. */
   .lc-karte:hover .lc-foto img { transform: scale(1.08); }
   .lc-karte:active, html.bd-fx-on .bd-fx-reveal.is-in.lc-karte:active { transform: translateY(-3px); box-shadow: 0 8px 12px -8px rgba(29,29,29,.35); }
@@ -1701,13 +1701,13 @@ body:has(.wl) { background: #0A0A0A; }
            Schatten, Pfeil-Pillen ganz rund. Bilder liegen auf einer Pastelltafel in der Farbe ihres Formats.
    Alles unter .mk gekapselt. MEEKO-LABOR ENDE markiert den Schluss.
    ═══════════════════════════════════════════ */
-.mk { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0;
+.mk { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0; --mk-gruen: #E1F2D8; --mk-gelb: #F4C03F; --mk-neutral: #F6F4EF; --mk-neutral-2: #ECE8E0;
       --mk-rand: 1px solid var(--mk-ink); background: #fff; color: var(--mk-ink); min-height: 100vh; overflow-x: clip;
       font-family: 'Instrument Sans', 'General Sans', 'Instrument Sans', 'Manrope', sans-serif; font-size: 18px; line-height: 1.5; }
 .mk a { color: inherit; text-decoration: none; }
 .mk a:hover, .mk button:hover { filter: none !important; }
 .mk-lavendel { background: var(--mk-lavendel); } .mk-himmel { background: var(--mk-himmel); } .mk-rosa { background: var(--mk-rosa); }
-.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); } .mk-weiss { background: #fff; }
+.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); } .mk-gruen { background: var(--mk-gruen); } .mk-weiss { background: #fff; }
 .mk a:focus-visible, .mk button:focus-visible { outline: 2px solid var(--mk-ink); outline-offset: 3px; }
 
 /* Text, der beim Hovern durchrollt */
@@ -1727,11 +1727,11 @@ a:hover .mk-roll span:last-child, button:hover .mk-roll span:last-child { transf
    die Schriftfarbe seiner Umgebung erben (im Fuss war er dadurch unsichtbar) */
 .mk .mk-knopf { color: var(--mk-ink); }
 /* Hauptknopf: Mint mit Ink-Rand (Denis 20.09.2026, Art B). Der Klassenname -dunkel bleibt, damit kein Aufrufer bricht. */
-.mk .mk-knopf-dunkel { background: var(--mk-mint); color: var(--mk-ink); box-shadow: inset 0 -5px 0 rgba(29,29,29,.16); }
+.mk .mk-knopf-dunkel { background: var(--mk-gelb); color: var(--mk-ink); box-shadow: inset 0 -5px 0 rgba(29,29,29,.16); }
 /* auf der Mint-Tafel des Hero wäre Mint unsichtbar: dort Lavendel */
-.mk-hero-echt .mk-knopf-dunkel { background: var(--mk-lavendel); }
-.mk-hero-echt .mk-knopf-dunkel:hover { background: #fff; }
-.mk .mk-knopf-dunkel:hover { background: var(--mk-lavendel); }
+.mk-hero-echt .mk-knopf-dunkel { background: var(--mk-gelb); }
+.mk-hero-echt .mk-knopf-dunkel:hover { background: #EBB42E; }
+.mk .mk-knopf-dunkel:hover { background: #EBB42E; }
 
 /* Header: schwebende weisse Pille */
 .mk-kopf { position: sticky; top: 0; z-index: 30; padding: 18px 24px 0; }
@@ -2237,7 +2237,7 @@ body:has(.mk) { background: #fff; }
    Rückweg: Git-Tag design-alt-2026-09. Farben als Variablen auf :root, damit auch Seiten ausserhalb des Labors sie lesen.
    Formensprache: 1 px Ink-Rand, Knöpfe 10 px mit eingedrücktem Schatten unten, Flächen in Pastell, keine Schlagschatten.
    ═══════════════════════════════════════════ */
-:root { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0;
+:root { --mk-ink: #1D1D1D; --mk-lavendel: #E3E3FF; --mk-himmel: #D3F0FF; --mk-rosa: #FFDFF9; --mk-mint: #CEF6E8; --mk-rose: #FFE2DE; --mk-butter: #FEE8B0; --mk-gruen: #E1F2D8; --mk-gelb: #F4C03F; --mk-neutral: #F6F4EF; --mk-neutral-2: #ECE8E0;
         --mk-rand: 1px solid #1D1D1D; --bd-akzent: #1D1D1D; /* Hover-System der ganzen Seite: gleiche Farbe wie --mk-akzent */
         /* Hover-Farbe für Schrift und Symbole: kräftiges Lavendel (Denis 20.09.2026: Lavendel statt Grün). Das Pastell-Lavendel
            selbst hätte als Schrift auf Weiss nur Kontrast 1.3, darum sein kräftiges Geschwister mit 6.0. Vorgabe war
@@ -2262,11 +2262,11 @@ body:has(.mk) { background: #fff; }
 /* Hover im Header (Denis 20.09.2026, dritte Fassung): die Schrift bleibt Ink, dahinter erscheint eine runde Fläche im
    BEEDARO-Lavendel. So gibt es im Header nur einen Lavendelton. Vorher: Butter-Kachel (zu eckig, Butter gefiel nicht),
    dann kräftiges Lavendel als Schriftfarbe (wirkte neben dem Pastell zu stark). */
-.hd-knopf:hover, .hd-knopf[aria-expanded=true] { background: var(--mk-lavendel); }
-.hd-knopf-dunkel:hover { background: var(--mk-lavendel); }
+.hd-knopf:hover, .hd-knopf[aria-expanded=true] { background: var(--mk-neutral-2); }
+.hd-knopf-dunkel:hover { background: #EBB42E; }
 .hd-knopf:active { box-shadow: inset 0 -1px 0 rgba(29,29,29,.14); padding-bottom: 1px; }
-.hd-knopf-dunkel { background: var(--mk-mint); color: var(--mk-ink) !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.16); }
-.hd-knopf-dunkel:hover { background: var(--mk-lavendel); }
+.hd-knopf-dunkel { background: var(--mk-gelb); color: var(--mk-ink) !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.16); }
+.hd-knopf-dunkel:hover { background: #EBB42E; }
 /* Suche */
 .hd-suche-wrap { flex: 1; min-width: 120px; position: relative; }
 .hd-suche { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 5px 0 14px; border: var(--mk-rand); border-radius: 10px; background: #fff; transition: background .2s ease, box-shadow .15s ease; } /* weiss (Denis 20.09.2026), nicht Lavendel */
@@ -2278,19 +2278,19 @@ body:has(.mk) { background: #fff; }
 .hd-suche input::placeholder { color: rgba(29,29,29,.6); }
 .hd-ki { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 9px; flex-shrink: 0; border: var(--mk-rand); border-radius: 999px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .hd-ki[aria-pressed=true] { background: var(--mk-ink); color: #fff; }
-.hd-suchen { width: 38px; height: 38px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0 0 3px; border: var(--mk-rand); border-radius: 8px !important; background: var(--mk-mint); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -3px 0 rgba(29,29,29,.16); }
-.hd-suchen:hover { background: var(--mk-lavendel); }
+.hd-suchen { width: 38px; height: 38px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0 0 3px; border: var(--mk-rand); border-radius: 8px !important; background: var(--mk-gelb); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -3px 0 rgba(29,29,29,.16); }
+.hd-suchen:hover { background: #EBB42E; }
 /* Menüs */
 .hd-menues { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .hd-text, .hd-icon, .hd-punkt, .hd-mpunkt, .hd-knopf { transition: background .15s ease; }
 .hd-text { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: none; border-radius: 999px !important; background: transparent; color: var(--mk-ink); font: inherit; font-size: 15px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background .15s ease; }
-.hd-text:hover, .hd-text[aria-expanded=true] { background: var(--mk-lavendel); }
+.hd-text:hover, .hd-text[aria-expanded=true] { background: var(--mk-neutral-2); }
 .hd-profil { padding-left: 4px; }
 .hd-icon { position: relative; width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 999px !important; background: transparent; color: var(--mk-ink); cursor: pointer; transition: background .15s ease; }
-.hd-icon:hover, .hd-icon[aria-current=page] { background: var(--mk-lavendel); }
+.hd-icon:hover, .hd-icon[aria-current=page] { background: var(--mk-neutral-2); }
 /* die Glocke ist ein eigenes Bauteil (hdr-icon-btn), sie bekommt im Header dieselbe Hover-Fläche */
 .hd .hdr-icon-btn { border-radius: 999px !important; color: var(--mk-ink) !important; transition: background .15s ease; }
-.hd .hdr-icon-btn:hover, .hd .hdr-icon-btn[aria-expanded=true] { background: var(--mk-lavendel) !important; filter: none !important; }
+.hd .hdr-icon-btn:hover, .hd .hdr-icon-btn[aria-expanded=true] { background: var(--mk-neutral-2) !important; filter: none !important; }
 .hd-zahl { position: absolute; top: 3px; right: 3px; min-width: 17px; height: 17px; padding: 0 4px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #C62828; color: #fff; font-size: 10px; font-weight: 700; border: 2px solid #fff; }
 .hd-sep { width: 1px; height: 26px; background: rgba(29,29,29,.2); flex-shrink: 0; margin: 0 6px; }
 /* Avatar in Mint, nicht Butter (Denis 20.09.2026) */
@@ -2299,7 +2299,7 @@ body:has(.mk) { background: #fff; }
 .hd-anmelden { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; margin-left: 2px; border-radius: 999px; color: var(--mk-ink) !important; }
 .hd-anmelden .hd-avatar { background: #fff; transition: background .15s ease; }
 .hd-anmelden:hover { filter: none !important; }
-.hd-anmelden:hover .hd-avatar { background: var(--mk-lavendel); }
+.hd-anmelden:hover .hd-avatar { background: var(--mk-neutral-2); }
 .hd-anmelden:focus-visible { outline: 2px solid var(--mk-ink); outline-offset: 2px; }
 /* Aufklappmenüs: weiss, Ink-Rand, kein Schatten */
 .hd-klapp { position: absolute; right: 0; top: calc(100% + 12px); z-index: 100; padding: 8px; background: #fff; border: var(--mk-rand); border-radius: 18px; display: flex; flex-direction: column; }
@@ -2309,7 +2309,7 @@ body:has(.mk) { background: #fff; }
 .hd-name { margin: 0; font-size: 15px; font-weight: 600; color: var(--mk-ink); }
 .hd-mail { margin: 2px 0 0; font-size: 12.5px; opacity: .65; overflow: hidden; text-overflow: ellipsis; }
 .hd-punkt { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px; border: none; border-radius: 10px !important; background: none; color: var(--mk-ink) !important; font: inherit; font-size: 15px; font-weight: 500; text-align: left; text-decoration: none; cursor: pointer; }
-.hd-punkt:hover { background: var(--mk-lavendel); }
+.hd-punkt:hover { background: var(--mk-neutral-2); }
 .hd-leise { margin-left: auto; font-size: 12px; opacity: .6; }
 .hd-linie { height: 1px; margin: 6px 10px; background: rgba(29,29,29,.16); }
 /* Unter der Pille: Handy-Suche, Mega-Menü, Handy-Menü */
@@ -2319,7 +2319,7 @@ body:has(.mk) { background: #fff; }
 .hd-mmenue { margin-top: 8px; padding: 10px; max-height: calc(100vh / var(--bd-zoom, 1) - 170px); overflow-y: auto; background: #fff; border: var(--mk-rand); border-radius: 26px; display: flex; flex-direction: column; }
 .hd-mkopf { display: flex; align-items: center; gap: 12px; padding: 10px 10px 16px; margin-bottom: 6px; border-bottom: 1px solid rgba(29,29,29,.16); }
 .hd-mpunkt { display: flex; align-items: center; gap: 12px; padding: 13px 10px; border-radius: 12px; color: var(--mk-ink) !important; font-size: 16px; font-weight: 500; text-decoration: none; }
-.hd-mpunkt:hover { background: var(--mk-lavendel); }
+.hd-mpunkt:hover { background: var(--mk-neutral-2); }
 .hd-mschluss { padding: 12px 4px 4px; display: flex; flex-direction: column; }
 @media (max-width: 1180px) { .hd-lbl { display: none; } .hd-text { padding: 0 8px; } .hd-knopf { padding: 0 14px 4px; } }
 @media (max-width: 767px) {
@@ -2353,7 +2353,7 @@ body:has(.mk) { background: #fff; }
 .bn-tab[aria-current=page] .bn-initialen { background: var(--bn-aktiv); border-color: var(--bn-aktiv); color: #fff; }
 .bn-tab:not([aria-current=page]) { opacity: .72; }
 .bn-initialen { font-size: 10px; font-weight: 700; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: #fff; }
-.bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-mint); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.16); transform: translateY(-10px); }
+.bn .bn-plus { width: 52px; height: 48px; padding: 0 0 4px; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 12px !important; background: var(--mk-gelb); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.16); transform: translateY(-10px); }
 .bn .bn-plus:active { box-shadow: inset 0 -1px 0 rgba(29,29,29,.16); padding-bottom: 1px; }
 
 /* ── MEEKO STARTSEITE, Schritt 2 (Denis 20.09.2026) ── */
@@ -2365,11 +2365,11 @@ body:has(.mk) { background: #fff; }
 .mk-hero-echt { margin-top: -97px; padding: 153px 24px 84px; background: var(--mk-hero) !important; border-bottom: var(--mk-rand); }
 .mk-hero-echt .mk-h1, .mk-hero-echt .mk-hero-text, .mk-hero-echt .mk-hero-hinweis, .mk-hero-echt .mk-hero-knoepfe, .mk-hero-echt .mk-hero-beta { position: relative; z-index: 2; }
 .mk-hero-hinweis { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 26px; padding: 7px 16px 8px; border: var(--mk-rand); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; letter-spacing: -.01em; transition: background .2s ease; }
-.mk-hero-hinweis:hover { background: var(--mk-lavendel); }
+.mk-hero-hinweis:hover { background: var(--mk-neutral-2); }
 .mk-hero-knoepfe { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
-.mk-hero-beta { display: inline-flex; align-items: center; gap: 10px; margin-top: 34px; padding: 6px 14px 6px 6px; border: var(--mk-rand); border-radius: 999px; background: rgba(255,255,255,.6); font-size: 14px; transition: background .2s ease; }
+.mk-hero-beta { display: inline-flex; align-items: center; gap: 10px; margin-top: 34px; padding: 6px 14px 6px 6px; border: 1px solid rgba(29,29,29,.22); border-radius: 999px; background: rgba(255,255,255,.55); font-size: 13.5px; transition: background .2s ease; }
 .mk-hero-beta:hover { background: #fff; }
-.mk-hero-beta-marke { padding: 3px 10px 4px; border-radius: 999px; background: var(--mk-ink); color: #fff; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.mk-hero-beta-marke { padding: 3px 10px 4px; border-radius: 999px; background: #fff; border: 1px solid rgba(29,29,29,.3); color: var(--mk-ink); font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
 /* Kacheln: im Labor am Boden 176 px hoch verankert (dort überlappen Karten den Hero), hier nicht */
 /* Feste Höhen statt "Mitte des Heros": dieser Hero ist niedriger als der im Labor, dort rutschten die mittleren Kacheln
    in die oberen (Denis 20.09.2026). Reihenfolge je Seite: oben, Mitte, unten, mit Luft für Drehung, Preismarke und Mausweg. */
@@ -2382,12 +2382,12 @@ body:has(.mk) { background: #fff; }
 .mk-link-knopf { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px 3px; border: var(--mk-rand); border-radius: 10px; background: #fff; color: var(--mk-ink) !important; font-size: 13.5px; font-weight: 600; text-decoration: none; white-space: nowrap; box-shadow: inset 0 -3px 0 rgba(29,29,29,.13); transition: background .2s ease; }
 /* Kategorien-Pillen und Knöpfe der Startseite im Meeko-Look: Ink-Rand, eingedrückter Schatten, Butter beim Hovern */
 .cat-pill { border: var(--mk-rand) !important; background: #fff !important; box-shadow: inset 0 -3px 0 rgba(29,29,29,.12); padding-bottom: 9px !important; }
-.cat-pill:hover { background: var(--mk-lavendel) !important; }
+.cat-pill:hover { background: var(--mk-neutral-2) !important; }
 main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
-.mk-link-knopf:hover { background: var(--mk-lavendel); filter: none !important; }
+.mk-link-knopf:hover { background: var(--mk-neutral-2); filter: none !important; }
 /* Pastelltafeln auch ausserhalb von .mk */
 .mk-lavendel { background: var(--mk-lavendel); } .mk-himmel { background: var(--mk-himmel); } .mk-rosa { background: var(--mk-rosa); }
-.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); }
+.mk-mint { background: var(--mk-mint); } .mk-rose { background: var(--mk-rose); } .mk-butter { background: var(--mk-butter); } .mk-gruen { background: var(--mk-gruen); }
 @media (max-width: 1100px) { .mk-hero-echt { min-height: 0; } .mk-hero-echt .mk-schweb { top: auto; bottom: auto; } }
 @media (max-width: 767px) {
   .mk-hero-echt { margin-top: 0; padding: 30px 16px 44px; }
@@ -2404,25 +2404,25 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
   .mk-hero-beta { flex-direction: column; gap: 6px; padding: 12px 16px; font-size: 14px; text-align: center; border-radius: 18px; }
   .mk-hero-beta svg { display: none; }
   .lc-text { padding: 10px 10px 12px !important; }
-  .lc-foto { inset: 7px !important; border-radius: 9px !important; }
+  .lc-foto { inset: 0 !important; border-radius: 0 !important; }
   /* Zweispaltig am Handy ist die Karte schmal: Chip und Herz rücken in die Ecken und werden kleiner, sonst stossen sie zusammen */
-  .lc-oben-l { top: 12px !important; left: 12px !important; }
+  .lc-oben-l { top: 8px !important; left: 8px !important; }
   .lc-oben-l span { font-size: 9.5px !important; padding: 2px 7px !important; }
-  .lc-oben-r { top: 12px !important; right: 12px !important; }
+  .lc-oben-r { top: 8px !important; right: 8px !important; }
   .lc-oben-r button { width: 28px !important; height: 28px !important; }
   .lc-oben-r button svg { width: 13px !important; height: auto !important; }
-  .lc-unten { bottom: 12px !important; left: 12px !important; }
-  .lc-tafel .sofort-chip { bottom: 12px !important; right: 12px !important; }
+  .lc-unten { bottom: 8px !important; left: 8px !important; }
+  .lc-tafel .sofort-chip { bottom: 8px !important; right: 8px !important; }
 }
 
 /* ── FUSS MEEKO (ft-*), Komponente components/layout/Footer.tsx ── */
 .ft { padding: 96px 24px 24px; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: var(--mk-ink); background: #fff; }
 .ft a:hover { filter: none !important; }
-.ft-tafel { max-width: 1280px; margin: 0 auto; padding: 48px 48px 28px; border: var(--mk-rand); border-radius: 28px; background: var(--mk-lavendel); }
+.ft-tafel { max-width: 1280px; margin: 0 auto; padding: 48px 48px 28px; border: var(--mk-rand); border-radius: 28px; background: var(--mk-neutral); }
 .ft-aufruf { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: 40px; margin-bottom: 40px; border-bottom: 1px solid rgba(29,29,29,.2); }
 .ft-satz { margin: 0; font-size: clamp(28px, 3.4vw, 46px); font-weight: 500; line-height: 1.08; letter-spacing: -.04em; }
-.ft-knopf { display: inline-flex; align-items: center; gap: 8px; min-height: 54px; padding: 0 26px 4px; border: var(--mk-rand); border-radius: 10px; background: var(--mk-mint); color: var(--mk-ink) !important; font-size: 17px; font-weight: 600; letter-spacing: -.02em; text-decoration: none; box-shadow: inset 0 -5px 0 rgba(29,29,29,.16); transition: background .2s ease; }
-.ft-knopf:hover { background: #fff; }
+.ft-knopf { display: inline-flex; align-items: center; gap: 8px; min-height: 54px; padding: 0 26px 4px; border: var(--mk-rand); border-radius: 10px; background: var(--mk-gelb); color: var(--mk-ink) !important; font-size: 17px; font-weight: 600; letter-spacing: -.02em; text-decoration: none; box-shadow: inset 0 -5px 0 rgba(29,29,29,.16); transition: background .2s ease; }
+.ft-knopf:hover { background: #EBB42E; }
 .ft-raster { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 44px; }
 .ft-text { margin: 16px 0 0; max-width: 290px; font-size: 15px; line-height: 1.55; opacity: .75; }
 .ft-adresse { margin: 14px 0 0; font-size: 13.5px; line-height: 1.5; opacity: .6; }
@@ -2466,7 +2466,7 @@ main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
 .lf-format:hover:not(.is-active) { transform: translateY(-4px); }
 .lf-format.is-active { box-shadow: inset 0 0 0 2px #1D1D1D; }
 .type-tab.lf-format.mk-rose:hover:not(.is-active) { background: var(--mk-rose) !important; }
-.type-tab.lf-format.mk-lavendel:hover:not(.is-active) { background: var(--mk-lavendel) !important; }
+.type-tab.lf-format.mk-lavendel:hover:not(.is-active) { background: var(--mk-neutral-2) !important; }
 .type-tab.lf-format.mk-himmel:hover:not(.is-active) { background: var(--mk-himmel) !important; }
 .type-tab.lf-format.mk-rosa:hover:not(.is-active) { background: var(--mk-rosa) !important; }
 @media (max-width: 640px) {
@@ -2595,7 +2595,7 @@ main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
 /* ── FAVORITEN MEEKO (fav-*): die Seite ist mit Tailwind-Klassen gebaut und fiel darum durch alle Farb-Durchgänge ── */
 .fav-reiter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .fav-pille { min-height: 44px; padding: 0 20px 3px; border: 1px solid #1D1D1D; border-radius: 999px !important; background: #fff; color: #1D1D1D; font: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(29,29,29,.12); transition: background .15s ease; }
-.fav-pille:hover { background: var(--mk-lavendel); filter: none !important; }
+.fav-pille:hover { background: var(--mk-neutral-2); filter: none !important; }
 .fav-pille.an { background: #1D1D1D; color: #fff; box-shadow: inset 0 -4px 0 rgba(255,255,255,.22); }
 .fav-suche { width: 100%; min-height: 52px; padding: 0 16px 0 42px !important; border: 1px solid #1D1D1D !important; border-radius: 12px !important; background: #fff !important; color: #1D1D1D; font: inherit; font-size: 16px; outline: none; box-shadow: none !important; transition: background .2s ease; }
 .fav-suche:focus { background: #fff !important; }

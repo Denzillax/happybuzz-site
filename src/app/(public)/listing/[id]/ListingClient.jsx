@@ -45,7 +45,7 @@ import BLogo from "@/components/shared/BLogo";
 // Butter ist die Fläche der Hauptknöpfe (früher Gelb), Ink die Farbe für gewählte Zustände und Links.
 const INK = "#1D1D1D";
 const BUTTER = "#FEE8B0";
-const SAND = "#F3F3FF";
+const SAND = "#F6F4EF";
 const PAPER = "#FFFFFF";
 const PETROL = "#1D1D1D";
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
@@ -762,7 +762,7 @@ export default function ListingDetail() {
                   <>
                     <div style={{ fontSize: 14, lineHeight: 1.7, color: colors.dark, whiteSpace: "pre-wrap" }}>{haupt?.text || "Keine Beschreibung"}</div>
                     {teile.filter(t => t.text).map((t, i) => (
-                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F3F3FF", borderLeft: "3px solid #F4C03F" }}>
+                      <div key={i} style={{ marginTop: 14, padding: "12px 14px", borderRadius: 20, background: "#F6F4EF", borderLeft: "3px solid #F4C03F" }}>
                         <p style={{ margin: "0 0 4px", fontSize: 11.5, fontWeight: 700, color: colors.muted, textTransform: "uppercase", letterSpacing: ".05em" }}>
                           Nachtrag{t.datum ? ` vom ${t.datum}` : ""}
                         </p>
@@ -871,7 +871,7 @@ export default function ListingDetail() {
                     </p>
                   </div>
                   <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${l.city}, Schweiz`)}`} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "9px 16px", borderRadius: 999, background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none", flexShrink: 0 }}>
                     <Navigation size={15} /> Route planen
                   </a>
                 </div>
@@ -901,7 +901,7 @@ export default function ListingDetail() {
               <div style={{ padding: "10px 20px", borderBottom: `1px solid ${colors.borderLt}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 11, color: colors.muted }}>Öffentlich sichtbar. Andere sehen Frage und Antwort.</span>
                 {user && !isOwner && (
-                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                  <button onClick={startPrivateChat} disabled={sendingMsg} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 12, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                     <MessageCircle size={14} /> Nachricht an Verkäufer
                   </button>
                 )}
@@ -1216,7 +1216,7 @@ export default function ListingDetail() {
                       const basis = { width: 36, height: 36, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, overflow: "hidden" };
                       if (offen && b.bidder?.avatar_url) return <span className="bid-avatar" style={basis}><img src={b.bidder.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></span>;
                       if (offen) return <span className="bid-avatar" style={{ ...basis, background: colors.teal, color: "#fff", textTransform: "uppercase" }}>{kurz}</span>;
-                      return <span className="bid-avatar" style={{ ...basis, background: "#F3F3FF", color: colors.muted }}>{kurz}</span>;
+                      return <span className="bid-avatar" style={{ ...basis, background: "#F6F4EF", color: colors.muted }}>{kurz}</span>;
                     };
                     return (
                     <div style={{ marginTop: 18 }}>
@@ -1541,7 +1541,7 @@ export default function ListingDetail() {
                               } catch (err) { setBidError(err.message); }
                               finally { setBidding(false); }
                             }} disabled={bidding || (bidModal === "bid" && !bidAmount)}
-                              style={{ flex: 1, padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#CEF6E8", color: "#1D1D1D", boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
+                              style={{ flex: 1, padding: "14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#F4C03F", color: "#1D1D1D", boxShadow: "inset 0 -4px 0 rgba(29,29,29,.16)", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, opacity: bidding ? 0.6 : 1 }}>
                               {bidding ? "Wird verarbeitet..." : bidModal === "bid" ? "Gebot bestätigen" : "Kaufen"}
                             </button>
                           </div>
@@ -1737,7 +1737,7 @@ export default function ListingDetail() {
               <div style={{ background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 18px", marginBottom: 14 }}>
                 <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: "#8A5A00" }}>Profil unvollständig:</p>
                 {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 3px", fontSize: 12, color: "#8A5A00" }}>• {m}</p>)}
-                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
+                <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "7px 16px", borderRadius: 999, background: "#F4C03F", color: "#1D1D1D", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>Einstellungen öffnen</a>
               </div>
             )}
 
@@ -1839,7 +1839,7 @@ export default function ListingDetail() {
                     <img src={qrSrc} alt="QR-Code" width={240} height={240} style={{ display: "block", margin: "0 auto", borderRadius: 20 }} />
                     <p style={{ margin: "12px 0 0", fontSize: 13, fontWeight: 700, color: colors.dark, wordBreak: "break-word" }}>{l?.title}</p>
                     <div style={{ display: "flex", gap: 8, marginTop: 16 }} className="no-print">
-                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, border: "none", background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
+                      <button onClick={() => window.print()} style={{ flex: 1, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, border: "none", background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>
                         <Printer size={15} /> Drucken
                       </button>
                       <button onClick={() => setShowQr(false)} style={{ flex: 1, padding: "10px 0", borderRadius: 20, border: `1.5px solid ${colors.border}`, background: "#fff", color: colors.dark, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer" }}>

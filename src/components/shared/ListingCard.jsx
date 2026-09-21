@@ -91,7 +91,7 @@ const PERIOD_LABEL = { hour: "Std", day: "Tag", week: "Woche", month: "Monat" };
 const chip = (bg = "#FFFFFF", color = INK) => ({
   fontSize: 10.5, fontWeight: 700, padding: "3px 9px", borderRadius: 999,
   background: bg, color, whiteSpace: "nowrap", lineHeight: 1.5,
-  border: RAND,
+  border: "1px solid rgba(29,29,29,.2)",
 });
 
 export function ListingCard(props) {
@@ -141,12 +141,12 @@ export function ListingCard(props) {
       className="bd-fx-reveal lc-karte"
       // Kartenstil (Denis 20.09.2026): Bild und Beschreibung stehen in EINER Karte mit Ink-Rand. Getrennt (Tafel oben, Text lose
       // darunter) wirkte die Beschreibung wie abgeschnitten. Die Pastelltafel füllt den Kartenkopf bis zum Rand.
-      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, border: RAND, borderRadius: 20, overflow: "hidden", "--lc-farbe": `var(--mk-${TYP_PASTELL[listing.listing_type] || "lavendel"})` }}
+      style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%", minWidth: 0, opacity: statusOverlay ? 0.75 : 1, border: "1px solid rgba(29,29,29,.16)", borderRadius: 18, overflow: "hidden", "--lc-farbe": `var(--mk-${TYP_PASTELL[listing.listing_type] || "lavendel"})` }}
     >
       {/* Bild: Quadrat 1:1 (Denis, 16.09.): fairer Mittelweg fuer gemischte Hoch- und Querfotos, jedes Foto verliert nur 25% */}
-      <div className={`lc-tafel mk-${TYP_PASTELL[listing.listing_type] || "lavendel"}`} style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", borderBottom: RAND }}>
+      <div className="lc-tafel" style={{ position: "relative", aspectRatio: "1/1", overflow: "hidden", background: "#F6F4EF", borderBottom: "3px solid var(--lc-farbe, #E3E3FF)" }}>
         {/* Das Foto liegt mit Abstand auf der Tafel und hat seinen eigenen Rand. Absolut gesetzt, damit Hochformate die Tafel nicht strecken. */}
-        <div className="lc-foto" style={{ position: "absolute", inset: 10, borderRadius: 11, border: RAND, overflow: "hidden", background: "#fff" }}>
+        <div className="lc-foto" style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#F6F4EF" }}>
           {cover
             ? <img src={cover} alt={listing.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: statusOverlay ? "grayscale(1)" : "none" }} loading="lazy" />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Package size={36} color="rgba(29,29,29,.35)" /></div>
@@ -154,8 +154,8 @@ export function ListingCard(props) {
         </div>
 
         {/* Oben links: farbiger Typ-Chip + Hinweise */}
-        <div className="lc-oben-l" style={{ position: "absolute", top: 18, left: 18, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
-          {TYP_LABEL[listing.listing_type] && <span style={chip()}>{TYP_LABEL[listing.listing_type]}</span>}
+        <div className="lc-oben-l" style={{ position: "absolute", top: 12, left: 12, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+          {TYP_LABEL[listing.listing_type] && <span style={chip("var(--lc-farbe, #fff)")}>{TYP_LABEL[listing.listing_type]}</span>}
           {hasFeatured && <span style={{ ...chip("#8A5A00", "#fff") }}><Star size={9} fill="#fff" style={{ verticalAlign: "-1px", marginRight: 3 }} />Featured</span>}
           {hasSpotlight && !hasFeatured && <span style={chip()}>Gesponsert</span>}
           {isNew && !hasFeatured && !hasSpotlight && <span style={chip()}>Neu</span>}
@@ -175,21 +175,21 @@ export function ListingCard(props) {
         )}
 
         {/* Oben rechts: Merken-Herz */}
-        <div className="lc-oben-r" style={{ position: "absolute", top: 18, right: 18 }}>
+        <div className="lc-oben-r" style={{ position: "absolute", top: 12, right: 12 }}>
           <FavoriteButton isFav={isFav} onToggle={handleToggleFav} />
         </div>
 
         {/* Unten rechts: Sofortkauf-Chip (Denis 16.09.: der Textblock bleibt so bei
             allen Karten gleich, und der Preis ist nirgends abgeschnitten) */}
         {isAuction && listing.buy_now_price > 0 && !statusOverlay && (
-          <span className="sofort-chip" style={{ position: "absolute", bottom: 18, right: 18, fontSize: 11, fontWeight: 700, color: INK, background: "#fff", border: RAND, borderRadius: 999, padding: "3px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>
+          <span className="sofort-chip" style={{ position: "absolute", bottom: 12, right: 12, fontSize: 11, fontWeight: 700, color: INK, background: "#fff", border: RAND, borderRadius: 999, padding: "3px 9px", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>
             {/* Ganze Beträge ohne .00, sonst wird der Chip am Handy zu breit (Denis 16.09.) */}
             Sofort CHF {Number.isInteger(listing.buy_now_price) ? listing.buy_now_price.toLocaleString("de-CH") : chf(listing.buy_now_price)}
           </span>
         )}
         {/* Unten links: Bildersuche-Lupe (oeffnet das Inserat und startet die
             KI-Bildersuche), daneben Endet bald / Hot */}
-        <div className="lc-unten" style={{ position: "absolute", bottom: 18, left: 18, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+        <div className="lc-unten" style={{ position: "absolute", bottom: 12, left: 12, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
           {!statusOverlay && (
             <button type="button" aria-label="Ähnliche per Bild finden" title="Ähnliche per Bild finden"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/listing/${listing.id}?bild=1`); }}
@@ -213,7 +213,7 @@ export function ListingCard(props) {
           feinen Linie, immer am Kartenboden (marginTop auto). */}
       <div className="lc-text" style={{ padding: "12px 14px 14px", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         <p style={{
-          fontSize: 15.5, fontWeight: 500, fontFamily: fonts.body, letterSpacing: "-.015em",
+          fontSize: 14.5, fontWeight: 500, fontFamily: fonts.body, letterSpacing: "-.01em",
           lineHeight: 1.3, margin: 0, color: INK,
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
           overflow: "hidden", minHeight: "2.6em",
@@ -222,26 +222,26 @@ export function ListingCard(props) {
         </p>
 
         {/* Preis als Anker, Gebote grau daneben */}
-        <div style={{ marginTop: 4, minHeight: 22, display: "flex", alignItems: "baseline", gap: 6, overflow: "hidden", whiteSpace: "nowrap" }}>
+        <div style={{ marginTop: 6, minHeight: 24, display: "flex", alignItems: "baseline", gap: 6, overflow: "hidden", whiteSpace: "nowrap" }}>
           {isAuction ? (
             <>
-              <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-.025em", color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {chf(listing.price || listing.start_price || 0)}
               </span>
               <span style={{ fontSize: 12, color: colors.muted }}>({bidCount} {bidCount === 1 ? "Gebot" : "Gebote"})</span>
             </>
           ) : isRent || isService ? (
-            <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-.025em", color: INK, fontVariantNumeric: "tabular-nums" }}>
               CHF {chf(listing.rent_price || listing.price || 0)}
               <span style={{ fontSize: 12, fontWeight: 600, color: colors.muted }}> / {PERIOD_LABEL[listing.rent_period] || "Tag"}</span>
             </span>
           ) : isFree ? (
-            <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK }}>Gratis</span>
+            <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-.025em", color: INK }}>Gratis</span>
           ) : (
             <>
               {/* Festpreis gleich gesetzt wie der Auktionspreis (Denis 16.09.: die
                   Kopfschrift wirkte dicker), daneben grau "(Festpreis)" wie "(n Gebote)" */}
-              <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-.02em", color: INK, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: "-.025em", color: INK, fontVariantNumeric: "tabular-nums" }}>
                 CHF {chf(listing.price || 0)}
               </span>
               {gesenkt ? (

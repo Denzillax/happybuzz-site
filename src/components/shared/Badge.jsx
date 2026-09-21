@@ -21,7 +21,7 @@ export function TypeBadge({ type }) {
     auction: { bg: "#E3E3FF", color: "#1D1D1D", label: "Auktion" },
     rent:    { bg: "#D3F0FF", color: "#1D1D1D", label: "Miete" },
     service: { bg: "#FFDFF9", color: "#1D1D1D", label: "Service" },
-    free:    { bg: "#FEE8B0", color: "#1D1D1D", label: "Gratis" },
+    free:    { bg: "#E1F2D8", color: "#1D1D1D", label: "Gratis" },
   };
   const c = config[type] || config.sell;
   return <Badge bg={c.bg} color={c.color}>{c.label}</Badge>;

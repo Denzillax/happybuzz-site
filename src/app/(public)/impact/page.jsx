@@ -179,7 +179,7 @@ export default function ImpactPage() {
           </p>
           <Link href="/listings/new" className="bd-btn" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "14px 28px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D",
+            padding: "14px 28px", borderRadius: 999, background: "#F4C03F", color: "#1D1D1D",
             fontSize: 15, fontWeight: 700, fontFamily: BODY, textDecoration: "none", border: "1px solid #1D1D1D",
           }}>
             Jetzt inserieren <ArrowRight size={16} />

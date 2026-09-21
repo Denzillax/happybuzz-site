@@ -3,7 +3,7 @@
 // keine Schlagschatten, Hauptknopf dunkel. Werte unten sind umgestellt, die Namen (sand, honey) sind geblieben.
 // Frueherer Katalog-Look (eckig, Ink-Rahmen, Space Mono, Versatzschatten)
 // ist abgeloest. Vokabular:
-//   · Flaechen weiss, Panels #F3F3FF, Karten mit Hairline rgba(29,29,29,.16)
+//   · Flaechen weiss, Panels #F6F4EF, Karten mit Hairline rgba(29,29,29,.16)
 //   · Ecken weich (radius 10), Schatten weich und sparsam
 //   · Labels: Manrope, Grossbuchstaben, dezentes Letter-Spacing
 //   · Primaerbutton Honey, rund; Fokus: Teal-Rahmen + weicher Ring
@@ -12,7 +12,7 @@
 
 export const K = {
   ink: "#1D1D1D",
-  sand: "#F3F3FF",
+  sand: "#F6F4EF",
   paper: "#FFFFFF",
   honey: "#FEE8B0", // Meeko: Butter. Das alte Gelb lebt nur noch in Sternen und Spielen
   petrol: "#1D1D1D",
@@ -73,7 +73,7 @@ export const btnPrimary = {
   padding: "13px 16px",
   borderRadius: 10,
   border: "1px solid #1D1D1D",
-  background: "#CEF6E8", // Hauptknopf in Mint mit Ink-Rand (Denis 20.09.2026)
+  background: "#F4C03F", // Hauptknopf im Beedaro-Gelb mit Ink-Rand (Denis 21.09.2026)
   color: "#1D1D1D",
   fontSize: 16,
   fontWeight: 600,

@@ -83,7 +83,7 @@ function FilterPill({ label, value, options, onChange, active }) {
                 fontWeight: value === opt.value ? 700 : 400,
                 transition: "background .1s",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = "#F3F3FF"}
+              onMouseEnter={e => e.currentTarget.style.background = "#F6F4EF"}
               onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#CEF6E8" : "transparent"}
             >
               {opt.label}
@@ -335,7 +335,7 @@ function SearchPageInner() {
             <Sparkles size={13} /> KI
           </button>
           <button onClick={suchenStarten}
-            style={{ padding: "8px 18px 10px", background: "#CEF6E8", border: "1px solid #1D1D1D", boxShadow: "inset 0 -3px 0 rgba(29,29,29,.16)", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#1D1D1D", fontFamily: fonts.body, flexShrink: 0 }}>
+            style={{ padding: "8px 18px 10px", background: "#F4C03F", border: "1px solid #1D1D1D", boxShadow: "inset 0 -3px 0 rgba(29,29,29,.16)", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#1D1D1D", fontFamily: fonts.body, flexShrink: 0 }}>
             Suchen
           </button>
         </div>
@@ -476,7 +476,7 @@ function SearchPageInner() {
                       style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #1D1D1D", borderRadius: 20, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
                   </div>
                   <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
-                    width: "100%", padding: "8px", background: "#CEF6E8", color: "#1D1D1D",
+                    width: "100%", padding: "8px", background: "#F4C03F", color: "#1D1D1D",
                     border: "none", borderRadius: 20, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
                   }}>Anwenden</button>
                 </div>
@@ -628,7 +628,7 @@ function SearchPageInner() {
                   <Sparkles size={15} /> {kiLaedt ? "KI sucht…" : "Mit KI suchen"}
                 </button>
               )}
-              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
+              <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#F4C03F", color: "#1D1D1D", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Alle Inserate ansehen</a>
               <a href="/search" style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "11px 22px", borderRadius: 999, background: "#fff", border: "1px solid #1D1D1D", color: INK, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Filter zurücksetzen</a>
             </div>
           </div>

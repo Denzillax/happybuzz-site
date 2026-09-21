@@ -81,7 +81,7 @@ export default function NektarBadge() {
             </div>
           </div>
           {/* heller Track braucht eine Kontur, sonst verschwindet er auf Weiss */}
-          <div style={{ height: 8, borderRadius: 20, background: "#F3F3FF", border: "1px solid rgba(29,29,29,.2)", overflow: "hidden", marginBottom: 6 }}>
+          <div style={{ height: 8, borderRadius: 20, background: "#F6F4EF", border: "1px solid rgba(29,29,29,.2)", overflow: "hidden", marginBottom: 6 }}>
             <div style={{ height: "100%", borderRadius: 20, background: level.color, width: `${next ? progress : 100}%`, transition: "width .4s" }} />
           </div>
           <p style={{ margin: "0 0 12px", fontSize: 11, color: "#5B626C" }}>
@@ -95,7 +95,7 @@ export default function NektarBadge() {
             <span style={{ fontSize: 12, color: "#5B626C", fontWeight: 600 }}>Nektar</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 15, fontWeight: 900, color: "#8A5A00" }}><Droplets size={14} color="#8A5A00" /> {data.nektar}</span>
           </div>
-          <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
+          <Link href="/hive" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 0", borderRadius: 20, background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>
             <Gift size={15} /> Belohnungen ansehen
           </Link>
         </div>

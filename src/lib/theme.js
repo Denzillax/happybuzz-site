@@ -33,10 +33,10 @@ export const colors = {
   mutedLt:    "#5B626C",
 
   // Surface
-  cream:      "#F3F3FF",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
+  cream:      "#F6F4EF",   // Off-White-Tint (Panels, Chips, Hover) auf weisser Seite — ersetzt frühere Sand-Fläche
   surface:    "#FFFFFF",
-  warm:       "#F3F3FF",
-  cloud:      "#F3F3FF",
+  warm:       "#F6F4EF",
+  cloud:      "#F6F4EF",
 
   // Borders
   border:     "#1D1D1D",          // Rahmen rundum: 1 px Ink (Meeko)

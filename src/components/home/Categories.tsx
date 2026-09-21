@@ -80,7 +80,7 @@ export function Categories() {
 
 
   return (
-    <section style={{ padding: '14px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ padding: '26px 24px 0', maxWidth: 1280, margin: '0 auto' }}>
       <div className={'cat-pills-wrap' + (more ? ' has-more' : '') + (less ? ' has-less' : '')}>
       {less && <button type="button" className="cat-scroll-btn left" aria-label="Kategorien zurück" onClick={() => schieben(-1)}><ChevronLeft size={16} /></button>}
       {more && <button type="button" className="cat-scroll-btn right" aria-label="Weitere Kategorien" onClick={() => schieben(1)}><ChevronRight size={16} /></button>}

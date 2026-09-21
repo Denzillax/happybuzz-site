@@ -69,7 +69,7 @@ export default function ProfilePage() {
               {listings.map(l => (
                 <Link key={l.id} href={`/listing/${l.id}`} style={{ textDecoration: "none", color: colors.dark }}>
                   <div style={{ background: "#fff", borderRadius: radius.md, overflow: "hidden", border: `1px solid ${colors.borderLt}` }}>
-                    <div style={{ height: 140, background: "#F3F3FF" }}>
+                    <div style={{ height: 140, background: "#F6F4EF" }}>
                       {img(l) && <img src={img(l)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
                     </div>
                     <div style={{ padding: "10px 12px" }}>

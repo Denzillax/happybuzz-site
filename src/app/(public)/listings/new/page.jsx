@@ -139,7 +139,7 @@ function NewListingPageInner() {
           <div style={{ background: "#FEE8B0", border: "1px solid #1D1D1D", borderRadius: 20, padding: "16px 20px" }}>
             <p style={{ margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: "#8A5A00" }}>Profil unvollständig, bitte ergänzen:</p>
             {profileWarning.map((m, i) => <p key={i} style={{ margin: "0 0 4px", fontSize: 13, color: "#8A5A00" }}>• {m}</p>)}
-            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#CEF6E8", color: "#1D1D1D", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
+            <a href="/settings" style={{ display: "inline-block", marginTop: 10, padding: "8px 20px", borderRadius: 999, background: "#F4C03F", color: "#1D1D1D", fontSize: 13, fontWeight: 700, textDecoration: "none" }}>Zu den Einstellungen</a>
           </div>
         </div>
       )}

@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const C = colors; // Alias for brevity in this file
 
 // Katalog-Tokens (wie öffentliche Seiten)
-const K = { ink: "#1D1D1D", sand: "#F3F3FF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
+const K = { ink: "#1D1D1D", sand: "#F6F4EF", paper: "#FFFFFF", honey: "#F4C03F", petrol: "#1D1D1D" };
 const MONO = "'Instrument Sans', 'Manrope', sans-serif";
 const BODY = "Manrope, sans-serif";
 

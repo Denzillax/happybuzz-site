@@ -192,7 +192,7 @@ export const PAYMENT_METHODS = [
 // Meeko-Design (20.09.2026): jedes Format hat eine Pastelltafel, auf der sein Bild liegt (Inseratkarte, Hero, Format-Kacheln).
 // Der Wert ist der Name der CSS-Klasse mk-<name> und der Variable --mk-<name> in globals.css. Mint gehört dem Hero und dem
 // App-Icon, darum trägt Gratis Butter.
-export const TYP_PASTELL = { sell: "rose", auction: "lavendel", rent: "himmel", free: "butter", service: "rosa" };
+export const TYP_PASTELL = { sell: "rose", auction: "lavendel", rent: "himmel", free: "gruen", service: "rosa" };
 export const TYP_LABEL = { sell: "Festpreis", auction: "Auktion", rent: "Miete", free: "Gratis", service: "Service" };
 
 // Chipfarben je Format: dieselben Pastelle wie TYP_PASTELL, Schrift immer Ink.
@@ -200,6 +200,6 @@ export const TYP_FARBEN = {
   sell: { bg: "#FFE2DE", fg: "#1D1D1D" },
   auction: { bg: "#E3E3FF", fg: "#1D1D1D" },
   rent: { bg: "#D3F0FF", fg: "#1D1D1D" },
-  free: { bg: "#FEE8B0", fg: "#1D1D1D" },
+  free: { bg: "#E1F2D8", fg: "#1D1D1D" },
   service: { bg: "#FFDFF9", fg: "#1D1D1D" },
 };

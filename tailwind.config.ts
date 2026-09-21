@@ -16,7 +16,7 @@ const config: Config = {
         'text-md':     '#34343B',
         'text-lt':     '#5B626C',
         bg:            '#FFFFFF',
-        'bg-alt':      '#F3F3FF',
+        'bg-alt':      '#F6F4EF',
         surface:       '#FFFFFF',
         border:        '#1D1D1D',
         'border-lt':   'rgba(29,29,29,.16)',

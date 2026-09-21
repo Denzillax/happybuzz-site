@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F3F3FF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#1D1D1D" }}>
+    <div style={{ fontFamily: "'Instrument Sans', 'Manrope', sans-serif", background: "#F6F4EF", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#1D1D1D" }}>
       <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 520 }}>
         <div style={{ fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: "#5B626C", marginBottom: 18 }}>
           Fehler 404 · Seite entfernt
