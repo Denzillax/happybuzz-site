@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
 import { supabase } from '@/lib/supabase/supabase'
-import { ArrowRight, Plus, MessageSquareHeart, Flower2, CircleCheck } from 'lucide-react'
+import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Neu gestaltet (Denis 21.09.2026), seit dem Abend über die ganze Breite: das Honig-Feld läuft links bis an den Bildschirmrand,
 // der Satz steht daneben auf Weiss. Rechts der Satz, grösser und fetter als bisher, mit EINEM dunklen Hauptknopf. Links ein Honig-Feld,
@@ -41,15 +41,17 @@ export function Hero() {
   return (
     <div className="hw-band">
       <style>{`
-        .hw-band { --hw-feld: 400px; --hw-kante: calc(max(24px, 50% - 616px) + var(--hw-feld)); background: linear-gradient(90deg, #F4C03F var(--hw-kante), #fff var(--hw-kante)); border-bottom: 1px solid #E5E8EC; }
-        .hw-reihe { max-width: 1280px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; gap: 28px; align-items: stretch; min-height: 470px; }
+        .hw-band { --hw-feld: 500px; --hw-kante: calc(max(24px, 50% - 616px) + var(--hw-feld)); background: linear-gradient(90deg, #F4C03F var(--hw-kante), #fff var(--hw-kante)); border-bottom: 1px solid #E5E8EC; }
+        .hw-reihe { max-width: 1280px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; align-items: stretch; min-height: 440px; }
         .hw { flex: 1 1 0; min-width: 0; display: flex; align-items: stretch; }
-        .hw-text { flex: 1 1 340px; min-width: 0; padding: clamp(30px, 4vw, 56px) 0 clamp(30px, 4vw, 56px) clamp(24px, 3.6vw, 52px); display: flex; flex-direction: column; justify-content: center; }
+        .hw-text { flex: 1 1 340px; min-width: 0; padding: clamp(30px, 4vw, 56px) 0 clamp(30px, 4vw, 56px) clamp(28px, 5vw, 80px); display: flex; flex-direction: column; justify-content: center; }
         .hw-zweck { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 16px; padding: 6px 13px; border-radius: 999px; background: #EEF3EC; border: 1px solid #D5E2D2; color: #2F5A2F; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
-        .hw-titel { margin: 0 0 12px; font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: #191615; }
+        .hw-titel { margin: 0 0 14px; font-size: clamp(30px, 4.4vw, 60px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: #191615; }
         .hw-unter { margin: 0 0 24px; max-width: 30em; font-size: clamp(14.5px, 1.5vw, 17px); line-height: 1.5; color: #5B626C; }
         .hw-marker { background: linear-gradient(transparent 62%, #F4C03F 62%, #F4C03F 92%, transparent 92%); padding: 0 .08em; margin: 0 -.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-        .hw-live { display: inline-flex; align-items: center; gap: 8px; margin: 18px 0 0; font-size: 13px; font-weight: 700; color: #5B626C; }
+        .hw-zeile { display: flex; align-items: center; gap: 8px 22px; flex-wrap: wrap; margin: 22px 0 0; font-size: 13px; font-weight: 600; color: #5B626C; }
+        .hw-live { display: inline-flex; align-items: center; gap: 8px; }
+        .hw-betalink { display: inline-flex; align-items: center; gap: 6px; color: #5B626C; text-decoration: underline; text-underline-offset: 3px; }
         .hw-live-punkt { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hwPuls 2.2s ease-out infinite; }
         @keyframes hwPuls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
         .hw-format { position: absolute; left: 12px; top: 12px; z-index: 1; padding: 4px 10px 5px; border-radius: 999px; border: 1px solid rgba(25,22,21,.14); font-size: 11.5px; font-weight: 800; color: #191615; }
@@ -58,28 +60,16 @@ export function Hero() {
         .hw-knopf.dunkel { background: #191615; color: #fff; }
         .hw-knopf.hell { background: #fff; color: #191615; border: 1px solid #D5D9DF; }
         .hw-feld { position: relative; order: -1; overflow: hidden; cursor: pointer; flex: 0 0 var(--hw-feld); min-height: 300px; }
-        .hw-marke { position: absolute; left: 4px; top: 30px; z-index: 3; padding: 7px 13px 8px; border-radius: 10px; background: #191615; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-5deg); box-shadow: 0 6px 14px rgba(25,22,21,.22); white-space: nowrap; }
-        .hw-fund { position: absolute; left: 38%; top: 60%; width: 60%; max-width: 250px; padding: 14px; background: #fff; border-radius: 22px; box-shadow: 0 16px 32px rgba(25,22,21,.2); transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
+        .hw-fund { position: absolute; left: 40%; top: 54%; width: 56%; max-width: 270px; padding: 14px; background: #fff; border-radius: 22px; box-shadow: 0 16px 32px rgba(25,22,21,.2); transition: transform .6s cubic-bezier(.3,.7,.2,1), opacity .45s ease; will-change: transform; }
         .hw-fund img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
-        .hw-beta { flex: 0 0 310px; margin: 28px 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; padding: clamp(22px, 3vw, 30px); border-radius: 18px; background: #fff; color: #191615; border: 1px solid #E5E8EC; box-shadow: 0 10px 30px rgba(25,22,21,.07); }
-        .hw-beta-marke { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; padding: 5px 12px; border-radius: 999px; background: #F5F6F8; border: 1px solid #E5E8EC; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-        .hw-punkt { width: 7px; height: 7px; border-radius: 50%; background: #F4C03F; flex-shrink: 0; }
-        .hw-beta-titel { margin: 0 0 8px; font-size: clamp(20px, 2.2vw, 26px); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; color: #191615; }
-        .hw-beta-text { margin: 0 0 16px; font-size: 14px; line-height: 1.55; color: #5B626C; }
-        .hw-beta-liste { display: flex; flex-direction: column; gap: 6px; width: 100%; margin: 0 0 18px; padding: 0; list-style: none; }
-        .hw-beta-liste li { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 10px; background: #F5F6F8; border: 1px solid #E5E8EC; font-size: 13.5px; font-weight: 700; color: #191615; }
-        .hw-beta-knopf { margin-top: auto; display: inline-flex; align-items: center; gap: 7px; padding: 12px 20px; border-radius: 999px; background: #F4C03F; color: #191615; font-size: 14px; font-weight: 800; text-decoration: none; }
-        .hw-mini { align-items: center; gap: 9px; margin: 0 0 16px; padding: 12px 16px; border-radius: 999px; background: #fff; border: 1px solid #E5E8EC; box-shadow: 0 6px 18px rgba(25,22,21,.06); color: #191615; font-size: 13.5px; font-weight: 800; text-decoration: none; }
-        @media (max-width: 1100px) { .hw-band { --hw-feld: 320px; } .hw-beta { flex-basis: 270px; } }
+        @media (max-width: 1100px) { .hw-band { --hw-feld: 380px; } }
         @media (max-width: 860px) {
           .hw-band { background: #fff; }
           .hw-reihe { flex-direction: column; gap: 14px; min-height: 0; }
           .hw { flex-direction: column; }
           .hw-text { padding: 26px 0 24px; }
           .hw-feld { order: 0; flex: 0 0 auto; min-height: 0; height: 260px; margin: 0 -24px; background: #F4C03F; }
-          .hw-marke { left: 20px; top: 18px; }
-          .hw-beta { flex: 0 0 auto; margin: 0 0 16px; }
-          .hw-fund { width: 42%; max-width: 160px; padding: 10px; border-radius: 18px; top: 58%; }
+              .hw-fund { width: 42%; max-width: 160px; padding: 10px; border-radius: 18px; top: 58%; }
           .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
           .hw-knoepfe { gap: 8px; }
         }
@@ -105,12 +95,12 @@ export function Hero() {
                 <Link href="/search" className="hw-knopf hell cta-pill">Stöbern <ArrowRight size={16} strokeWidth={2.4} /></Link>
               </Magnetic>
             </div>
-            {online > 0 && (
-              <p className="hw-live"><span className="hw-live-punkt" /> {online.toLocaleString('de-CH')} Inserate gerade online</p>
-            )}
+            <p className="hw-zeile">
+              {online > 0 && <span className="hw-live"><span className="hw-live-punkt" /> {online.toLocaleString('de-CH')} Inserate gerade online</span>}
+              <Link href="/beta" className="hw-betalink"><MessageSquareHeart size={14} /> Geschlossene Beta: so testest du mit</Link>
+            </p>
           </div>
           <div className="hw-feld" aria-hidden="true" onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={() => setVorn((v) => (v + 1) % FUNDE.length)}>
-            <span className="hw-marke">Secondhand aus der Schweiz</span>
             {FUNDE.map((src, i) => (
               <div key={src} className="hw-fund" style={PLATZ[(i - vorn + FUNDE.length) % FUNDE.length]}>
                 <span className="hw-format" style={{ background: FORMAT[i][1] }}>{FORMAT[i][0]}</span>
@@ -119,26 +109,6 @@ export function Hero() {
             ))}
           </div>
         </section>
-
-        {/* Beta-Karte: hell wie die übrigen Karten, mit den drei Dingen zum Testen und Honig-Knopf */}
-        <section className="hw-beta beta-card-full">
-          <div className="hw-beta-marke"><span className="hw-punkt" /> Geschlossene Beta</div>
-          <h2 className="hw-beta-titel">Willkommen, Beta-Crew.</h2>
-          <p className="hw-beta-text">Du gehörst zu den Ersten. Melde alles, was klemmt.</p>
-          <ul className="hw-beta-liste">
-            {['Kaufen und bieten', 'Inserieren und verkaufen', 'Mieten und buchen'].map((s) => (
-              <li key={s}><CircleCheck size={16} color="#50804F" /> {s}</li>
-            ))}
-          </ul>
-          <Link href="/beta" className="hw-beta-knopf cta-pill"><MessageSquareHeart size={15} /> So testest du mit</Link>
-        </section>
-
-        {/* Handy: schmale Beta-Leiste statt der grossen Karte (Umschaltung über beta-mini in globals.css) */}
-        <Link href="/beta" className="hw-mini beta-mini">
-          <span className="hw-punkt" />
-          Beta: So testest du mit
-          <ArrowRight size={15} style={{ marginLeft: 'auto', flexShrink: 0 }} />
-        </Link>
 
       </div>
     </div>
