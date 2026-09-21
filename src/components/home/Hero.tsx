@@ -4,7 +4,7 @@ import { Magnetic } from '@/components/shared/effects'
 import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
 // Neu gestaltet (Denis 21.09.2026), gleiche Sprache wie Challenge und Bee-Impact: eine weisse Karte mit feinem Rand und
-// weichem Schatten. Links der Satz, grösser und fetter als bisher, mit EINEM dunklen Hauptknopf. Rechts ein Honig-Feld,
+// weichem Schatten. Rechts der Satz, grösser und fetter als bisher, mit EINEM dunklen Hauptknopf. Links ein Honig-Feld,
 // auf dem vier Fundstücke als gekippte Karten liegen, mit dunklem Aufkleber. Daneben die Beta-Karte als dunkler
 // Gegenpol mit Honig-Knopf. Am Handy stehen Satz und Honig-Feld untereinander, die Beta-Karte wird zur schmalen Leiste.
 // Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
@@ -29,7 +29,7 @@ export function Hero() {
         .hw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 800; text-decoration: none; }
         .hw-knopf.dunkel { background: #191615; color: #fff; }
         .hw-knopf.hell { background: #fff; color: #191615; border: 1px solid #D5D9DF; }
-        .hw-feld { position: relative; flex: 0 0 38%; min-width: 300px; min-height: 270px; background: #F4C03F; }
+        .hw-feld { position: relative; order: -1; flex: 0 0 38%; min-width: 300px; min-height: 270px; background: #F4C03F; }
         .hw-marke { position: absolute; left: 16px; top: 18px; z-index: 3; padding: 7px 13px 8px; border-radius: 10px; background: #191615; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; transform: rotate(-5deg); box-shadow: 0 6px 14px rgba(25,22,21,.22); white-space: nowrap; }
         .hw-fund { position: absolute; width: 31%; max-width: 140px; padding: 9px; background: #fff; border-radius: 14px; box-shadow: 0 10px 22px rgba(25,22,21,.18); transition: margin-top .25s ease; }
         .hw-fund img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
@@ -43,7 +43,7 @@ export function Hero() {
         @media (hover: hover) and (pointer: fine) { .hw-feld:hover .hw-fund { margin-top: -8px; } }
         @media (max-width: 860px) {
           .hw { flex-direction: column; }
-          .hw-feld { flex: 0 0 auto; min-width: 0; min-height: 0; height: 250px; }
+          .hw-feld { order: 0; flex: 0 0 auto; min-width: 0; min-height: 0; height: 250px; }
           .hw-fund { width: 25%; max-width: 104px; }
           .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
           .hw-knoepfe { gap: 8px; }
