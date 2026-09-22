@@ -73,7 +73,8 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
 - Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich kräftig Rosa `#C2259B` (Service-Familie), ohne Fläche und ohne Kontur (Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer und Kontur lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
 - Hero (seit 21.09.2026, `hf-*` in `globals.css`): Mint über die ganze Fläche, der schwebende Header liegt darauf. Links der Satz mit gelbem Marker,
-  EIN gelber Hauptknopf, die echte Zahl der Inserate online. Rechts der Hypno-Tiger (`public/tiger-hypno.svg`, Spiralen drehen im SVG selbst),
+  EIN gelber Hauptknopf, die echte Zahl der Inserate online. Rechts der Tiger mit Lamellenbrille (`public/tiger-hero.svg`, seit 22.09.2026; ein gelber Blitz läuft durch die Lamellen, Animation im SVG selbst;
+  Alternativen auf `/labor/meeko/brille`),
   dahinter ein drehender Strahlenkranz, in der Sprechblase wechseln trockene Sprüche. KEINE Inserate im Hero und KEIN Karten-Layout wie im alten
   Design (beides lehnte Denis am 21.09. ab).
 - Challenge der Woche (`ch-*`): weisse Karte mit Mint-Feld und Foto-Biene, Belohnung als dunkler Aufkleber, gelber Knopf. Keine dunkle Tafel.
