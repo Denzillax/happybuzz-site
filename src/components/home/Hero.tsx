@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase/supabase'
 
 // Meeko-Hero, vierte Fassung (Denis 21.09.2026: über die ganze Fläche, keine Inserate im Hero, etwas Lustiges mit dem Tiger).
 // Mint von Rand zu Rand, der schwebende Header liegt darauf. Links der Satz mit gelbem Marker und EINEM gelben Hauptknopf.
-// Rechts ragt der Hypno-Tiger von unten ins Bild: die Spiralen in seiner Brille drehen sich (im SVG selbst), hinter ihm dreht
+// Rechts ragt der Tiger von unten ins Bild: die Lamellen seiner Brille gehen wie eine Jalousie auf und zu (im SVG selbst), hinter ihm dreht
 // sich langsam ein Strahlenkranz, und in seiner Sprechblase wechseln trockene Sprüche. Alles steht still, wenn jemand weniger
 // Bewegung wünscht. Die Suche sitzt im Header. Styles: globals.css, Block HERO FLÄCHE (hf-*).
 const SPRUECHE = [
@@ -61,7 +61,7 @@ export function Hero() {
           <span className="hf-blase" key={spruch}>{SPRUECHE[spruch]}</span>
           <span className="hf-sticker">Nicht wegschauen.</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/tiger-hypno.svg" alt="" width="640" height="640" />
+          <img src="/tiger-hero.svg" alt="" width="640" height="640" />
         </div>
       </div>
     </section>

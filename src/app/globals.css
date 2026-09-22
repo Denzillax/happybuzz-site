@@ -2456,7 +2456,7 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
 main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
 .listing-page button[style*="rgb(254, 232, 176)"], .listing-page a[style*="rgb(254, 232, 176)"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
 .listing-page button[style*="rgb(254, 232, 176)"]:hover { background: #FFDD85 !important; filter: none !important; }
-@media (max-width: 767px) { .lg-foto { margin: 7px !important; border-radius: 11px !important; } .lg-gallery { border-radius: 18px !important; } }
+@media (max-width: 767px) { .lg-gallery { border-radius: 18px !important; } }
 
 /* ── INSERIEREN MEEKO (Denis 20.09.2026): Formate als Pastellkacheln, Vorbild /labor/meeko/inserieren ── */
 .lf-formate { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
@@ -2670,17 +2670,17 @@ button[style*="border-bottom: 3px solid"]:not(#_):not(#__), button[style*="borde
 .hf-beta { display: inline-flex; align-items: center; gap: 7px; color: #1D1D1D !important; text-decoration: underline; text-underline-offset: 3px; }
 .hf-beta:hover { filter: none !important; }
 .hf-tiger { position: relative; flex: 0 1 500px; min-width: 300px; align-self: flex-end; margin-top: 40px; line-height: 0; }
-.hf-tiger img { display: block; width: 100%; height: auto; margin: 0 0 -5%; animation: hf-wippen 5s ease-in-out infinite; transform-origin: 50% 100%; }
+.hf-tiger img { display: block; width: 100%; height: auto; margin: 0 0 -2%; animation: hf-wippen 5s ease-in-out infinite; transform-origin: 50% 100%; }
 @keyframes hf-wippen { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-8px); } }
-.hf-blase { position: absolute; left: -16%; top: -2%; z-index: 2; max-width: 250px; padding: 14px 20px 17px; border: 1px solid #1D1D1D; border-radius: 22px 22px 22px 5px; background: #fff; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; animation: hf-blase .45s cubic-bezier(.2,.8,.2,1) both; }
+.hf-blase { position: absolute; left: -30%; top: -12%; z-index: 2; max-width: 250px; padding: 14px 20px 17px; border: 1px solid #1D1D1D; border-radius: 22px 22px 22px 5px; background: #fff; font-size: 18px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; animation: hf-blase .45s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes hf-blase { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: none; } }
-.hf-sticker { position: absolute; right: -3%; bottom: 9%; z-index: 2; padding: 9px 15px 11px; border: 1px solid #1D1D1D; border-radius: 12px; background: var(--mk-gelb); font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.1; transform: rotate(7deg); box-shadow: inset 0 -4px 0 rgba(29,29,29,.14); }
+.hf-sticker { position: absolute; right: 8%; bottom: 15%; z-index: 2; padding: 9px 15px 11px; border: 1px solid #1D1D1D; border-radius: 12px; background: var(--mk-gelb); font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; line-height: 1.1; transform: rotate(7deg); box-shadow: inset 0 -4px 0 rgba(29,29,29,.14); }
 @media (max-width: 960px) {
   .hf-innen { flex-direction: column; align-items: stretch; gap: 0; min-height: 0; }
   .hf-text { flex: 0 0 auto; padding: 44px 0 8px; }
   .hf-tiger { flex: 0 0 auto; align-self: center; width: min(86%, 400px); min-width: 0; margin-top: 92px; }
   .hf-strahlen { left: 50%; top: 78%; }
-  .hf-blase { left: -6%; top: -74px; font-size: 16.5px; }
+  .hf-blase { left: -4%; top: -78px; font-size: 16.5px; }
 }
 @media (max-width: 767px) {
   .hf { margin-top: 0; padding-top: 0; }

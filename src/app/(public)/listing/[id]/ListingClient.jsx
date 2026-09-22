@@ -37,7 +37,7 @@ import { createNotification } from "@/lib/notifications";
 import { getListingAttributesDetailed, getCategoryAttributes } from "@/lib/api/attributes";
 import { handlingLabel } from "@/lib/formatters";
 import { makeArtRef, calcFee } from "@/lib/fees";
-import { TYP_PASTELL } from "@/lib/constants";
+import { TYP_PASTELL, TYP_LABEL } from "@/lib/constants";
 import BLogo from "@/components/shared/BLogo";
 
 // ── Katalog-Design-Tokens (Hero/ListingCard-konsistent) ──
@@ -597,10 +597,10 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            {/* Die Galerie steht auf Weiss wie die Inseratkarten. Das Format zeigt nur eine dünne Linie unten (Denis 22.09.2026:
-                der farbige Rand war zu laut). Vorher lag das Foto auf einer breiten Pastelltafel. */}
-            <div className="lg-gallery" style={{ borderRadius: 24, border: "1px solid #1D1D1D", borderBottom: `3px solid var(--mk-${TYP_PASTELL[l.listing_type] || "lavendel"})`, background: "#fff", overflow: "hidden", marginBottom: 20 }}>
-              <div className="lg-foto" style={{ position: "relative", aspectRatio: "4/3", background: "#fff", margin: 10, borderRadius: 14, border: "1px solid rgba(29,29,29,.16)", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
+            {/* Genau wie die Inseratkarte: ein Block mit Ink-Rand, das Foto randlos darin. Das Format sagt das Schild oben
+                links auf dem Foto (Denis 22.09.2026). Vorher: breite Pastelltafel, dann Rahmen im Rahmen, dann farbige Linie. */}
+            <div className="lg-gallery" style={{ borderRadius: 24, border: "1px solid #1D1D1D", background: "#fff", overflow: "hidden", marginBottom: 20 }}>
+              <div className="lg-foto" style={{ position: "relative", aspectRatio: "4/3", background: "#fff", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
                 onTouchEnd={(e) => {
@@ -635,6 +635,12 @@ export default function ListingDetail() {
                   ? <img className="zoom-img" src={imgs[activeImg]?.url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "contain", background: "#fff", pointerEvents: "none" }} />
                   : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Camera size={60} color={colors.mutedLt} /></div>
                 }
+                {/* Format-Schild in der Farbe des Formats, gleiche Sprache wie auf den Inseratkarten */}
+                {TYP_LABEL[l.listing_type] && (
+                  <span style={{ position: "absolute", top: 14, left: 14, padding: "4px 12px 5px", borderRadius: 999, border: "1px solid rgba(29,29,29,.2)", background: `var(--mk-${TYP_PASTELL[l.listing_type] || "lavendel"})`, color: "#1D1D1D", fontSize: 12.5, fontWeight: 700, lineHeight: 1.4 }}>
+                    {TYP_LABEL[l.listing_type]}
+                  </span>
+                )}
                 {/* Favorite Heart */}
                 <button className="eckig kein-akzent" aria-pressed={!!isFav} aria-label={isFav ? "Aus den Favoriten entfernen" : "Zu den Favoriten"} onClick={(e) => { e.stopPropagation(); e.preventDefault(); handleFav(); }} style={{
                   position: "absolute", top: 14, right: 14, width: 44, height: 44, borderRadius: 999, padding: 0,
