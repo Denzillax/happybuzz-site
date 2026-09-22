@@ -68,6 +68,8 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
 - Karten und Boxen: Rundung 20 (grosse Abschnittskarten 28), `1px solid #1D1D1D`.
 - Knöpfe: 10 px Ecken oder Pille, eingedrückter Schatten unten (`inset 0 -4px 0 rgba(29,29,29,.16)`). Hauptknopf Gelb `#F4C03F` mit Ink-Rand und Ink-Schrift
   (Denis 21.09.2026; schwarze Knöpfe am 20.09. abgelehnt, Mint war die Zwischenlösung), Hover `#EBB42E`. Nebenknopf weiss.
+- Header (seit 22.09.2026): eckig mit denselben Rundungen wie die Knöpfe. Leiste 16 px (Handy 14), Knöpfe, Suchfeld, Symbole und Avatar 10 px,
+  KI-Chip und Suchknopf 8 px, Klappmenüs 14 bis 16 px. KEINE vollen Pillen mehr (999 px) ausser dem Zähler auf der Glocke.
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
 - Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich kräftig Rosa `#C2259B` (Service-Familie), ohne Fläche und ohne Kontur (Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer und Kontur lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
 - Hero (seit 21.09.2026, `hf-*` in `globals.css`): Mint über die ganze Fläche, der schwebende Header liegt darauf. Links der Satz mit gelbem Marker,

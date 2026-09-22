@@ -2251,7 +2251,7 @@ body:has(.mk) { background: #fff; }
 .hd { position: sticky; top: 0; z-index: 50; padding: 14px 24px; background: transparent; pointer-events: none; font-family: 'Instrument Sans', 'Manrope', sans-serif; color: var(--mk-ink); }
 .hd-pille, .hd-unter { pointer-events: auto; }
 .hd a:hover, .hd button:hover { filter: none !important; }
-.hd-pille { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 8px 10px 8px 22px; background: #fff; border: var(--mk-rand); border-radius: 34px; }
+.hd-pille { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 8px 10px 8px 22px; background: #fff; border: var(--mk-rand); border-radius: 16px; }
 .hd-logo { flex-shrink: 0; display: inline-flex; }
 .hd-logo svg { transition: transform .4s cubic-bezier(.2,.7,.1,1); }
 .hd-logo:hover svg { transform: rotate(-90deg); }
@@ -2276,33 +2276,33 @@ body:has(.mk) { background: #fff; }
 .hd-suche.hd-suche-ki, .hd-suche.hd-suche-ki:focus-within { background: var(--mk-rosa); }
 .hd-suche input { flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; font: inherit; font-size: 15px; color: var(--mk-ink); }
 .hd-suche input::placeholder { color: rgba(29,29,29,.6); }
-.hd-ki { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 9px; flex-shrink: 0; border: var(--mk-rand); border-radius: 999px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.hd-ki { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 9px; flex-shrink: 0; border: var(--mk-rand); border-radius: 8px !important; background: #fff; color: var(--mk-ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .hd-ki[aria-pressed=true] { background: var(--mk-ink); color: #fff; }
 .hd-suchen { width: 38px; height: 38px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 0 0 3px; border: var(--mk-rand); border-radius: 8px !important; background: var(--mk-gelb); color: var(--mk-ink); cursor: pointer; box-shadow: inset 0 -3px 0 rgba(29,29,29,.16); }
 .hd-suchen:hover { background: #EBB42E; }
 /* Menüs */
 .hd-menues { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .hd-text, .hd-icon, .hd-punkt, .hd-mpunkt, .hd-knopf { transition: background .15s ease; }
-.hd-text { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: none; border-radius: 999px !important; background: transparent; color: var(--mk-ink); font: inherit; font-size: 15px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background .15s ease; }
+.hd-text { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: none; border-radius: 10px !important; background: transparent; color: var(--mk-ink); font: inherit; font-size: 15px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; transition: background .15s ease; }
 .hd-text:hover, .hd-text[aria-expanded=true] { background: var(--mk-neutral-2); }
 .hd-profil { padding-left: 4px; }
-.hd-icon { position: relative; width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 999px !important; background: transparent; color: var(--mk-ink); cursor: pointer; transition: background .15s ease; }
+.hd-icon { position: relative; width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 10px !important; background: transparent; color: var(--mk-ink); cursor: pointer; transition: background .15s ease; }
 .hd-icon:hover, .hd-icon[aria-current=page] { background: var(--mk-neutral-2); }
 /* die Glocke ist ein eigenes Bauteil (hdr-icon-btn), sie bekommt im Header dieselbe Hover-Fläche */
-.hd .hdr-icon-btn { border-radius: 999px !important; color: var(--mk-ink) !important; transition: background .15s ease; }
+.hd .hdr-icon-btn { border-radius: 10px !important; color: var(--mk-ink) !important; transition: background .15s ease; }
 .hd .hdr-icon-btn:hover, .hd .hdr-icon-btn[aria-expanded=true] { background: var(--mk-neutral-2) !important; filter: none !important; }
 .hd-zahl { position: absolute; top: 3px; right: 3px; min-width: 17px; height: 17px; padding: 0 4px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #C62828; color: #fff; font-size: 10px; font-weight: 700; border: 2px solid #fff; }
 .hd-sep { width: 1px; height: 26px; background: rgba(29,29,29,.2); flex-shrink: 0; margin: 0 6px; }
 /* Avatar in Mint, nicht Butter (Denis 20.09.2026) */
-.hd-avatar { width: 34px; height: 34px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 999px; background: var(--mk-mint); color: var(--mk-ink); font-size: 12.5px; font-weight: 700; }
-.hd-avatar-gross { width: 46px; height: 46px; font-size: 16px; }
-.hd-anmelden { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; margin-left: 2px; border-radius: 999px; color: var(--mk-ink) !important; }
+.hd-avatar { width: 34px; height: 34px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border: var(--mk-rand); border-radius: 10px; background: var(--mk-mint); color: var(--mk-ink); font-size: 12.5px; font-weight: 700; }
+.hd-avatar-gross { width: 46px; height: 46px; border-radius: 12px; font-size: 16px; }
+.hd-anmelden { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; margin-left: 2px; border-radius: 10px; color: var(--mk-ink) !important; }
 .hd-anmelden .hd-avatar { background: #fff; transition: background .15s ease; }
 .hd-anmelden:hover { filter: none !important; }
 .hd-anmelden:hover .hd-avatar { background: var(--mk-neutral-2); }
 .hd-anmelden:focus-visible { outline: 2px solid var(--mk-ink); outline-offset: 2px; }
 /* Aufklappmenüs: weiss, Ink-Rand, kein Schatten */
-.hd-klapp { position: absolute; right: 0; top: calc(100% + 12px); z-index: 100; padding: 8px; background: #fff; border: var(--mk-rand); border-radius: 18px; display: flex; flex-direction: column; }
+.hd-klapp { position: absolute; right: 0; top: calc(100% + 12px); z-index: 100; padding: 8px; background: #fff; border: var(--mk-rand); border-radius: 14px; display: flex; flex-direction: column; }
 .hd-vorschlaege { left: 0; right: 0; top: calc(100% + 8px); }
 .hd-klapp-titel { padding: 6px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .6; }
 .hd-klapp-kopf { padding: 8px 10px 14px; margin-bottom: 6px; border-bottom: 1px solid rgba(29,29,29,.16); }
@@ -2314,9 +2314,9 @@ body:has(.mk) { background: #fff; }
 .hd-linie { height: 1px; margin: 6px 10px; background: rgba(29,29,29,.16); }
 /* Unter der Pille: Handy-Suche, Mega-Menü, Handy-Menü */
 .hd-unter { position: relative; max-width: 1280px; margin: 0 auto; }
-.hd-unter > [style*="position: absolute"], .hd-unter > [style*="position:absolute"] { margin-top: 8px; border: var(--mk-rand) !important; border-radius: 22px !important; box-shadow: none !important; overflow: hidden; }
+.hd-unter > [style*="position: absolute"], .hd-unter > [style*="position:absolute"] { margin-top: 8px; border: var(--mk-rand) !important; border-radius: 14px !important; box-shadow: none !important; overflow: hidden; }
 .hd-msuche { display: none; }
-.hd-mmenue { margin-top: 8px; padding: 10px; max-height: calc(100vh / var(--bd-zoom, 1) - 170px); overflow-y: auto; background: #fff; border: var(--mk-rand); border-radius: 26px; display: flex; flex-direction: column; }
+.hd-mmenue { margin-top: 8px; padding: 10px; max-height: calc(100vh / var(--bd-zoom, 1) - 170px); overflow-y: auto; background: #fff; border: var(--mk-rand); border-radius: 16px; display: flex; flex-direction: column; }
 .hd-mkopf { display: flex; align-items: center; gap: 12px; padding: 10px 10px 16px; margin-bottom: 6px; border-bottom: 1px solid rgba(29,29,29,.16); }
 .hd-mpunkt { display: flex; align-items: center; gap: 12px; padding: 13px 10px; border-radius: 12px; color: var(--mk-ink) !important; font-size: 16px; font-weight: 500; text-decoration: none; }
 .hd-mpunkt:hover { background: var(--mk-neutral-2); }
@@ -2325,17 +2325,18 @@ body:has(.mk) { background: #fff; }
 @media (max-width: 767px) {
   /* Am Handy steht der Kopf auf weissem Grund mit Linie: schwebend lief der Inhalt zwischen Pille und Suchfeld durch */
   .hd { padding: 10px 12px 10px; background: #fff; border-bottom: var(--mk-rand); pointer-events: auto; }
-  .hd-pille { min-height: 60px; padding: 6px 6px 6px 16px; border-radius: 30px; gap: 8px; }
+  .hd-pille { min-height: 60px; padding: 6px 6px 6px 16px; border-radius: 14px; gap: 8px; }
   .hd-desktop { display: none; }
   .hd-mobil { display: flex; }
-  /* Menüknopf rund und mit demselben Abstand zu allen Seiten: so läuft er mit der Rundung der Pille mit (Denis 20.09.: eckig sass er zu nah an der Rundung) */
-  .hd .hd-menue-knopf { width: 46px; height: 46px; min-height: 46px; padding: 0 0 3px; border-radius: 999px !important; }
+  /* Menüknopf mit derselben Rundung wie die übrigen Knöpfe (Denis 22.09.2026: Header eckiger). Vorher rund, weil die Leiste
+     selbst eine Pille war. */
+  .hd .hd-menue-knopf { width: 46px; height: 46px; min-height: 46px; padding: 0 0 3px; border-radius: 12px !important; }
   /* Eingeloggt stehen Nektar, Glocke und Menü in der Pille: für die Wortmarke reicht der Platz dann nicht, das B steht allein.
      Das Profil erreicht man über den Reiter unten, darum hier kein Avatar. */
   .hd-eingeloggt .bd-logo { width: auto !important; }
   .hd-eingeloggt .bd-logo span { display: none; }
   .hd-eingeloggt .bd-logo svg { width: 34px; height: auto; }
-  .hd-msuche { display: flex; align-items: center; gap: 8px; margin-top: 8px; height: 46px; padding: 0 16px; border: var(--mk-rand); border-radius: 23px; background: #fff; color: var(--mk-ink) !important; font-size: 15px; font-weight: 500; text-decoration: none; }
+  .hd-msuche { display: flex; align-items: center; gap: 8px; margin-top: 8px; height: 46px; padding: 0 16px; border: var(--mk-rand); border-radius: 12px; background: #fff; color: var(--mk-ink) !important; font-size: 15px; font-weight: 500; text-decoration: none; }
 }
 @media print { .hd { display: none !important; } }
 
