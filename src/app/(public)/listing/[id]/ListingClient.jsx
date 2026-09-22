@@ -597,9 +597,10 @@ export default function ListingDetail() {
           {/* ════ LEFT COLUMN ════ */}
           <div>
             {/* ── IMAGE GALLERY ──────────────────────── */}
-            {/* Meeko: die Galerie liegt auf der Pastelltafel des Formats, das Foto mit eigenem Rand darauf */}
-            <div className={`lg-gallery mk-${TYP_PASTELL[l.listing_type] || "lavendel"}`} style={{ borderRadius: 24, border: "1px solid #1D1D1D", overflow: "hidden", marginBottom: 20 }}>
-              <div className="lg-foto" style={{ position: "relative", aspectRatio: "4/3", background: "#fff", margin: 16, borderRadius: 14, border: "1px solid #1D1D1D", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
+            {/* Die Galerie steht auf Weiss wie die Inseratkarten. Das Format zeigt nur eine dünne Linie unten (Denis 22.09.2026:
+                der farbige Rand war zu laut). Vorher lag das Foto auf einer breiten Pastelltafel. */}
+            <div className="lg-gallery" style={{ borderRadius: 24, border: "1px solid #1D1D1D", borderBottom: `3px solid var(--mk-${TYP_PASTELL[l.listing_type] || "lavendel"})`, background: "#fff", overflow: "hidden", marginBottom: 20 }}>
+              <div className="lg-foto" style={{ position: "relative", aspectRatio: "4/3", background: "#fff", margin: 10, borderRadius: 14, border: "1px solid rgba(29,29,29,.16)", cursor: imgs.length > 0 ? "zoom-in" : "default", overflow: "hidden" }}
                 onClick={() => { if (swiped.current) { swiped.current = false; return; } if (imgs.length > 0) setLightbox(true); }}
                 onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
                 onTouchEnd={(e) => {

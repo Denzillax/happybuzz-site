@@ -2456,7 +2456,7 @@ main .cta-pill { border: var(--mk-rand) !important; border-radius: 10px !importa
 main button[style*="rgb(254, 232, 176)"], main a[style*="rgb(254, 232, 176)"],
 .listing-page button[style*="rgb(254, 232, 176)"], .listing-page a[style*="rgb(254, 232, 176)"] { border: 1px solid #1D1D1D !important; box-shadow: inset 0 -4px 0 rgba(29,29,29,.14) !important; }
 .listing-page button[style*="rgb(254, 232, 176)"]:hover { background: #FFDD85 !important; filter: none !important; }
-@media (max-width: 767px) { .lg-foto { margin: 9px !important; border-radius: 11px !important; } .lg-gallery { border-radius: 18px !important; } }
+@media (max-width: 767px) { .lg-foto { margin: 7px !important; border-radius: 11px !important; } .lg-gallery { border-radius: 18px !important; } }
 
 /* ── INSERIEREN MEEKO (Denis 20.09.2026): Formate als Pastellkacheln, Vorbild /labor/meeko/inserieren ── */
 .lf-formate { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
