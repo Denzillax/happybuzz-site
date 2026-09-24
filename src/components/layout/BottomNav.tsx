@@ -63,7 +63,7 @@ export function BottomNav() {
                 {tab.isProfile && user ? <span className="bn-initialen">{getInitials()}</span>
                   : tab.href === '/' ? <BLogo size={19} title="" />
                   : tab.href === '/favorites' ? <BLogo herz size={18} title="" />
-                  : <tab.icon size={21} strokeWidth={active ? 2.2 : 1.9} />}
+                  : <tab.icon size={21} strokeWidth={active ? 2.7 : 1.8} />}
               </span>
               {tab.label}
             </button>
