@@ -10,6 +10,23 @@ import { colors, fonts, radius } from "@/lib/theme";
 import { getMessages, sendMessage, markMessagesRead, uploadChatImage, createPurchaseAtPrice, setConversationHidden } from "@/lib/listings";
 import { blockUser, unblockUser, isBlockedByMe } from "@/lib/blocks";
 import { maskContactInfo } from "@/lib/contactFilter";
+import { getDisplayPrice } from "@/lib/formatters";
+
+// Preis und Rolle je Format (Denis 24.09.2026: Miete zeigte "CHF 0" und "Du verkaufst", weil nur price gelesen wurde).
+function preisText(listing) {
+  if (!listing) return "";
+  const d = getDisplayPrice(listing);
+  return `${d.prefix}${d.text}${d.suffix}`;
+}
+function rolleText(listing, isBuyer) {
+  switch (listing?.listing_type) {
+    case "rent": return isBuyer ? "Du mietest" : "Du vermietest";
+    case "service": return isBuyer ? "Du buchst" : "Du bietest an";
+    case "auction": return isBuyer ? "Du bietest" : "Du versteigerst";
+    case "free": return isBuyer ? "Du holst ab" : "Du verschenkst";
+    default: return isBuyer ? "Du kaufst" : "Du verkaufst";
+  }
+}
 
 
 function dayLabel(d) {
@@ -58,7 +75,7 @@ export default function ChatConversation() {
         supabase.from("profiles").select("contact_violations").eq("id", u.id).maybeSingle().then(({ data }) => setMyViolations(data?.contact_violations || 0)).catch(() => {});
         const { data: c } = await supabase
           .from("conversations")
-          .select("*, listing:listings(id, title, price, listing_type, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
+          .select("*, listing:listings(id, title, price, rent_price, rent_period, start_price, listing_type, listing_images(*)), buyer:profiles!conversations_buyer_id_fkey(id, display_name, avatar_url), seller:profiles!conversations_seller_id_fkey(id, display_name, avatar_url)")
           .eq("id", params.id)
           .maybeSingle();
         setConv(c);
@@ -204,8 +221,8 @@ export default function ChatConversation() {
           <div style={{ minWidth: 0 }}>
             <p style={{ margin: 0, fontSize: 14, fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{conv?.listing?.title || "Gelöschtes Inserat"}</p>
             <p style={{ margin: "1px 0 0", fontSize: 12, color: colors.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {conv?.listing?.price != null && <span style={{ color: colors.teal, fontWeight: 700 }}>CHF {Number(conv.listing.price).toLocaleString("de-CH")} · </span>}
-              {isBuyer ? "Du kaufst" : "Du verkaufst"}
+              {conv?.listing && <span style={{ color: colors.teal, fontWeight: 700 }}>{preisText(conv.listing)} · </span>}
+              {rolleText(conv?.listing, isBuyer)}
             </p>
           </div>
         </Link>
@@ -375,8 +392,8 @@ export default function ChatConversation() {
           </Link>
           <div>
             <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: colors.dark, lineHeight: 1.3 }}>{conv.listing.title}</p>
-            <p style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{conv.listing.listing_type === "free" ? "Gratis" : `CHF ${Number(conv.listing.price || 0).toLocaleString("de-CH")}`}</p>
-            <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted }}>{isBuyer ? "Du kaufst" : "Du verkaufst"}</p>
+            <p style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 900, fontFamily: fonts.head, color: colors.dark }}>{preisText(conv.listing)}</p>
+            <p style={{ margin: "6px 0 0", fontSize: 12, color: colors.muted }}>{rolleText(conv.listing, isBuyer)}</p>
           </div>
           <Link href={`/listing/${conv.listing.id}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 14px", borderRadius: radius.full, background: colors.teal, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, textDecoration: "none" }}>Zum Inserat</Link>
           {otherUser?.id && (
