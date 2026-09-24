@@ -71,16 +71,31 @@ Stand 20.09.2026: lokal fertig, noch NICHT gepusht (Denis schaut lokal, pusht se
 - Header (seit 22.09.2026): eckig mit denselben Rundungen wie die Knöpfe. Leiste 16 px (Handy 14), Knöpfe, Suchfeld, Symbole und Avatar 10 px,
   KI-Chip und Suchknopf 8 px, Klappmenüs 14 bis 16 px. KEINE vollen Pillen mehr (999 px) ausser dem Zähler auf der Glocke.
 - Statusfarben: Warnung `#8A5A00` auf Butter, Erfolg Green auf Mint, Fehler `#C62828` auf Rosé, Info Ink auf Himmel. Links sind Ink.
-- Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv: das Symbol färbt sich kräftig Rosa `#C2259B` (Service-Familie), ohne Fläche und ohne Kontur (Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer und Kontur lehnte Denis ab). Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
+- Hot-Schild: weiss mit roter Flamme. Bottom-Nav aktiv (seit 22.09.2026): nur Gewicht, keine Farbe. Das Symbol bleibt Ink, wird dicker
+  gezeichnet (`strokeWidth` 2.7 statt 1.8) und steht auf voller Deckkraft, inaktive Reiter auf `opacity .5`, das Wort wird fett. Abgelehnt
+  hat Denis: Rosa `#C2259B` (21.09. gesetzt, 22.09. verworfen: passte nicht), Mint-Pille, Ink-Strich, Lavendel-Kachel, Himbeer, Kontur.
+  Ausgeloggt im Header: nur Personen-Symbol im Avatar-Kreis.
+- Header am Handy (seit 22.09.2026): die Wortmarke "beedaro" steht auch eingeloggt neben Nektar, Glocke und Menü (B 24 px, Schrift 20 px).
+  Erst unter 360 px Breite steht das B wieder allein.
 - Hero (seit 21.09.2026, `hf-*` in `globals.css`): Mint über die ganze Fläche, der schwebende Header liegt darauf. Links der Satz mit gelbem Marker,
   EIN gelber Hauptknopf, die echte Zahl der Inserate online. Rechts der Tiger mit Lamellenbrille (`public/tiger-hero.svg`, seit 22.09.2026; ein gelber Blitz läuft durch die Lamellen und die Brille nickt langsam hin und her, Animation im SVG selbst;
   Alternativen auf `/labor/meeko/brille`),
   dahinter ein drehender Strahlenkranz, in der Sprechblase wechseln trockene Sprüche. KEINE Inserate im Hero und KEIN Karten-Layout wie im alten
   Design (beides lehnte Denis am 21.09. ab).
-- Challenge der Woche (`ch-*`): weisse Karte mit Mint-Feld und Foto-Biene, Belohnung als dunkler Aufkleber, gelber Knopf. Keine dunkle Tafel.
+- Challenge der Woche (`ch-*`): weisse Karte, das Feld mit der Foto-Biene und das Schild "Challenge der Woche" in Beedaro-Gelb `#F4C03F`
+  (Denis 24.09.2026, vorher Mint), Belohnung als dunkler Aufkleber, gelber Knopf. Keine dunkle Tafel.
+- Bee-Impact "Was bisher zusammengekommen ist" (`ci-*`, `CommunityImpact.jsx`, seit 24.09.2026): baugleich mit der Challenge-Karte. Links das
+  Bienenfoto auf sanftem Grün mit weissem Aufkleber "20% jeder Gebühr", rechts die drei Zahlen als Kacheln (CHF-Kachel in `--mk-gruen`),
+  Ziel-Balken mit Ink-Rand (bezahlt Green, unterwegs gelb gestreift), weisser Nebenknopf. Kein Mint-Band mehr.
 - Laufschrift: Farben kommen weiter aus dem Admin (`site_ticker`), nicht im Code übersteuern (Denis 21.09.2026).
 - Inseratkarte (`ListingCard`, seit 21.09.2026): überwiegend weiss, feiner heller Rand, Foto randlos oben. Das Format zeigt nur das getönte
   Schild und eine 3 px dünne Linie in der Formatfarbe unter dem Foto. Foto und Preis (19 px, fett) führen. KEINE grossen Pastellflächen um Karten.
+- Suchfilter (`sf-*`, `src/components/search/SuchFilter.jsx`, seit 24.09.2026, Vorbild Ricardo): am Desktop eine Reihe Pillen mit
+  Klappmenüs ohne Kasten drum herum (gewählt = Mint). Am Handy (unter 768 px) eine wischbare Reihe Kategorie-Chips und der Knopf
+  "Filter & Kategorien" über die ganze Breite mit Zähler, der eine Seitenleiste von rechts öffnet (Kategorie-Baum, Preis, Angebotsart,
+  Zustand, Lieferung, Verifiziert, Kategorie-Attribute). Filter wirken sofort, der gelbe Knopf unten zeigt die Trefferzahl und schliesst.
+  Dasselbe Bauteil liegt auch in `../BEEDARO-alt` mit Klar-Look-Farben (Teal statt Mint) im eigenen `sf-*`-Block.
+  Achtung: die globale Regel `button:not(.eckig)` macht jeden Knopf zur Pille, eckige Knöpfe brauchen die Klasse `eckig`.
 - Favoriten-Herz ist app-weit das um 90 Grad gedrehte B (`BLogo herz`), gesetzt: Himbeer `#C2255C` auf Rosa.
 - Abstände im Formular: 24 px zwischen Karten, 18 px zwischen den Teilen einer Karte (CSS `.lf-section`).
 - Logo: `BLogo` (kacheliges B, ein einziger Pfad) plus Wortmarke "beedaro" in Sora 700, Komponente `Logo.tsx`. Vollständig schwarz, kein Gelb
