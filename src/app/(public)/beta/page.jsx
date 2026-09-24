@@ -220,6 +220,10 @@ const TESTS = [
       { id: "bb_book_action", label: "Mietanfrage bestätigen / ablehnen" },
       { id: "bb_book_status", label: "Buchungs-Status korrekt (Angefragt/Laufend/Zurück)" },
       { id: "bb_book_returned", label: "Als zurückgegeben markieren" },
+      { id: "bb_book_gruppen", label: "Buchungen: Gruppen Überfällig / Offen / Abgeschlossen (Abgeschlossen eingeklappt)" },
+      { id: "bb_book_ueberfaellig", label: "Überfällige Miete: rote Zeile, Text \"Überfällig seit x Tagen\", Knopf \"Jetzt abschliessen\"" },
+      { id: "bb_book_zaehler", label: "Reiter zeigen Zähler der offenen Buchungen (rot bei überfällig)" },
+      { id: "bb_book_mail", label: "Mail + Push am Tag vor der Rückgabe und bei überfälliger Miete (an beide Seiten)" },
     ],
   },
   {

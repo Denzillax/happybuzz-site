@@ -1571,7 +1571,7 @@ export async function getBookingsForListing(listingId) {
 export async function getMyBookings(userId) {
   const { data, error } = await supabase
     .from("rental_bookings")
-    .select("*, listing:listings(id, title, listing_type, listing_images(*)), owner:profiles!rental_bookings_owner_id_fkey(id, display_name)")
+    .select("*, listing:listings(id, title, listing_type, listing_images(*)), owner:profiles!rental_bookings_owner_id_fkey(id, display_name), purchase:purchases(id, status)")
     .eq("renter_id", userId)
     .order("created_at", { ascending: false });
   if (error) return [];
@@ -1683,7 +1683,7 @@ export async function deleteSavedSearch(id) {
 export async function getMyRentalRequests(userId) {
   const { data, error } = await supabase
     .from("rental_bookings")
-    .select("*, listing:listings(id, title, listing_type, listing_images(*)), renter:profiles!rental_bookings_renter_id_fkey(id, display_name, avatar_url)")
+    .select("*, listing:listings(id, title, listing_type, listing_images(*)), renter:profiles!rental_bookings_renter_id_fkey(id, display_name, avatar_url), purchase:purchases(id, status)")
     .eq("owner_id", userId)
     .order("created_at", { ascending: false });
   if (error) return [];

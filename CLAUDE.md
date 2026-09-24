@@ -212,6 +212,9 @@ src/
 8. **Fee-Model**: Bee-Impact = 20% der Gebühr. Default Bee-Rate = 7% (Tier `impact`).
    Einzige Quelle: `DEFAULT_FEE_TIER` / `DEFAULT_FEE_PERCENT` in `src/lib/constants.js`.
    Nie hartkodieren, auch nicht als Fallback (`fee_percentage || 5` war ein Bug).
+9. **Buchungen**: `rental_bookings.status` bleibt nach der Bestätigung auf `confirmed`, der Ablauf läuft auf `purchases.status`.
+   Zustand (offen/überfällig/zu) NUR über `bookingState()` in `src/lib/bookingStatus.js` ableiten (Buchung + verknüpfte Bestellung).
+   Erinnerung/Überfällig-Meldung: Cron `notify-rental-reminders` (Migration `20260924_notify_rental_overdue.sql`).
 
 ## Kategorie-IDs (korrekt verifiziert)
 ```
