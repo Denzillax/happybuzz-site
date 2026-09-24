@@ -2,13 +2,14 @@
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search, X, ChevronDown, BadgeCheck, Shuffle, Sparkles } from "lucide-react";
+import { Search, X, Shuffle, Sparkles } from "lucide-react";
 import { searchListings, getCategories, saveSearch, getRandomListingId } from "@/lib/listings";
 import { getFilterableAttributes, filterListingsByAttributes } from "@/lib/api/attributes";
 import { colors, fonts, radius } from "@/lib/theme";
 import { CONDITIONS, LISTING_TYPES } from "@/lib/constants";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { RasterUmschalter } from "@/components/shared/RasterUmschalter";
+import { SuchFilter } from "@/components/search/SuchFilter";
 import { getRecentSearches, recordSearch, clearRecentSearches } from "@/lib/recentSearches";
 import { getActiveBoosts } from "@/lib/gamification";
 
@@ -27,73 +28,7 @@ const SORT_OPTS = [
   { value: "meiste_gebote", label: "Meiste Gebote" },
 ];
 
-// ── Filter Pill Dropdown ─────────────────────────────────────
-function FilterPill({ label, value, options, onChange, active }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  const displayLabel = active ? options.find(o => o.value === value)?.label || label : label;
-
-  return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <button
-        onClick={() => setOpen(!open)}
-        style={{
-          display: "flex", alignItems: "center", gap: 6,
-          padding: "8px 14px", borderRadius: 12,
-          border: active ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
-          background: active ? "#E6F5F5" : "#fff",
-          color: active ? "#0B5E5C" : INK,
-          fontSize: 13, fontWeight: active ? 700 : 500,
-          fontFamily: fonts.body, cursor: "pointer",
-          transition: "all .15s", whiteSpace: "nowrap",
-        }}
-      >
-        {displayLabel}
-        {active ? (
-          <X size={13} onClick={(e) => { e.stopPropagation(); onChange(""); setOpen(false); }} style={{ cursor: "pointer" }} />
-        ) : (
-          <ChevronDown size={13} style={{ opacity: 0.5 }} />
-        )}
-      </button>
-
-      {open && (
-        <div style={{
-          position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-          background: "#fff", borderRadius: 12,
-          boxShadow: "0 8px 30px rgba(20,17,13,.14)", border: "1px solid #E5E8EC",
-          minWidth: 180, maxHeight: 280, overflowY: "auto",
-          padding: "6px 0",
-        }}>
-          {options.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => { onChange(opt.value); setOpen(false); }}
-              style={{
-                display: "block", width: "100%", padding: "9px 16px",
-                background: value === opt.value ? "#F0FAFA" : "transparent",
-                border: "none", cursor: "pointer", textAlign: "left",
-                fontSize: 13, fontFamily: fonts.body, color: colors.dark,
-                fontWeight: value === opt.value ? 700 : 400,
-                transition: "background .1s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "#F5F6F8"}
-              onMouseLeave={e => e.currentTarget.style.background = value === opt.value ? "#F0FAFA" : "transparent"}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+// Die Filter (Pillen am Desktop, Seitenleiste am Handy) leben in components/search/SuchFilter.jsx.
 
 // ── Main Search Page ─────────────────────────────────────────
 // Suspense-Wrapper: useSearchParams braucht eine Boundary fürs Prerendering
@@ -162,10 +97,8 @@ function SearchPageInner() {
   const [page, setPage] = useState(1);
   const [categoryAttrs, setCategoryAttrs] = useState([]);
   const [attrFilters, setAttrFilters] = useState({});
-  const [showPrice, setShowPrice] = useState(false);
   const [recents, setRecents] = useState([]);
   const [searchSaved, setSearchSaved] = useState(false);
-  const priceRef = useRef(null);
 
   useEffect(() => { setRecents(getRecentSearches()); }, []);
   useEffect(() => { supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null)); }, []);
@@ -191,13 +124,6 @@ function SearchPageInner() {
       getFilterableAttributes(catId).then(attrs => { setCategoryAttrs(attrs); setAttrFilters({}); });
     } else { setCategoryAttrs([]); setAttrFilters({}); }
   }, [mainCatId, subCatId, subSubCatId]);
-
-  // Close price dropdown on outside click
-  useEffect(() => {
-    const h = (e) => { if (priceRef.current && !priceRef.current.contains(e.target)) setShowPrice(false); };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, []);
 
   const mainCats = categories.filter(c => !c.parent_id);
   const subCats = categories.filter(c => c.parent_id === mainCatId);
@@ -264,7 +190,8 @@ function SearchPageInner() {
   }, [categories]);
   const subSubCats = categories.filter(c => c.parent_id === subCatId);
 
-  async function doSearch() {
+  // preis: optionale Übersteuerung { min, max }, wenn der Preis gerade erst gesetzt wurde und der State noch alt ist
+  async function doSearch(preis = {}) {
     setLoading(true);
     try {
       const activeCat = subSubCatId || subCatId || undefined;
@@ -274,10 +201,12 @@ function SearchPageInner() {
       if (Object.keys(activeAttrFilters).length > 0) {
         attrListingIds = await filterListingsByAttributes(activeAttrFilters);
       }
+      const min = preis.min !== undefined ? preis.min : minPrice;
+      const max = preis.max !== undefined ? preis.max : maxPrice;
       const res = await searchListings({
         query, category_id: activeCat, parent_category_id: parentCat,
         listing_type: type || undefined, condition: condition || undefined,
-        min_price: minPrice || undefined, max_price: maxPrice || undefined,
+        min_price: min || undefined, max_price: max || undefined,
         city: city || undefined, sort: sortBy, page, per_page: 24,
         delivery: delivery || undefined, listing_ids: attrListingIds,
         verified_only: verifiedOnly || undefined,
@@ -299,8 +228,6 @@ function SearchPageInner() {
   const totalPages = Math.ceil(total / 24);
   const activeFilterCount = [mainCatId, condition, type, minPrice || maxPrice, city, delivery, verifiedOnly, ...Object.values(attrFilters)].filter(Boolean).length;
 
-  const categoryOpts = [{ value: "", label: "Alle Kategorien" }, ...mainCats.map(c => ({ value: c.id, label: c.name }))];
-  const subCatOpts = subCats.length > 0 ? [{ value: "", label: "Alle" }, ...subCats.map(c => ({ value: c.id, label: c.name }))] : [];
   const conditionOpts = CONDITIONS.map(c => ({ value: c.value, label: c.label }));
   const typeOpts = LISTING_TYPES.map(t => ({ value: t.value, label: t.label }));
   const deliveryOpts = [{ value: "shipping", label: "Versand" }, { value: "pickup", label: "Abholung" }];
@@ -412,119 +339,26 @@ function SearchPageInner() {
           </div>
         )}
 
-        {/* ── Filter Pills Row ── */}
-        <div style={{
-          background: "#fff", borderRadius: 12, border: "1px solid #E5E8EC",
-          padding: "16px 18px", marginBottom: 20,
-        }}>
-          {/* Row 1: Main filters */}
-          <div className="filter-row" style={{ marginBottom: 8 }}>
-            <FilterPill
-              label="Kategorie"
-              value={mainCatId}
-              active={!!mainCatId}
-              options={categoryOpts}
-              onChange={v => { setMainCatId(v); setSubCatId(""); setSubSubCatId(""); setPage(1); }}
-            />
-            {subCatOpts.length > 0 && (
-              <FilterPill
-                label="Unterkategorie"
-                value={subCatId}
-                active={!!subCatId}
-                options={subCatOpts}
-                onChange={v => { setSubCatId(v); setSubSubCatId(""); setPage(1); }}
-              />
-            )}
-            {subSubCats.length > 0 && (
-              <FilterPill
-                label="Weitere"
-                value={subSubCatId}
-                active={!!subSubCatId}
-                options={[{ value: "", label: "Alle" }, ...subSubCats.map(c => ({ value: c.id, label: c.name }))]}
-                onChange={v => { setSubSubCatId(v); setPage(1); }}
-              />
-            )}
-
-            {/* Price dropdown */}
-            <div ref={priceRef} style={{ position: "relative" }}>
-              <button onClick={() => setShowPrice(!showPrice)} style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 12,
-                border: (minPrice || maxPrice) ? "1.5px solid #007C7C" : "1.5px solid #d8d4cd",
-                background: (minPrice || maxPrice) ? "#E6F5F5" : "#fff",
-                color: (minPrice || maxPrice) ? "#0B5E5C" : INK,
-                fontSize: 13, fontWeight: (minPrice || maxPrice) ? 700 : 500,
-                fontFamily: fonts.body, cursor: "pointer", whiteSpace: "nowrap",
-              }}>
-                {(minPrice || maxPrice) ? `CHF ${minPrice || "0"} – ${maxPrice || "∞"}` : "Preis"}
-                {(minPrice || maxPrice) ? (
-                  <X size={13} onClick={(e) => { e.stopPropagation(); setMinPrice(""); setMaxPrice(""); setShowPrice(false); setPage(1); }} />
-                ) : <ChevronDown size={13} style={{ opacity: 0.5 }} />}
-              </button>
-              {showPrice && (
-                <div style={{
-                  position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
-                  background: "#fff", borderRadius: 12, boxShadow: "0 8px 30px rgba(20,17,13,.14)",
-                  border: "1px solid #E5E8EC", padding: 16, width: 220,
-                }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: colors.muted, marginBottom: 8 }}>Preis (CHF)</div>
-                  <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-                    <input type="number" placeholder="Von" value={minPrice} onChange={e => setMinPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E5E8EC", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
-                    <input type="number" placeholder="Bis" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                      style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #E5E8EC", borderRadius: 12, fontSize: 13, fontFamily: fonts.body, outline: "none", width: "100%" }} />
-                  </div>
-                  <button onClick={() => { doSearch(); setShowPrice(false); }} style={{
-                    width: "100%", padding: "8px", background: colors.teal, color: "#fff",
-                    border: "none", borderRadius: 12, fontSize: 13, fontWeight: 700, fontFamily: fonts.body, cursor: "pointer",
-                  }}>Anwenden</button>
-                </div>
-              )}
-            </div>
-
-            <FilterPill label="Zustand" value={condition} active={!!condition} options={conditionOpts} onChange={v => { setCondition(v); setPage(1); }} />
-            <FilterPill label="Angebotsart" value={type} active={!!type} options={typeOpts} onChange={v => { setType(v); setPage(1); }} />
-            <FilterPill label="Lieferung" value={delivery} active={!!delivery} options={deliveryOpts} onChange={v => { setDelivery(v); setPage(1); }} />
-            <button
-              onClick={() => { setVerifiedOnly(v => !v); setPage(1); }}
-              title="Nur Verkäufer mit geprüftem Ausweis + E-Mail"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "8px 14px", borderRadius: 12, cursor: "pointer",
-                fontFamily: "Manrope, sans-serif", fontSize: 13, fontWeight: 700,
-                border: `1px solid ${verifiedOnly ? "#50804F" : "#191615"}`,
-                background: verifiedOnly ? "#EEF4EC" : "#fff",
-                color: verifiedOnly ? "#50804F" : "#191615",
-              }}
-            >
-              <BadgeCheck size={15} color={verifiedOnly ? "#50804F" : "#191615"} strokeWidth={2.2} /> Verifiziert
-            </button>
-          </div>
-
-          {/* Row 2: Dynamic category attributes */}
-          {categoryAttrs.length > 0 && (
-            <div className="filter-row">
-              {categoryAttrs.map(attr => {
-                if (attr.attribute_type !== "select" || !attr.options) return null;
-                const opts = (Array.isArray(attr.options) ? attr.options : []).map(o => ({ value: o, label: o }));
-                return (
-                  <FilterPill
-                    key={attr.id}
-                    label={attr.name}
-                    value={attrFilters[attr.attribute_key] || ""}
-                    active={!!attrFilters[attr.attribute_key]}
-                    options={opts}
-                    onChange={v => {
-                      setAttrFilters(prev => ({ ...prev, [attr.attribute_key]: v }));
-                      setPage(1);
-                      // Suche läuft via useEffect-Dependency auf attrFilters (frischer State)
-                    }}
-                  />
-                );
-              })}
-            </div>
-          )}
-        </div>
+        {/* ── Filter: Pillen am Desktop, Seitenleiste am Handy (components/search/SuchFilter.jsx) ── */}
+        <SuchFilter f={{
+          categories, mainCatId, subCatId, subSubCatId,
+          setMainCat: v => { setMainCatId(v); setSubCatId(""); setSubSubCatId(""); setPage(1); },
+          setSubCat: v => { setSubCatId(v); setSubSubCatId(""); setPage(1); },
+          setSubSubCat: v => { setSubSubCatId(v); setPage(1); },
+          type, setType: v => { setType(v); setPage(1); },
+          condition, setCondition: v => { setCondition(v); setPage(1); },
+          delivery, setDelivery: v => { setDelivery(v); setPage(1); },
+          verifiedOnly, setVerifiedOnly: v => { setVerifiedOnly(v); setPage(1); },
+          minPrice, maxPrice, setMinPrice, setMaxPrice,
+          categoryAttrs, attrFilters, setAttr: (k, v) => { setAttrFilters(prev => ({ ...prev, [k]: v })); setPage(1); },
+          typeOpts, conditionOpts, deliveryOpts,
+          total, loading, activeFilterCount,
+          apply: (preis) => { setPage(1); doSearch(preis && typeof preis === "object" ? preis : {}); },
+          resetAll: () => {
+            setMainCatId(""); setSubCatId(""); setSubSubCatId(""); setCondition(""); setType("");
+            setMinPrice(""); setMaxPrice(""); setCity(""); setDelivery(""); setVerifiedOnly(false); setAttrFilters({}); setPage(1);
+          },
+        }} />
 
         {/* ── Toolbar: Results + Sort ── */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
