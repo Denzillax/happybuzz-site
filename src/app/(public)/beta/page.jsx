@@ -223,6 +223,8 @@ const TESTS = [
       { id: "bb_book_ueberfaellig", label: "Überfällige Miete: rote Zeile, Text \"Überfällig seit x Tagen\", Knopf \"Jetzt abschliessen\"" },
       { id: "bb_book_zaehler", label: "Reiter zeigen Zähler der offenen Buchungen (rot bei überfällig)" },
       { id: "bb_book_mail", label: "Mail + Push am Tag vor der Rückgabe und bei überfälliger Miete (an beide Seiten)" },
+      { id: "bb_book_chat", label: "Buchung: Knopf Nachricht öffnet den Chat zum Inserat" },
+      { id: "bb_book_chat_mahn", label: "Überfällige Miete: Anschreiben öffnet den Chat mit vorbereitetem Text, nichts wird automatisch gesendet" },
     ],
   },
   {
@@ -232,6 +234,7 @@ const TESTS = [
       { id: "om_sales", label: "Meine Verkäufe: Liste + Status-Filter" },
       { id: "om_links", label: "Links zu Inserat, Gegenpartei und Bestellseite" },
       { id: "om_status_sync", label: "Status zwischen Käufer- und Verkäufer-Sicht konsistent" },
+      { id: "om_chat", label: "Bestellseite: Nachricht schreiben öffnet den Chat mit der Gegenpartei" },
     ],
   },
   {

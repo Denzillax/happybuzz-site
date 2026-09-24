@@ -28,8 +28,7 @@ import {
   incrementViewCount, logListingView, createPurchase, getUserAvgRating, getSimilarListings,
   getOrCreateConversation, placeBid, getBids, getBidHistory, getMyBid, adjustPreislimit, removePreislimit, finalizeAuction, createBooking, getBookingsForListing,
   getListingQuestions, askPublicQuestion, replyToQuestion, sendMessage,
-  checkProfileComplete, reviewListing,
-} from "@/lib/listings";
+  checkProfileComplete, reviewListing, openBookingChat } from "@/lib/listings";
 import { ListingCard } from "@/components/shared/ListingCard";
 import { recordView } from "@/lib/recentlyViewed";
 import { sanitizeDescription, isFormattedDescription } from "@/lib/richtext";
@@ -452,16 +451,7 @@ export default function ListingDetail() {
     if (sendingMsg) return;
     setSendingMsg(true);
     try {
-      const { data: existing } = await supabase.from("conversations")
-        .select("id").eq("listing_id", l.id).eq("buyer_id", user.id).eq("seller_id", l.user_id).eq("is_public", false).maybeSingle();
-      let convId = existing?.id;
-      if (!convId) {
-        const { data: nc, error } = await supabase.from("conversations")
-          .insert({ listing_id: l.id, buyer_id: user.id, seller_id: l.user_id, is_public: false })
-          .select("id").single();
-        if (error) { console.error(error); return; }
-        convId = nc?.id;
-      }
+      const convId = await openBookingChat({ listingId: l.id, buyerId: user.id, sellerId: l.user_id });
       if (convId) router.push(`/chat/${convId}`);
     } catch (err) { console.error(err); toast.error("Chat konnte nicht geöffnet werden."); }
     finally { setSendingMsg(false); }
