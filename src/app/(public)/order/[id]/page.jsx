@@ -6,15 +6,14 @@ import Link from "next/link";
 import {
   Package, CreditCard, Truck, CheckCircle, Clock, MapPin, X, ExternalLink,
   ShoppingBag, Star, AlertTriangle, Loader2, ArrowLeft, Copy, FileText,
-  User, Tag, Box, ChevronDown, ChevronUp, Wrench,
-} from "lucide-react";
+  User, Tag, Box, ChevronDown, ChevronUp, Wrench, MessageCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase/supabase";
 import {
   getPurchaseDetail, getPurchaseEvents, markAsPaid, confirmPayment,
   markAsShipped, markAsPickedUp, confirmDelivery, completeTransaction,
   addPurchaseEvent, markAsReturned, confirmReturn, reportDamage, acceptDamage, confirmDepositReturned,
-  uploadDamagePhotos, submitServiceInvoice,
-} from "@/lib/listings";
+  uploadDamagePhotos, submitServiceInvoice, openBookingChat } from "@/lib/listings";
+import { bookingState, mahnText } from "@/lib/bookingStatus";
 import { colors, fonts, radius } from "@/lib/theme";
 import { fmtCHF, fullName, shippingMethodLabel, handlingLabel, lieferung } from "@/lib/formatters";
 import { makeBeeRef, makeArtRef, DEFAULT_FEE_PERCENT } from "@/lib/fees";
@@ -132,6 +131,23 @@ export default function OrderDetailPage() {
   const [showDamageForm, setShowDamageForm] = useState(false);
   const [showFullTimeline, setShowFullTimeline] = useState(false);
   const [booking, setBooking] = useState(null);
+  const [chatOeffnet, setChatOeffnet] = useState(false);
+  // Chat mit der Gegenpartei (Spec 24.09.2026): bestehender Inserat-Chat, bei überfälliger Miete mit Vorlage im Feld.
+  const handleChat = async () => {
+    if (chatOeffnet || !purchase) return;
+    setChatOeffnet(true);
+    try {
+      const convId = await openBookingChat({ listingId: purchase.listing_id, buyerId: purchase.buyer_id, sellerId: purchase.seller_id });
+      if (!convId) { toast.error("Chat konnte nicht geöffnet werden."); return; }
+      let text = "";
+      if (booking && purchase.listing?.listing_type === "rent") {
+        const s = bookingState({ ...booking, listing: purchase.listing, purchase });
+        if (s.key === "overdue") text = mahnText(user?.id === purchase.seller_id ? "owner" : "renter", purchase.listing?.title, booking.end_date);
+      }
+      router.push(`/chat/${convId}${text ? "?text=" + encodeURIComponent(text) : ""}`);
+    } catch (err) { console.error(err); toast.error("Chat konnte nicht geöffnet werden."); }
+    finally { setChatOeffnet(false); }
+  };
   const [damageFiles, setDamageFiles] = useState([]);
   const [salePopup, setSalePopup] = useState(null);
   const [myAddresses, setMyAddresses] = useState([]);
@@ -792,6 +808,10 @@ export default function OrderDetailPage() {
                   {counterpart?.email && <><a href={`mailto:${counterpart.email}`} style={{ fontSize: 12, color: K.petrol, textDecoration: "none" }}>{counterpart.email}</a><br /></>}
                   {counterpart?.phone && <span style={{ fontSize: 12, color: colors.muted }}>{counterpart.phone}</span>}
                 </div>
+                <button className="eckig kein-akzent" onClick={handleChat} disabled={chatOeffnet}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", marginTop: 10, padding: "10px 14px", borderRadius: 20, border: "1px solid #1D1D1D", background: "#fff", color: "#1D1D1D", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body, opacity: chatOeffnet ? .6 : 1 }}>
+                  <MessageCircle size={14} /> Nachricht schreiben
+                </button>
               </SidebarSection>
               <SidebarSection icon={FileText} title={pageTitle}>
                 <div style={{ lineHeight: 1.6, fontSize: 13 }}>

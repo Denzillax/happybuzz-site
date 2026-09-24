@@ -67,3 +67,15 @@ export function sortBookings(liste, heute = new Date()) {
       return new Date(y.b.created_at) - new Date(x.b.created_at);
     });
 }
+
+// Vorbereitete Nachricht für den Chat bei überfälliger Miete (Spec 24.09.2026). Wird nur ins Eingabefeld
+// gesetzt, nie automatisch gesendet. Tonalität: direkt, trocken, keine Ausrufezeichen.
+export function mahnText(rolle, titel, endDatum) {
+  const t = titel || "dem Inserat";
+  if (rolle === "owner") {
+    const d = new Date(endDatum);
+    const datum = isNaN(d) ? "dem vereinbarten Tag" : d.toLocaleDateString("de-CH", { day: "numeric", month: "short" });
+    return `Hallo, die Rückgabe von "${t}" war am ${datum} vereinbart. Wann bekomme ich sie zurück?`;
+  }
+  return `Hallo, ich bin mit "${t}" spät dran. Wann kann ich sie zurückbringen?`;
+}

@@ -1,11 +1,12 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { getMyRentalRequests, getMyBookings, updateBookingStatus } from "@/lib/listings";
-import { bookingState, sortBookings } from "@/lib/bookingStatus";
+import { getMyRentalRequests, getMyBookings, updateBookingStatus, openBookingChat } from "@/lib/listings";
+import { bookingState, sortBookings, mahnText } from "@/lib/bookingStatus";
 import Link from "next/link";
-import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home, AlertTriangle, ChevronDown, RotateCcw } from "lucide-react";
+import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home, AlertTriangle, ChevronDown, RotateCcw, MessageCircle } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 
 // Buchungen (Denis 24.09.2026): auf einen Blick, was offen und was zu ist. Der Zustand kommt aus
@@ -43,6 +44,21 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [zuOffen, setZuOffen] = useState({ incoming: false, outgoing: false });
+  const router = useRouter();
+  const [chatOeffnet, setChatOeffnet] = useState(null); // Buchungs-ID, deren Chat gerade geöffnet wird
+
+  // Chat mit der Gegenseite (Spec 24.09.2026): bestehender Inserat-Chat, bei überfälliger Miete mit Vorlage im Feld.
+  const handleChat = async (b, s, isOwner) => {
+    if (chatOeffnet) return;
+    setChatOeffnet(b.id);
+    try {
+      const convId = await openBookingChat({ listingId: b.listing_id, buyerId: b.renter_id, sellerId: b.owner_id });
+      if (!convId) { toast.error("Chat konnte nicht geöffnet werden."); return; }
+      const text = s.key === "overdue" ? mahnText(isOwner ? "owner" : "renter", b.listing?.title, b.end_date) : "";
+      router.push(`/chat/${convId}${text ? "?text=" + encodeURIComponent(text) : ""}`);
+    } catch (err) { console.error(err); toast.error("Chat konnte nicht geöffnet werden."); }
+    finally { setChatOeffnet(null); }
+  };
 
   useEffect(() => {
     async function load() {
@@ -108,7 +124,6 @@ export default function BookingsPage() {
     const StIcon = z.icon;
     const cover = b.listing?.listing_images?.[0]?.url;
     const service = b.listing?.listing_type === "service";
-    const hatAktionen = (isOwner && s.key === "pending") || b.purchase_id;
     const zz = zeitzeile(b, s);
     const klasse = "bk-row" + (s.ueberfaellig > 0 ? " bk-ueber" : "") + (!s.offen ? " bk-zu" : "");
     const wer = isOwner ? b.renter?.display_name : b.owner?.display_name;
@@ -143,7 +158,7 @@ export default function BookingsPage() {
           </span>
         </div>
 
-        {hatAktionen && (
+        {(
           <div className="bk-actions">
             {isOwner && s.key === "pending" && (
               <>
@@ -152,10 +167,14 @@ export default function BookingsPage() {
               </>
             )}
             {b.purchase_id && (
-              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: F.radius, background: s.ueberfaellig > 0 ? K.honey : "#fff", color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: F.rand, textAlign: "center", whiteSpace: "nowrap" }}>
+              <Link href={`/order/${b.purchase_id}`} style={{ padding: "9px 14px", borderRadius: F.radius, background: "#fff", color: K.ink, fontSize: 12, fontWeight: 800, textDecoration: "none", border: F.rand, textAlign: "center", whiteSpace: "nowrap" }}>
                 {s.key === "overdue" || s.key === "past" ? "Jetzt abschliessen" : "Zur Bestellung"}
               </Link>
             )}
+            <button className="eckig kein-akzent" onClick={() => handleChat(b, s, isOwner)} disabled={chatOeffnet === b.id}
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 14px", borderRadius: F.radius, border: F.rand, background: s.key === "overdue" ? K.honey : "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap", opacity: chatOeffnet === b.id ? .6 : 1 }}>
+              <MessageCircle size={13} /> {s.key === "overdue" ? "Anschreiben" : "Nachricht"}
+            </button>
           </div>
         )}
       </div>

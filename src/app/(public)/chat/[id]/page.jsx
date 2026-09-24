@@ -1,7 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useRef } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import EmojiPicker, { istNurEmoji } from "@/components/shared/EmojiPicker";
@@ -38,6 +38,12 @@ export default function ChatConversation() {
   const [lightbox, setLightbox] = useState(null);
   const bottomRef = useRef(null);
   const fileRef = useRef(null);
+  // Vorbereiteter Text aus der Buchungs- oder Bestellseite (?text=...): einmal ins leere Feld, nie automatisch senden.
+  const suchparameter = useSearchParams();
+  useEffect(() => {
+    const t = suchparameter?.get("text");
+    if (t && t.length <= 500) setNewMsg((alt) => alt || t);
+  }, [suchparameter]);
 
   useEffect(() => {
   }, []);

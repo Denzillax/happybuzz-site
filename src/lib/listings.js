@@ -1066,6 +1066,20 @@ export async function getOrCreateConversation(listingId, buyerId, sellerId) {
   return data;
 }
 
+// Privaten Chat zu Inserat + Käufer + Verkäufer finden oder anlegen und die ID zurückgeben.
+// Genutzt von Inseratseite, Buchungsseite und Bestellseite (Spec 24.09.2026). null bei Chat mit sich selbst.
+export async function openBookingChat({ listingId, buyerId, sellerId }) {
+  if (!listingId || !buyerId || !sellerId || buyerId === sellerId) return null;
+  const { data: existing } = await supabase.from("conversations")
+    .select("id").eq("listing_id", listingId).eq("buyer_id", buyerId).eq("seller_id", sellerId).eq("is_public", false).maybeSingle();
+  if (existing?.id) return existing.id;
+  const { data: nc, error } = await supabase.from("conversations")
+    .insert({ listing_id: listingId, buyer_id: buyerId, seller_id: sellerId, is_public: false })
+    .select("id").single();
+  if (error) throw error;
+  return nc?.id || null;
+}
+
 export async function getMyConversations(userId) {
   // Messages verschachtelt laden (vorher 2 Queries pro Conversation -> N+1).
   // Unread-Status + letzte Nachricht werden in JS abgeleitet.
