@@ -238,16 +238,11 @@ export default function BookingsPage() {
           </div>
         )}
 
-        <div style={{ display: "flex", gap: 0, borderBottom: "1px solid #E5E8EC", marginBottom: 24 }} role="tablist">
+        <div className="bd-reiter" role="tablist">
           {TABS.map((t) => {
             const offen = t.g.ueber.length + t.g.offen.length;
             return (
-              <button key={t.key} role="tab" aria-selected={tab === t.key} onClick={() => setTab(t.key)} style={{
-                padding: "12px 24px", background: "none", border: "none",
-                borderBottom: tab === t.key ? `3px solid ${K.honey}` : "3px solid transparent",
-                marginBottom: -2, cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: MONO, letterSpacing: ".1em", textTransform: "uppercase",
-                color: tab === t.key ? K.ink : colors.muted, display: "inline-flex", alignItems: "center",
-              }}>
+              <button key={t.key} role="tab" aria-selected={tab === t.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setTab(t.key)}>
                 {t.label}
                 {offen > 0 && <span className="bk-zaehler" style={{ background: t.g.ueber.length > 0 ? F.rot : K.ink, color: "#fff" }}>{offen}</span>}
               </button>

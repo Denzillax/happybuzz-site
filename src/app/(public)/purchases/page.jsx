@@ -70,13 +70,9 @@ export default function PurchasesPage() {
         </div>
 
         {/* Filters */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
+        <div className="bd-reiter" role="tablist">
           {FILTERS.map(f => (
-            <button key={f.key} onClick={() => setFilter(f.key)} style={{
-              padding: "7px 14px", borderRadius: 12, fontSize: 12, fontWeight: filter === f.key ? 800 : 600,
-              cursor: "pointer", fontFamily: fonts.body, border: "1px solid #E5E8EC",
-              background: filter === f.key ? K.honey : "#fff", color: K.ink,
-            }}>{f.label}</button>
+            <button key={f.key} role="tab" aria-selected={filter === f.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setFilter(f.key)}>{f.label}</button>
           ))}
         </div>
 

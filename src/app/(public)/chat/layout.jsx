@@ -309,12 +309,9 @@ export default function ChatLayout({ children }) {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
+          <div className="bd-reiter" role="tablist" style={{ marginTop: 6, marginBottom: 0 }}>
             {PILLS.map((s) => (
-              <button key={s.key} onClick={() => setFilter(s.key)} style={{
-                padding: "5px 11px", fontSize: 11, fontWeight: 700, border: "none", cursor: "pointer", borderRadius: 999,
-                fontFamily: fonts.body, background: filter === s.key ? colors.yellow : colors.cream, color: colors.dark,
-              }}>{s.label}</button>
+              <button key={s.key} role="tab" aria-selected={filter === s.key} className="bd-reiter-knopf eckig kein-akzent" style={{ fontSize: 13.5, padding: "8px 10px 9px" }} onClick={() => setFilter(s.key)}>{s.label}</button>
             ))}
           </div>
           <p style={{ margin: "7px 0 0", fontSize: 12, color: colors.muted }}>{totalUnread > 0 ? `${totalUnread} ungelesen` : "Alles gelesen"}</p>

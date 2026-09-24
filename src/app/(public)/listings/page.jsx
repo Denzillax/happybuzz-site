@@ -311,13 +311,9 @@ export default function ListingsPage() {
         </div>
 
         {/* Status Filters */}
-        <div className="pill-scroll" style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+        <div className="bd-reiter" role="tablist" style={{ marginBottom: 12 }}>
           {FILTERS.map(f => (
-            <button key={f.key} onClick={() => { setFilter(f.key); setVisibleCount(PAGE_SIZE); }} style={{
-              padding: "8px 15px", borderRadius: 999, fontSize: 12.5, fontWeight: filter === f.key ? 800 : 600,
-              cursor: "pointer", fontFamily: fonts.body, border: filter === f.key ? "1px solid transparent" : "1px solid #E5E8EC",
-              background: filter === f.key ? K.honey : "#fff", color: K.ink, whiteSpace: "nowrap",
-            }}>{f.label}</button>
+            <button key={f.key} role="tab" aria-selected={filter === f.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => { setFilter(f.key); setVisibleCount(PAGE_SIZE); }}>{f.label}</button>
           ))}
         </div>
 

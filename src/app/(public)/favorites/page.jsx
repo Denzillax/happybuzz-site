@@ -125,14 +125,14 @@ export default function FavoritesPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-0 border-b-2 border-[#191615] mb-6">
-        <button onClick={() => { setTab('listings'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'listings' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+      <div className="bd-reiter" role="tablist">
+        <button onClick={() => { setTab('listings'); setSearch('') }} role="tab" aria-selected={tab === 'listings'} className="bd-reiter-knopf eckig kein-akzent">
           Inserate ({favorites.length})
         </button>
-        <button onClick={() => { setTab('sellers'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'sellers' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('sellers'); setSearch('') }} role="tab" aria-selected={tab === 'sellers'} className="bd-reiter-knopf eckig kein-akzent">
           Verkäufer ({sellers.length})
         </button>
-        <button onClick={() => { setTab('searches'); setSearch('') }} className={`px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[.1em] transition-all ${tab === 'searches' ? 'border-b-[3px] border-honey text-[#191615] -mb-[2px]' : 'text-text/50 hover:text-text/70'}`}>
+        <button onClick={() => { setTab('searches'); setSearch('') }} role="tab" aria-selected={tab === 'searches'} className="bd-reiter-knopf eckig kein-akzent">
           Suchen ({searches.length})
         </button>
       </div>
