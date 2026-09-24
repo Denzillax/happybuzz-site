@@ -552,16 +552,26 @@ html.bd-chat-lock .beta-fab { bottom: 96px !important; }
 
 /* Buchungen: Desktop eine Zeile, Handy als Karte mit Umbruechen
    (Kopf voll breit, Preis+Status als Zeile darunter, Knoepfe volle Breite) */
+/* ── BUCHUNGEN (bk-*), seit 24.09.2026: Gruppen Überfällig / Offen / Abgeschlossen, Zustandsschild rechts, Typ-Chip
+   (Miete/Service) am Titel. Farben stehen inline auf der Seite, hier nur Aufbau. */
 .bk-row { display: flex; gap: 16px; padding: 18px 20px; align-items: center; }
+.bk-row.bk-zu { opacity: .72; }
+.bk-row.bk-zu:hover { opacity: 1; }
 .bk-head { display: flex; gap: 14px; align-items: center; flex: 1; min-width: 0; }
-.bk-side { text-align: right; flex-shrink: 0; }
+.bk-side { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; }
 .bk-actions { display: flex; flex-direction: column; gap: 6px; margin-left: 8px; flex-shrink: 0; }
-@media (max-width: 639px) {
+.bk-status { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 4px 10px 5px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.bk-typ { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 3px; border-radius: 999px; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.bk-gruppe { display: flex; align-items: center; gap: 8px; width: 100%; padding: 11px 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; text-align: left; }
+button.bk-klapp { border: none; border-radius: 0 !important; font-family: inherit; cursor: pointer; filter: none !important; }
+button.bk-klapp:hover { background: #F5F6F8 !important; }
+.bk-zaehler { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; margin-left: 7px; border-radius: 999px; font-size: 11.5px; font-weight: 800; line-height: 1; vertical-align: 1px; }
+@media (max-width: 640px) {
   .bk-row { flex-wrap: wrap; gap: 10px 12px; padding: 14px; }
   .bk-head { flex: 1 1 100%; }
-  .bk-side { flex: 1 1 100%; display: flex; align-items: baseline; gap: 10px; text-align: left; flex-wrap: wrap; }
+  .bk-side { flex: 1 1 100%; flex-direction: row; align-items: center; gap: 10px; text-align: left; flex-wrap: wrap; }
   .bk-side p { margin: 0 !important; }
-  .bk-status { margin-top: 0 !important; margin-left: auto; }
+  .bk-status { margin-top: 0; margin-left: auto; }
   .bk-actions { flex: 1 1 100%; flex-direction: row; margin-left: 0; }
   .bk-actions button, .bk-actions a { flex: 1 1 0; }
 }
