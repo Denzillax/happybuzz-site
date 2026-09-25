@@ -70,7 +70,7 @@ export default function NektarBadge() {
       </button>
 
       {open && (
-        <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, zIndex: 200, width: 264, background: "#fff", borderRadius: 12, boxShadow: "0 16px 38px rgba(20,17,13,.16)", border: "1px solid #E5E8EC", padding: 16, fontFamily: "'Manrope', sans-serif" }}>
+        <div className="nektar-pop" style={{ zIndex: 200, background: "#fff", borderRadius: 12, boxShadow: "0 16px 38px rgba(20,17,13,.16)", border: "1px solid #E5E8EC", padding: 16, fontFamily: "'Manrope', sans-serif" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${level.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <BeeIcon size={19} color={level.color} />

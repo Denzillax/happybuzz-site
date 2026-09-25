@@ -623,6 +623,13 @@ button.bk-klapp:hover { background: #F5F6F8 !important; }
   .nektar-level-name { display: none !important; }
   .nektar-badge > button { padding: 6px 9px !important; gap: 5px !important; }
 }
+/* Nektar-Popup: am Desktop haengt es rechtsbuendig unter dem Abzeichen. Am Handy ist das Abzeichen winzig und das
+   Popup hing links davon am Rand, halb abgeschnitten (Denis 25.09.2026). Darum dort als Karte ueber die volle Breite
+   mit 16px Rand, direkt unter der Kopfzeile. Fixiert am Header (backdrop-filter macht ihn zum Bezugsrahmen). */
+.nektar-pop { position: absolute; top: calc(100% + 8px); right: 0; width: 264px; box-sizing: border-box; }
+@media (max-width: 767px) {
+  .nektar-pop { position: fixed; top: 66px; left: 16px; right: 16px; width: auto; max-width: 420px; margin: 0 auto; }
+}
 
 /* Beta-Karte: Desktop gross, mobil als schmale Leiste */
 .beta-mini { display: none; }
