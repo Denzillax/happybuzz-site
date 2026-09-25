@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { Logo } from "@/components/shared/Logo";
 import { Search, ArrowLeft, Download } from "lucide-react";
 import { colors, fonts } from "@/lib/theme";
 import { ReportsTab } from "@/components/admin/tabs/ReportsTab";
@@ -31,10 +32,8 @@ export function AdminShell({ admin }) {
       {/* ═══ SIDEBAR ═══ */}
       <aside className="admin-sidebar" style={{ background: "#191615", color: "#fff", display: "flex", flexDirection: "column" }}>
         <div className="admin-brand" style={{ padding: "20px 20px 18px" }}>
-          {/* Original-Wortmarke, weiss invertiert fuer die dunkle Sidebar */}
-          <a href="/" style={{ display: "inline-block" }}>
-            <img src="/logo.svg" alt="Beedaro" style={{ width: 124, height: "auto", filter: "brightness(0) invert(1)", display: "block" }} />
-          </a>
+          {/* Neues Logo in Weiss fuer die dunkle Sidebar (verlinkt selbst auf die Startseite) */}
+          <Logo width={124} white />
           <div style={{ fontSize: 9.5, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(255,255,255,.45)", marginTop: 5 }}>Admin</div>
         </div>
 

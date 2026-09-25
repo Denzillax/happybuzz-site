@@ -534,7 +534,7 @@ const TESTS = [
       { id: "mob_no_hscroll", label: "Kein horizontales Scrollen auf keiner Seite" },
       { id: "mob_landscape", label: "Landscape-Modus: kein Layout-Bruch" },
       { id: "mob_pwa_install", label: "Als App installieren: Android/Chrome bietet 'App installieren' an (Menü), iPhone über Teilen -> 'Zum Home-Bildschirm'; heisst 'Beedaro' (nicht BEEDARO), startet im eigenen Fenster ohne Browserleiste" },
-      { id: "mob_pwa_splash", label: "App-Start zeigt kurze Beedaro-Animation (Logo + Honig-Balken + Claim, ~1.5s), nur in der installierten App, einmal pro Start; im Browser testbar über /?splash=1" },
+      { id: "mob_pwa_splash", label: "App-Start: das Logo baut sich aus seinen Kacheln auf, dann die Wortmarke und der Claim (~2s), nur in der installierten App, einmal pro Sitzung; im Browser mit ?splash=1 testbar" },
     ],
   },
   {

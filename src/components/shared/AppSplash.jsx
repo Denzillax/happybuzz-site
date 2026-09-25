@@ -1,11 +1,11 @@
 "use client";
 
 // Start-Animation fuer die installierte App (PWA im Standalone-Modus):
-// Beedaro-Logo mit Honig-Wisch auf Paper, ~1.4s, dann Ausblenden.
+// Das Logo baut sich aus seinen Kacheln auf, dann die Wortmarke (LogoAnimiert), ~1.9s, dann Ausblenden (Denis 25.09.2026).
 // Zeigt sich NUR beim App-Start (einmal pro Sitzung), nie im normalen
 // Browser. Zum Testen im Browser: /?splash=1 anhaengen.
 import { useEffect, useState } from "react";
-import { Logo } from "@/components/shared/Logo";
+import { LogoAnimiert } from "@/components/shared/LogoAnimiert";
 
 export default function AppSplash() {
   const [phase, setPhase] = useState("aus");   // aus | an | weg
@@ -26,8 +26,8 @@ export default function AppSplash() {
     const t1 = setTimeout(() => {
       setPhase("weg");
       try { sessionStorage.setItem("beedaro_splash", "1"); } catch {}
-    }, 1400);
-    const t2 = setTimeout(() => setPhase("aus"), 1850);
+    }, 1900);
+    const t2 = setTimeout(() => setPhase("aus"), 2350);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
@@ -40,8 +40,7 @@ export default function AppSplash() {
       opacity: phase === "weg" ? 0 : 1, transition: "opacity .45s ease",
       pointerEvents: phase === "weg" ? "none" : "auto",
     }}>
-      <div className="bd-splash-logo"><Logo width={190} /></div>
-      <div className="bd-splash-bar" aria-hidden />
+      <LogoAnimiert width={200} />
       <p className="bd-splash-claim" style={{
         margin: 0, fontFamily: "'Manrope', sans-serif",
         fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(20,17,13,0.5)",

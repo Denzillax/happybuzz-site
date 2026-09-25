@@ -18,6 +18,9 @@ const QUADRATE = [[177, 177.5, 177], [354, 354.5, 180], [177, 531.5, 177], [0, 3
 const PFAD = B + QUADRATE.map(([x, y, b]) => `M${x},${y}v177h${b}v-177Z`).join("");
 // Für Zeichenflächen (Kachel-Schriftzug im Fuss): derselbe Pfad, Masse 911.7 x 885.5
 export const B_PFAD = PFAD;
+// Für das animierte Logo (LogoAnimiert.jsx): B und Kacheln getrennt
+export const B_ALLEIN = B;
+export const QUADRATE_LISTE = QUADRATE;
 
 export default function BLogo({ size = 40, herz = false, title = "BEEDARO", style = undefined, className = undefined }) {
   return (
