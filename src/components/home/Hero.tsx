@@ -1,220 +1,142 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Magnetic } from '@/components/shared/effects'
 import { supabase } from '@/lib/supabase/supabase'
-import { ArrowRight, Plus, MessageSquareHeart, Flower2, Wrench } from 'lucide-react'
+import { ArrowRight, Plus, MessageSquareHeart, Flower2 } from 'lucide-react'
 
-// Zwei Heros zum Vergleichen, ohne Labor-Route (Denis 25.09.2026, der Kartenstapel war ihm zu wenig):
-//   A "formate": der ganze Hero erzählt reihum ein Format. Satz, Farbe der Fläche und das Bild wechseln zusammen.
-//   D "objekt":  ein einziges Ding steht still auf dem Honig, nur das Preisschild wechselt die Rolle.
-// Standard ist A. D siehst du auf der Startseite mit ?hero=objekt. Beide blättern von allein, halten beim Überfahren
-// an, springen per Klick weiter und stehen still, wenn jemand weniger Bewegung wünscht.
-// Im style-Block stehen bewusst keine Kind-Selektoren und keine Anführungszeichen (Hydration).
+// Hero ganz neu (Denis 25.09.2026: Formatwechsel und Preisschild gefielen beide nicht, Service raus).
+// Ein volles Honig-Band. Links der Satz, rechts eine Szene aus vier Dingen, die frei schweben: sie kommen gestaffelt
+// ins Bild, wippen leise, weichen der Maus aus (Tiefe je Objekt) und tragen je ein Schild mit dem Format. Das Schild
+// ist ein Link auf die Suche nach genau diesem Format, so hat die Szene einen Zweck und ist nicht nur Deko.
+// Die Dateinamen der Bilder täuschen: gameboy.png zeigt einen Roboter, vinyl.png den Game Boy.
+// Bei reduzierter Bewegung steht alles still. Im style-Block stehen keine Kind-Selektoren und keine Anführungszeichen.
 
-const FORMATE = [
-  { verb: 'Kaufen', format: 'Festpreis', farbe: '#FFE2DE', bild: '/images/hero/camera.png', satz: 'Kaufen, was jemand nicht mehr braucht.', schild: 'CHF 240', zusatz: 'Sofort kaufen' },
-  { verb: 'Bieten', format: 'Auktion', farbe: '#E3E3FF', bild: '/images/hero/gameboy.png', satz: 'Bieten, bis es dir gehört.', schild: 'ab CHF 1', zusatz: 'Auktion, 7 Tage' },
-  { verb: 'Mieten', format: 'Miete', farbe: '#D3F0FF', bild: '/images/hero/boombox.png', satz: 'Mieten, was du nur einmal brauchst.', schild: 'CHF 12', zusatz: 'pro Tag' },
-  { verb: 'Buchen', format: 'Service', farbe: '#FFDFF9', bild: '', satz: 'Buchen, wer es besser kann.', schild: 'CHF 65', zusatz: 'Reparatur, pro Stunde' },
-  { verb: 'Verschenken', format: 'Gratis', farbe: '#FEE8B0', bild: '/images/hero/vinyl.png', satz: 'Verschenken, was nur Platz braucht.', schild: 'CHF 0', zusatz: 'Gratis, abholen' },
+const DINGE = [
+  { bild: '/images/hero/camera.png', format: 'Festpreis', preis: 'CHF 240', typ: 'sell', links: '0%', oben: '6%', breite: '46%', tiefe: 10, dreh: -5, takt: '7s', warte: '.05s' },
+  { bild: '/images/hero/gameboy.png', format: 'Auktion', preis: 'ab CHF 1', typ: 'auction', links: '60%', oben: '0%', breite: '32%', tiefe: 22, dreh: 8, takt: '6s', warte: '.2s' },
+  { bild: '/images/hero/boombox.png', format: 'Miete', preis: 'CHF 12 pro Tag', typ: 'rent', links: '52%', oben: '44%', breite: '46%', tiefe: 16, dreh: 4, takt: '8s', warte: '.35s' },
+  { bild: '/images/hero/vinyl.png', format: 'Gratis', preis: 'abholen', typ: 'free', links: '6%', oben: '68%', breite: '26%', tiefe: 28, dreh: -9, takt: '6.5s', warte: '.5s' },
 ]
 
-const TAKT = 4200
-
-// Gemeinsame Mechanik: welches Format ist dran, hält der Mauszeiger an, wie viele Inserate sind online.
-function useHero() {
-  const [vorn, setVorn] = useState(0)
-  const [halt, setHalt] = useState(false)
+export function Hero() {
+  const band = useRef<HTMLElement>(null)
   const [online, setOnline] = useState(0)
   useEffect(() => {
     supabase.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'active')
       .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
       .then(({ count }) => { if (count && count > 0) setOnline(count) })
   }, [])
+
+  // Die Maus verschiebt die Szene: jedes Ding weicht nach seiner Tiefe aus, nahe Dinge stärker als ferne.
   useEffect(() => {
-    if (halt || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const t = setInterval(() => setVorn((v) => (v + 1) % FORMATE.length), TAKT)
-    return () => clearInterval(t)
-  }, [halt, vorn])
-  const weiter = () => setVorn((v) => (v + 1) % FORMATE.length)
-  return { vorn, setVorn, halt, setHalt, online, weiter }
-}
-
-// Gemeinsame Schicht: Zweck-Pille oben, Knöpfe und Live-Zeile unten. Dazwischen kommt, was die Variante erzählt.
-function Rahmen({ online, children }: { online: number; children: React.ReactNode }) {
-  return (
-    <>
-      <Link href="/impact" className="hw-zweck cta-pill">
-        <Flower2 size={14} color="#487848" /> 20% jeder Gebühr fliessen in den Bienenschutz
-        <ArrowRight size={13} strokeWidth={2.4} />
-      </Link>
-      {children}
-      <div className="hw-knoepfe">
-        <Magnetic>
-          <Link href="/listings/new" className="hw-knopf dunkel cta-pill"><Plus size={17} strokeWidth={2.4} /> Inserieren</Link>
-        </Magnetic>
-        <Magnetic>
-          <Link href="/search" className="hw-knopf hell cta-pill">Stöbern <ArrowRight size={16} strokeWidth={2.4} /></Link>
-        </Magnetic>
-      </div>
-      <p className="hw-zeile">
-        {online > 0 && <span className="hw-live"><span className="hw-live-punkt" /> {online.toLocaleString('de-CH')} Inserate gerade online</span>}
-        <Link href="/beta" className="hw-betalink"><MessageSquareHeart size={14} /> Geschlossene Beta: so testest du mit</Link>
-      </p>
-    </>
-  )
-}
-
-const STIL = `
-  .hw-band { position: relative; --hw-feld: 500px; --hw-schraeg: 56px; --hw-kante: calc(max(24px, 50% - 616px) + var(--hw-feld)); background: #fff; border-bottom: 1px solid #E5E8EC; }
-  .hw-flaeche { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--hw-kante) + var(--hw-schraeg)); clip-path: polygon(0 0, calc(100% - var(--hw-schraeg)) 0, 100% 100%, 0 100%); pointer-events: none; transition: background-color .8s ease; }
-  .hw-flaeche.honig { background: linear-gradient(160deg, #F7C94F 0%, #F4C03F 46%, #E9B22B 100%); }
-  .hw-reihe { max-width: 1280px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; align-items: stretch; min-height: 460px; }
-  .hw { flex: 1 1 0; min-width: 0; display: flex; align-items: stretch; }
-  .hw-text { flex: 1 1 340px; min-width: 0; padding: clamp(30px, 4vw, 56px) 0 clamp(30px, 4vw, 56px) clamp(74px, 6vw, 100px); display: flex; flex-direction: column; justify-content: center; }
-  .hw-zweck { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 18px; padding: 6px 13px; border-radius: 999px; background: #EEF3EC; border: 1px solid #D5E2D2; color: #2F5A2F; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; }
-  .hw-titel { margin: 0 0 16px; font-size: clamp(30px, 4.2vw, 56px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; color: #191615; }
-  .hw-marker { background: linear-gradient(transparent 62%, #F4C03F 62%, #F4C03F 92%, transparent 92%); padding: 0 .08em; margin: 0 -.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-  .hw-unter { margin: 0 0 26px; max-width: 30em; font-size: clamp(16px, 1.7vw, 19px); line-height: 1.5; font-weight: 500; color: #5B626C; }
-  .hw-zeile { display: flex; align-items: center; gap: 8px 22px; flex-wrap: wrap; margin: 22px 0 0; font-size: 13px; font-weight: 600; color: #5B626C; }
-  .hw-live { display: inline-flex; align-items: center; gap: 8px; }
-  .hw-betalink { display: inline-flex; align-items: center; gap: 6px; color: #5B626C; text-decoration: underline; text-underline-offset: 3px; }
-  .hw-live-punkt { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #50804F; flex-shrink: 0; animation: hwPuls 2.2s ease-out infinite; }
-  @keyframes hwPuls { 0% { box-shadow: 0 0 0 0 rgba(80,128,79,.5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(80,128,79,0); } }
-  .hw-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; }
-  .hw-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-size: 15px; font-weight: 800; text-decoration: none; }
-  .hw-knopf.dunkel { background: #191615; color: #fff; }
-  .hw-knopf.hell { background: #fff; color: #191615; border: 1px solid #D5D9DF; }
-  .hw-feld { position: relative; order: -1; overflow: hidden; cursor: pointer; flex: 0 0 var(--hw-feld); min-height: 300px; }
-
-  /* A: Format-Wechsel. Der Titel hat feste Höhe für zwei Zeilen, damit die Knöpfe nicht hüpfen. */
-  .hw-a-titel { min-height: 2.1em; }
-  .hw-a-titel span { display: block; animation: hwRein .55s cubic-bezier(.3,.7,.2,1) both; }
-  @keyframes hwRein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-  .hw-reiter { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 26px; padding: 0; list-style: none; }
-  .hw-reiter button { appearance: none; border: 1px solid #E5E8EC; background: #fff; color: #5B626C; padding: 7px 13px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
-  .hw-reiter button.an { background: #191615; border-color: #191615; color: #fff; }
-  .hw-bild { position: absolute; left: 40%; top: 52%; width: 62%; max-width: 330px; aspect-ratio: 1 / 1; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; transition: opacity .6s ease, transform .7s cubic-bezier(.3,.7,.2,1); will-change: opacity, transform; }
-  .hw-bild img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 22px 30px rgba(25,22,21,.22)); }
-  .hw-bild.weg { opacity: 0; transform: translate(-50%, -50%) scale(.86) rotate(-6deg); pointer-events: none; }
-  .hw-bild.da { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0); }
-  .hw-bild-service { display: flex; align-items: center; justify-content: center; width: 72%; aspect-ratio: 1 / 1; border-radius: 32px; background: #fff; color: #191615; box-shadow: 0 22px 30px rgba(25,22,21,.18); }
-  .hw-schild { position: absolute; left: 40%; bottom: 34px; transform: translateX(-50%); padding: 7px 14px 8px; border-radius: 999px; background: #191615; color: #fff; font-size: 13px; font-weight: 800; letter-spacing: .01em; white-space: nowrap; }
-
-  /* D: ein Objekt, wechselndes Preisschild. Das Schild ploppt bei jedem Wechsel neu auf. */
-  .hw-ding { position: absolute; left: 36%; top: 52%; width: 64%; max-width: 340px; aspect-ratio: 1 / 1; transform: translate(-50%, -50%); }
-  .hw-ding img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 22px 30px rgba(25,22,21,.22)); }
-  .hw-preis { position: absolute; left: 58%; top: 60%; min-width: 150px; padding: 14px 16px 15px; border-radius: 18px; background: #fff; box-shadow: 0 16px 32px rgba(25,22,21,.2); transform: rotate(-6deg); transform-origin: 10% 90%; animation: hwPlopp .5s cubic-bezier(.3,.7,.2,1) both; }
-  @keyframes hwPlopp { from { opacity: 0; transform: rotate(-14deg) scale(.7); } to { opacity: 1; transform: rotate(-6deg) scale(1); } }
-  .hw-preis-format { display: inline-block; margin-bottom: 8px; padding: 4px 10px 5px; border-radius: 999px; border: 1px solid rgba(25,22,21,.14); font-size: 12px; font-weight: 800; color: #191615; }
-  .hw-preis-zahl { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: #191615; }
-  .hw-preis-zusatz { display: block; margin-top: 5px; font-size: 12.5px; font-weight: 600; color: #5B626C; }
-  .hw-d-verben { margin: 0 0 26px; max-width: 30em; font-size: clamp(16px, 1.8vw, 21px); line-height: 1.45; font-weight: 600; color: #737A82; letter-spacing: -.01em; }
-  .hw-verb { transition: color .35s ease; }
-  .hw-verb.an { color: #191615; background: linear-gradient(transparent 84%, #F4C03F 84%, #F4C03F 96%, transparent 96%); }
-
-  @media (max-width: 1100px) { .hw-band { --hw-feld: 380px; } }
-  @media (max-width: 860px) {
-    .hw-flaeche { display: none; }
-    .hw-reihe { flex-direction: column; gap: 14px; min-height: 0; }
-    .hw { flex-direction: column; }
-    .hw-text { padding: 26px 0 24px; }
-    .hw-feld { order: 0; flex: 0 0 auto; min-height: 0; height: 260px; margin: 0 -24px; background: var(--hw-mobil, #F4C03F); transition: background-color .8s ease; }
-    .hw-bild { left: 50%; width: 52%; max-width: 200px; }
-    .hw-schild { left: 50%; bottom: 16px; }
-    .hw-ding { left: 44%; width: 56%; max-width: 210px; }
-    .hw-preis { left: 58%; top: 54%; min-width: 128px; padding: 11px 13px 12px; border-radius: 14px; }
-    .hw-preis-zahl { font-size: 21px; }
-    .hw-knopf { padding: 13px 17px; font-size: 14.5px; }
-    .hw-knoepfe { gap: 8px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hw-live-punkt { animation: none; } .hw-verb { transition: none; }
-    .hw-bild, .hw-flaeche, .hw-feld { transition: none; } .hw-a-titel span, .hw-preis { animation: none; }
-  }
-`
-
-// A: Der Hero erzählt reihum ein Format. Satz, Farbe der Fläche und Bild wechseln zusammen, die Reiter springen.
-function HeroFormate() {
-  const { vorn, setVorn, setHalt, online, weiter } = useHero()
-  const f = FORMATE[vorn]
-  return (
-    <div className="hw-band">
-      <style>{STIL}</style>
-      <span className="hw-flaeche" aria-hidden="true" style={{ backgroundColor: f.farbe }} />
-      <div className="hw-reihe">
-        <section className="hw">
-          <div className="hw-text">
-            <Rahmen online={online}>
-              <h1 className="hw-titel hw-a-titel" aria-live="polite"><span key={f.format}>{f.satz}</span></h1>
-              <p className="hw-unter">Festpreis, Auktion, Miete, Service oder Gratis. Ein Marktplatz, fünf Formate. Du entscheidest, wie.</p>
-              <ul className="hw-reiter" aria-label="Format wählen">
-                {FORMATE.map((x, i) => (
-                  <li key={x.format}>
-                    <button type="button" className={i === vorn ? 'an' : ''} aria-pressed={i === vorn} onClick={() => setVorn(i)} onFocus={() => setHalt(true)} onBlur={() => setHalt(false)}>{x.format}</button>
-                  </li>
-                ))}
-              </ul>
-            </Rahmen>
-          </div>
-          <div className="hw-feld" aria-hidden="true" style={{ ['--hw-mobil' as any]: f.farbe }} onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={weiter}>
-            {FORMATE.map((x, i) => (
-              <div key={x.format} className={i === vorn ? 'hw-bild da' : 'hw-bild weg'}>
-                {x.bild ? <img src={x.bild} alt="" /> : <span className="hw-bild-service"><Wrench size={96} strokeWidth={1.4} /></span>}
-              </div>
-            ))}
-            <span className="hw-schild" key={f.format}>{f.verb}</span>
-          </div>
-        </section>
-      </div>
-    </div>
-  )
-}
-
-// D: Eine Kamera, fünf Inserate. Das Ding bleibt, nur das Preisschild wechselt die Rolle.
-function HeroObjekt() {
-  const { vorn, setHalt, online, weiter } = useHero()
-  const f = FORMATE[vorn]
-  return (
-    <div className="hw-band">
-      <style>{STIL}</style>
-      <span className="hw-flaeche honig" aria-hidden="true" />
-      <div className="hw-reihe">
-        <section className="hw">
-          <div className="hw-text">
-            <Rahmen online={online}>
-              <h1 className="hw-titel">Eine Kamera.<br /><span className="hw-marker">Fünf Inserate.</span></h1>
-              <p className="hw-d-verben" aria-live="polite">
-                {FORMATE.map((x, i) => (
-                  <span key={x.verb}>
-                    <span className={i === vorn ? 'hw-verb an' : 'hw-verb'}>{i === 0 ? x.verb : x.verb.toLowerCase()}</span>
-                    {i < FORMATE.length - 2 ? ', ' : i === FORMATE.length - 2 ? ' oder ' : '. Du entscheidest, wie.'}
-                  </span>
-                ))}
-              </p>
-            </Rahmen>
-          </div>
-          <div className="hw-feld" aria-hidden="true" onMouseEnter={() => setHalt(true)} onMouseLeave={() => setHalt(false)} onClick={weiter}>
-            <div className="hw-ding"><img src="/images/hero/camera.png" alt="" /></div>
-            <div className="hw-preis" key={f.format}>
-              <span className="hw-preis-format" style={{ background: f.farbe }}>{f.format}</span>
-              <span className="hw-preis-zahl">{f.schild}</span>
-              <span className="hw-preis-zusatz">{f.zusatz}</span>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  )
-}
-
-export function Hero() {
-  // Variante aus der Adresse lesen, ohne useSearchParams (das bräuchte eine Suspense-Grenze beim statischen Bauen).
-  const [variante, setVariante] = useState<'formate' | 'objekt'>('formate')
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get('hero')
-    if (v === 'objekt') setVariante('objekt')
+    const el = band.current
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.matchMedia('(hover: hover)').matches) return
+    let raf = 0
+    const bewegen = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect()
+      const mx = ((e.clientX - r.left) / r.width - .5) * 2
+      const my = ((e.clientY - r.top) / r.height - .5) * 2
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => { el.style.setProperty('--mx', String(mx)); el.style.setProperty('--my', String(my)) })
+    }
+    const raus = () => { el.style.setProperty('--mx', '0'); el.style.setProperty('--my', '0') }
+    el.addEventListener('mousemove', bewegen)
+    el.addEventListener('mouseleave', raus)
+    return () => { el.removeEventListener('mousemove', bewegen); el.removeEventListener('mouseleave', raus); cancelAnimationFrame(raf) }
   }, [])
-  return variante === 'objekt' ? <HeroObjekt /> : <HeroFormate />
+
+  return (
+    <section ref={band} className="hb" style={{ ['--mx' as any]: 0, ['--my' as any]: 0 }}>
+      <style>{`
+        .hb { position: relative; overflow: hidden; background: linear-gradient(160deg, #F8CB52 0%, #F4C03F 48%, #EAB32B 100%); border-bottom: 1px solid #E5E8EC; }
+        /* Ein weiches Licht hinter der Szene, damit die Fläche nicht platt wirkt. Es wandert leicht mit der Maus. */
+        .hb-licht { position: absolute; right: -8%; top: -30%; width: 62%; aspect-ratio: 1 / 1; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0) 72%); transform: translate(calc(var(--mx) * -18px), calc(var(--my) * -12px)); transition: transform .9s ease-out; pointer-events: none; }
+        .hb-reihe { position: relative; max-width: 1280px; margin: 0 auto; padding: clamp(32px, 4vw, 52px) 24px clamp(32px, 4vw, 48px); box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+        .hb-text { display: flex; flex-direction: column; align-items: flex-start; }
+        .hb-zweck { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 22px; padding: 6px 13px; border-radius: 999px; background: rgba(255,255,255,.72); border: 1px solid rgba(25,22,21,.1); color: #191615; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; animation: hbAuf .7s cubic-bezier(.2,.7,.2,1) both; }
+        .hb-titel { margin: 0 0 20px; font-size: clamp(36px, 4.6vw, 64px); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; color: #191615; }
+        .hb-titel .z1, .hb-titel .z2 { display: block; animation: hbAuf .8s cubic-bezier(.2,.7,.2,1) both; }
+        .hb-titel .z2 { animation-delay: .12s; }
+        .hb-marker { background: linear-gradient(transparent 64%, rgba(255,255,255,.85) 64%, rgba(255,255,255,.85) 94%, transparent 94%); padding: 0 .06em; margin: 0 -.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+        .hb-unter { margin: 0 0 30px; max-width: 26em; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.5; font-weight: 500; color: #3F3A37; animation: hbAuf .8s cubic-bezier(.2,.7,.2,1) .22s both; }
+        .hb-knoepfe { display: flex; gap: 10px; flex-wrap: wrap; animation: hbAuf .8s cubic-bezier(.2,.7,.2,1) .32s both; }
+        .hb-knopf { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; border-radius: 999px; font-size: 15.5px; font-weight: 800; text-decoration: none; }
+        .hb-knopf.dunkel { background: #191615; color: #fff; }
+        .hb-knopf.hell { background: #fff; color: #191615; }
+        .hb-zeile { display: flex; align-items: center; gap: 8px 22px; flex-wrap: wrap; margin: 24px 0 0; font-size: 13px; font-weight: 600; color: #3F3A37; animation: hbAuf .8s cubic-bezier(.2,.7,.2,1) .42s both; }
+        .hb-live { display: inline-flex; align-items: center; gap: 8px; }
+        .hb-punkt { width: 8px; height: 8px; border-radius: 50%; background: #191615; flex-shrink: 0; animation: hbPuls 2.2s ease-out infinite; }
+        .hb-betalink { display: inline-flex; align-items: center; gap: 6px; color: #3F3A37; text-decoration: underline; text-underline-offset: 3px; }
+        @keyframes hbPuls { 0% { box-shadow: 0 0 0 0 rgba(25,22,21,.35); } 70%, 100% { box-shadow: 0 0 0 9px rgba(25,22,21,0); } }
+        @keyframes hbAuf { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+        /* Die Szene: ein Feld mit festem Seitenverhältnis, die Dinge liegen in Prozent darin und skalieren mit. */
+        .hb-szene { position: relative; width: 100%; aspect-ratio: 5 / 4.6; max-width: 560px; justify-self: end; }
+        .hb-ding { position: absolute; transform: translate(calc(var(--mx) * var(--tiefe) * 1px), calc(var(--my) * var(--tiefe) * 1px)); transition: transform .7s cubic-bezier(.2,.7,.2,1); will-change: transform; }
+        .hb-auf { animation: hbHer .9s cubic-bezier(.2,.7,.2,1) var(--warte) both; }
+        @keyframes hbHer { from { opacity: 0; transform: translateY(40px) scale(.9); } to { opacity: 1; transform: none; } }
+        .hb-schweb { animation: hbSchweb var(--takt) ease-in-out calc(var(--warte) + .9s) infinite alternate; transform: rotate(calc(var(--dreh) * 1deg)); }
+        @keyframes hbSchweb { from { transform: rotate(calc(var(--dreh) * 1deg)) translateY(0); } to { transform: rotate(calc(var(--dreh) * 1deg)) translateY(-14px); } }
+        .hb-bild { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: contain; filter: drop-shadow(0 26px 28px rgba(25,22,21,.24)); transition: transform .5s cubic-bezier(.2,.7,.2,1), filter .5s ease; }
+        .hb-ding:hover .hb-bild { transform: scale(1.05) translateY(-4px); filter: drop-shadow(0 36px 34px rgba(25,22,21,.28)); }
+        /* Das Schild: weiss, leicht gedreht, hängt unten am Ding. Ein Link auf die Suche nach diesem Format. */
+        .hb-schild { position: absolute; left: 50%; bottom: -4%; transform: translateX(-50%) rotate(calc(var(--dreh) * -.5deg)); display: inline-flex; align-items: baseline; gap: 7px; padding: 8px 14px 9px; border-radius: 999px; background: #fff; color: #191615; box-shadow: 0 10px 24px rgba(25,22,21,.16); white-space: nowrap; text-decoration: none; font-size: 13px; font-weight: 800; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease; }
+        .hb-schild small { font-size: 12px; font-weight: 600; color: #5B626C; }
+        .hb-ding:hover .hb-schild { transform: translateX(-50%) rotate(0) scale(1.06); box-shadow: 0 14px 28px rgba(25,22,21,.22); }
+        .hb-schild:focus-visible { outline: 2px solid #191615; outline-offset: 3px; }
+
+        @media (max-width: 900px) {
+          .hb-reihe { grid-template-columns: 1fr; gap: 12px; padding-top: 28px; padding-bottom: 28px; }
+          .hb-titel { font-size: clamp(36px, 10vw, 48px); }
+          .hb-unter { margin-bottom: 24px; }
+          .hb-szene { max-width: 420px; justify-self: center; margin-top: 18px; aspect-ratio: 5 / 4.2; }
+          .hb-schild { padding: 6px 11px 7px; font-size: 12px; }
+          .hb-schild small { font-size: 11px; }
+          .hb-knopf { padding: 13px 18px; font-size: 14.5px; }
+          .hb-licht { right: -30%; top: 30%; width: 90%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hb-titel span, .hb-zweck, .hb-unter, .hb-knoepfe, .hb-zeile, .hb-auf, .hb-schweb, .hb-punkt { animation: none; }
+          .hb-ding, .hb-licht, .hb-bild, .hb-schild { transition: none; }
+        }
+      `}</style>
+      <span className="hb-licht" aria-hidden="true" />
+      <div className="hb-reihe">
+        <div className="hb-text">
+          <Link href="/impact" className="hb-zweck cta-pill">
+            <Flower2 size={14} color="#487848" /> 20% jeder Gebühr fliessen in den Bienenschutz
+            <ArrowRight size={13} strokeWidth={2.4} />
+          </Link>
+          <h1 className="hb-titel"><span className="z1">Was du suchst,</span><span className="z2"><span className="hb-marker">hat schon jemand.</span></span></h1>
+          <p className="hb-unter">Kaufen, bieten, mieten oder gratis mitnehmen. Die Gebühr wählst du selbst, ab 3 Prozent. Ein Fünftel davon geht an die Bienen.</p>
+          <div className="hb-knoepfe">
+            <Magnetic>
+              <Link href="/listings/new" className="hb-knopf dunkel cta-pill"><Plus size={17} strokeWidth={2.4} /> Inserieren</Link>
+            </Magnetic>
+            <Magnetic>
+              <Link href="/search" className="hb-knopf hell cta-pill">Stöbern <ArrowRight size={16} strokeWidth={2.4} /></Link>
+            </Magnetic>
+          </div>
+          <p className="hb-zeile">
+            {online > 0 && <span className="hb-live"><span className="hb-punkt" /> {online.toLocaleString('de-CH')} Inserate gerade online</span>}
+            <Link href="/beta" className="hb-betalink"><MessageSquareHeart size={14} /> Geschlossene Beta: so testest du mit</Link>
+          </p>
+        </div>
+
+        <div className="hb-szene" role="group" aria-label="Vier Formate: Festpreis, Auktion, Miete, Gratis">
+          {DINGE.map((d) => (
+            <div key={d.format} className="hb-ding" style={{ left: d.links, top: d.oben, width: d.breite, ['--tiefe' as any]: d.tiefe, ['--dreh' as any]: d.dreh, ['--takt' as any]: d.takt, ['--warte' as any]: d.warte }}>
+              <div className="hb-auf">
+                <div className="hb-schweb">
+                  <img className="hb-bild" src={d.bild} alt="" />
+                  <Link href={`/search?type=${d.typ}`} className="hb-schild">{d.format} <small>{d.preis}</small></Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
