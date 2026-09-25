@@ -209,7 +209,9 @@ export function Header() {
              Server escaped beides im style-Tag und die Hydration bricht. */
           .hdr-wrap { padding-left: 12px !important; padding-right: 12px !important; }
           .hdr-logo { margin-right: 8px !important; }
-          .hdr-logo img { width: 122px !important; }
+          .hdr-logo .bd-logo { width: auto !important; gap: 5px !important; }
+          .hdr-logo .bd-logo span { font-size: 21px !important; }
+          .hdr-logo .bd-logo svg { width: 25px; height: auto; }
           .hdr-mobile-only { gap: 3px !important; }
           .hdr-mobile-search { display: flex !important; }
           .hdr-top { border-bottom: 1px solid #E5E8EC; }
