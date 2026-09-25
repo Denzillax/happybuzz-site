@@ -9,11 +9,8 @@ import { AnimatedAmount } from "@/components/shared/effects";
 import Portal from "@/components/shared/Portal";
 import { preisGesenkt } from "@/lib/formatters";
 import EmojiPicker, { istNurEmoji } from "@/components/shared/EmojiPicker";
-import {
-  Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle,
-  Loader2, Star, Heart, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus,
-  AlertCircle as AlertCircleBid, Info as InfoBid, Send as SendFrage,
-} from "lucide-react";
+import { Camera, MessageCircle, Phone, X, User, ShoppingBag, CheckCircle, Loader2, Star, ScanSearch, MapPin, Clock, Truck, Share2, ChevronLeft, ChevronRight, ChevronDown, Tag, Gavel, CalendarDays, Flag, Mail, Link2, QrCode, Printer, Eye, Navigation, Plus, Minus, AlertCircle as AlertCircleBid, Info as InfoBid, Send as SendFrage } from "lucide-react";
+import { HerzIcon as Heart } from "@/components/shared/HerzIcon";
 import "leaflet/dist/leaflet.css";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge } from "@/components/shared/BeeLevel";

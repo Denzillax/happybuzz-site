@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Heart } from "lucide-react";
+import {  } from "lucide-react";
+import { HerzIcon as Heart } from "@/components/shared/HerzIcon";
 import { colors } from "@/lib/theme";
 
 export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
@@ -15,7 +16,7 @@ export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
         // Favoriten sind app-weit HONEY (nicht rot): gleiche Farbe wie
         // ListingClient, Meine Inserate und die Favoriten-Seite.
-        color: isFav ? colors.yellow : "#bbb", backdropFilter: "blur(4px)",
+        color: isFav ? colors.yellow : "#9AA0A6", backdropFilter: "blur(4px)",
         transition: "all .15s", ...style,
       }}
     >

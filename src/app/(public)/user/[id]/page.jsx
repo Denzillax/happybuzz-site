@@ -2,9 +2,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import {
-  MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2, Heart, StickyNote,
-} from "lucide-react";
+import { MapPin, Calendar, Star, Package, ShoppingBag, ArrowLeft, Loader2, StickyNote } from "lucide-react";
+import { HerzIcon as Heart } from "@/components/shared/HerzIcon";
 import BeeIcon from "@/components/shared/BeeIcon";
 import { BeeLevelBadge, BeeLevelCard } from "@/components/shared/BeeLevel";
 import { ListingCard } from "@/components/shared/ListingCard";

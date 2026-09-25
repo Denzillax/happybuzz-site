@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/supabase'
-import { Home, Search, Plus, Heart, User } from 'lucide-react'
+import { Home, Search, Plus, User } from 'lucide-react'
+import { HerzIcon as Heart } from '@/components/shared/HerzIcon'
 
 const YELLOW = '#F4C03F'
 const DARK = '#191615'

@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { getUserListings, deleteListing, getListingAnalytics, renewListing, publishScheduledNow } from "@/lib/listings";
 import { redeemNektar, NEKTAR_CATALOG } from "@/lib/gamification";
 import Link from "next/link";
-import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Heart, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket, RefreshCw } from "lucide-react";
+import { Package, Plus, Eye, Clock, CheckCircle, XCircle, Pencil, ArchiveRestore, Trash2, Gavel, Pause, Play, ChevronDown, ArrowUpDown, Copy, BarChart3, X, MessageCircle, Rocket, RefreshCw } from "lucide-react";
+import { HerzIcon as Heart } from "@/components/shared/HerzIcon";
 import { colors, fonts, radius } from "@/lib/theme";
 import { TypeBadge } from "@/components/shared/Badge";
 
