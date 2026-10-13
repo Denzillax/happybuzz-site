@@ -22,6 +22,12 @@ describe("bookingState", () => {
     expect(s.key).toBe("overdue");
     expect(s.ueberfaellig).toBe(24);
   });
+  it("bestätigte Rückgabe mit offener Kaution ist offen, aber nicht überfällig", () => {
+    const s = bookingState({ status: "confirmed", start_date: "2026-09-18", end_date: "2026-09-21", listing: { listing_type: "rent" }, purchase: { status: "returned" } }, heute);
+    expect(s.key).toBe("returned_open");
+    expect(s.offen).toBe(true);
+    expect(s.ueberfaellig).toBe(0);
+  });
   it("abgeschlossene Bestellung schliesst die Buchung", () => {
     const s = bookingState({ status: "confirmed", start_date: "2026-08-28", end_date: "2026-08-28", listing: { listing_type: "service" }, purchase: { status: "completed" } }, heute);
     expect(s.offen).toBe(false);

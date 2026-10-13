@@ -698,7 +698,9 @@ export default function ListingsPage() {
                         </div>
                       )}
                       {(l.status === "active" || l.status === "paused") && (
-                        <button onClick={() => togglePause(l)} style={{ ...actBtn, color: l.status === "paused" ? "#2E7D32" : "#E65100", borderColor: l.status === "paused" ? "#2E7D3240" : "#E6510040" }}>
+                        <button onClick={() => togglePause(l)} disabled={l.status === "active" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0}
+                          title={l.status === "active" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0 ? "Auktionen mit Geboten können nicht pausiert werden" : undefined}
+                          style={{ ...actBtn, color: l.status === "paused" ? "#2E7D32" : "#E65100", borderColor: l.status === "paused" ? "#2E7D3240" : "#E6510040", opacity: l.status === "active" && l.listing_type === "auction" && bidCounts[l.id]?.count > 0 ? .4 : 1 }}>
                           {l.status === "paused" ? <><Play size={14} /> Aktivieren</> : <><Pause size={14} /> Pausieren</>}
                         </button>
                       )}

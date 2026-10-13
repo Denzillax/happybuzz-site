@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/supabase";
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { getMyRentalRequests, getMyBookings, updateBookingStatus, openBookingChat } from "@/lib/listings";
+import { getMyRentalRequests, getMyBookings, updateBookingStatus, openBookingChat, markAsReturned } from "@/lib/listings";
 import { bookingState, sortBookings, mahnText } from "@/lib/bookingStatus";
 import Link from "next/link";
 import { CalendarDays, Package, CheckCircle, XCircle, Clock, User, Wrench, Home, AlertTriangle, ChevronDown, RotateCcw, MessageCircle } from "lucide-react";
@@ -32,10 +32,13 @@ const ZUSTAND = {
   overdue:        { color: F.rot,   grund: F.rotGrund,   icon: AlertTriangle },
   past:           { color: F.rot,   grund: F.rotGrund,   icon: AlertTriangle },
   return_pending: { color: F.warn,  grund: F.warnGrund,  icon: RotateCcw },
+  returned_open:  { color: F.warn,  grund: F.warnGrund,  icon: RotateCcw },
   problem:        { color: F.rot,   grund: F.rotGrund,   icon: AlertTriangle },
   done:           { color: F.gruen, grund: F.gruenGrund, icon: CheckCircle },
   cancelled:      { color: colors.muted, grund: F.neutral, icon: XCircle },
 };
+
+const LAUFEND = ["active", "return_pending", "returned_open", "problem"]; // Miete ist übergeben, Rückgabe läuft
 
 export default function BookingsPage() {
   const [tab, setTab] = useState("incoming"); // incoming | outgoing
@@ -46,6 +49,19 @@ export default function BookingsPage() {
   const [zuOffen, setZuOffen] = useState({ incoming: false, outgoing: false });
   const router = useRouter();
   const [chatOeffnet, setChatOeffnet] = useState(null); // Buchungs-ID, deren Chat gerade geöffnet wird
+
+  // Mieter hat die Sache längst zurückgebracht und nur das Markieren vergessen (Christian 06.10.2026): ein Klick statt Umweg
+  const [markiert, setMarkiert] = useState(null);
+  const handleRueckgabe = async (b) => {
+    if (markiert || !b.purchase_id) return;
+    setMarkiert(b.id);
+    try {
+      await markAsReturned(b.purchase_id, userId);
+      setOutgoing(await getMyBookings(userId));
+      toast.success("Rückgabe markiert. Der Vermieter bestätigt sie auf der Bestellseite.");
+    } catch (err) { console.error(err); toast.error("Rückgabe konnte nicht markiert werden."); }
+    finally { setMarkiert(null); }
+  };
 
   // Chat mit der Gegenseite (Spec 24.09.2026): bestehender Inserat-Chat, bei überfälliger Miete mit Vorlage im Feld.
   const handleChat = async (b, s, isOwner) => {
@@ -89,13 +105,14 @@ export default function BookingsPage() {
     } catch (err) { console.error(err); toast.error("Aktion fehlgeschlagen. Bitte erneut versuchen."); }
   };
 
-  // Gruppen pro Reiter: überfällig / offen / zu
+  // Gruppen pro Reiter: überfällig / laufend / offen / zu (Laufend seit 13.10.2026, Denis: "ein Tab aktiv oder so")
   const gruppen = useMemo(() => {
     const teile = (liste) => {
       const s = sortBookings(liste);
       return {
         ueber: s.filter((x) => x.s.offen && x.s.ueberfaellig > 0),
-        offen: s.filter((x) => x.s.offen && x.s.ueberfaellig === 0),
+        laufend: s.filter((x) => x.s.offen && x.s.ueberfaellig === 0 && LAUFEND.includes(x.s.key)),
+        offen: s.filter((x) => x.s.offen && x.s.ueberfaellig === 0 && !LAUFEND.includes(x.s.key)),
         zu: s.filter((x) => !x.s.offen),
       };
     };
@@ -116,6 +133,7 @@ export default function BookingsPage() {
     if (s.key === "confirmed" && s.bisStart > 0) return service ? `Termin in ${tagen(s.bisStart)}` : `Beginnt in ${tagen(s.bisStart)}`;
     if (s.key === "confirmed" && s.bisStart === 0) return service ? "Termin heute" : "Beginnt heute";
     if (s.key === "return_pending") return "Rückgabe markiert, Bestätigung ausstehend";
+    if (s.key === "returned_open") return "Zurückgegeben, Kaution noch nicht erstattet";
     return null;
   };
 
@@ -171,8 +189,14 @@ export default function BookingsPage() {
                 {s.key === "overdue" || s.key === "past" ? "Jetzt abschliessen" : "Zur Bestellung"}
               </Link>
             )}
+            {!isOwner && s.key === "overdue" && b.purchase_id && (
+              <button className="eckig kein-akzent" onClick={() => handleRueckgabe(b)} disabled={markiert === b.id}
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 14px", borderRadius: F.radius, border: F.rand, background: K.honey, color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap", opacity: markiert === b.id ? .6 : 1 }}>
+                <RotateCcw size={13} /> Schon zurückgegeben
+              </button>
+            )}
             <button className="eckig kein-akzent" onClick={() => handleChat(b, s, isOwner)} disabled={chatOeffnet === b.id}
-              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 14px", borderRadius: F.radius, border: F.rand, background: s.key === "overdue" ? K.honey : "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap", opacity: chatOeffnet === b.id ? .6 : 1 }}>
+              style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 14px", borderRadius: F.radius, border: F.rand, background: s.key === "overdue" && isOwner ? K.honey : "#fff", color: K.ink, fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body, whiteSpace: "nowrap", opacity: chatOeffnet === b.id ? .6 : 1 }}>
               <MessageCircle size={13} /> {s.key === "overdue" ? "Anschreiben" : "Nachricht"}
             </button>
           </div>
@@ -188,7 +212,7 @@ export default function BookingsPage() {
   );
 
   const renderTab = (key, g, isOwner) => {
-    const total = g.ueber.length + g.offen.length + g.zu.length;
+    const total = g.ueber.length + g.laufend.length + g.offen.length + g.zu.length;
     if (total === 0) {
       return (
         <div style={{ textAlign: "center", padding: "56px 20px", color: colors.muted }}>
@@ -205,11 +229,15 @@ export default function BookingsPage() {
           <Gruppe icon={AlertTriangle} titel="Überfällig" n={g.ueber.length} color={F.rot} grund={F.rotGrund} />
           {g.ueber.map((x) => renderBooking(x, isOwner))}
         </>}
+        {g.laufend.length > 0 && <>
+          <Gruppe icon={CalendarDays} titel="Laufend" n={g.laufend.length} color={F.gruen} grund={F.gruenGrund} />
+          {g.laufend.map((x) => renderBooking(x, isOwner))}
+        </>}
         {g.offen.length > 0 && <>
           <Gruppe icon={Clock} titel="Offen" n={g.offen.length} color={K.ink} grund={F.neutral} />
           {g.offen.map((x) => renderBooking(x, isOwner))}
         </>}
-        {g.ueber.length + g.offen.length === 0 && (
+        {g.ueber.length + g.laufend.length + g.offen.length === 0 && (
           <div style={{ padding: "18px 20px", fontSize: 13.5, color: colors.muted, borderBottom: F.randFein }}>Nichts offen. Alles erledigt.</div>
         )}
         {g.zu.length > 0 && <>
@@ -240,7 +268,7 @@ export default function BookingsPage() {
 
         <div className="bd-reiter" role="tablist">
           {TABS.map((t) => {
-            const offen = t.g.ueber.length + t.g.offen.length;
+            const offen = t.g.ueber.length + t.g.laufend.length + t.g.offen.length;
             return (
               <button key={t.key} role="tab" aria-selected={tab === t.key} className="bd-reiter-knopf eckig kein-akzent" onClick={() => setTab(t.key)}>
                 {t.label}

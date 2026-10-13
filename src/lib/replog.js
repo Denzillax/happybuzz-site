@@ -23,6 +23,19 @@ export function melderRanking() {
 
 export const REP_LOG = [
   {
+    datum: "14. Oktober 2026",
+    punkte: [
+      { typ: "fix", bereich: "Mieten", text: "Buchungen: Eine Miete, die zurückgegeben ist und nur noch auf die Kaution wartet, stand weiter als überfällig. Sie steht jetzt unter Laufend mit dem Hinweis, dass die Kaution noch offen ist. Neue Gruppe Laufend für übergebene Mieten.", melder: "Denis" },
+      { typ: "neu", bereich: "Mieten", text: "Überfällige Miete: Der Mieter kann die Rückgabe direkt in der Buchungsliste markieren (Schon zurückgegeben), falls er es nur vergessen hat.", melder: "Christian" },
+      { typ: "fix", bereich: "Bestellung", text: "Bei reiner Abholung stand nach der Zahlung trotzdem Der Verkäufer bereitet den Versand vor. Jetzt steht dort Abholung: vereinbare die Übergabe.", melder: "Christian" },
+      { typ: "fix", bereich: "Mieten", text: "Gemeldete Schäden samt Foto bleiben auf der Bestellseite sichtbar, auch nach Kaution und Abschluss.", melder: "Denis" },
+      { typ: "fix", bereich: "Bestellung", text: "Rechnungstitel immer schwarz (die Kautionsrechnung war grün). Zahlungsteil am Handy untereinander, der QR-Code überdeckte den Text nicht mehr.", melder: "Christian" },
+      { typ: "fix", bereich: "Mobile", text: "Rückgabe-Knöpfe (Alles OK, Schaden melden) am Handy schlanker.", melder: "Denis" },
+      { typ: "fix", bereich: "Inserate", text: "Meine Inserate am Handy: Pausieren ist bei Auktionen mit Geboten ausgegraut statt erst beim Klick abgelehnt.", melder: "Christian" },
+      { typ: "fix", bereich: "Gebühren", text: "Gebührenrechnungen entstehen jetzt am Monatsanfang automatisch für alle Verkäufer. Vorher nur, wenn jemand selbst die Gebührenseite öffnete.", melder: "Denis" },
+    ],
+  },
+  {
     datum: "19. September 2026",
     punkte: [
       { typ: "neu", bereich: "Startseite", text: "Die fünf Format-Kacheln tragen im Icon-Feld dieselbe Farbe wie die Beschriftung auf den Inseraten: Festpreis Gelb, Auktion Blaugrau, Miete Violett, Gratis Grün, Service Orange. So erkennt man ein Format überall an seiner Farbe.", melder: "Denis" },

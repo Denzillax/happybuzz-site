@@ -35,6 +35,10 @@ export function bookingState(b, heute = new Date()) {
   if (ps === "return_pending") {
     return { key: "return_pending", label: "Rückgabe markiert", offen: true, ueberfaellig: 0 };
   }
+  if (ps === "returned") {
+    // Rückgabe bestätigt, Kaution noch nicht erstattet: offen, aber nicht überfällig (Denis 13.10.2026)
+    return { key: "returned_open", label: "Zurück, Kaution offen", offen: true, ueberfaellig: 0 };
+  }
   if (ps === "damage_reported" || ps === "disputed") {
     return { key: "problem", label: "Beanstandet", offen: true, ueberfaellig: 0 };
   }

@@ -498,7 +498,7 @@ export default function OrderDetailPage() {
                   </div>
                 )}
                 {!isService && isBuyer && p.status === "paid" && (
-                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#94B9C9" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Bezahlt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>Der Verkäufer bereitet den Versand vor.</p></div>
+                  <div style={{ textAlign: "center", padding: 10 }}><Truck size={28} color="#94B9C9" style={{ marginBottom: 8 }} /><p style={{ fontSize: 14, fontWeight: 700, margin: "0 0 4px" }}>Bezahlt</p><p style={{ fontSize: 13, color: colors.muted, margin: 0 }}>{wirdAbgeholt ? "Abholung: vereinbare die Übergabe mit dem Verkäufer." : "Der Verkäufer bereitet den Versand vor."}</p></div>
                 )}
                 {/* SERVICE: Zahlung bestätigt -> Auftrag abschliessen */}
                 {isService && isSeller && p.status === "paid" && (
@@ -553,8 +553,8 @@ export default function OrderDetailPage() {
                     <p style={{ fontSize: 13, color: colors.muted, marginBottom: 14 }}>Der Mieter hat den Artikel zurückgegeben. Prüfe den Zustand.</p>
                     {!showDamageForm ? (
                       <div style={{ display: "flex", gap: 8 }}>
-                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK, Kaution zurück"}</button>
-                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
+                        <button onClick={() => doAction(confirmReturn, p.id, user.id, depositAmount)} disabled={acting} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Alles OK, Kaution zurück"}</button>
+                        <button onClick={() => setShowDamageForm(true)} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: colors.dark, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: fonts.body }}>Schaden melden</button>
                       </div>
                     ) : (
                       <div>
@@ -588,7 +588,7 @@ export default function OrderDetailPage() {
                               setShowDamageForm(false); setDamageFiles([]);
                             } catch (err) { console.error(err); toast.error("Schadenmeldung fehlgeschlagen. Bitte erneut versuchen."); }
                             setActing(false);
-                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: 14, borderRadius: 12, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
+                          }} disabled={acting || !damageAmount || !damageDesc} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, border: "none", background: "#c62828", color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "Wird hochgeladen..." : "Schaden melden"}</button>
                           <button onClick={() => { setShowDamageForm(false); setDamageFiles([]); }} style={{ padding: "14px 20px", borderRadius: 12, border: "1px solid #E5E8EC", background: "#fff", color: colors.muted, fontSize: 13, cursor: "pointer", fontFamily: fonts.body }}>Abbrechen</button>
                         </div>
                       </div>
@@ -614,7 +614,7 @@ export default function OrderDetailPage() {
                       </div>
                     )}
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: 14, borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
+                      <button onClick={() => doAction(acceptDamage, p.id, user.id)} disabled={acting} style={{ flex: 1, padding: "12px 10px", borderRadius: 12, border: "1px solid #E5E8EC", background: K.petrol, color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: fonts.body }}>{acting ? "..." : "Akzeptieren"}</button>
                     </div>
                   </div>
                 )}
@@ -795,6 +795,19 @@ export default function OrderDetailPage() {
                     {p.status === "completed" && <><br /><span style={{ fontSize: 12, color: "#50804F", fontWeight: 600 }}>Zurückerstattet</span></>}
                     {p.status === "returned" && <><br /><span style={{ fontSize: 12, color: "#F4A100", fontWeight: 600 }}>Rückerstattung ausstehend</span></>}
                     {p.status === "damage_reported" && <><br /><span style={{ fontSize: 12, color: "#c62828", fontWeight: 600 }}>Schaden gemeldet</span></>}
+                  </div>
+                </SidebarSection>
+              )}
+              {/* Schaden bleibt sichtbar, auch nach Kaution und Abschluss (Denis 13.10.2026: Foto war nachträglich nicht mehr zu sehen) */}
+              {isRental && p.damage_photos && p.damage_photos.length > 0 && (
+                <SidebarSection icon={AlertTriangle} title="Gemeldeter Schaden">
+                  <div style={{ fontSize: 13, marginBottom: 8 }}>CHF {fmtCHF(parseFloat(p.damage_amount || 0))} von der Kaution abgezogen</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {p.damage_photos.map((url, i) => (
+                      <a key={i} href={url} target="_blank" rel="noopener" style={{ width: 56, height: 56, borderRadius: 12, overflow: "hidden", border: "1px solid #E5E8EC", display: "block" }}>
+                        <img src={url} alt={`Schaden ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </a>
+                    ))}
                   </div>
                 </SidebarSection>
               )}

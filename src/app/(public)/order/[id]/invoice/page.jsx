@@ -116,7 +116,7 @@ export default function InvoicePage() {
           <div style={{ textAlign: "right", fontSize: 10, color: g, fontFamily: f, lineHeight: 1.6 }}>Gemeindehausstrasse 11B<br/>6010 Kriens, Schweiz</div>
         </div>
         {/* Titel */}
-        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: isDeposit ? "#50804F" : "#191615" }}>{pageTitle}</h1>
+        <h1 style={{ fontSize: 20, fontWeight: 900, margin: "0 0 4px", fontFamily: f, color: "#191615" }}>{pageTitle}</h1>
         <p style={{ margin: "0 0 16px", fontSize: 11, color: g, fontFamily: f }}>Ref: <strong style={{ color: "#191615" }}>{ref}</strong> · {orderDate}</p>
         {/* Adressen */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 18 }}>
@@ -231,7 +231,7 @@ export default function InvoicePage() {
           </p>
         )}
         {/* Zahlung + QR */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: `1px solid ${isDeposit ? "#50804F" : "#E5E8EC"}`, borderRadius: 0, marginBottom: 16 }}>
+        <div className="inv-zahlung" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 16, padding: "14px 18px", border: "1px solid #E5E8EC", borderRadius: 0, marginBottom: 16 }}>
           <div style={{ fontFamily: f }}>
             <p style={{ ...lbl, marginBottom: 8 }}>{isDeposit ? "Rückerstattung an" : "Zahlungsinformationen"}</p>
             {[
@@ -267,6 +267,8 @@ export default function InvoicePage() {
         </div>
       </div>
       <style>{`
+        /* Handy: Zahlungsangaben und QR untereinander, sonst überdeckte der QR-Code den Text (Christian 06.10.2026) */
+        @media (max-width: 520px) { .inv-zahlung { grid-template-columns: 1fr !important; justify-items: center; } }
         @media print {
           .no-print { display: none !important; }
           html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
