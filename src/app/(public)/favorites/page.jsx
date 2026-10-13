@@ -120,7 +120,7 @@ export default function FavoritesPage() {
       <div className="mb-6">
         <div className="font-sans text-[10px] font-bold tracking-[.18em] uppercase text-[#0B5E5C] mb-1.5">Gemerkt</div>
         <h1 className="bd-seitentitel font-bold text-[#191615] font-['General_Sans','Manrope',sans-serif] flex items-center gap-3">
-          <Heart size={26} className="text-honey" fill="#F4C03F" />
+          <Heart size={26} fill="#C62828" />
           Meine Favoriten
         </h1>
       </div>
@@ -187,7 +187,7 @@ export default function FavoritesPage() {
           ) : (
             <div className="text-center py-20">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-none border border-[#191615] bg-honey/20 mb-6">
-                <Heart size={36} className="text-honey" />
+                <Heart size={36} fill="#C62828" />
               </div>
               <h2 className="text-xl font-bold text-text mb-2">{q ? 'Keine Treffer' : 'Noch keine Favoriten'}</h2>
               <p className="text-text/50 mb-8 max-w-md mx-auto">
