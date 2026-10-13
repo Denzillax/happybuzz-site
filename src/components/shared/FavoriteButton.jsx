@@ -14,9 +14,9 @@ export function FavoriteButton({ isFav, onToggle, size = 32, style = {} }) {
         width: size, height: size, borderRadius: size / 4,
         background: "rgba(255,255,255,.9)", border: "none",
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-        // Favoriten sind app-weit HONEY (nicht rot): gleiche Farbe wie
-        // ListingClient, Meine Inserate und die Favoriten-Seite.
-        color: isFav ? colors.yellow : "#9AA0A6", backdropFilter: "blur(4px)",
+        // Favoriten sind app-weit ROT #C62828 (Denis 14.10.2026, vorher Honig): gleiche Farbe wie
+        // ListingClient, Meine Inserate, Profil und die Favoriten-Seite.
+        color: isFav ? "#C62828" : "#9AA0A6", backdropFilter: "blur(4px)",
         transition: "all .15s", ...style,
       }}
     >

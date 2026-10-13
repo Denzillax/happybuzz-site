@@ -622,7 +622,7 @@ export default function ListingDetail() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: "0 2px 8px rgba(0,0,0,.1)", transition: "all .15s",
                 }}>
-                  <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={20} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
+                  <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={20} fill={isFav ? "#C62828" : "none"} color={isFav ? "#C62828" : colors.muted} /></span>
                 </button>
                 {/* KI-Bildersuche: aehnliche Inserate zu diesem Foto */}
                 {imgs.length > 0 && (
@@ -1706,7 +1706,7 @@ export default function ListingDetail() {
               {!isOwner && (
                 <div style={{ textAlign: "center", marginTop: 10 }}>
                   <button onClick={handleFav} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: "6px 10px", fontSize: 13, fontWeight: 700, fontFamily: fonts.body, color: isFav ? colors.dark : colors.muted }}>
-                    <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={15} fill={isFav ? colors.yellow : "none"} color={isFav ? colors.yellow : colors.muted} /></span>
+                    <span key={favPop} className={favPop ? "bd-fx-heart" : undefined} style={{ display: "flex" }}><Heart size={15} fill={isFav ? "#C62828" : "none"} color={isFav ? "#C62828" : colors.muted} /></span>
                     {isFav ? "Gemerkt" : "Merken"}
                   </button>
                 </div>

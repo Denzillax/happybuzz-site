@@ -458,7 +458,7 @@ export default function ListingsPage() {
                       {/* Favoriten */}
                       <td style={{ padding: "14px 10px", textAlign: "center", verticalAlign: "middle" }}>
                         <div style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? colors.yellow : colors.muted, fontSize: 13 }}>
-                          <Heart size={14} fill={l.favorite_count > 0 ? colors.yellow : "none"} /> {l.favorite_count || 0}
+                          <Heart size={14} fill={l.favorite_count > 0 ? "#C62828" : "none"} /> {l.favorite_count || 0}
                         </div>
                       </td>
                       {/* Gebote */}
@@ -650,7 +650,7 @@ export default function ListingsPage() {
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10, flexWrap: "wrap", fontSize: 12.5 }}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: st.color, fontWeight: 700 }}><StIcon size={14} /> {st.label}</span>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: colors.muted }}><Eye size={14} /> {l.view_count || 0}</span>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? colors.yellow : colors.muted }}><Heart size={14} fill={l.favorite_count > 0 ? colors.yellow : "none"} /> {l.favorite_count || 0}</span>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: l.favorite_count > 0 ? "#C62828" : colors.muted }}><Heart size={14} fill={l.favorite_count > 0 ? "#C62828" : "none"} /> {l.favorite_count || 0}</span>
                       {l.listing_type === "auction" && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: bc.count > 0 ? colors.green : colors.muted, fontWeight: bc.count > 0 ? 700 : 400 }}><Gavel size={14} /> {bc.count}{bc.topBid > 0 ? ` · CHF ${fmtPrice(bc.topBid)}` : ""}</span>}
                       {boost && (() => { const labels = { spotlight: "Spotlight", golden_stamp: "Featured", mega_boost: "Mega-Boost" }; const rem = boost.expires_at ? Math.max(0, new Date(boost.expires_at).getTime() - Date.now()) : null; const remStr = rem == null ? "" : rem < 3600000 ? `noch ${Math.ceil(rem / 60000)}m` : rem < 86400000 ? `noch ${Math.round(rem / 3600000)}h` : `noch ${Math.round(rem / 86400000)}d`; return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#A66700", fontWeight: 800 }}><Rocket size={13} /> {labels[boost.reward_type] || boost.reward_type}{remStr ? ` · ${remStr}` : ""}</span>; })()}
                     </div>
